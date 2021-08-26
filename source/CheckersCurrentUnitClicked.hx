@@ -19,7 +19,7 @@ class CheckersCurrentUnitClicked extends FlxSprite
 	/******************************
 	* this is part of the client software. it is used mainly to connect, disconnect or access event.
 	*/
-	private var clientSocket:mphx.client.Client;
+	private var clientSocket:vendor.mphx.client.Client;
 	
 	/******************************
 	 * this class determines if a game has ended naturally, such as no move units to move to, or no more pieces for that player on board, etc.

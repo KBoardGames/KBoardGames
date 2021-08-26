@@ -14,7 +14,7 @@ class PlayState extends FlxState
 	/******************************
 	* this is part of the client software. it is used mainly to connect, disconnect or access event.
 	*/
-	public static var clientSocket:mphx.client.Client;
+	public static var clientSocket:vendor.mphx.client.Client;
 	
 	/******************************
 	 * this is used to save/load the client data such as username to place into the login username field box. Players data is not saved here. this var should only be used before the user logs in. after the user logs in, config data should be pulled from the server.
@@ -353,7 +353,7 @@ class PlayState extends FlxState
 		if (Reg._game_online_vs_cpu == true || Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false)		
 		{
 			try{
-				clientSocket = new mphx.client.Client(Reg._ipAddress, Reg._port);
+				clientSocket = new vendor.mphx.client.Client(Reg._ipAddress, Reg._port);
 				
 				// cannot connect to server.
 				clientSocket.onConnectionError = function (s)
@@ -366,12 +366,12 @@ class PlayState extends FlxState
 				
 				clientSocket.connect();	
 				
-				RegTypedef._dataAccount._host = Reg._ipAddress;
-				RegTypedef._dataAccount._ip = Reg._ipAddress; 
-								
 				if (RegTypedef._dataAccount._username == "")
 					RegTypedef._dataAccount._username = RegCustom._profile_username_p1;
 				
+				RegTypedef._dataAccount._host = Internet.getIP(RegTypedef._dataAccount._username);
+				RegTypedef._dataAccount._ip = Internet.getIP(RegTypedef._dataAccount._username); 
+
 				clientSocket.send("Join", RegTypedef._dataAccount); // go to the event "join" at server then at server at event join there could be a broadcast that will send data to a client event.
 				haxe.Timer.delay(function (){}, Reg2._event_sleep);
 			}	

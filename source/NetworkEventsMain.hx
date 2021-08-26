@@ -68,7 +68,7 @@ class NetworkEventsMain extends FlxState
 		__ids_win_lose_or_draw = ids_win_lose_or_draw;
 							
 		// set a close event. If the server exits or crashes then do the following.
-		PlayState.clientSocket.onConnectionClose = function (error:mphx.utils.Error.ClientError)
+		PlayState.clientSocket.onConnectionClose = function (error:vendor.mphx.utils.Error.ClientError)
 		{
 			Reg._serverDisconnected = true;
 			FlxG.switchState(new MenuState());

@@ -292,6 +292,45 @@ class Internet extends FlxGroup
 		}	
 		
 	}
+	
+	// gets ip from a website file. if ip is not found then user cannot login. therefore, user must first login to the website before this works.
+	public static function getIP(_username:String):String
+	{
+		_username = "&user=" + _username;
+		_username = StringTools.replace(_username, " ", "%20");
+		
+		var _token = "token=fi37cv%PFq5*ce78";
+		var _str = "http://" + Reg._websiteHomeUrl + "/server/getIP.php?" + _token + _username;		
+		var _http = new haxe.Http(_str);		
+		var _data:String = "";
+				
+		_http.onData = function (data:String) 
+		{
+			if (data.substr(0, 1) == "<") 
+			{
+				// display error message.
+				trace(data);
+			}
+			
+			else 
+			{
+				// we found the file if we are here.
+				if (data == "")
+				{
+				}
+				
+				else _data = data;
+			}
+		}
+
+		_http.onError = function (_error)
+		{			
+		}
+		
+		_http.request();
+	
+		return _data;
+	}
 		
 	public static function getAndroidAPKfile():Void
 	{
