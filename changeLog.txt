@@ -1,0 +1,680 @@
+Version 1.15. Date:
+This is yet another bug release. Where are all these bugs coming from?
+
+New Features.
+
+	Server flood protection. Player cannot hammer the buttons.
+	
+	Lobby now has a refresh button.
+
+Feature changed.
+
+	The history feature did not display a gameboard piece that was captured when a back button was used.
+	
+	In the signature game, in a three or four player game, gameboard pieces will now stay at the unit where they were before a player has ended game. Before this fix, those piece defaulted back to unit 1.
+	
+Bugs fixed.
+
+	After entering the configuration scene, at general section, the image of the gameboard coordinates was displayed when that feature had a visible setting of false.
+
+	At the "front door", the logging in text was shown when player entered the creating room.
+
+	Two scenes could be displayed simultaneously from the rapid clicking of buttons.
+	
+	Sound fired when mouse moved overtop of some buttons at house.
+	
+	Start game button flickered visibility on then off just after closing the quit game message box in an online game against the computer.
+	
+	In the signature game, a human player could mouse click the computer's "End turn" button.
+	
+	At lobby, some buttons would display its text not centered but only briefly when buttons were initialized.
+	
+	In checkers the last location of the gameboard piece was not highlighted for the spectator watching. 
+	
+	After the spectator watching had entered the game room, the first player's timer text was not shown for that spectator.
+	
+	Fixed wrong total gameboard piece count for Reversi.
+	
+	In chess, two or more pieces defending king on one path would not have their capturing units limited to the new current path in check.
+	
+	In a three a four player signature game, land ownership was not removed from the gameboard after a player had quit the game.
+	
+	Sometimes a person entering the waiting room would receive an empty message instead of "someone beat you to the room" message.
+	
+Version 1.14.0. Date: 2021-7-31
+
+New Features.
+	
+	Added button click sound.
+	
+	Added skill level feature for offline play.
+	
+Feature changed.
+
+	Fixed some grammar issues and corrected spelling mistakes.
+	
+	Optimized all images. Client is now half its original size. Client went from 23 megabytes to under 11 megabytes in size.
+
+	No more delay when sending events to the server.
+		
+Bugs fixed.
+
+	Previous future path to king displayed when restarting a chess game.
+	
+	Client crashed at tournament scene when player had previously visited the waiting room.
+	
+	The lobby "Players" and "Against" table columns had data at empty rooms when returning from the waiting room.
+	
+	In chess, "check" was called when there was no check but only when intermediate skill level was used.
+	
+Version 1.13.10. Date: 2021-7-21
+
+New Features.
+	
+	At configuration menu, toggle on/off chat for both lobby and for the room where player is at.
+
+	At configuration menu, toggle on/off host of the room can automatically send a start game request to other player(s) after entering the game room.
+	
+	At configuration menu, toggle on/off the display of message box before returning the lobby from waiting room.
+	
+	At configuration menu, toggle on/off display of message box before returning to lobby from game room.
+	
+	At configuration menu, toggle on/off automatically accept a start game request after entering game room.
+	
+	At configuration menu, toggle on/off display of message box before entering game room from waiting room.
+
+	At configuration menu, toggle on/off display of message box before returning to title.
+	
+	At configuration menu, toggle on/off display of players' move timer. Note: tournament play ignores this feature.
+	
+	At configuration menu, toggle on/off display of player's move total text.
+	
+	At configuration menu, toggle on/off display of notation panel. 
+	
+	At configuration menu, toggle on/off display of message box when starting a game in offline mode.
+	
+	At configuration menu, toggle on/off display of chess opening moves.
+	
+	At configuration menu, toggle on/off display of chess legal moves.
+	
+	At configuration menu, able to change legal move units to a different color.
+	
+	At configuration menu, toggle on/off display of last gameboard piece moved.
+	
+	At configuration menu, toggle on/off display of gameboard border.
+	
+	At configuration menu, toggle on/off display of gameboard coordinates.
+	
+	At configuration menu, toggle on/off display of future capturing units feature.
+	
+	At configuration menu, able to change future capturing units to a different color.
+	
+	At configuration menu, toggle on/off display of path to king feature. 
+	
+	At configuration menu, able to change path of king units to a different color.
+	
+	At configuration menu, toggle on/off display of notation panel 15% transparency.
+	
+	At configuration menu, toggle on/off display of even gameboard units.
+	
+	At configuration menu, toggle on/off display of a game room background image.
+	
+	At configuration menu, toggle on/off display of a game room background image transparency. 
+	
+	At the game room the lobby button is now displayed above the title button when playing against a human.
+	
+	Redone the front door.
+	
+Bugs fixed.
+
+	Fixed bugs in future capturing units that displayed incorrect highlighted units.
+
+	In a four player game, the forth player could not enter the waiting room. Instead, the forth player would enter the game room.
+		
+	When player one is at a game room but is not playing a game yet, the spectator that enters that room would see player one's time ticking as if the game had started.
+	
+	At the house, the item get button and item put button would disabled when house map scrolled to far to the right. Buttons needed a map.x offset 
+
+	At house, a panel boxScroller would stop working after scrolling the house map horizontally. Also, an input click on images would be offset at a panel after scrolling the boxScroller vertically. Therefore, images would not fire. 
+	
+	Scrolling the house map to offset the tracker then returning to house would stop that map from scrolling.
+	
+	At house feature, when the "item put" button is used, clicking any button at the map's top menu would trigger scrolling the map up.
+	
+	Saving the house layout would not save the current house coins.
+	
+	Fixed broken chess castling.
+	
+	New account scene would display after existing house after returning from game room.
+		
+Version 1.12.10. Date: 2021-6-16
+
+Bugs fixed.
+
+	The cannot move a gameboard piece message was outputted to the wrong player after the game ended in the Reversi game.
+	
+	In a game of Chess, the CPU piece was not highlighted to show where the piece had moved to.
+	
+	One of the previous software update broke the chess castling feature. Castling feature now works.
+	
+	In a previous software update, accidentally removed the unit highlight path to king feature.
+	
+	In a game of Chess, the king's piece is now highlighted when showing future capturing units.
+	
+	Snakes and ladders game crashed the client when second player quit a game in progress.
+	
+	In a game of Chess, rook units were not highlighted after castling. 
+	
+	Chat input was hidden at lobby when returning to lobby from game room.
+	
+	No name shown for second player at HUD from room 1 and room 2 in an online game against the CPU.
+	
+	Wrong avatar shown for second player after creating an online game against the CPU.
+
+Version 1.12.0. Date: 2021-6-12
+
+New Features.
+	
+	Chess Tournament: Standard 8. The number 8 in the title means that the tournament will start after the 8th player signs up for tournament play. This tournament is an elimination game. Lose 1 game at anytime and the tournament will end for that user.
+	
+	Game time remaining text now works in offline mode.
+	
+	Game board units now highlight moves when using the history feature.
+	
+Feature changed.
+
+	When a checkers piece is selected or after a piece had moved that unit will now highlight a different color. The unit highlight is now the same color as then using the history feature.
+	
+	Unit now highlights in color showing where the piece had moved from and moved to when using the History feature.
+	
+	Reversi player input click changed from finger/mouse just pressed to just released to avoid a confusing display of a player's piece when input drag to a unit then input release at a different unit.
+
+Bugs fixed.
+
+	Fixed a client crash at the game room when server disconnected. The user that was redirected to title scene, triggered the bug when relogging in to the lobby after server restarted. 
+
+	Fixed chatter scrollbar not visible when returning to lobby from house.
+	
+	Room state was shown as a computer game but only briefly for the user entering the creating room scene.
+	
+	Invite user to room feature was broken.
+	
+	After clicking the online list at the waiting room, when a user is no longer at the lobby
+	the win percentage text remained visible for that user.
+	
+	The player that had just lost a game sometimes received a win message when there was a spectator watching the game.
+	
+	Win message for the player that lost the second game when spectator was watching.
+	
+	Removed a redundant game restart message for spectator watching.
+	
+	Fixed a bug where a spectator that entered the game room was greeted with a logging in message.
+	
+	Removed an unneeded call to restart the game room.
+	
+	Removed a game loss message for "spectator watching" after a game ended.
+	
+	After a game ended the "spectator watching" usernames were added to the usernames that are allowed to play in that room. The result would break many features of game play such as cancelling a draw request or an incorrect number of players for that room.
+	
+	A "Spectator watching" was able to click lobby elements from the game room.
+	
+	The history forward button needed an additional input click to display the first move history in a checkers game.
+	
+	In a chess game a random check was called when king was not in check. Hopefully this bug is fixed.
+	
+	Fixed numerous calls where in a chess game the CPU moved to an empty unit that was captured by the other player. 
+	
+	Units beside the king has an incorrect capturing value.
+	
+	The piece color and its value of the last piece moved was the same as the piece being updated for the spectator watching.
+	
+	Scrolling the map at the house feature would disable foundation build buttons.
+	
+Version 1.11.0. Date: 2021-4-26
+
+New Features.
+	
+	Play a game of chess against another player offline.
+	
+	At the configuration menu, chess and checkers now can be set to have different game board colors.
+	
+Feature changed.
+
+	Added 15 more house items.
+	
+	More configuration options at the configuration menu accessed from the title scene.
+	
+Bugs fixed.
+
+	Functions that are used to move a CPU chess piece that rely on the Reg_futureCapturingUnitsForPiece variable would never move a piece because that variable was set to zero at the CapturingUnits function.
+
+	The client crashed at chess after the CPU tried to move a piece to defend king.
+
+	At client the menu icons where still inactive after user closed the server offline dialog.
+
+	Chatter had a display bug in the signature game. ScrollFacter was set to zero for buttons and images. Therefore, buttons and images could not be seen in the boxScroller.
+
+	In a game of chess, check was called instead of checkmate for player 2 in an online game.
+
+	In a game of chess, when king is in check its defending pieces could not block the attacking path.
+
+	When the CPU found checkmate using the search for checkmate in 2 moves, the first move in that series would remove the 17 value from its defending pieces.
+
+	In a games of chess, some king units where incorrectly captured while others should have been captured.
+	
+	At the House side game the scale factor needed to be removed because a furniture item's position did not save correctly the first time. Also, changing the scale value would offset the furniture item's rotate icon and drag icon.
+	
+	When a group is added to a boxScroller, that group needs to be added to the stage. The result are two groups sharing the same coordinate. One group that scrolls with the boxScroller and the other that stays static. When scrolling a page, button coordinate offset in that group was needed to address the hidden buttons behind the boxScroller that were firing at the stage.
+	
+	Multiple groups shared the same boxScroller at the configuration menu. The result was that one group could trigger elements from another group.
+	
+	Some path-to-king danger units were incorrectly highlighted.	
+	
+	In the snakes and ladders game the other player's location was moved to the end unit after player won game.
+	
+	at the house side game, when changing the z-order of a selectable furniture item the other item that was swapped would match the same wall z-order of that selectable furniture item.
+	
+	At the house side game, changing the z-order of a furniture item, then toggling the visibility of that item, would instead toggle the visibility of the previous item in that z-order stack. 
+	
+	In the signature game the ownership background image was sometimes displayed in front of the icon developed image because of a update() function timing issue.
+	
+	In a game using the number wheel, sometimes the pause of the number wheel was executed after assigning that value to a player's piece because of a update() function timing issue.
+	
+	Fixed broken chess En passant.
+
+	In a Reversi game, incorrect player win message after a player had no piece to capture.
+	
+	"A loss will be added to your game stats" message no longer displayed while playing a game against the CPU.
+	
+Version 1.10.0. Date: 2021-3-30
+
+Feature changed.
+
+	No longer can a user click something behind a dialog box at the title scene.
+	
+	Redone chatter. Chatter now remembers 100 lines of text. Chatter is now inside a boxScroller.
+	
+	Redone boxScoller. Scrollbars can no longer take user input. BoxScroller now scrolls when clicking and holding that user input at a region of the boxScroller area.
+	
+	Added more of a delay when showing a message box.
+	
+	Redone the keyboard for android. Added the forwards button and backwards button for the input text caret index which changes the position of the text cursor.
+	
+	Instead of the normal server disconnected message, client how will show an inactivity message after permitted time elapses.
+	
+Bugs fixed.
+
+	Game statistic messages removed when playing an online game against the CPU.
+
+	If two users try to enter the same room simultaneously, one user will be host and the other user will always get a locked room message. Also, incorrect room data for everyone when the none host user tries to enter that room the second time.
+
+	Fixed avatar bug when playing a CPU game online. The CPU player name disappeared from scene when restarting a game.
+
+	Incorrect avatar shown for second player in a two player online game.
+
+	client crashed after user exited the waiting room, entered an online CPU game, then returned to lobby.
+
+	ScrollingText class was added to the scene of a checkers game and then seen at the beginning of that game.
+	
+	MenuState scene elements were not set to inactive after calendar was displayed. At calendar those active elements at the hidden scene menuState could be clicked. The result would be a click double fire that would stop a calendar description from displaying.
+
+	Last client release stopped the loading of a house saved layout feature.
+	
+	Moving a piece using a checkmate search was broken after fixing a regular CPU move and moving a regular CPU piece was broken after a checkmate search.
+	
+	Resetting Reg._gamePointValueForPiece and Reg._gameUniqueValueForPiece variables at ChessFindCheckmate:resetVars() was called while playing a game. All pieces would therefore be set back to zero.
+	
+	A "checkmate search" that failed to find a checkmate in 2 moves did not correctly undo its checkmate search moves. The result was that same values of 17 that referred to a piece location was set to 0.
+	
+	After playing a game of chess, the exit button and restart button are hidden until the checkmate dialog OK button is clicked. However, if pressing the dialog "x" button then those exit button and restart button will remain hidden because the code needs a Reg._yesNoKeyPressValueAtMessage value of 1.
+	
+	The "misc menu" shares the same scene as the lobby. An input click at the misc menu could trigger hidden lobby buttons.
+	
+	Returning to the title screen by clicking the exit button at the "misc menu" boxScroller scene and then re-logging in would automatically send that user to the miscellaneous menu instead of the lobby scene.
+	
+	Logging in message seen while offline game was loading.
+	
+	Fixed a vertical boxScroller track bug seen at the notation boxScroller on android phones.
+	
+	History buttons did not work when a game ended because when playing a game the variables were set back to default at every game turn.
+	
+	Reversi game stopped working after the forth move.
+	
+	Clicking the client help at the title scene would open a 404 page not found at the K Board Games website. The old forum link was still being used.
+	
+	Clicking "yes" at the dialog box of the client credits scene would redirect the user to a 404 page not found at the K Board Games website. The old forum link was still being used.
+	
+	Clicking the exit button at the leaderboard scene and then clicking the multiplayer online button would display a cannot log in twice message.
+	
+Version 1.9.0. Date: 2021-3-7
+
+New Features.
+
+	After clicking the "Multiplayer Online" button from the client's title scene, the user will be automatically logged in and will be redirected to the lobby but only if that user is logged in at the website forum. The server gets the IP address of the user when logging in. The server then searches the database to determine if there is an IP address match. If the search is successful, the username of that IP address is known to the server and that user may then be sent to the lobby. 
+
+	A player's move total for games chess and checkers is a new feature displayed at the GamePlaying.hx side panel.
+
+	Daily quests feature now at the lobby. Complete any three, six or nine daily quests to receive rewards such as experience point, house coins and credits respectively.
+
+Feature changed.
+
+	An ECO message only displayed for the first player. Now all ECO messages for a move sequence are outputted.
+	
+	Removed game instructions from lobby.
+
+Bugs fixed.
+
+	The client would freeze while playing chess against the computer because the unit capturing data was not populated before the call to the function whatPieceShouldBeMoved(). 
+
+	In the game of chess the value of 17 referring to a piece location was reset back to 0 after the computer moved a piece. The 17 piece value was cleared not at the location of the moved piece but rather its other instance. The result was that the original piece could extend its capturing units passed another pieces location.
+
+	Playing an offline game of checkers had an incorrect who won message or an empty message depending on what player won the game.
+
+	The checker game did not have all pieces on board. The layout of the pieces were incorrect for game play as those pieces were positioned for troubleshooting.
+
+	At configuration the username text would not save if username was previously saved without any characters.
+
+Version 1.8.0. Date: 2021-1-31
+
+New Features.
+
+	Game section added to the configuration scene. User can now configure the total game minutes allowable for each game.
+
+Feature changed.
+
+	Improved the chess AI.
+	
+	Darkened the random colored background scenes.
+
+Bugs fixed.
+
+	A game that ended normally still had variables referring to a game in progress. The result was a player could not leave the room without registering a game loss.
+
+	HUD now shows the correct win data when game ends.	
+
+	Fixed broken chess notation when playing against the computer.
+
+	Fixed broken computer search for checkmate in two moves.
+
+	NPC avatars and NPC names did not show when playing a computer game online.
+
+	Incorrect message after clicking the "To title" button while playing a game.
+
+	Incorrect capturing units for chess horse.
+
+	Wrong mention about who won an offline game for both snakes and ladders or Reversi.
+
+	Ending the game using the quit button would crash the client online.
+
+	Start game button was hidden from host of the room after both parties agreed to a game draw but only when host was not moving piece.  
+
+	When playing a game against the computer online, the first game move would hide the lobby button for the duration of the game room session.
+
+	Ben and piper avatars needed to be swapped.
+
+	Online avatars were not working.
+
+	All sound and all associated code were removed from the client to avoid a random client crash when using the old HaxeLibs.
+
+Version 1.7.0. Date: 2021-1-7
+
+New Features.
+
+	Added top win leaderboard to the lobby screen.
+	
+	At the configuration screen there is now an option to enable the leaderboard. Also added 300 avatars to the client. User can how select an avatar for offline play.
+	
+	Added 5 more furniture items to the house side game.
+	
+	Scene now flashes in colour when a button or clickable image receive input action from the player.
+	
+	added spectators column to lobby scene.
+	
+Feature changed.
+	
+	Added Button at title screen to check for newer version of the client software.
+	
+	Android now can download the most recent version of the client software but the installation of the software is manual.
+	
+	Button click state changed from pressed to released for most general buttons not located on the scrollbar area.
+	
+	Scrollbar swap now works when dragging the finger or mouse.
+	
+	redone the HUD.
+	
+	Login field and password field now change in border colour and background colour when focus changes.
+	
+	Repositioned the keyboard characters to the same layout as the qwerty keyboard.
+	
+	Made the height of all buttons about 25% bigger.
+	
+	While playing checkers, the unit where that piece moved to and the unit where the piece moved from, is now highlighted and using a different colour for each player.
+
+Bugs fixed.
+	
+	bottom part of the help text, accessed from the title screen, could not be seen.
+
+	Fixed a spelling mistake and removed a duplicate "Go back" button at the game instructions scene.
+
+	At the miscellaneousOutput scene the exit button needed two clicks to return to the miscellaneous scene.
+	
+	Returning to the miscellaneous scene from the lobby would display the miscellaneousOutput scene when player has previously visited the miscellaneousOutput scene from current lobby session.
+	
+	When playing checkers online the piece that jumped would no longer be seen for the other player.
+
+Version 1.6.0. Date: 2020-12-15
+
+New Features.
+
+	Options menu added to the title scene. Users can now configure the way the game board and game board border looks. Shade and colour can be applied to game board even units and odd units. Users are able to save the custom game board.
+	
+Feature changed.
+
+	Scrollbar can now be scrolled by a input swipe. The scrollbar area can scroll a maximum of 1 page when swiping.
+	
+	New backgrounds added to the login scene and event scheduler scene.
+
+	Checkers pieces and Reversi pieces were changed.
+	
+Bugs fixed.
+
+	When entering a room in offline mode the game will start automatically and the notation window will not output anything. However, the second time starting a game by clicking the start game button the notation window outputted "1. =".
+
+
+Version 1.5.0. Date: 2020-12-7
+
+New Features.
+	
+	Client help icon added to the title scene. Help data is pulled from the website when that icon is clicked.
+	
+	Credits icon added to the title scene. At that scene credit is given to the following websites and authors that contributed in someway to help make this game possible.
+	
+Feature changed.
+	
+	Client and server no longer share the same version file used to determine if a software update is needed.
+
+Version 1.4.0. Date: 2020-12-1
+
+Feature changed.
+	
+	Scrollbar class had an overhaul. scrollbar area can now be scrolled with just an input press. Scrollbar does not scroll when clicking an item on it such as a button.
+	
+	Button input how happens either from just a press or from a press then release. Therefore, a button action can happen either when player touches the button or when player releases the mouse or finger from a button.
+	
+	A fair amount of buttons were rearranged. Options menu background was added to the bottom of most scenes. At the right-corner of scenes that has an options menu, a red "X" button once clicked will return the user to the title scene.
+	
+	Icons instead of buttons are now at the title scene.
+	
+Bugs fixed.
+	
+	Fixed scrolling map at house feature. For example, a left sided scrollable region of the map remained highlighted when an input drag went immediately to a bottom scrollable region. Also, some scrollable regions highlighted areas beyond the map boundaries.
+	
+	Fixed a layout bug at "furniture get" and "furniture put" panels where the first item of each panel did not match the same y coordinate as the other. Also, moved the "no selected item" text to the map.
+	
+	At lobby, clicking the left side of the "house" button would trigger a room button if underneath it. The result would be a very ugly display bug.
+	
+	Fixed a bug where the players total allowed to play the selected game was not set back to zero before re-entering the creating room. When clicking the enter room button from the creating room without first selecting a game, checkers would be selected as default but that room from lobby would see the players total allowed from the last game played.
+	
+	The spectators watching a game feature was only working for checkers.
+
+	The creating room scene had to be redone because of a scrollbar bug that could not be fixed. The scrollbar was removed from that scene.
+	
+Version 1.3.0. Date: 2020-11-13
+
+New Features.
+
+	At login screen, now an option to remember password. Username field now has text of the last logged in user.
+	
+
+Feature changed.
+
+	mobile keyboard made larger.
+	
+Bugs fixed.
+	
+	A restart of game did not show the restart button for host of the room. Instead, player two could restart the game.
+
+	Return from lobby from waiting room would sometimes not delete host.
+	
+	Invalid event error. Server could not handle two much client data. The problem was that a tick variable from an update() function would send an event simultaneously to server with other event perhaps from a mouse click or from another event called at update() that would corrupt the data at server side. The problem was found when months of research showed that those corrupt events were not from player activity.
+	
+	House did not restore a saved game after client was reloaded.
+	
+	At "furniture put", the panel layout was broken when there was an item to display.
+	
+	When entering the lobby a player can quickly click a room button before lobby data is received, corrupting the room data. This variable is used to set lobby buttons active only when "get room data" event is received.
+	
+	Player created a game and is now in waiting room while there is a player who has not yet left that room number at the game room. When player leaves the game room, room host was deleted, deleting the host that just created the new waiting room.
+
+	Loading client would display a black screen at title screen for about 30 seconds while trying to connect to a webpage that was offline.
+	
+	At client, the host of the device was being saved as the server IP address. Also, the host was deleted from the database each time client connected to the server. The result was that more than one connection to the server could be made from a device.
+	
+	Signature game player's piece reset back to unit 0 after that piece had landed on unit 7 or 21. 
+	
+Version 1.2.1. Date: 2020-11-06
+
+Bugs fixed.
+
+	Sometimes the host of the room was not removed from the host table at database because a tick would trigger an event to create that player as host when that tick was at a value. At the lobby that room would then have incorrect data.
+
+	lobby or game room was calling a "Room Lock 1" event which would try to unlock a room that, at those room locations, would never be locked.
+	
+	There was a condition that checked for both a mouse justPressed and a mouse pressed. The result would be that a message box could not be dragged.
+	
+	When clicking the register button from client, a wrong page was loaded because software to power website had changed.
+	
+	login box and its elements were not set to inactive after player logged in. lobby was then drawn overtop of login box. The keyboard would display when player clicked the location of the hidden username input box.
+	
+	When a spectator left a game room, an event would trigger to end game for players in that room.
+	
+	When a spectator returned to the lobby from a game room, lobby would be seen as a black stage with a few button seen from the game room.
+	
+	Scrolling the map at house changed the positions of chatter/Hud elements.
+	
+	Message box that displays the win/lose text to player did not display.
+	
+	In a 3 or 4 player game in progress, when the second or third player left the game room, a message box did not display saying that a player left the game.
+	
+	After changing the default font for the client, increase/decrease month buttons at calendar did not show any text.
+	
+	A spectator watching a game that purposely crashed the client would end the game for the party in that room.
+
+	A spectator watching that returned to lobby would have incorrect data when re-watching a game. The spectator would have a win or loss added to stats when game ended because part of the incorrect data was the spectator as an active player.
+	
+	In a three player game, the last player left in the game room did not receive a message about the player that just left the game room.
+	
+	In a three player game, the first player to quit a game would still receive a win after the other players game ended but only when that first player to quit game was still at that game room.
+	
+	In a three player game, the last player left would instead receive a "Player's time expired" message instead of a "Player quit game" message.
+	
+Version 1.2.0. Date: 2020-10-26.
+
+New Features.
+	
+	A keyboard will now display when player clicks a input field to type in text.
+	
+	Android build is now available at downloads.
+	
+Feature changed.
+
+	button font size increased.
+	
+Bugs fixed.
+	
+	At login, messages about incorrect username or password were not shown.
+
+	Title scene buttons could be executed from within The event scheduler scene. At login, the login button could still be clicked after a message box displayed.
+
+
+Version 1.1.0. Date: 2020-10-20.
+
+Feature changed.
+
+	The "request games" button was removed. Now lobby refreshes at so many ticks.
+	
+	a spectator watching the game play can no longer view chat or participate in chat. 
+
+Bugs fixed.
+
+	Re-entering house from title/lobby button would show scene bugs. Icons at "Furniture put" would be drawn twice on the panel or a panel would not be seen.
+	
+	The background behind the selected furniture, where the draw icon and rotate icon are seen, would not display underneath that furniture when re-entering house from title scene. Static variables needed to be reset back to default.
+	
+	Fixed a bug where re-entering the house would randomly drop the client. Client was not populating its typeDef variables from event "_data" variables that the server was sending. The client would drop at the time one of those variables were used.
+	
+	At client/server events used in handling player entering/exiting a lobby room needed to be reprogrammed. A non host player could not re-enter a room. Lobby data shown incorrect room values when exiting a room. TypeDef _dataMisc was not correct.
+	
+	A player that logged in would send "Get Room Data" event data to other players. Features such as start a game would be broken because of that event data.
+	
+	while playing the signature game, when a player disconnected or left the game using the lobby button, the game did not continue for the other players.
+	
+Version 1.0.0. Date: 2020-09-25.
+
+New Features.
+
+	An isometric house feature is a side game where you can make isometric rooms by placing floor tiles, wall tiles and furniture anywhere in the house.
+	
+	Now you can play against the CPU online. Rooms a and b are now reserved for CPU games. Currently, these rooms are for a 1 player game. Spectators are not allowed.
+
+	Added a password feature at server. The server will now ask for a membership password before the server goes online.
+	
+Feature changed.
+
+	Experience points event now online. A game played while this event is active will give double experience points. On a day this event is not active, the experience points given will be the normal amount.
+
+	At the client, room configuration screen, the spectator watching feature can now be toggled true or false. Also, at the same place, the player can now select to play against the computer.
+
+Bugs fixed.
+
+	Fixed a bug at the miscellaneous menu where the height between game instruction paragraphs were not the same. 
+
+	Fixed a bug at the MenuState.hx class. The event scheduler would not display the next event if that event was on a different month.
+
+
+Version 0.12.0. Date: 2020-06-27.
+
+New Features.
+
+	Rooms now have a room lock feature. Two or more players were able to setup the same room or enter into the same waiting room near the same time. The player that setup a room is the host of the room able to ban, kick or start a game for the other players. When there are two or more players setting up the same room, the game will not operate correctly. The game cannot have two hosts because one reason would be that in a two player game the host moves a piece first.
+
+	When a player request to enter into a room, that room will now be checked to determine if its locked. A message that the room is locked will be given to any player that tries to enter a room when all room data has not been sent to the first player that entered into that room.
+
+	A player might find a way to cheat or crash the server. Every action that the player does is now logged. Each day a file is created and is used to hold all players actions. There was a problem where a fair amount of places that logged a username was logged as a username called null. That bug is now fixed.
+
+	Experience Points is the second event added to the client. On the day of this event, you will receive experience points after your game has ended. A game win gives the full experience points value for that game, while a game loss will give half experience points value for that game.
+
+	Different games give different experience points. A game that gives higher experience points is a game that can take longer to finish. Chess can end in three moves but can also take a very long time to finish. Chess and checkers has a 50 move rules. Therefore, those games give the same experience points.
+
+	After you mouse click the "Experience Points" at the main menu, you will see a table containing all 2000 experience point level and the experience points needed to advance to a level. So, if you have 110 experience points then you are a level 2 player and depending on your level, a board game feature can be unlocked and your player shown at the website "Leaderboards" page.
+
+	Miscellaneous Menu.
+	Game instructions and game statistics can both be accessed from the miscellaneous menu button from within the client software at lobby. From that menu if you mouse click the 'Checkers' button, the game instruction is downloaded from the website then displayed at the miscellaneous menu output scene. At the miscellaneous menu you can also mouse click the 'Statistics' button to display your wins, losses, draws, credit total and experience points total.
+
+Bugs fixed.
+
+	Sometimes when entering the waiting room, all data for that player would not display. That room was empty of all data. That bug has not been seen for a while so hopefully its fixed.
+
+	A the lobby, sometimes the room data was seen as empty when it was not. Mouse clicking that room would bring another player into that room as host.
+
+	After a none hosted player re-enter into the same waiting to become a host after the game had ended, there would not be a start game button when re-entering into the game room.
