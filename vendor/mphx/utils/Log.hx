@@ -6,7 +6,7 @@ package vendor.mphx.utils;
 	var Warnings = 0;  //Large messages, weird behaviour
 	var Errors = 1;    //Socket drops, corrupt data
 	var Info = 2;      //Serialization method, start/stop of server...
-	var Networking = value(3);//Every message sent and received.
+	var Networking = 3;//Every message sent and received.
 
     static inline function value(index:Int) return 1 << index;
 }
