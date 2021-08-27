@@ -175,13 +175,13 @@ class SceneLobby extends FlxState
 		
 		_title_background = new FlxSprite(0, 0);
 		_title_background.makeGraphic(FlxG.width - 40, 50, 0xFF440000); 
-		_title_background.scrollFactor.set(0,1);
+		_title_background.scrollFactor.set(1,1);
 		add(_title_background);
 		
 		_title = new FlxText(15, 0, 0, "Lobby");
 		_title.setFormat(Reg._fontDefault, 50, FlxColor.YELLOW);
 		_title.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 3);
-		_title.scrollFactor.set(0, 1);
+		_title.scrollFactor.set(1,1);
 		_title.visible = true;
 		add(_title);
 		

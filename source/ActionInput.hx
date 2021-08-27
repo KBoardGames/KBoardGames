@@ -51,8 +51,7 @@ class ActionInput
 		
 		#end
 		
-		if (_state_enabled == false) _bool = false;
-		
+		//if (_state_enabled == false) _bool = false;		
 		//enableDisableInput();
 		
 		return _bool;
@@ -81,8 +80,7 @@ class ActionInput
 		
 		#end
 		
-		if (_state_enabled == false) _bool = false;
-		
+		//if (_state_enabled == false) _bool = false;		
 		//enableDisableInput();
 		
 		return _bool;
@@ -109,8 +107,7 @@ class ActionInput
 		
 		#end
 		
-		if (_state_enabled == false) _bool = false;
-		
+		//if (_state_enabled == false) _bool = false;
 		//enableDisableInput();
 						
 		return _bool;
@@ -137,8 +134,7 @@ class ActionInput
 		
 		#end
 		
-		if (_state_enabled == false) _bool = false;
-		
+		//if (_state_enabled == false) _bool = false;
 		//enableDisableInput();
 		
 		return _bool;

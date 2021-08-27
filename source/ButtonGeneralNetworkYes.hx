@@ -233,7 +233,7 @@ class ButtonGeneralNetworkYes extends FlxUIButton
 		alpha = 1;			
 		
 		Reg2._boxScroller_is_scrolling = false;
-		Reg2._lobby_button_alpha = 1;
+		Reg2._lobby_button_alpha = 0.3;
 	}
 	
 	private function makeActive2(i:FlxTimer):Void
@@ -246,6 +246,6 @@ class ButtonGeneralNetworkYes extends FlxUIButton
 		alpha = 1;			
 		
 		Reg2._boxScroller_is_scrolling = false;
-		Reg2._lobby_button_alpha = 1;
+		Reg2._lobby_button_alpha = 0.3;
 	}
 }

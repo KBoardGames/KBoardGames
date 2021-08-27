@@ -1,4 +1,6 @@
 package;
+import sys.net.Address;
+import sys.net.Host;
 
 /**
  * ...
@@ -369,9 +371,9 @@ class PlayState extends FlxState
 				if (RegTypedef._dataAccount._username == "")
 					RegTypedef._dataAccount._username = RegCustom._profile_username_p1;
 				
-				RegTypedef._dataAccount._host = Internet.getIP(RegTypedef._dataAccount._username);
-				RegTypedef._dataAccount._ip = Internet.getIP(RegTypedef._dataAccount._username); 
-
+				RegTypedef._dataAccount._host = Internet.getIP();
+				RegTypedef._dataAccount._ip = Internet.getIP(); 
+	
 				clientSocket.send("Join", RegTypedef._dataAccount); // go to the event "join" at server then at server at event join there could be a broadcast that will send data to a client event.
 				haxe.Timer.delay(function (){}, Reg2._event_sleep);
 			}	
