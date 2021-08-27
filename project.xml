@@ -37,7 +37,7 @@
 	<classpath name="source" />
 	
 	<assets path="assets" embed="true"/>
-	<assets path="multiavatar" embed="true"/>
+	<assets path="vendor/multiavatar" embed="true"/>
 	
 	<haxedef name="no-inline" if="flash"/>
 	<haxedef name="no-inline" if="neko"/>
