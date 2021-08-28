@@ -153,7 +153,7 @@ class HUD extends FlxState
 		else if (Reg._game_offline_vs_cpu == true
 		&& 		 Reg._game_online_vs_cpu == false)
 		{
-			var _num = getNPCvalue();
+			var _num = getBOTvalue();
 			_image_profile_avatar_p2.loadGraphic("vendor/multiavatar/" + Reg2._offline_cpu_avatar_number[_num]);	
 		}
 		
@@ -547,7 +547,7 @@ class HUD extends FlxState
 	}
 	
 	// this is used to display the computer avatar when playing a game with the computer. this is for the first computer only, if adding a second computer to the game then you will need a different function. this function is called at the constructor of this class.
-	private function getNPCvalue():Int
+	private function getBOTvalue():Int
 	{
 		var _num = 0;
 		

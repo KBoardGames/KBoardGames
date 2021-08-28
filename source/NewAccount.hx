@@ -16,7 +16,8 @@ class NewAccount extends FlxGroup
 		super();	
 		
 		FlxG.autoPause = false;	// this application will pause when not in focus.
-				
+		RegTypedef._dataStatistics._chess_elo_rating = 800;
+		
 		var _title = new FlxText(0, 0, 0, "New Account");
 		_title.setFormat(Reg._fontDefault, 50, FlxColor.YELLOW);
 		_title.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 3);
@@ -57,14 +58,15 @@ class NewAccount extends FlxGroup
 		_button_b3.set_toggled(false);
 		add(_button_b3);
 		
-		var _close = new ButtonGeneralNetworkYes(30, FlxG.height - 40, "Save", 150 + 15, 35, Reg._font_size, 0xFFCCFF33, 0, saveAllConfigurations, 0xFF000044, false);
+		// ButtonGeneralNetworkNo is needed here.
+		var _close = new ButtonGeneralNetworkNo(30, FlxG.height - 40, "Save", 150 + 15, 35, Reg._font_size, 0xFFCCFF33, 0, saveAllConfigurations, 0xFF000044, false, 1);
 		_close.label.font = Reg._fontDefault;
 		_close.screenCenter(X);
 		#if html5
 			_close.label.text = "Apply";
 		#end
 		_close.x += 400;
-		add(_close);		
+		add(_close);
 	}
 	
 	private function saveAllConfigurations():Void
@@ -84,10 +86,10 @@ class NewAccount extends FlxGroup
 			if (_button_b1.has_toggle == true)
 				RegTypedef._dataStatistics._chess_elo_rating = 800;
 			
-			if (_button_b2.has_toggle == true)
+			else if (_button_b2.has_toggle == true)
 				RegTypedef._dataStatistics._chess_elo_rating = 1200;
 			
-			if (_button_b3.has_toggle == true)
+			else if (_button_b3.has_toggle == true)
 				RegTypedef._dataStatistics._chess_elo_rating = 1600;
 						
 			PlayState.clientSocket.send("Save New Account Configurations", RegTypedef._dataStatistics);
@@ -147,6 +149,9 @@ class NewAccount extends FlxGroup
 		remove(__menu_bar);
 		__menu_bar.destroy();
 		__menu_bar = null;
+		
+		FlxG.mouse.reset();
+		FlxG.mouse.enabled = true;
 		
 		RegTriggers._returnToLobbyMakeButtonsActive = true;
 		

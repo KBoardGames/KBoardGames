@@ -659,7 +659,7 @@ class RegFunctions
 	}
 	
 	/******************************
-	 * generate the computer names and computer avatar numbers to be used for computer games. if playing a one player game against computer computer, use the name and avatar created at this function for that NPC player.	 * 
+	 * generate the computer names and computer avatar numbers to be used for computer games. if playing a one player game against computer computer, use the name and avatar created at this function for that BOT player.	 * 
 	 */
 	public static function offlineCpuUserNames():Void
 	{

@@ -88,11 +88,11 @@ class MenuState extends FlxState
 	 */
 	private var _ticks_startup:Float = 0;
 	
-	private var _npc_ben:ButtonUnique;
-	private var _npc_tina:ButtonUnique;
-	private var _npc_piper:ButtonUnique;
-	private var _npc_amy:ButtonUnique;
-	private var _npc_zak:ButtonUnique;
+	private var _bot_ben:ButtonUnique;
+	private var _bot_tina:ButtonUnique;
+	private var _bot_piper:ButtonUnique;
+	private var _bot_amy:ButtonUnique;
+	private var _bot_zak:ButtonUnique;
 	private var _profile_username_p1:ButtonUnique;
 	
 	private var _icon_offset_x:Int = 0;
@@ -245,7 +245,7 @@ class MenuState extends FlxState
 			#end
 						
 			startupFunctions();
-			drawNPCbuttonsOnScene();
+			drawBOTbuttonsOnScene();
 			chess_skill_level_setup();
 			
 			#if !html5
@@ -914,7 +914,7 @@ class MenuState extends FlxState
 			#end
 			
 			#if html5
-				RegTypedef._dataAccount._username = "npc ben";
+				RegTypedef._dataAccount._username = "bot ben";
 				FlxG.switchState(new PlayState());
 					
 			#end
@@ -1434,63 +1434,63 @@ class MenuState extends FlxState
 		buttonsIconsNotActive();
 	}
 	
-	// if client is not ready for release, at client title, buttons for NPC login are displayed. when clicking those buttons, the _data._username will be set to that button name. the reason for this is because when using fast login the IP address of the user is checked against the IP in the MySQL database, however, the NPC's all share the same IP. so logging in the second time cannot be achieved without those buttons at client. note that the buttons will not be display at release mode.
+	// if client is not ready for release, at client title, buttons for BOT login are displayed. when clicking those buttons, the _data._username will be set to that button name. the reason for this is because when using fast login the IP address of the user is checked against the IP in the MySQL database, however, the BOT's all share the same IP. so logging in the second time cannot be achieved without those buttons at client. note that the buttons will not be display at release mode.
 	
 	// the above text is also at server.
-	private function drawNPCbuttonsOnScene():Void	{		
+	private function drawBOTbuttonsOnScene():Void	{		
 		
 		if (Reg._clientReadyForPublicRelease == false)
 		{
-			var _npc_text = new FlxText(15, 180, 0, "Click npc player button then click multiplayer online icon.");
-			_npc_text.scrollFactor.set();
-			_npc_text.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.YELLOW);
-			_npc_text.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 2);
-			add(_npc_text);	
+			var _bot_text = new FlxText(15, 180, 0, "Click bot player button then click multiplayer online icon.");
+			_bot_text.scrollFactor.set();
+			_bot_text.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.YELLOW);
+			_bot_text.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 2);
+			add(_bot_text);	
 			
-			if (_npc_ben == null)
+			if (_bot_ben == null)
 			{
-				_npc_ben = new ButtonUnique(15, 230, "Npc ben", 150, 35, Reg._font_size, 0xFFCCFF33, 0, npcUseBenOnline, 0xFF000044, false, 1);
-				_npc_ben.label.font = Reg._fontDefault;
-				add(_npc_ben);			
+				_bot_ben = new ButtonUnique(15, 230, "Bot ben", 150, 35, Reg._font_size, 0xFFCCFF33, 0, botUseBenOnline, 0xFF000044, false, 1);
+				_bot_ben.label.font = Reg._fontDefault;
+				add(_bot_ben);			
 			}
 			
-			if (_npc_tina == null)
+			if (_bot_tina == null)
 			{
-				_npc_tina = new ButtonUnique(150+30, 230, "Npc tina", 150, 35, Reg._font_size, 0xFFCCFF33, 0, npcUseTinaOnline, 0xFF000044, false, 1);
-				_npc_tina.label.font = Reg._fontDefault;
-				add(_npc_tina);		
+				_bot_tina = new ButtonUnique(150+30, 230, "Bot tina", 150, 35, Reg._font_size, 0xFFCCFF33, 0, botUseTinaOnline, 0xFF000044, false, 1);
+				_bot_tina.label.font = Reg._fontDefault;
+				add(_bot_tina);		
 			}
 			
-			if (_npc_piper == null)
+			if (_bot_piper == null)
 			{
-				_npc_piper = new ButtonUnique(300+45, 230, "Npc piper", 150, 35, Reg._font_size, 0xFFCCFF33, 0, npcUsePiperOnline, 0xFF000044, false, 1);
-				_npc_piper.label.font = Reg._fontDefault;
-				add(_npc_piper);		
+				_bot_piper = new ButtonUnique(300+45, 230, "Bot piper", 150, 35, Reg._font_size, 0xFFCCFF33, 0, botUsePiperOnline, 0xFF000044, false, 1);
+				_bot_piper.label.font = Reg._fontDefault;
+				add(_bot_piper);		
 			}
 			
-			if (_npc_amy == null)
+			if (_bot_amy == null)
 			{
-				_npc_amy = new ButtonUnique(450+60, 230, "Npc amy", 150, 35, Reg._font_size, 0xFFCCFF33, 0, npcUseAmyOnline, 0xFF000044, false, 1);
-				_npc_amy.label.font = Reg._fontDefault;
-				add(_npc_amy);			
+				_bot_amy = new ButtonUnique(450+60, 230, "Bot amy", 150, 35, Reg._font_size, 0xFFCCFF33, 0, botUseAmyOnline, 0xFF000044, false, 1);
+				_bot_amy.label.font = Reg._fontDefault;
+				add(_bot_amy);			
 			}
 			
-			if (_npc_zak == null)
+			if (_bot_zak == null)
 			{
-				_npc_zak = new ButtonUnique(600+75, 230, "Npc zak", 150, 35, Reg._font_size, 0xFFCCFF33, 0, npcUseZakOnline, 0xFF000044, false, 1);
-				_npc_zak.label.font = Reg._fontDefault;
-				add(_npc_zak);
+				_bot_zak = new ButtonUnique(600+75, 230, "Bot zak", 150, 35, Reg._font_size, 0xFFCCFF33, 0, botUseZakOnline, 0xFF000044, false, 1);
+				_bot_zak.label.font = Reg._fontDefault;
+				add(_bot_zak);
 			}
 			
-			// add the none npc name as the last button from the configuration menu.
+			// add the none bot name as the last button from the configuration menu.
 			if (RegCustom._profile_username_p1 != ""
 			&&	RegCustom._profile_username_p1 != "Guest 1"
 			&&	RegCustom._profile_username_p1 != "Guest 2"
-			&&	RegCustom._profile_username_p1 != "Npc ben".toLowerCase()
-			&&	RegCustom._profile_username_p1 != "Npc tina".toLowerCase()
-			&&	RegCustom._profile_username_p1 != "Npc piper".toLowerCase()
-			&&	RegCustom._profile_username_p1 != "Npc amy".toLowerCase()
-			&&	RegCustom._profile_username_p1 != "Npc zak".toLowerCase()
+			&&	RegCustom._profile_username_p1 != "Bot ben".toLowerCase()
+			&&	RegCustom._profile_username_p1 != "Bot tina".toLowerCase()
+			&&	RegCustom._profile_username_p1 != "Bot piper".toLowerCase()
+			&&	RegCustom._profile_username_p1 != "Bot amy".toLowerCase()
+			&&	RegCustom._profile_username_p1 != "Bot zak".toLowerCase()
 			)
 			{
 				_profile_username_p1 = new ButtonUnique(750+90, 230, RegCustom._profile_username_p1, 150, 35, Reg._font_size, 0xFFCCFF33, 0, profile_username_p1, 0xFF000044, false, 1);
@@ -1503,40 +1503,40 @@ class MenuState extends FlxState
 			{
 				switch (Reg2._menu_state_username_p1)
 				{
-					case 0: npcUseBenOnline();
-					case 1: npcUseTinaOnline();
-					case 2: npcUsePiperOnline();
-					case 3: npcUseAmyOnline();
-					case 4: npcUseZakOnline();
+					case 0: botUseBenOnline();
+					case 1: botUseTinaOnline();
+					case 2: botUsePiperOnline();
+					case 3: botUseAmyOnline();
+					case 4: botUseZakOnline();
 					case 5: profile_username_p1();
 				}
 			}
 			
 			else
 			{
-				if (RegCustom._profile_username_p1 == "Npc ben".toLowerCase())
-					npcUseBenOnline();
+				if (RegCustom._profile_username_p1 == "Bot ben".toLowerCase())
+					botUseBenOnline();
 				
-				else if (RegCustom._profile_username_p1 == "Npc tina".toLowerCase())
-					npcUseTinaOnline();
+				else if (RegCustom._profile_username_p1 == "Bot tina".toLowerCase())
+					botUseTinaOnline();
 				
-				else if (RegCustom._profile_username_p1 == "Npc piper".toLowerCase())
-					npcUsePiperOnline();			
+				else if (RegCustom._profile_username_p1 == "Bot piper".toLowerCase())
+					botUsePiperOnline();			
 				
-				else if (RegCustom._profile_username_p1 == "Npc amy".toLowerCase())
-					npcUseAmyOnline();
+				else if (RegCustom._profile_username_p1 == "Bot amy".toLowerCase())
+					botUseAmyOnline();
 				
-				else if (RegCustom._profile_username_p1 == "Npc zak".toLowerCase())
-					npcUseZakOnline();				
+				else if (RegCustom._profile_username_p1 == "Bot zak".toLowerCase())
+					botUseZakOnline();				
 				
 				else if (RegCustom._profile_username_p1 != ""
 				&&	RegCustom._profile_username_p1 != "Guest 1"
 				&&	RegCustom._profile_username_p1 != "Guest 2"
-				&&	RegCustom._profile_username_p1 != "Npc ben".toLowerCase()
-				&&	RegCustom._profile_username_p1 != "Npc tina".toLowerCase()
-				&&	RegCustom._profile_username_p1 != "Npc piper".toLowerCase()
-				&&	RegCustom._profile_username_p1 != "Npc amy".toLowerCase()
-				&&	RegCustom._profile_username_p1 != "Npc zak".toLowerCase()
+				&&	RegCustom._profile_username_p1 != "Bot ben".toLowerCase()
+				&&	RegCustom._profile_username_p1 != "Bot tina".toLowerCase()
+				&&	RegCustom._profile_username_p1 != "Bot piper".toLowerCase()
+				&&	RegCustom._profile_username_p1 != "Bot amy".toLowerCase()
+				&&	RegCustom._profile_username_p1 != "Bot zak".toLowerCase()
 				) 
 					profile_username_p1();
 				
@@ -1544,32 +1544,32 @@ class MenuState extends FlxState
 		}
 	}
 	
-	private function npc_no_toggle():Void
+	private function bot_no_toggle():Void
 	{		
-		_npc_ben.color = 0xFF550000;
-		_npc_ben.over_color = 0xFFFFFFFF;
-		_npc_ben.has_toggle = false;
-		_npc_ben.set_toggled(false);
+		_bot_ben.color = 0xFF550000;
+		_bot_ben.over_color = 0xFFFFFFFF;
+		_bot_ben.has_toggle = false;
+		_bot_ben.set_toggled(false);
 		
-		_npc_tina.color = 0xFF550000;
-		_npc_tina.over_color = 0xFFFFFFFF;
-		_npc_tina.has_toggle = false;
-		_npc_tina.set_toggled(false);
+		_bot_tina.color = 0xFF550000;
+		_bot_tina.over_color = 0xFFFFFFFF;
+		_bot_tina.has_toggle = false;
+		_bot_tina.set_toggled(false);
 		
-		_npc_piper.color = 0xFF550000;
-		_npc_piper.over_color = 0xFFFFFFFF;
-		_npc_piper.has_toggle = false;
-		_npc_piper.set_toggled(false);
+		_bot_piper.color = 0xFF550000;
+		_bot_piper.over_color = 0xFFFFFFFF;
+		_bot_piper.has_toggle = false;
+		_bot_piper.set_toggled(false);
 		
-		_npc_amy.color = 0xFF550000;
-		_npc_amy.over_color = 0xFFFFFFFF;
-		_npc_amy.has_toggle = false;
-		_npc_amy.set_toggled(false);
+		_bot_amy.color = 0xFF550000;
+		_bot_amy.over_color = 0xFFFFFFFF;
+		_bot_amy.has_toggle = false;
+		_bot_amy.set_toggled(false);
 		
-		_npc_zak.color = 0xFF550000;
-		_npc_zak.over_color = 0xFFFFFFFF;
-		_npc_zak.has_toggle = false;
-		_npc_zak.set_toggled(false);
+		_bot_zak.color = 0xFF550000;
+		_bot_zak.over_color = 0xFFFFFFFF;
+		_bot_zak.has_toggle = false;
+		_bot_zak.set_toggled(false);
 		
 		if (RegCustom._profile_username_p1 != ""
 		&&	_profile_username_p1 != null)
@@ -1581,68 +1581,68 @@ class MenuState extends FlxState
 		}
 	}
 	
-	private function npcUseBenOnline():Void
+	private function botUseBenOnline():Void
 	{		
-		RegTypedef._dataAccount._username = "npc ben";
+		RegTypedef._dataAccount._username = "bot ben";
 		Reg2._menu_state_username_p1 = 0;
 		
-		npc_no_toggle();
-		_npc_ben.color = 0xFF004400;
-		_npc_ben.over_color = 0xFFFFFFFF;
-		_npc_ben.has_toggle = true;
-		_npc_ben.set_toggled(true);
+		bot_no_toggle();
+		_bot_ben.color = 0xFF004400;
+		_bot_ben.over_color = 0xFFFFFFFF;
+		_bot_ben.has_toggle = true;
+		_bot_ben.set_toggled(true);
 		
 	}
 	
-	private function npcUseTinaOnline():Void
+	private function botUseTinaOnline():Void
 	{
-		RegTypedef._dataAccount._username = "npc tina";
+		RegTypedef._dataAccount._username = "bot tina";
 		Reg2._menu_state_username_p1 = 1;
 		
-		npc_no_toggle();
-		_npc_tina.color = 0xFF004400;
-		_npc_tina.over_color = 0xFFFFFFFF;
-		_npc_tina.has_toggle = true;
-		_npc_tina.set_toggled(true);
+		bot_no_toggle();
+		_bot_tina.color = 0xFF004400;
+		_bot_tina.over_color = 0xFFFFFFFF;
+		_bot_tina.has_toggle = true;
+		_bot_tina.set_toggled(true);
 		
 	}
 	
-	private function npcUsePiperOnline():Void
+	private function botUsePiperOnline():Void
 	{
-		RegTypedef._dataAccount._username = "npc piper";
+		RegTypedef._dataAccount._username = "bot piper";
 		Reg2._menu_state_username_p1 = 2;
 		
-		npc_no_toggle();
-		_npc_piper.color = 0xFF004400;
-		_npc_piper.over_color = 0xFFFFFFFF;
-		_npc_piper.has_toggle = true;
-		_npc_piper.set_toggled(true);
+		bot_no_toggle();
+		_bot_piper.color = 0xFF004400;
+		_bot_piper.over_color = 0xFFFFFFFF;
+		_bot_piper.has_toggle = true;
+		_bot_piper.set_toggled(true);
 		
 	}
 	
-	private function npcUseAmyOnline():Void
+	private function botUseAmyOnline():Void
 	{
-		RegTypedef._dataAccount._username = "npc amy";
+		RegTypedef._dataAccount._username = "bot amy";
 		Reg2._menu_state_username_p1 = 3;
 		
-		npc_no_toggle();
-		_npc_amy.color = 0xFF004400;
-		_npc_amy.over_color = 0xFFFFFFFF;
-		_npc_amy.has_toggle = true;
-		_npc_amy.set_toggled(true);
+		bot_no_toggle();
+		_bot_amy.color = 0xFF004400;
+		_bot_amy.over_color = 0xFFFFFFFF;
+		_bot_amy.has_toggle = true;
+		_bot_amy.set_toggled(true);
 		
 	}
 	
-	private function npcUseZakOnline():Void
+	private function botUseZakOnline():Void
 	{
-		RegTypedef._dataAccount._username = "npc zak";
+		RegTypedef._dataAccount._username = "bot zak";
 		Reg2._menu_state_username_p1 = 4;
 		
-		npc_no_toggle();
-		_npc_zak.color = 0xFF004400;
-		_npc_zak.over_color = 0xFFFFFFFF;
-		_npc_zak.has_toggle = true;
-		_npc_zak.set_toggled(true);
+		bot_no_toggle();
+		_bot_zak.color = 0xFF004400;
+		_bot_zak.over_color = 0xFFFFFFFF;
+		_bot_zak.has_toggle = true;
+		_bot_zak.set_toggled(true);
 		
 	}
 	
@@ -1651,7 +1651,7 @@ class MenuState extends FlxState
 		RegTypedef._dataAccount._username = RegCustom._profile_username_p1;
 		Reg2._menu_state_username_p1 = 5;
 		
-		npc_no_toggle();
+		bot_no_toggle();
 		_profile_username_p1.color = 0xFF004400;
 		_profile_username_p1.over_color = 0xFFFFFFFF;
 		_profile_username_p1.has_toggle = true;

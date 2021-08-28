@@ -93,6 +93,7 @@ class SceneLobby extends FlxState
 	private var _tournaments:Tournaments;
 	private var _button_leaderboards:ButtonGeneralNetworkYes;
 	private var _leaderboards:Leaderboards;
+	private var _button_lobby_refresh:ButtonGeneralNetworkYes;
 	
 	/******************************
 	 * moves all row data to the left side.
@@ -186,7 +187,7 @@ class SceneLobby extends FlxState
 		add(_title);
 		
 		// 360 is the chat width. 215 is this button with. 15 is the default space from the edge. 20 is the width of the scrollbar. 10 is the extra space needed to make it look nice,
-		var _button_lobby_refresh = new ButtonGeneralNetworkYes(FlxG.width + -360 + -215 + -15 - 20 - 10, 10, "Lobby Refresh", 215, 35, Reg._font_size, 0xFFCCFF33, 0, button_refresh, 0xFF000044, false);		
+		_button_lobby_refresh = new ButtonGeneralNetworkYes(FlxG.width + -360 + -215 + -15 - 20 - 10, 10, "Lobby Refresh", 215, 35, Reg._font_size, 0xFFCCFF33, 0, button_refresh, 0xFF000044, false);		
 		_button_lobby_refresh.label.font = Reg._fontDefault;
 		_button_lobby_refresh.scrollFactor.set(0, 0);
 		add(_button_lobby_refresh);
@@ -1310,6 +1311,13 @@ class SceneLobby extends FlxState
 		if (_button_leaderboards != null) _button_leaderboards.active = false;
 		if (_button_tournaments != null) _button_tournaments.active = false;
 		
+		if (_button_lobby_refresh != null)
+		{
+			_button_lobby_refresh.visible = false;
+			_button_lobby_refresh.active = false;
+		}
+		
+		_title_background.visible = false;
 		_title.visible = false;
 		
 		_t1.visible = false;
@@ -1380,6 +1388,13 @@ class SceneLobby extends FlxState
 		
 		RegTriggers._ticks_buttons_menuBar = true;
 		
+		if (_button_lobby_refresh != null)
+		{
+			_button_lobby_refresh.active = true;
+			_button_lobby_refresh.visible = true;
+		}
+		
+		_title_background.visible = true;
 		_title.visible = true;
 		
 		_t1.visible = true;

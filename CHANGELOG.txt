@@ -1,4 +1,18 @@
-Version 1.15.13 Date: 2021-8-27
+Version 1.16.1. Date: 2021-8-28
+
+New Features.
+
+	Updated the credits scene.
+
+	Put back mouse wheel function for FlxScrollableArea.
+
+	Renamed word npc to bot.
+
+Bugs fixed.
+
+	Fixed new account scene bug.
+
+Version 1.15.13. Date: 2021-8-27
 
 This is yet another bug release.
 

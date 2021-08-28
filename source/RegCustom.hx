@@ -64,7 +64,7 @@ class RegCustom
 	 * this is the offline mode profile avatar number that refers to an avatar image.
 	 */
 	public static var _profile_avatar_number1:String = "0.png";
-	public static var _profile_avatar_number2:String = "0.png"; // player 2 or NPC 1.
+	public static var _profile_avatar_number2:String = "0.png"; // player 2 or BOT 1.
 	public static var _profile_avatar_number3:String = "0.png";
 	public static var _profile_avatar_number4:String = "0.png";
 	

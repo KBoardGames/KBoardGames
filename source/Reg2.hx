@@ -138,7 +138,7 @@ class Reg2 extends FlxGroup
 	 * these are the computer player names for room a and b. those rooms are reserved for playing a game against the computer. these names are displayed at the hub.
 	 * when the server first starts, the two of the names, randomly selected, will be assigned to room a and b.
 	 */
-	public static var _offline_cpu_host_names:Array<String> = ["npc piper", "npc ben", "npc tina", "npc zak", "npc amy"];
+	public static var _offline_cpu_host_names:Array<String> = ["bot piper", "bot ben", "bot tina", "bot zak", "bot amy"];
 	
 	public static var _offline_cpu_avatar_number:Array<String> = ["11.png", "15.png", "30.png", "44.png", "41.png"];
 	

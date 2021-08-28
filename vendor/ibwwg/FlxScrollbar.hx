@@ -121,6 +121,7 @@ class FlxScrollbar extends FlxSpriteGroup
 	 * this is the space between the left side of the scrollarea and where the left/right scrolling ends. the ending of the scroll is defined by this var. its a region of space that once clicked on, the scrollarea will scroll left or right. scrollbars without an id of zero will have this value set to zero so that the left and right scrolling cannot be done.
 	 */
 	private var _scrollarea_horizontal_width: Int = 100;
+	private var _mouseWheelMultiplier:Int;
 	
 	/*************************************************************************
 	 * Create a new scrollbar graphic.  You'll have to hide it yourself when needed.
@@ -150,6 +151,7 @@ class FlxScrollbar extends FlxSpriteGroup
 		_camera = Camera;
 		_vertical_bar_bring_up = vertical_bar_bring_up;
 		_vertical_bar_bring_down = vertical_bar_bring_down;
+		_mouseWheelMultiplier = MouseWheelMultiplier;
 		
 		if (id > 0) _scrollarea_horizontal_width = 0;
 		
@@ -295,31 +297,7 @@ class FlxScrollbar extends FlxSpriteGroup
 			}			
 			
 		}
-		
-		/*if (_bar.overlapsPoint( mousePosition ) || _track.overlapsPoint( mousePosition ))
-		{
-			if (FlxG.mouse.y >= _viewPort.height - 20) // 20 is width of scrollbar
-				_orientation = HORIZONTAL;
-			else
-				_orientation = VERTICAL;
-		}
-		*/
-		/*
-		if (_doOnce == 0) 
-		{			
-			// mouse is located at the track
-			if (!_bar.overlapsPoint( mousePosition ) && _track.overlapsPoint( mousePosition ))
-			{
-				_trackClickCountdown = 0.5;
-			
-				// sometimes when clicking the bar, the bar gets sticking and does not move. this is the fix.
-				if (_orientation == HORIZONTAL)	_dragStartedWhenBarWasAt = _bar.x;
-				else _dragStartedWhenBarWasAt = _bar.y;
-							
-				tryToScrollPage = true;
-			}
-		}*/
-		
+				
 		if (FlxG.mouse.pressed || _doOnce == 0)
 		{
 			if (_ticks < 50) _ticks = RegFunctions.incrementTicks(_ticks, 60 / Reg._framerate);		
@@ -417,6 +395,22 @@ class FlxScrollbar extends FlxSpriteGroup
 			if (whichWayToScroll != 0)
 				updateViewScroll();
 		} 		
+		
+		if (FlxG.mouse.wheel != 0)
+		{
+			if (_orientation == HORIZONTAL) 
+			{
+				_bar.x = FlxMath.bound(_bar.x - FlxG.mouse.wheel * _mouseWheelMultiplier, _track.x, _track.x + _track.width - _bar.width);
+			} 
+			else 
+			{ // VERTICAL
+				_bar.y = FlxMath.bound(_bar.y - FlxG.mouse.wheel * _mouseWheelMultiplier, _track.y, _track.y + _track.height - _bar.height);
+			}
+			
+			updateViewScrollWheel();
+		}
+		
+		trace(FlxG.mouse.wheel);
 				
 		if (RegHouse._at_House == false) updateScrollbar();		
 	
@@ -615,6 +609,23 @@ class FlxScrollbar extends FlxSpriteGroup
 						_camera.scroll.y = _content_height - height + _content_height_extra; 
 				}				
 			}
+		}
+	}
+	
+	public function updateViewScrollWheel() {
+		var scrolledProportion:Float;
+		if (_orientation == HORIZONTAL) {
+			if (_track.width == _bar.width)
+				scrolledProportion = 0;
+			else
+				scrolledProportion = FlxMath.bound( (_bar.x - x) / (_track.width - _bar.width), 0, 1 );
+			_camera.scroll.x = _camera.content.x + (_camera.content.width - _track.width) * scrolledProportion;
+		} else {
+			if (_track.height == _bar.height)
+				scrolledProportion = 0;
+			else
+				scrolledProportion = FlxMath.bound( (_bar.y - y) / (_track.height - _bar.height), 0, 1 );
+			_camera.scroll.y = _camera.content.y + (_camera.content.height - _track.height) * scrolledProportion;
 		}
 	}
 	

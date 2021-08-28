@@ -79,7 +79,7 @@ class Connection implements IConnection
 
 	public function loseConnection(?reason:String)
 	{
-		Log.message(DebugLevel.Networking,"Client disconnected with code: " + reason);
+		//trace("Client disconnected with code: " + reason);
 		if (server.onConnectionClose != null)
 			server.onConnectionClose(reason, this);
 

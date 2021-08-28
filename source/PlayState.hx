@@ -277,7 +277,7 @@ class PlayState extends FlxState
 	
 	public static function getPlayersNamesAndAvatars():Void
 	{
-		if (Reg._game_offline_vs_cpu == true) RegFunctions.offlineCpuUserNames(); // generate the computer names and computer avatar numbers to be used when playing against computer. if playing a one player game against the computer, use the name and avatar created at this function for that NPC player.
+		if (Reg._game_offline_vs_cpu == true) RegFunctions.offlineCpuUserNames(); // generate the computer names and computer avatar numbers to be used when playing against computer. if playing a one player game against the computer, use the name and avatar created at this function for that BOT player.
 			
 		if (Reg._loggedIn == false)
 		{

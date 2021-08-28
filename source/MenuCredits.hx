@@ -35,7 +35,7 @@ class MenuCredits extends FlxState
 		_title_sub.setPosition(50, 75);
 		add(_title_sub);
 		
-		var _text = new FlxText(0, 0, 0, "Thankyou to the authors at the following websites that helped make this game possible. A lot of images from this client software came from freepik.com, flaticon.com, kenney.nl, sourceforge.net, Wikipedia.org, and opengameart.org.\n\nTo see the full list of credits go to " + Reg._websiteHomeUrl + " by clicking the button below.");
+		var _text = new FlxText(0, 0, 0, "Thankyou to the following websites and authors that contributed in someway to help make this game possible.\n\nHouse items make by https://www.kenney.nl. This kenny furniture package was released under the CC0 1.0 Universal (CC0 1.0) public domain license.\n\nAvatars from multiavatar. https://multiavatar.com/\n\nAll images can be used freely for commercial and non-commercial purposes");
 		_text.setFormat(Reg._fontDefault, Reg._font_size);
 		_text.scrollFactor.set();
 		_text.fieldWidth = FlxG.width - 100;
@@ -44,11 +44,6 @@ class MenuCredits extends FlxState
 		
 		var __menu_bar = new MenuBar(true);
 		add(__menu_bar);
-		
-		var _credits = new ButtonGeneralNetworkNo(0, FlxG.height - 40, "Full Credits", 220, 35, Reg._font_size, 0xFFCCFF33, 0, fullCredits, 0xFF000044, false, 1);		
-		_credits.label.font = Reg._fontDefault;
-		_credits.screenCenter(X);
-		add(_credits);
 	}
 	
 	override public function update(elapsed:Float):Void
@@ -82,14 +77,6 @@ class MenuCredits extends FlxState
 	private function backToTitle():Void
 	{
 		FlxG.switchState(new MenuState());
-	}
-	
-	private function fullCredits():Void
-	{
-		Reg._messageId = 10001;
-		Reg._buttonCodeValues = "y1000";		
-		SceneGameRoom.messageBoxMessageOrder();
-		
 	}
 	
 }
