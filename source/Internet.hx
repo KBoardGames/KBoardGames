@@ -294,6 +294,8 @@ class Internet extends FlxGroup
 	}
 	
 	// gets ip from a website file. if ip is not found then user cannot login. therefore, user must first login to the website before this works.
+	// alternatively, you can use this website.
+	// http://checkip.dyndns.com
 	public static function getIP():String
 	{
 		var http = new haxe.Http("http://ipecho.net/plain");

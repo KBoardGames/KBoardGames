@@ -140,7 +140,7 @@ class MenuConfigurationsProfile extends FlxGroup
 		_group.add(_profile_avatar_notice);
 		
 		_image_profile_avatar = new FlxSprite(15, 300);
-		_image_profile_avatar.loadGraphic("multiavatar/"+ RegCustom._profile_avatar_number1);
+		_image_profile_avatar.loadGraphic("vendor/multiavatar/"+ RegCustom._profile_avatar_number1);
 		_image_profile_avatar.y = _profile_avatar_notice.y + 50;
 		_group.add(_image_profile_avatar);		
 		
@@ -159,7 +159,7 @@ class MenuConfigurationsProfile extends FlxGroup
 		for (i in 0... Reg._avatar_total)
 		{			
 			var _image_avatar = new FlxSprite(0, 0);
-			_image_avatar.loadGraphic("multiavatar/"+ i +".png");
+			_image_avatar.loadGraphic("vendor/multiavatar/"+ i +".png");
 			_image_avatar.visible = false;
 			_group.add(_image_avatar);
 			
@@ -218,7 +218,7 @@ class MenuConfigurationsProfile extends FlxGroup
 			else _usernameInput.text = RegCustom._profile_username_p1;
 		}
 		
-		_image_profile_avatar.loadGraphic("multiavatar/" + RegCustom._profile_avatar_number1);
+		_image_profile_avatar.loadGraphic("vendor/multiavatar/" + RegCustom._profile_avatar_number1);
 		
 		_button_p1.color = 0xFF005500;
 		_button_p1.set_toggled(true);
@@ -241,7 +241,7 @@ class MenuConfigurationsProfile extends FlxGroup
 			else _usernameInput.text = RegCustom._profile_username_p2;
 		}
 		
-		_image_profile_avatar.loadGraphic("multiavatar/" + RegCustom._profile_avatar_number2);
+		_image_profile_avatar.loadGraphic("vendor/multiavatar/" + RegCustom._profile_avatar_number2);
 		
 		_button_p2.set_toggled(true);
 		_button_p2.color = 0xFF005500;
@@ -305,7 +305,7 @@ class MenuConfigurationsProfile extends FlxGroup
 						else 
 							RegCustom._profile_avatar_number2 = Std.string(i) + ".png";
 							
-						_image_profile_avatar.loadGraphic("multiavatar/" + i +".png");
+						_image_profile_avatar.loadGraphic("vendor/multiavatar/" + i +".png");
 					}
 				} 
 			}

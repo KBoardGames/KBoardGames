@@ -270,9 +270,9 @@ class MenuConfigurationsOutput extends FlxGroup
 	private function saveConfig():Void
 	{
 		if (__menu_configurations_profile._button_p1.has_toggle == true)
-			__menu_configurations_profile._image_profile_avatar.loadGraphic("multiavatar/" + RegCustom._profile_avatar_number1);
+			__menu_configurations_profile._image_profile_avatar.loadGraphic("vendor/multiavatar/" + RegCustom._profile_avatar_number1);
 		else
-			__menu_configurations_profile._image_profile_avatar.loadGraphic("multiavatar/" + RegCustom._profile_avatar_number2);
+			__menu_configurations_profile._image_profile_avatar.loadGraphic("vendor/multiavatar/" + RegCustom._profile_avatar_number2);
 		
 		RegFunctions.saveConfig();
 	}

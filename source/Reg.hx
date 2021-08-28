@@ -27,7 +27,7 @@ class Reg
 	 * only change the version number here. this value must be changed every time this complete program with dll's are copied to the localhost/files/windows folder.
 	 * no need to copy this var then paste to the bottom of this class because this value does not change while client is running.
 	 */
-	public static var _version:String = "1.14.0";
+	public static var _version:String = "1.15.13";
 	
 	/******************************
 	 * total games available in this release.
@@ -2134,7 +2134,7 @@ class Reg
 	 */
 	public static function set_for_public():Void
 	{		
-		var _public = false;
+		var _public = true;
 		
 		if (_public == false)
 		{
@@ -3028,4 +3028,4 @@ class Reg
 		_gameJumpTo = 0; 
 		
 	}
-}//
+}//

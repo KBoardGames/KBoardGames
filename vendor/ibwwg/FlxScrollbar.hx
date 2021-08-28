@@ -435,7 +435,6 @@ class FlxScrollbar extends FlxSpriteGroup
 			Reg2._boxScroller_is_scrolling = false;
 				
 		tryToScrollPage = false;
-		
 		_doOnce = 1;
 		
 		super.update(elapsed);
