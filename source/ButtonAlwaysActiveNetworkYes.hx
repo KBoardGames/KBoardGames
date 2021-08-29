@@ -1,4 +1,22 @@
- package;
+/*
+    Copyright (c) 2021 KBoardGames.com
+    This program is part of KBoardGames client software.
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published
+    by the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*/
+
+package;
 
 /**
  * the buttons in this class is displayed always overtop of any other button or image on a scene. the reason is because these buttons are called from a sub state. these buttons that can be created at this class are only created at the MessageBox.hx class. then that class displays the message box with a yes/no or ok button, all other buttons on the scene cannot be clicked. when that message box first displays, it calls a trigger which stops the other buttons from updating. see super.update in these button class.
