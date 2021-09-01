@@ -20,8 +20,7 @@ package;
 
 /**
  * the first class.
- * TODO one day you need to remove all created elements before they are created so that memory does not grow which will slow down the client which will happens now. the client becomes a bit more slow each time entering and exiting a scene.
- * search for the word TODO to see all the to do.
+ * TODO remove all elements before the "new" call, so that memory does not grow which will slow down the client. the client becomes a bit more slower each time entering and exiting a scene.
  * @author kboardgames.com
  */
 class Main extends Sprite

@@ -52,7 +52,7 @@ class IDsWinLoseOrDraw extends FlxState
 				}
 			}
 			
-			// TODO note this... using not equal for both vars will not work when comparing two or more var. not sure why that is. you need to trap the vars with {}.
+			// using not equal for both vars will not work when comparing two or more var. not sure why that is. you need to trap the vars with {}.
 			if (Reg._gameYYnew2 == -1 && Reg._gameXXnew2 == -1) {}
 			else
 			{

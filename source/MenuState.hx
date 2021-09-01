@@ -1418,7 +1418,7 @@ class MenuState extends FlxState
 		_game_highlighted = new FlxSprite(_icon_offset_x, 440 + _offset_icons_and__event_scheduler_y);
 		
 		#if html5
-			// TODO one day do a sys.ssl certificate at server so that html5 client can connect to it then remove this #if code block.
+			// TODO sys.ssl certificate commands are needed so that html5 can connect to server.
 			_game_highlighted.x = _icon_offset_x + 79;
 		#end
 		
@@ -1431,7 +1431,9 @@ class MenuState extends FlxState
 	}
 	
 	private function titleMenu(_num:Int):Void
-	{
+	{		
+		RegTriggers._buttons_set_not_active = false;
+		
 		if (_num == 0) tryToConnect();
 		if (_num == 1) offlinePlayers();
 		//if (_num == 2) TODO add something here;
@@ -1666,15 +1668,17 @@ class MenuState extends FlxState
 	
 	private function profile_username_p1():Void
 	{
-		RegTypedef._dataAccount._username = RegCustom._profile_username_p1;
-		Reg2._menu_state_username_p1 = 5;
-		
-		bot_no_toggle();
-		_profile_username_p1.color = 0xFF004400;
-		_profile_username_p1.over_color = 0xFFFFFFFF;
-		_profile_username_p1.has_toggle = true;
-		_profile_username_p1.set_toggled(true);
-		
+		if (_profile_username_p1 != null)
+		{
+			RegTypedef._dataAccount._username = RegCustom._profile_username_p1;
+			Reg2._menu_state_username_p1 = 5;
+			
+			bot_no_toggle();
+			_profile_username_p1.color = 0xFF004400;
+			_profile_username_p1.over_color = 0xFFFFFFFF;
+			_profile_username_p1.has_toggle = true;
+			_profile_username_p1.set_toggled(true);
+		}
 	}
 	
 	private function buttonsIconsActive():Void

@@ -1513,7 +1513,7 @@ class ChessCapturingUnits
 				{
 					//Reg._chessKing[Reg._playerMoving][cy][cx] = 1;
 					
-					_pieceFound = true; // TODO should this line be commented/removed? there is the same var and the same value below.
+					_pieceFound = true;
 					_stopAtKing = true;
 				}
 				

@@ -714,9 +714,6 @@ class IDsCreateAndMain extends FlxState
 		if (RegTypedef._dataTournaments._move_piece == false)
 			RegTypedef._dataPlayers._moveTotal = 0;
 			
-		// TODO remove.
-		//RegTypedef._dataMovement._history_get_all == 0
-		
 		if (RegTypedef._dataMovement._history_get_all == 1)
 		{
 			for (yy in 0...8)
@@ -1052,6 +1049,11 @@ class IDsCreateAndMain extends FlxState
 				if (y > 1 && y < 6 && x > 1 && x < 6) {} // don't draw centre unit if playing the signature game.
 				else
 				{
+					var _gameOwnershipImages = new 
+					SignatureGameUnitOwnershipImages(_gameBoard[0].x + (x * 75), _gameBoard[0].y + (y * 75) - 4, Reg._gamePointValueOfUnit[p], p); // pieces are 75x75 pixels wide.
+					_gameOwnershipImages.scrollFactor.set(0, 0);
+					_groupPlayerPieces.add(_gameOwnershipImages);
+					
 					// note that the x and y values here are reverse of the class. it works. don't change them.
 					var _gameDevelopedLandIcons = new 
 					SignatureGameDevelopedLandImages(_gameBoard[0].x + (x * 75) + 5, _gameBoard[0].y + (y * 75) + 5, Reg._gamePointValueOfUnit[p], p); // pieces are 75x75 pixels wide.

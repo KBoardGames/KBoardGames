@@ -309,7 +309,7 @@ class GameHistoryAndNotations extends FlxGroup
 				}
 			}
 			
-			// TODO: players enter this event in the order that this event was first called.
+			// players enter this event in the order that this event was first called.
 			PlayState.clientSocket.send("Move History Next Entry", RegTypedef._dataMovement);
 			haxe.Timer.delay(function (){}, Reg2._event_sleep);
 			

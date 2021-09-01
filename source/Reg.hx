@@ -1775,12 +1775,12 @@ class Reg
 	/******************************
 	 * in a four player game, this is the color of a gameboard piece.
 	 */
-	public static var _game_piece_color1:Array<Int> = [0xFFff4444, 0xFF4444ff, 0xFF44ff44, 0xFFffff44];
+	public static var _game_piece_color1:Array<Int> = [0xFFaa2222, 0xFF2222aa, 0xFF22aa22, 0xFFaaaa22];
 	
 	/******************************
-	 * in a four player game, this is the color of a gameboard unit.
+	 * in a four player game, this is the color of a gameboard unit and game board background used when buying land.
 	 */
-	public static var _game_piece_color2:Array<Int> = [0x88ff0088, 0x88000088, 0x8800ff88, 0x88ffff88];
+	public static var _game_piece_color2:Array<Int> = [0xffaa0000, 0xff0000aa, 0xff00aa00, 0xff0000aa];
 	
 	/******************************
 	 * move value passed to the second client so that client can move the first piece. 

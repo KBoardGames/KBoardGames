@@ -122,9 +122,8 @@ class SceneCreateRoom extends FlxState
 		for (i in 0...Reg._total_games_in_release)
 		{
 			// all gameboards images are stored in frames.
-			_sprite = new FlxSprite(20, 120);
-			_sprite.loadGraphic("assets/images/games.png", true, 660, 660); // height is the same value as width.
-			_sprite.scale.set(0.3, 0.3);
+			_sprite = new FlxSprite(50, 120);
+			_sprite.loadGraphic("assets/images/games.png", true, 240, 240); // height is the same value as width.
 			_sprite.scrollFactor.set(0, 0);
 			_sprite.visible = false;
 			_sprite.updateHitbox();
@@ -144,10 +143,11 @@ class SceneCreateRoom extends FlxState
 		
 		// when clicking on a game image, this image has a border that highlighted it.
 		// all gameboards images are stored in frames.
-		_game_highlighted = new FlxSprite(100, 120);
-		_game_highlighted.loadGraphic("assets/images/titleUnitBorderHover.png", true, 64, 64); // height is the same value as width.
-		_game_highlighted.scale.set(3.1, 3.1);
+		_game_highlighted = new FlxSprite(50, 120);
+		_game_highlighted.loadGraphic("assets/images/gamesBorder.png", true, 240, 240); // height is the same value as width.
 		_game_highlighted.scrollFactor.set(0, 0);
+		_game_highlighted.animation.add("anim", [0, 1], 2);
+		_game_highlighted.animation.play("anim");
 		_game_highlighted.updateHitbox();
 		add(_game_highlighted);
 		

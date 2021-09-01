@@ -1172,8 +1172,6 @@ class SceneLobby extends FlxState
 		
 		__miscellaneous_menu = new MiscellaneousMenu();
 		add(__miscellaneous_menu);
-		
-		//TODO instead of destroying a scene, the scene must be removed. hence, opposite of add();
 	}
 	
 	
@@ -1187,7 +1185,6 @@ class SceneLobby extends FlxState
 		if (__daily_quests != null)
 		{
 			//TODO all destroy code everywhere must use .remove
-			//__daily_quests = null;
 			__daily_quests.destroy();
 			remove(__daily_quests);
 		}

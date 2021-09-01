@@ -224,19 +224,9 @@ class SignatureGameClickMe extends FlxSprite
 				
 			}
 			
-			//TODO uncomment this now!!!
 			else 
 			{
-				Reg._gameDiceMaximumIndex[Reg._move_number_next] = Reg._gameDiceMaximumIndex[Reg._move_number_next] + __number_wheel.animation.curAnim.curIndex + 1;
-		
-				
-				// TODO delete
-				//if (Reg._gameDiceMaximumIndex[Reg._move_number_next] <= 6)
-				//{
-					//Reg._gameDiceMaximumIndex[Reg._move_number_next] = 33;
-					//Reg._gameDiceCurrentIndex[Reg._move_number_next] = 33;
-				//}
-				// end delete
+				Reg._gameDiceMaximumIndex[Reg._move_number_next] = Reg._gameDiceMaximumIndex[Reg._move_number_next] + __number_wheel.animation.curAnim.curIndex + 1;				
 			}
 			
 		}

@@ -3,19 +3,72 @@
 [![License (GPL 3.0)](https://img.shields.io/github/license/kboardgames/kboardgames?style=for-the-badge)](https://github.com/KBoardGames/KBoardGames/blob/main/LICENSE)
 [![Discord](https://img.shields.io/discord/878790325261434923?color=%236b7ff5&label=Discord&style=for-the-badge)](https://discord.gg/7gF8t3yNDU)
 
-The client for KBoardGames
+The client for KBoardGames. The client is used to play games online against other players.
+
+<p>Play 8x8 board games online with other players using the client software. Main features are <a href="https://kboardgames.com/forum/events">scheduled events</a>, signature game, game statistics, daily quests and a <a href="https://kboardgames.com/forum/viewtopic.php?f=4&t=3">isometric house side game</a>. Currently, the board games that you can play online against other players are <a href="/forum/viewtopic.php?f=10&amp;t=15">chess</a>, <a href="/forum/viewtopic.php?f=10&amp;t=14">checkers</a>, <a href="/forum/viewtopic.php?f=10&amp;t=17">snakes and ladders</a>, <a href="/forum/viewtopic.php?f=10&amp;t=16">reversi</a> and a signature game called <a href="/forum/viewtopic.php?f=10&amp;t=18">wheel estate</a>, game.</p>
+
+## Summary
+* Always 100% free client software.
+* Play games <a href="https://kboardgames.com/forum/viewtopic.php?f=4&t=34">online or offline</a>.
+* MMO board games.
+* 2000+ chess openings moves.
+* Maximum of 2000 XP levels for a player.
+* Zillions of <a href="https://kboardgames.com/forum/viewtopic.php?f=4&t=37">game room color combinations.</a>
+* 17 <a href="https://kboardgames.com/forum/leaderboards">Leaderboards</a> showing top players.
+* 9 different chess sets.
+* Option to play chess using 2 different chess sets.
+* Player move history. In game and in database.
+* Client archive under 11MB in size.
+* Free <a href="https://kboardgames.com/forum/viewforum.php?f=7">website advertisement</a> at the forum. No bots allowed.
+* No advertisements in the client software.
+* <a href="https://kboardgames.com/forum/viewtopic.php?f=4&t=29">Chess features</a> for beginners.
+* In game waiting room chatting and game room chatting.
+* Room lock feature. No back doors.
+* <a href="https://kboardgames.com/forum/viewtopic.php?f=8&t=26">Host your own games</a> using the server software.
+* Anti-cheating of player statistics.
+* Player activity <a href="https://kboardgames.com/forum/viewtopic.php?f=4&t=33">server logging.</a>
+
+## Chess.
+<img src="https://kboardgames.com/images/game2_chess.jpg?" alt="Image 1 of chess" width="500"/>
+
+1: Capturing Path To King. This feature refers to a check against the king and that check is shown as a straight line of units starting from the attacker's piece and ending at the defenders king. The capturing path must be protected. The defender piece must capture one of the highlighted units after check is called.
+
+2: Future Capturing Units. These are the capturing path to king that the attacking piece can capture on its next move. This shows any possible straight line attacks that the opponent can place on the defending king at the opponents next move by highlighting those units a different color.
+
+## Wheel Estate
+<img src="https://kboardgames.com/images/signatureGame.jpg?" alt="Image 1 of wheel estate" width="500"/>
+
+This is a two to four player signature game of the client software that is very similar in playability to the game of monopoly.
 
 ## Dependencies
 For compilation you will need:
-- Haxe 4.0.0-rc.2 or later
-- MySQL
+
+* Haxe 4.0.0-rc.2
+* Haxeflixel (See haxelib commands below.)
+* MySQL
+
+Here are the libraries needed to build Haxeflixel games. Note that newer versions of these libraries will break the libraries found in the vendor folder.
+
+* haxelib install actuate 1.8.9
+* haxelib install flixel-addons 2.7.5
+* haxelib install flixel-demos 2.7.0
+* haxelib install flixel-templates 2.6.1
+* haxelib install flixel-tools 1.4.4
+* haxelib install flixel-ui 2.3.2
+* haxelib install flixel 4.6.1
+* haxelib install hxcpp 4.0.8
+* haxelib install lime-tools 1.5.7
+* haxelib install lime 7.3.0
+* haxelib install openfl 8.9.0
+* haxelib install msgpack-haxe 1.15.1
+* haxelib run lime setup
 
 ## Compilation
 ```
 haxe Build.hxml
 ```
 
-## License
+## License disclaimer
 ```
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published
@@ -30,29 +83,3 @@ haxe Build.hxml
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ```
-
-## LICENSE SUMMARY
-```
-    1. Anyone can copy, modify and distribute this software.
-    2. You have to include the license and copyright notice with each and 
-    every distribution.
-    3. You can use this software privately.
-    4. You can use this software for commercial purposes.
-    5. If you dare build your business solely from this code, you risk 
-    open-sourcing the whole code base.
-    6. If you modify it, you have to indicate changes made to the code.
-    7. Any modifications of this code base MUST be distributed with the same license.
-    8. This software is provided without warranty.
-    9. The software author or license can not be held liable for any damages 
-    inflicted by the software.
-```
-
-## GPL VS AGPL
-```
-    GPL: if you use any GPL code on your front-end, or any other code that is
-    being “distributed” to users, your entire codebase needs to be open sourced. 
-    You are free to use GPL on the server side without having to open source your code.
-
-    AGPL: AGPL takes the above and applies it to the backend. So if you use any code 
-    licensed under AGPL anywhere in your application, you need to release the source 
-    code for your entire application.

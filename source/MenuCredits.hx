@@ -66,6 +66,8 @@ class MenuCredits extends FlxState
 	
 	override public function update(elapsed:Float):Void
 	{
+		FlxG.mouse.enabled = true;
+		
 		// should message box be displayed?
 		if (Reg._messageId > 0 && Reg._messageId != 1000000
 		&&	RegTriggers._buttons_set_not_active == false)

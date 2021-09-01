@@ -22,7 +22,7 @@ package;
  * @author kboardgames.com
  */
 
-class SignatureGameUnitOwnership extends FlxSprite
+class SignatureGameUnitPlayersPiece extends FlxSprite
 {
 	private var _xID:Int = 0;
 	private var _yID:Int = 0;

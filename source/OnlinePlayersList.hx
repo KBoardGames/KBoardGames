@@ -151,7 +151,7 @@ class OnlinePlayersList extends FlxState
 		//.......................
 		if (_didPopulateList == false && RegTypedef._dataOnlinePlayers._usernamesOnline != null)
 		{
-			// TODO need to make these columns each into a sprite or text group because doing a destroy() here will only remove the element that was created before this one is make. the result will be an empty list or a list with only one row.
+			// TODO For the online players list at the waiting room, make the data in those columns each into a sprite group or text group because currently doing a destroy() will only remove the last element.
 			_onlineUserListUsernames = new OnlinePlayersText(35, 145 - _offset_y + ((i + 1) * 70), 0, "", 20, i);
 			// even thou _data._usernamesDynamic[i] is a string, we need to say it here again or else the program will crash.
 			if ( Std.string(RegTypedef._dataOnlinePlayers._usernamesOnline[i]) != "")

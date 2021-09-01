@@ -1265,7 +1265,7 @@ class SceneGameRoom extends FlxState
 		Reg._playerWaitingAtGameRoom = false;
 	}
 	
-	// TODO delete this. no longer deleted.
+	// TODO Message boxes can no longer be stacked on each other because a message box that is displayed will stop user from clicking the scene underneath it. therefore, remove messageBoxMessageOrder() code and all references to it.
 	public static function messageBoxMessageOrder():Void
 	{
 		for (i in 0...Reg._messageFocusId.length)

@@ -148,8 +148,7 @@ class Reg2 extends FlxGroup
 	/******************************
 	 * after an event is sent to the server a sleep command is used to delay the next event to the server in the hopes that this stops an invalid error at server that is triggered when two or more events are sent near the same time.
 	 * TODO if you still get an invalid error at position 0 then events cannot be one after another. instead, the second event is called at the first event function at the time that the server sends data back to that function.
-	 * TODO. if server continues to drop connection, increase this value in milliseconds
-	 */
+	*/
 	public static var _event_sleep:Int = 0; // TODO server might drop client because of this value.
 		
 	/******************************

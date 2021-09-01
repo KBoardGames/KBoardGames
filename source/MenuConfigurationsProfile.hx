@@ -115,7 +115,7 @@ class MenuConfigurationsProfile extends FlxGroup
 		_button_p1.screenCenter(X);
 		_button_p1.x -= 97;
 		_button_p1.color = 0xFF005500;
-		// TODO set_toggled must be before has_toggle or the save will not work when click event has not fired somewhere other than this input widget.
+		// set_toggled must be before has_toggle or the save will not work when click event has not fired somewhere other than this input widget.
 		_button_p1.set_toggled(true);
 		_button_p1.has_toggle = true;
 		_button_p1.y = _profile_general_instructions.y + _profile_general_instructions.height + 15;

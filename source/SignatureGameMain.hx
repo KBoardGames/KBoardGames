@@ -1780,7 +1780,7 @@ class SignatureGameMain extends FlxState
 			RegTriggers._signatureGameUnitImage = true;
 			RegTriggers._highlightOnlyOuterUnits = true;
 			
-			// user to... TODO what is this junk. usernamesDynamic has an array element total of 4 yet we use Reg.YYold2?
+			// user to... TODO usernamesDynamic has an array element total of 4 yet we use Reg.YYold2? we need a trace here to determine what is happening.
 			RegTypedef._dataGameMessage._userTo = RegTypedef._dataPlayers._usernamesDynamic[Reg._gameUniqueValueForPiece[Reg._gameYYold2][Reg._gameXXold2] - 1];
 				
 			// user from...
