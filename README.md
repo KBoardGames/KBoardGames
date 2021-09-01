@@ -1,6 +1,5 @@
 # K Board Games Client
 [![Server Status](https://img.shields.io/pingpong/status/sp_7241145592d44ae2bd4c2a9c4558a0ef?label=kboardgames.com&style=for-the-badge)](https://kboardgames.com)
-[![License (GPL 3.0)](https://img.shields.io/github/license/kboardgames/kboardgames?style=for-the-badge)](https://github.com/KBoardGames/KBoardGames/blob/main/LICENSE)
 [![Discord](https://img.shields.io/discord/878790325261434923?color=%236b7ff5&label=Discord&style=for-the-badge)](https://discord.gg/7gF8t3yNDU)
 
 The client for KBoardGames. The client is used to play games online against other players.
@@ -27,6 +26,7 @@ The client for KBoardGames. The client is used to play games online against othe
 * <a href="https://kboardgames.com/forum/viewtopic.php?f=8&t=26">Host your own games</a> using the server software.
 * Anti-cheating of player statistics.
 * Player activity <a href="https://kboardgames.com/forum/viewtopic.php?f=4&t=33">server logging.</a>
+* Built-in server anti-hammering feature.
 
 ## Chess.
 <img src="https://kboardgames.com/images/game2_chess.jpg?" alt="Image 1 of chess" width="500"/>
@@ -69,17 +69,9 @@ haxe Build.hxml
 ```
 
 ## License disclaimer
-```
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published
-    by the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <https://www.gnu.org/licenses/>.
-```
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with this program. If not, see https://www.gnu.org/licenses/.
