@@ -1238,7 +1238,7 @@ class IDsCreateAndMain extends FlxState
 		// fill the screen with a random color.
 		_background_scene_color = new FlxSprite();
 		_background_scene_color.makeGraphic(FlxG.width,FlxG.height - Reg._offsetScreenY + 10,FlxColor.WHITE);
-		_background_scene_color.color = FlxColor.fromHSB(FlxG.random.int(1, 360), 0.8, 0.25);
+		_background_scene_color.color = FlxColor.fromHSB(FlxG.random.int(1, 360), 0.8, RegCustom._background_brightness);
 		_background_scene_color.scrollFactor.set(0, 0);
 		add(_background_scene_color);
 		

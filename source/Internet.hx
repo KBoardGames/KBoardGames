@@ -26,52 +26,6 @@ class Internet extends FlxGroup
 {
 	public static var _bool:Bool = false;
 	
-	public static function getHostname():String
-	{
-		var _http = new haxe.Http("http://" + Reg._websiteHomeUrl + "/server/" + "getHostname.php");
-		
-		var _data:String = "";
-				
-		_http.onData = function (data:String) 
-		{
-			if (data.substr(0, 1) == "<") 
-			{
-				// display error message.
-				Reg._hostname_message = true;
-								
-				PlayState.clientSocket.close();
-				FlxG.switchState(new MenuState());
-			}
-			
-			else 
-			{
-				// we found the file if we are here.
-				if (data == "")
-				{
-					// display error message.
-					Reg._hostname_message = true;
-									
-					PlayState.clientSocket.close();
-					FlxG.switchState(new MenuState());
-				}
-				
-				else _data = data;
-			}
-		}
-
-		_http.onError = function (_error)
-		{			
-			// display error message.
-			Reg._hostname_message = true;
-			
-			PlayState.clientSocket.close();
-			FlxG.switchState(new MenuState());
-		}
-		
-		_http.request();
-		return _data;
-	}
-		
 	public static function webVersionFileExist():Void
 	{
 		var _http = new haxe.Http("http://" + Reg._websiteHomeUrl + "/" + "files/versionClient.txt");

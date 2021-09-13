@@ -36,6 +36,7 @@ class MenuConfigurationsOutput extends FlxGroup
 	 * An area of the screen that has automatic scrollbars, if needed.
 	 */
 	public var __boxscroller:FlxScrollableArea;	
+	public var _bg_color:Int = 0;
 	
 	public var _title:FlxText; // title of a scene.
 	
@@ -83,8 +84,9 @@ class MenuConfigurationsOutput extends FlxGroup
 		
 		// a negative x value moves the boxScroller in the opposite direction.
 		if (__boxscroller != null) FlxG.cameras.remove(__boxscroller);
-		__boxscroller = new FlxScrollableArea(new FlxRect( 0, 0, FlxG.width, FlxG.height-50), __menu_configurations_profile._group.getHitbox(), ResizeMode.NONE, 0, 100, -1, FlxColor.LIME, null, 100, true);
-		__boxscroller.bgColor = 0xFF000066;
+		__boxscroller = new FlxScrollableArea(new FlxRect( 0, 0, FlxG.width, FlxG.height - 50), __menu_configurations_profile._group.getHitbox(), ResizeMode.NONE, 0, 100, -1, FlxColor.LIME, null, 100, true);		
+		_bg_color = FlxG.random.int(1, 360);
+		__boxscroller.bgColor = FlxColor.fromHSB(_bg_color, 0.8, RegCustom._background_brightness);
 		FlxG.cameras.add( __boxscroller );
 		__boxscroller.antialiasing = true;
 		__boxscroller.pixelPerfectRender = true;
@@ -117,7 +119,6 @@ class MenuConfigurationsOutput extends FlxGroup
 	{
 		if (_button_general != null)
 		{
-			_button_general.color = 0xFF550000;
 			_button_general.has_toggle = false;
 			_button_general.set_toggled(false);
 		}
@@ -128,7 +129,6 @@ class MenuConfigurationsOutput extends FlxGroup
 		
 		if (_button_profile != null)
 		{
-			_button_profile.color = 0xFF550000;
 			_button_profile.has_toggle = false;
 			_button_profile.set_toggled(false);
 		}
@@ -139,7 +139,6 @@ class MenuConfigurationsOutput extends FlxGroup
 		
 		if (_button_games != null)
 		{
-			_button_games.color = 0xFF550000;
 			_button_games.has_toggle = false;
 			_button_games.set_toggled(false);
 		}
@@ -161,7 +160,6 @@ class MenuConfigurationsOutput extends FlxGroup
 		
 		if (__menu_configurations_profile != null)
 		{
-			_button_profile.color = 0xFF005500;
 			_button_profile.has_toggle = true;
 			_button_profile.set_toggled(true);	
 		}
@@ -196,7 +194,6 @@ class MenuConfigurationsOutput extends FlxGroup
 		
 		if (_button_general != null)
 		{
-			_button_general.color = 0xFF005500;
 			_button_general.has_toggle = true;
 			_button_general.set_toggled(true);	
 		}
@@ -228,7 +225,6 @@ class MenuConfigurationsOutput extends FlxGroup
 		
 		if (_button_games != null)
 		{
-			_button_games.color = 0xFF005500;
 			_button_games.has_toggle = true;
 			_button_games.set_toggled(true);	
 		}
@@ -255,13 +251,13 @@ class MenuConfigurationsOutput extends FlxGroup
 	
 	private function sceneMenuButtons():Void
 	{
-		var _save = new ButtonGeneralNetworkNo(0, FlxG.height - 40, "Save", 160 + 15, 35, Reg._font_size, 0xFFCCFF33, 0, saveConfig, 0xFF000044, false, 1);
+		var _save = new ButtonGeneralNetworkNo(0, FlxG.height - 40, "Save", 160 + 15, 35, Reg._font_size, RegCustom._button_text_color, 0, saveConfig, RegCustom._button_color, false, 1);
 		_save.label.font = Reg._fontDefault;
 		_save.screenCenter(X);
 		_save.x += 400;
 		add(_save);
 		
-		_button_profile = new ButtonToggleFlxState(15, FlxG.height - 40, 2, "Profile", 180, 35, Reg._font_size, 0xFFCCFF33, 0, buttonProfile, 0xFF550000);
+		_button_profile = new ButtonToggleFlxState(15, FlxG.height - 40, 2, "Profile", 180, 35, Reg._font_size, RegCustom._button_text_color, 0, buttonProfile, RegCustom._button_color);
 		_button_profile.label.font = Reg._fontDefault;
 		_button_profile.has_toggle = false;
 		_button_profile.set_toggled(false);
@@ -269,13 +265,13 @@ class MenuConfigurationsOutput extends FlxGroup
 		_button_profile.x += 97; // half of button (90) + half of 15 rounded down (7);
 		add(_button_profile);
 				
-		_button_general = new ButtonToggleFlxState(_button_profile.x - 195, FlxG.height - 40, 1, "General", 180, 35, Reg._font_size, 0xFFCCFF33, 0, buttonGeneral, 0xFF550000);
+		_button_general = new ButtonToggleFlxState(_button_profile.x - 195, FlxG.height - 40, 1, "General", 180, 35, Reg._font_size, RegCustom._button_text_color, 0, buttonGeneral, RegCustom._button_color);
 		_button_general.label.font = Reg._fontDefault;
 		_button_general.has_toggle = true;
 		_button_general.set_toggled(true);
 		add(_button_general);
 				
-		_button_games = new ButtonToggleFlxState(_button_general.x - 195, FlxG.height - 40, 2, "Games", 180, 35, Reg._font_size, 0xFFCCFF33, 0, buttonGames, 0xFF550000);
+		_button_games = new ButtonToggleFlxState(_button_general.x - 195, FlxG.height - 40, 2, "Games", 180, 35, Reg._font_size, RegCustom._button_text_color, 0, buttonGames, RegCustom._button_color);
 		_button_games.label.font = Reg._fontDefault;
 		_button_games.has_toggle = false;
 		_button_games.set_toggled(false);

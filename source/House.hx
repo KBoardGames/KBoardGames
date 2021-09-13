@@ -58,7 +58,7 @@ class House extends FlxGroup
 	/******************************
 	 * navigational buttons such as return to lobby or save layout.
 	 */
-	public var __house_menu_main:HouseMenuMain;
+	public var __house_menu_main:MenuBar;
 	
 	/******************************
 	 * Menu used to select a floor or wall tiles to draw on scene.
@@ -310,10 +310,7 @@ class House extends FlxGroup
 		
 		__house_menu_furniture = new HouseMenuFurniture(this, __house_furniture_items_front, __house_furniture_put, __house_map_furniture);
 		add(__house_menu_furniture);
-		
-		__house_menu_main = new HouseMenuMain(this, __house_furniture_items_front);
-		add(__house_menu_main);
-		
+				
 		__house_foundation_put = new HouseFoundationPut(__house_furniture_put);
 		__house_foundation_put.visible = false;
 		__house_foundation_put.active = false;
@@ -356,8 +353,16 @@ class House extends FlxGroup
 	
 	public function optionsMakeActive():Void
 	{
-		__house_menu_main.active = true;
+		if (__house_menu_main != null)
+		{
+			__house_menu_main.visible = false;
+			remove(__house_menu_main);
+			__house_menu_main = null;
+		}
 		
+		__house_menu_main = new MenuBar(false, false, this, __house_furniture_items_front);
+		add(__house_menu_main);
+				
 		__house_menu_main._buttonToFurnitureGetMenu.active = true;
 		__house_menu_main._buttonToFurniturePutMenu.active = true;
 		__house_menu_main._buttonToFoundationPutMenu.active = true;
@@ -454,11 +459,11 @@ class House extends FlxGroup
 			RegTriggers._houseDrawSpritesDoNotEnter = false;
 			options();
 			
-			PlayState.__scene_lobby.returnToLobbyFromHouse();
+			PlayState.__scene_lobby.__menu_bar.scene_house_return_to_lobby();
 		}
 		
 		// if player returned to lobby then this var is false so don't update().
-		if (RegHouse._at_House == false) return;
+		if (Reg._at_house == false) return;
 		
 		if (_houseDataLoaded == true)
 		{			
@@ -705,12 +710,6 @@ class House extends FlxGroup
 	{
 		if (__house_menu_main != null)
 		{
-			__house_menu_main._buttonToFoundationPutMenu.color = 0xFF550000;
-			__house_menu_main._buttonToFurnitureGetMenu.color = 0xFF550000;
-			__house_menu_main._buttonToFurniturePutMenu.color = 0xFF550000;
-			
-			__house_menu_main._buttonToFurnitureGetMenu.color = 0xFF005500;
-			
 			RegHouse._house_main_menu_button_number = 0;
 			
 			__house_menu_main._buttonToFoundationPutMenu.active = true;
@@ -734,12 +733,6 @@ class House extends FlxGroup
 	
 	public function buttonToFurniturePutMenu():Void
 	{
-		__house_menu_main._buttonToFoundationPutMenu.color = 0xFF550000;
-		__house_menu_main._buttonToFurnitureGetMenu.color = 0xFF550000;
-		__house_menu_main._buttonToFurniturePutMenu.color = 0xFF550000;
-			
-		__house_menu_main._buttonToFurniturePutMenu.color = 0xFF005500;
-			
 		RegHouse._house_main_menu_button_number = 1;
 		
 		__house_menu_main._buttonToFurnitureGetMenu.active = true;
@@ -780,12 +773,6 @@ class House extends FlxGroup
 	
 	public function buttonToFoundationPutMenu():Void
 	{		
-		__house_menu_main._buttonToFoundationPutMenu.color = 0xFF550000;
-		__house_menu_main._buttonToFurnitureGetMenu.color = 0xFF550000;
-		__house_menu_main._buttonToFurniturePutMenu.color = 0xFF550000;
-			
-		__house_menu_main._buttonToFoundationPutMenu.color = 0xFF005500;
-			
 		RegHouse._house_main_menu_button_number = 2;
 		
 		__house_menu_main._buttonToFurniturePutMenu.active = true;

@@ -73,10 +73,6 @@ class ChessCurrentUnitClicked extends FlxSprite
 	
 	override public function update (elapsed:Float)
 	{
-	//trace(Reg._playerMoving + " playerMoving");
-	//trace(Reg._gameHost + " gameHost");
-	//trace(Reg._playerCanMovePiece + " movePiece");
-		
 		if (Reg._checkmate == false 
 		&&  Reg._gameOverForPlayer == false)
 		{

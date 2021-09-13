@@ -96,7 +96,7 @@ class GameHistoryAndNotations extends FlxGroup
 			_notation = new FlxSprite(0, 0);
 			_notation.makeGraphic(337, FlxG.height - Reg._offsetScreenY + 13, FlxColor.BLACK);
 			if (RegCustom._notation_panel_alpha_apply == true)
-				_notation.alpha = 0.85;
+				_notation.alpha = 0.60;
 			_notation.scrollFactor.set(0, 0);
 			add(_notation);
 		}

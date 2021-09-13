@@ -17,6 +17,7 @@
 */
 
 package;
+import openfl.geom.ColorTransform;
 
 /**
  * use this button when at anytime after a button click there will be data sent to the server, such as restarting a game or returning to lobby. if an exit button is clicked then use the ButtonGeneral class. the reason is that no other buttons can be triggered. there is no way to overload the server.
@@ -38,7 +39,7 @@ class ButtonGeneralNetworkYes extends FlxUIButton
 	/******************************
 	 * Thickness of the buttons border
 	 */
-	private var _border:Int = 2;
+	private var _border:Float = 2;
 
 	/******************************
 	 *if id is needed then it is passed to this class constructor then this id is assigned to that parameter so that this id can be used at update() and at update only the code for a button with this id will be executed.
@@ -75,12 +76,17 @@ class ButtonGeneralNetworkYes extends FlxUIButton
 
 	private var _timer:FlxTimer;
 	private var _timer2:FlxTimer;
+	private var _timer3:FlxTimer;
 	
 	/******************************
 	 * from waiting room.
 	 */
 	private var _refresh_online_list:Bool = false;
 	private var _id_refresh:Int = 0; // used as the id of the refresh online list.
+	
+	private var _colorTransform:ColorTransform;
+	private var _innerColor:FlxColor;
+	private var _text:String;
 	
 	/**
 	 * @param	x				The x location of the button on the screen.
@@ -92,14 +98,16 @@ class ButtonGeneralNetworkYes extends FlxUIButton
 	 * @param	textColor		The color of the text.
 	 * @param	textPadding		The padding between the button and the text.
 	 * @param	onClick			When button is clicked this is the function to go to. The function name without the ()?
-	 * @param	_innerColor		The color behind the text.
+	 * @param	innerColor		The color behind the text.
 	 */
-	public function new(x:Float = 0, y:Float = 0, ?text:String, button_width:Int = 80, button_height:Int = 40, textSize:Int = 20, textColor:FlxColor = 0xFFFFFFFF, textPadding:Int = 0, ?onClick:Void->Void, innerColor:FlxColor = 0xFF000044, use_down_click:Bool = false, id:Int = 0, refresh_online_list:Bool = false, id_refresh:Int = 0)
+	public function new(x:Float = 0, y:Float = 0, ?text:String, button_width:Int = 80, button_height:Int = 40, textSize:Int = 20, textColor:FlxColor = 0xFFFFFFFF, textPadding:Int = 0, ?onClick:Void->Void, innerColor:FlxColor = 0xFF000066, use_down_click:Bool = false, id:Int = 0, refresh_online_list:Bool = false, id_refresh:Int = 0)
 	{
-		super(x, y-7, text, onClick, false);
+		super(x, y-7, text, onClick, false, false, RegCustom._button_color);
 
 		_startX = x;
 		_startY = y;
+	
+		_text = text;
 		
 		_refresh_online_list = refresh_online_list;
 		_id_refresh = id_refresh;
@@ -109,49 +117,54 @@ class ButtonGeneralNetworkYes extends FlxUIButton
 
 		_button_width = button_width;
 		_button_height = button_height;
-
+				
 		_timer = new FlxTimer();
 		_timer2 = new FlxTimer();
+		_timer3 = new FlxTimer();
 		
 		button_height += 10;
 
 		_scrollarea_offset_x = 0;
 		_scrollarea_offset_y = 0;
-
-		resize(button_width, button_height);
-		setLabelFormat(Reg._fontDefault, (Reg._font_size-1), 0xFFFFFFFF, FlxTextAlign.CENTER);
-		label.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 2);
-		autoCenterLabel();
-
-		color = innerColor;
-		over_color = 0xFF00FF00;
-		up_color = 0xFFFFFFFF;
 		
-		_timer = new FlxTimer().start(3, makeActive, 1); // message box was closed. now do timer to delay the display of this button.
+		resize(button_width, button_height);
+		setLabelFormat(Reg._fontDefault, (Reg._font_size-1), RegCustom._button_text_color, FlxTextAlign.CENTER);
+		label.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 1);
+		autoCenterLabel();
+		
+		_innerColor = innerColor;
+		var _lineStyle = { thickness: 4.0, color: RegCustom._button_border_color};
+		FlxSpriteUtil.drawRect(this, 0, 0, _button_width, _button_height + 10, _innerColor, _lineStyle);
+		
+		_timer = new FlxTimer().start(2, makeActive, 1); // not lobby button id of 2
 		_timer.active = false;
 		
-		_timer2 = new FlxTimer().start(3, makeActive2, 1); // lobby buttons
+		_timer2 = new FlxTimer().start(3, makeActive, 1); // id 2, lobby buttons. used when entering a room.
 		_timer2.active = false;
+		
+		_timer3 = new FlxTimer().start(1.2, makeActive, 1); // lobby buttons after message box closes. boxes such as, room full or someone beat you to the room message.
+		_timer3.active = false;
+		
+		//colorTransform = new ColorTransform(0, 0, 0.3);
 	}
 	
 	override public function draw():Void
 	{
 		// daily quest, misc, create room, etc buttons.
 		if (FlxG.mouse.justPressed == true
-		&&	justPressed == true && _id == 0)
+		&&	justPressed == true && _id <= 200
+		&&	Reg2._message_box_just_closed == false
+		&& _id == ID)
 		{
-			alpha = 0.3;
-			over_color = 0xFFFFFFFF;
-			
+			alpha = 0.3;			
 			Reg2._boxScroller_is_scrolling = false;
 		}
 		
-		// lobby buttons.
 		if (FlxG.mouse.justPressed == true
-		&&	justPressed == true && _id == 2)
+		&&	justPressed == true && _id == 2
+		&&	Reg._buttonCodeValues != "")
 		{
 			alpha = 0.3;
-			over_color = 0xFFFFFFFF;
 			_timer2.active = true; // do this code block once.
 			_timer2.reset();
 			_timer2.update(1);
@@ -161,24 +174,45 @@ class ButtonGeneralNetworkYes extends FlxUIButton
 			Reg2._boxScroller_is_scrolling = false;
 		}
 		
-		if (justReleased == true && _id == 1)
+		if (justReleased == true && _id >= 1000 && _id <= 2000
+		||	Reg._buttonCodeValues != "" && _id < 1000
+		&&	MessageBox._displayMessage == true
+		&& _id == ID)
 		{
 			alpha = 0.3;
-			over_color = 0xFFFFFFFF;
-			active = false;
+			
+			_timer.active = true; // do this code block once.
+			_timer.reset();
+			_timer.update(1);
+			
+			Reg2._boxScroller_is_scrolling = false;
+			
 		}
 		
-		// buggy. does a double fire every once in a while. tested in neko.
 		if (Reg._messageId == 0
 		&&	_timer.active == false
-		&&	over_color == 0xFFFFFFFF
 		&&  alpha == 0.3
-		&&	_id != 2	
+		&&	Reg._buttonCodeValues == ""
+		&& _id == ID
 		)
 		{		
 			_timer.active = true; // do this code block once.
 			_timer.reset();
 			_timer.update(1);
+			
+			Reg2._lobby_button_alpha = 0.3;
+			Reg2._boxScroller_is_scrolling = false;
+		}
+		
+		// make alpha 1 for lobby buttons but after message box closes.
+		if (_timer3.active == false
+		&&  alpha == 0.3
+		&&	Reg._buttonCodeValues != ""
+		)
+		{
+			_timer3.active = true; // do this code block once.
+			_timer3.reset();
+			_timer3.update(1);
 			
 			Reg2._lobby_button_alpha = 0.3;
 			Reg2._boxScroller_is_scrolling = false;
@@ -190,63 +224,72 @@ class ButtonGeneralNetworkYes extends FlxUIButton
 	// this function must not be removed. also stops double firing of button sound at ActionKeyboard.hx.
 	override public function update(elapsed:Float):Void
 	{
-		if (ActionInput.overlaps(this, null)
-		&&  FlxG.mouse.justPressed == true
-		&&  FlxG.mouse.enabled == true
-		&&	alpha == 1) 
-		{
-			if (GameChatter._input_chat != null) GameChatter._input_chat.hasFocus = false;
-			if (RegCustom._enable_sound == true
-			&&  Reg2._boxScroller_is_scrolling == false)
-				FlxG.sound.play("click", 1, false);
+		if (RegTriggers._buttons_set_not_active == false)
+		{		
+			if (ActionInput.overlaps(this, null)
+			&&  FlxG.mouse.justPressed == true
+			&&  FlxG.mouse.enabled == true
+			&&	alpha == 1
+			&& _id == ID) 
+			{
+				if (GameChatter._input_chat != null) GameChatter._input_chat.hasFocus = false;
+				if (RegCustom._enable_sound == true
+				&&  Reg2._boxScroller_is_scrolling == false)
+					FlxG.sound.play("click", 1, false);
+					
+				if (_id == 1
+				||	_id >= 1000
+				&&	_id <= 2000) FlxG.mouse.enabled = false;	
 				
-			if (_id == 1) FlxG.mouse.enabled = false;	
+			}			
+			
+			// when pressing the refresh online user list button, this code is needed so that it populates the table without creating text and buttons.
+			if (_refresh_online_list == true)
+			{
+				for (i in 0...120)
+				{
+					// no username found, so make this button off screen so that user cannot click it and its not visible,
+					if ((i + 1) == _id_refresh) 
+					{
+						if (RegTypedef._dataOnlinePlayers._usernamesOnline[i] == "")
+						{
+							label.text = "";
+							y = 2000;
+							visible = false;
+						}
+						
+						else if (Reg._move_number_current == 0 && GameChatter._chatterIsOpen == false)
+						{
+							label.text = "Send";
+							y = _startY;
+							visible = true;
+						}
+					}			
+				}
+			}			
 			
 		}
 		
-		
-		// when pressing the refresh online user list button, this code is needed so that it populates the table without creating text and buttons.
-		if (_refresh_online_list == true)
-		{
-			for (i in 0...120)
-			{
-				// no username found, so make this button off screen so that user cannot click it and its not visible,
-				if ((i + 1) == _id_refresh) 
-				{
-					if (RegTypedef._dataOnlinePlayers._usernamesOnline[i] == "")
-					{
-						label.text = "";
-						y = 2000;
-						visible = false;
-					}
-					
-					else if (Reg._move_number_current == 0 && GameChatter._chatterIsOpen == false)
-					{
-						label.text = "Send";
-						y = _startY;
-						visible = true;
-					}
-				}			
-			}
-		}	
-
-		if (RegTriggers._buttons_set_not_active == false)
-		{
-			if (alpha == 1
-			&& _id != 2)
-				super.update(elapsed);
-			else
-				super.update(elapsed);
+		if (alpha == 1 && _id == ID) super.update(elapsed);
 				
+		if (Reg._at_lobby == true
+		&&	Reg._buttonCodeValues != ""
+		&&	RegTypedef._dataMisc._room > 0
+		&&	Reg2._message_box_just_closed == true)
+		{
+			Reg2._message_box_just_closed = false;
+			RegTypedef._dataMisc._room = 0;
+			Reg._buttonCodeValues = "";
+			alpha = 1;
+			Reg2._lobby_button_alpha = 0.3;
+			Reg2._boxScroller_is_scrolling = false;
 		}
+		
 	}
 	
 	private function makeActive(i:FlxTimer):Void
 	{
-		over_color = 0xFF00FF00;
-			
 		FlxG.mouse.enabled = true;
-			
 		active = true;
 		alpha = 1;			
 		
@@ -254,16 +297,4 @@ class ButtonGeneralNetworkYes extends FlxUIButton
 		Reg2._lobby_button_alpha = 0.3;
 	}
 	
-	private function makeActive2(i:FlxTimer):Void
-	{
-		over_color = 0xFF00FF00;
-			
-		FlxG.mouse.enabled = true;
-			
-		active = true;
-		alpha = 1;			
-		
-		Reg2._boxScroller_is_scrolling = false;
-		Reg2._lobby_button_alpha = 0.3;
-	}
 }

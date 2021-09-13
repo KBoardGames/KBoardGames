@@ -131,8 +131,8 @@ class ActionCommands extends FlxGroup
 		trace ("26:_dataOnlinePlayers._room: " + RegTypedef._dataOnlinePlayers._room);
 		
 		trace ("43:Reg._roomPlayerLimit: "+Reg._roomPlayerLimit);
-		trace ("44:Reg._atRoom: "+Reg._atRoom);
-		trace ("45:Reg._atChat: "+Reg._atChat);
+		trace ("44:Reg._at_create_room: "+Reg._at_create_room);
+		trace ("45:Reg._at_waiting_room: "+Reg._at_waiting_room);
 		trace ("46:Reg._currentRoomState: "+Reg._currentRoomState);				
 		trace ("47:Reg._gameOverForPlayer: "+Reg._gameOverForPlayer); 
 		trace ("48:Reg._gameOverForAllPlayers: "+Reg._gameOverForAllPlayers);

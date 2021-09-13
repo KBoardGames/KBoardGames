@@ -665,8 +665,6 @@ class ChessCheckOrCheckmate extends FlxSubState
 			// not reset at the end of player's turn.
 			Reg._chessOriginOfcheckmateYYnew = Reg._gameYYnew; 
 			Reg._chessOriginOfcheckmateXXnew = Reg._gameXXnew;
-		
-			//trace ("checkmate" + Reg._chessOriginOfCheckY[Reg._playerMoving] + "yy" + Reg._chessOriginOfCheckX[Reg._playerMoving] +"xx"+Reg._playerMoving);	
 	
 			Reg._checkmate_break_loop = true;
 			

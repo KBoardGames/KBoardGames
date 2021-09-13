@@ -62,45 +62,34 @@ class ButtonAlwaysActiveNetworkYes extends FlxUIButton
 	 * @param	onClick			When button is clicked this is the function to go to. The function name without the ()?
 	 * @param	innerColor		The color behind the text.
 	 */
-	public function new(x:Float = 0, y:Float = 0, ?text:String, button_width:Int = 80, button_height:Int = 40, textSize:Int = 20, textColor:FlxColor = 0xFFFFFFFF, textPadding:Int = 0, ?onClick:Void->Void, innerColor:FlxColor = 0xFF000044, use_down_click:Bool = false, id:Int = 0)	
+	public function new(x:Float = 0, y:Float = 0, ?text:String, button_width:Int = 80, button_height:Int = 40, textSize:Int = 20, textColor:FlxColor = 0xFFFFFFFF, textPadding:Int = 0, ?onClick:Void->Void, innerColor:FlxColor = 0xFF000066, use_down_click:Bool = false, id:Int = 0)	
 	{	
-		super(x, y-5, text, onClick, false);
+		super(x, y-5, text, onClick, false, false, RegCustom._button_color);
 		
 		_startX = x;
 		_startY = y;
 		_use_down_click = use_down_click;
 		
 		button_height += 10;
-				
+		
 		resize(button_width, button_height);
-		setLabelFormat(Reg._fontDefault, (Reg._font_size-1), 0xFFFFFFFF, FlxTextAlign.CENTER);
-		label.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 2);
+		setLabelFormat(Reg._fontDefault, (Reg._font_size-1), RegCustom._button_text_color, FlxTextAlign.CENTER);
+		label.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 1);
 		autoCenterLabel();
 		
-		color = innerColor;
-		if (id == 0) over_color = 0xFF00FF00;
-		else 
-		{
-			color = 0xFF550000;
-			over_color = 0xFFFFFFFF;
-		}
+		var _lineStyle = { thickness: 4.0, color: RegCustom._button_border_color};
+		FlxSpriteUtil.drawRect(this, 0, 0, button_width, button_height, innerColor, _lineStyle);
 		
-		up_color = 0xFFFFFFFF;
 	}
 	
 	// this function must not be removed. also stops double firing of button sound at ActionKeyboard.hx.
 	override public function update(elapsed:Float):Void 
-	{		
+	{
 		if (ActionInput.overlaps(this, null)
 		&&  FlxG.mouse.justPressed == true
 		&&  FlxG.mouse.enabled == true)
 		{
 			if (GameChatter._input_chat != null) GameChatter._input_chat.hasFocus = false;
-			
-			if (RegCustom._enable_sound == true
-			&&  Reg2._boxScroller_is_scrolling == false)
-				FlxG.sound.play("click", 1, false);
-				
 		}
 		
 		super.update(elapsed);

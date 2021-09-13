@@ -89,9 +89,9 @@ class ButtonGeneralNetworkNo extends FlxUIButton
 	 * @param	onClick			When button is clicked this is the function to go to. The function name without the ()?
 	 * @param	_innerColor		The color behind the text.
 	 */
-	public function new(x:Float = 0, y:Float = 0, ?text:String, button_width:Int = 80, button_height:Int = 40, textSize:Int = 20, textColor:FlxColor = 0xFFFFFFFF, textPadding:Int = 0, ?onClick:Void->Void, innerColor:FlxColor = 0xFF000044, use_down_click:Bool = false, id:Int = 0)
+	public function new(x:Float = 0, y:Float = 0, ?text:String, button_width:Int = 80, button_height:Int = 40, textSize:Int = 20, textColor:FlxColor = 0xFFFFFFFF, textPadding:Int = 0, ?onClick:Void->Void, innerColor:FlxColor = 0xFF000066, use_down_click:Bool = false, id:Int = 0)
 	{
-		super(x, y-7, text, onClick, false);
+		super(x, y-7, text, onClick, false, false, RegCustom._button_color);
 
 		_startX = x;
 		_startY = y;
@@ -106,15 +106,14 @@ class ButtonGeneralNetworkNo extends FlxUIButton
 
 		_scrollarea_offset_x = 0;
 		_scrollarea_offset_y = 0;
-
+						
 		resize(button_width, button_height);
-		setLabelFormat(Reg._fontDefault, (Reg._font_size-1), 0xFFFFFFFF, FlxTextAlign.CENTER);
-		label.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 2);
+		setLabelFormat(Reg._fontDefault, (Reg._font_size-1), RegCustom._button_text_color, FlxTextAlign.CENTER);
+		label.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 1);
 		autoCenterLabel();
 
-		color = innerColor;
-		over_color = 0xFF00FF00;
-		up_color = 0xFFFFFFFF;
+		var _lineStyle = { thickness: 4.0, color: RegCustom._button_border_color};
+		FlxSpriteUtil.drawRect(this, 0, 0, _button_width, _button_height + 10, innerColor, _lineStyle);
 		
 		_timer = new FlxTimer().start(3, makeActive, 1);
 		_timer.active = false;
@@ -127,7 +126,6 @@ class ButtonGeneralNetworkNo extends FlxUIButton
 			_timer.update(1);
 			
 			alpha = 0.3;
-			over_color = 0xFFFFFFFF;
 			active = false;
 			
 			Reg2._boxScroller_is_scrolling = false;
@@ -138,7 +136,6 @@ class ButtonGeneralNetworkNo extends FlxUIButton
 		{
 			active = true;
 			alpha = 1;	
-			over_color = 0xFF00FF00;
 			
 			FlxG.mouse.enabled = true;
 			Reg2._boxScroller_is_scrolling = false;
@@ -149,20 +146,22 @@ class ButtonGeneralNetworkNo extends FlxUIButton
 	
 	// this function must not be removed. also stops double firing of button sound at ActionKeyboard.hx.
 	override public function update(elapsed:Float):Void
-	{		
-		if (justPressed == true
-		&&	alpha == 1)
-		{
-			if (GameChatter._input_chat != null) GameChatter._input_chat.hasFocus = false;
-			
-			if (RegCustom._enable_sound == true
-			&&  Reg2._boxScroller_is_scrolling == false)
-				FlxG.sound.play("click", 1, false);
-			
-		}
-		
+	{
 		if (alpha == 1
-		&&	RegTriggers._buttons_set_not_active == false) super.update(elapsed);
+		&&	RegTriggers._buttons_set_not_active == false)
+		{
+			if (justPressed == true)
+			{
+				if (GameChatter._input_chat != null) GameChatter._input_chat.hasFocus = false;
+				
+				if (RegCustom._enable_sound == true
+				&&  Reg2._boxScroller_is_scrolling == false)
+					FlxG.sound.play("click", 1, false);
+				
+			}
+			
+			super.update(elapsed);
+		}
 	}
 	
 	private function makeActive(i:FlxTimer):Void
@@ -175,6 +174,5 @@ class ButtonGeneralNetworkNo extends FlxUIButton
 			Reg2._boxScroller_is_scrolling = false;
 		}
 	}
-
 
 }

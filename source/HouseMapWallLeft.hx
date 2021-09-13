@@ -91,7 +91,7 @@ class HouseMapWallLeft extends FlxSprite
 	override public function update(elapsed:Float)
 	{
 		// if player returned to lobby then this var is false so don't update().
-		if (RegHouse._at_House == false) return;
+		if (Reg._at_house == false) return;
 		if (RegHouse._house_main_menu_button_number < 2) return;
 		
 		// stop the drawing of a floor tile, wall or door when able to scroll map.

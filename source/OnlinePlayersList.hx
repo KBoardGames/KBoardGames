@@ -73,7 +73,7 @@ class OnlinePlayersList extends FlxState
 		__scene_waiting_room = scene_waiting_room;
 		
 
-		var _color_table_rows = FlxColor.fromHSB((__scene_waiting_room._color_ra+25), 0.8, 0.15);
+		var _color_table_rows = FlxColor.fromHSB((__scene_waiting_room._color_ra+25), 0.8, (RegCustom._background_brightness-0.10));
 		
 		group = cast add(new FlxSpriteGroup());
 				
@@ -161,7 +161,7 @@ class OnlinePlayersList extends FlxState
 			
 			//.......................
 			// invite button, each for an online user not in room.
-			_onlineUserListInvite = new ButtonGeneralNetworkYes(325, 140 - _offset_y + ((i + 1) * 70), "", 160, 35, Reg._font_size, 0xFFCCFF33, 0, sendInviteConfirm.bind(i), 0xff000044, false, 1, true, (i + 1));
+			_onlineUserListInvite = new ButtonGeneralNetworkYes(325, 140 - _offset_y + ((i + 1) * 70), "", 160, 35, Reg._font_size, RegCustom._button_text_color, 0, sendInviteConfirm.bind(i), RegCustom._button_color, false, 1, true, (i + 1000));
 			_onlineUserListInvite.label.font = Reg._fontDefault;
 			_onlineUserListInvite.visible = false;
 			group.add(_onlineUserListInvite);
@@ -339,25 +339,25 @@ class OnlinePlayersList extends FlxState
 			// fix a camera display bug where the return to lobby an invite buttons can also be clicked from the right side of the screen because of the chatter boxScroller scrolling part of the scene.
 			if (FlxG.mouse.x > FlxG.width / 2
 			&&  FlxG.mouse.y >= FlxG.height - 50
-			&&  __scene_waiting_room.buttonReturnToLobby.visible == true
-			&&  __scene_waiting_room.buttonRefreshList.visible == true) 
+			&&  __scene_waiting_room.__menu_bar._button_return_to_lobby_from_waiting_room.visible == true
+			&&  __scene_waiting_room.__menu_bar._button_refresh_list.visible == true) 
 			{
-				__scene_waiting_room.buttonReturnToLobby.label.color = 0xFFFFFFFF;
-				__scene_waiting_room.buttonRefreshList.label.color = 0xFFFFFFFF;
+				__scene_waiting_room.__menu_bar._button_return_to_lobby_from_waiting_room.label.color = 0xFFFFFFFF;
+				__scene_waiting_room.__menu_bar._button_refresh_list.label.color = 0xFFFFFFFF;
 				
-				__scene_waiting_room.buttonReturnToLobby.active = false;
-				__scene_waiting_room.buttonRefreshList.active = false;
+				__scene_waiting_room.__menu_bar._button_return_to_lobby_from_waiting_room.active = false;
+				__scene_waiting_room.__menu_bar._button_refresh_list.active = false;
 			}
 			
 			else
 			
 			{
-				__scene_waiting_room.buttonReturnToLobby.active = true;
-				__scene_waiting_room.buttonRefreshList.active = true;
+				__scene_waiting_room.__menu_bar._button_return_to_lobby_from_waiting_room.active = true;
+				__scene_waiting_room.__menu_bar._button_refresh_list.active = true;
 			}
 			
 		}
 		
 		super.update(elapsed);
 	}
-}
+}//

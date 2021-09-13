@@ -206,12 +206,12 @@ class Reg
 	/******************************
 	 * when true, used to stop the creation of Room.hx when room already exists. also used to determine if user is creating a room.
 	 */
-	public static var _atRoom:Bool = false;
+	public static var _at_create_room:Bool = false;
 	
 	/******************************
 	 * used to determine if user is at the chatroom.
 	 */
-	public static var _atChat:Bool = false;
+	public static var _at_waiting_room:Bool = false;
 	
 	/******************************
 	 * if true then the keyboard is being used. this is needed so that the buttons do not go inactive for a few milliseconds at ButtonGeneral class. we want the buttons always responsive to user input.
@@ -226,7 +226,10 @@ class Reg
 	/******************************
 	 * used the same way as the at_lobby button;
 	 */
-	public static var at_scene_menu:Bool = false;
+	public static var _at_misc:Bool = false;
+	public static var _at_daily_quests:Bool = false;
+	public static var _at_tournaments:Bool = false;
+	public static var _at_leaderboards:Bool = false;
 	
 	/******************************
 	 * used at PlayState to make a condition to be only read once. at lobby, the scrollbar needs to be hidden or else the message box will not display it "login successful" message. this var is needed to only hide the scrollbar once along with reg._doOnce so the if statement is not read the second time.
@@ -2016,6 +2019,13 @@ class Reg
 	 * displays an inportant server message from the admin.
 	 */
 	public static var _server_message:String = "";
+				
+	/******************************
+	 * true if at house.
+	 */
+	public static var _at_house:Bool = false;
+	
+	public static var __menu_bar:MenuBar;
 	
 	public static function resetCPUaiVars():Void
 	{
@@ -2244,7 +2254,7 @@ class Reg
 		_useThirdPartyIpAddress = true; // set this true to enable paid server feature. paid members can host their own domain and that domain can be selected at MenuState as an option to connect to that server.
 		
 		//############################# END CONFIG
-		_menubar_color = FlxColor.fromHSB(FlxG.random.int(1, 335), 0.75, 0.20);
+		_menubar_color = FlxColor.fromHSB(FlxG.random.int(1, 335), 0.75, RegCustom._background_brightness);
 		
 		_p_all_static1 = 
 	[ 0,  1,  2,  3,  4,  5,  6,  7,  8,  9
@@ -2615,8 +2625,8 @@ class Reg
 		_messageFocusId.splice(0, _messageFocusId.length);
 		_currentRoomState = 0;
 		_clearDoubleMessage = false;
-		_atRoom = false;
-		_atChat = false;
+		_at_create_room = false;
+		_at_waiting_room = false;
 		_at_input_keyboard = false;
 		_loginSuccessfulWasRead = false;
 		_doOnce = true;
@@ -3046,4 +3056,4 @@ class Reg
 		_gameJumpTo = 0; 
 		
 	}
-}//
+}//

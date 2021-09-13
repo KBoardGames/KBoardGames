@@ -77,7 +77,7 @@ class PlayerKickOrBanPlayers extends FlxState
 				
 		//----------------------------------
 		// buttons which are displayed over top of text players name but never for player 1. those buttons trigger kick/ban message box.
-		buttonKickOrBan2 = new ButtonGeneralNetworkNo(280, 565, "", 205, 35, Reg._font_size, 0xFFCCFF33, 0, kickOrBanMessage.bind(2), 0xFF000044, false);
+		buttonKickOrBan2 = new ButtonGeneralNetworkNo(280, 565, "", 205, 35, Reg._font_size, RegCustom._button_text_color, 0, kickOrBanMessage.bind(2), RegCustom._button_color, false);
 		buttonKickOrBan2.label.font = Reg._fontDefault;
 		buttonKickOrBan2.label.alignment = FlxTextAlign.LEFT;
 		buttonKickOrBan2.label.fieldWidth = 200;
@@ -87,7 +87,7 @@ class PlayerKickOrBanPlayers extends FlxState
 		buttonKickOrBan2.visible = false;
 		buttonKickOrBan2.active = false;
 		
-		buttonKickOrBan3 = new ButtonGeneralNetworkNo(500, 565, "", 205, 35, Reg._font_size, 0xFFCCFF33, 0, kickOrBanMessage.bind(3), 0xFF000044, false);
+		buttonKickOrBan3 = new ButtonGeneralNetworkNo(500, 565, "", 205, 35, Reg._font_size, RegCustom._button_text_color, 0, kickOrBanMessage.bind(3), RegCustom._button_color, false);
 		buttonKickOrBan3.label.font = Reg._fontDefault;
 		buttonKickOrBan3.label.alignment = FlxTextAlign.LEFT;
 		buttonKickOrBan3.label.fieldWidth = 200;
@@ -97,7 +97,7 @@ class PlayerKickOrBanPlayers extends FlxState
 		buttonKickOrBan3.visible = false;
 		buttonKickOrBan3.active = false;
 		
-		buttonKickOrBan4 = new ButtonGeneralNetworkNo(720, 565, "", 205, 35, Reg._font_size, 0xFFCCFF33, 0, kickOrBanMessage.bind(4), 0xFF000044, false);
+		buttonKickOrBan4 = new ButtonGeneralNetworkNo(720, 565, "", 205, 35, Reg._font_size, RegCustom._button_text_color, 0, kickOrBanMessage.bind(4), RegCustom._button_color, false);
 		buttonKickOrBan4.label.font = Reg._fontDefault;
 		buttonKickOrBan4.label.alignment = FlxTextAlign.LEFT;
 		buttonKickOrBan4.label.fieldWidth = 200;

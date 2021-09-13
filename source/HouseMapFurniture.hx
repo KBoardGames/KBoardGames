@@ -115,7 +115,7 @@ class HouseMapFurniture extends FlxGroup
 	override public function update(elapsed:Float):Void
 	{
 		// if player returned to lobby then this var is false so don't update().
-		if (RegHouse._at_House == false) return;
+		if (Reg._at_house == false) return;
 		if (RegHouse._house_main_menu_button_number != 1)
 		{
 			return;

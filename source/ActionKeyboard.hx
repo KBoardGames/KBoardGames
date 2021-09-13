@@ -159,7 +159,7 @@ class ActionKeyboard extends FlxGroup
 				{
 					// keyboard togglable keys such as letters, numbers and special characters.
 					//use onDownClick false because setting it to true that will break the focus of the input fields such as the username field. if setting the onDownClick to true the cursor will then be set back to the beginning at every keyboard press, so don't set it back to true.
-					_button_rows = new ButtonGeneralNetworkYes(Reg._unitXgameBoardLocation[xx]+2, Reg._unitXgameBoardLocation[yy] + 4 - 290 + 7, _keys[(i + _toggle_keys)], 72, 62, 32, 0xFFFFFFFF, 0, buttonClicked.bind(i), 0xFF000044, false);
+					_button_rows = new ButtonGeneralNetworkYes(Reg._unitXgameBoardLocation[xx]+2, Reg._unitXgameBoardLocation[yy] + 4 - 290 + 7, _keys[(i + _toggle_keys)], 72, 62, 32, 0xFFFFFFFF, 0, buttonClicked.bind(i), RegCustom._button_color, false);
 					_button_rows.label.font = Reg._fontDefault;
 					add(_button_rows);
 					// add this member to _group_sprite.

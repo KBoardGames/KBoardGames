@@ -25,7 +25,9 @@ package;
 
 // RegTypedef._dataMisc._roomState[RegTypedef._dataMisc._room], // 0 = empty, 1 computer game, 2 creating room, 3 = firth player waiting to play game. 4 = second player in waiting room. 5 third player in waiting room if any. 6 - forth player in waiting room if any. 7 - room full, 8 - playing game / waiting game.
 class SceneWaitingRoom extends FlxState 
-{		
+{
+	public var __menu_bar:MenuBar;
+	
 	/******************************
 	 * moves everything up by these many pixels.
 	 */
@@ -46,17 +48,6 @@ class SceneWaitingRoom extends FlxState
 	public static var _textPlayer3Stats:FlxText;
 	public static var _textPlayer4Stats:FlxText;
 
-	/******************************
-	 * start playing the multi games after this button is pressed.
-	 */
-	public var buttonGameRoom:ButtonGeneralNetworkYes;
-	
-	/******************************
-	 * button that returns user to the lobby.
-	 */
-	public var buttonReturnToLobby:ButtonGeneralNetworkYes;
-	public var buttonRefreshList:ButtonGeneralNetworkYes; // refresh online players list.
-	
 	/******************************
 	 * when at a set value then mouse will be reset and enabled again. this stops server flooding.
 	 */
@@ -93,7 +84,7 @@ class SceneWaitingRoom extends FlxState
 		RegFunctions.fontsSharpen();
 		
 		_color_ra = FlxG.random.int(1, 335);
-		_color = FlxColor.fromHSB(_color_ra, 0.75, 0.20);
+		_color = FlxColor.fromHSB(_color_ra, 0.75, RegCustom._background_brightness);
 				
 		// creates the invite table and also sends the invite request to the server.
 		__online_players_list = new OnlinePlayersList(this);
@@ -120,25 +111,8 @@ class SceneWaitingRoom extends FlxState
 				
 		var _offset:Int = 20;		
 		
-		var __menu_bar = new MenuBar();
+		__menu_bar = new MenuBar();
 			add(__menu_bar);
-		
-		buttonReturnToLobby = new ButtonGeneralNetworkYes(40 + _offset, FlxG.height-40, "To Lobby", 205, 35, Reg._font_size, 0xFFCCFF33, 0, messageReturnToLobby, 0xFF000044, false);
-		buttonReturnToLobby.label.font = Reg._fontDefault;
-		buttonReturnToLobby.visible = false;
-		buttonReturnToLobby.active = false;
-		add(buttonReturnToLobby);
-		
-		buttonRefreshList = new ButtonGeneralNetworkYes(260 + _offset, FlxG.height-40, "Update List", 205, 35, Reg._font_size, 0xFFCCFF33, 0, refreshOnlineList, 0xFF000044, false, 0, true);		
-		buttonRefreshList.label.font = Reg._fontDefault;
-		buttonRefreshList.visible = false;
-		buttonRefreshList.active = false;
-		add(buttonRefreshList);
-				
-		buttonGameRoom = new ButtonGeneralNetworkYes(700 + _offset, FlxG.height-40, "Game Room", 205, 35, Reg._font_size, 0xFFCCFF33, 0, messageGameRoom, 0xFF000044, false, 1);
-		buttonGameRoom.label.font = Reg._fontDefault;
-		buttonGameRoom.visible = false;
-		add(buttonGameRoom);
 		
 		var playerKickOrBanPlayers = new PlayerKickOrBanPlayers();
 		add(playerKickOrBanPlayers);
@@ -211,10 +185,10 @@ class SceneWaitingRoom extends FlxState
 	}
 	
 	public function options():Void
-	{			
+	{
+		Reg._at_waiting_room = true;
 		boxScroller();
 		
-		//var _color = FlxColor.fromHSB(FlxG.random.int(1, 360), 0.8, 0.25);
 		__online_players_list._title_background.color = _color;
 		bodyBg.color = _color;
 		
@@ -235,14 +209,14 @@ class SceneWaitingRoom extends FlxState
 		
 		
 		// computer resources are at a maximum when populating the user online list. clicking these buttons at that time would not trigger an event. so hide them until all fields are populated.
-		buttonReturnToLobby.visible = false;
-		buttonReturnToLobby.active = false;
+		__menu_bar._button_return_to_lobby_from_waiting_room.visible = false;
+		__menu_bar._button_return_to_lobby_from_waiting_room.active = false;
 		
-		buttonRefreshList.visible = false;	
-		buttonRefreshList.active = false;
+		__menu_bar._button_refresh_list.visible = false;	
+		__menu_bar._button_refresh_list.active = false;
 		
-		buttonGameRoom.visible = false;
-		buttonGameRoom.active = false; 
+		__menu_bar._buttonGameRoom.visible = false;
+		__menu_bar._buttonGameRoom.active = false; 
 		
 		RegTypedef._dataPlayers._username = RegTypedef._dataAccount._username;
 	
@@ -299,8 +273,6 @@ class SceneWaitingRoom extends FlxState
 		// TODO make this code everywhere that's needed, such as at SceneGameRoom.hx.
 		if (Reg._buttonCodeValues != "") buttonCodeValues();
 			
-		_ticksOnlineList = RegFunctions.incrementTicks(_ticksOnlineList, 60 / Reg._framerate);
-				
 		super.update(elapsed);
 					
 	}
@@ -438,30 +410,30 @@ class SceneWaitingRoom extends FlxState
 				||  Reg._currentRoomState == 5 && _textPlayer3Stats.text != ""
 				||  Reg._currentRoomState == 6 && _textPlayer4Stats.text != "")
 				{
-					buttonGameRoom.active = true;
-					buttonGameRoom.visible = true;
+					__menu_bar._buttonGameRoom.active = true;
+					__menu_bar._buttonGameRoom.visible = true;
 					
 				}
 			}
 			else if (Reg._buttonCodeValues != "p1000") // player does not exist so delete button.
 			{
-				buttonGameRoom.visible = false;
-				buttonGameRoom.active = false;
+				__menu_bar._buttonGameRoom.visible = false;
+				__menu_bar._buttonGameRoom.active = false;
 			}
 				
 						
 			if (Reg._currentRoomState >= 2 && Std.string(RegTypedef._dataAccount._username) != Std.string(RegTypedef._dataPlayers._usernamesDynamic[0]) && RegTypedef._dataPlayers._actionWho == "")
 			{
-				buttonGameRoom.visible = false;
-				buttonGameRoom.active = false;	
+				__menu_bar._buttonGameRoom.visible = false;
+				__menu_bar._buttonGameRoom.active = false;	
 			}
 			
 		}
 		else
 		{		
 			// only one player is in room.
-			buttonGameRoom.visible = false;					
-			buttonGameRoom.active = false;	
+			__menu_bar._buttonGameRoom.visible = false;					
+			__menu_bar._buttonGameRoom.active = false;	
 		}
 
 	}
@@ -532,8 +504,8 @@ class SceneWaitingRoom extends FlxState
 			haxe.Timer.delay(function (){}, Reg2._event_sleep);
 			//addRemovePlayerCheck();
 			
-			Reg._atRoom = false;
-			Reg._atChat = false;
+			Reg._at_create_room = false;
+			Reg._at_waiting_room = false;
 			Reg._gameRoom = false;
 			Reg._rememberChatterIsOpen = false;
 			Reg._lobbyDisplay = false;
@@ -572,57 +544,5 @@ class SceneWaitingRoom extends FlxState
 		
 	}
 	
-	private function messageReturnToLobby():Void
-	{	
-		Reg._messageId = 4000;
-		Reg._buttonCodeValues = "r1004";
 		
-		if (RegCustom._to_lobby_waiting_room_confirmation == false)
-		{
-			Reg._yesNoKeyPressValueAtMessage = 1;
-		}
-		
-		else SceneGameRoom.messageBoxMessageOrder();
-	}
-		
-	private function messageGameRoom():Void
-	{
-		Reg._messageId = 4002;
-		Reg._buttonCodeValues = "r1001";
-
-		if (RegCustom._to_game_room_confirmation == false)
-		{
-			Reg._yesNoKeyPressValueAtMessage = 1;
-		}
-		
-		else SceneGameRoom.messageBoxMessageOrder();
-	}	
-	
-	// refresh a list, a boxScroller with users that can be invited to the room.
-	public function refreshOnlineList():Void
-	{
-		// this stop bugs when the refresh button is pressed many times and fast.
-		//if (_ticksOnlineList > 180) 
-		//{
-		for (i in 0...121)
-		{
-			// clear list so that old data will not be displayed. a user may not be online since last update.
-			RegTypedef._dataOnlinePlayers._usernamesOnline[i] = "";
-			RegTypedef._dataOnlinePlayers._gamesAllTotalWins[i] = 0;
-			RegTypedef._dataOnlinePlayers._gamesAllTotalLosses[i] = 0;
-			RegTypedef._dataOnlinePlayers._gamesAllTotalDraws[i] = 0;	
-			RegTypedef._dataOnlinePlayers._chess_elo_rating[i] = 0;
-			
-		}
-		
-		PlayState.clientSocket.send("Logged In Users", RegTypedef._dataOnlinePlayers);
-		haxe.Timer.delay(function (){}, Reg2._event_sleep);
-				
-		_ticksOnlineList = 0;
-		buttonRefreshList.active = false;
-		
-		RegTriggers._waiting_room_refresh_list = true;
-		
-	
-	}	
 }

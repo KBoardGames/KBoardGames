@@ -84,10 +84,16 @@ class MenuConfigurationsGeneral extends FlxGroup
 	 */
 	public var _group_button:Array<ButtonGeneralNetworkNo> = [];
 	
+	public var _button_default_colors_checkers:ButtonToggleFlxState;
+	public var _button_default_colors_chess:ButtonToggleFlxState;
+	
+
+	private var _text_background_brightness:FlxText;
+	
 	/******************************
-	 * value starts at 0. access members here. for toggle buttons.
+	 * this is the "Output" text displayed beside the button that shows the example, a sample of, the button's fill, border and text color.
 	 */
-	public var _group_button_toggle:Array<ButtonToggleFlxState> = [];
+	private var _question_button_colors_output:FlxText;
 	
 	/******************************
 	 * this is the "Configuration Menu: " for the title text that a scene can add to. when clicking a button at the SceneMenu, the scene name will append to this var. for example, "Configuration Menu: Avatars.".
@@ -116,6 +122,12 @@ class MenuConfigurationsGeneral extends FlxGroup
 	private var _button_game_room_background_enabled:ButtonGeneralNetworkNo;
 	private var _button_game_room_background_alpha_enabled:ButtonGeneralNetworkNo;
 	private var _button_game_show_capturing_units:ButtonGeneralNetworkNo;
+	private var _button_background_brightness_minus:ButtonGeneralNetworkNo;
+	private var _button_background_brightness_plus:ButtonGeneralNetworkNo;
+	private var _button_color:ButtonGeneralNetworkNo;
+	private var _button_border_color:ButtonGeneralNetworkNo;
+	private var _button_text_color:ButtonGeneralNetworkNo;
+	private var _button_color_output:ButtonGeneralNetworkNo;
 	
 	private var __menu_configurations_output:MenuConfigurationsOutput;
 	
@@ -147,7 +159,6 @@ class MenuConfigurationsGeneral extends FlxGroup
 		
 		_group = cast add(new FlxSpriteGroup());
 		_group_button.splice(0, _group_button.length);
-		_group_button_toggle.splice(0, _group_button_toggle.length);
 		
 		var _title_sub = new FlxText(0, 100, 0, "Gameboard");
 		_title_sub.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.ORANGE);
@@ -161,19 +172,17 @@ class MenuConfigurationsGeneral extends FlxGroup
 		_default_colors_title.setPosition((FlxG.width / 2) + (FlxG.width / 4) - (_default_colors_title.fieldWidth / 2) + _offset_x, 100 + _offset_y + _offset);
 		_group.add(_default_colors_title);
 		
-		var _button_default_colors_checkers = new ButtonToggleFlxState(_default_colors_title.x + (_default_colors_title.fieldWidth / 2) - 200 - 7, _default_colors_title.y + 50 - 3, 1, "Checkers", 200, 35, Reg._font_size, 0xFFCCFF33, 0, null);
+		_button_default_colors_checkers = new ButtonToggleFlxState(_default_colors_title.x + (_default_colors_title.fieldWidth / 2) - 200 - 7, _default_colors_title.y + 50 - 3, 1, "Checkers", 200, 35, Reg._font_size, RegCustom._button_text_color, 0, defaultColorsCheckers, RegCustom._button_color);
 		_button_default_colors_checkers.label.font = Reg._fontDefault;
-		_button_default_colors_checkers.visible = false;
+		_button_default_colors_checkers.set_toggled(true);
+		_button_default_colors_checkers.has_toggle = true;
+		_group.add(_button_default_colors_checkers);
 		
-		_group_button_toggle.push(_button_default_colors_checkers);
-		_group.add(_group_button_toggle[0]);
-		
-		var _button_default_colors_chess = new ButtonToggleFlxState(_default_colors_title.x + (_default_colors_title.fieldWidth / 2) + 7, _default_colors_title.y + 50 - 3, 2, "Chess", 200, 35, Reg._font_size, 0xFFCCFF33, 0, null);
+		_button_default_colors_chess = new ButtonToggleFlxState(_default_colors_title.x + (_default_colors_title.fieldWidth / 2) + 7, _default_colors_title.y + 50 - 3, 2, "Chess", 200, 35, Reg._font_size, RegCustom._button_text_color, 0, defaultColorsChess, RegCustom._button_color);
 		_button_default_colors_chess.label.font = Reg._fontDefault;
-		_button_default_colors_chess.visible = false;
-		
-		_group_button_toggle.push(_button_default_colors_chess);
-		_group.add(_group_button_toggle[1]);
+		_button_default_colors_chess.set_toggled(false);
+		_button_default_colors_chess.has_toggle = false;	
+		_group.add(_button_default_colors_chess);
 		
 		// title text for odd and even units.
 		_text_title_odd_units = new FlxText(0, 0, 0, "Odd Units");
@@ -200,14 +209,14 @@ class MenuConfigurationsGeneral extends FlxGroup
 		_group.add(_text_even_units_shader);	
 		
 		//############################# plus and minus buttons for shade images of odd units.	
-		_button_shader_odd_units_minus = new ButtonGeneralNetworkNo(_text_odd_units_shader.x + _text_odd_units_shader.fieldWidth + 15, _text_odd_units_shader.y - 3, "-", 35, 35, Reg._font_size, 0xFFCCFF33, 0, null);
+		_button_shader_odd_units_minus = new ButtonGeneralNetworkNo(_text_odd_units_shader.x + _text_odd_units_shader.fieldWidth + 15, _text_odd_units_shader.y - 3, "-", 35, 35, Reg._font_size, RegCustom._button_text_color, 0, null, RegCustom._button_color);
 		_button_shader_odd_units_minus.label.font = Reg._fontDefault;
 		_button_shader_odd_units_minus.visible = false;
 		
 		_group_button.push(_button_shader_odd_units_minus);
 		_group.add(_group_button[0]);		
 		
-		_button_shader_odd_units_plus = new ButtonGeneralNetworkNo(_button_shader_odd_units_minus.x + _button_shader_odd_units_minus.label.fieldWidth + 15, _text_odd_units_shader.y - 3, "+", 35, 35, Reg._font_size, 0xFFCCFF33, 0, null);
+		_button_shader_odd_units_plus = new ButtonGeneralNetworkNo(_button_shader_odd_units_minus.x + _button_shader_odd_units_minus.label.fieldWidth + 15, _text_odd_units_shader.y - 3, "+", 35, 35, Reg._font_size, RegCustom._button_text_color, 0, null, RegCustom._button_color);
 		_button_shader_odd_units_plus.label.font = Reg._fontDefault;
 		_button_shader_odd_units_plus.visible = false;	
 		
@@ -215,14 +224,14 @@ class MenuConfigurationsGeneral extends FlxGroup
 		_group.add(_group_button[1]);
 		
 		//############################# even buttons for shade images
-		_button_shader_even_units_minus = new ButtonGeneralNetworkNo(_text_even_units_shader.x + _text_even_units_shader.fieldWidth + 15, _text_even_units_shader.y - 3, "-", 35, 35, Reg._font_size, 0xFFCCFF33, 0, null);
+		_button_shader_even_units_minus = new ButtonGeneralNetworkNo(_text_even_units_shader.x + _text_even_units_shader.fieldWidth + 15, _text_even_units_shader.y - 3, "-", 35, 35, Reg._font_size, RegCustom._button_text_color, 0, null, RegCustom._button_color);
 		_button_shader_even_units_minus.label.font = Reg._fontDefault;
 		_button_shader_even_units_minus.visible = false;
 		
 		_group_button.push(_button_shader_even_units_minus);
 		_group.add(_group_button[2]);
 		
-		_button_shader_even_units_plus = new ButtonGeneralNetworkNo(_button_shader_even_units_minus.x + _button_shader_even_units_minus.label.fieldWidth + 15, _text_even_units_shader.y - 3, "+", 35, 35, Reg._font_size, 0xFFCCFF33, 0, null);
+		_button_shader_even_units_plus = new ButtonGeneralNetworkNo(_button_shader_even_units_minus.x + _button_shader_even_units_minus.label.fieldWidth + 15, _text_even_units_shader.y - 3, "+", 35, 35, Reg._font_size, RegCustom._button_text_color, 0, null, RegCustom._button_color);
 		_button_shader_even_units_plus.label.font = Reg._fontDefault;
 		_button_shader_even_units_plus.visible = false;	
 		
@@ -241,28 +250,28 @@ class MenuConfigurationsGeneral extends FlxGroup
 		_group.add(_text_even_units_color);		
 		
 		//############################# plus and minus buttons for color of odd units.	
-		_button_color_odd_units_minus = new ButtonGeneralNetworkNo(_text_odd_units_color.x + _text_odd_units_color.fieldWidth + 15, _text_odd_units_color.y - 3, "-", 35, 35, Reg._font_size, 0xFFCCFF33, 0, null);
+		_button_color_odd_units_minus = new ButtonGeneralNetworkNo(_text_odd_units_color.x + _text_odd_units_color.fieldWidth + 15, _text_odd_units_color.y - 3, "-", 35, 35, Reg._font_size, RegCustom._button_text_color, 0, null, RegCustom._button_color);
 		_button_color_odd_units_minus.label.font = Reg._fontDefault;
 		_button_color_odd_units_minus.visible = false;
 		
 		_group_button.push(_button_color_odd_units_minus);
 		_group.add(_group_button[4]);
 		
-		_button_color_odd_units_plus = new ButtonGeneralNetworkNo(_button_color_odd_units_minus.x + _button_color_odd_units_minus.label.fieldWidth + 15, _text_odd_units_color.y - 3, "+", 35, 35, Reg._font_size, 0xFFCCFF33, 0, null);
+		_button_color_odd_units_plus = new ButtonGeneralNetworkNo(_button_color_odd_units_minus.x + _button_color_odd_units_minus.label.fieldWidth + 15, _text_odd_units_color.y - 3, "+", 35, 35, Reg._font_size, RegCustom._button_text_color, 0, null, RegCustom._button_color);
 		_button_color_odd_units_plus.label.font = Reg._fontDefault;
 		_button_color_odd_units_plus.visible = false;
 		
 		_group_button.push(_button_color_odd_units_plus);
 		_group.add(_group_button[5]);
 		
-		_button_color_even_units_minus = new ButtonGeneralNetworkNo(_text_even_units_color.x + _text_even_units_color.fieldWidth + 15, _text_even_units_color.y - 3, "-", 35, 35, Reg._font_size, 0xFFCCFF33, 0, null);
+		_button_color_even_units_minus = new ButtonGeneralNetworkNo(_text_even_units_color.x + _text_even_units_color.fieldWidth + 15, _text_even_units_color.y - 3, "-", 35, 35, Reg._font_size, RegCustom._button_text_color, 0, null, RegCustom._button_color);
 		_button_color_even_units_minus.label.font = Reg._fontDefault;
 		_button_color_even_units_minus.visible = false;
 		
 		_group_button.push(_button_color_even_units_minus);
 		_group.add(_group_button[6]);
 		
-		_button_color_even_units_plus = new ButtonGeneralNetworkNo(_button_color_even_units_minus.x + _button_color_even_units_minus.label.fieldWidth + 15, _text_even_units_color.y - 3, "+", 35, 35, Reg._font_size, 0xFFCCFF33, 0, null);
+		_button_color_even_units_plus = new ButtonGeneralNetworkNo(_button_color_even_units_minus.x + _button_color_even_units_minus.label.fieldWidth + 15, _text_even_units_color.y - 3, "+", 35, 35, Reg._font_size, RegCustom._button_text_color, 0, null, RegCustom._button_color);
 		_button_color_even_units_plus.label.font = Reg._fontDefault;
 		_button_color_even_units_plus.visible = false;
 		
@@ -276,14 +285,14 @@ class MenuConfigurationsGeneral extends FlxGroup
 		_gameboard_border_title.x -= 35;
 		_group.add(_gameboard_border_title);
 		
-		_button_gameboard_border_minus = new ButtonGeneralNetworkNo(_gameboard_border_title.x + _gameboard_border_title.fieldWidth + 15, _gameboard_border_title.y - 3, "-", 35, 35, Reg._font_size, 0xFFCCFF33, 0, null);
+		_button_gameboard_border_minus = new ButtonGeneralNetworkNo(_gameboard_border_title.x + _gameboard_border_title.fieldWidth + 15, _gameboard_border_title.y - 3, "-", 35, 35, Reg._font_size, RegCustom._button_text_color, 0, null, RegCustom._button_color);
 		_button_gameboard_border_minus.label.font = Reg._fontDefault;
 		_button_gameboard_border_minus.visible = false;
 		
 		_group_button.push(_button_gameboard_border_minus);
 		_group.add(_group_button[8]);
 		
-		var _button_gameboard_border_plus = new ButtonGeneralNetworkNo(_gameboard_border_title.x + _gameboard_border_title.fieldWidth + 15 + 50, _gameboard_border_title.y - 3, "+", 35, 35, Reg._font_size, 0xFFCCFF33, 0, null);
+		var _button_gameboard_border_plus = new ButtonGeneralNetworkNo(_gameboard_border_title.x + _gameboard_border_title.fieldWidth + 15 + 50, _gameboard_border_title.y - 3, "+", 35, 35, Reg._font_size, RegCustom._button_text_color, 0, null, RegCustom._button_color);
 		_button_gameboard_border_plus.label.font = Reg._fontDefault;
 		_button_gameboard_border_plus.visible = false;
 		
@@ -324,7 +333,7 @@ class MenuConfigurationsGeneral extends FlxGroup
 		_question_gameboard_border_enabled.y = _button_gameboard_border_plus.height + _button_gameboard_border_plus.y + 40;
 		_group.add(_question_gameboard_border_enabled);
 		
-		_button_gameboard_border_enabled = new ButtonGeneralNetworkNo(_question_gameboard_border_enabled.x + _question_gameboard_border_enabled.width + 15, _question_gameboard_border_enabled.y - 8, "", 100, 35, Reg._font_size, 0xFFCCFF33, 0, null);
+		_button_gameboard_border_enabled = new ButtonGeneralNetworkNo(_question_gameboard_border_enabled.x + _question_gameboard_border_enabled.width + 15, _question_gameboard_border_enabled.y - 8, "", 100, 35, Reg._font_size, RegCustom._button_text_color, 0, null, RegCustom._button_color);
 		_button_gameboard_border_enabled.label.font = Reg._fontDefault;
 		_button_gameboard_border_enabled.label.text = Std.string(RegCustom._gameboard_border_enabled);
 		
@@ -337,19 +346,19 @@ class MenuConfigurationsGeneral extends FlxGroup
 		_question_gameboard_coordinates_enabled.y = _button_gameboard_border_enabled.height + _button_gameboard_border_enabled.y + 40;
 		_group.add(_question_gameboard_coordinates_enabled);
 		
-		_button_gameboard_coordinates_enabled = new ButtonGeneralNetworkNo(_question_gameboard_coordinates_enabled.x + _question_gameboard_coordinates_enabled.width + 15, _question_gameboard_coordinates_enabled.y - 8, "", 100, 35, Reg._font_size, 0xFFCCFF33, 0, null);
+		_button_gameboard_coordinates_enabled = new ButtonGeneralNetworkNo(_question_gameboard_coordinates_enabled.x + _question_gameboard_coordinates_enabled.width + 15, _question_gameboard_coordinates_enabled.y - 8, "", 100, 35, Reg._font_size, RegCustom._button_text_color, 0, null, RegCustom._button_color);
 		_button_gameboard_coordinates_enabled.label.font = Reg._fontDefault;
 		_button_gameboard_coordinates_enabled.label.text = Std.string(RegCustom._gameboard_coordinates_enabled);
 		
 		_group_button.push(_button_gameboard_coordinates_enabled);
 		_group.add(_group_button[11]);
 		
-		var _question_notation_panel_alpha_apply = new FlxText(15, 0, 0, "Apply 15% transparency to the notation panel?");
+		var _question_notation_panel_alpha_apply = new FlxText(15, 0, 0, "Apply 40% transparency to the notation panel?");
 		_question_notation_panel_alpha_apply.setFormat(Reg._fontDefault, Reg._font_size);
 		_question_notation_panel_alpha_apply.y = _button_gameboard_coordinates_enabled.height + _button_gameboard_coordinates_enabled.y + 100;
 		_group.add(_question_notation_panel_alpha_apply);
 		
-		_button_notation_panel_alpha_apply = new ButtonGeneralNetworkNo(_question_notation_panel_alpha_apply.width + 30, _question_notation_panel_alpha_apply.y - 8, "", 100, 35, Reg._font_size, 0xFFCCFF33, 0, null);
+		_button_notation_panel_alpha_apply = new ButtonGeneralNetworkNo(_question_notation_panel_alpha_apply.width + 30, _question_notation_panel_alpha_apply.y - 8, "", 100, 35, Reg._font_size, RegCustom._button_text_color, 0, null, RegCustom._button_color);
 		_button_notation_panel_alpha_apply.label.font = Reg._fontDefault;
 		_button_notation_panel_alpha_apply.label.text = Std.string(RegCustom._notation_panel_alpha_apply);
 		
@@ -361,7 +370,7 @@ class MenuConfigurationsGeneral extends FlxGroup
 		_question_units_even_gameboard_show.y = _question_notation_panel_alpha_apply.height + _question_notation_panel_alpha_apply.y + 40;
 		_group.add(_question_units_even_gameboard_show);
 		
-		_button_units_even_gameboard_show = new ButtonGeneralNetworkNo(_question_units_even_gameboard_show.width + 30, _question_units_even_gameboard_show.y - 8, "", 100, 35, Reg._font_size, 0xFFCCFF33, 0, null);
+		_button_units_even_gameboard_show = new ButtonGeneralNetworkNo(_question_units_even_gameboard_show.width + 30, _question_units_even_gameboard_show.y - 8, "", 100, 35, Reg._font_size, RegCustom._button_text_color, 0, null, RegCustom._button_color);
 		_button_units_even_gameboard_show.label.font = Reg._fontDefault;
 		_button_units_even_gameboard_show.label.text = Std.string(RegCustom._units_even_gameboard_show);
 		
@@ -371,10 +380,10 @@ class MenuConfigurationsGeneral extends FlxGroup
 		//----------------------------
 		var _question_game_room_background_enabled = new FlxText(15, 0, 0, "Display a gameboard background?");
 		_question_game_room_background_enabled.setFormat(Reg._fontDefault, Reg._font_size);
-		_question_game_room_background_enabled.y = _question_units_even_gameboard_show.height + _question_units_even_gameboard_show.y + 70;
+		_question_game_room_background_enabled.y = _question_units_even_gameboard_show.height + _question_units_even_gameboard_show.y + 40;
 		_group.add(_question_game_room_background_enabled);
 		
-		_button_game_room_background_enabled = new ButtonGeneralNetworkNo(_question_game_room_background_enabled.width + 30, _question_game_room_background_enabled.y - 8, "", 100, 35, Reg._font_size, 0xFFCCFF33, 0, null);
+		_button_game_room_background_enabled = new ButtonGeneralNetworkNo(_question_game_room_background_enabled.width + 30, _question_game_room_background_enabled.y - 8, "", 100, 35, Reg._font_size, RegCustom._button_text_color, 0, null, RegCustom._button_color);
 		_button_game_room_background_enabled.label.font = Reg._fontDefault;
 		_button_game_room_background_enabled.label.text = Std.string(RegCustom._game_room_background_enabled);
 		_button_game_room_background_enabled.visible = false;
@@ -382,13 +391,13 @@ class MenuConfigurationsGeneral extends FlxGroup
 		_group_button.push(_button_game_room_background_enabled);
 		_group.add(_group_button[14]);
 		
-		_button_game_room_minus = new ButtonGeneralNetworkNo(_button_game_room_background_enabled.x + _button_game_room_background_enabled.width + 15, _button_game_room_background_enabled.y + 7, "-", 35, 35, Reg._font_size, 0xFFCCFF33, 0, null);
+		_button_game_room_minus = new ButtonGeneralNetworkNo(_button_game_room_background_enabled.x + _button_game_room_background_enabled.width + 15, _button_game_room_background_enabled.y + 7, "-", 35, 35, Reg._font_size, RegCustom._button_text_color, 0, null, RegCustom._button_color);
 		_button_game_room_minus.label.font = Reg._fontDefault;
 	
 		_group_button.push(_button_game_room_minus);
 		_group.add(_group_button[15]);		
 		
-		_button_game_room_plus = new ButtonGeneralNetworkNo(_button_game_room_minus.x + _button_game_room_minus.label.fieldWidth + 15, _button_game_room_background_enabled.y + 7, "+", 35, 35, Reg._font_size, 0xFFCCFF33, 0, null);
+		_button_game_room_plus = new ButtonGeneralNetworkNo(_button_game_room_minus.x + _button_game_room_minus.label.fieldWidth + 15, _button_game_room_background_enabled.y + 7, "+", 35, 35, Reg._font_size, RegCustom._button_text_color, 0, null, RegCustom._button_color);
 		_button_game_room_plus.label.font = Reg._fontDefault;
 		
 		_group_button.push(_button_game_room_plus);
@@ -401,10 +410,10 @@ class MenuConfigurationsGeneral extends FlxGroup
 	
 		var _question_game_room_background_alpha_enabled = new FlxText(15, 0, 0, "Apply a 75% transparency to the gameboard background?");
 		_question_game_room_background_alpha_enabled.setFormat(Reg._fontDefault, Reg._font_size);
-		_question_game_room_background_alpha_enabled.y = _question_game_room_background_enabled.height + _question_game_room_background_enabled.y + 70;
+		_question_game_room_background_alpha_enabled.y = _question_game_room_background_enabled.height + _question_game_room_background_enabled.y + 110;
 		_group.add(_question_game_room_background_alpha_enabled);
 		
-		_button_game_room_background_alpha_enabled = new ButtonGeneralNetworkNo(_question_game_room_background_alpha_enabled.width + 30, _question_game_room_background_alpha_enabled.y - 8, "", 100, 35, Reg._font_size, 0xFFCCFF33, 0, null);
+		_button_game_room_background_alpha_enabled = new ButtonGeneralNetworkNo(_question_game_room_background_alpha_enabled.width + 30, _question_game_room_background_alpha_enabled.y - 8, "", 100, 35, Reg._font_size, RegCustom._button_text_color, 0, null, RegCustom._button_color);
 		_button_game_room_background_alpha_enabled.label.font = Reg._fontDefault;
 		_button_game_room_background_alpha_enabled.label.text = Std.string(RegCustom._game_room_background_alpha_enabled);
 		_button_game_room_background_alpha_enabled.visible = false;
@@ -418,7 +427,7 @@ class MenuConfigurationsGeneral extends FlxGroup
 		_leaderboard_question.y = _question_game_room_background_alpha_enabled.height + _question_game_room_background_alpha_enabled.y + 40;
 		_group.add(_leaderboard_question);
 		
-		_button_leaderboard_enabled = new ButtonGeneralNetworkNo(_leaderboard_question.width + 30, _leaderboard_question.y - 8, "", 100, 35, Reg._font_size, 0xFFCCFF33, 0, null);
+		_button_leaderboard_enabled = new ButtonGeneralNetworkNo(_leaderboard_question.width + 30, _leaderboard_question.y - 8, "", 100, 35, Reg._font_size, RegCustom._button_text_color, 0, null, RegCustom._button_color);
 		_button_leaderboard_enabled.label.font = Reg._fontDefault;
 		_button_leaderboard_enabled.label.text = Std.string(RegCustom._config_leaderboard_enabled);
 		_button_leaderboard_enabled.visible = false;
@@ -431,7 +440,7 @@ class MenuConfigurationsGeneral extends FlxGroup
 		_house_feature_question.y = _button_leaderboard_enabled.height + _button_leaderboard_enabled.y + 40;
 		_group.add(_house_feature_question);
 		
-		_button_house_feature_enabled = new ButtonGeneralNetworkNo(_house_feature_question.width + 30, _house_feature_question.y - 8, "", 100, 35, Reg._font_size, 0xFFCCFF33, 0, null);
+		_button_house_feature_enabled = new ButtonGeneralNetworkNo(_house_feature_question.width + 30, _house_feature_question.y - 8, "", 100, 35, Reg._font_size, RegCustom._button_text_color, 0, null, RegCustom._button_color);
 		_button_house_feature_enabled.label.font = Reg._fontDefault;
 		_button_house_feature_enabled.label.text = Std.string(RegCustom._config_house_feature_enabled);
 		_button_house_feature_enabled.visible = false;
@@ -444,7 +453,7 @@ class MenuConfigurationsGeneral extends FlxGroup
 		_save_goto_lobby_question.y = _button_house_feature_enabled.height + _button_house_feature_enabled.y + 40;
 		_group.add(_save_goto_lobby_question);
 		
-		_button_save_goto_lobby_enabled = new ButtonGeneralNetworkNo(_save_goto_lobby_question.width + 30, _save_goto_lobby_question.y - 8, "", 100, 35, Reg._font_size, 0xFFCCFF33, 0, null);
+		_button_save_goto_lobby_enabled = new ButtonGeneralNetworkNo(_save_goto_lobby_question.width + 30, _save_goto_lobby_question.y - 8, "", 100, 35, Reg._font_size, RegCustom._button_text_color, 0, null, RegCustom._button_color);
 		_button_save_goto_lobby_enabled.label.font = Reg._fontDefault;
 		_button_save_goto_lobby_enabled.label.text = Std.string(RegCustom._config_save_goto_lobby_enabled);
 		_button_save_goto_lobby_enabled.visible = false;
@@ -458,7 +467,7 @@ class MenuConfigurationsGeneral extends FlxGroup
 		_save_start_game_request_question.y = _button_save_goto_lobby_enabled.height + _button_save_goto_lobby_enabled.y + 40;
 		_group.add(_save_start_game_request_question);
 		
-		_button_send_automatic_start_game_request = new ButtonGeneralNetworkNo(FlxG.width-200 - 20, _save_start_game_request_question.y + 8, "", 100, 35, Reg._font_size, 0xFFCCFF33, 0, null);
+		_button_send_automatic_start_game_request = new ButtonGeneralNetworkNo(FlxG.width-200 - 20, _save_start_game_request_question.y + 8, "", 100, 35, Reg._font_size, RegCustom._button_text_color, 0, null, RegCustom._button_color);
 		_button_send_automatic_start_game_request.label.font = Reg._fontDefault;
 		_button_send_automatic_start_game_request.label.text = Std.string(RegCustom._send_automatic_start_game_request);
 		_button_send_automatic_start_game_request.visible = false;
@@ -471,7 +480,7 @@ class MenuConfigurationsGeneral extends FlxGroup
 		_question_start_game_offline_confirmation.y = _button_send_automatic_start_game_request.height + 15 + _button_send_automatic_start_game_request.y + 40;
 		_group.add(_question_start_game_offline_confirmation);
 		
-		_button_start_game_offline_confirmation = new ButtonGeneralNetworkNo(_question_start_game_offline_confirmation.width + 30, _question_start_game_offline_confirmation.y - 8, "", 100, 35, Reg._font_size, 0xFFCCFF33, 0, null);
+		_button_start_game_offline_confirmation = new ButtonGeneralNetworkNo(_question_start_game_offline_confirmation.width + 30, _question_start_game_offline_confirmation.y - 8, "", 100, 35, Reg._font_size, RegCustom._button_text_color, 0, null, RegCustom._button_color);
 		_button_start_game_offline_confirmation.label.font = Reg._fontDefault;
 		_button_start_game_offline_confirmation.label.text = Std.string(RegCustom._start_game_offline_confirmation);
 		_button_start_game_offline_confirmation.visible = false;
@@ -484,7 +493,7 @@ class MenuConfigurationsGeneral extends FlxGroup
 		_question_accept_start_game_request.y = _button_start_game_offline_confirmation.height + _button_start_game_offline_confirmation.y + 40;
 		_group.add(_question_accept_start_game_request);
 		
-		_button_accept_automatic_start_game_request = new ButtonGeneralNetworkNo(_question_accept_start_game_request.width + 30, _question_accept_start_game_request.y - 8, "", 100, 35, Reg._font_size, 0xFFCCFF33, 0, null);
+		_button_accept_automatic_start_game_request = new ButtonGeneralNetworkNo(_question_accept_start_game_request.width + 30, _question_accept_start_game_request.y - 8, "", 100, 35, Reg._font_size, RegCustom._button_text_color, 0, null, RegCustom._button_color);
 		_button_accept_automatic_start_game_request.label.font = Reg._fontDefault;
 		_button_accept_automatic_start_game_request.label.text = Std.string(RegCustom._accept_automatic_start_game_request);
 		_button_accept_automatic_start_game_request.visible = false;
@@ -497,7 +506,7 @@ class MenuConfigurationsGeneral extends FlxGroup
 		_question_to_lobby_waiting_room_confirmation.y = _button_accept_automatic_start_game_request.height + _button_accept_automatic_start_game_request.y + 40;
 		_group.add(_question_to_lobby_waiting_room_confirmation);
 		
-		_button_to_lobby_waiting_room_confirmation = new ButtonGeneralNetworkNo(_question_to_lobby_waiting_room_confirmation.width + 30, _question_to_lobby_waiting_room_confirmation.y - 8, "", 100, 35, Reg._font_size, 0xFFCCFF33, 0, null);
+		_button_to_lobby_waiting_room_confirmation = new ButtonGeneralNetworkNo(_question_to_lobby_waiting_room_confirmation.width + 30, _question_to_lobby_waiting_room_confirmation.y - 8, "", 100, 35, Reg._font_size, RegCustom._button_text_color, 0, null, RegCustom._button_color);
 		_button_to_lobby_waiting_room_confirmation.label.font = Reg._fontDefault;
 		_button_to_lobby_waiting_room_confirmation.label.text = Std.string(RegCustom._to_lobby_waiting_room_confirmation);
 		_button_to_lobby_waiting_room_confirmation.visible = false;
@@ -510,7 +519,7 @@ class MenuConfigurationsGeneral extends FlxGroup
 		_question_to_lobby_game_room_confirmation.y = _button_to_lobby_waiting_room_confirmation.height + _button_to_lobby_waiting_room_confirmation.y + 40;
 		_group.add(_question_to_lobby_game_room_confirmation);
 		
-		_button_to_lobby_game_room_confirmation = new ButtonGeneralNetworkNo(_question_to_lobby_game_room_confirmation.width + 30, _question_to_lobby_game_room_confirmation.y - 8, "", 100, 35, Reg._font_size, 0xFFCCFF33, 0, null);
+		_button_to_lobby_game_room_confirmation = new ButtonGeneralNetworkNo(_question_to_lobby_game_room_confirmation.width + 30, _question_to_lobby_game_room_confirmation.y - 8, "", 100, 35, Reg._font_size, RegCustom._button_text_color, 0, null, RegCustom._button_color);
 		_button_to_lobby_game_room_confirmation.label.font = Reg._fontDefault;
 		_button_to_lobby_game_room_confirmation.label.text = Std.string(RegCustom._to_lobby_game_room_confirmation);
 		_button_to_lobby_game_room_confirmation.visible = false;
@@ -523,7 +532,7 @@ class MenuConfigurationsGeneral extends FlxGroup
 		_question_to_game_room_confirmation.y = _button_to_lobby_game_room_confirmation.height + _button_to_lobby_game_room_confirmation.y + 40;
 		_group.add(_question_to_game_room_confirmation);
 		
-		_button_to_game_room_confirmation = new ButtonGeneralNetworkNo(_question_to_game_room_confirmation.width + 30, _question_to_game_room_confirmation.y - 8, "", 100, 35, Reg._font_size, 0xFFCCFF33, 0, null);
+		_button_to_game_room_confirmation = new ButtonGeneralNetworkNo(_question_to_game_room_confirmation.width + 30, _question_to_game_room_confirmation.y - 8, "", 100, 35, Reg._font_size, RegCustom._button_text_color, 0, null, RegCustom._button_color);
 		_button_to_game_room_confirmation.label.font = Reg._fontDefault;
 		_button_to_game_room_confirmation.label.text = Std.string(RegCustom._to_game_room_confirmation);
 		_button_to_game_room_confirmation.visible = false;
@@ -536,7 +545,7 @@ class MenuConfigurationsGeneral extends FlxGroup
 		_question_to_title_confirmation.y = _button_to_game_room_confirmation.height + _button_to_game_room_confirmation.y + 40;
 		_group.add(_question_to_title_confirmation);
 		
-		_button_to_title_confirmation = new ButtonGeneralNetworkNo(_question_to_title_confirmation.width + 30, _question_to_title_confirmation.y - 8, "", 100, 35, Reg._font_size, 0xFFCCFF33, 0, null);
+		_button_to_title_confirmation = new ButtonGeneralNetworkNo(_question_to_title_confirmation.width + 30, _question_to_title_confirmation.y - 8, "", 100, 35, Reg._font_size, RegCustom._button_text_color, 0, null, RegCustom._button_color);
 		_button_to_title_confirmation.label.font = Reg._fontDefault;
 		_button_to_title_confirmation.label.text = Std.string(RegCustom._to_title_confirmation);
 		_button_to_title_confirmation.visible = false;
@@ -549,7 +558,7 @@ class MenuConfigurationsGeneral extends FlxGroup
 		_question_chat_turn_off_for_lobby.y = _button_to_title_confirmation.height + _button_to_title_confirmation.y + 40;
 		_group.add(_question_chat_turn_off_for_lobby);
 		
-		_button_chat_turn_off_for_lobby = new ButtonGeneralNetworkNo(_question_chat_turn_off_for_lobby.width + 30, _question_chat_turn_off_for_lobby.y - 8, "", 100, 35, Reg._font_size, 0xFFCCFF33, 0, null);
+		_button_chat_turn_off_for_lobby = new ButtonGeneralNetworkNo(_question_chat_turn_off_for_lobby.width + 30, _question_chat_turn_off_for_lobby.y - 8, "", 100, 35, Reg._font_size, RegCustom._button_text_color, 0, null, RegCustom._button_color);
 		_button_chat_turn_off_for_lobby.label.font = Reg._fontDefault;
 		_button_chat_turn_off_for_lobby.label.text = Std.string(RegCustom._chat_turn_off_for_lobby);
 		_button_chat_turn_off_for_lobby.visible = false;
@@ -562,7 +571,7 @@ class MenuConfigurationsGeneral extends FlxGroup
 		_question_chat_turn_off_for_room.y = _button_chat_turn_off_for_lobby.height + _button_chat_turn_off_for_lobby.y + 40;
 		_group.add(_question_chat_turn_off_for_room);
 		
-		_button_chat_turn_off_when_in_room = new ButtonGeneralNetworkNo(_question_chat_turn_off_for_room.width + 30, _question_chat_turn_off_for_room.y - 8, "", 100, 35, Reg._font_size, 0xFFCCFF33, 0, null);
+		_button_chat_turn_off_when_in_room = new ButtonGeneralNetworkNo(_question_chat_turn_off_for_room.width + 30, _question_chat_turn_off_for_room.y - 8, "", 100, 35, Reg._font_size, RegCustom._button_text_color, 0, null, RegCustom._button_color);
 		_button_chat_turn_off_when_in_room.label.font = Reg._fontDefault;
 		_button_chat_turn_off_when_in_room.label.text = Std.string(RegCustom._chat_turn_off_when_in_room);
 		_button_chat_turn_off_when_in_room.visible = false;
@@ -575,19 +584,19 @@ class MenuConfigurationsGeneral extends FlxGroup
 		_question_move_timer.y = _button_chat_turn_off_when_in_room.height + _button_chat_turn_off_when_in_room.y + 40;
 		_group.add(_question_move_timer);
 		
-		_button_move_timer = new ButtonGeneralNetworkNo(_question_move_timer.width + 10, _question_move_timer.y - 8, "", 100, 35, Reg._font_size, 0xFFCCFF33, 0, null);
+		_button_move_timer = new ButtonGeneralNetworkNo(_question_move_timer.width + 10, _question_move_timer.y - 8, "", 100, 35, Reg._font_size, RegCustom._button_text_color, 0, null, RegCustom._button_color);
 		_button_move_timer.label.font = Reg._fontDefault;
 		_button_move_timer.label.text = Std.string(RegCustom._move_timer_enable);
 		
 		_group_button.push(_button_move_timer);
 		_group.add(_group_button[30]);
 				
-		var _question_move_total = new FlxText(15, 0, 0, "Display the player's piece move total text?");
+		var _question_move_total = new FlxText(15, 0, 0, "Display the player's move total text?");
 		_question_move_total.setFormat(Reg._fontDefault, Reg._font_size);
-		_question_move_total.y = _button_move_timer.height + 15 + _button_move_timer.y + 40;
+		_question_move_total.y = _button_move_timer.height + _button_move_timer.y + 40;
 		_group.add(_question_move_total);
 		
-		_button_move_total = new ButtonGeneralNetworkNo(_question_move_total.width + 30, _question_move_total.y - 8, "", 100, 35, Reg._font_size, 0xFFCCFF33, 0, null);
+		_button_move_total = new ButtonGeneralNetworkNo(_question_move_total.width + 30, _question_move_total.y - 8, "", 100, 35, Reg._font_size, RegCustom._button_text_color, 0, null, RegCustom._button_color);
 		_button_move_total.label.font = Reg._fontDefault;
 		_button_move_total.label.text = Std.string(RegCustom._move_total_enable);
 		
@@ -599,7 +608,7 @@ class MenuConfigurationsGeneral extends FlxGroup
 		_question_notation_panel_enabled.y = _button_move_total.height + _button_move_total.y + 40;
 		_group.add(_question_notation_panel_enabled);
 		
-		_button_notation_panel_enabled = new ButtonGeneralNetworkNo(_question_notation_panel_enabled.width + 30, _question_notation_panel_enabled.y - 8, "", 100, 35, Reg._font_size, 0xFFCCFF33, 0, null);
+		_button_notation_panel_enabled = new ButtonGeneralNetworkNo(_question_notation_panel_enabled.width + 30, _question_notation_panel_enabled.y - 8, "", 100, 35, Reg._font_size, RegCustom._button_text_color, 0, null, RegCustom._button_color);
 		_button_notation_panel_enabled.label.font = Reg._fontDefault;
 		_button_notation_panel_enabled.label.text = Std.string(RegCustom._notation_panel_enabled);
 		
@@ -611,20 +620,20 @@ class MenuConfigurationsGeneral extends FlxGroup
 		_question_game_show_capturing_units.y = _button_notation_panel_enabled.height + _button_notation_panel_enabled.y + 40;
 		_group.add(_question_game_show_capturing_units);
 		
-		_button_game_show_capturing_units = new ButtonGeneralNetworkNo(_question_game_show_capturing_units.width + 30, _question_game_show_capturing_units.y - 8, "", 100, 35, Reg._font_size, 0xFFCCFF33, 0, null);
+		_button_game_show_capturing_units = new ButtonGeneralNetworkNo(_question_game_show_capturing_units.width + 30, _question_game_show_capturing_units.y - 8, "", 100, 35, Reg._font_size, RegCustom._button_text_color, 0, null, RegCustom._button_color);
 		_button_game_show_capturing_units.label.font = Reg._fontDefault;
 		_button_game_show_capturing_units.label.text = Std.string(RegCustom._game_show_capturing_units);
 		
 		_group_button.push(_button_game_show_capturing_units);
 		_group.add(_group_button[33]);
 		
-		_button_game_show_capturing_units_minus = new ButtonGeneralNetworkNo(_button_game_show_capturing_units.x + _button_game_show_capturing_units.width + 15, _button_game_show_capturing_units.y + 7, "-", 35, 35, Reg._font_size, 0xFFCCFF33, 0, null);
+		_button_game_show_capturing_units_minus = new ButtonGeneralNetworkNo(_button_game_show_capturing_units.x + _button_game_show_capturing_units.width + 15, _button_game_show_capturing_units.y + 7, "-", 35, 35, Reg._font_size, RegCustom._button_text_color, 0, null, RegCustom._button_color);
 		_button_game_show_capturing_units_minus.label.font = Reg._fontDefault;
 	
 		_group_button.push(_button_game_show_capturing_units_minus);
 		_group.add(_group_button[34]);		
 		
-		_button_game_show_capturing_units_plus = new ButtonGeneralNetworkNo(_button_game_show_capturing_units_minus.x + _button_game_show_capturing_units_minus.label.fieldWidth + 15, _button_game_show_capturing_units_minus.y + 7, "+", 35, 35, Reg._font_size, 0xFFCCFF33, 0, null);
+		_button_game_show_capturing_units_plus = new ButtonGeneralNetworkNo(_button_game_show_capturing_units_minus.x + _button_game_show_capturing_units_minus.label.fieldWidth + 15, _button_game_show_capturing_units_minus.y + 7, "+", 35, 35, Reg._font_size, RegCustom._button_text_color, 0, null, RegCustom._button_color);
 		_button_game_show_capturing_units_plus.label.font = Reg._fontDefault;
 		
 		_group_button.push(_button_game_show_capturing_units_plus);
@@ -638,10 +647,65 @@ class MenuConfigurationsGeneral extends FlxGroup
 		var _sprite_chess_path_to_king_bg = new FlxSprite(_button_game_show_capturing_units_plus.x + _button_game_show_capturing_units_plus.width + 45, _button_game_show_capturing_units_plus.y - 14, "assets/images/dailyQuestsBorder1.png");
 		_group.add(_sprite_chess_path_to_king_bg);
 		
+		//-----------------------------
+		var _question_background_brightness = new FlxText(15, 0, 0, "Background brightness? 0 is black. 1 is full bright.");
+		_question_background_brightness.setFormat(Reg._fontDefault, Reg._font_size);
+		_question_background_brightness.y = _button_game_show_capturing_units.height + _button_game_show_capturing_units.y + 60;
+		_group.add(_question_background_brightness);
+		
+		// y - 7 is needed here.
+		_button_background_brightness_minus = new ButtonGeneralNetworkNo(_question_background_brightness.x + _question_background_brightness.width + 15, _question_background_brightness.y - 7, "-", 35, 35, Reg._font_size, RegCustom._button_text_color, 0, null, RegCustom._button_color);
+		_button_background_brightness_minus.label.font = Reg._fontDefault;
+	
+		_group_button.push(_button_background_brightness_minus);
+		_group.add(_group_button[36]);		
+		
+		_button_background_brightness_plus = new ButtonGeneralNetworkNo(_button_background_brightness_minus.x + _button_background_brightness_minus.label.fieldWidth + 15, _button_background_brightness_minus.y + 7, "+", 35, 35, Reg._font_size, RegCustom._button_text_color, 0, null, RegCustom._button_color);
+		_button_background_brightness_plus.label.font = Reg._fontDefault;
+		
+		_group_button.push(_button_background_brightness_plus);
+		_group.add(_group_button[37]);
+		
+		_text_background_brightness = new FlxText(_button_background_brightness_plus.x + 50, _question_background_brightness.y, 0, Std.string(RegCustom._background_brightness));
+		_text_background_brightness.setFormat(Reg._fontDefault, Reg._font_size);		
+		_group.add(_text_background_brightness);
+		
+		var _question_button_colors = new FlxText(15, 0, 0, "Change the appearance of all client buttons?");
+		_question_button_colors.setFormat(Reg._fontDefault, Reg._font_size);
+		_question_button_colors.y = _text_background_brightness.height + _text_background_brightness.y + 40;
+		_question_button_colors.fieldWidth = 400;
+		_group.add(_question_button_colors);
+		
+		_button_color = new ButtonGeneralNetworkNo(_question_button_colors.x + _question_button_colors.fieldWidth + 15, _question_button_colors.y + 15, "Background", 190, 35, Reg._font_size, RegCustom._button_text_color, 0, null, RegCustom._button_color);
+		_button_color.label.font = Reg._fontDefault;
+		
+		_group_button.push(_button_color);
+		_group.add(_group_button[38]);
+		
+		_button_border_color = new ButtonGeneralNetworkNo(_button_color.x + _button_color.label.fieldWidth + 15, _button_color.y + 7, "Border", 170, 35, Reg._font_size, RegCustom._button_text_color, 0, null, RegCustom._button_color);
+		_button_border_color.label.font = Reg._fontDefault;
+		
+		_group_button.push(_button_border_color);
+		_group.add(_group_button[39]);
+		
+		_button_text_color = new ButtonGeneralNetworkNo(_button_border_color.x + _button_border_color.label.fieldWidth + 15, _button_border_color.y + 7, "Text", 170, 35, Reg._font_size, RegCustom._button_text_color, 0, null, RegCustom._button_color);
+		_button_text_color.label.font = Reg._fontDefault;
+		
+		_group_button.push(_button_text_color);
+		_group.add(_group_button[40]);
+		
+		_question_button_colors_output = new FlxText(_button_text_color.x + _button_text_color.label.fieldWidth + 80, 0, 0, "Output:");
+		_question_button_colors_output.setFormat(Reg._fontDefault, Reg._font_size);
+		_question_button_colors_output.y = _button_color.y + 7;
+		_group.add(_question_button_colors_output);
+		
+		_button_color_output = new ButtonGeneralNetworkNo(_question_button_colors_output.x + _question_button_colors_output.fieldWidth + 15, _button_border_color.y + 7, "Example", 110, 35, Reg._font_size, RegCustom._button_text_color, 0, null, RegCustom._button_color);
+		_button_color_output.label.font = Reg._fontDefault;
+		_group.add(_button_color_output);
 		
 		//-----------------------------
-		// DO NOT FORGET TO UNDATE THE buttonNumber() FUNCTiON.
-		var _text_empty = new ButtonGeneralNetworkNo(0, _button_notation_panel_enabled.y + 250, "", 100, 35, Reg._font_size, 0xFFCCFF33, 0, null);
+		// DO NOT FORGET TO UPDATE THE buttonNumber() FUNCTiON.
+		var _text_empty = new ButtonGeneralNetworkNo(0, _button_background_brightness_minus.y + 250, "", 100, 35, Reg._font_size, RegCustom._button_text_color, 0, null, RegCustom._button_color);
 		_text_empty.visible = false;
 		_group.add(_text_empty);
 		
@@ -690,6 +754,11 @@ class MenuConfigurationsGeneral extends FlxGroup
 			case 33: save_game_show_capturing_units();
 			case 34: game_show_capturing_units_minus();
 			case 35: game_show_capturing_units_plus();
+			case 36: background_brightness_minus();
+			case 37: background_brightness_plus();
+			case 38: apply_button_background_color();
+			case 39: apply_button_border_color();
+			case 40: apply_button_text_color();
 		}
 	}
 		
@@ -762,7 +831,7 @@ class MenuConfigurationsGeneral extends FlxGroup
 	private function colorUnitsOddMinus()
 	{
 		RegCustom._units_odd_color_num[_num] -= 1;
-		if (RegCustom._units_odd_color_num[_num] == 0) RegCustom._units_odd_color_num[_num] = 26;
+		if (RegCustom._units_odd_color_num[_num] == 0) RegCustom._units_odd_color_num[_num] = 40;
 		
 		_sprite_board_game_unit_odd.color = colorToggleUnitsOdd();
 	}
@@ -771,7 +840,7 @@ class MenuConfigurationsGeneral extends FlxGroup
 	private function colorUnitsOddPlus()
 	{
 		RegCustom._units_odd_color_num[_num] += 1;
-		if (RegCustom._units_odd_color_num[_num] == 27) RegCustom._units_odd_color_num[_num] = 1;
+		if (RegCustom._units_odd_color_num[_num] == 41) RegCustom._units_odd_color_num[_num] = 1;
 		
 		_sprite_board_game_unit_odd.color = colorToggleUnitsOdd();
 	}	
@@ -781,32 +850,46 @@ class MenuConfigurationsGeneral extends FlxGroup
 		
 		var _color:FlxColor = 0xFFFFFFFF;
 		
-		if (RegCustom._units_odd_color_num[_num] == 1) _color = 0xFFb18d8d; // red 1
-		if (RegCustom._units_odd_color_num[_num] == 2) _color = 0xFFaf5252; // red 2
-		if (RegCustom._units_odd_color_num[_num] == 3) _color = 0xFFaa2222; // red 3
-		if (RegCustom._units_odd_color_num[_num] == 4) _color = 0xFFb18dc0; // purple 1
-		if (RegCustom._units_odd_color_num[_num] == 5) _color = 0xFFaf529b; // purple 2
-		if (RegCustom._units_odd_color_num[_num] == 6) _color = 0xFFaa2283; // purple 3
-		if (RegCustom._units_odd_color_num[_num] == 7) _color = 0xFF908de1; // purple 4
-		if (RegCustom._units_odd_color_num[_num] == 8) _color = 0xFF9352af; // purple 5
-		if (RegCustom._units_odd_color_num[_num] == 9) _color = 0xFF732298; // purple 6
-		if (RegCustom._units_odd_color_num[_num] == 10) _color = 0xFF5db3e1; // blue 1	 
-		if (RegCustom._units_odd_color_num[_num] == 11) _color = 0xFF5252af; // blue 2
-		if (RegCustom._units_odd_color_num[_num] == 12) _color = 0xFF2222aa; // blue 3
-		if (RegCustom._units_odd_color_num[_num] == 13) _color = 0xFF5fe1cd; // blue 4	
-		if (RegCustom._units_odd_color_num[_num] == 14) _color = 0xFF529eaf; // blue 5
-		if (RegCustom._units_odd_color_num[_num] == 15) _color = 0xFF229999; // blue 6
-		if (RegCustom._units_odd_color_num[_num] == 16) _color = 0xFF5de197; // green 1
-		if (RegCustom._units_odd_color_num[_num] == 17) _color = 0xFF52af60; // green 2
-		if (RegCustom._units_odd_color_num[_num] == 18) _color = 0xFF22aa22; // green 3
-		if (RegCustom._units_odd_color_num[_num] == 19) _color = 0xFFd2e16d; // yellow 1
-		if (RegCustom._units_odd_color_num[_num] == 20) _color = 0xFFa4af52; // yellow 2
-		if (RegCustom._units_odd_color_num[_num] == 21) _color = 0xFFaaaa22; // yellow 3
-		if (RegCustom._units_odd_color_num[_num] == 22) _color = 0xFFb1b68d; // orange 1	
-		if (RegCustom._units_odd_color_num[_num] == 23) _color = 0xFFaf7f52; // orange 2
-		if (RegCustom._units_odd_color_num[_num] == 24) _color = 0xFFaa4522; // orange 3
-		if (RegCustom._units_odd_color_num[_num] == 25) _color = 0xFFffffff; // white
-		if (RegCustom._units_odd_color_num[_num] == 26) _color = 0xFF222222; // black
+		if (RegCustom._units_odd_color_num[_num] == 1) _color = 0xFF1a1c2c;
+		if (RegCustom._units_odd_color_num[_num] == 2) _color = 0xFF5d275d;
+		if (RegCustom._units_odd_color_num[_num] == 3) _color = 0xFFcb0025;
+		if (RegCustom._units_odd_color_num[_num] == 4) _color = 0xFFef7d57;
+		if (RegCustom._units_odd_color_num[_num] == 5) _color = 0xFFffcd75;
+		if (RegCustom._units_odd_color_num[_num] == 6) _color = 0xFFa7f070;
+		if (RegCustom._units_odd_color_num[_num] == 7) _color = 0xFF38b764;
+		if (RegCustom._units_odd_color_num[_num] == 8) _color = 0xFF257179;
+		if (RegCustom._units_odd_color_num[_num] == 9) _color = 0xFF29366f;
+		if (RegCustom._units_odd_color_num[_num] == 10) _color = 0xFF3b5dc9;
+		if (RegCustom._units_odd_color_num[_num] == 11) _color = 0xFF41a6f6;
+		if (RegCustom._units_odd_color_num[_num] == 12) _color = 0xFF73eff7;
+		if (RegCustom._units_odd_color_num[_num] == 13) _color = 0xFFf4f4f4;
+		if (RegCustom._units_odd_color_num[_num] == 14) _color = 0xFF94b0c2;
+		if (RegCustom._units_odd_color_num[_num] == 15) _color = 0xFF566c86;
+		if (RegCustom._units_odd_color_num[_num] == 16) _color = 0xFF333c57;
+		if (RegCustom._units_odd_color_num[_num] == 17) _color = 0xFF9c5b3e;
+		if (RegCustom._units_odd_color_num[_num] == 18) _color = 0xFF573139;
+		if (RegCustom._units_odd_color_num[_num] == 19) _color = 0xFF4c7554;
+		if (RegCustom._units_odd_color_num[_num] == 20) _color = 0xFF2a201e;
+		if (RegCustom._units_odd_color_num[_num] == 21) _color = 0x881a1c2c;
+		if (RegCustom._units_odd_color_num[_num] == 22) _color = 0x885d275d;
+		if (RegCustom._units_odd_color_num[_num] == 23) _color = 0x88b13e53;
+		if (RegCustom._units_odd_color_num[_num] == 24) _color = 0x88ef7d57;
+		if (RegCustom._units_odd_color_num[_num] == 25) _color = 0x88ffcd75;
+		if (RegCustom._units_odd_color_num[_num] == 26) _color = 0x88a7f070;
+		if (RegCustom._units_odd_color_num[_num] == 27) _color = 0x8838b764;
+		if (RegCustom._units_odd_color_num[_num] == 28) _color = 0x88257179;
+		if (RegCustom._units_odd_color_num[_num] == 29) _color = 0x8829366f;
+		if (RegCustom._units_odd_color_num[_num] == 30) _color = 0x883b5dc9;
+		if (RegCustom._units_odd_color_num[_num] == 31) _color = 0x8841a6f6;
+		if (RegCustom._units_odd_color_num[_num] == 32) _color = 0x8873eff7;
+		if (RegCustom._units_odd_color_num[_num] == 33) _color = 0x88f4f4f4;
+		if (RegCustom._units_odd_color_num[_num] == 34) _color = 0x8894b0c2;
+		if (RegCustom._units_odd_color_num[_num] == 35) _color = 0x88566c86;
+		if (RegCustom._units_odd_color_num[_num] == 36) _color = 0x88333c57;
+		if (RegCustom._units_odd_color_num[_num] == 37) _color = 0x889c5b3e;
+		if (RegCustom._units_odd_color_num[_num] == 38) _color = 0x88573139;
+		if (RegCustom._units_odd_color_num[_num] == 39) _color = 0x884c7554;
+		if (RegCustom._units_odd_color_num[_num] == 40) _color = 0x882a201e;
 		
 		return _color;
 	}
@@ -815,7 +898,7 @@ class MenuConfigurationsGeneral extends FlxGroup
 	private function colorUnitsEvenMinus()
 	{
 		RegCustom._units_even_color_num[_num] -= 1;
-		if (RegCustom._units_even_color_num[_num] == 0) RegCustom._units_even_color_num[_num] = 26;
+		if (RegCustom._units_even_color_num[_num] == 0) RegCustom._units_even_color_num[_num] = 40;
 		
 		_sprite_board_game_unit_even.color = colorToggleUnitsEven();
 	}
@@ -824,7 +907,7 @@ class MenuConfigurationsGeneral extends FlxGroup
 	private function colorUnitsEvenPlus()
 	{
 		RegCustom._units_even_color_num[_num] += 1;
-		if (RegCustom._units_even_color_num[_num] == 27) RegCustom._units_even_color_num[_num] = 1;
+		if (RegCustom._units_even_color_num[_num] == 41) RegCustom._units_even_color_num[_num] = 1;
 		
 		_sprite_board_game_unit_even.color = colorToggleUnitsEven();
 	}	
@@ -833,37 +916,50 @@ class MenuConfigurationsGeneral extends FlxGroup
 	 * changes the color of game board units.
 	 */
 	public static function colorToggleUnitsEven():FlxColor
-	{
-		
+	{		
 		var _color:FlxColor = 0xFFFFFFFF;
 		
-		if (RegCustom._units_even_color_num[_num] == 1) _color = 0xFFb18d8d; // red 1
-		if (RegCustom._units_even_color_num[_num] == 2) _color = 0xFFaf5252; // red 2
-		if (RegCustom._units_even_color_num[_num] == 3) _color = 0xFFaa2222; // red 3
-		if (RegCustom._units_even_color_num[_num] == 4) _color = 0xFFb18dc0; // purple 1
-		if (RegCustom._units_even_color_num[_num] == 5) _color = 0xFFaf529b; // purple 2
-		if (RegCustom._units_even_color_num[_num] == 6) _color = 0xFFaa2283; // purple 3
-		if (RegCustom._units_even_color_num[_num] == 7) _color = 0xFF908de1; // purple 4
-		if (RegCustom._units_even_color_num[_num] == 8) _color = 0xFF9352af; // purple 5
-		if (RegCustom._units_even_color_num[_num] == 9) _color = 0xFF732298; // purple 6
-		if (RegCustom._units_even_color_num[_num] == 10) _color = 0xFF5db3e1; // blue 1	 
-		if (RegCustom._units_even_color_num[_num] == 11) _color = 0xFF5252af; // blue 2
-		if (RegCustom._units_even_color_num[_num] == 12) _color = 0xFF2222aa; // blue 3
-		if (RegCustom._units_even_color_num[_num] == 13) _color = 0xFF5fe1cd; // blue 4	
-		if (RegCustom._units_even_color_num[_num] == 14) _color = 0xFF529eaf; // blue 5
-		if (RegCustom._units_even_color_num[_num] == 15) _color = 0xFF229999; // blue 6
-		if (RegCustom._units_even_color_num[_num] == 16) _color = 0xFF5de197; // green 1
-		if (RegCustom._units_even_color_num[_num] == 17) _color = 0xFF52af60; // green 2
-		if (RegCustom._units_even_color_num[_num] == 18) _color = 0xFF22aa22; // green 3
-		if (RegCustom._units_even_color_num[_num] == 19) _color = 0xFFd2e16d; // yellow 1
-		if (RegCustom._units_even_color_num[_num] == 20) _color = 0xFFa4af52; // yellow 2
-		if (RegCustom._units_even_color_num[_num] == 21) _color = 0xFFaaaa22; // yellow 3
-		if (RegCustom._units_even_color_num[_num] == 22) _color = 0xFFb1b68d; // orange 1	
-		if (RegCustom._units_even_color_num[_num] == 23) _color = 0xFFaf7f52; // orange 2
-		if (RegCustom._units_even_color_num[_num] == 24) _color = 0xFFaa4522; // orange 3
-		if (RegCustom._units_even_color_num[_num] == 25) _color = 0xFFffffff; // white
-		if (RegCustom._units_even_color_num[_num] == 26) _color = 0xFF222222; // black
-					
+		if (RegCustom._units_even_color_num[_num] == 1) _color = 0xFF1a1c2c;
+		if (RegCustom._units_even_color_num[_num] == 2) _color = 0xFF5d275d;
+		if (RegCustom._units_even_color_num[_num] == 3) _color = 0xFFcb0025;
+		if (RegCustom._units_even_color_num[_num] == 4) _color = 0xFFef7d57;
+		if (RegCustom._units_even_color_num[_num] == 5) _color = 0xFFffcd75;
+		if (RegCustom._units_even_color_num[_num] == 6) _color = 0xFFa7f070;
+		if (RegCustom._units_even_color_num[_num] == 7) _color = 0xFF38b764;
+		if (RegCustom._units_even_color_num[_num] == 8) _color = 0xFF257179;
+		if (RegCustom._units_even_color_num[_num] == 9) _color = 0xFF29366f;
+		if (RegCustom._units_even_color_num[_num] == 10) _color = 0xFF3b5dc9;
+		if (RegCustom._units_even_color_num[_num] == 11) _color = 0xFF41a6f6;
+		if (RegCustom._units_even_color_num[_num] == 12) _color = 0xFF73eff7;
+		if (RegCustom._units_even_color_num[_num] == 13) _color = 0xFFf4f4f4;
+		if (RegCustom._units_even_color_num[_num] == 14) _color = 0xFF94b0c2;
+		if (RegCustom._units_even_color_num[_num] == 15) _color = 0xFF566c86;
+		if (RegCustom._units_even_color_num[_num] == 16) _color = 0xFF333c57;
+		if (RegCustom._units_even_color_num[_num] == 17) _color = 0xFF9c5b3e;
+		if (RegCustom._units_even_color_num[_num] == 18) _color = 0xFF573139;
+		if (RegCustom._units_even_color_num[_num] == 19) _color = 0xFF4c7554;
+		if (RegCustom._units_even_color_num[_num] == 20) _color = 0xFF2a201e;
+		if (RegCustom._units_even_color_num[_num] == 21) _color = 0x881a1c2c;
+		if (RegCustom._units_even_color_num[_num] == 22) _color = 0x885d275d;
+		if (RegCustom._units_even_color_num[_num] == 23) _color = 0x88b13e53;
+		if (RegCustom._units_even_color_num[_num] == 24) _color = 0x88ef7d57;
+		if (RegCustom._units_even_color_num[_num] == 25) _color = 0x88ffcd75;
+		if (RegCustom._units_even_color_num[_num] == 26) _color = 0x88a7f070;
+		if (RegCustom._units_even_color_num[_num] == 27) _color = 0x8838b764;
+		if (RegCustom._units_even_color_num[_num] == 28) _color = 0x88257179;
+		if (RegCustom._units_even_color_num[_num] == 29) _color = 0x8829366f;
+		if (RegCustom._units_even_color_num[_num] == 30) _color = 0x883b5dc9;
+		if (RegCustom._units_even_color_num[_num] == 31) _color = 0x8841a6f6;
+		if (RegCustom._units_even_color_num[_num] == 32) _color = 0x8873eff7;
+		if (RegCustom._units_even_color_num[_num] == 33) _color = 0x88f4f4f4;
+		if (RegCustom._units_even_color_num[_num] == 34) _color = 0x8894b0c2;
+		if (RegCustom._units_even_color_num[_num] == 35) _color = 0x88566c86;
+		if (RegCustom._units_even_color_num[_num] == 36) _color = 0x88333c57;
+		if (RegCustom._units_even_color_num[_num] == 37) _color = 0x889c5b3e;
+		if (RegCustom._units_even_color_num[_num] == 38) _color = 0x88573139;
+		if (RegCustom._units_even_color_num[_num] == 39) _color = 0x884c7554;
+		if (RegCustom._units_even_color_num[_num] == 40) _color = 0x882a201e;
+		
 		return _color;
 	}
 	
@@ -950,12 +1046,11 @@ class MenuConfigurationsGeneral extends FlxGroup
 	 * when the checkers button is pressed this changes the board game colors for the game to the default colors that seems to be the colors used by a fair amount of websites.
 	 */
 	private function defaultColorsCheckers():Void
-	{
+	{		
 		buttonToggle();
 		
-		_group_button_toggle[0].color = 0xFF005500;
-		_group_button_toggle[0].has_toggle = true;
-		_group_button_toggle[0].set_toggled(true);
+		_button_default_colors_checkers.has_toggle = true;
+		_button_default_colors_checkers.set_toggled(true);
 		
 		shaderToggleUnitsOdd();
 		shaderToggleUnitsEven();
@@ -967,7 +1062,7 @@ class MenuConfigurationsGeneral extends FlxGroup
 			_sprite_board_game_unit_even.alpha = 0;
 		else
 			_sprite_board_game_unit_even.alpha = 1;
-			
+		
 	}
 	
 	/******************************
@@ -977,10 +1072,9 @@ class MenuConfigurationsGeneral extends FlxGroup
 	{
 		buttonToggle();
 				
-		_group_button_toggle[1].color = 0xFF005500;
-		_group_button_toggle[1].has_toggle = true;
-		_group_button_toggle[1].set_toggled(true);	
-			
+		_button_default_colors_chess.has_toggle = true;
+		_button_default_colors_chess.set_toggled(true);	
+		
 		shaderToggleUnitsOdd();
 		shaderToggleUnitsEven();
 		
@@ -991,6 +1085,7 @@ class MenuConfigurationsGeneral extends FlxGroup
 			_sprite_board_game_unit_even.alpha = 0;
 		else
 			_sprite_board_game_unit_even.alpha = 1;
+			
 	}
 
 	
@@ -998,19 +1093,17 @@ class MenuConfigurationsGeneral extends FlxGroup
 	private function buttonToggle():Void
 	{
 		// checkers
-		if (_group_button_toggle[0] != null)
+		if (_button_default_colors_checkers != null)
 		{
-			_group_button_toggle[0].color = 0xFF550000;
-			_group_button_toggle[0].has_toggle = false;
-			_group_button_toggle[0].set_toggled(false);
+			_button_default_colors_checkers.has_toggle = false;
+			_button_default_colors_checkers.set_toggled(false);
 		}
 		
 		// chess
-		if (_group_button_toggle[1] != null)
+		if (_button_default_colors_chess != null)
 		{
-			_group_button_toggle[1].color = 0xFF550000;
-			_group_button_toggle[1].has_toggle = false;
-			_group_button_toggle[1].set_toggled(false);
+			_button_default_colors_chess.has_toggle = false;
+			_button_default_colors_chess.set_toggled(false);
 		}
 	}
 	
@@ -1244,6 +1337,146 @@ class MenuConfigurationsGeneral extends FlxGroup
 		
 	}
 	
+	private function background_brightness_minus():Void
+	{
+		RegCustom._background_brightness -= 0.05;
+		if (RegCustom._background_brightness < 0.15) RegCustom._background_brightness = 0.65;
+		
+		__menu_configurations_output.__boxscroller.bgColor = FlxColor.fromHSB(__menu_configurations_output._bg_color, 0.8, RegCustom._background_brightness);
+		
+		_text_background_brightness.text = Std.string(RegCustom._background_brightness);
+	}
+	
+	private function background_brightness_plus():Void
+	{
+		RegCustom._background_brightness += 0.05;
+		if (RegCustom._background_brightness > 0.65) RegCustom._background_brightness = 0.15;
+		
+		__menu_configurations_output.__boxscroller.bgColor = FlxColor.fromHSB(__menu_configurations_output._bg_color, 0.8, RegCustom._background_brightness);
+		
+		_text_background_brightness.text = Std.string(RegCustom._background_brightness);
+	}
+	
+	/******************************
+	 * apply a fill color to the example buttom. that button is used to show the changes of the fill color, border color and text color.
+	 */
+	private function apply_button_background_color()
+	{
+		RegCustom._button_color_number += 1;
+		if (RegCustom._button_color_number == 41) RegCustom._button_color_number = 1;
+		
+		// new button color.
+		RegCustom._button_color = button_colors();
+		
+		// the below code will remove the example buttonfrom the scene.  
+		// the button will be redisplay to show the new button's fill color.
+		if (_button_color_output != null)
+		{			
+			_group.remove(_button_color_output);
+			remove(_button_color_output);
+			_button_color_output.destroy();
+		}
+		
+		_button_color_output = new ButtonGeneralNetworkNo(_question_button_colors_output.x + _question_button_colors_output.fieldWidth + 15, _button_border_color.y + 7, "Example", 110, 35, Reg._font_size, RegCustom._button_text_color, 0, null, RegCustom._button_color);
+		_button_color_output.label.font = Reg._fontDefault;
+		_group.add(_button_color_output);
+	}
+		
+	private function apply_button_border_color()
+	{
+		RegCustom._button_color_number += 1;
+		if (RegCustom._button_color_number == 41) RegCustom._button_color_number = 1;
+		
+		// new button color.
+		RegCustom._button_border_color = button_colors();
+		
+		// the below code will remove the example buttonfrom the scene.  
+		// the button will be redisplay to show the new button's fill color.
+		if (_button_color_output != null)
+		{			
+			_group.remove(_button_color_output);
+			remove(_button_color_output);
+			_button_color_output.destroy();
+		}
+		
+		_button_color_output = new ButtonGeneralNetworkNo(_question_button_colors_output.x + _question_button_colors_output.fieldWidth + 15, _button_border_color.y + 7, "Example", 110, 35, Reg._font_size, RegCustom._button_text_color, 0, null, RegCustom._button_color);
+		_button_color_output.label.font = Reg._fontDefault;
+		_group.add(_button_color_output);
+	}
+	
+	private function apply_button_text_color()
+	{
+		RegCustom._button_color_number += 1;
+		if (RegCustom._button_color_number == 41) RegCustom._button_color_number = 1;
+		
+		// new button color.
+		RegCustom._button_text_color = button_colors();
+		
+		// the below code will remove the example buttonfrom the scene.  
+		// the button will be redisplay to show the new button's fill color.
+		if (_button_color_output != null)
+		{			
+			_group.remove(_button_color_output);
+			remove(_button_color_output);
+			_button_color_output.destroy();
+		}
+		
+		_button_color_output = new ButtonGeneralNetworkNo(_question_button_colors_output.x + _question_button_colors_output.fieldWidth + 15, _button_border_color.y + 7, "Example", 110, 35, Reg._font_size, RegCustom._button_text_color, 0, null, RegCustom._button_color);
+		_button_color_output.label.font = Reg._fontDefault;
+		_group.add(_button_color_output);
+	}
+	
+	/******************************
+	 * button fill color is the color behind the button text.
+	 */
+	public static function button_colors():FlxColor
+	{		
+		var _color:FlxColor = 0xFF1a1c2c;
+		
+		if (RegCustom._button_color_number == 1) _color = 0xFF1a1c2c;
+		if (RegCustom._button_color_number == 2) _color = 0xFF5d275d;
+		if (RegCustom._button_color_number == 3) _color = 0xFFcb0025;
+		if (RegCustom._button_color_number == 4) _color = 0xFFef7d57;
+		if (RegCustom._button_color_number == 5) _color = 0xFFffcd75;
+		if (RegCustom._button_color_number == 6) _color = 0xFFa7f070;
+		if (RegCustom._button_color_number == 7) _color = 0xFF38b764;
+		if (RegCustom._button_color_number == 8) _color = 0xFF257179;
+		if (RegCustom._button_color_number == 9) _color = 0xFF29366f;
+		if (RegCustom._button_color_number == 10) _color = 0xFF3b5dc9;
+		if (RegCustom._button_color_number == 11) _color = 0xFF41a6f6;
+		if (RegCustom._button_color_number == 12) _color = 0xFF73eff7;
+		if (RegCustom._button_color_number == 13) _color = 0xFFf4f4f4;
+		if (RegCustom._button_color_number == 14) _color = 0xFF94b0c2;
+		if (RegCustom._button_color_number == 15) _color = 0xFF566c86;
+		if (RegCustom._button_color_number == 16) _color = 0xFF333c57;
+		if (RegCustom._button_color_number == 17) _color = 0xFF9c5b3e;
+		if (RegCustom._button_color_number == 18) _color = 0xFF573139;
+		if (RegCustom._button_color_number == 19) _color = 0xFF4c7554;
+		if (RegCustom._button_color_number == 20) _color = 0xFF2a201e;
+		if (RegCustom._button_color_number == 21) _color = 0x881a1c2c;
+		if (RegCustom._button_color_number == 22) _color = 0x885d275d;
+		if (RegCustom._button_color_number == 23) _color = 0x88b13e53;
+		if (RegCustom._button_color_number == 24) _color = 0x88ef7d57;
+		if (RegCustom._button_color_number == 25) _color = 0x88ffcd75;
+		if (RegCustom._button_color_number == 26) _color = 0x88a7f070;
+		if (RegCustom._button_color_number == 27) _color = 0x8838b764;
+		if (RegCustom._button_color_number == 28) _color = 0x88257179;
+		if (RegCustom._button_color_number == 29) _color = 0x8829366f;
+		if (RegCustom._button_color_number == 30) _color = 0x883b5dc9;
+		if (RegCustom._button_color_number == 31) _color = 0x8841a6f6;
+		if (RegCustom._button_color_number == 32) _color = 0x8873eff7;
+		if (RegCustom._button_color_number == 33) _color = 0x88f4f4f4;
+		if (RegCustom._button_color_number == 34) _color = 0x8894b0c2;
+		if (RegCustom._button_color_number == 35) _color = 0x88566c86;
+		if (RegCustom._button_color_number == 36) _color = 0x88333c57;
+		if (RegCustom._button_color_number == 37) _color = 0x889c5b3e;
+		if (RegCustom._button_color_number == 38) _color = 0x88573139;
+		if (RegCustom._button_color_number == 39) _color = 0x884c7554;
+		if (RegCustom._button_color_number == 40) _color = 0x882a201e;
+		
+		return _color;
+	}
+	
 	override public function update(elapsed:Float):Void
 	{	
 		if (Reg._yesNoKeyPressValueAtMessage > 0 && Reg._buttonCodeValues == "v1000")
@@ -1271,63 +1504,9 @@ class MenuConfigurationsGeneral extends FlxGroup
 				break;
 			}
 			
-			// if same as above but mouse is not pressed.
-			else if (FlxG.mouse.y + ButtonGeneralNetworkNo._scrollarea_offset_y >= _group_button[i]._startY &&  FlxG.mouse.y + ButtonGeneralNetworkNo._scrollarea_offset_y <= _group_button[i]._startY + _group_button[i]._button_height 
-			&& FlxG.mouse.x + ButtonGeneralNetworkNo._scrollarea_offset_x >= _group_button[i]._startX &&  FlxG.mouse.x + ButtonGeneralNetworkNo._scrollarea_offset_x <= _group_button[i]._startX + _group_button[i]._button_width)
-			{
-				_group_button[i].active = true;
-				_group_button[i].label.color = 0xFF00FF00;
-				
-				break;
-			}
-			// if mouse is not at a button that set it not active.
-			else if (FlxG.mouse.y + ButtonGeneralNetworkNo._scrollarea_offset_y < _group_button[i]._startY 
-			||  FlxG.mouse.y + ButtonGeneralNetworkNo._scrollarea_offset_y > _group_button[i]._startY + _group_button[i]._button_height
-			||  FlxG.mouse.x + ButtonGeneralNetworkNo._scrollarea_offset_x < _group_button[i]._startX 
-			||  FlxG.mouse.x + ButtonGeneralNetworkNo._scrollarea_offset_x > _group_button[i]._startX + _group_button[i]._button_width)			
-			{
-				if (_group_button[i].label.color == 0xFFFFFFFF) 
-					_group_button[i].active = false;
-				_group_button[i].label.color = 0xFFFFFFFF;
-				
-			}
-		}
-		
-		//############################# code for toggle buttons. used along with __boxScroller scroll offset.
-		for (i in 0... _group_button_toggle.length)
-		{
-			// if mouse is on the button plus any offset made by the box scroller and mouse is pressed...
-			if (FlxG.mouse.y + ButtonToggleFlxState._scrollarea_offset_y >= _group_button_toggle[i]._startY &&  FlxG.mouse.y + ButtonToggleFlxState._scrollarea_offset_y <= _group_button_toggle[i]._startY + _group_button_toggle[i]._button_height 
-			&& FlxG.mouse.x + ButtonToggleFlxState._scrollarea_offset_x >= _group_button_toggle[i]._startX &&  FlxG.mouse.x + ButtonToggleFlxState._scrollarea_offset_x <= _group_button_toggle[i]._startX + _group_button_toggle[i]._button_width && FlxG.mouse.justPressed == true )
-			{
-				_num = i;
-				buttonNumberToggle();				
-				break;
-			}
 			
-			// if same as above but mouse is not pressed.
-			else if (FlxG.mouse.y + ButtonToggleFlxState._scrollarea_offset_y >= _group_button_toggle[i]._startY &&  FlxG.mouse.y + ButtonToggleFlxState._scrollarea_offset_y <= _group_button_toggle[i]._startY + _group_button_toggle[i]._button_height 
-			&& FlxG.mouse.x + ButtonToggleFlxState._scrollarea_offset_x >= _group_button_toggle[i]._startX &&  FlxG.mouse.x + ButtonToggleFlxState._scrollarea_offset_x <= _group_button_toggle[i]._startX + _group_button_toggle[i]._button_width)
-			{
-				_group_button_toggle[i].active = true;
-				_group_button_toggle[i].label.color = 0xFF00FF00;
-				
-				break;
-			}
-			// if mouse is not at a button that set it not active.
-			else if (FlxG.mouse.y + ButtonToggleFlxState._scrollarea_offset_y < _group_button_toggle[i]._startY 
-			||  FlxG.mouse.y + ButtonToggleFlxState._scrollarea_offset_y > _group_button_toggle[i]._startY + _group_button_toggle[i]._button_height
-			||  FlxG.mouse.x + ButtonToggleFlxState._scrollarea_offset_x < _group_button_toggle[i]._startX 
-			||  FlxG.mouse.x + ButtonToggleFlxState._scrollarea_offset_x > _group_button_toggle[i]._startX + _group_button_toggle[i]._button_width)			
-			{
-				if (_group_button_toggle[i].label.color == 0xFFFFFFFF) 
-					_group_button_toggle[i].active = false;
-				_group_button_toggle[i].label.color = 0xFFFFFFFF;
-				
-			}
 		}
-
-		
+			
 		super.update(elapsed);		
 		
 	}

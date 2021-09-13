@@ -42,8 +42,6 @@ class Leaderboards extends FlxGroup
 	public var _group:FlxSpriteGroup;	
 	public var __boxscroller:FlxScrollableArea;	
 	
-	public var _to_lobby:ButtonGeneralNetworkYes;
-	
 	public var _title_background:FlxSprite;
 	public var _title:FlxText;
 	
@@ -95,7 +93,7 @@ class Leaderboards extends FlxGroup
 				if (RegTypedef._dataLeaderboards._username == Std.string(_lb_users[(i-1)]))
 				{
 					var slotBox = new FlxSprite(0, 0);
-					slotBox.makeGraphic(FlxG.width - 60, 55, 0xFF000044);		
+					slotBox.makeGraphic(FlxG.width - 60, 55, RegCustom._button_color);		
 					slotBox.setPosition(20, 120 + (i * 70)); 
 					slotBox.scrollFactor.set(0, 0);
 					_group.add(slotBox);
@@ -190,13 +188,6 @@ class Leaderboards extends FlxGroup
 			add(_t2);
 			
 			
-			
-			_to_lobby = new ButtonGeneralNetworkYes(0, FlxG.height - 40, "To Lobby", 160 + 15, 35, Reg._font_size, 0xFFCCFF33, 0, returnToLobby, 0xFF000044, false);		
-			_to_lobby.label.font = Reg._fontDefault;
-			_to_lobby.screenCenter(X);
-			_to_lobby.x += 400;
-			add(_to_lobby);
-			
 		}
 		
 		super.update(elapsed);
@@ -209,9 +200,6 @@ class Leaderboards extends FlxGroup
 		SceneGameRoom.messageBoxMessageOrder();		
 	}
 	
-	private function returnToLobby():Void
-	{
-		PlayState.__scene_lobby.returnToLobbyFromLeaderboards();
-	}
+	
 	
 }

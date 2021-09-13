@@ -21,3 +21,5 @@
 * The software needs improved commenting. Lots of functions need a description. Lots of static variables need /* tags.
 
 * Reg._buttonCodeValues and buttonCodeValues() are currently used in many class. Place those data into a single class.
+
+* make the client look better or improve the layout.

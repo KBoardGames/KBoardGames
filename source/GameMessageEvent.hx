@@ -70,7 +70,7 @@ class GameMessageEvent extends FlxSubState
 		_eventDescription.setPosition(50, 135);
 		add(_eventDescription);
 		
-		var _close = new ButtonGeneralNetworkNo(FlxG.width - 178, FlxG.height - 85, "Exit", 150 + 15, 35, Reg._font_size, 0xFFCCFF33, 0, closeSubstate);
+		var _close = new ButtonGeneralNetworkNo(FlxG.width - 178, FlxG.height - 85, "Exit", 150 + 15, 35, Reg._font_size, RegCustom._button_text_color, 0, closeSubstate);
 		_close.label.font = Reg._fontDefault;
 		add(_close);
 	}

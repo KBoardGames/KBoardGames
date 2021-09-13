@@ -200,6 +200,11 @@ class Reg2 extends FlxGroup
 	 */
 	public static var _lobby_button_alpha:Float = 0.3;
 	
+	/******************************
+	 * at lobby after a message box is closed, this var is used to set alpha to 1 to all buttons.
+	 */
+	public static var _message_box_just_closed:Bool = false;
+	
 	public static function system_reset():Void
 	{
 		_checked_for_new_account = false;
@@ -222,7 +227,7 @@ class Reg2 extends FlxGroup
 		resetMessageBox();
 		
 		_boxScroller_is_scrolling = false;
-		
+		_message_box_just_closed = false;
 		_offline_cpu_host_name2 = "";
 		_offline_cpu_host_name3 = "";
 		_lobby_button_alpha = 0.3;

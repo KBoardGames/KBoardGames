@@ -148,7 +148,12 @@ class SceneGameRoom extends FlxState
 			_title.setPosition(FlxG.width - 275, 20);
 		else
 			_title.setPosition(FlxG.width - 290, 20);
-		_title.text = "Room " + Std.string(RegTypedef._dataMisc._room ) + " ";
+			
+		if (Reg._game_offline_vs_player == true 
+		||	Reg._game_offline_vs_cpu == true)
+			_title.text = "Offline";
+		else
+			_title.text = "Room " + Std.string(RegTypedef._dataMisc._room ) + " ";
 		_title.visible = true;
 		add(_title);	
 			
@@ -1984,7 +1989,7 @@ class SceneGameRoom extends FlxState
 	{
 		if (Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false)
 		{
-			buttonStartRestartGame = new ButtonGeneralNetworkYes(FlxG.width - 363, FlxG.height - 237, "Start Game", 160 + 15, 35, Reg._font_size, 0xFFCCFF33, 0, messageStartRestartGame, 0xFF000044, false, 1);
+			buttonStartRestartGame = new ButtonGeneralNetworkYes(FlxG.width - 363, FlxG.height - 237, "Start Game", 160 + 15, 35, Reg._font_size, RegCustom._button_text_color, 0, messageStartRestartGame, RegCustom._button_color, false, 1000);
 			
 			if (Reg._gameHost == true
 			&&  RegTypedef._dataPlayers._spectatorWatching == false)
@@ -2003,7 +2008,7 @@ class SceneGameRoom extends FlxState
 		else
 		{
 			// offline
-			buttonStartRestartGame2 = new ButtonGeneralNetworkNo(FlxG.width - 363, FlxG.height - 137, "Start Game", 175, 35, Reg._font_size, 0xFFCCFF33, 0, messageStartRestartGame, 0xFF000044, false, 1);
+			buttonStartRestartGame2 = new ButtonGeneralNetworkNo(FlxG.width - 363, FlxG.height - 137, "Start Game", 175, 35, Reg._font_size, RegCustom._button_text_color, 0, messageStartRestartGame, RegCustom._button_color, false, 1);
 			buttonStartRestartGame2.label.font = Reg._fontDefault;
 		add(buttonStartRestartGame2); 
 		
@@ -2012,7 +2017,7 @@ class SceneGameRoom extends FlxState
 		
 		if (Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false)
 		{
-			buttonReturnToTitle = new ButtonGeneralNetworkYes(FlxG.width - 183, FlxG.height - 187, "To Title", 160 + 15, 35, Reg._font_size, 0xFFCCFF33, 0, messageReturnToTitle, 0xFF000044, false, 1);
+			buttonReturnToTitle = new ButtonGeneralNetworkYes(FlxG.width - 183, FlxG.height - 187, "To Title", 160 + 15, 35, Reg._font_size, RegCustom._button_text_color, 0, messageReturnToTitle, RegCustom._button_color, false, 1001);
 			buttonReturnToTitle.label.font = Reg._fontDefault;
 			add(buttonReturnToTitle);
 			
@@ -2021,7 +2026,7 @@ class SceneGameRoom extends FlxState
 		if (Reg._game_offline_vs_cpu == true || Reg._game_offline_vs_player == true)
 		{
 			// offline
-			buttonReturnToTitle2 = new ButtonGeneralNetworkNo(FlxG.width - 183, FlxG.height - 137, "To Title", 160 + 15, 35, Reg._font_size, 0xFFCCFF33, 0, messageReturnToTitle, 0xFF000044, false, 1);
+			buttonReturnToTitle2 = new ButtonGeneralNetworkNo(FlxG.width - 183, FlxG.height - 137, "To Title", 160 + 15, 35, Reg._font_size, RegCustom._button_text_color, 0, messageReturnToTitle, RegCustom._button_color, false, 1);
 			buttonReturnToTitle2.label.font = Reg._fontDefault;
 			add(buttonReturnToTitle2);
 			
@@ -2029,7 +2034,7 @@ class SceneGameRoom extends FlxState
 		
 		if (Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false)
 		{
-			buttonDrawGame = new ButtonGeneralNetworkYes(FlxG.width - 363, FlxG.height -  187, "Draw", 160 + 15, 35, Reg._font_size, 0xFFCCFF33, 0, messageDrawOffer, 0xFF000044, false, 1);
+			buttonDrawGame = new ButtonGeneralNetworkYes(FlxG.width - 363, FlxG.height -  187, "Draw", 160 + 15, 35, Reg._font_size, RegCustom._button_text_color, 0, messageDrawOffer, RegCustom._button_color, false, 1002);
 			buttonDrawGame.label.font = Reg._fontDefault;
 			buttonDrawGame.visible = false;
 			buttonDrawGame.active = false;
@@ -2039,14 +2044,14 @@ class SceneGameRoom extends FlxState
 		// Reg._game_online_vs_cpu code is needed to show this button while playing an online game.
 		if (Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false)
 		{
-			buttonReturnToLobby = new ButtonGeneralNetworkYes(FlxG.width - 183, FlxG.height - 237, "To Lobby", 160 + 15, 35, Reg._font_size, 0xFFCCFF33, 0, messageReturnToLobby, 0xFF000044, false, 1);
+			buttonReturnToLobby = new ButtonGeneralNetworkYes(FlxG.width - 183, FlxG.height - 237, "To Lobby", 160 + 15, 35, Reg._font_size, RegCustom._button_text_color, 0, messageReturnToLobby, RegCustom._button_color, false, 1003);
 			buttonReturnToLobby.label.font = Reg._fontDefault;
 			add(buttonReturnToLobby);
 		}
 		
 		if (Reg._game_online_vs_cpu == true)
 		{
-			buttonReturnToLobby = new ButtonGeneralNetworkYes(FlxG.width - 183, FlxG.height - 187, "To Lobby", 160 + 15, 35, Reg._font_size, 0xFFCCFF33, 0, messageReturnToLobby, 0xFF000044, false, 1);
+			buttonReturnToLobby = new ButtonGeneralNetworkYes(FlxG.width - 183, FlxG.height - 187, "To Lobby", 160 + 15, 35, Reg._font_size, RegCustom._button_text_color, 0, messageReturnToLobby, RegCustom._button_color, false, 1004);
 			buttonReturnToLobby.label.font = Reg._fontDefault;
 			add(buttonReturnToLobby);
 		}
@@ -2054,7 +2059,7 @@ class SceneGameRoom extends FlxState
 		// Reg._game_online_vs_cpu code is needed to show this button while playing an online game.
 		if (Reg._game_online_vs_cpu == true || Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false)
 		{
-			buttonQuitGame = new ButtonGeneralNetworkYes(FlxG.width - 363, FlxG.height - 137, "Quit Game", 160 + 15, 35, Reg._font_size, 0xFFCCFF33, 0, messageQuitGame, 0xFF000044, false, 1);
+			buttonQuitGame = new ButtonGeneralNetworkYes(FlxG.width - 363, FlxG.height - 137, "Quit Game", 160 + 15, 35, Reg._font_size, RegCustom._button_text_color, 0, messageQuitGame, RegCustom._button_color, false, 1005);
 			buttonQuitGame.label.font = Reg._fontDefault;
 			buttonQuitGame.visible = false;
 			buttonQuitGame.active = false;
@@ -2084,8 +2089,8 @@ class SceneGameRoom extends FlxState
 		Reg._createGameRoom = false;
 		Reg._loginSuccessfulWasRead = false;
 		Reg._doOnce = true;			
-		Reg._atRoom = false;
-		Reg._atChat = false;
+		Reg._at_create_room = false;
+		Reg._at_waiting_room = false;
 		Reg._doStartGameOnce = false;
 		Reg._gameRoom = false;
 		Reg._hasUserConnectedToServer = true;

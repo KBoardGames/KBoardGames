@@ -66,10 +66,11 @@ class DailyQuests extends FlxGroup
 	 */
 	private var _ticks:Int = 0; 
 	
+	/******************************
+	 * daily quests rewards.
+	 */
 	public var _rewards:Array<String> = ["0", "0", "0"];
-	
-	private var _close:ButtonGeneralNetworkYes;
-	
+		
 	private var _quest_description:Array<String> = 
 	[
 	"Win three board games in a row.", 
@@ -94,10 +95,6 @@ class DailyQuests extends FlxGroup
 	 * if a value is neither 1 or 0 then that value refers to a _bar_value_current value that increments. 
 	 */
 	private var _bar_value_max:Array<Int> = [3,1,1,1,4,1,1,1,5];
-	
-	public var __menu_bar:MenuBar;
-	
-	private var _button_claim_reward:ButtonGeneralNetworkYes;
 	
 	override public function new():Void
 	{
@@ -136,45 +133,20 @@ class DailyQuests extends FlxGroup
 				
 		_group = cast add(new FlxSpriteGroup());
 
-		// ------------------- static movement. not at the __boxscroller.
-		__menu_bar = new MenuBar();
-		add(__menu_bar);
-		
-		_close = new ButtonGeneralNetworkYes(30, FlxG.height - 40, "Exit", 150 + 15, 35, Reg._font_size, 0xFFCCFF33, 0, closeState, 0xFF000044, false);
-		_close.label.font = Reg._fontDefault;
-		_close.screenCenter(X);
-		_close.x += 400;
-		_close.alpha = 1;
-		add(_close);
+		if (Reg.__menu_bar != null)	remove(Reg.__menu_bar);
+		Reg.__menu_bar = new MenuBar();
+		add(Reg.__menu_bar);
 		
 		_rewards.splice(3, 0);
 		_rewards = RegTypedef._dataDailyQuests._rewards.split(",");
-		
-		var _stop:Bool = false; // used to break out of the following loop if that condition is true.
-		
-		for (i in 0...3)
-		{
-			if (_rewards[i] == "1")
-			{
-				_button_claim_reward = new ButtonGeneralNetworkYes(_close.x-200, FlxG.height - 40, "Claim", 185, 35, Reg._font_size, 0xFFCCFF33, 0, claimReward, 0xFF000044, false);
-				_button_claim_reward.label.font = Reg._fontDefault;
-				add(_button_claim_reward);
 				
-				_stop = true;
-				break;
-			}
-			
-			if (_stop == true) break;
-		}
-		//----------------------------
-		
 		for (i in 0...9)
 		{
 			createBar((i+1), _quest_description[i], _bar_value_current[i], _bar_value_max[i], _rewards[0], _rewards[1], _rewards[2]);
 		}		
 		
 		// needed extra vertical space to show all last element.
-		var _button = new ButtonGeneralNetworkYes(0, 13 * _height_between_bars, "", 200, 35, Reg._font_size, 0xFFCCFF33, 0, null);
+		var _button = new ButtonGeneralNetworkYes(0, 13 * _height_between_bars, "", 200, 35, Reg._font_size, RegCustom._button_text_color, 0, null, RegCustom._button_color);
 		_button.visible = false;
 		_group.add(_button);
 		
@@ -297,7 +269,7 @@ class DailyQuests extends FlxGroup
 	{
 		// create the quest bars.		
 		_bar = new FlxBar(100, _id * _height_between_bars + 100, FlxBarFillDirection.LEFT_TO_RIGHT, FlxG.width - 550, 110, null, "", 0, _max, true);
-		_bar.createColoredEmptyBar(0xFF000044, true);
+		_bar.createColoredEmptyBar(RegCustom._button_color, true);
 		_bar.createColoredFilledBar(0xFF111199, true);
 		_bar.screenCenter(X);		
 		
@@ -351,7 +323,7 @@ class DailyQuests extends FlxGroup
 		if (_ticks < 5) _ticks += 1;
 		
 		// if at SceneMenu then set __boxScroller active to false so that a mouse click at SceneMenu cannot trigger a button click at __boxScroller.
-		if (_ticks >= 5 && _group != null && __menu_bar != null)
+		if (_ticks >= 5 && _group != null && Reg.__menu_bar != null)
 		{
 			if (FlxG.mouse.y >= FlxG.height - 50)
 			{
@@ -413,57 +385,8 @@ class DailyQuests extends FlxGroup
 			createBar((i+1), _quest_description[i], _bar_value_current[i], _bar_value_max[i], _rewards[0], _rewards[1], _rewards[2]);
 		}
 	}
-	
-	private function closeState():Void
-	{
-		if (RegCustom._enable_sound == true
-		&&  Reg2._boxScroller_is_scrolling == false)
-		{
-			 FlxG.sound.play("click", 1, false);
-		}
 		
-		FlxG.mouse.reset();
-				
-		RegTriggers._returnToLobbyMakeButtonsActive = true;
-		
-		__boxscroller.visible = false;
-		visible = false;
-		active = false;
-		
-	}
-	
-	private function claimReward():Void
-	{
-		_rewards.splice(3, 0);
-		_rewards =  RegTypedef._dataDailyQuests._rewards.split(",");
-		
-		if (_rewards[2] == "1")
-		{
-			_rewards[2] = "2";
-			RegTypedef._dataDailyQuests._rewards = _rewards[0] + "," + _rewards[1] + "," + _rewards[2];
-			messageRewardGiven3();
-		}
-				
-		if (_rewards[1] == "1")
-		{
-			_rewards[1] = "2";
-			RegTypedef._dataDailyQuests._rewards = _rewards[0] + "," + _rewards[1] + "," + _rewards[2];
-			messageRewardGiven2();
-		}
-		
-		if (_rewards[0] == "1")
-		{
-			_rewards[0] = "2";
-			RegTypedef._dataDailyQuests._rewards = _rewards[0] + "," + _rewards[1] + "," + _rewards[2];
-			messageRewardGiven1();
-		}
-		
-		_button_claim_reward.visible = false;
-		_button_claim_reward.active = false;		
-	}
-	
-	
-	private function messageRewardGiven1():Void
+	public function messageRewardGiven1():Void
 	{	
 		Reg._messageId = 5001;
 		Reg._buttonCodeValues = "d1000";		
@@ -478,7 +401,7 @@ class DailyQuests extends FlxGroup
 		haxe.Timer.delay(function (){}, Reg2._event_sleep);
 	}
 	
-	private function messageRewardGiven2():Void
+	public function messageRewardGiven2():Void
 	{	
 		Reg._messageId = 5002;
 		Reg._buttonCodeValues = "d1010";		
@@ -493,7 +416,7 @@ class DailyQuests extends FlxGroup
 		haxe.Timer.delay(function (){}, Reg2._event_sleep);
 	}
 	
-	private function messageRewardGiven3():Void
+	public function messageRewardGiven3():Void
 	{	
 		Reg._messageId = 5003;
 		Reg._buttonCodeValues = "d1020";		

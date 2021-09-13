@@ -192,7 +192,7 @@ class HouseFurnitureGet extends FlxGroup
 		}
 	
 		// the scrollbar is needed or else there will be a client crash when a request for the scrollbar is made.
-		var _buttonForScrollBar = new ButtonGeneralNetworkNo(0, (((RegHouse._totalCanPurchase + 1 ) * 200) + 100) + _offset_y, "", 160 + 15, 35, Reg._font_size, 0xFFCCFF33, 0, null);
+		var _buttonForScrollBar = new ButtonGeneralNetworkNo(0, (((RegHouse._totalCanPurchase + 1 ) * 200) + 100) + _offset_y, "", 160 + 15, 35, Reg._font_size, RegCustom._button_text_color, 0, null, RegCustom._button_color);
 		_buttonForScrollBar.label.font = Reg._fontDefault;
 		_buttonForScrollBar.visible = false;
 		_group.add(_buttonForScrollBar);
@@ -286,7 +286,7 @@ class HouseFurnitureGet extends FlxGroup
 	override public function update(elapsed:Float):Void
 	{
 		// if player returned to lobby then this var is false so don't update().
-		if (RegHouse._at_House == false) return;
+		if (Reg._at_house == false) return;
 		if (RegHouse._house_main_menu_button_number != 0) return;
 		
 		// highlight item if mouse is hovering over it.
@@ -361,6 +361,12 @@ class HouseFurnitureGet extends FlxGroup
 			RegTypedef._dataPlayers._house_items_daily_total += 1;
 		}
 		
+		if (Reg._yesNoKeyPressValueAtMessage > 1 && Reg._buttonCodeValues == "f1000")
+		{
+			Reg._buttonCodeValues = ""; // do not enter this block of code the second time.
+			Reg._yesNoKeyPressValueAtMessage = 0; // no button is clicked.
+		}
+		
 		// not enough house coins to buy a furniture item.
 		// buying a furniture item.
 		if (Reg._yesNoKeyPressValueAtMessage == 1 && Reg._buttonCodeValues == "f1010")
@@ -369,6 +375,13 @@ class HouseFurnitureGet extends FlxGroup
 			Reg._yesNoKeyPressValueAtMessage = 0; // no button is clicked.
 		
 		}	
+		
+		if (Reg._yesNoKeyPressValueAtMessage > 1 && Reg._buttonCodeValues == "f1010")
+		{
+			Reg._buttonCodeValues = ""; // do not enter this block of code the second time.
+			Reg._yesNoKeyPressValueAtMessage = 0; // no button is clicked.
+		}
+		
 	}
 	
 	/******************************

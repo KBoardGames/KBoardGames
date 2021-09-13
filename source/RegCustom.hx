@@ -25,22 +25,22 @@ package;
 class RegCustom
 {
 	/******************************
-	 * this var refers to part of the spite name in use when changing the look of the game board. At MenuConfigurations when a button is clicked all odd units are changed to a different color. This var is loaded at SceneGameRoom to display the game board.
+	 * 9 shaders. this var refers to part of the spite name in use when changing the look of the game board. At MenuConfigurations when a button is clicked all odd units are changed to a different color. This var is loaded at SceneGameRoom to display the game board.
 	 */
 	public static var _units_odd_spr_num:Array<Int> = [1, 1];
 	
 	/******************************
-	 * this var refers to part of the spite name in use when changing the look of the game board. At MenuConfigurations when a button is clicked all even units are changed to a different color. This var is loaded at SceneGameRoom to display the game board.
+	 * 9 shaders. this var refers to part of the spite name in use when changing the look of the game board. At MenuConfigurations when a button is clicked all even units are changed to a different color. This var is loaded at SceneGameRoom to display the game board.
 	 */
 	public static var _units_even_spr_num:Array<Int> = [1, 1];
 	
 	/******************************
-	 * this var refers to the color of the game board odd numbered units. At MenuConfigurations every time a button is pressed, this var increases in value to change the odd units to a different color. This var is loaded at SceneGameRoom to display the game board.
+	 * 40 colors. this var refers to the color of the game board odd numbered units. At MenuConfigurations every time a button is pressed, this var increases in value to change the odd units to a different color. This var is loaded at SceneGameRoom to display the game board.
 	 */
 	public static var _units_odd_color_num:Array<Int> = [0, 0];
 	
 	/******************************
-	 * this var refers to the color of the game board even numbered units. At MenuConfigurations every time a button is pressed, this var increases in value to change the even units to a different color. This var is loaded at SceneGameRoom to display the game board.
+	 * 40 colors. this var refers to the color of the game board even numbered units. At MenuConfigurations every time a button is pressed, this var increases in value to change the even units to a different color. This var is loaded at SceneGameRoom to display the game board.
 	 */
 	public static var _units_even_color_num:Array<Int> = [0, 0];
 	
@@ -227,7 +227,7 @@ class RegCustom
 	/******************************
 	 * apply a 10% alpha to the notation panel.
 	 */
-	public static var _notation_panel_alpha_apply:Bool = false;
+	public static var _notation_panel_alpha_apply:Bool = true;
 	
 	/******************************
 	 * show even gameboard units at game room.
@@ -237,9 +237,9 @@ class RegCustom
 	/******************************
 	 * display background image for game room. this button.
 	 */
-	public static var _game_room_background_image_number:Int = 1;
-	public static var _game_room_background_enabled:Bool = false;
-	public static var _game_room_background_alpha_enabled:Bool = true;
+	public static var _game_room_background_image_number:Int = 4;
+	public static var _game_room_background_enabled:Bool = true;
+	public static var _game_room_background_alpha_enabled:Bool = false;
 	
 	public static var _enable_music:Bool = true;
 	public static var _enable_sound:Bool = true;
@@ -253,9 +253,29 @@ class RegCustom
 	public static var _chess_current_piece_p2_set_color:Int = 1;
 	
 	/******************************
-	 * 
+	 * the brightness of the background of a scene.
 	 */
-	//public static var
+	public static var _background_brightness:Float = 0.45;
+	
+	/******************************
+	 * this is the color of the button, excluding the button's mouse over color and excluding the button's border.
+	 */
+	public static var _button_color:FlxColor = 0xFF5d275d; //330000
+	
+	/******************************
+	 * this is the color of the border that parameters the button graphic.
+	 */
+	public static var _button_border_color:FlxColor = 0xFFef7d57;
+	
+	/******************************
+	 * static font color of the button.
+	 */
+	public static var _button_text_color:FlxColor = 0xffffff66;
+	
+	/******************************
+	 * button fill color is the color behind the button text.
+	 */
+	public static var _button_color_number:Int = 0;
 	
 	// these vars are reset at the start of each game.
 	public static function resetRegVars():Void
@@ -275,10 +295,10 @@ class RegCustom
 	public static function resetConfigurationVars():Void
 	{
 		// game board.
-		_units_odd_spr_num = [1, 3];
-		_units_even_spr_num = [9, 4];
-		_units_odd_color_num = [3, 10];
-		_units_even_color_num = [26, 12];		
+		_units_odd_spr_num = [7, 3];
+		_units_even_spr_num = [9, 1];
+		_units_odd_color_num = [3, 13];
+		_units_even_color_num = [21, 7];		
 		
 		_gameboardBorder_num = 1;	// gameboard border image.
 		_gameboard_border_enabled = true;	
@@ -314,14 +334,19 @@ class RegCustom
 		_chess_path_to_king_enabled = true;
 		_chess_path_to_king_number = 1;
 		_gameboard_border_enabled = true;
-		_notation_panel_alpha_apply = false;
+		_notation_panel_alpha_apply = true;
 		_units_even_gameboard_show = true;
-		_game_room_background_image_number = 1;
-		_game_room_background_enabled = false;
-		_game_room_background_alpha_enabled = true;
+		_game_room_background_image_number = 4;
+		_game_room_background_enabled = true;
+		_game_room_background_alpha_enabled = false;
 		_chess_current_piece_p1_set = 1;
 		_chess_current_piece_p2_set = 1;
 		_chess_current_piece_p1_set_color = 25;
 		_chess_current_piece_p2_set_color = 26;
+		_background_brightness = 0.45;
+		_button_color = 0xFF5d275d;
+		_button_border_color = 0xFFef7d57;
+		_button_text_color = 0xffffff66;
+		_button_color_number = 0;
 	}
 }

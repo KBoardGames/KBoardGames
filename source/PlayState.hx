@@ -233,15 +233,11 @@ class PlayState extends FlxState
 			haxe.Timer.delay(function (){}, Reg2._event_sleep);
 		}
 		
-		else 
-		{
-			// call the leave room code at SceneGameRoom.hx
-			Reg._yesNoKeyPressValueAtMessage = 1;
-			Reg._buttonCodeValues = "g1000";
-		
-			Reg._disconnectNow = true;
-		}
-
+		// call the leave room code at SceneGameRoom.hx
+		Reg._yesNoKeyPressValueAtMessage = 1;
+		Reg._buttonCodeValues = "g1000";
+	
+		Reg._disconnectNow = true;
 	}
 	
 	/******************************
@@ -358,8 +354,8 @@ class PlayState extends FlxState
 			_lobbyRoomChat = false;
 			Reg._loggedIn = true;
 			Reg._doStartGameOnce = true;
-			Reg._atRoom = false;
-			Reg._atChat = false;
+			Reg._at_create_room = false;
+			Reg._at_waiting_room = false;
 			RegTypedef._dataMisc._room = 26;
 			RegTypedef._dataMisc._roomState[26] = 6; 
 			RegTypedef._dataMisc._gameRoom = true;
@@ -416,7 +412,7 @@ class PlayState extends FlxState
 			__scene_lobby.active = false;
 			add(__scene_lobby);
 			
-			__scene_create_room = new SceneCreateRoom(); // Reg._atRoom now equals true. if this event is called from room.hx then this block of code will not be read. third var is used to clear screen.
+			__scene_create_room = new SceneCreateRoom(); // Reg._at_create_room now equals true. if this event is called from room.hx then this block of code will not be read. third var is used to clear screen.
 			__scene_create_room.visible = false;
 			__scene_create_room.active = false;			
 			add(__scene_create_room);
@@ -428,7 +424,7 @@ class PlayState extends FlxState
 			__scene_waiting_room.visible = false;
 			__scene_waiting_room.active = false;
 			add(__scene_waiting_room);
-						
+					
 			if (Reg._clientReadyForPublicRelease == false)
 			{
 				__action_commands = new ActionCommands(); 
@@ -436,8 +432,8 @@ class PlayState extends FlxState
 			}
 			
 			// these value could have been set to true when creating the room and chat class. they need to be set back to false for the buttons text at lobby to refresh.
-			Reg._atRoom = false;
-			Reg._atChat = false;
+			Reg._at_create_room = false;
+			Reg._at_waiting_room = false;
 			
 					
 			if (Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false)
@@ -602,8 +598,8 @@ class PlayState extends FlxState
 				
 			Reg._clearDoubleMessage = false;
 			Reg._game_online_vs_cpu = false;
-			Reg._atRoom = false;
-			Reg._atChat = false;
+			Reg._at_create_room = false;
+			Reg._at_waiting_room = false;
 			
 			//room.group.visible = false;
 			__scene_create_room.visible = false;
@@ -655,7 +651,7 @@ class PlayState extends FlxState
 		
 		if (RegTriggers._createRoom == true)
 		{
-			Reg._atRoom = true;
+			Reg._at_create_room = true;
 			RegTriggers._createRoom = false;
 			Reg._clearDoubleMessage = false;
 			FlxG.mouse.reset();
@@ -702,7 +698,7 @@ class PlayState extends FlxState
 			Reg._clearDoubleMessage = false;
 			Reg2._lobby_button_alpha = 0.3;
 			RegTriggers._buttons_set_not_active = false;
-			Reg._atChat = true;
+			Reg._at_waiting_room = true;
 			
 			__scene_create_room.visible = false;
 			__scene_create_room.active = false;			
@@ -787,7 +783,7 @@ class PlayState extends FlxState
 		if (Reg._yesNoKeyPressValueAtMessage > 0 && Reg._buttonCodeValues == "lock1000")
 		{
 			Reg._yesNoKeyPressValueAtMessage = 0;
-			Reg._buttonCodeValues = "";
+			// Reg._buttonCodeValues = ""; this var is cleared at ButtonGeneralNetworkYes class
 		}
 		
 		if (Reg._outputMessage == true) gameMessage();
@@ -1037,8 +1033,8 @@ class PlayState extends FlxState
 			_lobbyRoomChat = false;
 			Reg._loggedIn = true;
 			Reg._doStartGameOnce = true;
-			Reg._atRoom = false;
-			Reg._atChat = false;
+			Reg._at_create_room = false;
+			Reg._at_waiting_room = false;
 			RegTypedef._dataMisc._room = 5;
 			RegTypedef._dataMisc._roomState[3] = 6; 
 			RegTypedef._dataMisc._gameRoom = true;
@@ -1088,8 +1084,8 @@ class PlayState extends FlxState
 			
 			if (Reg._game_online_vs_cpu == true) 
 				RegTypedef._dataPlayers._spectatorPlaying = true;	
-			Reg._atRoom = true;
-			Reg._atChat = true;
+			Reg._at_create_room = true;
+			Reg._at_waiting_room = true;
 			_lobbyRoomChat = false;
 			Reg._goBackToLobby = false;
 			Reg._loggedIn = true;

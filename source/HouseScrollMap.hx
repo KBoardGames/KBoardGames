@@ -155,7 +155,7 @@ class HouseScrollMap extends FlxState
 	override public function update(elapsed:Float):Void
 	{
 		// if player returned to lobby then this var is false so don't update().
-		if (RegHouse._at_House == false) return;
+		if (Reg._at_house == false) return;
 
 		// move map if mouse is within a region near edge of screen.
 		// is move is near the upper region of map.

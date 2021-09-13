@@ -53,27 +53,27 @@ class MenuStateOfflinePlayers extends MenuState
 		title.screenCenter(X);
 		add(title);
 		
-		var _checkers = new ButtonGeneralNetworkNo(0, (FlxG.height - 340) / 2 + 40, "Checkers", 350 + 15, 35, Reg._font_size, 0xFFCCFF33, 0, playCheckers, 0xFF000044, false);
+		var _checkers = new ButtonGeneralNetworkNo(0, (FlxG.height - 340) / 2 + 40, "Checkers", 350 + 15, 35, Reg._font_size, RegCustom._button_text_color, 0, playCheckers, RegCustom._button_color, false);
 		_checkers.label.font = Reg._fontDefault;
 		_checkers.screenCenter(X);
 		add(_checkers);
 		
-		var _chess = new ButtonGeneralNetworkNo(0, (FlxG.height - 340) / 2 + 100, "Chess", 350 + 15, 35, Reg._font_size, 0xFFCCFF33, 0, playChess, 0xFF000044, false);
+		var _chess = new ButtonGeneralNetworkNo(0, (FlxG.height - 340) / 2 + 100, "Chess", 350 + 15, 35, Reg._font_size, RegCustom._button_text_color, 0, playChess, RegCustom._button_color, false);
 		_chess.label.font = Reg._fontDefault;
 		_chess.screenCenter(X);
 		add(_chess);
 		
-		var _reversi = new ButtonGeneralNetworkNo(0, (FlxG.height - 340) / 2 + 160, "Reversi", 350 + 15, 35, Reg._font_size, 0xFFCCFF33, 0, playReversi, 0xFF000044, false);
+		var _reversi = new ButtonGeneralNetworkNo(0, (FlxG.height - 340) / 2 + 160, "Reversi", 350 + 15, 35, Reg._font_size, RegCustom._button_text_color, 0, playReversi, RegCustom._button_color, false);
 		_reversi.label.font = Reg._fontDefault;
 		_reversi.screenCenter(X);
 		add(_reversi);
 			
-		var _snakesAndladders = new ButtonGeneralNetworkNo(0, (FlxG.height - 340) / 2 + 220, "Snakes and Ladders", 350 + 15, 35, Reg._font_size, 0xFFCCFF33, 0, playSnakesAndLadders, 0xFF000044, false);
+		var _snakesAndladders = new ButtonGeneralNetworkNo(0, (FlxG.height - 340) / 2 + 220, "Snakes and Ladders", 350 + 15, 35, Reg._font_size, RegCustom._button_text_color, 0, playSnakesAndLadders, RegCustom._button_color, false);
 		_snakesAndladders.label.font = Reg._fontDefault;
 		_snakesAndladders.screenCenter(X);
 		add(_snakesAndladders);
 		
-		var _back = new ButtonGeneralNetworkNo(0, (FlxG.height - 340) / 2 + 280, "To Title", 170 + 15, 35, Reg._font_size, 0xFFCCFF33, 0, backToTitle, 0xFF000044, false);
+		var _back = new ButtonGeneralNetworkNo(0, (FlxG.height - 340) / 2 + 280, "To Title", 170 + 15, 35, Reg._font_size, RegCustom._button_text_color, 0, backToTitle, RegCustom._button_color, false);
 		_back.label.font = Reg._fontDefault;
 		_back.screenCenter(X);
 		add(_back);

@@ -24,6 +24,8 @@ package;
  */
 class SceneCreateRoom extends FlxState
 {
+	public var __menu_bar:MenuBar;
+	
 	/******************************
 	* the _title of this state.
 	*/
@@ -33,7 +35,7 @@ class SceneCreateRoom extends FlxState
 	/******************************
 	* when creating a game, this will be the default number of total players permitted for the game.
 	*/
-	public var _textMaximumPlayersForGame:FlxText;
+	public static var _textMaximumPlayersForGame:FlxText;
 	
 	public var _vsHumanOrComputerGame:FlxText;
 
@@ -52,20 +54,13 @@ class SceneCreateRoom extends FlxState
 	/******************************
 	 * if the word is "Yes" then this room allows spectators.
 	 */
-	private var _buttonAllowSpectatorsGame:ButtonGeneralNetworkNo;
+	public static var _buttonAllowSpectatorsGame:ButtonGeneralNetworkNo;
 	
 	private var _textAllowSpectatorsGame:FlxText;
 	private var _text_allow_minutes:FlxText;
-	
-	public var _buttonCreateRoom:ButtonGeneralNetworkYes;
-	
-	/******************************
-	 * button that returns user to the lobby.
-	 */
-	private var _buttonReturnToLobby:ButtonGeneralNetworkYes;
-	
+		
 	// used to select either human to computer to play a game against.		
-	private var	_buttonHumanOrComputerGame:ButtonGeneralNetworkNo;
+	public static var	_buttonHumanOrComputerGame:ButtonGeneralNetworkNo;
 		
 	/******************************
 	 * moves all row data to the left side.
@@ -96,7 +91,6 @@ class SceneCreateRoom extends FlxState
 	public function new() 
 	{
 		super();
-				
 		RegFunctions.fontsSharpen();		
 				
 		RegTypedef._dataPlayers._gameName = RegFunctions.gameName(0);
@@ -266,34 +260,22 @@ class SceneCreateRoom extends FlxState
 		Reg._keyOrButtonDown = false;
 		
 		//#############################
-		// this button is not added to the _group, so it will not scroll with the other buttons.
-		var __menu_bar = new MenuBar();
-		add(__menu_bar);
 		
-		_buttonCreateRoom = new ButtonGeneralNetworkYes(0, FlxG.height - 40, "Enter Room", 160 + 15, 35, Reg._font_size, 0xFFCCFF33, 0, createRoom, 0xFF000044, false);		
-		_buttonCreateRoom.label.font = Reg._fontDefault;
-		_buttonCreateRoom.visible = false;
-		_buttonCreateRoom.active = false;
-		_buttonCreateRoom.screenCenter(X);
-		add(_buttonCreateRoom);
-	
-		_buttonReturnToLobby = new ButtonGeneralNetworkYes(_buttonCreateRoom.x - 200, FlxG.height - 40, "To Lobby", 160 + 15, 35, Reg._font_size, 0xFFCCFF33, 0, returnToLobby, 0xFF000044, false);
-		_buttonReturnToLobby.label.font = Reg._fontDefault;
-		add(_buttonReturnToLobby);
+		options();
 		
 		_game_highlighted.setPosition(100, 120);
-		//ActionInput.enable();
+		
 	}
 	
 	public function amountOfPlayersForGame():Void
 	{
-		_minusTotalPlayersForGame = new ButtonGeneralNetworkNo(423 - _offsetX - _offsetX2, 130 + (1 * 70 + 1) + _offset_y, "-", 40, 40, Reg._font_size, 0xFFCCFF33, 0, playersTotalToggleMinus);
+		_minusTotalPlayersForGame = new ButtonGeneralNetworkNo(423 - _offsetX - _offsetX2, 130 + (1 * 70 + 1) + _offset_y, "-", 40, 40, Reg._font_size, RegCustom._button_text_color, 0, playersTotalToggleMinus);
 		_minusTotalPlayersForGame.offset.y = 2;
 		_minusTotalPlayersForGame.label.font = Reg._fontDefault;
 		_minusTotalPlayersForGame.label.bold = true;
 		add(_minusTotalPlayersForGame);
 		
-		_plusTotalPlayersForGame = new ButtonGeneralNetworkNo(513 - _offsetX - _offsetX2, 130 + (1 * 70 + 1) + _offset_y, "+", 40, 40, Reg._font_size, 0xFFCCFF33, 0, playersTotalTogglePlus);		
+		_plusTotalPlayersForGame = new ButtonGeneralNetworkNo(513 - _offsetX - _offsetX2, 130 + (1 * 70 + 1) + _offset_y, "+", 40, 40, Reg._font_size, RegCustom._button_text_color, 0, playersTotalTogglePlus);		
 		_plusTotalPlayersForGame.offset.y = 2;
 		_plusTotalPlayersForGame.label.font = Reg._fontDefault;	
 		_plusTotalPlayersForGame.label.bold = true;
@@ -328,7 +310,13 @@ class SceneCreateRoom extends FlxState
 	
 	
 	public function options():Void
-	{		
+	{
+		
+		//#############################
+		// this button is not added to the _group, so it will not scroll with the other buttons.
+		__menu_bar = new MenuBar();
+		add(__menu_bar);
+		
 		// might need to recreate the scrollbar to bring it back up.
 
 		Reg._roomPlayerLimit = 0;
@@ -538,94 +526,6 @@ class SceneCreateRoom extends FlxState
 		RegTypedef._dataPlayers._usernamesDynamic[1] = Reg2._offline_cpu_host_name2;
 		RegTypedef._dataPlayers._avatarNumber[1] = RegCustom._profile_avatar_number2;
 		
-	}
-	
-	
-	/******************************
-	 * go to GameWaitingRoom class
-	 */
-	public function createRoom():Void
-	{
-		//ActionInput.disabled();
-		
-		// if image selected. id == 1
-		if (_buttonHumanOrComputerGame.label.text == "Computer"
-		) 
-		{
-			Reg._game_online_vs_cpu = true;
-			createRoomOnlineAgainstCPU();
-			
-			visible = false;
-			active = false;
-		}
-		
-		// entering the waiting room.
-		else if (Reg._atChat == false)
-		{
-			// this line is needed.
-			if (Reg._roomPlayerLimit == 0) Reg._roomPlayerLimit = 2;
-			
-			Reg._currentRoomState = 2;
-			
-			// is this a game where host can change the amount of players for a game?
-			if (Reg._gameId == 4) Reg._roomPlayerLimit = Std.parseInt(_textMaximumPlayersForGame.text);
-			
-			RegTypedef._dataMisc._roomPlayerLimit[RegTypedef._dataMisc._room] = Reg._roomPlayerLimit;
-			
-			RegTypedef._dataMisc._roomGameIds[RegTypedef._dataMisc._room] = Reg._gameId;
-			
-			// never get a value of -1 or there will be a server error when saving stats.
-			if (RegTypedef._dataMisc._roomGameIds[RegTypedef._dataMisc._room] > -1)
-				RegTypedef._dataPlayers._gameId = RegTypedef._dataMisc._roomGameIds[RegTypedef._dataMisc._room];
-			
-			RegTypedef._dataMisc._userLocation = 2;
-			RegTypedef._dataMisc._roomHostUsername[RegTypedef._dataMisc._room] = RegTypedef._dataMisc._username;
-			RegTypedef._dataMisc._gid[RegTypedef._dataMisc._room] = RegTypedef._dataMisc.id;
-			RegTypedef._dataPlayers._usernamesDynamic[0] = RegTypedef._dataMisc._username;
-			RegTypedef._dataPlayers._usernamesStatic[0] = RegTypedef._dataMisc._username;
-			Reg._gameHost = true;
-			
-			Reg._atRoom = false;
-			Reg._atChat = true;
-			Reg._game_online_vs_cpu = false;
-			
-			RegTypedef._dataMisc._roomCheckForLock[RegTypedef._dataMisc._room] = 0;	
-			RegTypedef._dataMisc._roomState[RegTypedef._dataMisc._room] = 1;
-			
-					
-			// when returning to the lobby from this room, since this value it was never saved to the database, it will be set back to 0 when the "set room data" event is called. 
-			if (_buttonAllowSpectatorsGame.label.text == "Yes")
-				RegTypedef._dataMisc._allowSpectators[RegTypedef._dataMisc._room] = 1;
-			else
-				RegTypedef._dataMisc._allowSpectators[RegTypedef._dataMisc._room] = 0;
-			
-			PlayState.clientSocket.send("Is Room Locked", RegTypedef._dataMisc);
-			haxe.Timer.delay(function (){}, Reg2._event_sleep);
-		}
-		
-
-	}
-	
-	private function returnToLobby():Void
-	{		
-		//ActionInput.enable();
-		
-		RegTypedef._dataMisc._roomState[RegTypedef._dataMisc._room] = 0;
-					 
-		PlayState.clientSocket.send("Lesser RoomState Value", RegTypedef._dataMisc);
-		haxe.Timer.delay(function (){}, Reg2._event_sleep);
-		
-		Reg._atRoom = false;
-		Reg._atChat = false;
-				
-		visible = false;		
-		Reg._currentRoomState = 0;
-		
-		// display the lobby.
-		Reg._loginSuccessfulWasRead = true;
-		Reg._doOnce = true;
-		
-		RegTriggers._lobby = true;
 	}
 	
 	private function toggleAgainstHumanOrComputer():Void

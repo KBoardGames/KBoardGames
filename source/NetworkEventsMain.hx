@@ -674,11 +674,11 @@ class NetworkEventsMain extends FlxState
 					}
 					
 					
-					__scene_waiting_room.buttonRefreshList.active = true;
-					__scene_waiting_room.buttonRefreshList.visible = true;	
+					__scene_waiting_room.__menu_bar._button_refresh_list.active = true;
+					__scene_waiting_room.__menu_bar._button_refresh_list.visible = true;	
 					
-					__scene_waiting_room.buttonReturnToLobby.active = true;
-					__scene_waiting_room.buttonReturnToLobby.visible = true;
+					__scene_waiting_room.__menu_bar._button_return_to_lobby_from_waiting_room.active = true;
+					__scene_waiting_room.__menu_bar._button_return_to_lobby_from_waiting_room.visible = true;
 					
 				}
 				
@@ -771,7 +771,7 @@ class NetworkEventsMain extends FlxState
 					PlayState.clientSocket.send("Set Room Data", _data);
 					haxe.Timer.delay(function (){}, Reg2._event_sleep);
 					
-					if (__scene_create_room._buttonCreateRoom.visible == true)
+					if (__scene_create_room.__menu_bar._buttonCreateRoom.visible == true)
 						_data._roomState[_data._room] -= 1;
 				}
 				
@@ -841,9 +841,12 @@ class NetworkEventsMain extends FlxState
 				
 				Reg._roomPlayerLimit = 0;
 				Reg._currentRoomState = 0;
-						
-				__scene_create_room._buttonCreateRoom.visible = false;
-				__scene_create_room._buttonCreateRoom.active = false;
+				
+				__scene_create_room.__menu_bar._buttonReturnToLobby.visible = false;
+				__scene_create_room.__menu_bar._buttonReturnToLobby.active = false;
+				
+				__scene_create_room.__menu_bar._buttonCreateRoom.visible = false;
+				__scene_create_room.__menu_bar._buttonCreateRoom.active = false;
 	
 				RegTypedef._dataMisc._room = 0; // returning to the lobby
 				RegTypedef._dataMisc._userLocation = 0;
@@ -929,11 +932,14 @@ class NetworkEventsMain extends FlxState
 						
 					}
 					
-					else if (__scene_create_room._buttonCreateRoom.visible == false 
+					else if (__scene_create_room.__menu_bar._buttonCreateRoom.visible == false 
 					&&  Reg._currentRoomState == 2)
 					{
-						__scene_create_room._buttonCreateRoom.active = true;
-						__scene_create_room._buttonCreateRoom.visible = true; 
+						__scene_create_room.__menu_bar._buttonReturnToLobby.active = true;
+						__scene_create_room.__menu_bar._buttonReturnToLobby.visible = true;
+						
+						__scene_create_room.__menu_bar._buttonCreateRoom.active = true;
+						__scene_create_room.__menu_bar._buttonCreateRoom.visible = true; 
 						
 						RegTriggers._createRoom = true;
 						
@@ -944,7 +950,8 @@ class NetworkEventsMain extends FlxState
 					&&  Reg._currentRoomState < 7)
 					{
 						//__scene_create_room._buttonCreateRoom.visible = false;
-						__scene_create_room._buttonCreateRoom.active = false;
+						__scene_create_room.__menu_bar._buttonReturnToLobby.active = false;
+						__scene_create_room.__menu_bar._buttonCreateRoom.active = false;
 						
 						RegTriggers.__scene_waiting_room = true;
 					}
@@ -1043,7 +1050,7 @@ class NetworkEventsMain extends FlxState
 				}
 				
 				// if at lobby and room is locked then display message.
-				else if (Reg._atRoom == false && Reg._atChat == false)
+				else if (Reg._at_create_room == false && Reg._at_waiting_room == false)
 				{
 					//ActionInput.enable();
 
@@ -2477,8 +2484,8 @@ class NetworkEventsMain extends FlxState
 					Reg._createGameRoom = false;
 					Reg._loginSuccessfulWasRead = false;
 					Reg._doOnce = true;			
-					Reg._atRoom = false;
-					Reg._atChat = false;
+					Reg._at_create_room = false;
+					Reg._at_waiting_room = false;
 					Reg._doStartGameOnce = false;
 					Reg._gameRoom = false;
 					Reg._hasUserConnectedToServer = true;
@@ -2512,11 +2519,11 @@ class NetworkEventsMain extends FlxState
 				RegTypedef._dataOnlinePlayers = _data;
 				RegTriggers._onlineList = true;
 				
-				__scene_waiting_room.buttonRefreshList.active = true;
-				__scene_waiting_room.buttonRefreshList.visible = true;	
+				__scene_waiting_room.__menu_bar._button_refresh_list.active = true;
+				__scene_waiting_room.__menu_bar._button_refresh_list.visible = true;	
 				
-				__scene_waiting_room.buttonReturnToLobby.active = true;
-				__scene_waiting_room.buttonReturnToLobby.visible = true;
+				__scene_waiting_room.__menu_bar._button_return_to_lobby_from_waiting_room.active = true;
+				__scene_waiting_room.__menu_bar._button_return_to_lobby_from_waiting_room.visible = true;
 
 				// get the stats for the waiting room.
 				if (RegTypedef._dataMisc._userLocation == 2 
@@ -2577,7 +2584,7 @@ class NetworkEventsMain extends FlxState
 					RegTypedef._dataPlayers._actionNumber = 0;
 					RegTypedef._dataPlayers._actionWho = _data._actionWho;
 					
-					if (RegTypedef._dataMisc._userLocation == 2 && Reg._atRoom == false)
+					if (RegTypedef._dataMisc._userLocation == 2 && Reg._at_create_room == false)
 					{
 						__scene_waiting_room.mainButtonsAndTexts();
 						__scene_waiting_room.__boxscroller.visible = true;
@@ -2836,4 +2843,4 @@ class NetworkEventsMain extends FlxState
 		});
 	}
 	
-}//
+}//

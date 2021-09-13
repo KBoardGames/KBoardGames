@@ -223,7 +223,7 @@ class GameChatter extends FlxGroup
 		createInputChat(); // deals with typing in text at chatter. there is a bug where this UI needs to be destroyed then recreated after every output of text.
 		
 		// chatter open/close button.
-		_chatterOpenCloseButton = new ButtonGeneralNetworkNo(FlxG.width - 183, FlxG.height - 137, "", 160 + 15, 35, Reg._font_size, 0xFFCCFF33, 0, openCloseChatter);
+		_chatterOpenCloseButton = new ButtonGeneralNetworkNo(FlxG.width - 183, FlxG.height - 137, "", 160 + 15, 35, Reg._font_size, RegCustom._button_text_color, 0, openCloseChatter);
 		_chatterOpenCloseButton.label.font = Reg._fontDefault;
 		_chatterOpenCloseButton.scrollFactor.set(0, 0);
 		
@@ -241,7 +241,7 @@ class GameChatter extends FlxGroup
 		//-----------------------------------
 		
 		// the chatter output button that is beside the _input_chat.
-		_chatInputButton = new ButtonGeneralNetworkYes(FlxG.width - 363, FlxG.height - 137, "Send", 175, 35, Reg._font_size, 0xFFCCFF33, 0, chatInputFromButton, 0xFF000044, true);
+		_chatInputButton = new ButtonGeneralNetworkYes(FlxG.width - 363, FlxG.height - 137, "Send", 175, 35, Reg._font_size, RegCustom._button_text_color, 0, chatInputFromButton, RegCustom._button_color, true);
 		_chatInputButton.visible = false;
 		_chatInputButton.active = false;
 		_chatInputButton.label.font = Reg._fontDefault;

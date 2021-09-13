@@ -101,7 +101,9 @@ class ReversiCurrentUnitClicked extends FlxSprite
 							if (ActionInput.justReleased() == true && RegTypedef._dataMisc._spectatorWatching == false)
 							{
 								// if this unit is a capturing unit.
-								if (Reg._capturingUnitsForPieces[Reg._playerMoving][yy][xx] > 0 && ActionInput.overlaps(Reg._groupPlayer1) == false && ActionInput.overlaps(Reg._groupPlayer2) == false				
+								if (Reg._capturingUnitsForPieces[Reg._playerMoving][yy][xx] > 0 
+								&& ActionInput.overlaps(Reg._groupPlayer1) == false 
+								&& ActionInput.overlaps(Reg._groupPlayer2) == false				
 								)
 								{
 									x = _startX + (xx * 75);						

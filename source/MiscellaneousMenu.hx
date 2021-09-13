@@ -23,10 +23,10 @@ package;
  * @author kboardgames.com
  */
 class MiscellaneousMenu extends FlxGroup
-{	
-	public var __miscellaneous_menu_output:MiscellaneousMenuOutput;
-	
+{		
 	public var __menu_bar:MenuBar;
+	public var __miscellaneous_menu_output:MiscellaneousMenuOutput;	
+	
 	
 	public function new():Void
 	{
@@ -66,15 +66,10 @@ class MiscellaneousMenu extends FlxGroup
 		_gameOptions.fieldWidth = FlxG.width - 100;
 		add(_gameOptions);
 		
-		var _statisticsAll = new ButtonGeneralNetworkYes(30, 175, "Statistics", 200 + 15, 35, Reg._font_size, 0xFFCCFF33, 0, statisticsAll);
+		var _statisticsAll = new ButtonGeneralNetworkYes(30, 175, "Statistics", 200 + 15, 35, Reg._font_size, RegCustom._button_text_color, 0, statisticsAll);
 		_statisticsAll.label.font = Reg._fontDefault;
 		add(_statisticsAll);
 		
-		var _close = new ButtonGeneralNetworkYes(30, FlxG.height - 40, "Exit", 150 + 15, 35, Reg._font_size, 0xFFCCFF33, 0, closeState, 0xFF000044, false);
-		_close.label.font = Reg._fontDefault;
-		_close.screenCenter(X);
-		_close.x += 400;
-		add(_close);
 	}
 	
 	/******************************
@@ -87,33 +82,7 @@ class MiscellaneousMenu extends FlxGroup
 		PlayState.clientSocket.send("Get Statistics All", RegTypedef._dataStatistics);
 		haxe.Timer.delay(function (){}, Reg2._event_sleep);
 	}
-	
-	private function closeState():Void
-	{
-		//if (RegCustom._enable_sound == true
-		//&&  Reg2._boxScroller_is_scrolling == false)
-		//v	FlxG.sound.play("click", 1, false);
 		
-		FlxG.mouse.reset();
-		FlxG.mouse.enabled = true;
-		
-		if (Reg.at_scene_menu == false)
-		{
-			Reg.at_scene_menu = true;
-			return;
-		}
-		
-		remove(__menu_bar);
-		__menu_bar.destroy();
-		__menu_bar = null;
-		
-		RegTriggers._returnToLobbyMakeButtonsActive = true;
-		
-		visible = false;
-		active = false;
-		
-	}
-	
 	// go to the miscellaneous output to output the text. this _i is the button bind value that was clicked.
 	private function openInstructionsSubState(_i:Int):Void
 	{

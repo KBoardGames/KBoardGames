@@ -542,9 +542,21 @@ class RegFunctions
 			if (_gameMenu.data._chess_current_piece_p2_set_color != null)
 				RegCustom._chess_current_piece_p2_set_color = _gameMenu.data._chess_current_piece_p2_set_color;
 			
+			if (_gameMenu.data._background_brightness != null)
+				RegCustom._background_brightness = _gameMenu.data._background_brightness;
 			
-			
+			if (_gameMenu.data._button_color != null)
+				RegCustom._button_color = _gameMenu.data._button_color;
+				
+			if (_gameMenu.data._button_border_color != null)
+				RegCustom._button_border_color = _gameMenu.data._button_border_color;
+				
+			if (_gameMenu.data._button_text_color != null)
+				RegCustom._button_text_color = _gameMenu.data._button_text_color;
+				
+			if (_gameMenu.data._button_color_number != null) RegCustom._button_color_number = _gameMenu.data._button_color_number;
 			_gameMenu.close;
+			
 		#end
 	}
 	
@@ -656,8 +668,17 @@ class RegFunctions
 			
 			_gameMenu.data._chess_current_piece_p2_set_color = RegCustom._chess_current_piece_p2_set_color;
 			
+			_gameMenu.data._background_brightness = RegCustom._background_brightness;
 			
+			_gameMenu.data._button_color = RegCustom._button_color;
+			_gameMenu.data._button_border_color = RegCustom._button_border_color;
+			_gameMenu.data._button_text_color = RegCustom._button_text_color;
 		
+			_gameMenu.data._button_color_number = RegCustom._button_color_number;
+			
+			
+			
+			
 			_gameMenu.flush();
 			_gameMenu.close;
 		#end
@@ -863,32 +884,46 @@ class RegFunctions
 		
 		switch(RegCustom._chess_current_piece_p1_set_color)
 		{
-			 case 1: _color = 0xFFb18d8d; // red 1
-			 case 2: _color = 0xFFaf5252; // red 2
-			 case 3: _color = 0xFFaa2222; // red 3
-			 case 4: _color = 0xFFb18dc0; // purple 1
-			 case 5: _color = 0xFFaf529b; // purple 2
-			 case 6: _color = 0xFFaa2283; // purple 3
-			 case 7: _color = 0xFF908de1; // purple 4
-			 case 8: _color = 0xFF9352af; // purple 5
-			 case 9: _color = 0xFF732298; // purple 6
-			case 10: _color = 0xFF5db3e1; // blue 1	 
-			case 11: _color = 0xFF5252af; // blue 2
-			case 12: _color = 0xFF2222aa; // blue 3
-			case 13: _color = 0xFF5fe1cd; // blue 4	
-			case 14: _color = 0xFF529eaf; // blue 5
-			case 15: _color = 0xFF229999; // blue 6
-			case 16: _color = 0xFF5de197; // green 1
-			case 17: _color = 0xFF52af60; // green 2
-			case 18: _color = 0xFF22aa22; // green 3
-			case 19: _color = 0xFFd2e16d; // yellow 1
-			case 20: _color = 0xFFa4af52; // yellow 2
-			case 21: _color = 0xFFaaaa22; // yellow 3
-			case 22: _color = 0xFFb1b68d; // orange 1	
-			case 23: _color = 0xFFaf7f52; // orange 2
-			case 24: _color = 0xFFaa4522; // orange 3
-			case 25: _color = 0xFFFFFFFF;
-			case 26: _color = 0xFF555555;
+			 case 1: _color = 0xFF1a1c2c;
+			 case 2: _color = 0xFF5d275d;
+			 case 3: _color = 0xFFcb0025;
+			 case 4: _color = 0xFFef7d57;
+			 case 5: _color = 0xFFffcd75;
+			 case 6: _color = 0xFFa7f070;
+			 case 7: _color = 0xFF38b764;
+			 case 8: _color = 0xFF257179;
+			 case 9: _color = 0xFF29366f;
+			case 10: _color = 0xFF3b5dc9;
+			case 11: _color = 0xFF41a6f6;
+			case 12: _color = 0xFF73eff7;
+			case 13: _color = 0xFFf4f4f4;
+			case 14: _color = 0xFF94b0c2;
+			case 15: _color = 0xFF566c86;
+			case 16: _color = 0xFF333c57;
+			case 17: _color = 0xFF9c5b3e;
+			case 18: _color = 0xFF573139;
+			case 19: _color = 0xFF4c7554;
+			case 20: _color = 0xFF2a201e;
+			case 21: _color = 0x881a1c2c;
+			case 22: _color = 0x885d275d;
+			case 23: _color = 0x88b13e53;
+			case 24: _color = 0x88ef7d57;
+			case 25: _color = 0x88ffcd75;
+			case 26: _color = 0x88a7f070;
+			case 27: _color = 0x8838b764;
+			case 28: _color = 0x88257179;
+			case 29: _color = 0x8829366f;
+			case 30: _color = 0x883b5dc9;
+			case 31: _color = 0x8841a6f6;
+			case 32: _color = 0x8873eff7;
+			case 33: _color = 0x88f4f4f4;
+			case 34: _color = 0x8894b0c2;
+			case 35: _color = 0x88566c86;
+			case 36: _color = 0x88333c57;
+			case 37: _color = 0x889c5b3e;
+			case 38: _color = 0x88573139;
+			case 39: _color = 0x884c7554;
+			case 40: _color = 0x882a201e;
 		}
 		
 		return _color;
@@ -903,32 +938,46 @@ class RegFunctions
 		
 		switch(RegCustom._chess_current_piece_p2_set_color)
 		{
-			 case 1: _color = 0xFFb18d8d; // red 1
-			 case 2: _color = 0xFFaf5252; // red 2
-			 case 3: _color = 0xFFaa2222; // red 3
-			 case 4: _color = 0xFFb18dc0; // purple 1
-			 case 5: _color = 0xFFaf529b; // purple 2
-			 case 6: _color = 0xFFaa2283; // purple 3
-			 case 7: _color = 0xFF908de1; // purple 4
-			 case 8: _color = 0xFF9352af; // purple 5
-			 case 9: _color = 0xFF732298; // purple 6
-			case 10: _color = 0xFF5db3e1; // blue 1	 
-			case 11: _color = 0xFF5252af; // blue 2
-			case 12: _color = 0xFF2222aa; // blue 3
-			case 13: _color = 0xFF5fe1cd; // blue 4	
-			case 14: _color = 0xFF529eaf; // blue 5
-			case 15: _color = 0xFF229999; // blue 6
-			case 16: _color = 0xFF5de197; // green 1
-			case 17: _color = 0xFF52af60; // green 2
-			case 18: _color = 0xFF22aa22; // green 3
-			case 19: _color = 0xFFd2e16d; // yellow 1
-			case 20: _color = 0xFFa4af52; // yellow 2
-			case 21: _color = 0xFFaaaa22; // yellow 3
-			case 22: _color = 0xFFb1b68d; // orange 1	
-			case 23: _color = 0xFFaf7f52; // orange 2
-			case 24: _color = 0xFFaa4522; // orange 3
-			case 25: _color = 0xFFFFFFFF;
-			case 26: _color = 0xFF555555;
+			 case 1: _color = 0xFF1a1c2c;
+			 case 2: _color = 0xFF5d275d;
+			 case 3: _color = 0xFFcb0025;
+			 case 4: _color = 0xFFef7d57;
+			 case 5: _color = 0xFFffcd75;
+			 case 6: _color = 0xFFa7f070;
+			 case 7: _color = 0xFF38b764;
+			 case 8: _color = 0xFF257179;
+			 case 9: _color = 0xFF29366f;
+			case 10: _color = 0xFF3b5dc9;
+			case 11: _color = 0xFF41a6f6;
+			case 12: _color = 0xFF73eff7;
+			case 13: _color = 0xFFf4f4f4;
+			case 14: _color = 0xFF94b0c2;
+			case 15: _color = 0xFF566c86;
+			case 16: _color = 0xFF333c57;
+			case 17: _color = 0xFF9c5b3e;
+			case 18: _color = 0xFF573139;
+			case 19: _color = 0xFF4c7554;
+			case 20: _color = 0xFF2a201e;
+			case 21: _color = 0x881a1c2c;
+			case 22: _color = 0x885d275d;
+			case 23: _color = 0x88b13e53;
+			case 24: _color = 0x88ef7d57;
+			case 25: _color = 0x88ffcd75;
+			case 26: _color = 0x88a7f070;
+			case 27: _color = 0x8838b764;
+			case 28: _color = 0x88257179;
+			case 29: _color = 0x8829366f;
+			case 30: _color = 0x883b5dc9;
+			case 31: _color = 0x8841a6f6;
+			case 32: _color = 0x8873eff7;
+			case 33: _color = 0x88f4f4f4;
+			case 34: _color = 0x8894b0c2;
+			case 35: _color = 0x88566c86;
+			case 36: _color = 0x88333c57;
+			case 37: _color = 0x889c5b3e;
+			case 38: _color = 0x88573139;
+			case 39: _color = 0x884c7554;
+			case 40: _color = 0x882a201e;
 		}
 		
 		return _color;

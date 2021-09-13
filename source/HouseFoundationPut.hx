@@ -183,18 +183,17 @@ class HouseFoundationPut extends FlxGroup
 		_item_hover.visible = false;
 		add(_item_hover);
 				
-		_buttonItemPosition1 = new ButtonToggleFlxState(17, FlxG.height - 95-100, 1, "North-West", 160, 35, Reg._font_size, 0xFFCCFF33, 0, buttonPositionToggle1);
+		_buttonItemPosition1 = new ButtonToggleFlxState(17, FlxG.height - 95-100, 1, "North-West", 160, 35, Reg._font_size, RegCustom._button_text_color, 0, buttonPositionToggle1);
 		_buttonItemPosition1.label.font = Reg._fontDefault;	
-		_buttonItemPosition1.color = 0xFF005500;
 		_buttonItemPosition1.set_toggled(true);
 		_buttonItemPosition1.has_toggle = true;
 		add(_buttonItemPosition1);
 		
-		_buttonItemPosition2 = new ButtonToggleFlxState(160 + 30, FlxG.height - 95-100, 2, "North-East", 160, 35, Reg._font_size, 0xFFCCFF33, 0, buttonPositionToggle2);
+		_buttonItemPosition2 = new ButtonToggleFlxState(160 + 30, FlxG.height - 95-100, 2, "North-East", 160, 35, Reg._font_size, RegCustom._button_text_color, 0, buttonPositionToggle2);
 		_buttonItemPosition2.label.font = Reg._fontDefault;		
 		add(_buttonItemPosition2);
 		
-		_buttonItemRemoveTile = new ButtonGeneralNetworkNo(17+40+7, FlxG.height - 130, "Remove Tile On", 240 + 15, 35, Reg._font_size, 0xFFCCFF33, 0, buttonRemoveTile);
+		_buttonItemRemoveTile = new ButtonGeneralNetworkNo(17+40+7, FlxG.height - 130, "Remove Tile On", 240 + 15, 35, Reg._font_size, RegCustom._button_text_color, 0, buttonRemoveTile);
 		_buttonItemRemoveTile.label.font = Reg._fontDefault;
 		add(_buttonItemRemoveTile);
 		
@@ -258,7 +257,7 @@ class HouseFoundationPut extends FlxGroup
 	override public function update(elapsed:Float):Void
 	{
 		// if player returned to lobby then this var is false so don't update().
-		if (RegHouse._at_House == false) return;
+		if (Reg._at_house == false) return;
 		if (RegHouse._house_main_menu_button_number < 2) return;		
 		
 		var _found:Bool = false;
@@ -391,22 +390,18 @@ class HouseFoundationPut extends FlxGroup
 	
 	private function buttonPositionToggle1():Void
 	{
-		_buttonItemPosition1.color = 0xFF005500;
 		_buttonItemPosition1.set_toggled(true);
 		_buttonItemPosition1.has_toggle = true;
 		
-		_buttonItemPosition2.color = 0xFF550000;
 		_buttonItemPosition2.set_toggled(false);
 		_buttonItemPosition2.has_toggle = false;
 	}
 	
 	private function buttonPositionToggle2():Void
 	{
-		_buttonItemPosition2.color = 0xFF005500;
 		_buttonItemPosition2.set_toggled(true);
 		_buttonItemPosition2.has_toggle = true;
 		
-		_buttonItemPosition1.color = 0xFF550000;
 		_buttonItemPosition1.set_toggled(false);
 		_buttonItemPosition1.has_toggle = false;
 	}

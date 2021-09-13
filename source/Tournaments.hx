@@ -37,16 +37,11 @@ class Tournaments extends FlxGroup
 	 * the title of this scene.
 	 */
 	private var _title:FlxText;
-	
-	/******************************
-	 * return to lobby.
-	 */
-	private var _close:ButtonGeneralNetworkYes;
-	
+		
 	/******************************
 	 * go to game room
 	 */
-	private var _button_move_piece:ButtonGeneralNetworkYes;
+	public var _button_move_piece:ButtonGeneralNetworkYes;
 	
 	public function new():Void
 	{
@@ -76,13 +71,6 @@ class Tournaments extends FlxGroup
 		add(_title);
 		
 		
-		//#############################
-		
-		_close = new ButtonGeneralNetworkYes(30, FlxG.height - 40, "Exit", 150 + 15, 35, Reg._font_size, 0xFFCCFF33, 0, closeState, 0xFF000044, false);
-		_close.label.font = Reg._fontDefault;
-		_close.screenCenter(X);
-		_close.x += 400;
-		add(_close);
 	}
 	
 	public function _tournament_standard_8():Void
@@ -116,7 +104,7 @@ class Tournaments extends FlxGroup
 			_tourny1.color = FlxColor.GREEN;
 			_tourny1.text = "Please move your gameboard piece.";
 			
-			_button_move_piece = new ButtonGeneralNetworkYes(_tourny1.x + _tourny1.textField.textWidth + 15, _tourny1.y, "Move Piece", 215, 35, Reg._font_size, 0xFFCCFF33, 0, move_piece.bind(1), 0xFF000044, false);		
+			_button_move_piece = new ButtonGeneralNetworkYes(_tourny1.x + _tourny1.textField.textWidth + 15, _tourny1.y, "Move Piece", 215, 35, Reg._font_size, RegCustom._button_text_color, 0, move_piece.bind(1), RegCustom._button_color, false);		
 			_button_move_piece.label.font = Reg._fontDefault;
 			_button_move_piece.scrollFactor.set(0, 0);
 			add(_button_move_piece);
@@ -146,7 +134,7 @@ class Tournaments extends FlxGroup
 			_tourny1.color = FlxColor.RED;
 			_tourny1.text = "You have been eliminated from this tournament.";
 			
-			_button_move_piece = new ButtonGeneralNetworkYes(_tourny1.x + _tourny1.textField.textWidth + 15, _tourny1.y, "Preview", 215, 35, Reg._font_size, 0xFFCCFF33, 0, preview.bind(1), 0xFF000044, false);		
+			_button_move_piece = new ButtonGeneralNetworkYes(_tourny1.x + _tourny1.textField.textWidth + 15, _tourny1.y, "Preview", 215, 35, Reg._font_size, RegCustom._button_text_color, 0, preview.bind(1), RegCustom._button_color, false);		
 			_button_move_piece.label.font = Reg._fontDefault;
 			_button_move_piece.scrollFactor.set(0, 0);
 			add(_button_move_piece);
@@ -160,9 +148,10 @@ class Tournaments extends FlxGroup
 	private function move_piece(_num:Int):Void
 	{
 		_piece_move_completed = false;
-		
+				
+		__menu_bar._scene_tournaments_exit.active = false;
 		__menu_bar.active = false;
-		_close.active = false;
+		
 		_button_move_piece.active = false;
 		
 		visible = false;
@@ -198,9 +187,10 @@ class Tournaments extends FlxGroup
 	private function preview(_num:Int):Void
 	{
 		_piece_move_completed = true;
-		
+				
+		__menu_bar._scene_tournaments_exit.active = false;
 		__menu_bar.active = false;
-		_close.active = false;
+		
 		_button_move_piece.active = false;
 		
 		visible = false;
@@ -240,30 +230,6 @@ class Tournaments extends FlxGroup
 		
 		super.update(elapsed);
 	}	
-	
-	private function closeState():Void
-	{
-		if (RegCustom._enable_sound == true
-		&&  Reg2._boxScroller_is_scrolling == false)
-			FlxG.sound.play("click", 1, false);
-		
-		FlxG.mouse.reset();
-				
-		__menu_bar.active = false;
-		_close.active = false;
-		
-		if (_button_move_piece != null) _button_move_piece.active = false;
-		
-		remove(__menu_bar);
-		__menu_bar.destroy();
-		__menu_bar = null;
-		
-		RegTriggers._returnToLobbyMakeButtonsActive = true;
-		
-		visible = false;
-		active = false;
-		
-	}
 	
 	override public function destroy()
 	{

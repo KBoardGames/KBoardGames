@@ -45,7 +45,7 @@ class MiscellaneousMenuOutput extends FlxState
 		FlxG.mouse.enabled = true;
 		
 		FlxG.autoPause = false;	// this application will pause when not in focus.
-		Reg.at_scene_menu = false;
+		Reg._at_misc = false;
 		
 		RegTriggers._makeMiscellaneousMenuClassNotActive = true;
 		
@@ -103,7 +103,7 @@ class MiscellaneousMenuOutput extends FlxState
 		_title.x -= 20; // minus the width of the boxScroller track.
 		add(_title);
 		
-		_close = new ButtonGeneralNetworkYes(0, FlxG.height-40, "Exit", 150 + 15, 35, Reg._font_size, 0xFFCCFF33, 0, closeState, 0xFF000044, false);
+		_close = new ButtonGeneralNetworkYes(0, FlxG.height-40, "Exit", 150 + 15, 35, Reg._font_size, RegCustom._button_text_color, 0, closeState, RegCustom._button_color, false);
 		_close.active = true;
 		_close.label.font = Reg._fontDefault;
 		_close.screenCenter(X);
@@ -458,7 +458,7 @@ class MiscellaneousMenuOutput extends FlxState
 		RegTriggers._makeMiscellaneousMenuClassActive = true;
 		
 		__boxscroller.visible = false;
-		Reg.at_scene_menu = true;
+		Reg._at_misc = true;
 		
 		visible = false;
 		active = false;

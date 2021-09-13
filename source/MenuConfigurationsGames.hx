@@ -147,7 +147,7 @@ class MenuConfigurationsGames extends FlxGroup
 		_title_checkers_game_minutes.setFormat(Reg._fontDefault, Reg._font_size);
 		_group.add(_title_checkers_game_minutes);
 		
-		var _checkers_minus_minutes = new ButtonGeneralNetworkNo(_title_checkers_game_minutes.fieldWidth + 40, _title_checkers_game_minutes.y - 10, "-", 40, 40, Reg._font_size, 0xFFCCFF33, 0, null);
+		var _checkers_minus_minutes = new ButtonGeneralNetworkNo(_title_checkers_game_minutes.fieldWidth + 40, _title_checkers_game_minutes.y - 10, "-", 40, 40, Reg._font_size, RegCustom._button_text_color, 0, null, RegCustom._button_color);
 		_checkers_minus_minutes.label.font = Reg._fontDefault;
 		_checkers_minus_minutes.label.bold = true;
 		_checkers_minus_minutes.visible = false;
@@ -159,7 +159,7 @@ class MenuConfigurationsGames extends FlxGroup
 		_checkers_game_minutes.setFormat(Reg._fontDefault, Reg._font_size);
 		_group.add(_checkers_game_minutes);
 		
-		var _checkers_plus_minutes = new ButtonGeneralNetworkNo(_checkers_minus_minutes.x + 90, _title_checkers_game_minutes.y - 10, "+", 40, 40, Reg._font_size, 0xFFCCFF33, 0, null);		
+		var _checkers_plus_minutes = new ButtonGeneralNetworkNo(_checkers_minus_minutes.x + 90, _title_checkers_game_minutes.y - 10, "+", 40, 40, Reg._font_size, RegCustom._button_text_color, 0, null, RegCustom._button_color);		
 		_checkers_plus_minutes.label.font = Reg._fontDefault;	
 		_checkers_plus_minutes.label.bold = true;
 		_checkers_plus_minutes.visible = false;
@@ -172,7 +172,7 @@ class MenuConfigurationsGames extends FlxGroup
 		_title_chess_game_minutes.setFormat(Reg._fontDefault, Reg._font_size);
 		_group.add(_title_chess_game_minutes);
 		
-		var _chess_minus_minutes = new ButtonGeneralNetworkNo(_title_chess_game_minutes.fieldWidth + 40, _title_chess_game_minutes.y - 10, "-", 40, 40, Reg._font_size, 0xFFCCFF33, 0, null);
+		var _chess_minus_minutes = new ButtonGeneralNetworkNo(_title_chess_game_minutes.fieldWidth + 40, _title_chess_game_minutes.y - 10, "-", 40, 40, Reg._font_size, RegCustom._button_text_color, 0, null, RegCustom._button_color);
 		_chess_minus_minutes.label.font = Reg._fontDefault;
 		_chess_minus_minutes.label.bold = true;
 		_chess_minus_minutes.visible = false;
@@ -184,7 +184,7 @@ class MenuConfigurationsGames extends FlxGroup
 		_chess_game_minutes.setFormat(Reg._fontDefault, Reg._font_size);
 		_group.add(_chess_game_minutes);
 		
-		var _chess_plus_minutes = new ButtonGeneralNetworkNo(_chess_minus_minutes.x + 90, _title_chess_game_minutes.y - 10, "+", 40, 40, Reg._font_size, 0xFFCCFF33, 0, null);
+		var _chess_plus_minutes = new ButtonGeneralNetworkNo(_chess_minus_minutes.x + 90, _title_chess_game_minutes.y - 10, "+", 40, 40, Reg._font_size, RegCustom._button_text_color, 0, null, RegCustom._button_color);
 		_chess_plus_minutes.label.font = Reg._fontDefault;	
 		_chess_plus_minutes.label.bold = true;
 		_chess_plus_minutes.visible = false;
@@ -197,7 +197,7 @@ class MenuConfigurationsGames extends FlxGroup
 		_title_reversi_game_minutes.setFormat(Reg._fontDefault, Reg._font_size);
 		_group.add(_title_reversi_game_minutes);
 		
-		var _reversi_minus_minutes = new ButtonGeneralNetworkNo(_title_reversi_game_minutes.fieldWidth + 40, _title_reversi_game_minutes.y - 10, "-", 40, 40, Reg._font_size, 0xFFCCFF33, 0, null);
+		var _reversi_minus_minutes = new ButtonGeneralNetworkNo(_title_reversi_game_minutes.fieldWidth + 40, _title_reversi_game_minutes.y - 10, "-", 40, 40, Reg._font_size, RegCustom._button_text_color, 0, null, RegCustom._button_color);
 		_reversi_minus_minutes.label.font = Reg._fontDefault;
 		_reversi_minus_minutes.label.bold = true;
 		_reversi_minus_minutes.visible = false;
@@ -209,7 +209,7 @@ class MenuConfigurationsGames extends FlxGroup
 		_reversi_game_minutes.setFormat(Reg._fontDefault, Reg._font_size);
 		_group.add(_reversi_game_minutes);
 		
-		var _reversi_plus_minutes = new ButtonGeneralNetworkNo(_reversi_minus_minutes.x + 90, _title_reversi_game_minutes.y - 10, "+", 40, 40, Reg._font_size, 0xFFCCFF33, 0, null);
+		var _reversi_plus_minutes = new ButtonGeneralNetworkNo(_reversi_minus_minutes.x + 90, _title_reversi_game_minutes.y - 10, "+", 40, 40, Reg._font_size, RegCustom._button_text_color, 0, null, RegCustom._button_color);
 		_reversi_plus_minutes.label.font = Reg._fontDefault;	
 		_reversi_plus_minutes.label.bold = true;
 		_reversi_plus_minutes.visible = false;
@@ -222,7 +222,7 @@ class MenuConfigurationsGames extends FlxGroup
 		_title_snakes_ladders_game_minutes.setFormat(Reg._fontDefault, Reg._font_size);
 		_group.add(_title_snakes_ladders_game_minutes);
 		
-		var _snakes_ladders_minus_minutes = new ButtonGeneralNetworkNo(_title_snakes_ladders_game_minutes.fieldWidth + 40, _title_snakes_ladders_game_minutes.y - 10, "-", 40, 40, Reg._font_size, 0xFFCCFF33, 0, null);
+		var _snakes_ladders_minus_minutes = new ButtonGeneralNetworkNo(_title_snakes_ladders_game_minutes.fieldWidth + 40, _title_snakes_ladders_game_minutes.y - 10, "-", 40, 40, Reg._font_size, RegCustom._button_text_color, 0, null, RegCustom._button_color);
 		_snakes_ladders_minus_minutes.label.font = Reg._fontDefault;
 		_snakes_ladders_minus_minutes.label.bold = true;
 		_snakes_ladders_minus_minutes.visible = false;
@@ -234,7 +234,7 @@ class MenuConfigurationsGames extends FlxGroup
 		_snakes_ladders_game_minutes.setFormat(Reg._fontDefault, Reg._font_size);
 		_group.add(_snakes_ladders_game_minutes);
 		
-		var _snakes_ladders_plus_minutes = new ButtonGeneralNetworkNo(_snakes_ladders_minus_minutes.x + 90, _title_snakes_ladders_game_minutes.y - 10, "+", 40, 40, Reg._font_size, 0xFFCCFF33, 0, null);
+		var _snakes_ladders_plus_minutes = new ButtonGeneralNetworkNo(_snakes_ladders_minus_minutes.x + 90, _title_snakes_ladders_game_minutes.y - 10, "+", 40, 40, Reg._font_size, RegCustom._button_text_color, 0, null, RegCustom._button_color);
 		_snakes_ladders_plus_minutes.label.font = Reg._fontDefault;	
 		_snakes_ladders_plus_minutes.label.bold = true;
 		_snakes_ladders_plus_minutes.visible = false;
@@ -247,7 +247,7 @@ class MenuConfigurationsGames extends FlxGroup
 		_title_signature_game_minutes.setFormat(Reg._fontDefault, Reg._font_size);
 		_group.add(_title_signature_game_minutes);
 		
-		var _signature_minus_minutes = new ButtonGeneralNetworkNo(_title_signature_game_minutes.fieldWidth + 40, _title_signature_game_minutes.y - 10, "-", 40, 40, Reg._font_size, 0xFFCCFF33, 0, null);
+		var _signature_minus_minutes = new ButtonGeneralNetworkNo(_title_signature_game_minutes.fieldWidth + 40, _title_signature_game_minutes.y - 10, "-", 40, 40, Reg._font_size, RegCustom._button_text_color, 0, null, RegCustom._button_color);
 		_signature_minus_minutes.label.font = Reg._fontDefault;
 		_signature_minus_minutes.label.bold = true;
 		_signature_minus_minutes.visible = false;
@@ -259,7 +259,7 @@ class MenuConfigurationsGames extends FlxGroup
 		_signature_game_minutes.setFormat(Reg._fontDefault, Reg._font_size);
 		_group.add(_signature_game_minutes);
 		
-		var _signature_plus_minutes = new ButtonGeneralNetworkNo(_signature_minus_minutes.x + 90, _title_signature_game_minutes.y - 10, "+", 40, 40, Reg._font_size, 0xFFCCFF33, 0, null);		
+		var _signature_plus_minutes = new ButtonGeneralNetworkNo(_signature_minus_minutes.x + 90, _title_signature_game_minutes.y - 10, "+", 40, 40, Reg._font_size, RegCustom._button_text_color, 0, null, RegCustom._button_color);		
 		_signature_plus_minutes.label.font = Reg._fontDefault;	
 		_signature_plus_minutes.label.bold = true;
 		_signature_plus_minutes.visible = false;
@@ -277,7 +277,7 @@ class MenuConfigurationsGames extends FlxGroup
 		_text_game_skill_level_chess.setFormat(Reg._fontDefault, Reg._font_size);
 		_group.add(_text_game_skill_level_chess);
 		
-		_button_game_skill_level_chess = new ButtonGeneralNetworkNo(_text_game_skill_level_chess.x + _text_game_skill_level_chess.fieldWidth + 15, _text_game_skill_level_chess.y - 10, "", 240, 40, Reg._font_size, 0xFFCCFF33, 0, null);
+		_button_game_skill_level_chess = new ButtonGeneralNetworkNo(_text_game_skill_level_chess.x + _text_game_skill_level_chess.fieldWidth + 15, _text_game_skill_level_chess.y - 10, "", 240, 40, Reg._font_size, RegCustom._button_text_color, 0, null, RegCustom._button_color);
 		
 		if (RegCustom._game_skill_level_chess == 0) 
 			_button_game_skill_level_chess.label.text = "Beginner";
@@ -298,7 +298,7 @@ class MenuConfigurationsGames extends FlxGroup
 		_question_chess_opening_moves_enabled.y = _button_game_skill_level_chess.height + _button_game_skill_level_chess.y + 40;
 		_group.add(_question_chess_opening_moves_enabled);
 		
-		_button_chess_opening_moves_enabled = new ButtonGeneralNetworkNo(_question_chess_opening_moves_enabled.width + 30, _question_chess_opening_moves_enabled.y - 8, "", 100, 35, Reg._font_size, 0xFFCCFF33, 0, null);
+		_button_chess_opening_moves_enabled = new ButtonGeneralNetworkNo(_question_chess_opening_moves_enabled.width + 30, _question_chess_opening_moves_enabled.y - 8, "", 100, 35, Reg._font_size, RegCustom._button_text_color, 0, null, RegCustom._button_color);
 		_button_chess_opening_moves_enabled.label.font = Reg._fontDefault;
 		_button_chess_opening_moves_enabled.label.text = Std.string(RegCustom._chess_opening_moves_enabled);
 		
@@ -310,7 +310,7 @@ class MenuConfigurationsGames extends FlxGroup
 		_question_chess_show_last_piece_moved.y = _button_chess_opening_moves_enabled.height + _button_chess_opening_moves_enabled.y + 40;
 		_group.add(_question_chess_show_last_piece_moved);
 		
-		_button_chess_show_last_piece_moved = new ButtonGeneralNetworkNo(_question_chess_show_last_piece_moved.width + 30, _question_chess_show_last_piece_moved.y - 8, "", 100, 35, Reg._font_size, 0xFFCCFF33, 0, null);
+		_button_chess_show_last_piece_moved = new ButtonGeneralNetworkNo(_question_chess_show_last_piece_moved.width + 30, _question_chess_show_last_piece_moved.y - 8, "", 100, 35, Reg._font_size, RegCustom._button_text_color, 0, null, RegCustom._button_color);
 		_button_chess_show_last_piece_moved.label.font = Reg._fontDefault;
 		_button_chess_show_last_piece_moved.label.text = Std.string(RegCustom._chess_show_last_piece_moved);
 		
@@ -322,7 +322,7 @@ class MenuConfigurationsGames extends FlxGroup
 		_question_chess_computer_thinking_enabled.y = _button_chess_show_last_piece_moved.height + _button_chess_show_last_piece_moved.y + 40;
 		_group.add(_question_chess_computer_thinking_enabled);
 		
-		_button_chess_computer_thinking_enabled = new ButtonGeneralNetworkNo(_question_chess_computer_thinking_enabled.width + 30, _question_chess_computer_thinking_enabled.y - 8, "", 100, 35, Reg._font_size, 0xFFCCFF33, 0, null);
+		_button_chess_computer_thinking_enabled = new ButtonGeneralNetworkNo(_question_chess_computer_thinking_enabled.width + 30, _question_chess_computer_thinking_enabled.y - 8, "", 100, 35, Reg._font_size, RegCustom._button_text_color, 0, null, RegCustom._button_color);
 		_button_chess_computer_thinking_enabled.label.font = Reg._fontDefault;
 		_button_chess_computer_thinking_enabled.label.text = Std.string(RegCustom._chess_computer_thinking_enabled);
 		
@@ -334,7 +334,7 @@ class MenuConfigurationsGames extends FlxGroup
 		_question_chess_future_capturing_units_enabled.y = _button_chess_computer_thinking_enabled.height +  _button_chess_computer_thinking_enabled.y + 40;
 		_group.add(_question_chess_future_capturing_units_enabled);
 		
-		_button_chess_future_capturing_units_enabled = new ButtonGeneralNetworkNo(_question_chess_future_capturing_units_enabled.width + 20, _question_chess_future_capturing_units_enabled.y + 10, "", 100, 35, Reg._font_size, 0xFFCCFF33, 0, null);
+		_button_chess_future_capturing_units_enabled = new ButtonGeneralNetworkNo(_question_chess_future_capturing_units_enabled.width + 20, _question_chess_future_capturing_units_enabled.y + 10, "", 100, 35, Reg._font_size, RegCustom._button_text_color, 0, null, RegCustom._button_color);
 		_button_chess_future_capturing_units_enabled.label.font = Reg._fontDefault;
 		_button_chess_future_capturing_units_enabled.label.text = Std.string(RegCustom._chess_future_capturing_units_enabled);
 		
@@ -342,14 +342,14 @@ class MenuConfigurationsGames extends FlxGroup
 		_group.add(_group_button[14]);
 		
 		//############################## plus and minus future capturing unit buttons.
-		_button_chess_future_capturing_units_minus = new ButtonGeneralNetworkNo(_button_chess_future_capturing_units_enabled.x + _button_chess_future_capturing_units_enabled.width + 15, _button_chess_future_capturing_units_enabled.y + 7, "-", 35, 35, Reg._font_size, 0xFFCCFF33, 0, null);
+		_button_chess_future_capturing_units_minus = new ButtonGeneralNetworkNo(_button_chess_future_capturing_units_enabled.x + _button_chess_future_capturing_units_enabled.width + 15, _button_chess_future_capturing_units_enabled.y + 7, "-", 35, 35, Reg._font_size, RegCustom._button_text_color, 0, null, RegCustom._button_color);
 		_button_chess_future_capturing_units_minus.label.font = Reg._fontDefault;
 		_button_chess_future_capturing_units_minus.visible = false;
 		
 		_group_button.push(_button_chess_future_capturing_units_minus);
 		_group.add(_group_button[15]);		
 		
-		_button_chess_future_capturing_units_plus = new ButtonGeneralNetworkNo(_button_chess_future_capturing_units_minus.x + _button_chess_future_capturing_units_minus.width + 15, _button_chess_future_capturing_units_minus.y + 7, "+", 35, 35, Reg._font_size, 0xFFCCFF33, 0, null);
+		_button_chess_future_capturing_units_plus = new ButtonGeneralNetworkNo(_button_chess_future_capturing_units_minus.x + _button_chess_future_capturing_units_minus.width + 15, _button_chess_future_capturing_units_minus.y + 7, "+", 35, 35, Reg._font_size, RegCustom._button_text_color, 0, null, RegCustom._button_color);
 		_button_chess_future_capturing_units_plus.label.font = Reg._fontDefault;
 		_button_chess_future_capturing_units_plus.visible = false;	
 		
@@ -373,7 +373,7 @@ class MenuConfigurationsGames extends FlxGroup
 		_question_chess_path_to_king_enabled.y = _question_chess_future_capturing_units_enabled.height +  _question_chess_future_capturing_units_enabled.y + 40;
 		_group.add(_question_chess_path_to_king_enabled);
 		
-		_button_chess_path_to_king_enabled = new ButtonGeneralNetworkNo(_question_chess_path_to_king_enabled.width + 10, _question_chess_path_to_king_enabled.y + 10, "", 100, 35, Reg._font_size, 0xFFCCFF33, 0, null);
+		_button_chess_path_to_king_enabled = new ButtonGeneralNetworkNo(_question_chess_path_to_king_enabled.width + 10, _question_chess_path_to_king_enabled.y + 10, "", 100, 35, Reg._font_size, RegCustom._button_text_color, 0, null, RegCustom._button_color);
 		_button_chess_path_to_king_enabled.label.font = Reg._fontDefault;
 		_button_chess_path_to_king_enabled.label.text = Std.string(RegCustom._chess_path_to_king_enabled);
 		
@@ -381,14 +381,14 @@ class MenuConfigurationsGames extends FlxGroup
 		_group.add(_group_button[17]);
 
 		//############################## plus and minus path to king buttons.
-		_button_chess_path_to_king_minus = new ButtonGeneralNetworkNo(_button_chess_path_to_king_enabled.x + _button_chess_path_to_king_enabled.width + 15, _button_chess_path_to_king_enabled.y + 7, "-", 35, 35, Reg._font_size, 0xFFCCFF33, 0, null);
+		_button_chess_path_to_king_minus = new ButtonGeneralNetworkNo(_button_chess_path_to_king_enabled.x + _button_chess_path_to_king_enabled.width + 15, _button_chess_path_to_king_enabled.y + 7, "-", 35, 35, Reg._font_size, RegCustom._button_text_color, 0, null, RegCustom._button_color);
 		_button_chess_path_to_king_minus.label.font = Reg._fontDefault;
 		_button_chess_path_to_king_minus.visible = false;
 		
 		_group_button.push(_button_chess_path_to_king_minus);
 		_group.add(_group_button[18]);		
 		
-		_button_chess_path_to_king_plus = new ButtonGeneralNetworkNo(_button_chess_path_to_king_minus.x + _button_chess_path_to_king_minus.width + 15, _button_chess_path_to_king_minus.y + 7, "+", 35, 35, Reg._font_size, 0xFFCCFF33, 0, null);
+		_button_chess_path_to_king_plus = new ButtonGeneralNetworkNo(_button_chess_path_to_king_minus.x + _button_chess_path_to_king_minus.width + 15, _button_chess_path_to_king_minus.y + 7, "+", 35, 35, Reg._font_size, RegCustom._button_text_color, 0, null, RegCustom._button_color);
 		_button_chess_path_to_king_plus.label.font = Reg._fontDefault;
 		_button_chess_path_to_king_plus.visible = false;	
 		
@@ -410,14 +410,14 @@ class MenuConfigurationsGames extends FlxGroup
 		_question_chess_current_piece_p1_set.y = _question_chess_path_to_king_enabled.height + _question_chess_path_to_king_enabled.y + 40;
 		_group.add(_question_chess_current_piece_p1_set);
 		
-		_button_chess_current_piece_p1_set_minus = new ButtonGeneralNetworkNo(_question_chess_current_piece_p1_set.width + 30, _question_chess_current_piece_p1_set.y - 8, "", 35, 35, Reg._font_size, 0xFFCCFF33, 0, null);
+		_button_chess_current_piece_p1_set_minus = new ButtonGeneralNetworkNo(_question_chess_current_piece_p1_set.width + 30, _question_chess_current_piece_p1_set.y - 8, "", 35, 35, Reg._font_size, RegCustom._button_text_color, 0, null, RegCustom._button_color);
 		_button_chess_current_piece_p1_set_minus.label.font = Reg._fontDefault;
 		_button_chess_current_piece_p1_set_minus.label.text = "-";
 		
 		_group_button.push(_button_chess_current_piece_p1_set_minus);
 		_group.add(_group_button[20]);
 		
-		_button_chess_current_piece_p1_set_plus = new ButtonGeneralNetworkNo(_question_chess_current_piece_p1_set.width + 30 + 50, _question_chess_current_piece_p1_set.y - 8, "", 35, 35, Reg._font_size, 0xFFCCFF33, 0, null);
+		_button_chess_current_piece_p1_set_plus = new ButtonGeneralNetworkNo(_question_chess_current_piece_p1_set.width + 30 + 50, _question_chess_current_piece_p1_set.y - 8, "", 35, 35, Reg._font_size, RegCustom._button_text_color, 0, null, RegCustom._button_color);
 		_button_chess_current_piece_p1_set_plus.label.font = Reg._fontDefault;
 		_button_chess_current_piece_p1_set_plus.label.text = "+";
 		
@@ -460,14 +460,14 @@ class MenuConfigurationsGames extends FlxGroup
 		_question_chess_current_piece_p1_set_color.y = _question_chess_current_piece_p1_set.height + _question_chess_current_piece_p1_set.y + 40;
 		_group.add(_question_chess_current_piece_p1_set_color);
 		
-		_button_chess_current_piece_p1_set_color_minus = new ButtonGeneralNetworkNo(_question_chess_current_piece_p1_set_color.width + 30, _question_chess_current_piece_p1_set_color.y - 8, "", 35, 35, Reg._font_size, 0xFFCCFF33, 0, null);
+		_button_chess_current_piece_p1_set_color_minus = new ButtonGeneralNetworkNo(_question_chess_current_piece_p1_set_color.width + 30, _question_chess_current_piece_p1_set_color.y - 8, "", 35, 35, Reg._font_size, RegCustom._button_text_color, 0, null, RegCustom._button_color);
 		_button_chess_current_piece_p1_set_color_minus.label.font = Reg._fontDefault;
 		_button_chess_current_piece_p1_set_color_minus.label.text = "-";
 		
 		_group_button.push(_button_chess_current_piece_p1_set_color_minus);
 		_group.add(_group_button[22]);
 		
-		_button_chess_current_piece_p1_set_color_plus = new ButtonGeneralNetworkNo(_question_chess_current_piece_p1_set_color.width + 30 + 50, _question_chess_current_piece_p1_set_color.y - 8, "", 35, 35, Reg._font_size, 0xFFCCFF33, 0, null);
+		_button_chess_current_piece_p1_set_color_plus = new ButtonGeneralNetworkNo(_question_chess_current_piece_p1_set_color.width + 30 + 50, _question_chess_current_piece_p1_set_color.y - 8, "", 35, 35, Reg._font_size, RegCustom._button_text_color, 0, null, RegCustom._button_color);
 		_button_chess_current_piece_p1_set_color_plus.label.font = Reg._fontDefault;
 		_button_chess_current_piece_p1_set_color_plus.label.text = "+";
 		
@@ -481,14 +481,14 @@ class MenuConfigurationsGames extends FlxGroup
 		_question_chess_current_piece_p2_set.y = _button_chess_current_piece_p1_set_color_plus.height + _button_chess_current_piece_p1_set_color_plus.y + 40;
 		_group.add(_question_chess_current_piece_p2_set);
 		
-		_button_chess_current_piece_p2_set_minus = new ButtonGeneralNetworkNo(_question_chess_current_piece_p2_set.width + 30, _question_chess_current_piece_p2_set.y - 8, "", 35, 35, Reg._font_size, 0xFFCCFF33, 0, null);
+		_button_chess_current_piece_p2_set_minus = new ButtonGeneralNetworkNo(_question_chess_current_piece_p2_set.width + 30, _question_chess_current_piece_p2_set.y - 8, "", 35, 35, Reg._font_size, RegCustom._button_text_color, 0, null, RegCustom._button_color);
 		_button_chess_current_piece_p2_set_minus.label.font = Reg._fontDefault;
 		_button_chess_current_piece_p2_set_minus.label.text = "-";
 		
 		_group_button.push(_button_chess_current_piece_p2_set_minus);
 		_group.add(_group_button[24]);
 		
-		_button_chess_current_piece_p2_set_plus = new ButtonGeneralNetworkNo(_question_chess_current_piece_p2_set.width + 30 + 50, _question_chess_current_piece_p2_set.y - 8, "", 35, 35, Reg._font_size, 0xFFCCFF33, 0, null);
+		_button_chess_current_piece_p2_set_plus = new ButtonGeneralNetworkNo(_question_chess_current_piece_p2_set.width + 30 + 50, _question_chess_current_piece_p2_set.y - 8, "", 35, 35, Reg._font_size, RegCustom._button_text_color, 0, null, RegCustom._button_color);
 		_button_chess_current_piece_p2_set_plus.label.font = Reg._fontDefault;
 		_button_chess_current_piece_p2_set_plus.label.text = "+";
 		
@@ -531,14 +531,14 @@ class MenuConfigurationsGames extends FlxGroup
 		_question_chess_current_piece_p2_set_color.y = _question_chess_current_piece_p2_set.height + _question_chess_current_piece_p2_set.y + 40;
 		_group.add(_question_chess_current_piece_p2_set_color);
 		
-		_button_chess_current_piece_p2_set_color_minus = new ButtonGeneralNetworkNo(_question_chess_current_piece_p2_set_color.width + 30, _question_chess_current_piece_p2_set_color.y - 8, "", 35, 35, Reg._font_size, 0xFFCCFF33, 0, null);
+		_button_chess_current_piece_p2_set_color_minus = new ButtonGeneralNetworkNo(_question_chess_current_piece_p2_set_color.width + 30, _question_chess_current_piece_p2_set_color.y - 8, "", 35, 35, Reg._font_size, RegCustom._button_text_color, 0, null, RegCustom._button_color);
 		_button_chess_current_piece_p2_set_color_minus.label.font = Reg._fontDefault;
 		_button_chess_current_piece_p2_set_color_minus.label.text = "-";
 		
 		_group_button.push(_button_chess_current_piece_p2_set_color_minus);
 		_group.add(_group_button[26]);
 		
-		_button_chess_current_piece_p2_set_color_plus = new ButtonGeneralNetworkNo(_question_chess_current_piece_p2_set_color.width + 30 + 50, _question_chess_current_piece_p2_set_color.y - 8, "", 35, 35, Reg._font_size, 0xFFCCFF33, 0, null);
+		_button_chess_current_piece_p2_set_color_plus = new ButtonGeneralNetworkNo(_question_chess_current_piece_p2_set_color.width + 30 + 50, _question_chess_current_piece_p2_set_color.y - 8, "", 35, 35, Reg._font_size, RegCustom._button_text_color, 0, null, RegCustom._button_color);
 		_button_chess_current_piece_p2_set_color_plus.label.font = Reg._fontDefault;
 		_button_chess_current_piece_p2_set_color_plus.label.text = "+";
 		
@@ -549,7 +549,7 @@ class MenuConfigurationsGames extends FlxGroup
 		
 		
 		
-		var _button = new ButtonGeneralNetworkNo(0, (_button_chess_current_piece_p2_set_minus).y + 200, "", 240, 40, Reg._font_size, 0xFFCCFF33, 0, null);
+		var _button = new ButtonGeneralNetworkNo(0, (_button_chess_current_piece_p2_set_minus).y + 200, "", 240, 40, Reg._font_size, RegCustom._button_text_color, 0, null, RegCustom._button_color);
 		_group.add(_button);
 
 	}
@@ -758,7 +758,7 @@ class MenuConfigurationsGames extends FlxGroup
 	private function save_chess_piece_p1_set_color_current_minus():Void
 	{
 		RegCustom._chess_current_piece_p1_set_color -= 1;
-		if (RegCustom._chess_current_piece_p1_set_color == 0) RegCustom._chess_current_piece_p1_set_color = 26;
+		if (RegCustom._chess_current_piece_p1_set_color == 0) RegCustom._chess_current_piece_p1_set_color = 40;
 		
 		var _color = RegFunctions.draw_update_board_p1_set_color();
 		
@@ -774,7 +774,7 @@ class MenuConfigurationsGames extends FlxGroup
 	private function save_chess_piece_p1_set_color_current_plus():Void
 	{
 		RegCustom._chess_current_piece_p1_set_color += 1;
-		if (RegCustom._chess_current_piece_p1_set_color == 27) RegCustom._chess_current_piece_p1_set_color = 1;
+		if (RegCustom._chess_current_piece_p1_set_color == 41) RegCustom._chess_current_piece_p1_set_color = 1;
 		
 		var _color = RegFunctions.draw_update_board_p1_set_color();
 		
@@ -815,7 +815,7 @@ class MenuConfigurationsGames extends FlxGroup
 	private function save_chess_piece_p2_set_color_current_minus():Void
 	{
 		RegCustom._chess_current_piece_p2_set_color -= 1;
-		if (RegCustom._chess_current_piece_p2_set_color == 0) RegCustom._chess_current_piece_p2_set_color = 26;
+		if (RegCustom._chess_current_piece_p2_set_color == 0) RegCustom._chess_current_piece_p2_set_color = 40;
 		
 		var _color = RegFunctions.draw_update_board_p2_set_color();
 		
@@ -830,7 +830,7 @@ class MenuConfigurationsGames extends FlxGroup
 	private function save_chess_piece_p2_set_color_current_plus():Void
 	{
 		RegCustom._chess_current_piece_p2_set_color += 1;
-		if (RegCustom._chess_current_piece_p2_set_color == 27) RegCustom._chess_current_piece_p2_set_color = 1;
+		if (RegCustom._chess_current_piece_p2_set_color == 41) RegCustom._chess_current_piece_p2_set_color = 1;
 		
 		var _color = RegFunctions.draw_update_board_p2_set_color();
 		
@@ -866,26 +866,6 @@ class MenuConfigurationsGames extends FlxGroup
 				break;
 			}
 			
-			// if same as above but mouse is not pressed.
-			else if (FlxG.mouse.y + ButtonGeneralNetworkNo._scrollarea_offset_y >= _group_button[i]._startY &&  FlxG.mouse.y + ButtonGeneralNetworkNo._scrollarea_offset_y <= _group_button[i]._startY + _group_button[i]._button_height 
-			&& FlxG.mouse.x + ButtonGeneralNetworkNo._scrollarea_offset_x >= _group_button[i]._startX &&  FlxG.mouse.x + ButtonGeneralNetworkNo._scrollarea_offset_x <= _group_button[i]._startX + _group_button[i]._button_width)
-			{
-				_group_button[i].active = true;
-				_group_button[i].label.color = 0xFF00FF00;
-				
-				break;
-			}
-			// if mouse is not at a button that set it not active.
-			else if (FlxG.mouse.y + ButtonGeneralNetworkNo._scrollarea_offset_y < _group_button[i]._startY 
-			||  FlxG.mouse.y + ButtonGeneralNetworkNo._scrollarea_offset_y > _group_button[i]._startY + _group_button[i]._button_height
-			||  FlxG.mouse.x + ButtonGeneralNetworkNo._scrollarea_offset_x < _group_button[i]._startX 
-			||  FlxG.mouse.x + ButtonGeneralNetworkNo._scrollarea_offset_x > _group_button[i]._startX + _group_button[i]._button_width)			
-			{
-				if (_group_button[i].label.color == 0xFFFFFFFF) 
-					_group_button[i].active = false;
-				_group_button[i].label.color = 0xFFFFFFFF;
-				
-			}
 		}
 
 		super.update(elapsed);		

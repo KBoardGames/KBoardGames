@@ -53,24 +53,24 @@ class ActionInput
 	static public function overlaps(_bas:FlxBasic, ?_cam:FlxCamera):Bool
 	{
 		var _bool:Bool = false;
-		
-		#if mobile
-			for (touch in FlxG.touches.list)
-			{
-				if (touch.overlaps(_bas, _cam) == true) _bool = true;
-			}
-			return _bool;
 			
-		#elseif desktop
-			if (FlxG.mouse.overlaps(_bas, _cam) == true) _bool = true;
-		
-		#elseif html5
-			if (FlxG.mouse.overlaps(_bas, _cam) == true) _bool = true;
-		
-		#end
-		
-		//if (_state_enabled == false) _bool = false;		
-		//enableDisableInput();
+		if (RegTriggers._buttons_set_not_active == false)
+		{
+			#if mobile
+				for (touch in FlxG.touches.list)
+				{
+					if (touch.overlaps(_bas, _cam) == true) _bool = true;
+				}
+				return _bool;
+				
+			#elseif desktop
+				if (FlxG.mouse.overlaps(_bas, _cam) == true) _bool = true;
+			
+			#elseif html5
+				if (FlxG.mouse.overlaps(_bas, _cam) == true) _bool = true;
+			
+			#end
+		}
 		
 		return _bool;
 	}
@@ -82,24 +82,24 @@ class ActionInput
 	{
 		var _bool:Bool = false;
 		
-		#if mobile
-			for (touch in FlxG.touches.list)
-			{
-				if (touch.pressed == true) _bool = true;
-			}
+		if (RegTriggers._buttons_set_not_active == false)
+		{
+			#if mobile
+				for (touch in FlxG.touches.list)
+				{
+					if (touch.pressed == true) _bool = true;
+				}
+				
+			#elseif desktop
+				if (FlxG.mouse.pressed == true) _bool = true;
+				else if (FlxG.mouse.wheel != 0) _bool = true;
 			
-		#elseif desktop
-			if (FlxG.mouse.pressed == true) _bool = true;
-			else if (FlxG.mouse.wheel != 0) _bool = true;
-		
-		#elseif html5
-			if (FlxG.mouse.pressed == true) _bool = true;
-			else if (FlxG.mouse.wheel != 0) _bool = true;
-		
-		#end
-		
-		//if (_state_enabled == false) _bool = false;		
-		//enableDisableInput();
+			#elseif html5
+				if (FlxG.mouse.pressed == true) _bool = true;
+				else if (FlxG.mouse.wheel != 0) _bool = true;
+			
+			#end
+		}
 		
 		return _bool;
 	}
@@ -108,26 +108,26 @@ class ActionInput
 	{
 		var _bool:Bool = false;
 		
-		#if mobile
-			for (touch in FlxG.touches.list)
-			{
-				if (touch.justPressed == true) 
+		if (RegTriggers._buttons_set_not_active == false)
+		{
+			#if mobile
+				for (touch in FlxG.touches.list)
+				{
+					if (touch.justPressed == true) 
+					{
+						_bool = true;
+					}
+				}
+						
+			#else
+				if (FlxG.mouse.justPressed == true) 
 				{
 					_bool = true;
 				}
-			}
-					
-		#else
-			if (FlxG.mouse.justPressed == true) 
-			{
-				_bool = true;
-			}
+			
+			#end
+		}
 		
-		#end
-		
-		//if (_state_enabled == false) _bool = false;
-		//enableDisableInput();
-						
 		return _bool;
 	}
 	
@@ -135,25 +135,25 @@ class ActionInput
 	{
 		var _bool:Bool = false;
 		
-		#if mobile
-			for (touch in FlxG.touches.list)
-			{
-				if (touch.justReleased == true) 
+		if (RegTriggers._buttons_set_not_active == false)
+		{
+			#if mobile
+				for (touch in FlxG.touches.list)
+				{
+					if (touch.justReleased == true) 
+					{
+						_bool = true;
+					}
+				}
+						
+			#else
+				if (FlxG.mouse.justReleased == true)
 				{
 					_bool = true;
 				}
-			}
-					
-		#else
-			if (FlxG.mouse.justReleased == true)
-			{
-				_bool = true;
-			}
-		
-		#end
-		
-		//if (_state_enabled == false) _bool = false;
-		//enableDisableInput();
+			
+			#end
+		}
 		
 		return _bool;
 	}
@@ -165,19 +165,22 @@ class ActionInput
 	{
 		var _int:Int = 0;
 		
-		#if mobile
-			for (touch in FlxG.touches.list)
-			{
-				_int = touch.x;
-			}
+		if (RegTriggers._buttons_set_not_active == false)
+		{
+			#if mobile
+				for (touch in FlxG.touches.list)
+				{
+					_int = touch.x;
+				}
+				
+			#elseif desktop
+				_int = FlxG.mouse.x;
 			
-		#elseif desktop
-			_int = FlxG.mouse.x;
-		
-		#elseif html5
-			_int = FlxG.mouse.x;
-			
-		#end
+			#elseif html5
+				_int = FlxG.mouse.x;
+				
+			#end
+		}
 		
 		return _int;
 	}
@@ -189,59 +192,27 @@ class ActionInput
 	{
 		var _int:Int = 0;
 		
-		#if mobile
-			for (touch in FlxG.touches.list)
-			{
-				_int = touch.y;
-			}
+		if (RegTriggers._buttons_set_not_active == false)
+		{
+			#if mobile
+				for (touch in FlxG.touches.list)
+				{
+					_int = touch.y;
+				}
+				
+			#elseif desktop
+				_int = FlxG.mouse.y;
 			
-		#elseif desktop
-			_int = FlxG.mouse.y;
-		
-		#elseif html5
-			_int = FlxG.mouse.y;
-			
-		#end
+			#elseif html5
+				_int = FlxG.mouse.y;
+				
+			#end
+		}
 		
 		return _int;
 	}
 	
-	/******************************
-	 * you can safely comment this function if the compiler barks.
-	 */
-	/*static function enableDisableInput():Void
-	{
-		#if mobile
-			FlxG.mouse.visible = false;
-			
-		#elseif desktop
-			if (_state_enabled == false) 
-			{
-				FlxG.mouse.visible = false;
-				FlxG.mouse.enabled = false;
-			}
-			
-			else
-			{
-				FlxG.mouse.enabled = true;
-				FlxG.mouse.visible = true;
-			}
-			
-		#elseif html5
-			if (_state_enabled == false) 
-			{
-				FlxG.mouse.visible = false;
-				FlxG.mouse.enabled = false;
-			}
-			
-			else
-			{
-				FlxG.mouse.enabled = true;
-				FlxG.mouse.visible = true;
-			}
-		
-		#end
-	}*/
+	
 }
 
 

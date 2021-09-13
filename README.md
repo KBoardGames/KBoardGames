@@ -22,11 +22,7 @@ The client for KBoardGames. The client is used to play games online against othe
 * No advertisements in the client software.
 * <a href="https://kboardgames.com/forum/viewtopic.php?f=4&t=29">Chess features</a> for beginners.
 * In game waiting room chatting and game room chatting.
-* Room lock feature. No back doors.
 * <a href="https://kboardgames.com/forum/viewtopic.php?f=8&t=26">Host your own games</a> using the server software.
-* Anti-cheating of player statistics.
-* Player activity <a href="https://kboardgames.com/forum/viewtopic.php?f=4&t=33">server logging.</a>
-* Built-in server anti-hammering feature.
 
 ## Chess.
 <img src="https://kboardgames.com/images/game2_chess.jpg?" alt="Image 1 of chess" width="500"/>

@@ -111,18 +111,16 @@ class MenuConfigurationsProfile extends FlxGroup
 		_profile_general_instructions.y = _text_title_player.y + 50;
 		_group.add(_profile_general_instructions);
 		
-		_button_p1 = new ButtonToggleFlxState(0, 0, 1, "Player 1", 180, 35, Reg._font_size, 0xFFCCFF33, 0, buttonP1);
+		_button_p1 = new ButtonToggleFlxState(0, 0, 1, "Player 1", 180, 35, Reg._font_size, RegCustom._button_text_color, 0, buttonP1);
 		_button_p1.screenCenter(X);
 		_button_p1.x -= 97;
-		_button_p1.color = 0xFF005500;
 		// set_toggled must be before has_toggle or the save will not work when click event has not fired somewhere other than this input widget.
 		_button_p1.set_toggled(true);
 		_button_p1.has_toggle = true;
 		_button_p1.y = _profile_general_instructions.y + _profile_general_instructions.height + 15;
 		_group.add(_button_p1);
 		
-		_button_p2 = new ButtonToggleFlxState(_button_p1.x + 180 + 15, 200, 1, "Player 2", 180, 35, Reg._font_size, 0xFFCCFF33, 0, buttonP2);
-		_button_p2.color = 0xFF550000;
+		_button_p2 = new ButtonToggleFlxState(_button_p1.x + 180 + 15, 200, 1, "Player 2", 180, 35, Reg._font_size, RegCustom._button_text_color, 0, buttonP2);
 		_button_p2.set_toggled(false);
 		_button_p2.has_toggle = false;
 		_button_p2.y = _button_p1.y;
@@ -208,7 +206,7 @@ class MenuConfigurationsProfile extends FlxGroup
 		_image_avatar_highlighted.updateHitbox();
 		_group.add(_image_avatar_highlighted);
 		
-		var _text_empty = new ButtonGeneralNetworkNo(0, _group_sprite[Reg._avatar_total-1].y + 300, "", 100, 35, Reg._font_size, 0xFFCCFF33, 0, null);
+		var _text_empty = new ButtonGeneralNetworkNo(0, _group_sprite[Reg._avatar_total-1].y + 300, "", 100, 35, Reg._font_size, RegCustom._button_text_color, 0, null, RegCustom._button_color);
 		_text_empty.visible = false;
 		_group.add(_text_empty);
 	}
@@ -238,11 +236,9 @@ class MenuConfigurationsProfile extends FlxGroup
 		
 		_image_profile_avatar.loadGraphic("vendor/multiavatar/" + RegCustom._profile_avatar_number1);
 		
-		_button_p1.color = 0xFF005500;
 		_button_p1.set_toggled(true);
 		_button_p1.has_toggle = true;
 		
-		_button_p2.color = 0xFF550000;
 		_button_p2.set_toggled(false);
 		_button_p2.has_toggle = false;
 	}
@@ -262,10 +258,8 @@ class MenuConfigurationsProfile extends FlxGroup
 		_image_profile_avatar.loadGraphic("vendor/multiavatar/" + RegCustom._profile_avatar_number2);
 		
 		_button_p2.set_toggled(true);
-		_button_p2.color = 0xFF005500;
 		_button_p2.has_toggle = true;
 		
-		_button_p1.color = 0xFF550000;
 		_button_p1.set_toggled(false);
 		_button_p1.has_toggle = false;
 	}
@@ -515,26 +509,6 @@ class MenuConfigurationsProfile extends FlxGroup
 				break;
 			}
 			
-			// if same as above but mouse is not pressed.
-			else if (FlxG.mouse.y + ButtonGeneralNetworkNo._scrollarea_offset_y >= _group_button[i]._startY &&  FlxG.mouse.y + ButtonGeneralNetworkNo._scrollarea_offset_y <= _group_button[i]._startY + _group_button[i]._button_height 
-			&& FlxG.mouse.x + ButtonGeneralNetworkNo._scrollarea_offset_x >= _group_button[i]._startX &&  FlxG.mouse.x + ButtonGeneralNetworkNo._scrollarea_offset_x <= _group_button[i]._startX + _group_button[i]._button_width)
-			{
-				_group_button[i].active = true;
-				_group_button[i].label.color = 0xFF00FF00;
-				
-				break;
-			}
-			// if mouse is not at a button that set it not active.
-			else if (FlxG.mouse.y + ButtonGeneralNetworkNo._scrollarea_offset_y < _group_button[i]._startY 
-			||  FlxG.mouse.y + ButtonGeneralNetworkNo._scrollarea_offset_y > _group_button[i]._startY + _group_button[i]._button_height
-			||  FlxG.mouse.x + ButtonGeneralNetworkNo._scrollarea_offset_x < _group_button[i]._startX 
-			||  FlxG.mouse.x + ButtonGeneralNetworkNo._scrollarea_offset_x > _group_button[i]._startX + _group_button[i]._button_width)			
-			{
-				if (_group_button[i].label.color == 0xFFFFFFFF) 
-					_group_button[i].active = false;
-				_group_button[i].label.color = 0xFFFFFFFF;
-				
-			}
 		}
 		
 		super.update(elapsed);		

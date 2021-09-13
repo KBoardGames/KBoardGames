@@ -142,6 +142,8 @@ class FlxScrollbar extends FlxSpriteGroup
 	{
 		super( x, y);
 		
+		_track_color = 0xff111111; // dark gray;
+		
 		// MouseWheelMultiplier disabled because sometimes client uses two boxscroller and a wheel would scroll both at the same time.
 		_id = ID = id;
 		_viewPort = viewPort;	
@@ -163,8 +165,6 @@ class FlxScrollbar extends FlxSpriteGroup
 			_bg.scrollFactor.set(0, 0);
 			add( _bg );
 		}
-		
-		_track_color = FlxColor.GRAY;
 		
 		// if scrollarea is the one to the right, such as chatter, and height is small, so it is a horizontal scrollbar, then make the scrollbar black so it cannot be seen.
 		// this addresses a bug where two scrollbar areas shares the same scene, and then doing so, the first scrollbar area has a mirror horizontal scrollbar when the second scrollbar area is created.
@@ -204,7 +204,7 @@ class FlxScrollbar extends FlxSpriteGroup
 		
 		if (_id != ID) return;
 		
-		if (_stale || _auto_update_track == true)
+		if (_stale == true || _auto_update_track == true)
 		{
 			var barProportion:Float;
 			var scrolledProportion:Float;
@@ -212,6 +212,7 @@ class FlxScrollbar extends FlxSpriteGroup
 			if (_orientation == HORIZONTAL)
 			{
 				barProportion = FlxMath.bound( _track.width / _camera.content.width, _minProportion );
+				
 				_bar.makeGraphic( Std.int( _track.width * barProportion ), Std.int( _track.height ), _bar_color, true );
 			
 				if (_camera.content.width == _track.width)
@@ -224,6 +225,7 @@ class FlxScrollbar extends FlxSpriteGroup
 			else
 			{
 				barProportion = FlxMath.bound( _track.height / _camera.content.height, _minProportion );
+				
 				_bar.makeGraphic( Std.int( _track.width ), Std.int( _track.height * barProportion ), _bar_color, true );
 			
 				if (_camera.content.height == _track.height)
@@ -244,6 +246,7 @@ class FlxScrollbar extends FlxSpriteGroup
 	
 	override public function update(elapsed:Float)
 	{
+		// update the class if MessageBox is not displayed.
 		if (_id != ID) return;
 		
 		if (visible == false)
@@ -251,9 +254,6 @@ class FlxScrollbar extends FlxSpriteGroup
 			_doOnce = 0;
 			return;
 		}
-		
-				
-		updateScrollbar();
 		
 		var mousePosition = FlxG.mouse.getScreenPosition();
 		
@@ -264,16 +264,25 @@ class FlxScrollbar extends FlxSpriteGroup
 		&&  FlxG.mouse.x - HouseScrollMap._map_offset_x < Math.abs(_viewPort.x) + _viewPort.width 
 		&&  FlxG.mouse.y - HouseScrollMap._map_offset_y < _viewPort.height || _doOnce == 0 )
 		{
+			// remember the scroll location of the scrollbox when returning to the scene at this second condition.
 			if (FlxG.mouse.justPressed
 			&&	Reg2._boxScroller_is_scrolling == false
-			&&	Reg2._lobby_button_alpha == 0.3)
+			&&	Reg._messageId == 0
+			&&	Reg2._lobby_button_alpha == 0.3
+			|| _doOnce == 0
+			&&	Reg2._boxScroller_is_scrolling == false
+			&&	Reg._messageId == 0
+			&&	Reg2._lobby_button_alpha == 0.3
+			&& _id == 0
+			&& _id == ID)
 			{
 				// if _auto_update_track is false then chat and notation or something where content is added to the bottom of the boxscroller is used. since chat and notation has no horizontal bar we don't need this. besides, it stops an artifact bug.
 				if (_auto_update_track == false) 
-						_orientation = HORIZONTAL; // defualt to this.
+						_orientation = HORIZONTAL; // default to this.
 
 				// moving up / down.
 				if (FlxG.mouse.x - HouseScrollMap._map_offset_x > _viewPort.x + _scrollarea_horizontal_width
+				&&	Reg._messageId == 0
 				&&  FlxG.mouse.x - HouseScrollMap._map_offset_x < _viewPort.x + _viewPort.width - _scrollarea_horizontal_width
 				&&  FlxG.mouse.y - HouseScrollMap._map_offset_y > 0
 				&&  FlxG.mouse.y - HouseScrollMap._map_offset_y < FlxG.height)
@@ -281,48 +290,67 @@ class FlxScrollbar extends FlxSpriteGroup
 				
 				// get the location of the mouse when input click was made and pass that data to the drga/input start vars.
 				_dragStartedAt = mousePosition;
-				if (_orientation == HORIZONTAL)
+				
+				if (_orientation == HORIZONTAL) 
 				{
 					_dragStartedWhenBarWasAt = _bar.x;
-					_InputStartedAt = ActionInput.coordinateX();
-				} 
-		
+				}
+				
+				else
+				{
+					_dragStartedWhenBarWasAt = _bar.y;					
+				}
+			} 
+			
+			else if (_track.overlapsPoint( mousePosition )) 
+			{
+				_trackClickCountdown = 0.5;
+				
+				if (_orientation == HORIZONTAL) 
+				{
+					_dragStartedWhenBarWasAt = _bar.x;
+				}
+				
 				else
 				{
 					_dragStartedWhenBarWasAt = _bar.y;
-					_InputStartedAt = ActionInput.coordinateY();
 				}
 				
-				
-			}			
-			
+				tryToScrollPage = true;
+			}
 		}
-				
-		if (FlxG.mouse.pressed || _doOnce == 0)
+		
+		else if (FlxG.mouse.pressed || _doOnce == 0)
 		{
-			if (_ticks < 50) _ticks = RegFunctions.incrementTicks(_ticks, 60 / Reg._framerate);		
-		
 			_trackClickCountdown -= elapsed;
-		
-			// if clicked on the track
-			//if (_trackClickCountdown < 0 && !_bar.overlapsPoint(mousePosition) && _track.overlapsPoint(mousePosition)
-			//)
-			//tryToScrollPage = true;
+			
+			if (_trackClickCountdown < 0 && !_bar.overlapsPoint(mousePosition) && _track.overlapsPoint(mousePosition))
+				tryToScrollPage = true;
 		}
 		
 		if (_dragStartedAt != null) 
 		{
-			/*if (_orientation == HORIZONTAL) 
+			if (_orientation == HORIZONTAL) 
 			{
-				if (mousePosition.y < _camera.y)
+				if (mousePosition.y < (_camera.y + _camera.height / 2)) // allow 50% of height away before jumping back to original position
 					mousePosition.x = _dragStartedAt.x;
-			}*/
+					
+				_bar.x = FlxMath.bound( _dragStartedWhenBarWasAt + (mousePosition.x - _dragStartedAt.x), _track.x, _track.x + _track.width - _bar.width );
+			} 
 			
-			// call this function because an input was clicked on either the scrollable area, track or bar and now we need to move it.
+			else
+			{
+				// VERTICAL
+				if (mousePosition.x < (_camera.x + _camera.width / 2)) // allow 50% of width away before jumping back to original position
+					mousePosition.y = _dragStartedAt.y;
+					
+				_bar.y = FlxMath.bound( _dragStartedWhenBarWasAt + (mousePosition.y - _dragStartedAt.y), _track.y, _track.y + _track.height - _bar.height );
+			}
+			
 			updateViewScroll();
-		}
+		} 
 		
-		else if (tryToScrollPage)
+		else if (tryToScrollPage == true && _id == ID) 
 		{
 			/**
 			* Tries to scroll a whole viewport width/height toward wherever the mousedown on the track is.
@@ -332,91 +360,103 @@ class FlxScrollbar extends FlxSpriteGroup
 			* E.g. on a vertical scrollbar, if you click & hold below the bar, it scrolls down, but if, while still holding, you move to above the bar, nothing happens.
 			*/
 			var whichWayToScroll:Int = 0; // 0: don't; 1: positive along axis; 2: negative along axis
+			
 			if (_orientation == HORIZONTAL) 
 			{
-				if (_bar.x > _dragStartedWhenBarWasAt) { // scrolling right
+				if (_bar.x > _dragStartedWhenBarWasAt) 
+				{
+					// scrolling right
 					if (mousePosition.x > _bar.x + _bar.width) // and far enough right to scroll more
 						whichWayToScroll = 1;
 				}
 				
 				else if (_bar.x > _dragStartedWhenBarWasAt) 
-				{ // scrolling left
+				{
+					// scrolling left
 					if (mousePosition.x < _bar.x) // and far enough left to scroll more
 						whichWayToScroll = -1;
 				} 
 				
-				else { // first scroll...which way?
+				else 
+				{
+					// first scroll...which way?
 					if (mousePosition.x < _bar.x) // left of bar
 						whichWayToScroll = -1;
+					
 					else // either right of bar, or on the bar; but if on the bar, execution shouldn't reach here in the first place
 						whichWayToScroll = 1; // start scrolling right
 				}
 				
 				if (whichWayToScroll == 1)
 					_bar.x = FlxMath.bound(_bar.x + _bar.width, null, _track.x + _track.width - _bar.width);
-					
+				
 				else if (whichWayToScroll == -1)
 					_bar.x = FlxMath.bound(_bar.x - _bar.width, _track.x);
-					
 			} 
 			
 			else
 			{
 				// VERTICAL
-				if (_bar.y > _dragStartedWhenBarWasAt)
+				if (_bar.y > _dragStartedWhenBarWasAt) 
 				{
-					// scrolling down and far enough down to scroll more
-					if (mousePosition.y > _bar.y + _bar.height) 
+					// scrolling down
+					if (mousePosition.y > _bar.y + _bar.height) // and far enough down to scroll more
 						whichWayToScroll = 1;
-				}
+				} 
 				
-				else if (_bar.y > _dragStartedWhenBarWasAt) { // scrolling up
+				else if (_bar.y > _dragStartedWhenBarWasAt)
+				{
+					// scrolling up
 					if (mousePosition.y < _bar.y) // and far enough up to scroll more
 						whichWayToScroll = -1;
-				}
+				} 
 				
-				else 
+				else
 				{
 					// first scroll...which way?
 					if (mousePosition.y < _bar.y) // up of bar
 						whichWayToScroll = -1;
-					
-						else // either down of bar, or on the bar; but if on the bar, execution shouldn't reach here in the first place
+					else // either down of bar, or on the bar; but if on the bar, execution shouldn't reach here in the first place
 						whichWayToScroll = 1; // start scrolling down
 				}
 				
 				if (whichWayToScroll == 1)
 					_bar.y = FlxMath.bound(_bar.y + _bar.height, null, _track.y + _track.height - _bar.height);
-				
+			
 				else if (whichWayToScroll == -1)
 					_bar.y = FlxMath.bound(_bar.y - _bar.height, _track.y);
 			}
 			
 			if (whichWayToScroll != 0)
 				updateViewScroll();
-		} 		
-		
-		if (FlxG.mouse.wheel != 0)
-		{
-			if (_orientation == HORIZONTAL) 
-			{
-				_bar.x = FlxMath.bound(_bar.x - FlxG.mouse.wheel * _mouseWheelMultiplier, _track.x, _track.x + _track.width - _bar.width);
-			} 
-			else 
-			{ // VERTICAL
-				_bar.y = FlxMath.bound(_bar.y - FlxG.mouse.wheel * _mouseWheelMultiplier, _track.y, _track.y + _track.height - _bar.height);
-			}
-			
-			updateViewScrollWheel();
 		}
 		
-		trace(FlxG.mouse.wheel);
-				
-		if (RegHouse._at_House == false) updateScrollbar();		
+		// if mouse is within a region of a scrollbox then scroll up or down the page.
+		else if (FlxG.mouse.wheel != 0 
+		&&	_id == ID 
+		&&	_id == 0
+		&&	FlxG.mouse.x >= 0 
+		&&	FlxG.mouse.x < _viewPort.width
+		||	FlxG.mouse.wheel != 0 
+		&&	_id == ID
+		&& 	_id > 0
+		&&	FlxG.mouse.x >= _viewPort.x 
+		&&	FlxG.mouse.x <= 1400)
+		{
+			_bar.y = FlxMath.bound(_bar.y - FlxG.mouse.wheel * _mouseWheelMultiplier, _track.y, _track.y + _track.height - _bar.height);
+						
+			updateViewScroll();
+		}
+		
+		if (FlxG.mouse.justReleased)
+			_dragStartedAt = null;
+		
+		if (Reg._at_house == false) updateScrollbar();		
 	
 		if (_doOnce == 0) _dragStartedAt = null;
 
-		if (FlxG.mouse.pressed == false)
+		if (FlxG.mouse.pressed == false
+		&&	Reg._messageId == 0)
 		{
 			_ticks = 0;
 			_InputStartedAt = 0;
@@ -433,8 +473,7 @@ class FlxScrollbar extends FlxSpriteGroup
 		
 		super.update(elapsed);
 	}
-	
-	/**************************************************************************
+		/**************************************************************************
 	 * this bring the scrollable area and vertical bar to the botton of scene if the condition is true.
 	 */
 	private function updateScrollbar():Void
@@ -457,183 +496,37 @@ class FlxScrollbar extends FlxSpriteGroup
 	 */
 	public function updateViewScroll()
 	{
-		if (_id != ID) return;
-		
 		var scrolledProportion:Float;
-	
-		if (_orientation == HORIZONTAL) 
+		
+		if (_orientation == HORIZONTAL)
 		{
-			// if input clicked the second time and the area was already updated then do nothing.
 			if (_track.width == _bar.width)
 				scrolledProportion = 0;
-			else // how much the scrollable area should be scrolled.
+				
+			else
 				scrolledProportion = FlxMath.bound( (_bar.x - x) / (_track.width - _bar.width), 0, 1 );
-						
-			// used to scroll the area after the input was clicked.
-			if (_doOnce == 0)
-			{
-				_camera.scroll.x = _camera.content.x + (_camera.content.width - _track.width) * scrolledProportion;
-			}
-			
-			// if at scrollarea and tring to scroll left or right and not at the vertical scroll bar...
-			else if (!FlxG.mouse.overlaps(_track) && !FlxG.mouse.overlaps(_bar) 
-			&& 		 FlxG.mouse.pressed == true 
-			&&		 Reg2._lobby_button_alpha == 0.3
-			&&		 _ticks >= 40
-			&& 		 FlxG.mouse.x - HouseScrollMap._map_offset_x < _viewPort.x + _viewPort.width - 20 
-			&& 		 _track.height == 20 
-			&&		 _track.visible == true
-			)
-			{
-				Reg2._boxScroller_is_scrolling = true;
 				
-				if (FlxG.mouse.x - HouseScrollMap._map_offset_x > _viewPort.x
-				&&  FlxG.mouse.x - HouseScrollMap._map_offset_x < _viewPort.x + _scrollarea_horizontal_width && _camera.scroll.x + 10 >= 10)
-				_camera.scroll.x -= 10; // scroll left.
-				 
-				// bring scrollbar bar to left.	
-				else if (_camera.scroll.x > 0 && _camera.scroll.x < 10)
-					_camera.scroll.x = 0;
-			
-				else if (FlxG.mouse.x - HouseScrollMap._map_offset_x >= _viewPort.width - _scrollarea_horizontal_width 
-				&& 		 FlxG.mouse.x - HouseScrollMap._map_offset_x <= FlxG.width && _camera.scroll.x < _content_width - width - 10)
-					_camera.scroll.x += 10; // scroll right.
-				
-				else if (FlxG.mouse.x - HouseScrollMap._map_offset_x >= _viewPort.width - _scrollarea_horizontal_width) _camera.scroll.x = _content_width - width + _content_height_extra; // bring scrollbar bar to far right.
-						
-				// the bar needs to be updated when the boxscroller area is clicked. so if the center area of the boxscroller content is displayed, the bar need to be at the center area of the track. so we need to get the ratio between the boxscroller content and the track.
-				var _ratio:Float = _viewPort.width + _content_height_extra / _track.width;
-				var mousePosition2 = FlxG.mouse.getScreenPosition();
-				
-				// also, the bar positioned at the center of the track needs to be centered at that location, where as the bar at the top of the track needs its top part at that location. this ratio between then camera and the bar is the fix.
-				if (!_bar.overlapsPoint( mousePosition2 ) && !_track.overlapsPoint( mousePosition2 ))
-				{
-					_bar.x = FlxMath.bound((_camera.scroll.x / _ratio) * _track.width, _track.x, _track.x + _track.width - _bar.width - (_ratio / 50)) + _camera.scroll.x / (_ratio / 60) ; // not perfect but works for horizontal bar. maybe make another code line and base it on viewport.x
-				}
-				
-			}
-			
-			if (_camera.scroll.x < 0 ) _camera.scroll.x = 0;
+			_camera.scroll.x = _camera.content.x + (_camera.content.width - _track.width) * scrolledProportion;
 		} 
 		
-		else 
+		else
 		{
-			// if input clicked the second time and the area was already updated then do nothing.
-			if (_track.height == _bar.height)
-				scrolledProportion = 0;				
-			else // how much the scrollable area should be scrolled.
-				scrolledProportion = FlxMath.bound( (_bar.y - y) / (_track.height - _bar.height), 0, 1 );
-						
-			// used to scroll the area after the input was clicked.
-			if (_doOnce == 0)
-			{
-				_camera.scroll.y = _camera.content.y + (_camera.content.height - _track.height) * scrolledProportion;
-			}
-			
-			
-			// move scrollbar up and down.
-			// _scrollarea_horizontal_width is used for moving the scrollbar left and right. so we do use it here.
-			else if (!FlxG.mouse.overlaps(_track) 
-			&& !FlxG.mouse.overlaps(_bar)
-			&& FlxG.mouse.x - HouseScrollMap._map_offset_x > _viewPort.x + _scrollarea_horizontal_width 
-			&& FlxG.mouse.x - HouseScrollMap._map_offset_x < _track.x - _scrollarea_horizontal_width
-			)
-			{				
-				// 0.75 seconds for ticks.  ticks will only increase when input is pressed. when input is released the ticks will then be reset back to zero. so the scrolling of the scrollbar will only occur when input is pressed for 0.75 seconds or longer. 
-				if (FlxG.mouse.pressed == true && _ticks >= 40)
-				{
-					Reg2._boxScroller_is_scrolling = true;
-					
-					// if user clicked on the boxscroller area not the bar and that the click was located from the top of the boxscroller area to the top 16.6666% of boxscroller's height.
-					if (FlxG.mouse.y - HouseScrollMap._map_offset_y < FlxG.height / 6 && _camera.scroll.y > 40)
-						_camera.scroll.y -= 40;
-						
-					// if user clicked on the boxscroller area not the bar and that the click was located from the top 16.6666% of boxscroller height to the boxscroller 33.3333% area.
-					else if (FlxG.mouse.y - HouseScrollMap._map_offset_y >= FlxG.height / 6 
-					&& 		 FlxG.mouse.y - HouseScrollMap._map_offset_y < FlxG.height / 3 && _camera.scroll.y > 25)
-						_camera.scroll.y -= 25;
-						
-					// if user clicked on the boxscroller area not the bar and that the click was located from the top 33.3333% of boxscroller height to the boxscroller center area.
-					else if (FlxG.mouse.y - HouseScrollMap._map_offset_y >= FlxG.height / 3 
-					&& 		 FlxG.mouse.y - HouseScrollMap._map_offset_y < FlxG.height / 2 && _camera.scroll.y > 10)
-						_camera.scroll.y -= 10;
-						
-					//---------------------------
-					// here is the botton half of the boxscroller.
-					// if user clicked on the boxscroller area not the bar and that the click was located from the 50% from top of boxscroller to the 66.66666% location of the boxscroller's height.	
-					else if (FlxG.mouse.y - HouseScrollMap._map_offset_y >= FlxG.height / 2
-					&& 		 FlxG.mouse.y - HouseScrollMap._map_offset_y < FlxG.height / 1.5 && _camera.scroll.y < _content_height - height - 10 + _content_height_extra)
-						_camera.scroll.y += 10;
-						
-					// if user clicked on the boxscroller area not the bar and that the click was located from the 66.6666% from top of boxscroller to the 83.3333% location of the boxscroller's height.	
-					else if (FlxG.mouse.y - HouseScrollMap._map_offset_y >= FlxG.height / 1.5 
-					&& 		 FlxG.mouse.y - HouseScrollMap._map_offset_y < FlxG.height / 1.2 && _camera.scroll.y < _content_height - height - 25 + _content_height_extra)
-						_camera.scroll.y += 25;
-						
-					// if user clicked on the boxscroller area not the bar and that the click was located from the 83.3333% from top of boxscroller to the very button of the boxscroller.	
-					else if (FlxG.mouse.y - HouseScrollMap._map_offset_y >= FlxG.height / 1.2 
-					&&		 FlxG.mouse.y - HouseScrollMap._map_offset_y <= FlxG.height && _camera.scroll.y < _content_height - height - 40 + _content_height_extra)
-						_camera.scroll.y += 40;		
-				}
-			
-				
-					
-				// the bar needs to be updated when the boxscroller area is clicked. so if the center area of the boxscroller content is displayed, the bar need to be at the center area of the track. so we need to get the ratio between the boxscroller content and the track.
-				var _ratio:Float = _content_height + _content_height_extra / _track.height;
-				var mousePosition2 = FlxG.mouse.getScreenPosition();
-						
-				// also, when viewing the boxscroller at the house, an additional value of _content_height_extra needs to be added to it so that the bottom of the boxscroller displays the last furniture item.
-				//for some reason, when that value is greater than _content_height_extra we need a slightly different calulation here so that the bar is updated and displayed at the track correctly when the boxscroller is clicked. without this extra value, when viewing the boxscroller, the bar would be displayed at the end of the track before the end of the boxscroller content is reached.
-				// also, the bar positioned at the center of the track needs to be centered at that location, where as the bar at the top of the track needs its top part at that location. this ratio between then camera and the bar is the fix.
-				if (!_bar.overlapsPoint( mousePosition2 ) && !_track.overlapsPoint( mousePosition2 ))
-				{
-					if (_content_height_extra > 0)
-						_bar.y = FlxMath.bound((_camera.scroll.y / _ratio) * _track.height - (_camera.scroll.y / _ratio) * _bar.height, _track.y, _track.y + _track.height - _bar.height );
-					else
-						_bar.y = FlxMath.bound((_camera.scroll.y / _ratio) * _track.height, _track.y, _track.y + _track.height - _bar.height );
-				}
-				
-				// snap the scrollbar track to the top or button of the scrollarea but only if bar is close to the end of the top or bottom of the scrollarea.
-				if (FlxG.mouse.y - HouseScrollMap._map_offset_y >= 0 && FlxG.mouse.y - HouseScrollMap._map_offset_y <= FlxG.height / 2)
-				{
-					if (_camera.scroll.y < 0 ) _camera.scroll.y = 0;
-					
-					// bring scrollbar bar to top.	
-					if (_camera.scroll.y < 40) _camera.scroll.y = 0;
-				}
-				
-				else
-				{
-					// bring scrollbar bar to the bottom/.	
-					if (_camera.scroll.y + 40 > _content_height - height + _content_height_extra) 
-						_camera.scroll.y = _content_height - height + _content_height_extra; 
-				}				
-			}
-		}
-	}
-	
-	public function updateViewScrollWheel() {
-		var scrolledProportion:Float;
-		if (_orientation == HORIZONTAL) {
-			if (_track.width == _bar.width)
-				scrolledProportion = 0;
-			else
-				scrolledProportion = FlxMath.bound( (_bar.x - x) / (_track.width - _bar.width), 0, 1 );
-			_camera.scroll.x = _camera.content.x + (_camera.content.width - _track.width) * scrolledProportion;
-		} else {
 			if (_track.height == _bar.height)
 				scrolledProportion = 0;
+				
 			else
 				scrolledProportion = FlxMath.bound( (_bar.y - y) / (_track.height - _bar.height), 0, 1 );
+				
 			_camera.scroll.y = _camera.content.y + (_camera.content.height - _track.height) * scrolledProportion;
 		}
 	}
 	
 	override private function set_width(Value:Float):Float 
 	{
-		if (_track != null && _track.width != Value) 
+		if (_track != null && _track.width != Value)
 		{
-			_track.makeGraphic( Std.int( Value ), Std.int( height ), _track_color, true );
+			_track.makeGraphic( Std.int( Value ), Std.int( height ), FlxColor.add( _track_color, _track_color ), true );
+			
 			_stale = true;
 		}
 		
@@ -642,9 +535,10 @@ class FlxScrollbar extends FlxSpriteGroup
 	
 	override private function set_height(Value:Float):Float 
 	{
-		if (_track != null && _track.height != Value) 
+		if (_track != null && _track.height != Value)
 		{
-			_track.makeGraphic( Std.int( width ), Std.int( Value ), _track_color, true );
+			_track.makeGraphic( Std.int( width ), Std.int( Value ), FlxColor.add( _track_color, _track_color ), true );
+		
 			_stale = true;
 		}
 		
@@ -663,7 +557,7 @@ class FlxScrollbar extends FlxSpriteGroup
 	
 	override private function set_y(Value:Float):Float 
 	{
-		if (_track != null && y != Value) 
+		if (_track != null && y != Value)
 		{
 			_stale = true;
 		}
@@ -671,36 +565,33 @@ class FlxScrollbar extends FlxSpriteGroup
 		return super.set_y(Value);
 	}
 	
-	override private function set_visible(value:Bool):Bool
-	{		
-		if (visible != value)
+	override private function set_visible(value:Bool):Bool 
+	{
+		if (visible != value) 
 		{
-			if (visible == false)
+			if (visible == false) 
 			{
 				// becoming visible: make sure we're on top
-				for ( piece in [_track, _bar] )
+				for ( piece in [_track, _bar] ) 
 				{
 					FlxG.state.remove( piece );
 					FlxG.state.add( piece );
 				}
 			}
-			
 			return super.set_visible( value );
-		} 
+		}
 		
 		else return value;
 	}
 	
-	public function forceRedraw() 
+	public function forceRedraw()
 	{
-		if (_id != ID) return;
-		
 		if (visible) _stale = true;
 	}
 }
 
-enum FlxScrollbarOrientation 
+enum FlxScrollbarOrientation
 {
-	VERTICAL;
+	VERTICAL; 
 	HORIZONTAL;
 }

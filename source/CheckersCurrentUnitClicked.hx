@@ -100,9 +100,17 @@ trace("Reg._checkersIsThisFirstMove " + Reg._checkersIsThisFirstMove);
 							&&  RegTypedef._dataTournaments._move_piece == true)
 							{
 								// a piece that has not been clicked at this game turn.
-								if (Reg._checkersUniquePieceValue[yy][xx] == 0 && Reg._checkersFoundPieceToJumpOver == false && Reg._gameHost == true && ActionInput.overlaps(Reg._groupPlayer1) 
+								if (Reg._checkersUniquePieceValue[yy][xx] == 0
+								&& Reg._checkersFoundPieceToJumpOver == false
+								&& Reg._gameHost == true 
+								&& ActionInput.overlaps(Reg._groupPlayer1)
+								&&	RegTriggers._buttons_set_not_active == false 
 								// not been clicked for a game turn.
-								|| Reg._checkersUniquePieceValue[yy][xx] == 0 && Reg._checkersFoundPieceToJumpOver == false && Reg._gameHost == false && ActionInput.overlaps(Reg._groupPlayer2)
+								|| Reg._checkersUniquePieceValue[yy][xx] == 0
+								&& Reg._checkersFoundPieceToJumpOver == false
+								&& Reg._gameHost == false
+								&& ActionInput.overlaps(Reg._groupPlayer2)
+								&&	RegTriggers._buttons_set_not_active == false
 								// if true then this piece can jump over the other player's piece.
 								|| Reg._checkersFoundPieceToJumpOver == true && Reg._checkersIsThisFirstMove == true && Reg._checkersUniquePieceValue[yy][xx] == 1 && Reg._gameHost == true && ActionInput.overlaps(Reg._groupPlayer1) 
 								

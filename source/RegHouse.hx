@@ -40,12 +40,7 @@ class RegHouse
 	 * height of frame.
 	 */
 	public static var _item_animation_height:Array<Int> = []; 
-			
-	/******************************
-	 * true if at house.
-	 */
-	public static var _at_House:Bool = false;
-	
+		
 	/******************************
 	 * this value refers to the button that is toggled.
 	 * 0:furniture get, 1:furniture put, 2:foundation put.
@@ -385,7 +380,7 @@ class RegHouse
 		_item_animation_height[37] = 98;
 		_item_animation_height[38] = 93;
 		
-		_at_House = false;
+		Reg._at_house = false;
 		_house_main_menu_button_number = 0;		
 		
 		_namesPurchased.splice(0, _namesPurchased.length);

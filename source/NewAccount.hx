@@ -55,29 +55,26 @@ class NewAccount extends FlxGroup
 		_gameOptions.scrollFactor.set();
 		add(_gameOptions);
 		
-		_button_b1 = new ButtonToggleFlxState(_gameOptions.x + _gameOptions.textField.width + 15, 122, 1, "Beginner", 200, 35, Reg._font_size, 0xFFCCFF33, 0, chess_skill_selected.bind(1), 0xFF000044, false);
-		_button_b1.color = 0xFF005500;
+		_button_b1 = new ButtonToggleFlxState(_gameOptions.x + _gameOptions.textField.width + 15, 122, 1, "Beginner", 200, 35, Reg._font_size, RegCustom._button_text_color, 0, chess_skill_selected.bind(1), RegCustom._button_color, false);
 		_button_b1.has_toggle = true;
 		_button_b1.set_toggled(true);
 		_button_b1.label.font = Reg._fontDefault;
 		add(_button_b1);
 		
-		_button_b2 = new ButtonToggleFlxState(_button_b1.x + _button_b1.label.textField.width + 15, 122, 2, "Intermediate", 200, 35, Reg._font_size, 0xFFCCFF33, 0, chess_skill_selected.bind(2), 0xFF000044, false);
-		_button_b2.color = 0xFF550000;
+		_button_b2 = new ButtonToggleFlxState(_button_b1.x + _button_b1.label.textField.width + 15, 122, 2, "Intermediate", 200, 35, Reg._font_size, RegCustom._button_text_color, 0, chess_skill_selected.bind(2), RegCustom._button_color, false);
 		_button_b2.label.font = Reg._fontDefault;
 		_button_b2.has_toggle = true;
 		_button_b2.set_toggled(false);
 		add(_button_b2);
 		
-		_button_b3 = new ButtonToggleFlxState(_button_b2.x + _button_b2.label.textField.width + 15, 122, 3, "Advance", 200, 35, Reg._font_size, 0xFFCCFF33, 0, chess_skill_selected.bind(3), 0xFF000044, false);
-		_button_b3.color = 0xFF550000;
+		_button_b3 = new ButtonToggleFlxState(_button_b2.x + _button_b2.label.textField.width + 15, 122, 3, "Advance", 200, 35, Reg._font_size, RegCustom._button_text_color, 0, chess_skill_selected.bind(3), RegCustom._button_color, false);
 		_button_b3.label.font = Reg._fontDefault;
 		_button_b3.has_toggle = true;
 		_button_b3.set_toggled(false);
 		add(_button_b3);
 		
 		// ButtonGeneralNetworkNo is needed here.
-		var _close = new ButtonGeneralNetworkNo(30, FlxG.height - 40, "Save", 150 + 15, 35, Reg._font_size, 0xFFCCFF33, 0, saveAllConfigurations, 0xFF000044, false, 1);
+		var _close = new ButtonGeneralNetworkNo(30, FlxG.height - 40, "Save", 150 + 15, 35, Reg._font_size, RegCustom._button_text_color, 0, saveAllConfigurations, RegCustom._button_color, false, 1);
 		_close.label.font = Reg._fontDefault;
 		_close.screenCenter(X);
 		#if html5
@@ -119,15 +116,12 @@ class NewAccount extends FlxGroup
 	
 	private function set_chess_elo_button_toggle():Void
 	{
-		_button_b1.color = 0xFF550000;
 		_button_b1.set_toggled(false);
 		_button_b1.has_toggle = false;
 		
-		_button_b2.color = 0xFF550000;
 		_button_b2.set_toggled(false);
 		_button_b2.has_toggle = false;
 		
-		_button_b3.color = 0xFF550000;
 		_button_b3.set_toggled(false);
 		_button_b3.has_toggle = false;
 	}
@@ -140,21 +134,18 @@ class NewAccount extends FlxGroup
 		{
 			case 1:
 			{
-				_button_b1.color = 0xFF005500;
 				_button_b1.set_toggled(true);
 				_button_b1.has_toggle = true;
 			}
 			
 			case 2:
 			{
-				_button_b2.color = 0xFF005500;
 				_button_b2.set_toggled(true);
 				_button_b2.has_toggle = true;
 			}
 			
 			case 3:
 			{
-				_button_b3.color = 0xFF005500;
 				_button_b3.set_toggled(true);
 				_button_b3.has_toggle = true;
 			}

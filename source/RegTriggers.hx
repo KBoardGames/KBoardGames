@@ -136,9 +136,12 @@ class RegTriggers
 	public static var _historyFastForwardSpectatorWatching:Bool = false;
 	
 	public static var _makeMiscellaneousMenuClassActive:Bool = false;
-	public static var _makeMiscellaneousMenuClassNotActive:Bool = false;
-	
+	public static var _makeMiscellaneousMenuClassNotActive:Bool = false;	
 	public static var _miscellaneousMenuOutputClassActive:Bool = false;
+	
+	public static var _make_daily_quests_not_active:Bool = false;
+	public static var _make_tournaments_not_active:Bool = false;
+	public static var _make_leaderboards_not_active:Bool = false;
 	
 	/******************************
 	 * miscellaneousMenu is closing state.
@@ -269,6 +272,9 @@ class RegTriggers
 		_makeMiscellaneousMenuClassActive = false;
 		_makeMiscellaneousMenuClassNotActive = false;		
 		_miscellaneousMenuOutputClassActive = false;
+		_make_daily_quests_not_active = false;
+		_make_tournaments_not_active = false;
+		_make_leaderboards_not_active = false;
 		_returnToLobbyMakeButtonsActive = false;
 		_houseDrawSpritesDoNotEnter = false;
 		_new_the_house = false;

@@ -269,7 +269,7 @@ class EventSchedule extends FlxState
 		// fill the screen with a random color.
 		var _background_scene_color = new FlxSprite();
 		_background_scene_color.makeGraphic(FlxG.width,FlxG.height,FlxColor.WHITE);
-		_background_scene_color.color = FlxColor.fromHSB(FlxG.random.int(1, 360), 0.8, 0.25);
+		_background_scene_color.color = FlxColor.fromHSB(FlxG.random.int(1, 360), 0.8, RegCustom._background_brightness);
 		_background_scene_color.scrollFactor.set(0, 0);
 		add(_background_scene_color);
 		
@@ -310,7 +310,7 @@ class EventSchedule extends FlxState
 		calendarOutput();		
 		calendarDayImageOutput();		
 			
-		_backwards = new ButtonGeneralNetworkNo(117, 0, "<", 80, 35, 22, 0xFFCCFF33, 0, calendarBackward);
+		_backwards = new ButtonGeneralNetworkNo(117, 0, "<", 80, 35, 22, RegCustom._button_text_color, 0, calendarBackward);
 		_backwards.label.font = Reg._fontDefault;
 		_backwards.label.size = 22;
 		_backwards.y = 20;
@@ -318,13 +318,13 @@ class EventSchedule extends FlxState
 		_backwards.active = false;
 		add(_backwards);
 		
-		_forwards = new ButtonGeneralNetworkNo(222, 0, ">", 80, 35, 22, 0xFFCCFF33, 0, calendarForward);
+		_forwards = new ButtonGeneralNetworkNo(222, 0, ">", 80, 35, 22, RegCustom._button_text_color, 0, calendarForward);
 		_forwards.label.font = Reg._fontDefault;
 		_forwards.label.size = 22;
 		_forwards.y = 20;
 		add(_forwards);
 		
-		_title = new ButtonGeneralNetworkNo(FlxG.width - 300, 0, "To Title", 170 + 15, 35, Reg._font_size, 0xFFCCFF33, 0, backToTitle);
+		_title = new ButtonGeneralNetworkNo(FlxG.width - 300, 0, "To Title", 170 + 15, 35, Reg._font_size, RegCustom._button_text_color, 0, backToTitle);
 		_title.label.font = Reg._fontDefault;
 		_title.y = 20;
 		add(_title);
