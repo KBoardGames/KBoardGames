@@ -269,7 +269,7 @@ class EventSchedule extends FlxState
 		// fill the screen with a random color.
 		var _background_scene_color = new FlxSprite();
 		_background_scene_color.makeGraphic(FlxG.width,FlxG.height,FlxColor.WHITE);
-		_background_scene_color.color = FlxColor.fromHSB(FlxG.random.int(1, 360), 0.8, RegCustom._background_brightness);
+		_background_scene_color.color = FlxColor.fromHSB(FlxG.random.int(1, 360), 0.8, RegCustom._background_brightness[Reg._tn]);
 		_background_scene_color.scrollFactor.set(0, 0);
 		add(_background_scene_color);
 		
@@ -310,7 +310,7 @@ class EventSchedule extends FlxState
 		calendarOutput();		
 		calendarDayImageOutput();		
 			
-		_backwards = new ButtonGeneralNetworkNo(117, 0, "<", 80, 35, 22, RegCustom._button_text_color, 0, calendarBackward);
+		_backwards = new ButtonGeneralNetworkNo(117, 0, "<", 80, 35, 22, RegCustom._button_text_color[Reg._tn], 0, calendarBackward);
 		_backwards.label.font = Reg._fontDefault;
 		_backwards.label.size = 22;
 		_backwards.y = 20;
@@ -318,13 +318,13 @@ class EventSchedule extends FlxState
 		_backwards.active = false;
 		add(_backwards);
 		
-		_forwards = new ButtonGeneralNetworkNo(222, 0, ">", 80, 35, 22, RegCustom._button_text_color, 0, calendarForward);
+		_forwards = new ButtonGeneralNetworkNo(222, 0, ">", 80, 35, 22, RegCustom._button_text_color[Reg._tn], 0, calendarForward);
 		_forwards.label.font = Reg._fontDefault;
 		_forwards.label.size = 22;
 		_forwards.y = 20;
 		add(_forwards);
 		
-		_title = new ButtonGeneralNetworkNo(FlxG.width - 300, 0, "To Title", 170 + 15, 35, Reg._font_size, RegCustom._button_text_color, 0, backToTitle);
+		_title = new ButtonGeneralNetworkNo(FlxG.width - 300, 0, "To Title", 170 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, backToTitle);
 		_title.label.font = Reg._fontDefault;
 		_title.y = 20;
 		add(_title);
@@ -341,7 +341,7 @@ class EventSchedule extends FlxState
 				if (ActionInput.overlaps(_bgEventRow1Number[i])
 				&&  _textEventRow1Number[i].text != "")
 				{
-					if (RegCustom._enable_sound == true
+					if (RegCustom._sound_enabled[Reg._tn] == true
 					&&  Reg2._boxScroller_is_scrolling == false)
 						FlxG.sound.play("click", 1, false);
 					openSubState(new GameMessageEvent(_textEventRow1Number[i].text));
@@ -350,7 +350,7 @@ class EventSchedule extends FlxState
 				if (ActionInput.overlaps(_bgEventRow2Number[i])
 				&&  _textEventRow2Number[i].text != "")
 				{
-					if (RegCustom._enable_sound == true
+					if (RegCustom._sound_enabled[Reg._tn] == true
 					&&  Reg2._boxScroller_is_scrolling == false)
 						FlxG.sound.play("click", 1, false);
 					openSubState(new GameMessageEvent(_textEventRow2Number[i].text));
@@ -359,7 +359,7 @@ class EventSchedule extends FlxState
 				if (ActionInput.overlaps(_bgEventRow3Number[i])
 				&&  _textEventRow3Number[i].text != "")
 				{
-					if (RegCustom._enable_sound == true
+					if (RegCustom._sound_enabled[Reg._tn] == true
 					&&  Reg2._boxScroller_is_scrolling == false)
 						FlxG.sound.play("click", 1, false);
 					openSubState(new GameMessageEvent(_textEventRow3Number[i].text));
@@ -976,4 +976,4 @@ class EventSchedule extends FlxState
 			
 		}
 	}
-}//
+}//

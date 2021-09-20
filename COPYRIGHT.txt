@@ -1,0 +1,1 @@
+This client is copyright 2021 by kboardgames.com. This game was programmed using the haxeflixel lib.

@@ -141,7 +141,7 @@ class MessageBoxTradeProposal extends FlxGroup
 		_title.visible = false;
 		add(_title);
 				
-		_button4 = new ButtonUnique((FlxG.width - 180) / 2 + 10, (FlxG.height - 343) / 2 + 249, "OK. ", 160 + 15, 35, 20, RegCustom._button_color, 0, output);
+		_button4 = new ButtonUnique((FlxG.width - 180) / 2 + 10, (FlxG.height - 343) / 2 + 249, "OK. ", 160 + 15, 35, 20, RegCustom._button_color[Reg._tn], 0, output);
 		_button4.label.font = Reg._fontDefault;
 		_button4.visible = false;
 		if (_setButtonActive == false) _button4.active = false;
@@ -171,21 +171,21 @@ class MessageBoxTradeProposal extends FlxGroup
 		if (_timeDo == null)
 		_timeDo = new Timer(1000); // fire every second.
 		
-		_buttonMessageOK = new ButtonUnique((FlxG.width - 1204) / 2 + 10, (FlxG.height - 727) / 2 + 252, "OK. ", 160 + 15, 35, 20, RegCustom._button_color, 0, messageWasRead);
+		_buttonMessageOK = new ButtonUnique((FlxG.width - 1204) / 2 + 10, (FlxG.height - 727) / 2 + 252, "OK. ", 160 + 15, 35, 20, RegCustom._button_color[Reg._tn], 0, messageWasRead);
 		_buttonMessageOK.label.font = Reg._fontDefault;
 		_buttonMessageOK.visible = false;
 		if (_setButtonActive == false) _buttonMessageOK.active = false;
 		_buttonMessageOK.scrollFactor.set(0, 0);
 		add(_buttonMessageOK);
 		
-		_button5 = new ButtonUnique((FlxG.width - 1204) / 2 - 60, (FlxG.height - 727) / 2 + 252, "D: " + _textForYesButton + ". ", 135 + 15, 35, 20, RegCustom._button_color, 0, messageWasRead);
+		_button5 = new ButtonUnique((FlxG.width - 1204) / 2 - 60, (FlxG.height - 727) / 2 + 252, "D: " + _textForYesButton + ". ", 135 + 15, 35, 20, RegCustom._button_color[Reg._tn], 0, messageWasRead);
 		_button5.label.font = Reg._fontDefault;
 		_button5.visible = false;
 		if (_setButtonActive == false) _button5.active = false;
 		_button5.scrollFactor.set(0, 0);
 		add(_button5);	
 		
-		_button6 = new ButtonUnique((FlxG.width - 1204) / 2 + 105, (FlxG.height - 727) / 2 + 252, "F: " + _textForNoButton + ". ", 135 + 15, 35, 20, RegCustom._button_color, 0, cancelWasPressed);
+		_button6 = new ButtonUnique((FlxG.width - 1204) / 2 + 105, (FlxG.height - 727) / 2 + 252, "F: " + _textForNoButton + ". ", 135 + 15, 35, 20, RegCustom._button_color[Reg._tn], 0, cancelWasPressed);
 		_button6.label.font = Reg._fontDefault;
 		_button6.visible = false;
 		if (_setButtonActive == false) _button6.active = false;

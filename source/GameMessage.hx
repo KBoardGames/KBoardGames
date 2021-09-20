@@ -22,7 +22,7 @@ package;
  * general message. its a blue background that can be closed when time expires or from a mouse button click.
  * @author kboardgames.com
  */
-class GameMessage extends FlxGroup
+class GameMessage extends FlxSubState
 {		
 	/******************************
 	 * the message.
@@ -41,9 +41,10 @@ class GameMessage extends FlxGroup
 		add(background);
 		
 		var background2 = new FlxSprite(0, 0);
-		background2.makeGraphic(650, 275, 0xBB000066);
+		background2.makeGraphic(630, 275, 0xBB000066);
 		background2.scrollFactor.set(0, 0);	
 		background2.screenCenter(XY);
+		background2.x -= 20;
 		add(background2);	
 					
 		var _text:FlxText = new FlxText(0, FlxG.height / 2 -75, 0, Reg._gameMessage);
@@ -62,8 +63,11 @@ class GameMessage extends FlxGroup
 	
 	override public function update(elapsed:Float):Void 
 	{
-		if (ActionInput.justPressed() == true)
+		if (FlxG.mouse.pressed == true)
+		{
 			visible = false;
+			close();
+		}
 		
 		super.update(elapsed);
 	}	
@@ -75,12 +79,8 @@ class GameMessage extends FlxGroup
 	
 	private function closeMessage(i:FlxTimer):Void
 	{
-		new FlxTimer().start(1, closeSubstate, 1);
-	}
-	
-	private function closeSubstate(i:FlxTimer):Void
-	{
-		visible = false;			
+		visible = false;
+		close();
 	}
 
 }

@@ -93,7 +93,7 @@ class Leaderboards extends FlxGroup
 				if (RegTypedef._dataLeaderboards._username == Std.string(_lb_users[(i-1)]))
 				{
 					var slotBox = new FlxSprite(0, 0);
-					slotBox.makeGraphic(FlxG.width - 60, 55, RegCustom._button_color);		
+					slotBox.makeGraphic(FlxG.width - 60, 55, RegCustom._button_color[Reg._tn]);		
 					slotBox.setPosition(20, 120 + (i * 70)); 
 					slotBox.scrollFactor.set(0, 0);
 					_group.add(slotBox);

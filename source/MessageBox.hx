@@ -142,7 +142,7 @@ class MessageBox extends FlxGroup
 		add(_title);
 		
 		if (_button1 != null) _button1.destroy();
-		_button1 = new ButtonAlwaysActiveNetworkYes(Reg2._messageBox_x + Reg2._button1_x, Reg2._messageBox_y + Reg2._button1_y + 5, "X", 45, 35, 20, RegCustom._button_text_color, 0, buttonX, 0xFFCC0000, false);
+		_button1 = new ButtonAlwaysActiveNetworkYes(Reg2._messageBox_x + Reg2._button1_x, Reg2._messageBox_y + Reg2._button1_y + 5, "X", 45, 35, 20, RegCustom._button_text_color[Reg._tn], 0, buttonX, 0xFFCC0000, false);
 		_button1.visible = false;
 		_button1.scrollFactor.set(0, 0);
 		_button1.label.font = Reg._fontDefault;
@@ -171,7 +171,7 @@ class MessageBox extends FlxGroup
 		_timeDo = new Timer(1000); // fire every second.
 		
 		if (_buttonMessageOK != null) _buttonMessageOK.destroy();
-		_buttonMessageOK = new ButtonAlwaysActiveNetworkYes(Reg2._messageBox_x + Reg2._buttonMessageOK_x, Reg2._messageBox_y + Reg2._buttonMessageOK_y + 5, "OK", 160 + 15, 35, 20, 0xffffffff, 0, messageWasRead, RegCustom._button_color);
+		_buttonMessageOK = new ButtonAlwaysActiveNetworkYes(Reg2._messageBox_x + Reg2._buttonMessageOK_x, Reg2._messageBox_y + Reg2._buttonMessageOK_y + 5, "OK", 160 + 15, 35, 20, 0xffffffff, 0, messageWasRead, RegCustom._button_color[Reg._tn]);
 		_buttonMessageOK.label.font = Reg._fontDefault;
 		_buttonMessageOK.visible = false;
 		if (_setButtonActive == false) _buttonMessageOK.active = false;
@@ -179,7 +179,7 @@ class MessageBox extends FlxGroup
 		add(_buttonMessageOK);
 		
 		if (_button5 != null) _button5.destroy();
-		_button5 = new ButtonAlwaysActiveNetworkYes(Reg2._messageBox_x + Reg2._button5_x, Reg2._messageBox_y + Reg2._button5_y + 5, _textForYesButton, 135 + 15, 35, 20, 0xffffffff, 0, messageWasRead, RegCustom._button_color);
+		_button5 = new ButtonAlwaysActiveNetworkYes(Reg2._messageBox_x + Reg2._button5_x, Reg2._messageBox_y + Reg2._button5_y + 5, _textForYesButton, 135 + 15, 35, 20, 0xffffffff, 0, messageWasRead, RegCustom._button_color[Reg._tn]);
 		_button5.label.font = Reg._fontDefault;
 		_button5.visible = false;
 		if (_setButtonActive == false) _button5.active = false;
@@ -187,7 +187,7 @@ class MessageBox extends FlxGroup
 		add(_button5);	
 		
 		if (_button6 != null) _button6.destroy();
-		_button6 = new ButtonAlwaysActiveNetworkYes(Reg2._messageBox_x + Reg2._button6_x, Reg2._messageBox_y + Reg2._button6_y + 5, _textForNoButton, 135 + 15, 35, 20, 0xffffffff, 0, cancelWasPressed, RegCustom._button_color);
+		_button6 = new ButtonAlwaysActiveNetworkYes(Reg2._messageBox_x + Reg2._button6_x, Reg2._messageBox_y + Reg2._button6_y + 5, _textForNoButton, 135 + 15, 35, 20, 0xffffffff, 0, cancelWasPressed, RegCustom._button_color[Reg._tn]);
 		_button6.label.font = Reg._fontDefault;
 		_button6.visible = false;
 		if (_setButtonActive == false) _button6.active = false;
@@ -309,7 +309,7 @@ class MessageBox extends FlxGroup
 			Reg._yesNoKeyPressValueAtMessage = 1; // ok key was pressed.
 			
 			// button does not fire when this code is in the button class.
-			if (RegCustom._enable_sound == true
+			if (RegCustom._sound_enabled[Reg._tn] == true
 			&&  Reg2._boxScroller_is_scrolling == false)
 				FlxG.sound.play("click", 1, false);
 				
@@ -380,7 +380,7 @@ class MessageBox extends FlxGroup
 			//Reg._buttonCodeValues = "";
 			
 			// button does not fire when this code is in the button class.
-			if (RegCustom._enable_sound == true
+			if (RegCustom._sound_enabled[Reg._tn] == true
 			&&  Reg2._boxScroller_is_scrolling == false)
 				FlxG.sound.play("click", 1, false);
 				
@@ -399,7 +399,7 @@ class MessageBox extends FlxGroup
 			FlxG.mouse.enabled = true;
 			
 			// button does not fire when this code is in the button class.
-			if (RegCustom._enable_sound == true
+			if (RegCustom._sound_enabled[Reg._tn] == true
 			&&  Reg2._boxScroller_is_scrolling == false)
 				FlxG.sound.play("click", 1, false);
 				

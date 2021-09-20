@@ -2,7 +2,7 @@
 <project>
 	<!-- _________________________ Application Settings _________________________ -->
 
-	<app title="K Board Games" file="boardGames" main="Main" company="kboardgames.com" />
+	<app title="K Board Games" file="KBoardGames" main="Main" company="kboardgames" />
 
 	<!--The flixel preloader is not accurate in Chrome. You can use it regularly if you embed the swf into a html file
 		or you can set the actual size of your file manually at "FlxPreloaderBase-onUpdate-bytesTotal"-->
@@ -58,6 +58,7 @@
 	<assets if="html5" exclude="*.mp3" path="assets" embed="true"/>
 	
 	<assets path="assets/sound" embed="true" rename="sound" unless="flash">
+		<sound path="buzz.ogg"  id="buzz"/>
 		<sound path="click.ogg" id="click"/>
 	</assets>
 	
@@ -76,7 +77,8 @@
 	<haxelib name="flixel" />
 	<haxelib name="flixel-addons" />
 	<!--<haxelib name="msgpack-haxe"/>-->
-
+	<haxelib name="yaml" />
+	
 	<!--<haxedef name="openfl-legacy" />-->
 	
 	<!-- 

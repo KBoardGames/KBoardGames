@@ -269,13 +269,13 @@ class SceneCreateRoom extends FlxState
 	
 	public function amountOfPlayersForGame():Void
 	{
-		_minusTotalPlayersForGame = new ButtonGeneralNetworkNo(423 - _offsetX - _offsetX2, 130 + (1 * 70 + 1) + _offset_y, "-", 40, 40, Reg._font_size, RegCustom._button_text_color, 0, playersTotalToggleMinus);
+		_minusTotalPlayersForGame = new ButtonGeneralNetworkNo(423 - _offsetX - _offsetX2, 130 + (1 * 70 + 1) + _offset_y, "-", 40, 40, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, playersTotalToggleMinus);
 		_minusTotalPlayersForGame.offset.y = 2;
 		_minusTotalPlayersForGame.label.font = Reg._fontDefault;
 		_minusTotalPlayersForGame.label.bold = true;
 		add(_minusTotalPlayersForGame);
 		
-		_plusTotalPlayersForGame = new ButtonGeneralNetworkNo(513 - _offsetX - _offsetX2, 130 + (1 * 70 + 1) + _offset_y, "+", 40, 40, Reg._font_size, RegCustom._button_text_color, 0, playersTotalTogglePlus);		
+		_plusTotalPlayersForGame = new ButtonGeneralNetworkNo(513 - _offsetX - _offsetX2, 130 + (1 * 70 + 1) + _offset_y, "+", 40, 40, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, playersTotalTogglePlus);		
 		_plusTotalPlayersForGame.offset.y = 2;
 		_plusTotalPlayersForGame.label.font = Reg._fontDefault;	
 		_plusTotalPlayersForGame.label.bold = true;
@@ -448,7 +448,7 @@ class SceneCreateRoom extends FlxState
 			if (ActionInput.overlaps(_group_sprite[i]) == true
 			&&  ActionInput.justPressed() == true)
 			{
-				if (RegCustom._enable_sound == true
+				if (RegCustom._sound_enabled[Reg._tn] == true
 				&&  Reg2._boxScroller_is_scrolling == false)
 					FlxG.sound.play("click", 1, false);
 			}
@@ -524,7 +524,7 @@ class SceneCreateRoom extends FlxState
 		
 			
 		RegTypedef._dataPlayers._usernamesDynamic[1] = Reg2._offline_cpu_host_name2;
-		RegTypedef._dataPlayers._avatarNumber[1] = RegCustom._profile_avatar_number2;
+		RegTypedef._dataPlayers._avatarNumber[1] = RegCustom._profile_avatar_number2[Reg._tn];
 		
 	}
 	

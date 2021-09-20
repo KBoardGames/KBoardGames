@@ -84,7 +84,7 @@ class SceneWaitingRoom extends FlxState
 		RegFunctions.fontsSharpen();
 		
 		_color_ra = FlxG.random.int(1, 335);
-		_color = FlxColor.fromHSB(_color_ra, 0.75, RegCustom._background_brightness);
+		_color = FlxColor.fromHSB(_color_ra, 0.75, RegCustom._background_brightness[Reg._tn]);
 				
 		// creates the invite table and also sends the invite request to the server.
 		__online_players_list = new OnlinePlayersList(this);
@@ -95,7 +95,7 @@ class SceneWaitingRoom extends FlxState
 		// background underneath the stats.
 		bodyBg = new FlxSprite(0, FlxG.height / 1.65 + 85);
 		bodyBg.makeGraphic(FlxG.width - 370 - 20, FlxG.height);
-		if (RegCustom._chat_turn_off_when_in_room == true)
+		if (RegCustom._chat_when_at_room_enabled[Reg._tn] == false)
 			bodyBg.makeGraphic(FlxG.width, FlxG.height);
 		
 		bodyBg.scrollFactor.set(0, 0);
@@ -120,7 +120,7 @@ class SceneWaitingRoom extends FlxState
 		// the user that created the chat. displayed at the bottom of the user list.
 		_textPlayer1Stats = new FlxText(60, 603, 0, "", 24);
 		_textPlayer1Stats.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.WHITE);
-		if (RegCustom._chat_turn_off_when_in_room == true)
+		if (RegCustom._chat_when_at_room_enabled[Reg._tn] == false)
 			_textPlayer1Stats.x += 180; // half of 360 is the width of chatter. half is used to center it to scene.
 		_textPlayer1Stats.scrollFactor.set(0, 0);
 		add(_textPlayer1Stats);
@@ -128,21 +128,21 @@ class SceneWaitingRoom extends FlxState
 		// the user that joined the chatroom.
 		_textPlayer2Stats = new FlxText(280, 603, 0, "", 24);
 		_textPlayer2Stats.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.WHITE);
-		if (RegCustom._chat_turn_off_when_in_room == true)
+		if (RegCustom._chat_when_at_room_enabled[Reg._tn] == false)
 			_textPlayer2Stats.x += 180; // half of 360 is the width of chatter. half is used to center it to scene.
 		_textPlayer2Stats.scrollFactor.set(0, 0);		
 		add(_textPlayer2Stats);
 		
 		_textPlayer3Stats = new FlxText(500, 603, 0, "", 24);
 		_textPlayer3Stats.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.WHITE);
-		if (RegCustom._chat_turn_off_when_in_room == true)
+		if (RegCustom._chat_when_at_room_enabled[Reg._tn] == false)
 			_textPlayer3Stats.x += 180; // half of 360 is the width of chatter. half is used to center it to scene.
 		_textPlayer3Stats.scrollFactor.set(0, 0);		
 		add(_textPlayer3Stats);
 		
 		_textPlayer4Stats = new FlxText(720, 603, 0, "", 24);
 		_textPlayer4Stats.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.WHITE);
-		if (RegCustom._chat_turn_off_when_in_room == true)
+		if (RegCustom._chat_when_at_room_enabled[Reg._tn] == false)
 			_textPlayer4Stats.x += 180; // half of 360 is the width of chatter. half is used to center it to scene.
 		_textPlayer4Stats.scrollFactor.set(0, 0);		
 		add(_textPlayer4Stats);
@@ -166,7 +166,7 @@ class SceneWaitingRoom extends FlxState
 	
 	public function boxScroller():Void
 	{
-		if (RegCustom._chat_turn_off_when_in_room == false)
+		if (RegCustom._chat_when_at_room_enabled[Reg._tn] == true)
 		{
 			// make a scrollbar-enabled camera for it (a FlxScrollableArea)	
 			if (__boxscroller != null) FlxG.cameras.remove(__boxscroller);
@@ -204,7 +204,7 @@ class SceneWaitingRoom extends FlxState
 		__online_players_list._title.text = "Room " + Std.string(RegTypedef._dataMisc._room ) + " - " + _gameName + " ";
 		__online_players_list._title.visible = true;
 		__online_players_list._title.x = ((FlxG.width  - 360) / 2) - (__online_players_list._title.textField.textWidth / 2); // 360 = chatter width.
-		if (RegCustom._chat_turn_off_when_in_room == true)
+		if (RegCustom._chat_when_at_room_enabled[Reg._tn] == false)
 			__online_players_list._title.screenCenter(X);
 		
 		
@@ -233,7 +233,7 @@ class SceneWaitingRoom extends FlxState
 			__game_chatter.destroy();
 		}
 		
-		if (RegCustom._chat_turn_off_when_in_room == false)
+		if (RegCustom._chat_when_at_room_enabled[Reg._tn] == true)
 		{
 			__game_chatter = new GameChatter(3);
 			__game_chatter.visible = false;

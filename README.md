@@ -14,7 +14,7 @@ The client for KBoardGames. The client is used to play games online against othe
 * Maximum of 2000 XP levels for a player.
 * Zillions of <a href="https://kboardgames.com/forum/viewtopic.php?f=4&t=37">game room color combinations.</a>
 * 17 <a href="https://kboardgames.com/forum/leaderboards">Leaderboards</a> showing top players.
-* 9 different chess sets.
+* 8 different chess sets.
 * Option to play chess using 2 different chess sets.
 * Player move history. In game and in database.
 * Client archive under 11MB in size.
@@ -35,6 +35,10 @@ The client for KBoardGames. The client is used to play games online against othe
 <img src="https://kboardgames.com/images/signatureGame.jpg?" alt="Image 1 of wheel estate" width="500"/>
 
 This is a two to four player signature game of the client software that is very similar in playability to the game of monopoly.
+
+<img src="https://kboardgames.com/images/checkers1.jpg?" alt="Image 1 of checkers" width="500"/>
+
+<img src="https://kboardgames.com/images/reversi.jpg?" alt="reversi" width="500"/>
 
 ## Dependencies
 For compilation you will need:

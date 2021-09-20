@@ -24,13 +24,19 @@ package;
  */
 class MenuConfigurations extends FlxState
 {
+	public var _output:MenuConfigurationsOutput;
+	
 	override public function create():Void
 	{
+		super.create();
+			
 		persistentDraw = true;
-		persistentUpdate = false;
+		persistentUpdate = true;
 		
-		var _help = new MenuConfigurationsOutput();
-		add(_help);
+		Reg._at_configuration_menu = true;
+		
+		_output = new MenuConfigurationsOutput();
+		add(_output);
 	}
 	
 	override public function update(elapsed:Float):Void 

@@ -73,7 +73,7 @@ class PlayerWhosTurnToMove extends FlxState
 		}
 	
 		// display move total only for checkers, chess and Reversi. do this condition also for the function updateMove().
-		if (Reg._gameId < 3 && RegCustom._move_total_enable == true)
+		if (Reg._gameId < 3 && RegCustom._move_total_enabled[Reg._tn] == true)
 		{
 			_move_total = new FlxText(FlxG.width - 352, FlxG.height - 357, 0, "Total Move:" + RegTypedef._dataPlayers._moveTotal);
 			_move_total.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.PINK);
@@ -95,7 +95,7 @@ class PlayerWhosTurnToMove extends FlxState
 	{
 		_rectangleBox.visible = true;
 		
-		if (RegCustom._move_total_enable == true)
+		if (RegCustom._move_total_enabled[Reg._tn] == true)
 		{
 			if (Reg._gameId < 3) _move_total.text = "Move Total: " + RegTypedef._dataPlayers._moveTotal;
 		}

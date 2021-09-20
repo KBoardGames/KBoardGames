@@ -126,6 +126,8 @@ class IdsMessageBox extends FlxGroup
 					else _msg = new MessageBox(9001, "Yes", "No", true, true, false, false, "", "Configurations saved.");
 				}
 				
+				case 9010: _msg = new MessageBox(9010, "Yes", "No", true, true, false, false, "", "Theme saved.");
+								
 				// menu credits 10000-10999
 				case 10001: _msg = new MessageBox(10001, "Yes", "No", true, true, true, false, "Website Credits.", "Display the full credits page at " + Reg._websiteNameTitle + " website?");
 				
@@ -198,9 +200,9 @@ class IdsMessageBox extends FlxGroup
 				
 				case 16210:
 				{
-					if (RegCustom._start_game_offline_confirmation == true
+					if (RegCustom._start_game_offline_confirmation[Reg._tn] == true
 					&&  Reg._game_offline_vs_cpu == true 
-					||  RegCustom._start_game_offline_confirmation == true
+					||  RegCustom._start_game_offline_confirmation[Reg._tn] == true
 					&&  Reg._game_offline_vs_player == true
 					){}
 					
@@ -220,7 +222,7 @@ class IdsMessageBox extends FlxGroup
 				
 				case 16250:
 				{
-					if (RegCustom._to_title_confirmation == false)
+					if (RegCustom._to_title_from_game_room_confirmation[Reg._tn] == false)
 					{}
 					
 					else
@@ -238,7 +240,7 @@ class IdsMessageBox extends FlxGroup
 				
 				case 16300:
 				{
-					if (RegCustom._to_lobby_game_room_confirmation == false)
+					if (RegCustom._to_lobby_from_game_room_confirmation[Reg._tn] == false)
 					{}
 					
 					else
@@ -266,7 +268,7 @@ class IdsMessageBox extends FlxGroup
 				
 				case 16500:
 				{
-					if (RegCustom._accept_automatic_start_game_request == true
+					if (RegCustom._accept_automatic_start_game_request[Reg._tn] == true
 					&&  Reg2._do_once_accept_game_start_request == false)
 					{}
 					

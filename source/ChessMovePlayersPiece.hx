@@ -127,9 +127,9 @@ class ChessMovePlayersPiece extends FlxSprite {
 		else 
 		{
 			if (_pieceValue < 11)
-				loadGraphic("assets/images/chess/set" + RegCustom._chess_current_piece_p1_set + "/" + _pieceValue + ".png", false);
+				loadGraphic("assets/images/chess/set" + RegCustom._chess_set_for_player1[Reg._tn] + "/" + _pieceValue + ".png", false);
 			else
-				loadGraphic("assets/images/chess/set" + RegCustom._chess_current_piece_p2_set + "/" + _pieceValue + ".png", false);
+				loadGraphic("assets/images/chess/set" + RegCustom._chess_set_for_player2[Reg._tn] + "/" + _pieceValue + ".png", false);
 				
 			if (_pieceValue < 11) color = RegFunctions.draw_update_board_p1_set_color();
 			else color = RegFunctions.draw_update_board_p2_set_color();
@@ -172,9 +172,9 @@ trace("~~~~");
 					&&  RegTypedef._dataTournaments._move_piece == false)
 					{
 						if (Reg._gamePointValueForPiece[Reg._gameYYnew][Reg._gameXXnew] < 11)
-							loadGraphic("assets/images/chess/set" + RegCustom._chess_current_piece_p1_set + "/" + Reg._gamePointValueForPiece[Reg._gameYYnew][Reg._gameXXnew] + ".png", false);
+							loadGraphic("assets/images/chess/set" + RegCustom._chess_set_for_player1[Reg._tn] + "/" + Reg._gamePointValueForPiece[Reg._gameYYnew][Reg._gameXXnew] + ".png", false);
 						else
-							loadGraphic("assets/images/chess/set" + RegCustom._chess_current_piece_p2_set + "/" + Reg._gamePointValueForPiece[Reg._gameYYnew][Reg._gameXXnew] + ".png", false);
+							loadGraphic("assets/images/chess/set" + RegCustom._chess_set_for_player2[Reg._tn] + "/" + Reg._gamePointValueForPiece[Reg._gameYYnew][Reg._gameXXnew] + ".png", false);
 							
 						if (Reg._gamePointValueForPiece[Reg._gameYYnew][Reg._gameXXnew] < 11)
 							color = RegFunctions.draw_update_board_p1_set_color();
@@ -205,9 +205,9 @@ trace("~~~~");
 					&& RegTypedef._dataTournaments._move_piece == false)
 					{
 						if (Reg._gamePointValueForPiece[Reg._gameYYnew2][Reg._gameXXnew2] < 11)
-							loadGraphic("assets/images/chess/set" + RegCustom._chess_current_piece_p1_set + "/" + Reg._gamePointValueForPiece[Reg._gameYYnew2][Reg._gameXXnew2] + ".png", false);
+							loadGraphic("assets/images/chess/set" + RegCustom._chess_set_for_player1[Reg._tn] + "/" + Reg._gamePointValueForPiece[Reg._gameYYnew2][Reg._gameXXnew2] + ".png", false);
 						else
-							loadGraphic("assets/images/chess/set" + RegCustom._chess_current_piece_p2_set + "/" + Reg._gamePointValueForPiece[Reg._gameYYnew2][Reg._gameXXnew2] + ".png", false);
+							loadGraphic("assets/images/chess/set" + RegCustom._chess_set_for_player2[Reg._tn] + "/" + Reg._gamePointValueForPiece[Reg._gameYYnew2][Reg._gameXXnew2] + ".png", false);
 							
 						if (Reg._gamePointValueForPiece[Reg._gameYYnew2][Reg._gameXXnew2] < 11)
 							color = RegFunctions.draw_update_board_p1_set_color();
@@ -391,9 +391,9 @@ trace("~~~~");
 				&&  RegTypedef._dataTournaments._move_piece == false)
 				{
 					if (Reg._gamePointValueForPiece[Reg._gameYYnew][Reg._gameXXnew] < 11)
-						loadGraphic("assets/images/chess/set" + RegCustom._chess_current_piece_p1_set + "/" + Reg._gamePointValueForPiece[Reg._gameYYnew][Reg._gameXXnew] + ".png", false);
+						loadGraphic("assets/images/chess/set" + RegCustom._chess_set_for_player1[Reg._tn] + "/" + Reg._gamePointValueForPiece[Reg._gameYYnew][Reg._gameXXnew] + ".png", false);
 					else
-						loadGraphic("assets/images/chess/set" + RegCustom._chess_current_piece_p2_set + "/" + Reg._gamePointValueForPiece[Reg._gameYYnew][Reg._gameXXnew] + ".png", false);
+						loadGraphic("assets/images/chess/set" + RegCustom._chess_set_for_player2[Reg._tn] + "/" + Reg._gamePointValueForPiece[Reg._gameYYnew][Reg._gameXXnew] + ".png", false);
 					
 					if (Reg._gamePointValueForPiece[Reg._gameYYnew][Reg._gameXXnew] < 11)
 						color = RegFunctions.draw_update_board_p1_set_color();
@@ -500,9 +500,9 @@ trace("~~~~");
 			&& IDsHistoryButtons._history_moving_forward == false)
 			{
 				if (Reg._moveHistoryPieceValueOld3[Reg._step] < 11)
-						loadGraphic("assets/images/chess/set" + RegCustom._chess_current_piece_p1_set + "/" + Reg._moveHistoryPieceValueOld3[Reg._step] + ".png", false);
+						loadGraphic("assets/images/chess/set" + RegCustom._chess_set_for_player1[Reg._tn] + "/" + Reg._moveHistoryPieceValueOld3[Reg._step] + ".png", false);
 					else
-						loadGraphic("assets/images/chess/set" + RegCustom._chess_current_piece_p2_set + "/" + Reg._moveHistoryPieceValueOld3[Reg._step] + ".png", false);
+						loadGraphic("assets/images/chess/set" + RegCustom._chess_set_for_player2[Reg._tn] + "/" + Reg._moveHistoryPieceValueOld3[Reg._step] + ".png", false);
 						
 					if (Reg._moveHistoryPieceValueOld3[Reg._step] < 11) color = RegFunctions.draw_update_board_p1_set_color();
 					else color = RegFunctions.draw_update_board_p2_set_color();
@@ -515,9 +515,9 @@ trace("~~~~");
 				else
 				{
 					if (_triggerImageValueOld < 11)
-						loadGraphic("assets/images/chess/set" + RegCustom._chess_current_piece_p1_set + "/" + _triggerImageValueOld + ".png", false);
+						loadGraphic("assets/images/chess/set" + RegCustom._chess_set_for_player1[Reg._tn] + "/" + _triggerImageValueOld + ".png", false);
 					else
-						loadGraphic("assets/images/chess/set" + RegCustom._chess_current_piece_p2_set + "/" + _triggerImageValueOld + ".png", false);
+						loadGraphic("assets/images/chess/set" + RegCustom._chess_set_for_player2[Reg._tn] + "/" + _triggerImageValueOld + ".png", false);
 						
 					if (_triggerImageValueOld < 11) color = RegFunctions.draw_update_board_p1_set_color();
 					else color = RegFunctions.draw_update_board_p2_set_color();
@@ -535,9 +535,9 @@ trace("~~~~");
 			else 
 			{
 				if (_triggerImageValueNew < 11)
-					loadGraphic("assets/images/chess/set" + RegCustom._chess_current_piece_p1_set + "/" + _triggerImageValueNew + ".png", false);
+					loadGraphic("assets/images/chess/set" + RegCustom._chess_set_for_player1[Reg._tn] + "/" + _triggerImageValueNew + ".png", false);
 				else
-					loadGraphic("assets/images/chess/set" + RegCustom._chess_current_piece_p2_set + "/" + _triggerImageValueNew + ".png", false);
+					loadGraphic("assets/images/chess/set" + RegCustom._chess_set_for_player2[Reg._tn] + "/" + _triggerImageValueNew + ".png", false);
 					
 				if (_triggerImageValueNew < 11) color = RegFunctions.draw_update_board_p1_set_color();
 				else color = RegFunctions.draw_update_board_p2_set_color();
@@ -554,9 +554,9 @@ trace("~~~~");
 			else 
 			{
 				if (_triggerImageValueOld2 < 11)
-					loadGraphic("assets/images/chess/set" + RegCustom._chess_current_piece_p1_set + "/" + _triggerImageValueOld2 + ".png", false);
+					loadGraphic("assets/images/chess/set" + RegCustom._chess_set_for_player1[Reg._tn] + "/" + _triggerImageValueOld2 + ".png", false);
 				else
-					loadGraphic("assets/images/chess/set" + RegCustom._chess_current_piece_p2_set + "/" + _triggerImageValueOld2 + ".png", false);
+					loadGraphic("assets/images/chess/set" + RegCustom._chess_set_for_player2[Reg._tn] + "/" + _triggerImageValueOld2 + ".png", false);
 					
 				if (_triggerImageValueOld2 < 11) color = RegFunctions.draw_update_board_p1_set_color();
 				else color = RegFunctions.draw_update_board_p2_set_color();
@@ -573,9 +573,9 @@ trace("~~~~");
 			else 
 			{
 				if (_triggerImageValueNew2 < 11)
-					loadGraphic("assets/images/chess/set" + RegCustom._chess_current_piece_p1_set + "/" + _triggerImageValueNew2 + ".png", false);
+					loadGraphic("assets/images/chess/set" + RegCustom._chess_set_for_player1[Reg._tn] + "/" + _triggerImageValueNew2 + ".png", false);
 				else
-					loadGraphic("assets/images/chess/set" + RegCustom._chess_current_piece_p2_set + "/" + _triggerImageValueNew2 + ".png", false);
+					loadGraphic("assets/images/chess/set" + RegCustom._chess_set_for_player2[Reg._tn] + "/" + _triggerImageValueNew2 + ".png", false);
 					
 				if (_triggerImageValueNew2 < 11) color = RegFunctions.draw_update_board_p1_set_color();
 				else color = RegFunctions.draw_update_board_p2_set_color();

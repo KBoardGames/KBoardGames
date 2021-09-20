@@ -103,7 +103,7 @@ class MiscellaneousMenuOutput extends FlxState
 		_title.x -= 20; // minus the width of the boxScroller track.
 		add(_title);
 		
-		_close = new ButtonGeneralNetworkYes(0, FlxG.height-40, "Exit", 150 + 15, 35, Reg._font_size, RegCustom._button_text_color, 0, closeState, RegCustom._button_color, false);
+		_close = new ButtonGeneralNetworkYes(0, FlxG.height-40, "Exit", 150 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, closeState, RegCustom._button_color[Reg._tn], false);
 		_close.active = true;
 		_close.label.font = Reg._fontDefault;
 		_close.screenCenter(X);

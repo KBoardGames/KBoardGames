@@ -160,7 +160,7 @@ class Reg2 extends FlxGroup
 	public static var _offline_cpu_avatar_number:Array<String> = ["11.png", "15.png", "30.png", "44.png", "41.png"];
 	
 	/******************************
-	 * this name will be seen when playing a computer game offline. this var is at the second position out of four players and goes with _profile_avatar_number2 which is the second avatar in the list.
+	 * this name will be seen when playing a computer game offline. this var is at the second position out of four players and goes with _profile_avatar_number2[Reg._tn] which is the second avatar in the list.
 	*/
 	public static var _offline_cpu_host_name2:String = "";
 	

@@ -196,7 +196,7 @@ class ChessCurrentUnitClicked extends FlxSprite
 										Reg._chessKeepPieceDefendingAtPath = 0;
 										Reg.resetCPUaiVars();	
 										
-										if (RegCustom._chess_show_last_piece_moved == true) visible = true;
+										if (RegCustom._chess_show_last_piece_moved[Reg._tn] == true) visible = true;
 										
 										populateCapturingUnits(yy, xx, p);
 										break;
@@ -218,7 +218,7 @@ class ChessCurrentUnitClicked extends FlxSprite
 				x = _startX + Reg._gameXXnew * 75;						
 				y = _startY + Reg._gameYYnew * 75;	
 				
-				if (RegCustom._chess_show_last_piece_moved == true) visible = true;
+				if (RegCustom._chess_show_last_piece_moved[Reg._tn] == true) visible = true;
 			}
 					
 			if (RegTypedef._dataPlayers._spectatorWatching == false
@@ -237,7 +237,7 @@ class ChessCurrentUnitClicked extends FlxSprite
 					x = _startX + Reg._gameXXnew * 75;						
 					y = _startY + Reg._gameYYnew * 75;
 				 
-					if (RegCustom._chess_show_last_piece_moved == true) visible = true;
+					if (RegCustom._chess_show_last_piece_moved[Reg._tn] == true) visible = true;
 				}
 						
 				if (Reg._gameYYold != -1 && Reg._gameYYnew != -1)

@@ -91,7 +91,7 @@ class ButtonGeneralNetworkNo extends FlxUIButton
 	 */
 	public function new(x:Float = 0, y:Float = 0, ?text:String, button_width:Int = 80, button_height:Int = 40, textSize:Int = 20, textColor:FlxColor = 0xFFFFFFFF, textPadding:Int = 0, ?onClick:Void->Void, innerColor:FlxColor = 0xFF000066, use_down_click:Bool = false, id:Int = 0)
 	{
-		super(x, y-7, text, onClick, false, false, RegCustom._button_color);
+		super(x, y-7, text, onClick, false, false, RegCustom._button_color[Reg._tn]);
 
 		_startX = x;
 		_startY = y;
@@ -108,11 +108,11 @@ class ButtonGeneralNetworkNo extends FlxUIButton
 		_scrollarea_offset_y = 0;
 						
 		resize(button_width, button_height);
-		setLabelFormat(Reg._fontDefault, (Reg._font_size-1), RegCustom._button_text_color, FlxTextAlign.CENTER);
+		setLabelFormat(Reg._fontDefault, (Reg._font_size-1), RegCustom._button_text_color[Reg._tn], FlxTextAlign.CENTER);
 		label.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 1);
 		autoCenterLabel();
 
-		var _lineStyle = { thickness: 4.0, color: RegCustom._button_border_color};
+		var _lineStyle = { thickness: 8.0, color: RegCustom._button_border_color[Reg._tn]};
 		FlxSpriteUtil.drawRect(this, 0, 0, _button_width, _button_height + 10, innerColor, _lineStyle);
 		
 		_timer = new FlxTimer().start(3, makeActive, 1);
@@ -154,10 +154,23 @@ class ButtonGeneralNetworkNo extends FlxUIButton
 			{
 				if (GameChatter._input_chat != null) GameChatter._input_chat.hasFocus = false;
 				
-				if (RegCustom._enable_sound == true
-				&&  Reg2._boxScroller_is_scrolling == false)
+				if (RegCustom._sound_enabled[Reg._tn] == true
+				&&  Reg2._boxScroller_is_scrolling == false
+				&&	Reg._tn > 0
+				||	RegCustom._sound_enabled[Reg._tn] == true
+				&&  Reg2._boxScroller_is_scrolling == false
+				&&	Reg._tn == 0 // theme named default.
+				&&	FlxG.mouse.y <= 50
+				&&  Reg2._boxScroller_is_scrolling == false
+				||	Reg._tn == 0 // theme named default.
+				&&	FlxG.mouse.y >= FlxG.height - 50
+				&&  Reg2._boxScroller_is_scrolling == false
+				||	Reg._at_configuration_menu == false)
 					FlxG.sound.play("click", 1, false);
-				
+					
+				else if (RegCustom._sound_enabled[Reg._tn] == true
+				&&  Reg2._boxScroller_is_scrolling == false)
+					FlxG.sound.play("buzz", 1, false);
 			}
 			
 			super.update(elapsed);
@@ -175,4 +188,4 @@ class ButtonGeneralNetworkNo extends FlxUIButton
 		}
 	}
 
-}
+}//

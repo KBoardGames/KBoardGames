@@ -106,7 +106,7 @@ class ChessImageFutureCapturingUnits extends FlxSprite
 				
 				else
 				{
-					if (RegCustom._game_skill_level_chess == 0
+					if (RegCustom._chess_skill_level_online == 0
 					&& Reg._chessFuturePathToKing[Reg._playerNotMoving][_yID][_xID] == 1
 					//&& Reg._gameUniqueValueForPiece[_yID][_xID] != 50
 					&& Reg._gameDidFirstMove == false)

@@ -1,0 +1,19 @@
+{
+	"name": "yaml",
+	"license": "MIT",
+	"tags": [
+	"cross",
+	"utility"
+],
+	"description": "A cross platform YAML 1.2 parser and renderer for Haxe.",
+	"contributors": [
+	"mikestead"
+],
+	"releasenote": "See https://github.com/mikestead/hx-yaml/blob/master/CHANGES.md",
+	"version": "2.0.1",
+	"url": "https://github.com/mikestead/hx-yaml",
+	"dependencies": 
+	{
+
+	}
+}

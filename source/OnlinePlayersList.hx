@@ -73,7 +73,7 @@ class OnlinePlayersList extends FlxState
 		__scene_waiting_room = scene_waiting_room;
 		
 
-		var _color_table_rows = FlxColor.fromHSB((__scene_waiting_room._color_ra+25), 0.8, (RegCustom._background_brightness-0.10));
+		var _color_table_rows = FlxColor.fromHSB((__scene_waiting_room._color_ra+25), 0.8, (RegCustom._background_brightness[Reg._tn]-0.10));
 		
 		group = cast add(new FlxSpriteGroup());
 				
@@ -161,7 +161,7 @@ class OnlinePlayersList extends FlxState
 			
 			//.......................
 			// invite button, each for an online user not in room.
-			_onlineUserListInvite = new ButtonGeneralNetworkYes(325, 140 - _offset_y + ((i + 1) * 70), "", 160, 35, Reg._font_size, RegCustom._button_text_color, 0, sendInviteConfirm.bind(i), RegCustom._button_color, false, 1, true, (i + 1000));
+			_onlineUserListInvite = new ButtonGeneralNetworkYes(325, 140 - _offset_y + ((i + 1) * 70), "", 160, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, sendInviteConfirm.bind(i), RegCustom._button_color[Reg._tn], false, 1, true, (i + 7000));
 			_onlineUserListInvite.label.font = Reg._fontDefault;
 			_onlineUserListInvite.visible = false;
 			group.add(_onlineUserListInvite);

@@ -1300,6 +1300,24 @@ class NetworkEventsMain extends FlxState
 						Reg._outputMessage = true;
 						Reg._createGameRoom = true;
 					
+						// do not put the following code at the bottom of SceneGameRoom constructor. the auto start of game feature will work but returning to lobby message notices will not be seen.
+						Reg._gameOverForPlayer = false;
+						Reg._gameOverForAllPlayers = false;
+						
+						Reg._playerOffset = 0;
+						
+						if (Reg._game_offline_vs_player == false 
+						&&	Reg._game_offline_vs_cpu == false)
+						{
+							RegTypedef._dataPlayers._gamePlayersValues = [1, 1, 1, 1];
+							Reg._playerIDs = -1;
+							PlayState.clientSocket.send("Game Players Values", RegTypedef._dataPlayers); 
+							haxe.Timer.delay(function (){}, Reg2._event_sleep);
+							
+							RegTypedef._dataPlayers._gameIsFinished = false;
+							PlayState.clientSocket.send("Game Is Finished", RegTypedef._dataPlayers);
+							haxe.Timer.delay(function (){}, Reg2._event_sleep);
+						}
 					}
 					
 					else
@@ -1888,8 +1906,8 @@ class NetworkEventsMain extends FlxState
 				Reg._playerNotMoving = 0;
 			}
 			
-			RegTypedef._dataPlayers._moveTimeRemaining[1] = RegCustom._move_time_remaining_current[1] = Std.parseInt(_data._time_remaining_player2);
-			RegTypedef._dataPlayers._moveTimeRemaining[0] = RegCustom._move_time_remaining_current[0] = Std.parseInt(_data._time_remaining_player1);
+			RegTypedef._dataPlayers._moveTimeRemaining[1] = RegCustom._time_remaining_for_game[1] = Std.parseInt(_data._time_remaining_player2);
+			RegTypedef._dataPlayers._moveTimeRemaining[0] = RegCustom._time_remaining_for_game[0] = Std.parseInt(_data._time_remaining_player1);
 			
 			Reg._textTimeRemainingToMove1 = PlayerTimeRemainingMove.formatTime(RegTypedef._dataPlayers._moveTimeRemaining[0]);
 			Reg._textTimeRemainingToMove2 = PlayerTimeRemainingMove.formatTime(RegTypedef._dataPlayers._moveTimeRemaining[1]);

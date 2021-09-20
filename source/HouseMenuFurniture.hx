@@ -134,26 +134,26 @@ class HouseMenuFurniture extends FlxGroup
 		add(_text_order);
 		
 		// bring the selected image minus 1 in z-order.
-		_stack_item_backwards = new ButtonGeneralNetworkNo(_text_order.x + 200, 57, "<", 35, 35, Reg._font_size, RegCustom._button_text_color, 0, stack_item_backwards);	
+		_stack_item_backwards = new ButtonGeneralNetworkNo(_text_order.x + 200, 57, "<", 35, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, stack_item_backwards);	
 		//_stack_item_backwards.label.font = Reg._fontDefault;	
 		_stack_item_backwards.visible = false;
 		_stack_item_backwards.active = false;
 		add(_stack_item_backwards);	
 		
-		_stack_item_forwards = new ButtonGeneralNetworkNo(_text_order.x + 250, 57, ">", 35, 35, Reg._font_size, RegCustom._button_text_color, 0, stack_item_forwards);		
+		_stack_item_forwards = new ButtonGeneralNetworkNo(_text_order.x + 250, 57, ">", 35, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, stack_item_forwards);		
 		//_stack_item_forwards.label.font = Reg._fontDefault;
 		_stack_item_forwards.visible = false;
 		_stack_item_forwards.active = false;
 		add(_stack_item_forwards);
 				
-		_button_item_behind_walls = new ButtonGeneralNetworkNo(620 + 350, 57, "", 160 + 65, 35, Reg._font_size, RegCustom._button_text_color, 0, toggle_item_front_or_back_walls);		
+		_button_item_behind_walls = new ButtonGeneralNetworkNo(620 + 350, 57, "", 160 + 65, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, toggle_item_front_or_back_walls);		
 		_button_item_behind_walls.label.font = Reg._fontDefault;
 		_button_item_behind_walls.visible = false;
 		_button_item_behind_walls.active = false;
 		add(_button_item_behind_walls);
 		
 				// 620 = lobby button location. this button is hide/show.
-		_button_is_hidden = new ButtonGeneralNetworkNo(620 + 600, 57, "", 160 + 15, 35, Reg._font_size, RegCustom._button_text_color, 0, item_toggle_visibility);		
+		_button_is_hidden = new ButtonGeneralNetworkNo(620 + 600, 57, "", 160 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, item_toggle_visibility);		
 		_button_is_hidden.label.font = Reg._fontDefault;
 		_button_is_hidden.visible = false;
 		_button_is_hidden.active = false;
@@ -292,7 +292,7 @@ class HouseMenuFurniture extends FlxGroup
 					if (ActionInput.overlaps(__house_map_furniture._house_rotate_icon)
 					&& ActionInput.justReleased())
 					{
-						if (RegCustom._enable_sound == true
+						if (RegCustom._sound_enabled[Reg._tn] == true
 						&&  Reg2._boxScroller_is_scrolling == false)
 							FlxG.sound.play("click", 1, false);
 						

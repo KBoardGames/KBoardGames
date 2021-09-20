@@ -102,7 +102,7 @@ class ButtonGeneralNetworkYes extends FlxUIButton
 	 */
 	public function new(x:Float = 0, y:Float = 0, ?text:String, button_width:Int = 80, button_height:Int = 40, textSize:Int = 20, textColor:FlxColor = 0xFFFFFFFF, textPadding:Int = 0, ?onClick:Void->Void, innerColor:FlxColor = 0xFF000066, use_down_click:Bool = false, id:Int = 0, refresh_online_list:Bool = false, id_refresh:Int = 0)
 	{
-		super(x, y-7, text, onClick, false, false, RegCustom._button_color);
+		super(x, y-7, text, onClick, false, false, RegCustom._button_color[Reg._tn]);
 
 		_startX = x;
 		_startY = y;
@@ -128,12 +128,12 @@ class ButtonGeneralNetworkYes extends FlxUIButton
 		_scrollarea_offset_y = 0;
 		
 		resize(button_width, button_height);
-		setLabelFormat(Reg._fontDefault, (Reg._font_size-1), RegCustom._button_text_color, FlxTextAlign.CENTER);
+		setLabelFormat(Reg._fontDefault, (Reg._font_size-1), RegCustom._button_text_color[Reg._tn], FlxTextAlign.CENTER);
 		label.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 1);
 		autoCenterLabel();
 		
 		_innerColor = innerColor;
-		var _lineStyle = { thickness: 4.0, color: RegCustom._button_border_color};
+		var _lineStyle = { thickness: 8.0, color: RegCustom._button_border_color[Reg._tn]};
 		FlxSpriteUtil.drawRect(this, 0, 0, _button_width, _button_height + 10, _innerColor, _lineStyle);
 		
 		_timer = new FlxTimer().start(2, makeActive, 1); // not lobby button id of 2
@@ -150,9 +150,15 @@ class ButtonGeneralNetworkYes extends FlxUIButton
 	
 	override public function draw():Void
 	{
-		// daily quest, misc, create room, etc buttons.
+		// daily quest, misc, create room, online list, etc buttons.
 		if (FlxG.mouse.justPressed == true
 		&&	justPressed == true && _id <= 200
+		&&	Reg2._message_box_just_closed == false
+		&& _id == ID
+		||	FlxG.mouse.justPressed == true
+		&&	justPressed == true 
+		&&	_id >= 7000
+		&&	_id <= 8000
 		&&	Reg2._message_box_just_closed == false
 		&& _id == ID)
 		{
@@ -233,7 +239,7 @@ class ButtonGeneralNetworkYes extends FlxUIButton
 			&& _id == ID) 
 			{
 				if (GameChatter._input_chat != null) GameChatter._input_chat.hasFocus = false;
-				if (RegCustom._enable_sound == true
+				if (RegCustom._sound_enabled[Reg._tn] == true
 				&&  Reg2._boxScroller_is_scrolling == false)
 					FlxG.sound.play("click", 1, false);
 					
@@ -241,40 +247,38 @@ class ButtonGeneralNetworkYes extends FlxUIButton
 				||	_id >= 1000
 				&&	_id <= 2000) FlxG.mouse.enabled = false;	
 				
-			}			
-			
-			// when pressing the refresh online user list button, this code is needed so that it populates the table without creating text and buttons.
-			if (_refresh_online_list == true)
-			{
-				for (i in 0...120)
-				{
-					// no username found, so make this button off screen so that user cannot click it and its not visible,
-					if ((i + 1) == _id_refresh) 
-					{
-						if (RegTypedef._dataOnlinePlayers._usernamesOnline[i] == "")
-						{
-							label.text = "";
-							y = 2000;
-							visible = false;
-						}
-						
-						else if (Reg._move_number_current == 0 && GameChatter._chatterIsOpen == false)
-						{
-							label.text = "Send";
-							y = _startY;
-							visible = true;
-						}
-					}			
-				}
-			}			
-			
+			}		
 		}
+		
+		// when pressing the refresh online user list button, this code is needed so that it populates the table without creating text and buttons.
+		if (_refresh_online_list == true)
+		{
+			for (i in 0...120)
+			{
+				// no username found, so make this button off screen so that user cannot click it and its not visible,
+				if ((i + 7000) == _id_refresh) 
+				{
+					if (RegTypedef._dataOnlinePlayers._usernamesOnline[i] == "")
+					{
+						label.text = "";
+						y = 2000;
+						visible = false;
+					}
+					
+					else //if (Reg._move_number_current == 0 && GameChatter._chatterIsOpen == false)
+					{
+						label.text = "Send";
+						y = _startY;
+						visible = true;
+					}
+				}			
+			}
+		}	
 		
 		if (alpha == 1 && _id == ID) super.update(elapsed);
 				
 		if (Reg._at_lobby == true
 		&&	Reg._buttonCodeValues != ""
-		&&	RegTypedef._dataMisc._room > 0
 		&&	Reg2._message_box_just_closed == true)
 		{
 			Reg2._message_box_just_closed = false;

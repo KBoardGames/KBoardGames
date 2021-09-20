@@ -740,7 +740,7 @@ class SignatureGameMain extends FlxState
 				
 		
 		if (_buttonSellHouse != null) remove(_buttonSellHouse);
-		_buttonSellHouse = new ButtonUnique((FlxG.width / 2) - 160 - 33, FlxG.height - 257 - 45 - 45, "", 180, 35, Reg._font_size, RegCustom._button_text_color, 0, sellAllHousesForLand);
+		_buttonSellHouse = new ButtonUnique((FlxG.width / 2) - 160 - 33, FlxG.height - 257 - 45 - 45, "", 180, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, sellAllHousesForLand);
 		_buttonSellHouse.label.text = "Sell All";			
 		_buttonSellHouse.label.font = Reg._fontDefault;
 		_buttonSellHouse.visible = false;
@@ -748,7 +748,7 @@ class SignatureGameMain extends FlxState
 		add(_buttonSellHouse);
 		
 		if (_buttonBuyMortgage != null) remove(_buttonBuyMortgage);
-		_buttonBuyMortgage = new ButtonUnique((FlxG.width / 2) + 13, FlxG.height - 257 - 45 - 45, "Mortgage", 180, 35, Reg._font_size, RegCustom._button_text_color, 0, getMortgage);
+		_buttonBuyMortgage = new ButtonUnique((FlxG.width / 2) + 13, FlxG.height - 257 - 45 - 45, "Mortgage", 180, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, getMortgage);
 		_buttonBuyMortgage.label.font = Reg._fontDefault;
 		_buttonBuyMortgage.visible = false;
 		_buttonBuyMortgage.active = false;
@@ -758,7 +758,7 @@ class SignatureGameMain extends FlxState
 			remove(_buttonBuyHouseTaxiCabOrCafeStores);
 		
 		// at options menu. this is the buy house, cab or store.
-		_buttonBuyHouseTaxiCabOrCafeStores = new ButtonUnique((FlxG.width / 2) - 160 - 33, FlxG.height - 257 - 45, "", 180, 35, Reg._font_size, RegCustom._button_text_color, 0, buyHouseTaxiCabOrCafeStore);
+		_buttonBuyHouseTaxiCabOrCafeStores = new ButtonUnique((FlxG.width / 2) - 160 - 33, FlxG.height - 257 - 45, "", 180, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, buyHouseTaxiCabOrCafeStore);
 		_buttonBuyHouseTaxiCabOrCafeStores.label.font = Reg._fontDefault;
 		_buttonBuyHouseTaxiCabOrCafeStores.visible = false;
 		_buttonBuyHouseTaxiCabOrCafeStores.active = false;
@@ -772,7 +772,7 @@ class SignatureGameMain extends FlxState
 		add(_buttonBuyHouseTaxiCabOrCafeStores);
 		
 		if (_tradeWith != null) remove(_tradeWith);
-		_tradeWith = new ButtonUnique((FlxG.width / 2) + 13, FlxG.height - 257 - 45, "Trade with", 180, 35, Reg._font_size, RegCustom._button_text_color, 0, tradeSelectPlayer);
+		_tradeWith = new ButtonUnique((FlxG.width / 2) + 13, FlxG.height - 257 - 45, "Trade with", 180, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, tradeSelectPlayer);
 		_tradeWith.label.font = Reg._fontDefault;
 		_tradeWith.visible = false;
 		_tradeWith.active = false;
@@ -783,14 +783,14 @@ class SignatureGameMain extends FlxState
 		// #############################################################
 		
 		if (_buttonGoBack != null) remove(_buttonGoBack);
-		_buttonGoBack = new ButtonUnique((FlxG.width / 2) - 190 - 15, FlxG.height - 257, "Go Back", 190, 35, Reg._font_size, RegCustom._button_text_color, 0, buttonGoBackOK);
+		_buttonGoBack = new ButtonUnique((FlxG.width / 2) - 190 - 15, FlxG.height - 257, "Go Back", 190, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, buttonGoBackOK);
 		_buttonGoBack.label.font = Reg._fontDefault;
 		_buttonGoBack.screenCenter(X);
 		_buttonGoBack.visible = false;
 		_buttonGoBack.active = false;
 		add(_buttonGoBack);
 		
-		_buttonEndTurnOrPayNow = new ButtonUnique(0, FlxG.height - 257, "End turn", 190, 35, Reg._font_size, RegCustom._button_text_color, 0, buttonOK);
+		_buttonEndTurnOrPayNow = new ButtonUnique(0, FlxG.height - 257, "End turn", 190, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, buttonOK);
 		_buttonEndTurnOrPayNow.label.font = Reg._fontDefault;
 		_buttonEndTurnOrPayNow.screenCenter(X);		
 		add(_buttonEndTurnOrPayNow);
@@ -799,7 +799,7 @@ class SignatureGameMain extends FlxState
 		
 		// buy first house, first cab or first store.
 		if (_buttonBuyHouseTaxiCabOrCafeStore1 != null) remove(_buttonBuyHouseTaxiCabOrCafeStore1);
-		_buttonBuyHouseTaxiCabOrCafeStore1 = new ButtonUnique((FlxG.width / 2) - 190 - 13, Reg._unitYgameBoardLocation[0] + 230 + 45, "", 405, 35, Reg._font_size, RegCustom._button_text_color, 0, boughtHouseTaxiCabOrCafeStore.bind(0));
+		_buttonBuyHouseTaxiCabOrCafeStore1 = new ButtonUnique((FlxG.width / 2) - 190 - 13, Reg._unitYgameBoardLocation[0] + 230 + 45, "", 405, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, boughtHouseTaxiCabOrCafeStore.bind(0));
 		_buttonBuyHouseTaxiCabOrCafeStore1.label.font = Reg._fontDefault;
 		_buttonBuyHouseTaxiCabOrCafeStore1.visible = false;
 		_buttonBuyHouseTaxiCabOrCafeStore1.active = false;
@@ -808,7 +808,7 @@ class SignatureGameMain extends FlxState
 		add(_buttonBuyHouseTaxiCabOrCafeStore1);
 				
 		if (_buttonBuyHouseTaxiCabOrCafeStore2 != null) remove(_buttonBuyHouseTaxiCabOrCafeStore2);
-		_buttonBuyHouseTaxiCabOrCafeStore2 = new ButtonUnique((FlxG.width / 2) - 190 - 13, Reg._unitYgameBoardLocation[0] + 230 + 45, "", 405, 35, Reg._font_size, RegCustom._button_text_color, 0, boughtHouseTaxiCabOrCafeStore.bind(1));
+		_buttonBuyHouseTaxiCabOrCafeStore2 = new ButtonUnique((FlxG.width / 2) - 190 - 13, Reg._unitYgameBoardLocation[0] + 230 + 45, "", 405, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, boughtHouseTaxiCabOrCafeStore.bind(1));
 		_buttonBuyHouseTaxiCabOrCafeStore2.label.font = Reg._fontDefault;
 		_buttonBuyHouseTaxiCabOrCafeStore2.visible = false;
 		_buttonBuyHouseTaxiCabOrCafeStore2.active = false;
@@ -817,7 +817,7 @@ class SignatureGameMain extends FlxState
 		add(_buttonBuyHouseTaxiCabOrCafeStore2);
 				
 		if (_buttonBuyHouseTaxiCabOrCafeStore3 != null) remove(_buttonBuyHouseTaxiCabOrCafeStore3);
-		_buttonBuyHouseTaxiCabOrCafeStore3 = new ButtonUnique((FlxG.width / 2) - 190 - 13, Reg._unitYgameBoardLocation[0] + 230 + 45 + 45, "", 405, 35, Reg._font_size, RegCustom._button_text_color, 0, boughtHouseTaxiCabOrCafeStore.bind(2));
+		_buttonBuyHouseTaxiCabOrCafeStore3 = new ButtonUnique((FlxG.width / 2) - 190 - 13, Reg._unitYgameBoardLocation[0] + 230 + 45 + 45, "", 405, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, boughtHouseTaxiCabOrCafeStore.bind(2));
 		_buttonBuyHouseTaxiCabOrCafeStore3.label.font = Reg._fontDefault;
 		_buttonBuyHouseTaxiCabOrCafeStore3.visible = false;
 		_buttonBuyHouseTaxiCabOrCafeStore3.active = false;
@@ -826,7 +826,7 @@ class SignatureGameMain extends FlxState
 		add(_buttonBuyHouseTaxiCabOrCafeStore3);
 		
 		if (_buttonBuyHouseTaxiCabOrCafeStore4 != null) remove(_buttonBuyHouseTaxiCabOrCafeStore4);
-		_buttonBuyHouseTaxiCabOrCafeStore4 = new ButtonUnique((FlxG.width / 2) - 190 - 13, Reg._unitYgameBoardLocation[0] + 230 + 45 + 45, "", 405, 35, Reg._font_size, RegCustom._button_text_color, 0, boughtHouseTaxiCabOrCafeStore.bind(3));
+		_buttonBuyHouseTaxiCabOrCafeStore4 = new ButtonUnique((FlxG.width / 2) - 190 - 13, Reg._unitYgameBoardLocation[0] + 230 + 45 + 45, "", 405, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, boughtHouseTaxiCabOrCafeStore.bind(3));
 		_buttonBuyHouseTaxiCabOrCafeStore4.label.font = Reg._fontDefault;
 		_buttonBuyHouseTaxiCabOrCafeStore4.visible = false;
 		_buttonBuyHouseTaxiCabOrCafeStore4.active = false;	
@@ -947,14 +947,14 @@ class SignatureGameMain extends FlxState
 	{		
 		
 		if (_buttonResetTradeProposal != null) remove(_buttonResetTradeProposal);
-		_buttonResetTradeProposal = new ButtonUnique((FlxG.width / 2) - 190 - 7, FlxG.height - 257 - 45, "Reset Trade", 190, 35, Reg._font_size, RegCustom._button_text_color, 0, buttonResetTradeProposal);
+		_buttonResetTradeProposal = new ButtonUnique((FlxG.width / 2) - 190 - 7, FlxG.height - 257 - 45, "Reset Trade", 190, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, buttonResetTradeProposal);
 		_buttonResetTradeProposal.label.font = Reg._fontDefault;
 		_buttonResetTradeProposal.visible = false;
 		_buttonResetTradeProposal.active = false;
 		add(_buttonResetTradeProposal);
 		
 		if (_buttonTradeProposal != null) remove(_buttonTradeProposal);
-		_buttonTradeProposal = new ButtonUnique((FlxG.width / 2) + 7, FlxG.height - 257 - 45, "Trade", 190, 35, Reg._font_size, RegCustom._button_text_color, 0, buttonTradeProposal);
+		_buttonTradeProposal = new ButtonUnique((FlxG.width / 2) + 7, FlxG.height - 257 - 45, "Trade", 190, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, buttonTradeProposal);
 		_buttonTradeProposal.label.font = Reg._fontDefault;
 		_buttonTradeProposal.visible = false;
 		_buttonTradeProposal.active = false;
@@ -969,7 +969,7 @@ class SignatureGameMain extends FlxState
 		add(_tradingYourBG);
 		
 		if (_unitYoursButton != null) remove(_unitYoursButton);
-		_unitYoursButton = new ButtonToggleSignatureGame(Reg._unitXgameBoardLocation[0] + 198, (Reg._unitYgameBoardLocation[0] + 140) + 35, 1, "Yours", 87, 87, 16, RegCustom._button_text_color, 0, buttonUnitYours);
+		_unitYoursButton = new ButtonToggleSignatureGame(Reg._unitXgameBoardLocation[0] + 198, (Reg._unitYgameBoardLocation[0] + 140) + 35, 1, "Yours", 87, 87, 16, RegCustom._button_text_color[Reg._tn], 0, buttonUnitYours);
 		_unitYoursButton.label.font = Reg._fontDefault;
 		_unitYoursButton.has_toggle = false;
 		_unitYoursButton.set_toggled(false);
@@ -998,7 +998,7 @@ class SignatureGameMain extends FlxState
 		add(_cashSendText);
 				
 		if (_cashMinus500YoursButton != null) remove(_cashMinus500YoursButton);
-		_cashMinus500YoursButton = new ButtonUnique(Reg._unitXgameBoardLocation[0] + 406, (Reg._unitYgameBoardLocation[0] + 140) + 43, "-", 45, 35, Reg._font_size, RegCustom._button_text_color, 0, cashMinus500Yours);		
+		_cashMinus500YoursButton = new ButtonUnique(Reg._unitXgameBoardLocation[0] + 406, (Reg._unitYgameBoardLocation[0] + 140) + 43, "-", 45, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, cashMinus500Yours);		
 		_cashMinus500YoursButton.label.font = Reg._fontDefault;
 		_cashMinus500YoursButton.label.bold = true;
 		_cashMinus500YoursButton.visible = false;
@@ -1006,7 +1006,7 @@ class SignatureGameMain extends FlxState
 		add(_cashMinus500YoursButton);
 		
 		if (_cashPlus500YoursButton != null) remove(_cashPlus500YoursButton);
-		_cashPlus500YoursButton = new ButtonUnique(Reg._unitXgameBoardLocation[0] + 461, (Reg._unitYgameBoardLocation[0] + 140) + 43, "+", 45, 35, Reg._font_size, RegCustom._button_text_color, 0, cashPlus500Yours);		
+		_cashPlus500YoursButton = new ButtonUnique(Reg._unitXgameBoardLocation[0] + 461, (Reg._unitYgameBoardLocation[0] + 140) + 43, "+", 45, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, cashPlus500Yours);		
 		_cashPlus500YoursButton.label.font = Reg._fontDefault;	
 		_cashPlus500YoursButton.label.bold = true;
 		_cashPlus500YoursButton.visible = false;
@@ -1031,7 +1031,7 @@ class SignatureGameMain extends FlxState
 		add(_tradingOtherBG);
 		
 		if (_unitOthersButton != null) remove(_unitOthersButton);
-		_unitOthersButton = new ButtonToggleSignatureGame(Reg._unitXgameBoardLocation[0] + 198, (Reg._unitYgameBoardLocation[0] + 263) + 35, 2, "Other", 87, 87, 16, RegCustom._button_text_color, 0, buttonUnitOthers);
+		_unitOthersButton = new ButtonToggleSignatureGame(Reg._unitXgameBoardLocation[0] + 198, (Reg._unitYgameBoardLocation[0] + 263) + 35, 2, "Other", 87, 87, 16, RegCustom._button_text_color[Reg._tn], 0, buttonUnitOthers);
 		_unitOthersButton.label.font = Reg._fontDefault;
 		_unitOthersButton.has_toggle = false;
 		_unitOthersButton.set_toggled(false);
@@ -1060,7 +1060,7 @@ class SignatureGameMain extends FlxState
 		add(_cashGetText);
 		
 		if (_cashMinus500OthersButton != null) remove(_cashMinus500OthersButton);
-		_cashMinus500OthersButton = new ButtonUnique(Reg._unitXgameBoardLocation[0] + 406, (Reg._unitYgameBoardLocation[0] + 263) + 43, "-", 45, 35, Reg._font_size, RegCustom._button_text_color, 0, cashMinus500Others);		
+		_cashMinus500OthersButton = new ButtonUnique(Reg._unitXgameBoardLocation[0] + 406, (Reg._unitYgameBoardLocation[0] + 263) + 43, "-", 45, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, cashMinus500Others);		
 		_cashMinus500OthersButton.label.font = Reg._fontDefault;
 		_cashMinus500OthersButton.label.bold = true;
 		_cashMinus500OthersButton.visible = false;
@@ -1068,7 +1068,7 @@ class SignatureGameMain extends FlxState
 		add(_cashMinus500OthersButton);
 		
 		if (_cashPlus500OthersButton != null) remove(_cashPlus500OthersButton);
-		_cashPlus500OthersButton = new ButtonUnique(Reg._unitXgameBoardLocation[0] + 461, (Reg._unitYgameBoardLocation[0] + 263) + 43, "+", 45, 35, Reg._font_size, RegCustom._button_text_color, 0, cashPlus500Others);		
+		_cashPlus500OthersButton = new ButtonUnique(Reg._unitXgameBoardLocation[0] + 461, (Reg._unitYgameBoardLocation[0] + 263) + 43, "+", 45, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, cashPlus500Others);		
 		_cashPlus500OthersButton.label.font = Reg._fontDefault;	
 		_cashPlus500OthersButton.label.bold = true;
 		_cashPlus500OthersButton.visible = false;
@@ -2739,7 +2739,7 @@ class SignatureGameMain extends FlxState
 		_textBuyLand.fieldWidth = 404;
 		add(_textBuyLand);
 		
-		_buttonBuyLand = new ButtonUnique(0, 0, "Buy", 190, 35, Reg._font_size, RegCustom._button_text_color, 0, buyLandConfirm);
+		_buttonBuyLand = new ButtonUnique(0, 0, "Buy", 190, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, buyLandConfirm);
 		_buttonBuyLand.label.font = Reg._fontDefault;
 		_buttonBuyLand.screenCenter(XY);
 		_buttonBuyLand.y += 97;

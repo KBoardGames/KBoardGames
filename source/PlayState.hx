@@ -311,9 +311,9 @@ class PlayState extends FlxState
 			RegTypedef._dataPlayers._moveNumberDynamic[2] = 2;
 			RegTypedef._dataPlayers._moveNumberDynamic[3] = 3;
 			
-			RegTypedef._dataPlayers._avatarNumber[0] = RegCustom._profile_avatar_number1;
-			RegTypedef._dataPlayers._avatarNumber[1] = RegCustom._profile_avatar_number2;
-			RegTypedef._dataPlayers._avatarNumber[2] = RegCustom._profile_avatar_number3;
+			RegTypedef._dataPlayers._avatarNumber[0] = RegCustom._profile_avatar_number1[Reg._tn];
+			RegTypedef._dataPlayers._avatarNumber[1] = RegCustom._profile_avatar_number2[Reg._tn];
+			RegTypedef._dataPlayers._avatarNumber[2] = RegCustom._profile_avatar_number3[Reg._tn];
 			RegTypedef._dataPlayers._avatarNumber[3] = "0.png";
 		}
 	}
@@ -360,7 +360,7 @@ class PlayState extends FlxState
 			RegTypedef._dataMisc._roomState[26] = 6; 
 			RegTypedef._dataMisc._gameRoom = true;
 			Reg._gameRoom = true;
-			Reg._gameOverForPlayer = false;
+			//TODO make auto start start for offline mode here. //Reg._gameOverForPlayer = false;
 			RegTypedef._dataMisc._roomGameIds[RegTypedef._dataMisc._room] = Reg._gameId;
 			
 			Reg._move_number_next = 0;
@@ -718,7 +718,7 @@ class PlayState extends FlxState
 			__scene_lobby.visible = false;	
 			__scene_lobby.active = false;
 			
-			if (RegCustom._chat_turn_off_for_lobby == false)
+			if (RegCustom._chat_when_at_lobby_enabled[Reg._tn] == true)
 			{
 				SceneLobby.__game_chatter.visible = false;
 				SceneLobby.__game_chatter.active = false;
@@ -859,7 +859,7 @@ class PlayState extends FlxState
 				__scene_lobby.visible = true;			
 				__scene_lobby.__boxscroller.visible = true;
 				
-				if (RegCustom._chat_turn_off_for_lobby == false)
+				if (RegCustom._chat_when_at_lobby_enabled[Reg._tn] == true)
 				{
 					GameChatter.__boxscroller2.visible = true;
 				}
@@ -951,7 +951,7 @@ class PlayState extends FlxState
 					// should the scroller text be displayed?
 					if (Reg._gameId == 1 
 					&&  SceneGameRoom.__game_history_and_notations != null
-					&&  RegCustom._chess_opening_moves_enabled == true)
+					&&  RegCustom._chess_opening_moves_enabled[Reg._tn] == true)
 						SceneGameRoom.__game_history_and_notations.gameNotationScrollerText(); 
 						
 				}						
@@ -1116,10 +1116,7 @@ class PlayState extends FlxState
 			openSubState(new ChessPromote());
 		}
 		
-	}
-	
-	
-	
+	}	
 	
 	private function gameMessage():Void
 	{
@@ -1129,7 +1126,7 @@ class PlayState extends FlxState
 		&& Reg._gameMessage != "Black piece wins."
 		|| Reg._gameMessage == "") return;
 	
-		new GameMessage();		
+		openSubState( new GameMessage());		
 		Reg._outputMessage = false;
 	}
 	

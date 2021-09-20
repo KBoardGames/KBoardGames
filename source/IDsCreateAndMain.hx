@@ -818,7 +818,7 @@ class IDsCreateAndMain extends FlxState
 	{
 		var p = -1; // gameboard pieces.
 		
-		if (RegCustom._chess_future_capturing_units_enabled == true)
+		if (RegCustom._chess_future_capturing_units_enabled[Reg._tn] == true)
 		{
 			for (y in 0...8)
 			{
@@ -835,7 +835,7 @@ class IDsCreateAndMain extends FlxState
 		}
 		 
 		// keep this outside of the above loop, so that when displaying an image of the capturing path to king at __chessImagePathToKing class, that class can set a var to hide the future capturing path to king image that might be displayed overtop of that unit that was set at __chess_image_future_capturing_units class.
-		if (RegCustom._chess_path_to_king_enabled == true)
+		if (RegCustom._chess_path_to_king_enabled[Reg._tn] == true)
 		{
 			for (y in 0...8)
 			{
@@ -1238,30 +1238,30 @@ class IDsCreateAndMain extends FlxState
 		// fill the screen with a random color.
 		_background_scene_color = new FlxSprite();
 		_background_scene_color.makeGraphic(FlxG.width,FlxG.height - Reg._offsetScreenY + 10,FlxColor.WHITE);
-		_background_scene_color.color = FlxColor.fromHSB(FlxG.random.int(1, 360), 0.8, RegCustom._background_brightness);
+		_background_scene_color.color = FlxColor.fromHSB(FlxG.random.int(1, 360), 0.8, RegCustom._background_brightness[Reg._tn]);
 		_background_scene_color.scrollFactor.set(0, 0);
 		add(_background_scene_color);
 		
-		if (RegCustom._game_room_background_enabled == true)
+		if (RegCustom._game_room_gradient_background_enabled[Reg._tn] == true)
 		{
-			_background_scene = new FlxSprite(0, -44, "assets/images/gameboardBackground" + Std.string(RegCustom._game_room_background_image_number) + ".jpg"); // 44 is half of hud height.
+			_background_scene = new FlxSprite(0, -44, "assets/images/gameboardBackground" + Std.string(RegCustom._game_room_gradient_background_image_number[Reg._tn]) + ".jpg"); // 44 is half of hud height.
 			_background_scene.scrollFactor.set(0, 0);
-			if (RegCustom._game_room_background_alpha_enabled == true)
+			if (RegCustom._game_room_gradient_background_alpha_enabled[Reg._tn] == true)
 				_background_scene.alpha = 0.25;
 			add(_background_scene);
 		}
 		
-		if (RegCustom._gameboard_border_enabled == true)
+		if (RegCustom._gameboard_border_enabled[Reg._tn] == true)
 		{
 			_gameboardBorder = new FlxSprite();
-			_gameboardBorder.loadGraphic("assets/images/gameboardBorder"+ RegCustom._gameboardBorder_num +".png", false);
+			_gameboardBorder.loadGraphic("assets/images/gameboardBorder"+ RegCustom._gameboard_border_number[Reg._tn] +".png", false);
 			_gameboardBorder.setPosition(Reg._unitXgameBoardLocation[0]-30, Reg._unitYgameBoardLocation[0]-30);
 			_gameboardBorder.scrollFactor.set(0, 0);
 			add(_gameboardBorder);
 		}
 		
 		// the numbers 1 to 8 and the letter a to h at the side of the gameboard.
-		if (RegCustom._gameboard_coordinates_enabled == true)
+		if (RegCustom._gameboard_coordinates_enabled[Reg._tn] == true)
 		{
 			var _coordinates = new FlxSprite();
 			_coordinates.loadGraphic("assets/images/coordinates.png", false);
@@ -1337,11 +1337,11 @@ class IDsCreateAndMain extends FlxState
 		// display the custom game board from options menu.
 		if (Reg._gameId == 0 || Reg._gameId == 1)
 		{
-			MenuConfigurationsGeneral._num = Reg._gameId;
+			MenuConfigurationsGeneral._id = Reg._gameId;
 
-			if (RegCustom._units_even_gameboard_show == true)
+			if (RegCustom._gameboard_even_units_show_enabled[Reg._tn] == true)
 			{
-				var _sprite_board_game_unit_even = new FlxSprite(0, 0, "assets/images/scenes/tiles/even/"+ Std.string(RegCustom._units_even_spr_num[Reg._gameId]) + ".png");
+				var _sprite_board_game_unit_even = new FlxSprite(0, 0, "assets/images/scenes/tiles/even/"+ Std.string(RegCustom._gameboard_units_even_sprite_number[Reg._tn][Reg._gameId]) + ".png");
 				_sprite_board_game_unit_even.scrollFactor.set();
 				_sprite_board_game_unit_even.setPosition(Reg._unitXgameBoardLocation[0], Reg._unitYgameBoardLocation[0]);
 				_sprite_board_game_unit_even.color = MenuConfigurationsGeneral.colorToggleUnitsEven();
@@ -1349,7 +1349,7 @@ class IDsCreateAndMain extends FlxState
 				add(_sprite_board_game_unit_even);			
 			}
 			
-			var _sprite_board_game_unit_odd = new FlxSprite(0, 0, "assets/images/scenes/tiles/odd/"+ Std.string(RegCustom._units_odd_spr_num[Reg._gameId]) +".png");
+			var _sprite_board_game_unit_odd = new FlxSprite(0, 0, "assets/images/scenes/tiles/odd/"+ Std.string(RegCustom._gameboard_units_odd_sprite_number[Reg._tn][Reg._gameId]) +".png");
 			_sprite_board_game_unit_odd.scrollFactor.set();
 			_sprite_board_game_unit_odd.setPosition(Reg._unitXgameBoardLocation[0], Reg._unitYgameBoardLocation[0]);
 			_sprite_board_game_unit_odd.color = MenuConfigurationsGeneral.colorToggleUnitsOdd();
@@ -1423,7 +1423,7 @@ class IDsCreateAndMain extends FlxState
 		if (RegTypedef._dataTournaments._move_piece == false)
 		{
 			// time is set at the MenuConfigurationsGames.hx file. we times it by 60 to create the seconds allowed for the game.
-			_t = RegCustom._move_time_remaining_current[_num] * 60;
+			_t = RegCustom._time_remaining_for_game[_num] * 60;
 		}
 		
 		RegTypedef._dataPlayers._timeTotal = _t;

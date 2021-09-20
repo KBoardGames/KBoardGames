@@ -217,7 +217,9 @@ class Reg
 	 * if true then the keyboard is being used. this is needed so that the buttons do not go inactive for a few milliseconds at ButtonGeneral class. we want the buttons always responsive to user input.
 	 */
 	public static var _at_input_keyboard:Bool = false;
-		
+	
+	public static var _at_configuration_menu:Bool = false;
+	
 	/******************************
 	 * used to stop a firing of a house button when entering the house from lobby. the bug was that when clicking house button from lobby the house "put" button was triggered also.
 	 */
@@ -2024,8 +2026,13 @@ class Reg
 	 * true if at house.
 	 */
 	public static var _at_house:Bool = false;
-	
 	public static var __menu_bar:MenuBar;
+	
+	/******************************
+	 * theme number var. default theme has this value of 0. all themes are taken from the themes folder. all themes from that folder will do a var push. so, the second theme from the folder will have a value of 2.
+	 */
+	public static var _tn:Int = 0;
+	public static var _tn_total:Int = 0; // total amount of themes available.
 	
 	public static function resetCPUaiVars():Void
 	{
@@ -2254,7 +2261,7 @@ class Reg
 		_useThirdPartyIpAddress = true; // set this true to enable paid server feature. paid members can host their own domain and that domain can be selected at MenuState as an option to connect to that server.
 		
 		//############################# END CONFIG
-		_menubar_color = FlxColor.fromHSB(FlxG.random.int(1, 335), 0.75, RegCustom._background_brightness);
+		_menubar_color = FlxColor.fromHSB(FlxG.random.int(1, 335), 0.75, RegCustom._background_brightness[_tn]);
 		
 		_p_all_static1 = 
 	[ 0,  1,  2,  3,  4,  5,  6,  7,  8,  9
@@ -2628,6 +2635,7 @@ class Reg
 		_at_create_room = false;
 		_at_waiting_room = false;
 		_at_input_keyboard = false;
+		_at_configuration_menu = false;
 		_loginSuccessfulWasRead = false;
 		_doOnce = true;
 		_spectator_start_timer = false;

@@ -66,7 +66,7 @@ class MiscellaneousMenu extends FlxGroup
 		_gameOptions.fieldWidth = FlxG.width - 100;
 		add(_gameOptions);
 		
-		var _statisticsAll = new ButtonGeneralNetworkYes(30, 175, "Statistics", 200 + 15, 35, Reg._font_size, RegCustom._button_text_color, 0, statisticsAll);
+		var _statisticsAll = new ButtonGeneralNetworkYes(30, 175, "Statistics", 200 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, statisticsAll);
 		_statisticsAll.label.font = Reg._fontDefault;
 		add(_statisticsAll);
 		

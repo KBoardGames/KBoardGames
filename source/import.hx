@@ -16,6 +16,10 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+import yaml.Yaml;
+import yaml.Parser;
+import yaml.Renderer;
+import yaml.util.ObjectMap;
 import flixel.FlxG;
 import flixel.addons.ui.FlxUIButton;
 import flixel.text.FlxText.FlxTextAlign;

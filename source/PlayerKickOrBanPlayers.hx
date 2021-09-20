@@ -48,7 +48,7 @@ class PlayerKickOrBanPlayers extends FlxState
 		// name of each player in front of each player's stats of win, lose or draw.
 		textKickOrBan1 = new FlxText(60, 572, 0, "", 20);
 		textKickOrBan1.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.WHITE);
-		if (RegCustom._chat_turn_off_when_in_room == true)
+		if (RegCustom._chat_when_at_room_enabled[Reg._tn] == false)
 			textKickOrBan1.x += 180; // half of 360 is the width of chatter. half is used to center it to scene.
 		textKickOrBan1.scrollFactor.set(0, 0);
 		add(textKickOrBan1);
@@ -56,52 +56,52 @@ class PlayerKickOrBanPlayers extends FlxState
 		// player 2's name.
 		textKickOrBan2 = new FlxText(280, 572, 0, "", 20);
 		textKickOrBan2.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.WHITE);
-		if (RegCustom._chat_turn_off_when_in_room == true)
+		if (RegCustom._chat_when_at_room_enabled[Reg._tn] == false)
 			textKickOrBan2.x += 180; // half of 360 is the width of chatter. half is used to center it to scene.
 		textKickOrBan2.scrollFactor.set(0, 0);
 		add(textKickOrBan2);
 		
 		textKickOrBan3 = new FlxText(500, 572, 0, "", 20);
 		textKickOrBan3.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.WHITE);
-		if (RegCustom._chat_turn_off_when_in_room == true)
+		if (RegCustom._chat_when_at_room_enabled[Reg._tn] == false)
 			textKickOrBan3.x += 180; // half of 360 is the width of chatter. half is used to center it to scene.
 		textKickOrBan3.scrollFactor.set(0, 0);
 		add(textKickOrBan3);
 		
 		textKickOrBan4 = new FlxText(720, 572, 0, "", 20);
 		textKickOrBan4.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.WHITE);
-		if (RegCustom._chat_turn_off_when_in_room == true)
+		if (RegCustom._chat_when_at_room_enabled[Reg._tn] == false)
 			textKickOrBan4.x += 180; // half of 360 is the width of chatter. half is used to center it to scene.
 		textKickOrBan4.scrollFactor.set(0, 0);
 		add(textKickOrBan4);
 				
 		//----------------------------------
 		// buttons which are displayed over top of text players name but never for player 1. those buttons trigger kick/ban message box.
-		buttonKickOrBan2 = new ButtonGeneralNetworkNo(280, 565, "", 205, 35, Reg._font_size, RegCustom._button_text_color, 0, kickOrBanMessage.bind(2), RegCustom._button_color, false);
+		buttonKickOrBan2 = new ButtonGeneralNetworkNo(280, 565, "", 205, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, kickOrBanMessage.bind(2), RegCustom._button_color[Reg._tn], false);
 		buttonKickOrBan2.label.font = Reg._fontDefault;
 		buttonKickOrBan2.label.alignment = FlxTextAlign.LEFT;
 		buttonKickOrBan2.label.fieldWidth = 200;
-		if (RegCustom._chat_turn_off_when_in_room == true)
+		if (RegCustom._chat_when_at_room_enabled[Reg._tn] == false)
 			buttonKickOrBan2.x += 180; // half of 360 is the width of chatter. half is used to center it to scene.
 		add(buttonKickOrBan2);
 		buttonKickOrBan2.visible = false;
 		buttonKickOrBan2.active = false;
 		
-		buttonKickOrBan3 = new ButtonGeneralNetworkNo(500, 565, "", 205, 35, Reg._font_size, RegCustom._button_text_color, 0, kickOrBanMessage.bind(3), RegCustom._button_color, false);
+		buttonKickOrBan3 = new ButtonGeneralNetworkNo(500, 565, "", 205, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, kickOrBanMessage.bind(3), RegCustom._button_color[Reg._tn], false);
 		buttonKickOrBan3.label.font = Reg._fontDefault;
 		buttonKickOrBan3.label.alignment = FlxTextAlign.LEFT;
 		buttonKickOrBan3.label.fieldWidth = 200;
-		if (RegCustom._chat_turn_off_when_in_room == true)
+		if (RegCustom._chat_when_at_room_enabled[Reg._tn] == false)
 			buttonKickOrBan3.x += 180; // half of 360 is the width of chatter. half is used to center it to scene.
 		add(buttonKickOrBan3);
 		buttonKickOrBan3.visible = false;
 		buttonKickOrBan3.active = false;
 		
-		buttonKickOrBan4 = new ButtonGeneralNetworkNo(720, 565, "", 205, 35, Reg._font_size, RegCustom._button_text_color, 0, kickOrBanMessage.bind(4), RegCustom._button_color, false);
+		buttonKickOrBan4 = new ButtonGeneralNetworkNo(720, 565, "", 205, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, kickOrBanMessage.bind(4), RegCustom._button_color[Reg._tn], false);
 		buttonKickOrBan4.label.font = Reg._fontDefault;
 		buttonKickOrBan4.label.alignment = FlxTextAlign.LEFT;
 		buttonKickOrBan4.label.fieldWidth = 200;
-		if (RegCustom._chat_turn_off_when_in_room == true)
+		if (RegCustom._chat_when_at_room_enabled[Reg._tn] == false)
 			buttonKickOrBan4.x += 180; // half of 360 is the width of chatter. half is used to center it to scene.
 		add(buttonKickOrBan4);
 		buttonKickOrBan4.visible = false;

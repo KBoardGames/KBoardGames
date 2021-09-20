@@ -104,7 +104,7 @@ class Tournaments extends FlxGroup
 			_tourny1.color = FlxColor.GREEN;
 			_tourny1.text = "Please move your gameboard piece.";
 			
-			_button_move_piece = new ButtonGeneralNetworkYes(_tourny1.x + _tourny1.textField.textWidth + 15, _tourny1.y, "Move Piece", 215, 35, Reg._font_size, RegCustom._button_text_color, 0, move_piece.bind(1), RegCustom._button_color, false);		
+			_button_move_piece = new ButtonGeneralNetworkYes(_tourny1.x + _tourny1.textField.textWidth + 15, _tourny1.y, "Move Piece", 215, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, move_piece.bind(1), RegCustom._button_color[Reg._tn], false);		
 			_button_move_piece.label.font = Reg._fontDefault;
 			_button_move_piece.scrollFactor.set(0, 0);
 			add(_button_move_piece);
@@ -134,7 +134,7 @@ class Tournaments extends FlxGroup
 			_tourny1.color = FlxColor.RED;
 			_tourny1.text = "You have been eliminated from this tournament.";
 			
-			_button_move_piece = new ButtonGeneralNetworkYes(_tourny1.x + _tourny1.textField.textWidth + 15, _tourny1.y, "Preview", 215, 35, Reg._font_size, RegCustom._button_text_color, 0, preview.bind(1), RegCustom._button_color, false);		
+			_button_move_piece = new ButtonGeneralNetworkYes(_tourny1.x + _tourny1.textField.textWidth + 15, _tourny1.y, "Preview", 215, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, preview.bind(1), RegCustom._button_color[Reg._tn], false);		
 			_button_move_piece.label.font = Reg._fontDefault;
 			_button_move_piece.scrollFactor.set(0, 0);
 			add(_button_move_piece);

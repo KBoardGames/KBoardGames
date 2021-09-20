@@ -153,7 +153,7 @@ class MenuBar extends FlxGroup
 		add(_background);
 			
 		// width is 35 + 15 extra pixels for the space between the button at the edge of screen.
-		var _button_disconnect = new ButtonGeneralNetworkYes(FlxG.width - 60, FlxG.height - 40, "X", 45, 35, Reg._font_size, RegCustom._button_text_color, 0, disconnect.bind(_from_menuState), 0xFFCC0000, false, 9999);
+		var _button_disconnect = new ButtonGeneralNetworkYes(FlxG.width - 60, FlxG.height - 40, "X", 45, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, disconnect.bind(_from_menuState), 0xFFCC0000, false, 9999);
 		_button_disconnect.scrollFactor.set(0, 0);
 		_button_disconnect.label.font = Reg._fontDefault;
 		add(_button_disconnect);
@@ -184,7 +184,7 @@ class MenuBar extends FlxGroup
 		// this button is not visible. it is placed under the house button and is used by other buttons, in case the house feature is disabled, so they can still be horizontally positioned on the menu bar.
 		if (_buttonHouse_under == null)
 		{
-			_buttonHouse_under = new ButtonGeneralNetworkYes(100 - _offset_x, FlxG.height - 40, "", 215, 35, Reg._font_size, RegCustom._button_text_color, 0, null, RegCustom._button_color, false, 101);		
+			_buttonHouse_under = new ButtonGeneralNetworkYes(100 - _offset_x, FlxG.height - 40, "", 215, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, null, RegCustom._button_color[Reg._tn], false, 101);		
 			_buttonHouse_under.label.font = Reg._fontDefault;
 			_buttonHouse_under.visible = false;
 			_buttonHouse_under.active = false;
@@ -192,11 +192,11 @@ class MenuBar extends FlxGroup
 			add(_buttonHouse_under);
 		}
 		
-		if (RegCustom._config_house_feature_enabled == true)
+		if (RegCustom._house_feature_enabled[Reg._tn] == true)
 		{
 			if (_buttonHouse == null)
 			{
-				_buttonHouse = new ButtonGeneralNetworkYes(100 - _offset_x, FlxG.height - 40, "House", 215, 35, Reg._font_size, RegCustom._button_text_color, 0, scene_house, RegCustom._button_color, false, 102);		
+				_buttonHouse = new ButtonGeneralNetworkYes(100 - _offset_x, FlxG.height - 40, "House", 215, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, scene_house, RegCustom._button_color[Reg._tn], false, 102);		
 				_buttonHouse.label.font = Reg._fontDefault;
 				_buttonHouse.visible = false;
 				_buttonHouse.active = false;
@@ -208,7 +208,7 @@ class MenuBar extends FlxGroup
 		// game instructions, stats.
 		if (_buttonMiscMenu == null)
 		{
-			_buttonMiscMenu = new ButtonGeneralNetworkYes(_buttonHouse_under.x + 230, FlxG.height - 40, "Misc Menu", 215, 35, Reg._font_size, RegCustom._button_text_color, 0, scene_lobby_miscMenu, RegCustom._button_color, false, 103);		
+			_buttonMiscMenu = new ButtonGeneralNetworkYes(_buttonHouse_under.x + 230, FlxG.height - 40, "Misc Menu", 215, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, scene_lobby_miscMenu, RegCustom._button_color[Reg._tn], false, 103);		
 			_buttonMiscMenu.label.font = Reg._fontDefault;
 			_buttonMiscMenu.visible = false;
 			_buttonMiscMenu.active = false;
@@ -219,7 +219,7 @@ class MenuBar extends FlxGroup
 		// daily quests
 		if (_button_daily_quests == null)
 		{
-			_button_daily_quests = new ButtonGeneralNetworkYes(_buttonMiscMenu.x + 230, FlxG.height - 40, "Daily Quests", 215, 35, Reg._font_size, RegCustom._button_text_color, 0, scene_lobby_daily_quests, RegCustom._button_color, false, 104);		
+			_button_daily_quests = new ButtonGeneralNetworkYes(_buttonMiscMenu.x + 230, FlxG.height - 40, "Daily Quests", 215, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, scene_lobby_daily_quests, RegCustom._button_color[Reg._tn], false, 104);		
 			_button_daily_quests.label.font = Reg._fontDefault;
 			_button_daily_quests.scrollFactor.set(0, 0);
 			_button_daily_quests.visible = false;
@@ -230,7 +230,7 @@ class MenuBar extends FlxGroup
 		// tournaments
 		if (_button_tournaments == null)
 		{
-			_button_tournaments = new ButtonGeneralNetworkYes(_button_daily_quests.x + 230, FlxG.height - 40, "Tournaments", 215, 35, Reg._font_size, RegCustom._button_text_color, 0, scene_lobby_tournaments, RegCustom._button_color, false, 105);		
+			_button_tournaments = new ButtonGeneralNetworkYes(_button_daily_quests.x + 230, FlxG.height - 40, "Tournaments", 215, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, scene_lobby_tournaments, RegCustom._button_color[Reg._tn], false, 105);		
 			_button_tournaments.label.font = Reg._fontDefault;
 			_button_tournaments.scrollFactor.set(0, 0);
 			_button_tournaments.visible = false;
@@ -239,11 +239,11 @@ class MenuBar extends FlxGroup
 		}
 		
 		// leaderboards.
-		if (RegCustom._config_leaderboard_enabled == true)
+		if (RegCustom._leaderboard_enabled[Reg._tn] == true)
 		{
 			if (_button_leaderboards == null)
 			{
-				_button_leaderboards = new ButtonGeneralNetworkYes(_button_tournaments.x + 230, FlxG.height - 40, "Leaderboards", 215, 35, Reg._font_size, RegCustom._button_text_color, 0, scene_lobby_leaderboards, RegCustom._button_color, false, 106);		
+				_button_leaderboards = new ButtonGeneralNetworkYes(_button_tournaments.x + 230, FlxG.height - 40, "Leaderboards", 215, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, scene_lobby_leaderboards, RegCustom._button_color[Reg._tn], false, 106);		
 				_button_leaderboards.label.font = Reg._fontDefault;
 				_button_leaderboards.scrollFactor.set(0, 0);
 				_button_leaderboards.visible = false;
@@ -260,7 +260,7 @@ class MenuBar extends FlxGroup
 		{
 			if (_to_lobby == null)
 			{
-				_to_lobby = new ButtonGeneralNetworkYes(0, FlxG.height - 40, "To Lobby", 160 + 15, 35, Reg._font_size, RegCustom._button_text_color, 0, scene_house_return_to_lobby, RegCustom._button_color, false, 3000);		
+				_to_lobby = new ButtonGeneralNetworkYes(0, FlxG.height - 40, "To Lobby", 160 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, scene_house_return_to_lobby, RegCustom._button_color[Reg._tn], false, 3000);		
 				_to_lobby.label.font = Reg._fontDefault;
 				_to_lobby.screenCenter(X);
 				_to_lobby.x += 200;
@@ -269,28 +269,28 @@ class MenuBar extends FlxGroup
 			
 			if (_buttonToFurnitureGetMenu == null)
 			{
-				_buttonToFurnitureGetMenu = new ButtonToggleHouse(_to_lobby.x - 800, FlxG.height - 40, 1, "Item Get", 175, 35, Reg._font_size, RegCustom._button_text_color, 0, __house.buttonToFurnitureGetMenu, 0xFF001100);
+				_buttonToFurnitureGetMenu = new ButtonToggleHouse(_to_lobby.x - 800, FlxG.height - 40, 1, "Item Get", 175, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, __house.buttonToFurnitureGetMenu, 0xFF001100);
 				_buttonToFurnitureGetMenu.label.font = Reg._fontDefault;
 				add(_buttonToFurnitureGetMenu);
 			}
 			
 			if (_buttonToFurniturePutMenu == null)
 			{
-				_buttonToFurniturePutMenu = new ButtonToggleHouse(_to_lobby.x - 600, FlxG.height - 40, 2, "Item Put", 175, 35, Reg._font_size, RegCustom._button_text_color, 0, __house.buttonToFurniturePutMenu, 0xFF001100);
+				_buttonToFurniturePutMenu = new ButtonToggleHouse(_to_lobby.x - 600, FlxG.height - 40, 2, "Item Put", 175, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, __house.buttonToFurniturePutMenu, 0xFF001100);
 				_buttonToFurniturePutMenu.label.font = Reg._fontDefault;
 				add(_buttonToFurniturePutMenu);
 			}
 			
 			if (_buttonToFoundationPutMenu == null)
 			{
-				_buttonToFoundationPutMenu = new ButtonToggleHouse(_to_lobby.x - 400, FlxG.height - 40, 3, "Build", 175, 35, Reg._font_size, RegCustom._button_text_color, 0, __house.buttonToFoundationPutMenu, 0xFF001100);
+				_buttonToFoundationPutMenu = new ButtonToggleHouse(_to_lobby.x - 400, FlxG.height - 40, 3, "Build", 175, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, __house.buttonToFoundationPutMenu, 0xFF001100);
 				_buttonToFoundationPutMenu.label.font = Reg._fontDefault;
 				add(_buttonToFoundationPutMenu);
 			}
 			
 			if (_save == null)
 			{
-				_save = new ButtonGeneralNetworkYes(_to_lobby.x + 200, FlxG.height - 40, "Save", 175, 35, Reg._font_size, RegCustom._button_text_color, 0, scene_house_save, RegCustom._button_color, false, 3001);
+				_save = new ButtonGeneralNetworkYes(_to_lobby.x + 200, FlxG.height - 40, "Save", 175, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, scene_house_save, RegCustom._button_color[Reg._tn], false, 3001);
 				_save.label.font = Reg._fontDefault;
 				
 				#if html5
@@ -310,7 +310,7 @@ class MenuBar extends FlxGroup
 	{
 		if (_buttonCreateRoom == null)
 		{
-			_buttonCreateRoom = new ButtonGeneralNetworkYes(0, FlxG.height - 40, "Enter Room", 160 + 15, 35, Reg._font_size, RegCustom._button_text_color, 0, scene_create_room_goto_waiting_room, RegCustom._button_color, false, 107);		
+			_buttonCreateRoom = new ButtonGeneralNetworkYes(0, FlxG.height - 40, "Enter Room", 160 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, scene_create_room_goto_waiting_room, RegCustom._button_color[Reg._tn], false, 107);		
 			_buttonCreateRoom.label.font = Reg._fontDefault;
 			if (Reg._at_create_room == false)
 			{
@@ -323,7 +323,7 @@ class MenuBar extends FlxGroup
 		
 		if (_buttonReturnToLobby == null)
 		{
-			_buttonReturnToLobby = new ButtonGeneralNetworkYes(_buttonCreateRoom.x - 200, FlxG.height - 40, "To Lobby", 160 + 15, 35, Reg._font_size, RegCustom._button_text_color, 0, scene_create_room_return_to_lobby, RegCustom._button_color, false, 108);
+			_buttonReturnToLobby = new ButtonGeneralNetworkYes(_buttonCreateRoom.x - 200, FlxG.height - 40, "To Lobby", 160 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, scene_create_room_return_to_lobby, RegCustom._button_color[Reg._tn], false, 108);
 			_buttonReturnToLobby.label.font = Reg._fontDefault;
 			if (Reg._at_create_room == false)
 			{
@@ -341,20 +341,20 @@ class MenuBar extends FlxGroup
 	{
 		var _offset:Int = 20;
 		
-		_button_return_to_lobby_from_waiting_room = new ButtonGeneralNetworkYes(40 + _offset, FlxG.height-40, "To Lobby", 205, 35, Reg._font_size, RegCustom._button_text_color, 0, scene_waiting_room_return_to_lobby, RegCustom._button_color, false, 109);
+		_button_return_to_lobby_from_waiting_room = new ButtonGeneralNetworkYes(40 + _offset, FlxG.height-40, "To Lobby", 205, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, scene_waiting_room_return_to_lobby, RegCustom._button_color[Reg._tn], false, 109);
 		_button_return_to_lobby_from_waiting_room.label.font = Reg._fontDefault;
 		_button_return_to_lobby_from_waiting_room.visible = false;
 		_button_return_to_lobby_from_waiting_room.active = false;
 		add(_button_return_to_lobby_from_waiting_room);
 				
-		_button_refresh_list = new ButtonGeneralNetworkYes(260 + _offset, FlxG.height-40, "Update List", 205, 35, Reg._font_size, RegCustom._button_text_color, 0, scene_waiting_room_refresh_online_list, RegCustom._button_color, false, 110);		
+		_button_refresh_list = new ButtonGeneralNetworkYes(260 + _offset, FlxG.height-40, "Update List", 205, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, scene_waiting_room_refresh_online_list, RegCustom._button_color[Reg._tn], false, 110);		
 		_button_refresh_list.label.font = Reg._fontDefault;
 		_button_refresh_list.scrollFactor.set(0, 0);
 		_button_refresh_list.visible = false;
 		_button_refresh_list.active = false;
 		add(_button_refresh_list);				
 		
-		_buttonGameRoom = new ButtonGeneralNetworkYes(700 + _offset, FlxG.height-40, "Game Room", 205, 35, Reg._font_size, RegCustom._button_text_color, 0, scene_waiting_room_goto_game_room, RegCustom._button_color, false, 111);
+		_buttonGameRoom = new ButtonGeneralNetworkYes(700 + _offset, FlxG.height-40, "Game Room", 205, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, scene_waiting_room_goto_game_room, RegCustom._button_color[Reg._tn], false, 111);
 		_buttonGameRoom.label.font = Reg._fontDefault;
 		_buttonGameRoom.visible = false;
 		_buttonGameRoom.active = false;
@@ -366,7 +366,7 @@ class MenuBar extends FlxGroup
 	 */
 	private function menu_misc():Void
 	{
-		_misc_menu_exit = new ButtonGeneralNetworkYes(30, FlxG.height - 40, "Exit", 150 + 15, 35, Reg._font_size, RegCustom._button_text_color, 0, scene_misc_exit, RegCustom._button_color, true, 112);
+		_misc_menu_exit = new ButtonGeneralNetworkYes(30, FlxG.height - 40, "Exit", 150 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, scene_misc_exit, RegCustom._button_color[Reg._tn], true, 112);
 		_misc_menu_exit.label.font = Reg._fontDefault;
 		_misc_menu_exit.screenCenter(X);
 		_misc_menu_exit.x += 400;
@@ -378,7 +378,7 @@ class MenuBar extends FlxGroup
 	 */
 	private function menu_daily_quests():Void
 	{
-		_scene_daily_quests_exit = new ButtonGeneralNetworkYes(30, FlxG.height - 40, "Exit", 150 + 15, 35, Reg._font_size, RegCustom._button_text_color, 0, scene_daily_quests_exit, RegCustom._button_color, true, 113);
+		_scene_daily_quests_exit = new ButtonGeneralNetworkYes(30, FlxG.height - 40, "Exit", 150 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, scene_daily_quests_exit, RegCustom._button_color[Reg._tn], true, 113);
 		_scene_daily_quests_exit.label.font = Reg._fontDefault;
 		_scene_daily_quests_exit.screenCenter(X);
 		_scene_daily_quests_exit.x += 400;
@@ -394,7 +394,7 @@ class MenuBar extends FlxGroup
 		{
 			if (_rewards[i] == "1")
 			{
-				_button_claim_reward = new ButtonGeneralNetworkYes(_scene_daily_quests_exit.x-200, FlxG.height - 40, "Claim", 185, 35, Reg._font_size, RegCustom._button_text_color, 0, scene_daily_quests_claim_reward, RegCustom._button_color, false, 114);
+				_button_claim_reward = new ButtonGeneralNetworkYes(_scene_daily_quests_exit.x-200, FlxG.height - 40, "Claim", 185, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, scene_daily_quests_claim_reward, RegCustom._button_color[Reg._tn], false, 114);
 				_button_claim_reward.label.font = Reg._fontDefault;
 				add(_button_claim_reward);
 				
@@ -412,7 +412,7 @@ class MenuBar extends FlxGroup
 	 */
 	private function menu_tournaments():Void
 	{
-		_scene_tournaments_exit = new ButtonGeneralNetworkYes(30, FlxG.height - 40, "Exit", 150 + 15, 35, Reg._font_size, RegCustom._button_text_color, 0, scene_tournaments_exit, RegCustom._button_color, true, 115);
+		_scene_tournaments_exit = new ButtonGeneralNetworkYes(30, FlxG.height - 40, "Exit", 150 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, scene_tournaments_exit, RegCustom._button_color[Reg._tn], true, 115);
 		_scene_tournaments_exit.label.font = Reg._fontDefault;
 		_scene_tournaments_exit.screenCenter(X);
 		_scene_tournaments_exit.x += 400;
@@ -424,7 +424,7 @@ class MenuBar extends FlxGroup
 	 */
 	private function menu_leaderboards():Void
 	{
-		_scene_leaderboards_exit = new ButtonGeneralNetworkYes(0, FlxG.height - 40, "To Lobby", 160 + 15, 35, Reg._font_size, RegCustom._button_text_color, 0, scene_leaderboard_return_to_lobby , RegCustom._button_color, true, 116);		
+		_scene_leaderboards_exit = new ButtonGeneralNetworkYes(0, FlxG.height - 40, "To Lobby", 160 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, scene_leaderboard_return_to_lobby , RegCustom._button_color[Reg._tn], true, 116);		
 		_scene_leaderboards_exit.label.font = Reg._fontDefault;
 		_scene_leaderboards_exit.screenCenter(X);
 		_scene_leaderboards_exit.x += 400;
@@ -436,7 +436,6 @@ class MenuBar extends FlxGroup
 	 */
 	private function disconnect(_from_menuState:Bool = false):Void
 	{
-		RegCustom.resetConfigurationVars();
 		Reg2._miscMenuIparameter = 0;
 		
 		if (GameChatter.__boxscroller2 != null)	GameChatter.__boxscroller2 = null;
@@ -449,12 +448,12 @@ class MenuBar extends FlxGroup
 	
 	public function options():Void
 	{
-		if (RegCustom._config_house_feature_enabled == true)
+		if (RegCustom._house_feature_enabled[Reg._tn] == true)
 		{
 			RegHouse.resetHouseAtLobby();
 		}
 		
-		if (RegCustom._config_house_feature_enabled == true)
+		if (RegCustom._house_feature_enabled[Reg._tn] == true)
 		{
 			RegTypedef.resetHouseData(); // this is needed to avoid a crash.	
 			RegHouse.resetHouseAtLobby();
@@ -667,7 +666,7 @@ class MenuBar extends FlxGroup
 	
 	override public function update(elapsed:Float):Void 
 	{
-		if (RegCustom._config_house_feature_enabled == true)
+		if (RegCustom._house_feature_enabled[Reg._tn] == true)
 		{
 			if (RegTriggers._new_the_house == true)
 			{
@@ -1152,29 +1151,35 @@ class MenuBar extends FlxGroup
 	}
 	
 	private function scene_waiting_room_return_to_lobby():Void
-	{	
-		Reg._messageId = 4000;
+	{			
 		Reg._buttonCodeValues = "r1004";
 		
-		if (RegCustom._to_lobby_waiting_room_confirmation == false)
+		if (RegCustom._to_lobby_from_waiting_room_confirmation[Reg._tn] == false)
 		{
 			Reg._yesNoKeyPressValueAtMessage = 1;
 		}
 		
-		else SceneGameRoom.messageBoxMessageOrder();
+		else 
+		{
+			Reg._messageId = 4000;
+			SceneGameRoom.messageBoxMessageOrder();
+		}
 	}
 		
 	private function scene_waiting_room_goto_game_room():Void
-	{
-		Reg._messageId = 4002;
+	{		
 		Reg._buttonCodeValues = "r1001";
 
-		if (RegCustom._to_game_room_confirmation == false)
+		if (RegCustom._to_game_room_from_waiting_room_confirmation[Reg._tn] == false)
 		{
 			Reg._yesNoKeyPressValueAtMessage = 1;
 		}
 		
-		else SceneGameRoom.messageBoxMessageOrder();
+		else
+		{
+			Reg._messageId = 4002;
+			SceneGameRoom.messageBoxMessageOrder();
+		}
 	}	
 	
 	// refresh a list, a boxScroller with users that can be invited to the room.

@@ -95,8 +95,6 @@ class MenuConfigurationsProfile extends FlxGroup
 		
 	private function sceneProfile():Void
 	{
-		__menu_configurations_output._title.screenCenter(X); // needed again because we changed the text length.
-		
 		_group = cast add(new FlxSpriteGroup());
 		_group_button.splice(0, _group_button.length);
 		
@@ -111,7 +109,7 @@ class MenuConfigurationsProfile extends FlxGroup
 		_profile_general_instructions.y = _text_title_player.y + 50;
 		_group.add(_profile_general_instructions);
 		
-		_button_p1 = new ButtonToggleFlxState(0, 0, 1, "Player 1", 180, 35, Reg._font_size, RegCustom._button_text_color, 0, buttonP1);
+		_button_p1 = new ButtonToggleFlxState(0, 0, 1, "Player 1", 180, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, buttonP1);
 		_button_p1.screenCenter(X);
 		_button_p1.x -= 97;
 		// set_toggled must be before has_toggle or the save will not work when click event has not fired somewhere other than this input widget.
@@ -120,7 +118,7 @@ class MenuConfigurationsProfile extends FlxGroup
 		_button_p1.y = _profile_general_instructions.y + _profile_general_instructions.height + 15;
 		_group.add(_button_p1);
 		
-		_button_p2 = new ButtonToggleFlxState(_button_p1.x + 180 + 15, 200, 1, "Player 2", 180, 35, Reg._font_size, RegCustom._button_text_color, 0, buttonP2);
+		_button_p2 = new ButtonToggleFlxState(_button_p1.x + 180 + 15, 200, 1, "Player 2", 180, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, buttonP2);
 		_button_p2.set_toggled(false);
 		_button_p2.has_toggle = false;
 		_button_p2.y = _button_p1.y;
@@ -156,7 +154,7 @@ class MenuConfigurationsProfile extends FlxGroup
 		_group.add(_profile_avatar_notice);
 		
 		_image_profile_avatar = new FlxSprite(15, 300);
-		_image_profile_avatar.loadGraphic("vendor/multiavatar/"+ RegCustom._profile_avatar_number1);
+		_image_profile_avatar.loadGraphic("vendor/multiavatar/"+ RegCustom._profile_avatar_number1[Reg._tn]);
 		_image_profile_avatar.y = _profile_avatar_notice.y + 50;
 		_group.add(_image_profile_avatar);		
 		
@@ -206,7 +204,7 @@ class MenuConfigurationsProfile extends FlxGroup
 		_image_avatar_highlighted.updateHitbox();
 		_group.add(_image_avatar_highlighted);
 		
-		var _text_empty = new ButtonGeneralNetworkNo(0, _group_sprite[Reg._avatar_total-1].y + 300, "", 100, 35, Reg._font_size, RegCustom._button_text_color, 0, null, RegCustom._button_color);
+		var _text_empty = new ButtonGeneralNetworkNo(0, _group_sprite[Reg._avatar_total-1].y + 300, "", 100, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, null, RegCustom._button_color[Reg._tn]);
 		_text_empty.visible = false;
 		_group.add(_text_empty);
 	}
@@ -234,7 +232,7 @@ class MenuConfigurationsProfile extends FlxGroup
 			else _usernameInput.text = RegCustom._profile_username_p1;
 		}
 		
-		_image_profile_avatar.loadGraphic("vendor/multiavatar/" + RegCustom._profile_avatar_number1);
+		_image_profile_avatar.loadGraphic("vendor/multiavatar/" + RegCustom._profile_avatar_number1[Reg._tn]);
 		
 		_button_p1.set_toggled(true);
 		_button_p1.has_toggle = true;
@@ -255,7 +253,7 @@ class MenuConfigurationsProfile extends FlxGroup
 			else _usernameInput.text = RegCustom._profile_username_p2;
 		}
 		
-		_image_profile_avatar.loadGraphic("vendor/multiavatar/" + RegCustom._profile_avatar_number2);
+		_image_profile_avatar.loadGraphic("vendor/multiavatar/" + RegCustom._profile_avatar_number2[Reg._tn]);
 		
 		_button_p2.set_toggled(true);
 		_button_p2.has_toggle = true;
@@ -308,14 +306,14 @@ class MenuConfigurationsProfile extends FlxGroup
 					
 					if (ActionInput.justPressed() == true)
 					{
-						if (RegCustom._enable_sound == true
+						if (RegCustom._sound_enabled[Reg._tn] == true
 						&&  Reg2._boxScroller_is_scrolling == false)
 							FlxG.sound.play("click", 1, false);
 						
 						if (_button_p1.has_toggle == true)
-							RegCustom._profile_avatar_number1 = Std.string(i) + ".png";
+							RegCustom._profile_avatar_number1[Reg._tn] = Std.string(i) + ".png";
 						else 
-							RegCustom._profile_avatar_number2 = Std.string(i) + ".png";
+							RegCustom._profile_avatar_number2[Reg._tn] = Std.string(i) + ".png";
 							
 						_image_profile_avatar.loadGraphic("vendor/multiavatar/" + i +".png");
 					}
@@ -522,7 +520,7 @@ class MenuConfigurationsProfile extends FlxGroup
 		{
 			_usernameInput.hasFocus = true;
 			
-			if (RegCustom._enable_sound == true
+			if (RegCustom._sound_enabled[Reg._tn] == true
 			&&  Reg2._boxScroller_is_scrolling == false)
 				FlxG.sound.play("click", 1, false);
 							
@@ -530,6 +528,6 @@ class MenuConfigurationsProfile extends FlxGroup
 				RegTriggers._keyboard_open = true;
 			#end
 		}
-		
+	
 	}
 }//

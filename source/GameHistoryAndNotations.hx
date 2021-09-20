@@ -91,11 +91,11 @@ class GameHistoryAndNotations extends FlxGroup
 		_boxScrollerGroup.add(_text);
 		
 		// used to darken the scrollableArea region.
-		if (RegCustom._notation_panel_enabled == true)
+		if (RegCustom._notation_panel_enabled[Reg._tn] == true)
 		{
 			_notation = new FlxSprite(0, 0);
 			_notation.makeGraphic(337, FlxG.height - Reg._offsetScreenY + 13, FlxColor.BLACK);
-			if (RegCustom._notation_panel_alpha_apply == true)
+			if (RegCustom._notation_panel_10_percent_alpha_enabled[Reg._tn] == true)
 				_notation.alpha = 0.60;
 			_notation.scrollFactor.set(0, 0);
 			add(_notation);
@@ -321,7 +321,7 @@ class GameHistoryAndNotations extends FlxGroup
 	public function notationPrint():Void 
 	{
 		// should the notation panel be displayed?
-		if (RegCustom._notation_panel_enabled == false) return;
+		if (RegCustom._notation_panel_enabled[Reg._tn] == false) return;
 		
 		var _textTemp:String = ""; // used to store pieces of text. when finished the this var will be copied to _messageForBoxScroller.text.	
 		var _letter:String = "";

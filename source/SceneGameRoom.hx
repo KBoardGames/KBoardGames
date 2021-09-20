@@ -95,8 +95,6 @@ class SceneGameRoom extends FlxState
 	{
 		super();
 		
-		Reg._gameOverForPlayer = true;
-		Reg._gameOverForAllPlayers = true;
 		Reg2._lobby_button_alpha = 1;
 		RegTriggers._buttons_set_not_active = false;
 		
@@ -195,7 +193,7 @@ class SceneGameRoom extends FlxState
 		if (Reg._game_offline_vs_cpu == false 
 		&&  Reg._game_offline_vs_player == false
 		&&  RegTypedef._dataPlayers._spectatorWatching == false
-		&&  RegCustom._chat_turn_off_when_in_room == false)
+		&&  RegCustom._chat_when_at_room_enabled[Reg._tn] == true)
 		{
 			//-------------------------------
 			if (__game_chatter != null) 
@@ -226,33 +224,17 @@ class SceneGameRoom extends FlxState
 		&&  Reg._game_offline_vs_cpu == false
 		&&  Reg2._do_once_game_start_request == false)
 		{
-			if (RegCustom._send_automatic_start_game_request == true
+			if (RegCustom._send_automatic_start_game_request[Reg._tn] == true
 			&&  RegTypedef._dataMisc._username == RegTypedef._dataMisc._roomHostUsername[RegTypedef._dataMisc._room])
 			{
-				RegCustom._send_automatic_start_game_request = false;
+				RegCustom._send_automatic_start_game_request[Reg._tn] = false;
 				
 				PlayState.clientSocket.send("Restart Offer", RegTypedef._dataQuestions);
 				haxe.Timer.delay(function (){}, Reg2._event_sleep);
 			}
 		}
 		
-		Reg._gameOverForPlayer = false;
-		Reg._gameOverForAllPlayers = false;
 		
-		Reg._playerOffset = 0;
-		
-		if (Reg._game_offline_vs_player == false 
-		&&	Reg._game_offline_vs_cpu == false)
-		{
-			RegTypedef._dataPlayers._gamePlayersValues = [1, 1, 1, 1];
-			Reg._playerIDs = -1;
-			PlayState.clientSocket.send("Game Players Values", RegTypedef._dataPlayers); 
-			haxe.Timer.delay(function (){}, Reg2._event_sleep);
-			
-			RegTypedef._dataPlayers._gameIsFinished = false;
-			PlayState.clientSocket.send("Game Is Finished", RegTypedef._dataPlayers);
-			haxe.Timer.delay(function (){}, Reg2._event_sleep);
-		}
 	}
 
 	override public function destroy()
@@ -643,7 +625,7 @@ class SceneGameRoom extends FlxState
 			buttonHideAll(); // hide the restart, draw and lobby buttons because a restart button, for example, should not be shown when a player leave the game room.
 						
 			// hide open close chatter button because we have a message popup that needs to be clicked.
-			if (GameChatter != null && RegCustom._chat_turn_off_when_in_room == false)
+			if (GameChatter != null && RegCustom._chat_when_at_room_enabled[Reg._tn] == true)
 			{
 				GameChatter._input_chat.visible = false;
 				GameChatter._input_chat.active = false;
@@ -1544,8 +1526,6 @@ class SceneGameRoom extends FlxState
 				
 				Reg._disconnectNow = true;	
 			}			
-			
-			else FlxG.switchState(new MenuState());			
 		}
 		
 		// return to title screen cancelled
@@ -1564,7 +1544,7 @@ class SceneGameRoom extends FlxState
 			if (GameChatter != null && RegTypedef._dataPlayers._spectatorWatching == false)
 			{
 				// player has left so we can now click the chatter button.
-				if (RegCustom._chat_turn_off_when_in_room == false)
+				if (RegCustom._chat_when_at_room_enabled[Reg._tn] == true)
 				{
 					GameChatter._chatterOpenCloseButton.active = true;
 					GameChatter._chatterOpenCloseButton.visible = true;
@@ -1853,9 +1833,9 @@ class SceneGameRoom extends FlxState
 		messageBoxMessageOrder();
 		
 		// should this message box be displayed?
-		if (RegCustom._start_game_offline_confirmation == true
+		if (RegCustom._start_game_offline_confirmation[Reg._tn] == true
 		&&  Reg._game_offline_vs_cpu == true 
-		||  RegCustom._start_game_offline_confirmation == true
+		||  RegCustom._start_game_offline_confirmation[Reg._tn] == true
 		&&  Reg._game_offline_vs_player == true
 		)
 		{
@@ -1867,23 +1847,39 @@ class SceneGameRoom extends FlxState
 	private function messageReturnToTitle():Void
 	{
 		FlxG.mouse.enabled = false;
-		
-		Reg._messageId = 16250;
 		Reg._buttonCodeValues = "g1002";
-		messageBoxMessageOrder();	
+			
+		if (Reg._game_offline_vs_player == true 
+		||	Reg._game_offline_vs_cpu == true
+		) 
+		{
+			FlxG.switchState(new MenuState());
+		}
+		
+		if (RegCustom._to_title_from_game_room_confirmation[Reg._tn] == false)		
+			Reg._yesNoKeyPressValueAtMessage = 1;
+				
+		else
+		{
+			Reg._messageId = 16250;			
+			messageBoxMessageOrder();
+		}
 	}
 	
 	private function messageReturnToLobby():Void
 	{
 		FlxG.mouse.enabled = false;
-		
-		Reg._messageId = 16300;
 		Reg._buttonCodeValues = "g1000";
-		messageBoxMessageOrder();
-		
-		if (RegCustom._to_lobby_game_room_confirmation == false)
+				
+		if (RegCustom._to_lobby_from_game_room_confirmation[Reg._tn] == false)
 		{
 			Reg._yesNoKeyPressValueAtMessage = 1;
+		}
+		
+		else
+		{
+			Reg._messageId = 16300;
+			messageBoxMessageOrder();
 		}
 		
 	}
@@ -1920,7 +1916,7 @@ class SceneGameRoom extends FlxState
 		Reg._buttonCodeValues = "g1011";	
 		messageBoxMessageOrder();
 		
-		if (RegCustom._accept_automatic_start_game_request == true
+		if (RegCustom._accept_automatic_start_game_request[Reg._tn] == true
 		&&  Reg2._do_once_accept_game_start_request == false)
 		{
 			Reg2._do_once_accept_game_start_request = true;
@@ -1953,7 +1949,7 @@ class SceneGameRoom extends FlxState
 			_playerTimeRemainingMove = null;
 		}
 
-		if (RegCustom._move_timer_enable == true
+		if (RegCustom._timer_enabled[Reg._tn] == true
 		||  RegTypedef._dataTournaments._move_piece == true) // always enabled for tournament play.
 		{
 			_playerTimeRemainingMove = new PlayerTimeRemainingMove(IDsCreateAndMain._t, this);
@@ -1989,7 +1985,7 @@ class SceneGameRoom extends FlxState
 	{
 		if (Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false)
 		{
-			buttonStartRestartGame = new ButtonGeneralNetworkYes(FlxG.width - 363, FlxG.height - 237, "Start Game", 160 + 15, 35, Reg._font_size, RegCustom._button_text_color, 0, messageStartRestartGame, RegCustom._button_color, false, 1000);
+			buttonStartRestartGame = new ButtonGeneralNetworkYes(FlxG.width - 363, FlxG.height - 237, "Start Game", 160 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, messageStartRestartGame, RegCustom._button_color[Reg._tn], false, 1000);
 			
 			if (Reg._gameHost == true
 			&&  RegTypedef._dataPlayers._spectatorWatching == false)
@@ -2008,7 +2004,7 @@ class SceneGameRoom extends FlxState
 		else
 		{
 			// offline
-			buttonStartRestartGame2 = new ButtonGeneralNetworkNo(FlxG.width - 363, FlxG.height - 137, "Start Game", 175, 35, Reg._font_size, RegCustom._button_text_color, 0, messageStartRestartGame, RegCustom._button_color, false, 1);
+			buttonStartRestartGame2 = new ButtonGeneralNetworkNo(FlxG.width - 363, FlxG.height - 137, "Start Game", 175, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, messageStartRestartGame, RegCustom._button_color[Reg._tn], false, 1);
 			buttonStartRestartGame2.label.font = Reg._fontDefault;
 		add(buttonStartRestartGame2); 
 		
@@ -2017,7 +2013,7 @@ class SceneGameRoom extends FlxState
 		
 		if (Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false)
 		{
-			buttonReturnToTitle = new ButtonGeneralNetworkYes(FlxG.width - 183, FlxG.height - 187, "To Title", 160 + 15, 35, Reg._font_size, RegCustom._button_text_color, 0, messageReturnToTitle, RegCustom._button_color, false, 1001);
+			buttonReturnToTitle = new ButtonGeneralNetworkYes(FlxG.width - 183, FlxG.height - 187, "To Title", 160 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, messageReturnToTitle, RegCustom._button_color[Reg._tn], false, 1001);
 			buttonReturnToTitle.label.font = Reg._fontDefault;
 			add(buttonReturnToTitle);
 			
@@ -2026,7 +2022,7 @@ class SceneGameRoom extends FlxState
 		if (Reg._game_offline_vs_cpu == true || Reg._game_offline_vs_player == true)
 		{
 			// offline
-			buttonReturnToTitle2 = new ButtonGeneralNetworkNo(FlxG.width - 183, FlxG.height - 137, "To Title", 160 + 15, 35, Reg._font_size, RegCustom._button_text_color, 0, messageReturnToTitle, RegCustom._button_color, false, 1);
+			buttonReturnToTitle2 = new ButtonGeneralNetworkNo(FlxG.width - 183, FlxG.height - 137, "To Title", 160 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, messageReturnToTitle, RegCustom._button_color[Reg._tn], false, 1);
 			buttonReturnToTitle2.label.font = Reg._fontDefault;
 			add(buttonReturnToTitle2);
 			
@@ -2034,7 +2030,7 @@ class SceneGameRoom extends FlxState
 		
 		if (Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false)
 		{
-			buttonDrawGame = new ButtonGeneralNetworkYes(FlxG.width - 363, FlxG.height -  187, "Draw", 160 + 15, 35, Reg._font_size, RegCustom._button_text_color, 0, messageDrawOffer, RegCustom._button_color, false, 1002);
+			buttonDrawGame = new ButtonGeneralNetworkYes(FlxG.width - 363, FlxG.height -  187, "Draw", 160 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, messageDrawOffer, RegCustom._button_color[Reg._tn], false, 1002);
 			buttonDrawGame.label.font = Reg._fontDefault;
 			buttonDrawGame.visible = false;
 			buttonDrawGame.active = false;
@@ -2044,14 +2040,14 @@ class SceneGameRoom extends FlxState
 		// Reg._game_online_vs_cpu code is needed to show this button while playing an online game.
 		if (Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false)
 		{
-			buttonReturnToLobby = new ButtonGeneralNetworkYes(FlxG.width - 183, FlxG.height - 237, "To Lobby", 160 + 15, 35, Reg._font_size, RegCustom._button_text_color, 0, messageReturnToLobby, RegCustom._button_color, false, 1003);
+			buttonReturnToLobby = new ButtonGeneralNetworkYes(FlxG.width - 183, FlxG.height - 237, "To Lobby", 160 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, messageReturnToLobby, RegCustom._button_color[Reg._tn], false, 1003);
 			buttonReturnToLobby.label.font = Reg._fontDefault;
 			add(buttonReturnToLobby);
 		}
 		
 		if (Reg._game_online_vs_cpu == true)
 		{
-			buttonReturnToLobby = new ButtonGeneralNetworkYes(FlxG.width - 183, FlxG.height - 187, "To Lobby", 160 + 15, 35, Reg._font_size, RegCustom._button_text_color, 0, messageReturnToLobby, RegCustom._button_color, false, 1004);
+			buttonReturnToLobby = new ButtonGeneralNetworkYes(FlxG.width - 183, FlxG.height - 187, "To Lobby", 160 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, messageReturnToLobby, RegCustom._button_color[Reg._tn], false, 1004);
 			buttonReturnToLobby.label.font = Reg._fontDefault;
 			add(buttonReturnToLobby);
 		}
@@ -2059,7 +2055,7 @@ class SceneGameRoom extends FlxState
 		// Reg._game_online_vs_cpu code is needed to show this button while playing an online game.
 		if (Reg._game_online_vs_cpu == true || Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false)
 		{
-			buttonQuitGame = new ButtonGeneralNetworkYes(FlxG.width - 363, FlxG.height - 137, "Quit Game", 160 + 15, 35, Reg._font_size, RegCustom._button_text_color, 0, messageQuitGame, RegCustom._button_color, false, 1005);
+			buttonQuitGame = new ButtonGeneralNetworkYes(FlxG.width - 363, FlxG.height - 137, "Quit Game", 160 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, messageQuitGame, RegCustom._button_color[Reg._tn], false, 1005);
 			buttonQuitGame.label.font = Reg._fontDefault;
 			buttonQuitGame.visible = false;
 			buttonQuitGame.active = false;

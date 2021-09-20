@@ -192,7 +192,7 @@ class HouseFurnitureGet extends FlxGroup
 		}
 	
 		// the scrollbar is needed or else there will be a client crash when a request for the scrollbar is made.
-		var _buttonForScrollBar = new ButtonGeneralNetworkNo(0, (((RegHouse._totalCanPurchase + 1 ) * 200) + 100) + _offset_y, "", 160 + 15, 35, Reg._font_size, RegCustom._button_text_color, 0, null, RegCustom._button_color);
+		var _buttonForScrollBar = new ButtonGeneralNetworkNo(0, (((RegHouse._totalCanPurchase + 1 ) * 200) + 100) + _offset_y, "", 160 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, null, RegCustom._button_color[Reg._tn]);
 		_buttonForScrollBar.label.font = Reg._fontDefault;
 		_buttonForScrollBar.visible = false;
 		_group.add(_buttonForScrollBar);
@@ -302,7 +302,7 @@ class HouseFurnitureGet extends FlxGroup
 				
 				if (ActionInput.justPressed() == true)
 				{
-					if (RegCustom._enable_sound == true
+					if (RegCustom._sound_enabled[Reg._tn] == true
 					&&  Reg2._boxScroller_is_scrolling == false)
 						FlxG.sound.play("click", 1, false);
 				}

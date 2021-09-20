@@ -146,7 +146,7 @@ class DailyQuests extends FlxGroup
 		}		
 		
 		// needed extra vertical space to show all last element.
-		var _button = new ButtonGeneralNetworkYes(0, 13 * _height_between_bars, "", 200, 35, Reg._font_size, RegCustom._button_text_color, 0, null, RegCustom._button_color);
+		var _button = new ButtonGeneralNetworkYes(0, 13 * _height_between_bars, "", 200, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, null, RegCustom._button_color[Reg._tn]);
 		_button.visible = false;
 		_group.add(_button);
 		
@@ -269,7 +269,7 @@ class DailyQuests extends FlxGroup
 	{
 		// create the quest bars.		
 		_bar = new FlxBar(100, _id * _height_between_bars + 100, FlxBarFillDirection.LEFT_TO_RIGHT, FlxG.width - 550, 110, null, "", 0, _max, true);
-		_bar.createColoredEmptyBar(RegCustom._button_color, true);
+		_bar.createColoredEmptyBar(RegCustom._button_color[Reg._tn], true);
 		_bar.createColoredFilledBar(0xFF111199, true);
 		_bar.screenCenter(X);		
 		

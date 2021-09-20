@@ -184,7 +184,7 @@ class SceneLobby extends FlxState
 		add(_title);
 		
 		// 360 is the chat width. 215 is this button with. 15 is the default space from the edge. 20 is the width of the scrollbar. 10 is the extra space needed to make it look nice,
-		_button_lobby_refresh = new ButtonGeneralNetworkYes(FlxG.width + -360 + -215 + -15 - 20 - 10, 14, "Lobby Refresh", 215, 35, Reg._font_size, RegCustom._button_text_color, 0, button_refresh, RegCustom._button_color, false);		
+		_button_lobby_refresh = new ButtonGeneralNetworkYes(FlxG.width + -360 + -215 + -15 - 20 - 10, 14, "Lobby Refresh", 215, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, button_refresh, RegCustom._button_color[Reg._tn], false);		
 		_button_lobby_refresh.label.font = Reg._fontDefault;
 		_button_lobby_refresh.scrollFactor.set(0, 0);
 		add(_button_lobby_refresh);
@@ -201,7 +201,7 @@ class SceneLobby extends FlxState
 		_buttonState[7] = "Full";
 		_buttonState[8] = "Watch";
 		
-		var _color_table_rows = FlxColor.fromHSB(FlxG.random.int(1, 360), 0.8, (RegCustom._background_brightness-0.10));
+		var _color_table_rows = FlxColor.fromHSB(FlxG.random.int(1, 360), 0.8, (RegCustom._background_brightness[Reg._tn]-0.10));
 		
 		// Create the text boxes underneath the buttons. Note that the last count ends before another loop, so only 26 loops will be made. 
 		for (i in 1...27)
@@ -255,7 +255,7 @@ class SceneLobby extends FlxState
 		for (i in 0... _button_total) // change this value if increasing the button number.
 		{
 			// buttons displayed overtop of a text box. Positioned at the right side of the screen.
-			var _button = new ButtonGeneralNetworkYes(100 - _offset_x, 125 - _offset_y + ((i + 1) * 70), Std.string(i) + ": " + _buttonState[RegTypedef._dataMisc._roomState[(i + 1)]], 215, 35, Reg._font_size, RegCustom._button_text_color, 0, null, RegCustom._button_color, false, _id);
+			var _button = new ButtonGeneralNetworkYes(100 - _offset_x, 125 - _offset_y + ((i + 1) * 70), Std.string(i) + ": " + _buttonState[RegTypedef._dataMisc._roomState[(i + 1)]], 215, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, null, RegCustom._button_color[Reg._tn], false, _id);
 									
 			_group_button.push(_button);				
 			//_group_button[i].visible = true;
@@ -320,7 +320,7 @@ class SceneLobby extends FlxState
 		group.add(_t6);
 		group.members[(_count+7)].scrollFactor.set(1, 0);
 		
-		if (RegCustom._chat_turn_off_for_lobby == false)
+		if (RegCustom._chat_when_at_lobby_enabled[Reg._tn] == true)
 		{
 			// make a scrollbar-enabled camera for it (a FlxScrollableArea)
 			if (__boxscroller != null)
@@ -569,7 +569,7 @@ class SceneLobby extends FlxState
 				{
 					if (_group_button[i].alpha == 1)
 					{
-						if (RegCustom._enable_sound == true
+						if (RegCustom._sound_enabled[Reg._tn] == true
 						&&  Reg2._boxScroller_is_scrolling == false)
 							FlxG.sound.play("click", 1, false);
 					
@@ -798,7 +798,7 @@ class SceneLobby extends FlxState
 					{
 						if (Reg2._offline_cpu_host_names[i] 
 						==  Reg2._offline_cpu_host_name2)
-							RegCustom._profile_avatar_number2 = Reg2._offline_cpu_avatar_number[i];
+							RegCustom._profile_avatar_number2[Reg._tn] = Reg2._offline_cpu_avatar_number[i];
 												
 					}
 		
@@ -1036,13 +1036,13 @@ class SceneLobby extends FlxState
 			GameChatter.__boxscroller3.active = false;
 		}
 		
-		if (RegCustom._chat_turn_off_for_lobby == false)
+		if (RegCustom._chat_when_at_lobby_enabled[Reg._tn] == true)
 		{
 			__game_chatter.visible = false;
 			__game_chatter.active = false;
 		}
 		
-		if (RegCustom._config_house_feature_enabled == true)
+		if (RegCustom._house_feature_enabled[Reg._tn] == true)
 		{
 			if (__menu_bar._buttonHouse != null) __menu_bar._buttonHouse.active = false;
 		}
@@ -1116,7 +1116,7 @@ class SceneLobby extends FlxState
 			GameChatter.__boxscroller3.active = true;
 		}
 		
-		if (RegCustom._chat_turn_off_for_lobby == false)
+		if (RegCustom._chat_when_at_lobby_enabled[Reg._tn] == true)
 		{
 			SceneLobby.__game_chatter.active = true;
 			SceneLobby.__game_chatter.visible = true;
@@ -1144,7 +1144,7 @@ class SceneLobby extends FlxState
 	// this shows the menuBar buttons after a brief second.
 	private function ticks_buttons_menuBar():Void
 	{
-		if (RegCustom._config_house_feature_enabled == true)
+		if (RegCustom._house_feature_enabled[Reg._tn] == true)
 		{
 			if (__menu_bar._buttonHouse != null) 
 			{
@@ -1185,4 +1185,4 @@ class SceneLobby extends FlxState
 		PlayState.clientSocket.send("Get Room Data", RegTypedef._dataMisc);
 		haxe.Timer.delay(function (){}, Reg2._event_sleep);
 	}
-}
+}//

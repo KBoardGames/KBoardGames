@@ -131,18 +131,11 @@ class MenuState extends FlxState
 		RegTypedef.resetTypedefData(); 
 		RegHouse.resetHouseAtLobby();
 		
-		Reg.resetRegVarsOnce(); 
-		Reg.resetRegVars(); 
-		Reg2.resetRegVarsOnce();
-		Reg2.resetRegVars();
-		RegCustom.resetRegVars();
-		ChessECO.ECOlists();
-			
 		// turn of chat for guests. we don't want guests swearing at everyone.
 		#if html5
-			RegCustom._chat_turn_off_for_lobby = true;
-			RegCustom._chat_turn_off_when_in_room = true;
-			RegCustom._move_timer_enable = false;
+			RegCustom._turn_off_chat_when_at_lobby[Reg._tn] = true;
+			RegCustom._turn_off_chat_when_at_room[Reg._tn] = true;
+			RegCustom._timer_enabled[Reg._tn] = false;
 			
 			// 886 = current first icon x position (multiplaer icon) for neko/cpp, times 79 which is 64 pixels for the icon plus 15 more for the space between the icons. 64 is the icon width / 2.
 			_icon_offset_x = 562; // 886 * (79 * 2) + (64 / 2) 			
@@ -159,11 +152,24 @@ class MenuState extends FlxState
 			//------------------------------
 			RegFunctions._gameMenu = new FlxSave(); // initialize		
 			RegFunctions._gameMenu.bind("ConfigurationsMenu"); // bind to the named save slot.
+		
+			// we use true here so that some items are loaded. a value of false is the default for this function so that so items are only loaded when a condition is met.
+			RegFunctions.loadConfig(true);
+			RegCustom.resetConfigurationVars();
+			RegFunctions.themes_recursive_file_loop();
 			
-			RegFunctions.loadConfig();
+			RegCustom.assign_colors();
+		
 		#end
 		
-		RegCustom._game_skill_level_chess = RegCustom._game_skill_level_chess_temp;
+		Reg.resetRegVarsOnce(); 
+		Reg.resetRegVars(); 
+		Reg2.resetRegVarsOnce();
+		Reg2.resetRegVars();
+		RegCustom.resetRegVars();
+		ChessECO.ECOlists();
+			
+		RegCustom._chess_skill_level_online = RegCustom._chess_skill_level_offline;
 		
 		if (Reg._startFullscreen == true) FlxG.fullscreen = true;
 		
@@ -183,23 +189,23 @@ class MenuState extends FlxState
 		_gameOptions.scrollFactor.set();
 		add(_gameOptions);
 		
-		_button_b1 = new ButtonToggleFlxState(_gameOptions.x + _gameOptions.textField.width + 15, 615, 1, "Beginner", 200, 35, Reg._font_size, RegCustom._button_text_color, 0, chess_skill_selected.bind(0), RegCustom._button_color, false);
+		_button_b1 = new ButtonToggleFlxState(_gameOptions.x + _gameOptions.textField.width + 15, 615, 1, "Beginner", 200, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, chess_skill_selected.bind(0), RegCustom._button_color[Reg._tn], false);
 		_button_b1.has_toggle = true;
 		_button_b1.label.font = Reg._fontDefault;
 		add(_button_b1);
 		
-		_button_b2 = new ButtonToggleFlxState(_button_b1.x + _button_b1.label.textField.width + 15, 615, 2, "Intermediate", 200, 35, Reg._font_size, RegCustom._button_text_color, 0, chess_skill_selected.bind(1), RegCustom._button_color, false);
+		_button_b2 = new ButtonToggleFlxState(_button_b1.x + _button_b1.label.textField.width + 15, 615, 2, "Intermediate", 200, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, chess_skill_selected.bind(1), RegCustom._button_color[Reg._tn], false);
 		_button_b2.label.font = Reg._fontDefault;
 		_button_b2.has_toggle = true;
 		add(_button_b2);
 		
-		_button_b3 = new ButtonToggleFlxState(_button_b2.x + _button_b2.label.textField.width + 15, 615, 3, "Advance", 200, 35, Reg._font_size, RegCustom._button_text_color, 0, chess_skill_selected.bind(2), RegCustom._button_color, false);
+		_button_b3 = new ButtonToggleFlxState(_button_b2.x + _button_b2.label.textField.width + 15, 615, 3, "Advance", 200, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, chess_skill_selected.bind(2), RegCustom._button_color[Reg._tn], false);
 		_button_b3.label.font = Reg._fontDefault;
 		_button_b3.has_toggle = true;
 		add(_button_b3);
 
 		set_chess_elo_button_toggle();
-		chess_skill_selected(RegCustom._game_skill_level_chess);
+		chess_skill_selected(RegCustom._chess_skill_level_online);
 	}
 	
 	private function set_chess_elo_button_toggle():Void
@@ -216,7 +222,7 @@ class MenuState extends FlxState
 	
 	private function chess_skill_selected(_num:Int = 0):Void
 	{
-		RegCustom._game_skill_level_chess = RegCustom._game_skill_level_chess_temp = _num;
+		RegCustom._chess_skill_level_online = RegCustom._chess_skill_level_offline = _num;
 		set_chess_elo_button_toggle();
 		
 		switch (_num)
@@ -317,13 +323,13 @@ class MenuState extends FlxState
 			titleIcons();
 			
 			if (_button_b1.has_toggle == true)
-				RegCustom._game_skill_level_chess = 0;
+				RegCustom._chess_skill_level_online = 0;
 			
 			if (_button_b2.has_toggle == true)
-				RegCustom._game_skill_level_chess = 1;
+				RegCustom._chess_skill_level_online = 1;
 			
 			if (_button_b3.has_toggle == true)
-				RegCustom._game_skill_level_chess = 2;
+				RegCustom._chess_skill_level_online = 2;
 			
 			#if !html5
 				draw_event_scheduler();
@@ -441,7 +447,7 @@ class MenuState extends FlxState
 						&& _is_active == true
 						)
 						{
-							if (RegCustom._enable_sound == true
+							if (RegCustom._sound_enabled[Reg._tn] == true
 							&&  Reg2._boxScroller_is_scrolling == false)
 								FlxG.sound.play("click", 1, false);
 						
@@ -525,7 +531,7 @@ class MenuState extends FlxState
 					&&  _group_sprite[i].active == true
 					&&	RegTriggers._buttons_set_not_active == false)
 					{
-						if (RegCustom._enable_sound == true
+						if (RegCustom._sound_enabled[Reg._tn] == true
 						&&  Reg2._boxScroller_is_scrolling == false)
 							FlxG.sound.play("click", 1, false);
 					
@@ -778,8 +784,8 @@ class MenuState extends FlxState
 	{
 		// gameboard image.
 		var _gameBoardImage = new FlxSprite(0,0);
-		_gameBoardImage.loadGraphic("assets/images/gameboardBackground4.jpg", false);
-		_gameBoardImage.alpha = 0.07;
+		_gameBoardImage.loadGraphic("assets/images/background.jpg", false);
+		_gameBoardImage.alpha = 0.15;
 		_gameBoardImage.scrollFactor.set(0, 0);
 		_gameBoardImage.updateHitbox();
 		add(_gameBoardImage);
@@ -809,7 +815,7 @@ class MenuState extends FlxState
 		#if !html5	
 			if (_client_online == true)
 			{
-				_software_new_check = new ButtonGeneralNetworkNo(190, FlxG.height -50, "", 385, 35, Reg._font_size, RegCustom._button_text_color, 0, checkForNewSoftware, RegCustom._button_color, false, 1);
+				_software_new_check = new ButtonGeneralNetworkNo(190, FlxG.height -50, "", 385, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, checkForNewSoftware, RegCustom._button_color[Reg._tn], false, 1);
 				_software_new_check.label.text = "Check For New Software";
 				_software_new_check.label.font = Reg._fontDefault;
 				add(_software_new_check);
@@ -818,7 +824,7 @@ class MenuState extends FlxState
 		
 		if (Reg._clientReadyForPublicRelease == false)
 		{
-			_toggleFullscreen = new ButtonGeneralNetworkNo(130, FlxG.height -50, "", 305, 35, Reg._font_size, RegCustom._button_text_color, 0, toggleFullScreenClicked, RegCustom._button_color, false, 1);
+			_toggleFullscreen = new ButtonGeneralNetworkNo(130, FlxG.height -50, "", 305, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, toggleFullScreenClicked, RegCustom._button_color[Reg._tn], false, 1);
 			_toggleFullscreen.label.text = "Toggle Fullscreen";
 			_toggleFullscreen.label.font = Reg._fontDefault;
 			#if html5
@@ -852,7 +858,7 @@ class MenuState extends FlxState
 	
 	private function buttonExitProgram():Void
 	{
-		_exitProgram = 		new ButtonGeneralNetworkNo(15, FlxG.height -50, "Exit", 160, 35, Reg._font_size, RegCustom._button_text_color, 0, exitProgram, RegCustom._button_color, false);
+		_exitProgram = 		new ButtonGeneralNetworkNo(15, FlxG.height -50, "Exit", 160, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, exitProgram, RegCustom._button_color[Reg._tn], false);
 		_exitProgram.label.font = Reg._fontDefault;
 		add(_exitProgram);
 		
@@ -1465,35 +1471,35 @@ class MenuState extends FlxState
 			
 			if (_bot_ben == null)
 			{
-				_bot_ben = new ButtonUnique(15, 230, "Bot ben", 150, 35, Reg._font_size, RegCustom._button_text_color, 0, botUseBenOnline, RegCustom._button_color, false, 1);
+				_bot_ben = new ButtonUnique(15, 230, "Bot ben", 150, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, botUseBenOnline, RegCustom._button_color[Reg._tn], false, 1);
 				_bot_ben.label.font = Reg._fontDefault;
 				add(_bot_ben);			
 			}
 			
 			if (_bot_tina == null)
 			{
-				_bot_tina = new ButtonUnique(150+30, 230, "Bot tina", 150, 35, Reg._font_size, RegCustom._button_text_color, 0, botUseTinaOnline, RegCustom._button_color, false, 1);
+				_bot_tina = new ButtonUnique(150+30, 230, "Bot tina", 150, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, botUseTinaOnline, RegCustom._button_color[Reg._tn], false, 1);
 				_bot_tina.label.font = Reg._fontDefault;
 				add(_bot_tina);		
 			}
 			
 			if (_bot_piper == null)
 			{
-				_bot_piper = new ButtonUnique(300+45, 230, "Bot piper", 150, 35, Reg._font_size, RegCustom._button_text_color, 0, botUsePiperOnline, RegCustom._button_color, false, 1);
+				_bot_piper = new ButtonUnique(300+45, 230, "Bot piper", 150, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, botUsePiperOnline, RegCustom._button_color[Reg._tn], false, 1);
 				_bot_piper.label.font = Reg._fontDefault;
 				add(_bot_piper);		
 			}
 			
 			if (_bot_amy == null)
 			{
-				_bot_amy = new ButtonUnique(450+60, 230, "Bot amy", 150, 35, Reg._font_size, RegCustom._button_text_color, 0, botUseAmyOnline, RegCustom._button_color, false, 1);
+				_bot_amy = new ButtonUnique(450+60, 230, "Bot amy", 150, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, botUseAmyOnline, RegCustom._button_color[Reg._tn], false, 1);
 				_bot_amy.label.font = Reg._fontDefault;
 				add(_bot_amy);			
 			}
 			
 			if (_bot_zak == null)
 			{
-				_bot_zak = new ButtonUnique(600+75, 230, "Bot zak", 150, 35, Reg._font_size, RegCustom._button_text_color, 0, botUseZakOnline, RegCustom._button_color, false, 1);
+				_bot_zak = new ButtonUnique(600+75, 230, "Bot zak", 150, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, botUseZakOnline, RegCustom._button_color[Reg._tn], false, 1);
 				_bot_zak.label.font = Reg._fontDefault;
 				add(_bot_zak);
 			}
@@ -1509,7 +1515,7 @@ class MenuState extends FlxState
 			&&	RegCustom._profile_username_p1 != "Bot zak".toLowerCase()
 			)
 			{
-				_profile_username_p1 = new ButtonUnique(750+90, 230, RegCustom._profile_username_p1, 150, 35, Reg._font_size, RegCustom._button_text_color, 0, profile_username_p1, RegCustom._button_color, false, 1);
+				_profile_username_p1 = new ButtonUnique(750+90, 230, RegCustom._profile_username_p1, 150, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, profile_username_p1, RegCustom._button_color[Reg._tn], false, 1);
 				_profile_username_p1.label.font = Reg._fontDefault;
 				add(_profile_username_p1);
 			}

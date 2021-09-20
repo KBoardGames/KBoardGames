@@ -156,7 +156,7 @@ class HUD extends FlxState
 		
 		_image_profile_avatar_p1 = new FlxSprite(150 + 6, 0);
 		if (Reg._game_offline_vs_player == true || Reg._game_offline_vs_cpu == true || Reg._game_online_vs_cpu == true)
-			_image_profile_avatar_p1.loadGraphic("vendor/multiavatar/" + RegCustom._profile_avatar_number1);
+			_image_profile_avatar_p1.loadGraphic("vendor/multiavatar/" + RegCustom._profile_avatar_number1[Reg._tn]);
 		else _image_profile_avatar_p1.loadGraphic("vendor/multiavatar/" + RegTypedef._dataPlayers._avatarNumber[0]);		
 		_image_profile_avatar_p1.y = FlxG.height - (Reg._offsetScreenY + _image_profile_avatar_p1.height - 10) / 2; // this centers avatar to the HUD background.
 		_image_profile_avatar_p1.scrollFactor.set();	
@@ -165,7 +165,7 @@ class HUD extends FlxState
 		_image_profile_avatar_p2 = new FlxSprite(450 + 12, 0);
 		if (Reg._game_offline_vs_player == true)
 		{
-			_image_profile_avatar_p2.loadGraphic("vendor/multiavatar/" + RegCustom._profile_avatar_number2);
+			_image_profile_avatar_p2.loadGraphic("vendor/multiavatar/" + RegCustom._profile_avatar_number2[Reg._tn]);
 		}
 			
 		else if (Reg._game_offline_vs_cpu == true
@@ -210,7 +210,7 @@ class HUD extends FlxState
 		
 		_image_profile_avatar_p3 = new FlxSprite(750 + 18, 0);
 		if (Reg._game_offline_vs_player == true)
-			_image_profile_avatar_p3.loadGraphic("vendor/multiavatar/" + RegCustom._profile_avatar_number3);
+			_image_profile_avatar_p3.loadGraphic("vendor/multiavatar/" + RegCustom._profile_avatar_number3[Reg._tn]);
 		else _image_profile_avatar_p3.loadGraphic("vendor/multiavatar/" + RegTypedef._dataPlayers._avatarNumber[2]);			
 		_image_profile_avatar_p3.y = FlxG.height - (Reg._offsetScreenY + _image_profile_avatar_p3.height - 10) / 2;	
 		_image_profile_avatar_p3.scrollFactor.set();	
@@ -218,7 +218,7 @@ class HUD extends FlxState
 		
 		_image_profile_avatar_p4 = new FlxSprite(1050 + 24, 0);
 		if (Reg._game_offline_vs_player == true)
-			_image_profile_avatar_p4.loadGraphic("vendor/multiavatar/" + RegCustom._profile_avatar_number4);
+			_image_profile_avatar_p4.loadGraphic("vendor/multiavatar/" + RegCustom._profile_avatar_number4[Reg._tn]);
 		else _image_profile_avatar_p4.loadGraphic("vendor/multiavatar/" + RegTypedef._dataPlayers._avatarNumber[3]);			
 		_image_profile_avatar_p4.y = FlxG.height - (Reg._offsetScreenY + _image_profile_avatar_p4.height - 10) / 2;	
 		_image_profile_avatar_p4.scrollFactor.set();	
