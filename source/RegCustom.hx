@@ -39,14 +39,14 @@ class RegCustom
 	public static var _theme_name_current:String = "default.yaml";	
 	
 	/******************************
-	 * 9 shaders. this var refers to part of the spite name in use when changing the look of the game board. At MenuConfigurations when a button is clicked all odd units are changed to a different color. This var is loaded at SceneGameRoom to display the game board.
+	 * 9 shades. this var refers to part of the spite name in use when changing the look of the game board. At MenuConfigurations when a button is clicked all odd units are changed to a different color. This var is loaded at SceneGameRoom to display the game board.
 	 */
-	public static var _gameboard_units_odd_sprite_number:Array<Array<Int>> = [[]];
+	public static var _gameboard_units_odd_shade_number:Array<Array<Int>> = [[]];
 	
 	/******************************
-	 * 9 shaders. this var refers to part of the spite name in use when changing the look of the game board. At MenuConfigurations when a button is clicked all even units are changed to a different color. This var is loaded at SceneGameRoom to display the game board.
+	 * 9 shades. this var refers to part of the spite name in use when changing the look of the game board. At MenuConfigurations when a button is clicked all even units are changed to a different color. This var is loaded at SceneGameRoom to display the game board.
 	 */
-	public static var _gameboard_units_even_sprite_number:Array<Array<Int>> = [[]];
+	public static var _gameboard_units_even_shade_number:Array<Array<Int>> = [[]];
 	
 	/******************************
 	 * 40 colors. this var refers to the color of the game board odd numbered units. At MenuConfigurations every time a button is pressed, this var increases in value to change the odd units to a different color. This var is loaded at SceneGameRoom to display the game board.
@@ -354,13 +354,13 @@ class RegCustom
 	{
 		_theme_name.splice(0, _theme_name.length);
 		
-		_gameboard_units_odd_sprite_number.splice(0, _gameboard_units_odd_sprite_number.length);
-		_gameboard_units_odd_sprite_number.push([0]);
-		_gameboard_units_odd_sprite_number[0] = [7, 3];		
+		_gameboard_units_odd_shade_number.splice(0, _gameboard_units_odd_shade_number.length);
+		_gameboard_units_odd_shade_number.push([0]);
+		_gameboard_units_odd_shade_number[0] = [7, 3];		
 		
-		_gameboard_units_even_sprite_number.splice(0, _gameboard_units_even_sprite_number.length);
-		_gameboard_units_even_sprite_number.push([0]);
-		_gameboard_units_even_sprite_number[0] = [9, 1];
+		_gameboard_units_even_shade_number.splice(0, _gameboard_units_even_shade_number.length);
+		_gameboard_units_even_shade_number.push([0]);
+		_gameboard_units_even_shade_number[0] = [9, 1];
 		
 		_gameboard_units_odd_color_number.splice(0, _gameboard_units_odd_color_number.length);
 		_gameboard_units_odd_color_number.push([0]);

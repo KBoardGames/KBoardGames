@@ -81,24 +81,24 @@ class MenuConfigurationsGeneral extends FlxGroup
 	private var  _gameboard_border_title:FlxText;
 	
 	/******************************
-	 * just a text that says "odd units". buttons in this category are the shader and the color buttons used to change the appearance of the odd units on the gameboard.
+	 * just a text that says "odd units". buttons in this category are the shade and the color buttons used to change the appearance of the odd units on the gameboard.
 	 */
 	private var _text_title_odd_units:FlxText;
 	
 	/******************************
-	 * just a text that says "even units". buttons in this category are the shader and the color buttons used to change the appearance of the even units on the gameboard.
+	 * just a text that says "even units". buttons in this category are the shade and the color buttons used to change the appearance of the even units on the gameboard.
 	 */
 	private var _text_title_even_units:FlxText;
 	
 	/******************************
-	 * shades of grayscale that can be applied to all odd gameboard units. this is the text "Shader" displayed beside the shader button.
+	 * shades of grayscale that can be applied to all odd gameboard units. this is the text "Shade" displayed beside the shade button.
 	 */
-	private var _text_odd_units_shader:FlxText;
+	private var _text_odd_units_shade:FlxText;
 	
 	/******************************
-	 * shades of grayscale that can be applied to all even gameboard units. this is the text "Shader" displayed beside the shader button.
+	 * shades of grayscale that can be applied to all even gameboard units. this is the text "Shade" displayed beside the shade button.
 	 */
-	private var _text_even_units_shader:FlxText;
+	private var _text_even_units_shade:FlxText;
 	
 	/******************************
 	 * color applied to a unit. this is the text "color" displayed beside the color button. clicking the color button will change the appearance of the gameboard units.
@@ -113,22 +113,22 @@ class MenuConfigurationsGeneral extends FlxGroup
 	/******************************
 	 * minus button for shade images of odd units. clicking this button will change the image of all odd units on the gameboard, displaying a different shade of grayscale.
 	 */
-	public var _button_shader_odd_units_minus:ButtonGeneralNetworkNo;
+	public var _button_shade_odd_units_minus:ButtonGeneralNetworkNo;
 	
 	/******************************
 	 * plus button for shade images of odd units. clicking this button will change the image of all odd units on the gameboard, displaying a different shade of grayscale.
 	 */
-	public var	_button_shader_odd_units_plus:ButtonGeneralNetworkNo;
+	public var	_button_shade_odd_units_plus:ButtonGeneralNetworkNo;
 	
 	/******************************
 	 * minus button for shade images of even units. clicking this button will change the image of all odd units on the gameboard, displaying a different shade of grayscale.
 	 */
-	public var _button_shader_even_units_minus:ButtonGeneralNetworkNo;
+	public var _button_shade_even_units_minus:ButtonGeneralNetworkNo;
 	
 	/******************************
 	 * plus button for shade images of even units. clicking this button will change the image of all odd units on the gameboard, displaying a different shade of grayscale.
 	 */
-	public var	_button_shader_even_units_plus:ButtonGeneralNetworkNo;
+	public var	_button_shade_even_units_plus:ButtonGeneralNetworkNo;
 	
 	/******************************
 	 * minus button to set a color of image to odd units. clicking this button will change the image of all odd units on the gameboard, displaying a different color.
@@ -151,12 +151,12 @@ class MenuConfigurationsGeneral extends FlxGroup
 	public var _button_color_even_units_plus:ButtonGeneralNetworkNo;
 	
 	/******************************
-	 * this is the shader image. different shades of grayscale. Color can then be played to this sprite.
+	 * this is the shade image. different shades of grayscale. Color can then be played to this sprite.
 	 */
 	private var _sprite_board_game_unit_odd:FlxSprite;
 	
 	/******************************
-	 * this is the shader image. different shades of grayscale. Color can then be played to this sprite.
+	 * this is the shade image. different shades of grayscale. Color can then be played to this sprite.
 	 */
 	private var _sprite_board_game_unit_even:FlxSprite;
 	
@@ -317,45 +317,45 @@ class MenuConfigurationsGeneral extends FlxGroup
 		//-----------------------------
 		
 		// color applied to a shaded unit.
-		_text_odd_units_shader = new FlxText(0, 0, 0, "Shader");
-		_text_odd_units_shader.setFormat(Reg._fontDefault, Reg._font_size);
-		_text_odd_units_shader.setPosition((_text_title_odd_units.x + _text_title_odd_units.fieldWidth / 2) - 225, _text_title_odd_units.y + 50);
-		_group.add(_text_odd_units_shader);	
+		_text_odd_units_shade = new FlxText(0, 0, 0, "Shade");
+		_text_odd_units_shade.setFormat(Reg._fontDefault, Reg._font_size);
+		_text_odd_units_shade.setPosition((_text_title_odd_units.x + _text_title_odd_units.fieldWidth / 2) - 225, _text_title_odd_units.y + 50);
+		_group.add(_text_odd_units_shade);	
 		
 		_text_title_even_units = new FlxText(0, 0, 0, "Even Units");
 		_text_title_even_units.setFormat(Reg._fontDefault, Reg._font_size);
-		_text_title_even_units.setPosition((FlxG.width / 2) + (FlxG.width / 4) - (_text_title_even_units.fieldWidth / 2) + _offset_x, _text_odd_units_shader.y + 55);
+		_text_title_even_units.setPosition((FlxG.width / 2) + (FlxG.width / 4) - (_text_title_even_units.fieldWidth / 2) + _offset_x, _text_odd_units_shade.y + 55);
 		_group.add(_text_title_even_units);	
 		
-		_text_even_units_shader = new FlxText(0, 0, 0, "Shader");
-		_text_even_units_shader.setFormat(Reg._fontDefault, Reg._font_size);
-		_text_even_units_shader.setPosition((_text_title_even_units.x + _text_title_even_units.fieldWidth / 2) - 225, _text_title_even_units.y + 50);
-		_group.add(_text_even_units_shader);	
+		_text_even_units_shade = new FlxText(0, 0, 0, "Shade");
+		_text_even_units_shade.setFormat(Reg._fontDefault, Reg._font_size);
+		_text_even_units_shade.setPosition((_text_title_even_units.x + _text_title_even_units.fieldWidth / 2) - 225, _text_title_even_units.y + 50);
+		_group.add(_text_even_units_shade);	
 		
 		//############################# plus and minus buttons for shade images of odd units.	
-		_button_shader_odd_units_minus = new ButtonGeneralNetworkNo(_text_odd_units_shader.x + _text_odd_units_shader.fieldWidth + 15, _text_odd_units_shader.y - 3, "-", 35, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, null, RegCustom._button_color[Reg._tn]);
-		_button_shader_odd_units_minus.label.font = Reg._fontDefault;
+		_button_shade_odd_units_minus = new ButtonGeneralNetworkNo(_text_odd_units_shade.x + _text_odd_units_shade.fieldWidth + 15, _text_odd_units_shade.y - 3, "-", 35, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, null, RegCustom._button_color[Reg._tn]);
+		_button_shade_odd_units_minus.label.font = Reg._fontDefault;
 		
-		_group_button.push(_button_shader_odd_units_minus);
+		_group_button.push(_button_shade_odd_units_minus);
 		_group.add(_group_button[0]);		
 		
-		_button_shader_odd_units_plus = new ButtonGeneralNetworkNo(_button_shader_odd_units_minus.x + _button_shader_odd_units_minus.label.fieldWidth + 15, _text_odd_units_shader.y - 3, "+", 35, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, null, RegCustom._button_color[Reg._tn]);
-		_button_shader_odd_units_plus.label.font = Reg._fontDefault;
+		_button_shade_odd_units_plus = new ButtonGeneralNetworkNo(_button_shade_odd_units_minus.x + _button_shade_odd_units_minus.label.fieldWidth + 15, _text_odd_units_shade.y - 3, "+", 35, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, null, RegCustom._button_color[Reg._tn]);
+		_button_shade_odd_units_plus.label.font = Reg._fontDefault;
 		
-		_group_button.push(_button_shader_odd_units_plus);
+		_group_button.push(_button_shade_odd_units_plus);
 		_group.add(_group_button[1]);
 		
 		//############################# even buttons for shade images
-		_button_shader_even_units_minus = new ButtonGeneralNetworkNo(_text_even_units_shader.x + _text_even_units_shader.fieldWidth + 15, _text_even_units_shader.y - 3, "-", 35, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, null, RegCustom._button_color[Reg._tn]);
-		_button_shader_even_units_minus.label.font = Reg._fontDefault;
+		_button_shade_even_units_minus = new ButtonGeneralNetworkNo(_text_even_units_shade.x + _text_even_units_shade.fieldWidth + 15, _text_even_units_shade.y - 3, "-", 35, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, null, RegCustom._button_color[Reg._tn]);
+		_button_shade_even_units_minus.label.font = Reg._fontDefault;
 		
-		_group_button.push(_button_shader_even_units_minus);
+		_group_button.push(_button_shade_even_units_minus);
 		_group.add(_group_button[2]);
 		
-		_button_shader_even_units_plus = new ButtonGeneralNetworkNo(_button_shader_even_units_minus.x + _button_shader_even_units_minus.label.fieldWidth + 15, _text_even_units_shader.y - 3, "+", 35, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, null, RegCustom._button_color[Reg._tn]);
-		_button_shader_even_units_plus.label.font = Reg._fontDefault;
+		_button_shade_even_units_plus = new ButtonGeneralNetworkNo(_button_shade_even_units_minus.x + _button_shade_even_units_minus.label.fieldWidth + 15, _text_even_units_shade.y - 3, "+", 35, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, null, RegCustom._button_color[Reg._tn]);
+		_button_shade_even_units_plus.label.font = Reg._fontDefault;
 		
-		_group_button.push(_button_shader_even_units_plus);
+		_group_button.push(_button_shade_even_units_plus);
 		_group.add(_group_button[3]);
 		
 		//############################# color applied to a shaded units.
@@ -792,14 +792,14 @@ class MenuConfigurationsGeneral extends FlxGroup
 	
 	public function draw_gameboard():Void
 	{
-		_sprite_board_game_unit_even = new FlxSprite(0, 0, "assets/images/scenes/tiles/even/"+ RegCustom._gameboard_units_even_sprite_number[Reg._tn][0] +".png");
+		_sprite_board_game_unit_even = new FlxSprite(0, 0, "assets/images/scenes/tiles/even/"+ RegCustom._gameboard_units_even_shade_number[Reg._tn][0] +".png");
 		_sprite_board_game_unit_even.setPosition(80, 105 + _offset_y);
 		_sprite_board_game_unit_even.scale.set(0.8, 0.8);
 		_group.add(_sprite_board_game_unit_even);
 		_sprite_board_game_unit_even.color = colorToggleUnitsEven();
 		_sprite_board_game_unit_even.alpha = 0;
 		
-		_sprite_board_game_unit_odd = new FlxSprite(0, 0, "assets/images/scenes/tiles/odd/"+ RegCustom._gameboard_units_odd_sprite_number[Reg._tn][0] +".png");
+		_sprite_board_game_unit_odd = new FlxSprite(0, 0, "assets/images/scenes/tiles/odd/"+ RegCustom._gameboard_units_odd_shade_number[Reg._tn][0] +".png");
 		_sprite_board_game_unit_odd.setPosition(80, 105 + _offset_y);
 		_sprite_board_game_unit_odd.scale.set(0.8, 0.8);
 		_group.add(_sprite_board_game_unit_odd);
@@ -829,10 +829,10 @@ class MenuConfigurationsGeneral extends FlxGroup
 		
 		switch (_val)
 		{
-			case 0: shaderUnitsOddMinus();
-			case 1: shaderUnitsOddPlus();
-			case 2: shaderUnitsEvenMinus();
-			case 3: shaderUnitsEvenPlus();			
+			case 0: shadeUnitsOddMinus();
+			case 1: shadeUnitsOddPlus();
+			case 2: shadeUnitsEvenMinus();
+			case 3: shadeUnitsEvenPlus();			
 			case 4: colorUnitsOddMinus();
 			case 5: colorUnitsOddPlus();
 			case 6: colorUnitsEvenMinus();
@@ -887,55 +887,55 @@ class MenuConfigurationsGeneral extends FlxGroup
 	}
 	
 	// minus 1 to display a lesser of a shade for these units.
-	private function shaderUnitsOddMinus():Void
+	private function shadeUnitsOddMinus():Void
 	{
-		RegCustom._gameboard_units_odd_sprite_number[Reg._tn][_id] -= 1;
-		if (RegCustom._gameboard_units_odd_sprite_number[Reg._tn][_id] == 0) RegCustom._gameboard_units_odd_sprite_number[Reg._tn][_id] = 9;
+		RegCustom._gameboard_units_odd_shade_number[Reg._tn][_id] -= 1;
+		if (RegCustom._gameboard_units_odd_shade_number[Reg._tn][_id] == 0) RegCustom._gameboard_units_odd_shade_number[Reg._tn][_id] = 9;
 		
-		shaderToggleUnitsOdd();
+		shadeToggleUnitsOdd();
 	}
 	
 	// plus 1 to display a greater of a shade for these units.
-	private function shaderUnitsOddPlus():Void
+	private function shadeUnitsOddPlus():Void
 	{
-		RegCustom._gameboard_units_odd_sprite_number[Reg._tn][_id] += 1;
-		if (RegCustom._gameboard_units_odd_sprite_number[Reg._tn][_id] == 10) RegCustom._gameboard_units_odd_sprite_number[Reg._tn][_id] = 1;
+		RegCustom._gameboard_units_odd_shade_number[Reg._tn][_id] += 1;
+		if (RegCustom._gameboard_units_odd_shade_number[Reg._tn][_id] == 10) RegCustom._gameboard_units_odd_shade_number[Reg._tn][_id] = 1;
 		
-		shaderToggleUnitsOdd();
+		shadeToggleUnitsOdd();
 	}
 	
 	/******************************
 	 * this toggles the colors of odd board game units.
 	 */
-	private function shaderToggleUnitsOdd():Void
+	private function shadeToggleUnitsOdd():Void
 	{
-		_sprite_board_game_unit_odd.loadGraphic("assets/images/scenes/tiles/odd/" + RegCustom._gameboard_units_odd_sprite_number[Reg._tn][_id] + ".png");
+		_sprite_board_game_unit_odd.loadGraphic("assets/images/scenes/tiles/odd/" + RegCustom._gameboard_units_odd_shade_number[Reg._tn][_id] + ".png");
 	}
 	
 	// minus 1 to display a lesser of a shade for these units.
-	private function shaderUnitsEvenMinus()
+	private function shadeUnitsEvenMinus()
 	{
-		RegCustom._gameboard_units_even_sprite_number[Reg._tn][_id] -= 1;
-		if (RegCustom._gameboard_units_even_sprite_number[Reg._tn][_id] == 0) RegCustom._gameboard_units_even_sprite_number[Reg._tn][_id] = 9;
+		RegCustom._gameboard_units_even_shade_number[Reg._tn][_id] -= 1;
+		if (RegCustom._gameboard_units_even_shade_number[Reg._tn][_id] == 0) RegCustom._gameboard_units_even_shade_number[Reg._tn][_id] = 9;
 		
-		shaderToggleUnitsEven();
+		shadeToggleUnitsEven();
 	}
 	
 	// plus 1 to display a greater of a shade for these units.
-	private function shaderUnitsEvenPlus()
+	private function shadeUnitsEvenPlus()
 	{
-		RegCustom._gameboard_units_even_sprite_number[Reg._tn][_id] += 1;
-		if (RegCustom._gameboard_units_even_sprite_number[Reg._tn][_id] == 10) RegCustom._gameboard_units_even_sprite_number[Reg._tn][_id] = 1;
+		RegCustom._gameboard_units_even_shade_number[Reg._tn][_id] += 1;
+		if (RegCustom._gameboard_units_even_shade_number[Reg._tn][_id] == 10) RegCustom._gameboard_units_even_shade_number[Reg._tn][_id] = 1;
 		
-		shaderToggleUnitsEven();
+		shadeToggleUnitsEven();
 	}
 	
 	/******************************
 	 * this toggles the colors of odd board game units.
 	 */
-	private function shaderToggleUnitsEven():Void
+	private function shadeToggleUnitsEven():Void
 	{
-		_sprite_board_game_unit_even.loadGraphic("assets/images/scenes/tiles/even/" + RegCustom._gameboard_units_even_sprite_number[Reg._tn][_id] +".png");
+		_sprite_board_game_unit_even.loadGraphic("assets/images/scenes/tiles/even/" + RegCustom._gameboard_units_even_shade_number[Reg._tn][_id] +".png");
 	}	
 	
 	// minus 1 to display a lesser of a color for these units.
@@ -951,7 +951,7 @@ class MenuConfigurationsGeneral extends FlxGroup
 	private function colorUnitsOddPlus()
 	{
 		RegCustom._gameboard_units_odd_color_number[Reg._tn][_id] += 1;
-		if (RegCustom._gameboard_units_odd_color_number[Reg._tn][_id] == 41) RegCustom._gameboard_units_odd_color_number[Reg._tn][_id] = 1;
+		if (RegCustom._gameboard_units_odd_color_number[Reg._tn][_id] == 26) RegCustom._gameboard_units_odd_color_number[Reg._tn][_id] = 1;
 		
 		_sprite_board_game_unit_odd.color = colorToggleUnitsOdd();
 	}	
@@ -965,7 +965,7 @@ class MenuConfigurationsGeneral extends FlxGroup
 		if (RegCustom._gameboard_units_odd_color_number[Reg._tn][_id] == 2) _color = 0xFF5d275d;
 		if (RegCustom._gameboard_units_odd_color_number[Reg._tn][_id] == 3) _color = 0xFFcb0025;
 		if (RegCustom._gameboard_units_odd_color_number[Reg._tn][_id] == 4) _color = 0xFFef7d57;
-		if (RegCustom._gameboard_units_odd_color_number[Reg._tn][_id] == 5) _color = 0xFFffcd75;
+		if (RegCustom._gameboard_units_odd_color_number[Reg._tn][_id] == 5) _color = 0xFFa4844d;
 		if (RegCustom._gameboard_units_odd_color_number[Reg._tn][_id] == 6) _color = 0xFFa7f070;
 		if (RegCustom._gameboard_units_odd_color_number[Reg._tn][_id] == 7) _color = 0xFF38b764;
 		if (RegCustom._gameboard_units_odd_color_number[Reg._tn][_id] == 8) _color = 0xFF257179;
@@ -973,7 +973,7 @@ class MenuConfigurationsGeneral extends FlxGroup
 		if (RegCustom._gameboard_units_odd_color_number[Reg._tn][_id] == 10) _color = 0xFF3b5dc9;
 		if (RegCustom._gameboard_units_odd_color_number[Reg._tn][_id] == 11) _color = 0xFF41a6f6;
 		if (RegCustom._gameboard_units_odd_color_number[Reg._tn][_id] == 12) _color = 0xFF73eff7;
-		if (RegCustom._gameboard_units_odd_color_number[Reg._tn][_id] == 13) _color = 0xFFf4f4f4;
+		if (RegCustom._gameboard_units_odd_color_number[Reg._tn][_id] == 13) _color = 0xFFcccccc;
 		if (RegCustom._gameboard_units_odd_color_number[Reg._tn][_id] == 14) _color = 0xFF94b0c2;
 		if (RegCustom._gameboard_units_odd_color_number[Reg._tn][_id] == 15) _color = 0xFF566c86;
 		if (RegCustom._gameboard_units_odd_color_number[Reg._tn][_id] == 16) _color = 0xFF333c57;
@@ -985,7 +985,7 @@ class MenuConfigurationsGeneral extends FlxGroup
 		if (RegCustom._gameboard_units_odd_color_number[Reg._tn][_id] == 22) _color = 0x885d275d;
 		if (RegCustom._gameboard_units_odd_color_number[Reg._tn][_id] == 23) _color = 0x88b13e53;
 		if (RegCustom._gameboard_units_odd_color_number[Reg._tn][_id] == 24) _color = 0x88ef7d57;
-		if (RegCustom._gameboard_units_odd_color_number[Reg._tn][_id] == 25) _color = 0x88ffcd75;
+		if (RegCustom._gameboard_units_odd_color_number[Reg._tn][_id] == 25) _color = 0x88a4844d;
 		if (RegCustom._gameboard_units_odd_color_number[Reg._tn][_id] == 26) _color = 0x88a7f070;
 		if (RegCustom._gameboard_units_odd_color_number[Reg._tn][_id] == 27) _color = 0x8838b764;
 		if (RegCustom._gameboard_units_odd_color_number[Reg._tn][_id] == 28) _color = 0x88257179;
@@ -993,7 +993,7 @@ class MenuConfigurationsGeneral extends FlxGroup
 		if (RegCustom._gameboard_units_odd_color_number[Reg._tn][_id] == 30) _color = 0x883b5dc9;
 		if (RegCustom._gameboard_units_odd_color_number[Reg._tn][_id] == 31) _color = 0x8841a6f6;
 		if (RegCustom._gameboard_units_odd_color_number[Reg._tn][_id] == 32) _color = 0x8873eff7;
-		if (RegCustom._gameboard_units_odd_color_number[Reg._tn][_id] == 33) _color = 0x88f4f4f4;
+		if (RegCustom._gameboard_units_odd_color_number[Reg._tn][_id] == 33) _color = 0x88cccccc;
 		if (RegCustom._gameboard_units_odd_color_number[Reg._tn][_id] == 34) _color = 0x8894b0c2;
 		if (RegCustom._gameboard_units_odd_color_number[Reg._tn][_id] == 35) _color = 0x88566c86;
 		if (RegCustom._gameboard_units_odd_color_number[Reg._tn][_id] == 36) _color = 0x88333c57;
@@ -1018,7 +1018,7 @@ class MenuConfigurationsGeneral extends FlxGroup
 	private function colorUnitsEvenPlus()
 	{
 		RegCustom._gameboard_units_even_color_number[Reg._tn][_id] += 1;
-		if (RegCustom._gameboard_units_even_color_number[Reg._tn][_id] == 41) RegCustom._gameboard_units_even_color_number[Reg._tn][_id] = 1;
+		if (RegCustom._gameboard_units_even_color_number[Reg._tn][_id] == 26) RegCustom._gameboard_units_even_color_number[Reg._tn][_id] = 1;
 		
 		_sprite_board_game_unit_even.color = colorToggleUnitsEven();
 	}	
@@ -1034,7 +1034,7 @@ class MenuConfigurationsGeneral extends FlxGroup
 		if (RegCustom._gameboard_units_even_color_number[Reg._tn][_id] == 2) _color = 0xFF5d275d;
 		if (RegCustom._gameboard_units_even_color_number[Reg._tn][_id] == 3) _color = 0xFFcb0025;
 		if (RegCustom._gameboard_units_even_color_number[Reg._tn][_id] == 4) _color = 0xFFef7d57;
-		if (RegCustom._gameboard_units_even_color_number[Reg._tn][_id] == 5) _color = 0xFFffcd75;
+		if (RegCustom._gameboard_units_even_color_number[Reg._tn][_id] == 5) _color = 0xFFa4844d;
 		if (RegCustom._gameboard_units_even_color_number[Reg._tn][_id] == 6) _color = 0xFFa7f070;
 		if (RegCustom._gameboard_units_even_color_number[Reg._tn][_id] == 7) _color = 0xFF38b764;
 		if (RegCustom._gameboard_units_even_color_number[Reg._tn][_id] == 8) _color = 0xFF257179;
@@ -1042,7 +1042,7 @@ class MenuConfigurationsGeneral extends FlxGroup
 		if (RegCustom._gameboard_units_even_color_number[Reg._tn][_id] == 10) _color = 0xFF3b5dc9;
 		if (RegCustom._gameboard_units_even_color_number[Reg._tn][_id] == 11) _color = 0xFF41a6f6;
 		if (RegCustom._gameboard_units_even_color_number[Reg._tn][_id] == 12) _color = 0xFF73eff7;
-		if (RegCustom._gameboard_units_even_color_number[Reg._tn][_id] == 13) _color = 0xFFf4f4f4;
+		if (RegCustom._gameboard_units_even_color_number[Reg._tn][_id] == 13) _color = 0xFFcccccc;
 		if (RegCustom._gameboard_units_even_color_number[Reg._tn][_id] == 14) _color = 0xFF94b0c2;
 		if (RegCustom._gameboard_units_even_color_number[Reg._tn][_id] == 15) _color = 0xFF566c86;
 		if (RegCustom._gameboard_units_even_color_number[Reg._tn][_id] == 16) _color = 0xFF333c57;
@@ -1054,7 +1054,7 @@ class MenuConfigurationsGeneral extends FlxGroup
 		if (RegCustom._gameboard_units_even_color_number[Reg._tn][_id] == 22) _color = 0x885d275d;
 		if (RegCustom._gameboard_units_even_color_number[Reg._tn][_id] == 23) _color = 0x88b13e53;
 		if (RegCustom._gameboard_units_even_color_number[Reg._tn][_id] == 24) _color = 0x88ef7d57;
-		if (RegCustom._gameboard_units_even_color_number[Reg._tn][_id] == 25) _color = 0x88ffcd75;
+		if (RegCustom._gameboard_units_even_color_number[Reg._tn][_id] == 25) _color = 0x88a4844d;
 		if (RegCustom._gameboard_units_even_color_number[Reg._tn][_id] == 26) _color = 0x88a7f070;
 		if (RegCustom._gameboard_units_even_color_number[Reg._tn][_id] == 27) _color = 0x8838b764;
 		if (RegCustom._gameboard_units_even_color_number[Reg._tn][_id] == 28) _color = 0x88257179;
@@ -1062,7 +1062,7 @@ class MenuConfigurationsGeneral extends FlxGroup
 		if (RegCustom._gameboard_units_even_color_number[Reg._tn][_id] == 30) _color = 0x883b5dc9;
 		if (RegCustom._gameboard_units_even_color_number[Reg._tn][_id] == 31) _color = 0x8841a6f6;
 		if (RegCustom._gameboard_units_even_color_number[Reg._tn][_id] == 32) _color = 0x8873eff7;
-		if (RegCustom._gameboard_units_even_color_number[Reg._tn][_id] == 33) _color = 0x88f4f4f4;
+		if (RegCustom._gameboard_units_even_color_number[Reg._tn][_id] == 33) _color = 0x88cccccc;
 		if (RegCustom._gameboard_units_even_color_number[Reg._tn][_id] == 34) _color = 0x8894b0c2;
 		if (RegCustom._gameboard_units_even_color_number[Reg._tn][_id] == 35) _color = 0x88566c86;
 		if (RegCustom._gameboard_units_even_color_number[Reg._tn][_id] == 36) _color = 0x88333c57;
@@ -1166,8 +1166,8 @@ class MenuConfigurationsGeneral extends FlxGroup
 		_group_button_toggle[0].set_toggled(true);
 		_group_button_toggle[0].active = false;
 		
-		shaderToggleUnitsOdd();
-		shaderToggleUnitsEven();
+		shadeToggleUnitsOdd();
+		shadeToggleUnitsEven();
 		
 		_sprite_board_game_unit_odd.color = colorToggleUnitsOdd();
 		_sprite_board_game_unit_even.color = colorToggleUnitsEven();
@@ -1192,8 +1192,8 @@ class MenuConfigurationsGeneral extends FlxGroup
 		_group_button_toggle[1].set_toggled(true);	
 		_group_button_toggle[1].active = false;
 		
-		shaderToggleUnitsOdd();
-		shaderToggleUnitsEven();
+		shadeToggleUnitsOdd();
+		shadeToggleUnitsEven();
 		
 		_sprite_board_game_unit_odd.color = colorToggleUnitsOdd();
 		_sprite_board_game_unit_even.color = colorToggleUnitsEven();
@@ -1468,7 +1468,7 @@ class MenuConfigurationsGeneral extends FlxGroup
 	private function apply_button_background_color()
 	{
 		RegCustom._button_color_number[Reg._tn] += 1;
-		if (RegCustom._button_color_number[Reg._tn] == 41) RegCustom._button_color_number[Reg._tn] = 1;
+		if (RegCustom._button_color_number[Reg._tn] == 26) RegCustom._button_color_number[Reg._tn] = 1;
 		
 		// new button color.
 		RegCustom._button_color[Reg._tn] = button_colors();
@@ -1490,7 +1490,7 @@ class MenuConfigurationsGeneral extends FlxGroup
 	private function apply_button_border_color()
 	{
 		RegCustom._button_border_color_number[Reg._tn] += 1;
-		if (RegCustom._button_border_color_number[Reg._tn] == 41) RegCustom._button_border_color_number[Reg._tn] = 1;
+		if (RegCustom._button_border_color_number[Reg._tn] == 26) RegCustom._button_border_color_number[Reg._tn] = 1;
 		
 		// new button color.
 		RegCustom._button_border_color[Reg._tn] = button_border_colors();
@@ -1512,7 +1512,7 @@ class MenuConfigurationsGeneral extends FlxGroup
 	private function apply_button_text_color()
 	{
 		RegCustom._button_text_color_number[Reg._tn] += 1;
-		if (RegCustom._button_text_color_number[Reg._tn] == 41) RegCustom._button_text_color_number[Reg._tn] = 1;
+		if (RegCustom._button_text_color_number[Reg._tn] == 26) RegCustom._button_text_color_number[Reg._tn] = 1;
 		
 		// new button color.
 		RegCustom._button_text_color[Reg._tn] = button_text_colors();
@@ -1542,7 +1542,7 @@ class MenuConfigurationsGeneral extends FlxGroup
 		if (RegCustom._button_color_number[Reg._tn] == 2) _color = 0xFF5d275d;
 		if (RegCustom._button_color_number[Reg._tn] == 3) _color = 0xFFcb0025;
 		if (RegCustom._button_color_number[Reg._tn] == 4) _color = 0xFFef7d57;
-		if (RegCustom._button_color_number[Reg._tn] == 5) _color = 0xFFffcd75;
+		if (RegCustom._button_color_number[Reg._tn] == 5) _color = 0xFFa4844d;
 		if (RegCustom._button_color_number[Reg._tn] == 6) _color = 0xFFa7f070;
 		if (RegCustom._button_color_number[Reg._tn] == 7) _color = 0xFF38b764;
 		if (RegCustom._button_color_number[Reg._tn] == 8) _color = 0xFF257179;
@@ -1550,7 +1550,7 @@ class MenuConfigurationsGeneral extends FlxGroup
 		if (RegCustom._button_color_number[Reg._tn] == 10) _color = 0xFF3b5dc9;
 		if (RegCustom._button_color_number[Reg._tn] == 11) _color = 0xFF41a6f6;
 		if (RegCustom._button_color_number[Reg._tn] == 12) _color = 0xFF73eff7;
-		if (RegCustom._button_color_number[Reg._tn] == 13) _color = 0xFFf4f4f4;
+		if (RegCustom._button_color_number[Reg._tn] == 13) _color = 0xFFcccccc;
 		if (RegCustom._button_color_number[Reg._tn] == 14) _color = 0xFF94b0c2;
 		if (RegCustom._button_color_number[Reg._tn] == 15) _color = 0xFF566c86;
 		if (RegCustom._button_color_number[Reg._tn] == 16) _color = 0xFF333c57;
@@ -1562,22 +1562,7 @@ class MenuConfigurationsGeneral extends FlxGroup
 		if (RegCustom._button_color_number[Reg._tn] == 22) _color = 0x885d275d;
 		if (RegCustom._button_color_number[Reg._tn] == 23) _color = 0x88b13e53;
 		if (RegCustom._button_color_number[Reg._tn] == 24) _color = 0x88ef7d57;
-		if (RegCustom._button_color_number[Reg._tn] == 25) _color = 0x88ffcd75;
-		if (RegCustom._button_color_number[Reg._tn] == 26) _color = 0x88a7f070;
-		if (RegCustom._button_color_number[Reg._tn] == 27) _color = 0x8838b764;
-		if (RegCustom._button_color_number[Reg._tn] == 28) _color = 0x88257179;
-		if (RegCustom._button_color_number[Reg._tn] == 29) _color = 0x8829366f;
-		if (RegCustom._button_color_number[Reg._tn] == 30) _color = 0x883b5dc9;
-		if (RegCustom._button_color_number[Reg._tn] == 31) _color = 0x8841a6f6;
-		if (RegCustom._button_color_number[Reg._tn] == 32) _color = 0x8873eff7;
-		if (RegCustom._button_color_number[Reg._tn] == 33) _color = 0x88f4f4f4;
-		if (RegCustom._button_color_number[Reg._tn] == 34) _color = 0x8894b0c2;
-		if (RegCustom._button_color_number[Reg._tn] == 35) _color = 0x88566c86;
-		if (RegCustom._button_color_number[Reg._tn] == 36) _color = 0x88333c57;
-		if (RegCustom._button_color_number[Reg._tn] == 37) _color = 0x889c5b3e;
-		if (RegCustom._button_color_number[Reg._tn] == 38) _color = 0x88573139;
-		if (RegCustom._button_color_number[Reg._tn] == 39) _color = 0x884c7554;
-		if (RegCustom._button_color_number[Reg._tn] == 40) _color = 0x88333333;
+		if (RegCustom._button_color_number[Reg._tn] == 25) _color = 0x88333333;
 		
 		return _color;
 	}
@@ -1593,7 +1578,7 @@ class MenuConfigurationsGeneral extends FlxGroup
 		if (RegCustom._button_border_color_number[Reg._tn] == 2) _color = 0xFF5d275d;
 		if (RegCustom._button_border_color_number[Reg._tn] == 3) _color = 0xFFcb0025;
 		if (RegCustom._button_border_color_number[Reg._tn] == 4) _color = 0xFFef7d57;
-		if (RegCustom._button_border_color_number[Reg._tn] == 5) _color = 0xFFffcd75;
+		if (RegCustom._button_border_color_number[Reg._tn] == 5) _color = 0xFFa4844d;
 		if (RegCustom._button_border_color_number[Reg._tn] == 6) _color = 0xFFa7f070;
 		if (RegCustom._button_border_color_number[Reg._tn] == 7) _color = 0xFF38b764;
 		if (RegCustom._button_border_color_number[Reg._tn] == 8) _color = 0xFF257179;
@@ -1601,7 +1586,7 @@ class MenuConfigurationsGeneral extends FlxGroup
 		if (RegCustom._button_border_color_number[Reg._tn] == 10) _color = 0xFF3b5dc9;
 		if (RegCustom._button_border_color_number[Reg._tn] == 11) _color = 0xFF41a6f6;
 		if (RegCustom._button_border_color_number[Reg._tn] == 12) _color = 0xFF73eff7;
-		if (RegCustom._button_border_color_number[Reg._tn] == 13) _color = 0xFFf4f4f4;
+		if (RegCustom._button_border_color_number[Reg._tn] == 13) _color = 0xFFcccccc;
 		if (RegCustom._button_border_color_number[Reg._tn] == 14) _color = 0xFF94b0c2;
 		if (RegCustom._button_border_color_number[Reg._tn] == 15) _color = 0xFF566c86;
 		if (RegCustom._button_border_color_number[Reg._tn] == 16) _color = 0xFF333c57;
@@ -1613,22 +1598,7 @@ class MenuConfigurationsGeneral extends FlxGroup
 		if (RegCustom._button_border_color_number[Reg._tn] == 22) _color = 0x885d275d;
 		if (RegCustom._button_border_color_number[Reg._tn] == 23) _color = 0x88b13e53;
 		if (RegCustom._button_border_color_number[Reg._tn] == 24) _color = 0x88ef7d57;
-		if (RegCustom._button_border_color_number[Reg._tn] == 25) _color = 0x88ffcd75;
-		if (RegCustom._button_border_color_number[Reg._tn] == 26) _color = 0x88a7f070;
-		if (RegCustom._button_border_color_number[Reg._tn] == 27) _color = 0x8838b764;
-		if (RegCustom._button_border_color_number[Reg._tn] == 28) _color = 0x88257179;
-		if (RegCustom._button_border_color_number[Reg._tn] == 29) _color = 0x8829366f;
-		if (RegCustom._button_border_color_number[Reg._tn] == 30) _color = 0x883b5dc9;
-		if (RegCustom._button_border_color_number[Reg._tn] == 31) _color = 0x8841a6f6;
-		if (RegCustom._button_border_color_number[Reg._tn] == 32) _color = 0x8873eff7;
-		if (RegCustom._button_border_color_number[Reg._tn] == 33) _color = 0x88f4f4f4;
-		if (RegCustom._button_border_color_number[Reg._tn] == 34) _color = 0x8894b0c2;
-		if (RegCustom._button_border_color_number[Reg._tn] == 35) _color = 0x88566c86;
-		if (RegCustom._button_border_color_number[Reg._tn] == 36) _color = 0x88333c57;
-		if (RegCustom._button_border_color_number[Reg._tn] == 37) _color = 0x889c5b3e;
-		if (RegCustom._button_border_color_number[Reg._tn] == 38) _color = 0x88573139;
-		if (RegCustom._button_border_color_number[Reg._tn] == 39) _color = 0x884c7554;
-		if (RegCustom._button_border_color_number[Reg._tn] == 40) _color = 0x88333333;
+		if (RegCustom._button_border_color_number[Reg._tn] == 25) _color = 0x88333333;
 		
 		return _color;
 	}
@@ -1644,7 +1614,7 @@ class MenuConfigurationsGeneral extends FlxGroup
 		if (RegCustom._button_text_color_number[Reg._tn] == 2) _color = 0xFF5d275d;
 		if (RegCustom._button_text_color_number[Reg._tn] == 3) _color = 0xFFcb0025;
 		if (RegCustom._button_text_color_number[Reg._tn] == 4) _color = 0xFFef7d57;
-		if (RegCustom._button_text_color_number[Reg._tn] == 5) _color = 0xFFffcd75;
+		if (RegCustom._button_text_color_number[Reg._tn] == 5) _color = 0xFFa4844d;
 		if (RegCustom._button_text_color_number[Reg._tn] == 6) _color = 0xFFa7f070;
 		if (RegCustom._button_text_color_number[Reg._tn] == 7) _color = 0xFF38b764;
 		if (RegCustom._button_text_color_number[Reg._tn] == 8) _color = 0xFF257179;
@@ -1652,7 +1622,7 @@ class MenuConfigurationsGeneral extends FlxGroup
 		if (RegCustom._button_text_color_number[Reg._tn] == 10) _color = 0xFF3b5dc9;
 		if (RegCustom._button_text_color_number[Reg._tn] == 11) _color = 0xFF41a6f6;
 		if (RegCustom._button_text_color_number[Reg._tn] == 12) _color = 0xFF73eff7;
-		if (RegCustom._button_text_color_number[Reg._tn] == 13) _color = 0xFFf4f4f4;
+		if (RegCustom._button_text_color_number[Reg._tn] == 13) _color = 0xFFcccccc;
 		if (RegCustom._button_text_color_number[Reg._tn] == 14) _color = 0xFF94b0c2;
 		if (RegCustom._button_text_color_number[Reg._tn] == 15) _color = 0xFF566c86;
 		if (RegCustom._button_text_color_number[Reg._tn] == 16) _color = 0xFF333c57;
@@ -1664,7 +1634,7 @@ class MenuConfigurationsGeneral extends FlxGroup
 		if (RegCustom._button_text_color_number[Reg._tn] == 22) _color = 0x885d275d;
 		if (RegCustom._button_text_color_number[Reg._tn] == 23) _color = 0x88b13e53;
 		if (RegCustom._button_text_color_number[Reg._tn] == 24) _color = 0x88ef7d57;
-		if (RegCustom._button_text_color_number[Reg._tn] == 25) _color = 0x88ffcd75;
+		if (RegCustom._button_text_color_number[Reg._tn] == 25) _color = 0x88a4844d;
 		if (RegCustom._button_text_color_number[Reg._tn] == 26) _color = 0x88a7f070;
 		if (RegCustom._button_text_color_number[Reg._tn] == 27) _color = 0x8838b764;
 		if (RegCustom._button_text_color_number[Reg._tn] == 28) _color = 0x88257179;
@@ -1672,7 +1642,7 @@ class MenuConfigurationsGeneral extends FlxGroup
 		if (RegCustom._button_text_color_number[Reg._tn] == 30) _color = 0x883b5dc9;
 		if (RegCustom._button_text_color_number[Reg._tn] == 31) _color = 0x8841a6f6;
 		if (RegCustom._button_text_color_number[Reg._tn] == 32) _color = 0x8873eff7;
-		if (RegCustom._button_text_color_number[Reg._tn] == 33) _color = 0x88f4f4f4;
+		if (RegCustom._button_text_color_number[Reg._tn] == 33) _color = 0x88cccccc;
 		if (RegCustom._button_text_color_number[Reg._tn] == 34) _color = 0x8894b0c2;
 		if (RegCustom._button_text_color_number[Reg._tn] == 35) _color = 0x88566c86;
 		if (RegCustom._button_text_color_number[Reg._tn] == 36) _color = 0x88333c57;
@@ -1696,10 +1666,10 @@ class MenuConfigurationsGeneral extends FlxGroup
 		{
 			Reg._yesNoKeyPressValueAtMessage = 0;
 			
-			_button_shader_even_units_minus.active = true;
-			_button_shader_even_units_plus.active = true;		
-			_button_shader_odd_units_minus.active = true;
-			_button_shader_odd_units_plus.active = true;
+			_button_shade_even_units_minus.active = true;
+			_button_shade_even_units_plus.active = true;		
+			_button_shade_odd_units_minus.active = true;
+			_button_shade_odd_units_plus.active = true;
 			
 			_button_color_even_units_minus.active = true;
 			_button_color_even_units_plus.active = true;		
@@ -1765,4 +1735,4 @@ class MenuConfigurationsGeneral extends FlxGroup
 		
 	}
 	
-}//
+}//

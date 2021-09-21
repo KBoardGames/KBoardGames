@@ -404,9 +404,9 @@ class RegFunctions
 		var saveFile = sys.io.File.write(_directory + RegCustom._theme_name[Reg._tn]);
 		
 		// needs a ]r at the end or there will be a neko crash when loading the .yaml data
-		saveFile.writeString("_gameboard_units_odd_sprite_number: " + RegCustom._gameboard_units_odd_sprite_number[Reg._tn][0] + ", " + RegCustom._gameboard_units_odd_sprite_number[Reg._tn][1] + "\r\n");
+		saveFile.writeString("_gameboard_units_odd_shade_number: " + RegCustom._gameboard_units_odd_shade_number[Reg._tn][0] + ", " + RegCustom._gameboard_units_odd_shade_number[Reg._tn][1] + "\r\n");
 		
-		saveFile.writeString("_gameboard_units_even_sprite_number: " + RegCustom._gameboard_units_even_sprite_number[Reg._tn][0] + ", " + RegCustom._gameboard_units_even_sprite_number[Reg._tn][1] + "\r\n");
+		saveFile.writeString("_gameboard_units_even_shade_number: " + RegCustom._gameboard_units_even_shade_number[Reg._tn][0] + ", " + RegCustom._gameboard_units_even_shade_number[Reg._tn][1] + "\r\n");
 		
 		saveFile.writeString("_gameboard_units_odd_color_number: " + RegCustom._gameboard_units_odd_color_number[Reg._tn][0] + ", " + RegCustom._gameboard_units_odd_color_number[Reg._tn][1] + "\r\n");
 		
@@ -530,16 +530,16 @@ class RegFunctions
 					// do something with file
 					var data = Yaml.read(_path); 
 
-					var _array_tmp = Std.string(data.get("_gameboard_units_odd_sprite_number"));
+					var _array_tmp = Std.string(data.get("_gameboard_units_odd_shade_number"));
 					var _array = _array_tmp.split(",");
 					
-					RegCustom._gameboard_units_odd_sprite_number[Reg._tn][0] = Std.parseInt(_array[0]);
-					RegCustom._gameboard_units_odd_sprite_number[Reg._tn][1] = Std.parseInt(_array[1]);
+					RegCustom._gameboard_units_odd_shade_number[Reg._tn][0] = Std.parseInt(_array[0]);
+					RegCustom._gameboard_units_odd_shade_number[Reg._tn][1] = Std.parseInt(_array[1]);
 					
-					var _array_tmp = Std.string(data.get("_gameboard_units_even_sprite_number"));
+					var _array_tmp = Std.string(data.get("_gameboard_units_even_shade_number"));
 					var _array = _array_tmp.split(",");
-					RegCustom._gameboard_units_even_sprite_number[Reg._tn][0] = Std.parseInt(_array[0]);
-					RegCustom._gameboard_units_even_sprite_number[Reg._tn][1] = Std.parseInt(_array[1]);
+					RegCustom._gameboard_units_even_shade_number[Reg._tn][0] = Std.parseInt(_array[0]);
+					RegCustom._gameboard_units_even_shade_number[Reg._tn][1] = Std.parseInt(_array[1]);
 					
 					var _array_tmp = Std.string(data.get("_gameboard_units_odd_color_number"));
 					var _array = _array_tmp.split(",");
@@ -724,8 +724,8 @@ class RegFunctions
 	// the values of this function will be changed when after the next theme is read from the themes folder. this function only pushes the array so that the theme can populate these vars.
 	static public function push_next_theme():Void
 	{
-		RegCustom._gameboard_units_odd_sprite_number.push([0]);
-		RegCustom._gameboard_units_even_sprite_number.push([0]);
+		RegCustom._gameboard_units_odd_shade_number.push([0]);
+		RegCustom._gameboard_units_even_shade_number.push([0]);
 		RegCustom._gameboard_units_odd_color_number.push([0]);
 		RegCustom._gameboard_units_even_color_number.push([0]);
 		RegCustom._gameboard_border_number.push(5);		
@@ -791,9 +791,9 @@ class RegFunctions
 			{
 				for (i in 0...2)
 				{
-					RegCustom._gameboard_units_odd_sprite_number[Reg._tn][i] = _gameMenu.data._gameboard_units_odd_sprite_number[i];
+					RegCustom._gameboard_units_odd_shade_number[Reg._tn][i] = _gameMenu.data._gameboard_units_odd_shade_number[i];
 					
-					RegCustom._gameboard_units_even_sprite_number[Reg._tn][i] = _gameMenu.data._gameboard_units_even_sprite_number[i];
+					RegCustom._gameboard_units_even_shade_number[Reg._tn][i] = _gameMenu.data._gameboard_units_even_shade_number[i];
 					
 					RegCustom._gameboard_units_odd_color_number[Reg._tn][i] = _gameMenu.data._gameboard_units_odd_color_number[i];
 					
@@ -985,9 +985,9 @@ class RegFunctions
 			// save data
 			_gameMenu.data._theme_name_current = RegCustom._theme_name_current;
 
-			_gameMenu.data._gameboard_units_odd_sprite_number = new Array<Array<Int>>();
+			_gameMenu.data._gameboard_units_odd_shade_number = new Array<Array<Int>>();
 			
-			_gameMenu.data._gameboard_units_even_sprite_number = new Array<Array<Int>>();
+			_gameMenu.data._gameboard_units_even_shade_number = new Array<Array<Int>>();
 			
 			_gameMenu.data._gameboard_units_odd_color_number = new Array<Array<Int>>();
 			
@@ -995,9 +995,9 @@ class RegFunctions
 			
 			for (i in 0... 2)
 			{
-				_gameMenu.data._gameboard_units_odd_sprite_number[i] = RegCustom._gameboard_units_odd_sprite_number[Reg._tn][i];
+				_gameMenu.data._gameboard_units_odd_shade_number[i] = RegCustom._gameboard_units_odd_shade_number[Reg._tn][i];
 				
-				_gameMenu.data._gameboard_units_even_sprite_number[i] = RegCustom._gameboard_units_even_sprite_number[Reg._tn][i];
+				_gameMenu.data._gameboard_units_even_shade_number[i] = RegCustom._gameboard_units_even_shade_number[Reg._tn][i];
 				
 				_gameMenu.data._gameboard_units_odd_color_number[i] = RegCustom._gameboard_units_odd_color_number[Reg._tn][i];
 				
@@ -1116,7 +1116,7 @@ class RegFunctions
 			_gameMenu.flush();
 			_gameMenu.close;
 			
-			save_theme();
+			if (Reg._tn > 0) save_theme();
 			
 		#end
 		

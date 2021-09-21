@@ -397,7 +397,7 @@ class MenuConfigurationsOutput extends FlxGroup
 	private function sceneMenuButtons():Void
 	{
 		if (_save != null) remove(_save); 
-		_save = new ButtonGeneralNetworkNo(0, FlxG.height - 40, "Save", 160 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, saveConfig, RegCustom._button_color[Reg._tn], false, 1);
+		_save = new ButtonGeneralNetworkNo(0, FlxG.height - 40, "Save Theme", 160 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, saveConfig, RegCustom._button_color[Reg._tn], false, 1);
 		_save.label.font = Reg._fontDefault;
 		_save.screenCenter(X);
 		_save.x += 400;
@@ -452,10 +452,10 @@ class MenuConfigurationsOutput extends FlxGroup
 		{
 			RegTriggers._config_menu_save_notice = false;
 			
-			__menu_configurations_general._button_shader_even_units_minus.active = false;
-			__menu_configurations_general._button_shader_even_units_plus.active = false;		
-			__menu_configurations_general._button_shader_odd_units_minus.active = false;
-			__menu_configurations_general._button_shader_odd_units_plus.active = false;
+			__menu_configurations_general._button_shade_even_units_minus.active = false;
+			__menu_configurations_general._button_shade_even_units_plus.active = false;		
+			__menu_configurations_general._button_shade_odd_units_minus.active = false;
+			__menu_configurations_general._button_shade_odd_units_plus.active = false;
 			
 			__menu_configurations_general._button_color_even_units_minus.active = false;
 			__menu_configurations_general._button_color_even_units_plus.active = false;		

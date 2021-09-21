@@ -1341,7 +1341,7 @@ class IDsCreateAndMain extends FlxState
 
 			if (RegCustom._gameboard_even_units_show_enabled[Reg._tn] == true)
 			{
-				var _sprite_board_game_unit_even = new FlxSprite(0, 0, "assets/images/scenes/tiles/even/"+ Std.string(RegCustom._gameboard_units_even_sprite_number[Reg._tn][Reg._gameId]) + ".png");
+				var _sprite_board_game_unit_even = new FlxSprite(0, 0, "assets/images/scenes/tiles/even/"+ Std.string(RegCustom._gameboard_units_even_shade_number[Reg._tn][Reg._gameId]) + ".png");
 				_sprite_board_game_unit_even.scrollFactor.set();
 				_sprite_board_game_unit_even.setPosition(Reg._unitXgameBoardLocation[0], Reg._unitYgameBoardLocation[0]);
 				_sprite_board_game_unit_even.color = MenuConfigurationsGeneral.colorToggleUnitsEven();
@@ -1349,7 +1349,7 @@ class IDsCreateAndMain extends FlxState
 				add(_sprite_board_game_unit_even);			
 			}
 			
-			var _sprite_board_game_unit_odd = new FlxSprite(0, 0, "assets/images/scenes/tiles/odd/"+ Std.string(RegCustom._gameboard_units_odd_sprite_number[Reg._tn][Reg._gameId]) +".png");
+			var _sprite_board_game_unit_odd = new FlxSprite(0, 0, "assets/images/scenes/tiles/odd/"+ Std.string(RegCustom._gameboard_units_odd_shade_number[Reg._tn][Reg._gameId]) +".png");
 			_sprite_board_game_unit_odd.scrollFactor.set();
 			_sprite_board_game_unit_odd.setPosition(Reg._unitXgameBoardLocation[0], Reg._unitYgameBoardLocation[0]);
 			_sprite_board_game_unit_odd.color = MenuConfigurationsGeneral.colorToggleUnitsOdd();
@@ -1635,4 +1635,4 @@ class IDsCreateAndMain extends FlxState
 		haxe.Timer.delay(function (){}, Reg2._event_sleep);
 	}
 	
-}
+}//
