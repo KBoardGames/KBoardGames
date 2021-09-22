@@ -120,6 +120,13 @@ class ChessPromote extends FlxSubState
 		}
 	}
 	
+	private function closeMessage(i:FlxTimer):Void
+	{
+		Reg._chessPawnPromotedMessage = false;
+		Reg._gameMessage = "";
+		close();
+	}	
+	
 	override public function update(elapsed:Float):Void 
 	{		
 		if (Reg._chessPawnPromotedMessage == true)
@@ -317,10 +324,4 @@ class ChessPromote extends FlxSubState
 		super.update(elapsed);
 	}	
 	
-	private function closeMessage(i:FlxTimer):Void
-	{
-		Reg._chessPawnPromotedMessage = false;
-		Reg._gameMessage = "";
-		close();
-	}
 }

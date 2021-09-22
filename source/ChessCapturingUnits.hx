@@ -64,21 +64,7 @@ class ChessCapturingUnits
 	 * true is there is a piece at some location.
 	 */
 	private static var _pieceFound:Bool = false;
-	
-	public function destroy()
-	{
-		_found = false;
-		_isKing = [false,false];
-		_stopAtKing = false;
-		_defenderUnits = false;
-		_sameColoredPieceFound = false;
-		_otherColoredPieceFound = false;
-		_defenderPiece = false;
-		_attackerPiece = false;
-		_pieceFound = false;
-	
-	}
-	
+		
 	//#############################	PAWN.
 	/******************************
 	 * when mouse clicked on a pawn, this function sets the units a pawn is able to move to by setting _capturingUnitsForImages to a value of 1.
@@ -2481,8 +2467,6 @@ class ChessCapturingUnits
 			}
 		}
 		
-		
-		
 	}
 	
 	// returns true if piece exists at that unit. creates the forPiece capturing units.
@@ -2557,5 +2541,18 @@ class ChessCapturingUnits
 		
 	}
 	
+	public function destroy()
+	{
+		_found = false;
+		_isKing = [false,false];
+		_stopAtKing = false;
+		_defenderUnits = false;
+		_sameColoredPieceFound = false;
+		_otherColoredPieceFound = false;
+		_defenderPiece = false;
+		_attackerPiece = false;
+		_pieceFound = false;
+	
+	}
 	
 }// 

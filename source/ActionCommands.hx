@@ -40,46 +40,6 @@ class ActionCommands extends FlxGroup
 			
 		_logoff_timer = new FlxTimer();
 	}
-	
-	override public function update(elapsed:Float):Void
-	{
-		// if the OK button was pressed at the MessageBox.hx and the player selected the esc key then disconnect the server.
-		if (Reg._yesNoKeyPressValueAtMessage == 1 && Reg._buttonCodeValues == "s9")
-		{
-			Reg._yesNoKeyPressValueAtMessage = 0;
-			PlayState._clientDisconnect = true;
-			PlayState.prepareToDisconnect();
-		}
-		
-		if (Reg._yesNoKeyPressValueAtMessage >= 2 && Reg._buttonCodeValues == "s9")
-		{
-			Reg._buttonCodeValues = "";
-			Reg._yesNoKeyPressValueAtMessage = 0;
-		}
-	
-		// stop the logoff timer if a mouse button/wheel or mobile touch was clicked.
-		if (ActionInput.justPressed() == true 
-		 || ActionInput.pressed() == true )
-		{
-			_logoff_timer_start = true; // start or restart the logoff timer. if the player still needs updating then this var will restart the timer again.
-		}
-		
-		logoffCountdown(); // determine if player should be logged off at every game tick.
-		
-		if (Reg._loggedIn == true)
-		{
-			#if desktop
-				if ( FlxG.keys.anyJustReleased(["ESCAPE"]))
-					commandESC();
-				
-				if ( FlxG.keys.anyJustReleased(["T"]))
-					commandTraceAll();
-			#end
-		}
-		
-		super.update(elapsed);
-	}
-	
 	/***************************************************************************
 	 * output trace data when a display bug displays. helps find where in code the bugs happens.
 	 */
@@ -169,5 +129,43 @@ class ActionCommands extends FlxGroup
 		}
 	}	
 	
+	override public function update(elapsed:Float):Void
+	{
+		// if the OK button was pressed at the MessageBox.hx and the player selected the esc key then disconnect the server.
+		if (Reg._yesNoKeyPressValueAtMessage == 1 && Reg._buttonCodeValues == "s9")
+		{
+			Reg._yesNoKeyPressValueAtMessage = 0;
+			PlayState._clientDisconnect = true;
+			PlayState.prepareToDisconnect();
+		}
+		
+		if (Reg._yesNoKeyPressValueAtMessage >= 2 && Reg._buttonCodeValues == "s9")
+		{
+			Reg._buttonCodeValues = "";
+			Reg._yesNoKeyPressValueAtMessage = 0;
+		}
+	
+		// stop the logoff timer if a mouse button/wheel or mobile touch was clicked.
+		if (ActionInput.justPressed() == true 
+		 || ActionInput.pressed() == true )
+		{
+			_logoff_timer_start = true; // start or restart the logoff timer. if the player still needs updating then this var will restart the timer again.
+		}
+		
+		logoffCountdown(); // determine if player should be logged off at every game tick.
+		
+		if (Reg._loggedIn == true)
+		{
+			#if desktop
+				if ( FlxG.keys.anyJustReleased(["ESCAPE"]))
+					commandESC();
+				
+				if ( FlxG.keys.anyJustReleased(["T"]))
+					commandTraceAll();
+			#end
+		}
+		
+		super.update(elapsed);
+	}
 	
 }//

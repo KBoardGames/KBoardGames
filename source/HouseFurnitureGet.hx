@@ -222,104 +222,6 @@ class HouseFurnitureGet extends FlxGroup
 		
 	}
 
-	override public function destroy()
-	{		
-		if (_background != null)
-		{
-			_background.destroy();
-			_background = null;
-		}
-		
-		if (_bgTitle != null)
-		{
-			_bgTitle.destroy();
-			_bgTitle = null;
-		}
-		
-		if (_title != null)
-		{
-			_title.destroy();
-			_title = null;
-		}		
-		
-		if (_group != null)
-		{
-			_group.destroy();
-			_group = null;
-		}
-		
-		if (_box != null)
-		{
-			_box.destroy();
-			_box = null;
-		}
-		
-		if (_text != null)
-		{
-			_text.destroy();
-			_text = null;
-		}
-		
-		if (_coins != null)
-		{
-			_coins.destroy();
-			_coins = null;
-		}
-		
-		if (_sprite != null)
-		{
-			_sprite.destroy();
-			_sprite = null;
-		}
-		
-		if (__boxscroller != null)
-		{
-			cameras.remove(__boxscroller);
-			__boxscroller.destroy();
-			__boxscroller = null;
-		}
-		
-		
-		super.destroy();
-	}
-	
-	override public function update(elapsed:Float):Void
-	{
-		// if player returned to lobby then this var is false so don't update().
-		if (Reg._at_house == false) return;
-		if (RegHouse._house_main_menu_button_number != 0) return;
-		
-		// highlight item if mouse is hovering over it.
-		for (i in 0...RegHouse._totalCanPurchase+1)
-		{
-			if (ActionInput.coordinateX() - HouseScrollMap._map_offset_x > _group_sprite[i].x
-			&&  ActionInput.coordinateX() - HouseScrollMap._map_offset_x < _group_sprite[i].x + 100
-			&&  ActionInput.coordinateY() - HouseScrollMap._map_offset_y + __boxscroller.scroll.y > _group_sprite[i].y
-			&&  ActionInput.coordinateY() - HouseScrollMap._map_offset_y + __boxscroller.scroll.y < _group_sprite[i].y + 100)
-			{
-				_group_sprite[i].animation.play("1");
-				
-				
-				if (ActionInput.justPressed() == true)
-				{
-					if (RegCustom._sound_enabled[Reg._tn] == true
-					&&  Reg2._boxScroller_is_scrolling == false)
-						FlxG.sound.play("click", 1, false);
-				}
-					
-				if (ActionInput.justReleased() == true)
-					buyingFurnitureItemConfirm(i);
-				
-			}
-			
-			else _group_sprite[i].animation.play("0");
-		}
-		
-		if (Reg._buttonCodeValues != "") buttonCodeValues();
-		
-		super.update(elapsed);
-	}	
-	
 	/******************************
 	 * at the time a button is created, a Reg._buttonCodeValues will be given a value. that value is used here to determine what block of code to read. 
 	 * a Reg._yesNoKeyPressValueAtMessage with a value of one means that the "yes" button was clicked. a value of two refers to button with text of "no". 
@@ -420,4 +322,102 @@ class HouseFurnitureGet extends FlxGroup
 		__boxscroller.content.height += Std.int(__boxscroller.scroll.y) + _offset_y;
 	}
 	
+	override public function destroy()
+	{		
+		if (_background != null)
+		{
+			_background.destroy();
+			_background = null;
+		}
+		
+		if (_bgTitle != null)
+		{
+			_bgTitle.destroy();
+			_bgTitle = null;
+		}
+		
+		if (_title != null)
+		{
+			_title.destroy();
+			_title = null;
+		}		
+		
+		if (_group != null)
+		{
+			_group.destroy();
+			_group = null;
+		}
+		
+		if (_box != null)
+		{
+			_box.destroy();
+			_box = null;
+		}
+		
+		if (_text != null)
+		{
+			_text.destroy();
+			_text = null;
+		}
+		
+		if (_coins != null)
+		{
+			_coins.destroy();
+			_coins = null;
+		}
+		
+		if (_sprite != null)
+		{
+			_sprite.destroy();
+			_sprite = null;
+		}
+		
+		if (__boxscroller != null)
+		{
+			cameras.remove(__boxscroller);
+			__boxscroller.destroy();
+			__boxscroller = null;
+		}
+		
+		
+		super.destroy();
+	}
+	
+	override public function update(elapsed:Float):Void
+	{
+		// if player returned to lobby then this var is false so don't update().
+		if (Reg._at_house == false) return;
+		if (RegHouse._house_main_menu_button_number != 0) return;
+		
+		// highlight item if mouse is hovering over it.
+		for (i in 0...RegHouse._totalCanPurchase+1)
+		{
+			if (ActionInput.coordinateX() - HouseScrollMap._map_offset_x > _group_sprite[i].x
+			&&  ActionInput.coordinateX() - HouseScrollMap._map_offset_x < _group_sprite[i].x + 100
+			&&  ActionInput.coordinateY() - HouseScrollMap._map_offset_y + __boxscroller.scroll.y > _group_sprite[i].y
+			&&  ActionInput.coordinateY() - HouseScrollMap._map_offset_y + __boxscroller.scroll.y < _group_sprite[i].y + 100)
+			{
+				_group_sprite[i].animation.play("1");
+				
+				
+				if (ActionInput.justPressed() == true)
+				{
+					if (RegCustom._sound_enabled[Reg._tn] == true
+					&&  Reg2._boxScroller_is_scrolling == false)
+						FlxG.sound.play("click", 1, false);
+				}
+					
+				if (ActionInput.justReleased() == true)
+					buyingFurnitureItemConfirm(i);
+				
+			}
+			
+			else _group_sprite[i].animation.play("0");
+		}
+		
+		if (Reg._buttonCodeValues != "") buttonCodeValues();
+		
+		super.update(elapsed);
+	}	
+		
 }//

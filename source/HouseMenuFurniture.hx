@@ -159,6 +159,155 @@ class HouseMenuFurniture extends FlxGroup
 		_button_is_hidden.active = false;
 		add(_button_is_hidden);
 	}
+		
+	public function stack_item_backwards():Void
+	{
+		if (_members == 0) return;
+		
+		if (_members > 1) 
+		{			
+			__house_map_furniture.members_bring_backward(_members, true);
+			_members -= 1;
+		}	
+		
+	}
+	
+	public function stack_item_forwards():Void
+	{
+		if (_members == 0) return;
+		
+		if (_members < _items.members.length) 
+		{					
+			__house_map_furniture.members_bring_forward(_members, true);
+			_members += 1;
+		}		
+	}
+	
+	
+	/******************************
+	 * display an item in the list of bought items that was selected from the HouseFurniturePut.hx class.
+	 */
+	private function item_select_triggered_from_put_panel():Void
+	{
+		__house_map_furniture._bg_behind_item.visible = true;
+		__house_map_furniture._house_drag_icon.visible = true;
+		__house_map_furniture._house_rotate_icon.visible = true;
+			
+		_text_of_item_selected.text = RegHouse._namesPurchased[_members]+".";
+		__house_map_furniture.member_bg_behind(_members);					
+		
+		__house.__house_menu_furniture._button_is_hidden.active = true;
+		__house.__house_menu_furniture._button_item_behind_walls.active = true;
+		__house.__house_menu_furniture._button_is_hidden.visible = true;
+		__house.__house_menu_furniture._button_item_behind_walls.visible = true;
+						
+		mapCenterOnItem();
+	}
+	
+	/******************************
+	 * when this button is clicked, the furniture item visibility will be toggled.
+	 */
+	public function item_toggle_visibility():Void
+	{
+		if (HouseFurniturePut._value_from_item_order >= 0)
+		{
+			// first we toggle the furniture var then we toggle the furniture item on the map.
+			if (RegHouse._item_is_hidden[HouseFurniturePut._value_from_item_pressed] == 0)
+			{
+				RegHouse._item_is_hidden[HouseFurniturePut._value_from_item_pressed] = 1;
+				HouseFurnitureItemsFront._group.members[HouseFurniturePut._value_from_item_order].visible = false;
+				HouseFurnitureItemsBack._group.members[HouseFurniturePut._value_from_item_order].visible = false;
+			}
+			else
+			{
+				RegHouse._item_is_hidden[HouseFurniturePut._value_from_item_pressed] = 0;
+				if (RegHouse._item_behind_walls[HouseFurniturePut._value_from_item_pressed] == 0)
+					HouseFurnitureItemsFront._group.members[HouseFurniturePut._value_from_item_order].visible = true;
+				else
+					HouseFurnitureItemsBack._group.members[HouseFurniturePut._value_from_item_order].visible = true;
+			}
+		
+			button_toggle_visibility_text();
+		}
+	}
+	
+	public function button_toggle_visibility_text():Void
+	{
+		if (RegHouse._item_is_hidden[HouseFurniturePut._value_from_item_pressed] == 0)
+			_button_is_hidden.label.text = "Hide Item";
+		else
+			_button_is_hidden.label.text = "Show Item";
+	}
+	
+	/******************************
+	 * this function either brings the selected furniture item in front or behind a wall.
+	 */
+	public function toggle_item_front_or_back_walls():Void
+	{	
+		if (HouseFurniturePut._value_from_item_order >= 0)
+		{
+			if (RegHouse._item_behind_walls[HouseFurniturePut._value_from_item_pressed] == 1)
+			{
+				if (RegHouse._item_is_hidden[HouseFurniturePut._value_from_item_pressed] == 0)
+				{
+					RegHouse._item_behind_walls[HouseFurniturePut._value_from_item_pressed] = 0;
+					HouseFurnitureItemsFront._group_sprite[HouseFurniturePut._value_from_item_order].visible = true;
+					HouseFurnitureItemsBack._group_sprite[HouseFurniturePut._value_from_item_order].visible = false;
+				}
+			}
+			
+			else
+			{
+				if (RegHouse._item_is_hidden[HouseFurniturePut._value_from_item_pressed] == 0)
+				{
+					RegHouse._item_behind_walls[HouseFurniturePut._value_from_item_pressed] = 1;
+					HouseFurnitureItemsFront._group_sprite[HouseFurniturePut._value_from_item_order].visible = false;
+					HouseFurnitureItemsBack._group_sprite[HouseFurniturePut._value_from_item_order].visible = true;
+				}
+			}
+			
+			button_toggle_walls_text();
+		}
+	}
+	
+	/******************************
+	 * this toggles the text of the _button_item_behind_walls.
+	 */
+	public function button_toggle_walls_text():Void
+	{
+		if (RegHouse._item_behind_walls[HouseFurniturePut._value_from_item_pressed] == 1)
+			_button_item_behind_walls.label.text = "Front of Wall";
+		else
+			_button_item_behind_walls.label.text = "Behind Wall";
+	}
+	
+	public function buttons_set_text_null():Void
+	{
+		_button_is_hidden.label.text = "";
+		_button_item_behind_walls.label.text = "";
+		
+		_button_is_hidden.visible = false;
+		_button_is_hidden.active = false;
+		
+		_button_item_behind_walls.visible = false;
+		_button_item_behind_walls.active = false;
+	}
+	
+	/******************************
+	 * if the item is not displayed on the visible map but the item is somewhere beyond the area of the map displayed then this will center the item on the map by changing the map coordinates.
+	 */
+	private function mapCenterOnItem():Void
+	{
+		if ((_members - 1) > -1)
+		{
+			__house._tracker.x = RegHouse._map_x[_members-1];
+			__house._tracker.y = RegHouse._map_y[_members-1];
+			
+			HouseScrollMap._map_offset_x = RegHouse._map_offset_x[_members-1];
+			HouseScrollMap._map_offset_y = RegHouse._map_offset_y[_members-1];
+		}
+		
+	}
 	
 	override public function destroy()
 	{
@@ -373,155 +522,6 @@ class HouseMenuFurniture extends FlxGroup
 			RegTriggers._item_select_triggered_from_put_panel = false;
 		
 		super.update(elapsed);
-	}
-		
-	public function stack_item_backwards():Void
-	{
-		if (_members == 0) return;
-		
-		if (_members > 1) 
-		{			
-			__house_map_furniture.members_bring_backward(_members, true);
-			_members -= 1;
-		}	
-		
-	}
-	
-	public function stack_item_forwards():Void
-	{
-		if (_members == 0) return;
-		
-		if (_members < _items.members.length) 
-		{					
-			__house_map_furniture.members_bring_forward(_members, true);
-			_members += 1;
-		}		
-	}
-	
-	
-	/******************************
-	 * display an item in the list of bought items that was selected from the HouseFurniturePut.hx class.
-	 */
-	private function item_select_triggered_from_put_panel():Void
-	{
-		__house_map_furniture._bg_behind_item.visible = true;
-		__house_map_furniture._house_drag_icon.visible = true;
-		__house_map_furniture._house_rotate_icon.visible = true;
-			
-		_text_of_item_selected.text = RegHouse._namesPurchased[_members]+".";
-		__house_map_furniture.member_bg_behind(_members);					
-		
-		__house.__house_menu_furniture._button_is_hidden.active = true;
-		__house.__house_menu_furniture._button_item_behind_walls.active = true;
-		__house.__house_menu_furniture._button_is_hidden.visible = true;
-		__house.__house_menu_furniture._button_item_behind_walls.visible = true;
-						
-		mapCenterOnItem();
-	}
-	
-	/******************************
-	 * when this button is clicked, the furniture item visibility will be toggled.
-	 */
-	public function item_toggle_visibility():Void
-	{
-		if (HouseFurniturePut._value_from_item_order >= 0)
-		{
-			// first we toggle the furniture var then we toggle the furniture item on the map.
-			if (RegHouse._item_is_hidden[HouseFurniturePut._value_from_item_pressed] == 0)
-			{
-				RegHouse._item_is_hidden[HouseFurniturePut._value_from_item_pressed] = 1;
-				HouseFurnitureItemsFront._group.members[HouseFurniturePut._value_from_item_order].visible = false;
-				HouseFurnitureItemsBack._group.members[HouseFurniturePut._value_from_item_order].visible = false;
-			}
-			else
-			{
-				RegHouse._item_is_hidden[HouseFurniturePut._value_from_item_pressed] = 0;
-				if (RegHouse._item_behind_walls[HouseFurniturePut._value_from_item_pressed] == 0)
-					HouseFurnitureItemsFront._group.members[HouseFurniturePut._value_from_item_order].visible = true;
-				else
-					HouseFurnitureItemsBack._group.members[HouseFurniturePut._value_from_item_order].visible = true;
-			}
-		
-			button_toggle_visibility_text();
-		}
-	}
-	
-	public function button_toggle_visibility_text():Void
-	{
-		if (RegHouse._item_is_hidden[HouseFurniturePut._value_from_item_pressed] == 0)
-			_button_is_hidden.label.text = "Hide Item";
-		else
-			_button_is_hidden.label.text = "Show Item";
-	}
-	
-	/******************************
-	 * this function either brings the selected furniture item in front or behind a wall.
-	 */
-	public function toggle_item_front_or_back_walls():Void
-	{	
-		if (HouseFurniturePut._value_from_item_order >= 0)
-		{
-			if (RegHouse._item_behind_walls[HouseFurniturePut._value_from_item_pressed] == 1)
-			{
-				if (RegHouse._item_is_hidden[HouseFurniturePut._value_from_item_pressed] == 0)
-				{
-					RegHouse._item_behind_walls[HouseFurniturePut._value_from_item_pressed] = 0;
-					HouseFurnitureItemsFront._group_sprite[HouseFurniturePut._value_from_item_order].visible = true;
-					HouseFurnitureItemsBack._group_sprite[HouseFurniturePut._value_from_item_order].visible = false;
-				}
-			}
-			
-			else
-			{
-				if (RegHouse._item_is_hidden[HouseFurniturePut._value_from_item_pressed] == 0)
-				{
-					RegHouse._item_behind_walls[HouseFurniturePut._value_from_item_pressed] = 1;
-					HouseFurnitureItemsFront._group_sprite[HouseFurniturePut._value_from_item_order].visible = false;
-					HouseFurnitureItemsBack._group_sprite[HouseFurniturePut._value_from_item_order].visible = true;
-				}
-			}
-			
-			button_toggle_walls_text();
-		}
-	}
-	
-	/******************************
-	 * this toggles the text of the _button_item_behind_walls.
-	 */
-	public function button_toggle_walls_text():Void
-	{
-		if (RegHouse._item_behind_walls[HouseFurniturePut._value_from_item_pressed] == 1)
-			_button_item_behind_walls.label.text = "Front of Wall";
-		else
-			_button_item_behind_walls.label.text = "Behind Wall";
-	}
-	
-	public function buttons_set_text_null():Void
-	{
-		_button_is_hidden.label.text = "";
-		_button_item_behind_walls.label.text = "";
-		
-		_button_is_hidden.visible = false;
-		_button_is_hidden.active = false;
-		
-		_button_item_behind_walls.visible = false;
-		_button_item_behind_walls.active = false;
-	}
-	
-	/******************************
-	 * if the item is not displayed on the visible map but the item is somewhere beyond the area of the map displayed then this will center the item on the map by changing the map coordinates.
-	 */
-	private function mapCenterOnItem():Void
-	{
-		if ((_members - 1) > -1)
-		{
-			__house._tracker.x = RegHouse._map_x[_members-1];
-			__house._tracker.y = RegHouse._map_y[_members-1];
-			
-			HouseScrollMap._map_offset_x = RegHouse._map_offset_x[_members-1];
-			HouseScrollMap._map_offset_y = RegHouse._map_offset_y[_members-1];
-		}
-		
 	}
 	
 }

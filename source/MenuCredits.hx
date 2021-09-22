@@ -64,6 +64,11 @@ class MenuCredits extends FlxState
 		add(__menu_bar);
 	}
 	
+	private function backToTitle():Void
+	{
+		FlxG.switchState(new MenuState());
+	}
+		
 	override public function update(elapsed:Float):Void
 	{
 		FlxG.mouse.enabled = true;
@@ -93,10 +98,5 @@ class MenuCredits extends FlxState
 		
 		super.update(elapsed);
 	}
-	
-	private function backToTitle():Void
-	{
-		FlxG.switchState(new MenuState());
-	}
-	
+
 }

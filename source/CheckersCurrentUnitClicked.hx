@@ -63,7 +63,112 @@ class CheckersCurrentUnitClicked extends FlxSprite
 
 		visible = false;
 	}
+	
+	private function populateCapturingUnits(yy:Int, xx:Int, p:Int):Void
+	{
+		// when the unit is clicked, the unit number is stored in this var. later this var will be read so that the unit to be move to and moved from can be determined.
+		Reg._gameUnitNumber = p;
+		
+		//############################# checkers.			
+		moveCheckersPieceHere(xx, yy);								
+	}
+	
+		/**
+	 * determines if a piece can be moved. 
+	 * this is the main function that passes data to other functions to determine check or even if a piece can be moved.
+	 * @param	xx		x coordinate of the piece that was clicked on.
+	 * @param	yy		y coordinate.
+	 */
+	private function moveCheckersPieceHere(cx:Int, cy:Int):Void
+	{		
+		RegFunctions.is_player_attacker(false); // a value of false then the player hosts a game known as the defender. true, if being hosted. eg, array[Reg._playerMoving][value][yy][xx]. playerAttacker is the opposite of the defender. so if Reg._playerMoving = 0 then its the player hosting the game while Reg._playerNotMoving which has a value of 1 had accepted the game at the chatroom.	
+			
+			// consider that the last unit of that gameboard was clicked. xx and yy will always refer to the unit number of 7/7. the units start from the top-left corner at a coordinate value of 0/0. 0 to 7 from left to right and 0 to 7 from top to bottom. cx/cy is used in this function for calculations. so, their value may change.
+		var xx:Int = cx;
+		var yy:Int = cy;
 
+		if (xx < 0) xx = 0;
+		if (yy < 0) yy = 0;
+		if (xx > 7) xx = 7;
+		if (yy > 7) yy = 7;
+			
+		//############################# MOVE PIECE
+			
+		// CheckersImagesCapturingUnits is the unit that the player can move to. since this function is called when the mouse is clicked and this value is > than 0 then that means the player is moving to this unit that has a value of xx/yy.
+		if (Reg._capturingUnitsForPieces[Reg._playerMoving][yy][xx] > 0 && Reg._gamePointValueForPiece[yy][xx] == 0 && Reg._gameYYold > -1 && Reg._gameXXold > -1 && Reg._gameDidFirstMove == true)
+		{
+			// these vars holds the value of xx/yy. later, they will be read to determine where, at a different class, the players piece should be moved to. 
+			Reg._gameXXnew = xx;
+			Reg._gameYYnew = yy;			
+			
+			// at mouse click, _gameUnitNumber equals p. since this unit is a move to unit, we need to store the value of p so we can loop through xx/yy or do something when an ID matches this value so that we can move this piece. see CheckersMovePlayersPiece.hx class for move information.
+			Reg._gameUnitNumberNew = Reg._gameUnitNumber; 		
+				
+			Reg._gameXXnew2 = -1;
+			Reg._gameYYnew2 = -1;
+			Reg._gameXXold2 = -1;
+			Reg._gameYYold2 = -1;
+			Reg._gameUnitNumberNew2 = -1;
+			Reg._gameUnitNumberOld2 = -1;
+			Reg._pointValue2 = -1;
+			Reg._uniqueValue2 = -1;
+			
+			// consider that if the king at the bottom-left corner of the gameboard was clicked then we must make the move to unit the same values as that unit...
+			Reg._gamePointValueForPiece[yy][xx] = Reg._gamePointValueForPiece[Reg._gameYYold][Reg._gameXXold];
+			Reg._gameUniqueValueForPiece[yy][xx] = Reg._gameUniqueValueForPiece[Reg._gameYYold][Reg._gameXXold];
+			
+			// ... next we make where the king would have been moved from, that unit a value of zero so that the other player can move to that unit at a later time.
+			Reg._gamePointValueForPiece[Reg._gameYYold][Reg._gameXXold] = 0;
+			Reg._gameUniqueValueForPiece[Reg._gameYYold][Reg._gameXXold] = 0;
+			
+			// make the final movement change to the sprite. when this var is true, a code block at CheckersMovePlayersPiece.hx is read at its update function. see update at that class for how the sprite is moved to the new unit.				
+			Reg._gameMovePiece = true;
+			//GameHistoryAndNotation.notationPrint();
+			
+			Reg._pieceMovedUpdateServer = true;
+						
+			return;
+		}
+	
+		// the following code handles what happen when a gameboard piece is clicked. the code sets values to the CheckersImagesCapturingUnits and other important vars so that the CheckersImagesCapturingUnits class can use an image to highlight where the player can move to.
+		Reg._gameXXold = xx; //since a player piece was clicked, we store the value of xx/yy so that...
+		Reg._gameYYold = yy; //... its move from value can later be determined.
+		 
+		Reg._gameUnitNumberOld = Reg._gameUnitNumber; // we do that same here for its p value.
+		 
+		// 	we need to correct player moving var...
+		Reg._playerMoving = 0;
+		if (Reg._gameHost == false) Reg._playerMoving = 1;
+		
+		// if there are no more jumps then clear these vars so that later a new capturing var with a value of 0 could be populated. remember that a value of 2 is a king and if not cleared here then later another jump will be possible.
+		if (Reg._checkersShouldKeepJumping == false)
+		{		
+			for (qy in 0...8)
+			{
+				for (qx in 0...8)
+				{
+					// the Reg._playerMoving that might have a value of 0, meaning player 0, could replace the [0] code below.
+					Reg._checkersUniquePieceValue[qy][qx] = 0;
+					Reg._capturingUnitsForPieces[0][qy][qx] = 0;
+					Reg._capturingUnitsForPieces[1][qy][qx] = 0;
+				}				
+
+			}
+		}	
+
+		// the following lines of code will determine if a jump is possible. if true then the code will set Reg._checkersFoundPieceToJumpOver to equal true and then will make its Reg._checkersUniquePieceValue to have a value of either 1 normal moving unit or 2 a king.
+		CheckersCapturingUnits.capturingUnits();
+		
+		if (cy > -1 && cx > -1) CheckersCapturingUnits.jumpCapturingUnitsForPiece(cy, cx, Reg._playerMoving);
+			
+		if (Reg._checkersFoundPieceToJumpOver == false)
+		{
+			if (cy > -1 && cx > -1) CheckersCapturingUnits.capturingUnitsForPiece(cy, cx, Reg._playerMoving);
+			
+		}
+
+	}
+	
 	override public function update (elapsed:Float)
 	{
 		if (Reg._gameOverForPlayer == false && Reg._gameId == 0)
@@ -214,108 +319,4 @@ trace("Reg._checkersIsThisFirstMove " + Reg._checkersIsThisFirstMove);
 		super.update(elapsed);
 	}
 	
-	private function populateCapturingUnits(yy:Int, xx:Int, p:Int):Void
-	{
-		// when the unit is clicked, the unit number is stored in this var. later this var will be read so that the unit to be move to and moved from can be determined.
-		Reg._gameUnitNumber = p;
-		
-		//############################# checkers.			
-		moveCheckersPieceHere(xx, yy);								
-	}
-	
-		/**
-	 * determines if a piece can be moved. 
-	 * this is the main function that passes data to other functions to determine check or even if a piece can be moved.
-	 * @param	xx		x coordinate of the piece that was clicked on.
-	 * @param	yy		y coordinate.
-	 */
-	private function moveCheckersPieceHere(cx:Int, cy:Int):Void
-	{		
-		RegFunctions.is_player_attacker(false); // a value of false then the player hosts a game known as the defender. true, if being hosted. eg, array[Reg._playerMoving][value][yy][xx]. playerAttacker is the opposite of the defender. so if Reg._playerMoving = 0 then its the player hosting the game while Reg._playerNotMoving which has a value of 1 had accepted the game at the chatroom.	
-			
-			// consider that the last unit of that gameboard was clicked. xx and yy will always refer to the unit number of 7/7. the units start from the top-left corner at a coordinate value of 0/0. 0 to 7 from left to right and 0 to 7 from top to bottom. cx/cy is used in this function for calculations. so, their value may change.
-		var xx:Int = cx;
-		var yy:Int = cy;
-
-		if (xx < 0) xx = 0;
-		if (yy < 0) yy = 0;
-		if (xx > 7) xx = 7;
-		if (yy > 7) yy = 7;
-			
-		//############################# MOVE PIECE
-			
-		// CheckersImagesCapturingUnits is the unit that the player can move to. since this function is called when the mouse is clicked and this value is > than 0 then that means the player is moving to this unit that has a value of xx/yy.
-		if (Reg._capturingUnitsForPieces[Reg._playerMoving][yy][xx] > 0 && Reg._gamePointValueForPiece[yy][xx] == 0 && Reg._gameYYold > -1 && Reg._gameXXold > -1 && Reg._gameDidFirstMove == true)
-		{
-			// these vars holds the value of xx/yy. later, they will be read to determine where, at a different class, the players piece should be moved to. 
-			Reg._gameXXnew = xx;
-			Reg._gameYYnew = yy;			
-			
-			// at mouse click, _gameUnitNumber equals p. since this unit is a move to unit, we need to store the value of p so we can loop through xx/yy or do something when an ID matches this value so that we can move this piece. see CheckersMovePlayersPiece.hx class for move information.
-			Reg._gameUnitNumberNew = Reg._gameUnitNumber; 		
-				
-			Reg._gameXXnew2 = -1;
-			Reg._gameYYnew2 = -1;
-			Reg._gameXXold2 = -1;
-			Reg._gameYYold2 = -1;
-			Reg._gameUnitNumberNew2 = -1;
-			Reg._gameUnitNumberOld2 = -1;
-			Reg._pointValue2 = -1;
-			Reg._uniqueValue2 = -1;
-			
-			// consider that if the king at the bottom-left corner of the gameboard was clicked then we must make the move to unit the same values as that unit...
-			Reg._gamePointValueForPiece[yy][xx] = Reg._gamePointValueForPiece[Reg._gameYYold][Reg._gameXXold];
-			Reg._gameUniqueValueForPiece[yy][xx] = Reg._gameUniqueValueForPiece[Reg._gameYYold][Reg._gameXXold];
-			
-			// ... next we make where the king would have been moved from, that unit a value of zero so that the other player can move to that unit at a later time.
-			Reg._gamePointValueForPiece[Reg._gameYYold][Reg._gameXXold] = 0;
-			Reg._gameUniqueValueForPiece[Reg._gameYYold][Reg._gameXXold] = 0;
-			
-			// make the final movement change to the sprite. when this var is true, a code block at CheckersMovePlayersPiece.hx is read at its update function. see update at that class for how the sprite is moved to the new unit.				
-			Reg._gameMovePiece = true;
-			//GameHistoryAndNotation.notationPrint();
-			
-			Reg._pieceMovedUpdateServer = true;
-						
-			return;
-		}
-	
-		// the following code handles what happen when a gameboard piece is clicked. the code sets values to the CheckersImagesCapturingUnits and other important vars so that the CheckersImagesCapturingUnits class can use an image to highlight where the player can move to.
-		Reg._gameXXold = xx; //since a player piece was clicked, we store the value of xx/yy so that...
-		Reg._gameYYold = yy; //... its move from value can later be determined.
-		 
-		Reg._gameUnitNumberOld = Reg._gameUnitNumber; // we do that same here for its p value.
-		 
-		// 	we need to correct player moving var...
-		Reg._playerMoving = 0;
-		if (Reg._gameHost == false) Reg._playerMoving = 1;
-		
-		// if there are no more jumps then clear these vars so that later a new capturing var with a value of 0 could be populated. remember that a value of 2 is a king and if not cleared here then later another jump will be possible.
-		if (Reg._checkersShouldKeepJumping == false)
-		{		
-			for (qy in 0...8)
-			{
-				for (qx in 0...8)
-				{
-					// the Reg._playerMoving that might have a value of 0, meaning player 0, could replace the [0] code below.
-					Reg._checkersUniquePieceValue[qy][qx] = 0;
-					Reg._capturingUnitsForPieces[0][qy][qx] = 0;
-					Reg._capturingUnitsForPieces[1][qy][qx] = 0;
-				}				
-
-			}
-		}	
-
-		// the following lines of code will determine if a jump is possible. if true then the code will set Reg._checkersFoundPieceToJumpOver to equal true and then will make its Reg._checkersUniquePieceValue to have a value of either 1 normal moving unit or 2 a king.
-		CheckersCapturingUnits.capturingUnits();
-		
-		if (cy > -1 && cx > -1) CheckersCapturingUnits.jumpCapturingUnitsForPiece(cy, cx, Reg._playerMoving);
-			
-		if (Reg._checkersFoundPieceToJumpOver == false)
-		{
-			if (cy > -1 && cx > -1) CheckersCapturingUnits.capturingUnitsForPiece(cy, cx, Reg._playerMoving);
-			
-		}
-
-	}	
 }

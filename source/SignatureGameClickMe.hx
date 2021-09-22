@@ -69,6 +69,70 @@ class SignatureGameClickMe extends FlxSprite
 		randomValue();	
 	}
 	
+	/******************************
+	 * set random tick value for next computer turn.
+	 */
+	private function randomValue():Void
+	{
+		// set random tick value for next computer turn.
+		_ra = FlxG.random.float(15, 80);
+	}
+	
+	public function shouldMoveNow():Void
+	{
+		randomValue();		
+		
+		// backdoor. make the value of the dice equal the backdoor value.
+		if (Reg._backdoorMoveValue != -1 && Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false && Reg._isThisPieceAtBackdoor == true && Reg._game_online_vs_cpu == false)
+		{
+			//Reg._move_number_next = Reg._gameXXold;
+			
+			Reg._gameDiceMaximumIndex[Reg._move_number_next] = Reg._backdoorMoveValue;
+		}
+		
+		// the player using the number wheel.
+		else
+		{
+			for (i in 0...28) // one time around the game board is 27. i in loop will stop before 28.
+			{
+				// if not in mortgage.
+				if (SignatureGameMain._isMortgage[Reg._move_number_next][i] != -1)
+				{
+					SignatureGameMain._isMortgage[Reg._move_number_next][i] = SignatureGameMain._isMortgage[Reg._move_number_next][i] + __number_wheel.animation.curAnim.curIndex + 1; // this code is for mortgage.					
+				}
+			}
+			
+			if (Reg._gameXXnew == -1) Reg._gameXXnew = 0;			
+			
+			// add the dice value to this var, so that the var will later be used to move a piece. see SignatureGameMovePlayersPiece.hx
+			if (Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false && Reg._game_online_vs_cpu == false)
+			{
+				Reg._move_number_next = Reg._gameXXnew;
+				
+				Reg._gameDiceMaximumIndex[Reg._move_number_next] = Reg._gameDiceMaximumIndex[Reg._move_number_next] + __number_wheel.animation.curAnim.curIndex + 1;
+	
+				// set backdoor value.
+				Reg._backdoorMoveValue = Reg._gameDiceMaximumIndex[Reg._move_number_next];
+				
+				// send to other clients so that all client move piece at the same time.
+				IDsCreateAndMain.setMovement();
+				RegTriggers._signatureGame = true;
+				
+			}
+			
+			else 
+			{
+				Reg._gameDiceMaximumIndex[Reg._move_number_next] = Reg._gameDiceMaximumIndex[Reg._move_number_next] + __number_wheel.animation.curAnim.curIndex + 1;				
+			}
+			
+		}
+		
+		Reg._gameMovePiece = true;
+		Reg._gameDidFirstMove = true;
+				
+		visible = false;
+	}
+	
 	override public function update(elapsed:Float):Void 
 	{			
 		if (Reg._gameId == 4 && Reg._gameOverForPlayer == false
@@ -171,70 +235,6 @@ class SignatureGameClickMe extends FlxSprite
 			
 		
 		super.update(elapsed);
-	}
-	
-	/******************************
-	 * set random tick value for next computer turn.
-	 */
-	private function randomValue():Void
-	{
-		// set random tick value for next computer turn.
-		_ra = FlxG.random.float(15, 80);
-	}
-	
-	public function shouldMoveNow():Void
-	{
-		randomValue();		
-		
-		// backdoor. make the value of the dice equal the backdoor value.
-		if (Reg._backdoorMoveValue != -1 && Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false && Reg._isThisPieceAtBackdoor == true && Reg._game_online_vs_cpu == false)
-		{
-			//Reg._move_number_next = Reg._gameXXold;
-			
-			Reg._gameDiceMaximumIndex[Reg._move_number_next] = Reg._backdoorMoveValue;
-		}
-		
-		// the player using the number wheel.
-		else
-		{
-			for (i in 0...28) // one time around the game board is 27. i in loop will stop before 28.
-			{
-				// if not in mortgage.
-				if (SignatureGameMain._isMortgage[Reg._move_number_next][i] != -1)
-				{
-					SignatureGameMain._isMortgage[Reg._move_number_next][i] = SignatureGameMain._isMortgage[Reg._move_number_next][i] + __number_wheel.animation.curAnim.curIndex + 1; // this code is for mortgage.					
-				}
-			}
-			
-			if (Reg._gameXXnew == -1) Reg._gameXXnew = 0;			
-			
-			// add the dice value to this var, so that the var will later be used to move a piece. see SignatureGameMovePlayersPiece.hx
-			if (Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false && Reg._game_online_vs_cpu == false)
-			{
-				Reg._move_number_next = Reg._gameXXnew;
-				
-				Reg._gameDiceMaximumIndex[Reg._move_number_next] = Reg._gameDiceMaximumIndex[Reg._move_number_next] + __number_wheel.animation.curAnim.curIndex + 1;
-	
-				// set backdoor value.
-				Reg._backdoorMoveValue = Reg._gameDiceMaximumIndex[Reg._move_number_next];
-				
-				// send to other clients so that all client move piece at the same time.
-				IDsCreateAndMain.setMovement();
-				RegTriggers._signatureGame = true;
-				
-			}
-			
-			else 
-			{
-				Reg._gameDiceMaximumIndex[Reg._move_number_next] = Reg._gameDiceMaximumIndex[Reg._move_number_next] + __number_wheel.animation.curAnim.curIndex + 1;				
-			}
-			
-		}
-		
-		Reg._gameMovePiece = true;
-		Reg._gameDidFirstMove = true;
-				
-		visible = false;
 	}
 	
 }

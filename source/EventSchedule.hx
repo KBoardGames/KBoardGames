@@ -310,7 +310,7 @@ class EventSchedule extends FlxState
 		calendarOutput();		
 		calendarDayImageOutput();		
 			
-		_backwards = new ButtonGeneralNetworkNo(117, 0, "<", 80, 35, 22, RegCustom._button_text_color[Reg._tn], 0, calendarBackward);
+		_backwards = new ButtonGeneralNetworkNo(117, 0, "<", 80, 35, 22, RegCustom._button_text_color[Reg._tn], 0, calendarBackward, RegCustom._button_color[Reg._tn]);
 		_backwards.label.font = Reg._fontDefault;
 		_backwards.label.size = 22;
 		_backwards.y = 20;
@@ -318,61 +318,18 @@ class EventSchedule extends FlxState
 		_backwards.active = false;
 		add(_backwards);
 		
-		_forwards = new ButtonGeneralNetworkNo(222, 0, ">", 80, 35, 22, RegCustom._button_text_color[Reg._tn], 0, calendarForward);
+		_forwards = new ButtonGeneralNetworkNo(222, 0, ">", 80, 35, 22, RegCustom._button_text_color[Reg._tn], 0, calendarForward, RegCustom._button_color[Reg._tn]);
 		_forwards.label.font = Reg._fontDefault;
 		_forwards.label.size = 22;
 		_forwards.y = 20;
 		add(_forwards);
 		
-		_title = new ButtonGeneralNetworkNo(FlxG.width - 300, 0, "To Title", 170 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, backToTitle);
+		_title = new ButtonGeneralNetworkNo(FlxG.width - 300, 0, "To Title", 170 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, backToTitle, RegCustom._button_color[Reg._tn]);
 		_title.label.font = Reg._fontDefault;
 		_title.y = 20;
 		add(_title);
 	}
-	
-	override public function update(elapsed:Float):Void 
-	{
-		if (_ticks == 0 && FlxG.mouse.pressed == false) _ticks = 1; 
 		
-		else if (ActionInput.justPressed() == true && _ticks == 1)
-		{
-			for (i in 0...37)
-			{
-				if (ActionInput.overlaps(_bgEventRow1Number[i])
-				&&  _textEventRow1Number[i].text != "")
-				{
-					if (RegCustom._sound_enabled[Reg._tn] == true
-					&&  Reg2._boxScroller_is_scrolling == false)
-						FlxG.sound.play("click", 1, false);
-					openSubState(new GameMessageEvent(_textEventRow1Number[i].text));
-				}
-				
-				if (ActionInput.overlaps(_bgEventRow2Number[i])
-				&&  _textEventRow2Number[i].text != "")
-				{
-					if (RegCustom._sound_enabled[Reg._tn] == true
-					&&  Reg2._boxScroller_is_scrolling == false)
-						FlxG.sound.play("click", 1, false);
-					openSubState(new GameMessageEvent(_textEventRow2Number[i].text));
-				}
-				
-				if (ActionInput.overlaps(_bgEventRow3Number[i])
-				&&  _textEventRow3Number[i].text != "")
-				{
-					if (RegCustom._sound_enabled[Reg._tn] == true
-					&&  Reg2._boxScroller_is_scrolling == false)
-						FlxG.sound.play("click", 1, false);
-					openSubState(new GameMessageEvent(_textEventRow3Number[i].text));
-				}
-				
-			}			
-			
-		}
-		
-		super.update(elapsed);	
-	}
-	
-	
 	/******************************
 	 * prints the calendar day border image that surrounds the current day to the stage.
 	 */
@@ -975,5 +932,48 @@ class EventSchedule extends FlxState
 			if (_i >= 36) break;
 			
 		}
+	}	
+	
+	override public function update(elapsed:Float):Void 
+	{
+		if (_ticks == 0 && FlxG.mouse.pressed == false) _ticks = 1; 
+		
+		else if (ActionInput.justPressed() == true && _ticks == 1)
+		{
+			for (i in 0...37)
+			{
+				if (ActionInput.overlaps(_bgEventRow1Number[i])
+				&&  _textEventRow1Number[i].text != "")
+				{
+					if (RegCustom._sound_enabled[Reg._tn] == true
+					&&  Reg2._boxScroller_is_scrolling == false)
+						FlxG.sound.play("click", 1, false);
+					openSubState(new GameMessageEvent(_textEventRow1Number[i].text));
+				}
+				
+				if (ActionInput.overlaps(_bgEventRow2Number[i])
+				&&  _textEventRow2Number[i].text != "")
+				{
+					if (RegCustom._sound_enabled[Reg._tn] == true
+					&&  Reg2._boxScroller_is_scrolling == false)
+						FlxG.sound.play("click", 1, false);
+					openSubState(new GameMessageEvent(_textEventRow2Number[i].text));
+				}
+				
+				if (ActionInput.overlaps(_bgEventRow3Number[i])
+				&&  _textEventRow3Number[i].text != "")
+				{
+					if (RegCustom._sound_enabled[Reg._tn] == true
+					&&  Reg2._boxScroller_is_scrolling == false)
+						FlxG.sound.play("click", 1, false);
+					openSubState(new GameMessageEvent(_textEventRow3Number[i].text));
+				}
+				
+			}			
+			
+		}
+		
+		super.update(elapsed);	
 	}
+	
 }//

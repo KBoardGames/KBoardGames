@@ -57,7 +57,12 @@ class ReversiUnitsTotal extends FlxGroup
 		_player2_units_total.scrollFactor.set(0, 0);
 		add(_player2_units_total);
 	}
-
+	
+	override public function destroy()
+	{		
+		super.destroy();
+	}
+	
 	override public function update(elapsed:Float)
 	{
 		if (Reg._gameOverForPlayer == false)
@@ -86,11 +91,5 @@ class ReversiUnitsTotal extends FlxGroup
 		super.update(elapsed);
 		
 	}
-	
-	override public function destroy()
-	{		
-		super.destroy();
-	}
-	
-	
+		
 }

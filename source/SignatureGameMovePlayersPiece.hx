@@ -90,26 +90,6 @@ class SignatureGameMovePlayersPiece extends FlxSprite {
 		
 	}
 	
-	override public function destroy()
-	{
-		_pieceAtBoardParameter = [true, true, true, true];
-	
-		super.destroy();
-	}
-	
-	override public function update (elapsed:Float)
-	{
-		if (Reg._gameId == 4 && Reg._gameOverForPlayer == false && Reg._gameDidFirstMove == true || Reg._gameId == 4 && Reg._isThisPieceAtBackdoor == true && Reg._gameDidFirstMove == true)
-		{
-			if (Reg._isThisPieceAtBackdoor == false) RegFunctions.is_player_attacker(false); // a value of false then the player hosts a game known as the defender. true, if being hosted. eg, array[Reg._playerMoving][value][yy][xx]. playerAttacker is the opposite of the defender. so if Reg._playerMoving = 0 then its the player hosting the game while Reg._playerNotMoving which has a value of 1 had accepted the game at the chatroom.
-			
-			movePiece();			
-		}
-		
-		
-		super.update(elapsed);
-	}
-	
 	public function movePiece():Void
 	{
 		// move the piece if movement var is less than maximum value.
@@ -315,4 +295,25 @@ class SignatureGameMovePlayersPiece extends FlxSprite {
 		Reg._gameDidFirstMove = false;				
 		
 	}
+	
+	override public function destroy()
+	{
+		_pieceAtBoardParameter = [true, true, true, true];
+	
+		super.destroy();
+	}
+	
+	override public function update (elapsed:Float)
+	{
+		if (Reg._gameId == 4 && Reg._gameOverForPlayer == false && Reg._gameDidFirstMove == true || Reg._gameId == 4 && Reg._isThisPieceAtBackdoor == true && Reg._gameDidFirstMove == true)
+		{
+			if (Reg._isThisPieceAtBackdoor == false) RegFunctions.is_player_attacker(false); // a value of false then the player hosts a game known as the defender. true, if being hosted. eg, array[Reg._playerMoving][value][yy][xx]. playerAttacker is the opposite of the defender. so if Reg._playerMoving = 0 then its the player hosting the game while Reg._playerNotMoving which has a value of 1 had accepted the game at the chatroom.
+			
+			movePiece();			
+		}
+		
+		
+		super.update(elapsed);
+	}
+	
 }//

@@ -85,12 +85,6 @@ class PlayerWhosTurnToMove extends FlxState
 		updateMove();
 	}
 
-	override public function destroy()
-	{
-		
-		super.destroy();
-	}
-	
 	public function updateMove():Void 
 	{
 		_rectangleBox.visible = true;
@@ -182,8 +176,13 @@ class PlayerWhosTurnToMove extends FlxState
 			
 			_rectangleBox.x = FlxG.width - 105;
 		}
-	
-	
+		
+	}
+		
+	override public function destroy()
+	{
+		
+		super.destroy();
 	}
 	
 }

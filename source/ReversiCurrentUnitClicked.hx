@@ -57,121 +57,6 @@ class ReversiCurrentUnitClicked extends FlxSprite
 		visible = false;
 	}
 
-	override public function update (elapsed:Float)
-	{
-		if (Reg._gameOverForPlayer == false)
-		{
-			RegFunctions.is_player_attacker(false); // a value of false then the player hosts a game known as the defender. true, if being hosted. eg, array[Reg._playerMoving][value][yy][xx]. playerAttacker is the opposite of the defender. so if Reg._playerMoving = 0 then its the player hosting the game while Reg._playerNotMoving which has a value of 1 had accepted the game at the chatroom.	
-			
-			// p is the unit number. at the loop below, p starts at the top-left corner of the gameboard, the xx/yy value of zero, and increments as each unit is looped and moving in the direction of east. when the end of that first row is loop, the next row will be looped and p will still continue to be increased in size.
-			var p = -1;
-
-			if (Reg._playerCanMovePiece == true
-			&&  Reg._at_input_keyboard == false)
-			{
-				// these yy and xx vars are the vertical and horizonal coordinates of the units that make up the grid of the gameboard. each unit is 75 x 75 pixels. 
-				for (yy in 0...8)
-				{
-					for (xx in 0...8)
-					{
-						p += 1;
-											
-						// determine if mouse is within a region of a grid unit.
-						if (ActionInput.coordinateX() > _startX + (xx * 75) && ActionInput.coordinateX() < _startX + 75 + (xx * 75) 
-						&& ActionInput.coordinateY() > _startY + (yy * 75) && ActionInput.coordinateY() < _startY + 75 + (yy * 75)
-						
-						)
-						{
-							// this is needed to display a different capturing image depending what player is moving.
-							if (Reg._playerMoving == 0) Reg._pieceNumber = 1;
-		else Reg._pieceNumber = 11;		
-		
-							if (Reg._capturingUnitsForPieces[Reg._playerMoving][yy][xx] > 0)
-							{	
-								// display an image at a capturing unit when moving the mouse around.
-								if (Reg._pieceNumber == 1) loadGraphic("assets/images/reversi/2.png", false);
-								if (Reg._pieceNumber == 11) loadGraphic("assets/images/reversi/12.png", false);
-								
-								x = _startX + (xx * 75);						
-								y = _startY + (yy * 75);
-									
-								visible = true;
-							} else visible = false;
-		
-							if (ActionInput.justReleased() == true && RegTypedef._dataMisc._spectatorWatching == false)
-							{
-								// if this unit is a capturing unit.
-								if (Reg._capturingUnitsForPieces[Reg._playerMoving][yy][xx] > 0 
-								&& ActionInput.overlaps(Reg._groupPlayer1) == false 
-								&& ActionInput.overlaps(Reg._groupPlayer2) == false				
-								)
-								{
-									x = _startX + (xx * 75);						
-									y = _startY + (yy * 75);																			
-									
-									visible = true; // display a highlighted unit where the mouse cursor is located.
-
-									// these vars need to be cleared at every mouse click.
-									Reg._gameYYold = -1; Reg._gameXXold = -1;
-									Reg._reversiProcessAllIdsTotal = 0;	
-									
-									populateCapturingUnits(yy, xx, p);
-									
-									break;
-								}
-							}
-						}					
-					}
-				}
-			}
-				
-			// this code block will be read after the player clicks the empty capturing unit.
-			
-			// move the piece highlighter...
-			if (Reg._gameMovePiece == true && Reg._triggerNextStuffToDo > 3)
-			{
-				//... if this condition is true.
-				if (Reg._gameYYold != -1 && Reg._gameXXold != -1)
-				{
-					if (Reg._capturingUnitsForPieces[Reg._playerMoving][Reg._gameYYold][Reg._gameXXold] != 0)
-					{
-						if (visible == false) visible = true;
-								
-						// the XY coordinate equals the start of the board plus the unit coordinate times the width/height of this image.
-						 x = _startX + Reg._gameXXold * 75;						
-						 y = _startY + Reg._gameYYold * 75;
-						 
-						Reg._capturingUnitsForPieces[Reg._playerMoving][Reg._gameYYold][Reg._gameXXold] = 1;
-					}	
-				}
-			
-			}
-			
-			// this code block will be read before the player can click a unit.			
-			if (Reg._gameDidFirstMove == false) 
-			{				
-				ReversiCapturingUnits.capturingUnits();
-				if (Reg._game_offline_vs_cpu == true || Reg._game_offline_vs_player == true)
-					__ids_win_lose_or_draw.canPlayerMove2();
-				else if (_doOnce == false) __ids_win_lose_or_draw.canPlayerMove2();
-				_doOnce = true;
-				
-				if (Reg._playerCanMovePiece == false && Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false && Reg._gameYYold != -1 && Reg._gameXXold != -1) 
-				{
-					
-					ReversiCapturingUnits.findCapturingUnits();			
-						
-					Reg._gameDidFirstMove = true;
-					_doOnce = false;
-				}
-			}
-					
-		} 
-		
-		
-		super.update(elapsed);
-	}
-	
 	private function populateCapturingUnits(yy:Int, xx:Int, p:Int):Void
 	{
 		// when the unit is clicked, the unit number is stored in this var. later this var will be read so that the unit to be move to and moved from can be determined.
@@ -287,4 +172,120 @@ class ReversiCurrentUnitClicked extends FlxSprite
 		Reg._gameDidFirstMove = true;
 
 	}	
+	
+	override public function update (elapsed:Float)
+	{
+		if (Reg._gameOverForPlayer == false)
+		{
+			RegFunctions.is_player_attacker(false); // a value of false then the player hosts a game known as the defender. true, if being hosted. eg, array[Reg._playerMoving][value][yy][xx]. playerAttacker is the opposite of the defender. so if Reg._playerMoving = 0 then its the player hosting the game while Reg._playerNotMoving which has a value of 1 had accepted the game at the chatroom.	
+			
+			// p is the unit number. at the loop below, p starts at the top-left corner of the gameboard, the xx/yy value of zero, and increments as each unit is looped and moving in the direction of east. when the end of that first row is loop, the next row will be looped and p will still continue to be increased in size.
+			var p = -1;
+
+			if (Reg._playerCanMovePiece == true
+			&&  Reg._at_input_keyboard == false)
+			{
+				// these yy and xx vars are the vertical and horizonal coordinates of the units that make up the grid of the gameboard. each unit is 75 x 75 pixels. 
+				for (yy in 0...8)
+				{
+					for (xx in 0...8)
+					{
+						p += 1;
+											
+						// determine if mouse is within a region of a grid unit.
+						if (ActionInput.coordinateX() > _startX + (xx * 75) && ActionInput.coordinateX() < _startX + 75 + (xx * 75) 
+						&& ActionInput.coordinateY() > _startY + (yy * 75) && ActionInput.coordinateY() < _startY + 75 + (yy * 75)
+						
+						)
+						{
+							// this is needed to display a different capturing image depending what player is moving.
+							if (Reg._playerMoving == 0) Reg._pieceNumber = 1;
+		else Reg._pieceNumber = 11;		
+		
+							if (Reg._capturingUnitsForPieces[Reg._playerMoving][yy][xx] > 0)
+							{	
+								// display an image at a capturing unit when moving the mouse around.
+								if (Reg._pieceNumber == 1) loadGraphic("assets/images/reversi/2.png", false);
+								if (Reg._pieceNumber == 11) loadGraphic("assets/images/reversi/12.png", false);
+								
+								x = _startX + (xx * 75);						
+								y = _startY + (yy * 75);
+									
+								visible = true;
+							} else visible = false;
+		
+							if (ActionInput.justReleased() == true && RegTypedef._dataMisc._spectatorWatching == false)
+							{
+								// if this unit is a capturing unit.
+								if (Reg._capturingUnitsForPieces[Reg._playerMoving][yy][xx] > 0 
+								&& ActionInput.overlaps(Reg._groupPlayer1) == false 
+								&& ActionInput.overlaps(Reg._groupPlayer2) == false				
+								)
+								{
+									x = _startX + (xx * 75);						
+									y = _startY + (yy * 75);																			
+									
+									visible = true; // display a highlighted unit where the mouse cursor is located.
+
+									// these vars need to be cleared at every mouse click.
+									Reg._gameYYold = -1; Reg._gameXXold = -1;
+									Reg._reversiProcessAllIdsTotal = 0;	
+									
+									populateCapturingUnits(yy, xx, p);
+									
+									break;
+								}
+							}
+						}					
+					}
+				}
+			}
+				
+			// this code block will be read after the player clicks the empty capturing unit.
+			
+			// move the piece highlighter...
+			if (Reg._gameMovePiece == true && Reg._triggerNextStuffToDo > 3)
+			{
+				//... if this condition is true.
+				if (Reg._gameYYold != -1 && Reg._gameXXold != -1)
+				{
+					if (Reg._capturingUnitsForPieces[Reg._playerMoving][Reg._gameYYold][Reg._gameXXold] != 0)
+					{
+						if (visible == false) visible = true;
+								
+						// the XY coordinate equals the start of the board plus the unit coordinate times the width/height of this image.
+						 x = _startX + Reg._gameXXold * 75;						
+						 y = _startY + Reg._gameYYold * 75;
+						 
+						Reg._capturingUnitsForPieces[Reg._playerMoving][Reg._gameYYold][Reg._gameXXold] = 1;
+					}	
+				}
+			
+			}
+			
+			// this code block will be read before the player can click a unit.			
+			if (Reg._gameDidFirstMove == false) 
+			{				
+				ReversiCapturingUnits.capturingUnits();
+				if (Reg._game_offline_vs_cpu == true || Reg._game_offline_vs_player == true)
+					__ids_win_lose_or_draw.canPlayerMove2();
+				else if (_doOnce == false) __ids_win_lose_or_draw.canPlayerMove2();
+				_doOnce = true;
+				
+				if (Reg._playerCanMovePiece == false && Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false && Reg._gameYYold != -1 && Reg._gameXXold != -1) 
+				{
+					
+					ReversiCapturingUnits.findCapturingUnits();			
+						
+					Reg._gameDidFirstMove = true;
+					_doOnce = false;
+				}
+			}
+					
+		} 
+		
+		
+		super.update(elapsed);
+	}
+	
 }

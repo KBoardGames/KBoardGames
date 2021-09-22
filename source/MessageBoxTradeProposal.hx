@@ -196,76 +196,6 @@ class MessageBoxTradeProposal extends FlxGroup
 		
 	}
 	
-	override public function destroy()
-	{
-		FlxG.mouse.enabled = false;
-		_timeDo.stop();
-		
-		if (_buttonMessageOK != null)
-		{
-			remove(_buttonMessageOK);
-			_buttonMessageOK.destroy();
-		}
-		
-		if (_button4 != null)
-		{
-			remove(_button4);
-			_button4.destroy();
-		}
-		
-		if (_button5 != null)
-		{
-			remove(_button5);
-			_button5.destroy();
-		}
-			
-		if (_button6 != null)
-		{
-			remove(_button6);
-			_button6.destroy();
-		}
-		
-		super.destroy();
-		
-	}
-	
-	override public function update(elapsed:Float):Void 
-	{			
-		// show the message box with this var is true.
-		if (_delayDisplayMessageBox == true)
-		{
-			_ticks = RegFunctions.incrementTicks(_ticks, 60 / Reg._framerate);
-					
-			if (_ticks >= 15) 
-			{
-				popupMessageShow();
-			}
-		}
-		
-		if (_useTimer == true)
-		{
-			_timeDo.run = function() 
-			{
-				// minus 1 from total move var.
-				if (_timeRemaining > 0)	_timeRemaining -= 1;
-
-				_textTimer.text = formatTime(_timeRemaining);			
-				if (_timeRemaining <= 0) moveZeroReached();
-			}
-		}
-		
-		if (GameChatter._input_chat != null)
-		{
-			if (GameChatter._input_chat.hasFocus == true)
-			{
-				return;
-			}
-		}
-		
-				
-		super.update(elapsed);
-	}	
-	
 	private function formatTime(_time:Int):String
 	{
 		// to get the number of full minutes, divide the number of total seconds by 60 (60 seconds / minute):
@@ -420,4 +350,75 @@ class MessageBoxTradeProposal extends FlxGroup
 		_button5.visible = false;
 		_button6.visible = false;		
 	}
+	
+	override public function destroy()
+	{
+		FlxG.mouse.enabled = false;
+		_timeDo.stop();
+		
+		if (_buttonMessageOK != null)
+		{
+			remove(_buttonMessageOK);
+			_buttonMessageOK.destroy();
+		}
+		
+		if (_button4 != null)
+		{
+			remove(_button4);
+			_button4.destroy();
+		}
+		
+		if (_button5 != null)
+		{
+			remove(_button5);
+			_button5.destroy();
+		}
+			
+		if (_button6 != null)
+		{
+			remove(_button6);
+			_button6.destroy();
+		}
+		
+		super.destroy();
+		
+	}
+	
+	override public function update(elapsed:Float):Void 
+	{			
+		// show the message box with this var is true.
+		if (_delayDisplayMessageBox == true)
+		{
+			_ticks = RegFunctions.incrementTicks(_ticks, 60 / Reg._framerate);
+					
+			if (_ticks >= 15) 
+			{
+				popupMessageShow();
+			}
+		}
+		
+		if (_useTimer == true)
+		{
+			_timeDo.run = function() 
+			{
+				// minus 1 from total move var.
+				if (_timeRemaining > 0)	_timeRemaining -= 1;
+
+				_textTimer.text = formatTime(_timeRemaining);			
+				if (_timeRemaining <= 0) moveZeroReached();
+			}
+		}
+		
+		if (GameChatter._input_chat != null)
+		{
+			if (GameChatter._input_chat.hasFocus == true)
+			{
+				return;
+			}
+		}
+		
+				
+		super.update(elapsed);
+	}	
+	
 }

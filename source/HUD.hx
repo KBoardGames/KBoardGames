@@ -331,67 +331,6 @@ class HUD extends FlxState
 		
 			
 	}
-
-	override public function destroy()
-	{
-		
-		super.destroy();
-	}
-	
-	override public function update(elapsed:Float):Void 
-	{	
-		if (Reg._gameOverForPlayer == false)
-		{
-			if (Reg._gameId < 2) // only checkers and chess do game turns.
-			{
-				// update the game turn for all players.
-				if (Reg._playerCanMovePiece == true) // the player moving...
-				{
-					if (textGameTurnsP1 != null)
-					textGameTurnsP1.text = Std.string(Reg._gameTurnsP1);
-				}
-				// ... and also that piece at the other player's board.
-				else if (Reg._otherPlayer == false && Reg._gameDidFirstMove == false)
-				{
-					if (textGameTurnsP2 != null)
-					textGameTurnsP2.text = Std.string(Reg._gameTurnsOther);
-				}
-			}
-			
-			if (Reg._gameTurnsP1 == 0 || Reg._gameTurnsOther == 0)
-			{
-				if (Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false)
-				{				
-					RegTypedef._dataGameMessage._gameMessage = "Draw: Fifty-move rule.";
-					PlayState.clientSocket.send("Game Message Not Sender", RegTypedef._dataGameMessage);
-					haxe.Timer.delay(function (){}, Reg2._event_sleep);
-					
-					RegTypedef._dataPlayers._gameMessage = "Game ended in a draw.";
-					PlayState.clientSocket.send("Game Draw", RegTypedef._dataPlayers);
-					haxe.Timer.delay(function (){}, Reg2._event_sleep);
-				}
-				
-				else
-				{
-					RegTriggers._messageDraw = "Game ended in a draw.";
-					RegTriggers._draw = true;
-					
-					Reg._gameOverForPlayer = true;
-					RegFunctions.playerAllStop();
-					
-				}
-				
-				Reg._gameMessage = "Draw: Fifty-move rule.";				
-				Reg._outputMessage = true;
-				
-			}
-		}	
-		
-		RegTypedef.mathRoundCash();
-		stats();
-				
-		super.update(elapsed);		
-	}
 	
 	public static function stats():Void
 	{
@@ -577,4 +516,66 @@ class HUD extends FlxState
 		
 		return _num;
 	}
+		
+	override public function destroy()
+	{
+		
+		super.destroy();
+	}
+	
+	override public function update(elapsed:Float):Void 
+	{	
+		if (Reg._gameOverForPlayer == false)
+		{
+			if (Reg._gameId < 2) // only checkers and chess do game turns.
+			{
+				// update the game turn for all players.
+				if (Reg._playerCanMovePiece == true) // the player moving...
+				{
+					if (textGameTurnsP1 != null)
+					textGameTurnsP1.text = Std.string(Reg._gameTurnsP1);
+				}
+				// ... and also that piece at the other player's board.
+				else if (Reg._otherPlayer == false && Reg._gameDidFirstMove == false)
+				{
+					if (textGameTurnsP2 != null)
+					textGameTurnsP2.text = Std.string(Reg._gameTurnsOther);
+				}
+			}
+			
+			if (Reg._gameTurnsP1 == 0 || Reg._gameTurnsOther == 0)
+			{
+				if (Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false)
+				{				
+					RegTypedef._dataGameMessage._gameMessage = "Draw: Fifty-move rule.";
+					PlayState.clientSocket.send("Game Message Not Sender", RegTypedef._dataGameMessage);
+					haxe.Timer.delay(function (){}, Reg2._event_sleep);
+					
+					RegTypedef._dataPlayers._gameMessage = "Game ended in a draw.";
+					PlayState.clientSocket.send("Game Draw", RegTypedef._dataPlayers);
+					haxe.Timer.delay(function (){}, Reg2._event_sleep);
+				}
+				
+				else
+				{
+					RegTriggers._messageDraw = "Game ended in a draw.";
+					RegTriggers._draw = true;
+					
+					Reg._gameOverForPlayer = true;
+					RegFunctions.playerAllStop();
+					
+				}
+				
+				Reg._gameMessage = "Draw: Fifty-move rule.";				
+				Reg._outputMessage = true;
+				
+			}
+		}	
+		
+		RegTypedef.mathRoundCash();
+		stats();
+				
+		super.update(elapsed);		
+	}
+	
 }

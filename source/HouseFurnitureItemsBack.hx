@@ -54,26 +54,7 @@ class HouseFurnitureItemsBack extends FlxGroup
 		//add(_group);
 		
 		options();
-	}
-	
-	override public function destroy()
-	{
-		super.destroy();
-	}
-
-	override public function update(elapsed:Float):Void
-	{
-		// if player returned to lobby then this var is false so don't update().
-		if (Reg._at_house == false) return;
-		
-		if (RegTriggers._furnitureItemSpriteAddToMapBack == true)
-		{
-			RegTriggers._furnitureItemSpriteAddToMapBack = false;
-			spriteBoughtAddToScene();
-		}
-		
-		super.update(elapsed);
-	}
+	}	
 	
 	private function options():Void
 	{
@@ -164,4 +145,24 @@ class HouseFurnitureItemsBack extends FlxGroup
 		//RegHouse._namesPurchased[RegHouse._totalPurchased+2] = RegHouse._namesCanPurchase[HouseFurnitureGet._idCurrentItemPurchased];
 		
 	}
+	
+	override public function destroy()
+	{
+		super.destroy();
+	}
+
+	override public function update(elapsed:Float):Void
+	{
+		// if player returned to lobby then this var is false so don't update().
+		if (Reg._at_house == false) return;
+		
+		if (RegTriggers._furnitureItemSpriteAddToMapBack == true)
+		{
+			RegTriggers._furnitureItemSpriteAddToMapBack = false;
+			spriteBoughtAddToScene();
+		}
+		
+		super.update(elapsed);
+	}
+	
 }

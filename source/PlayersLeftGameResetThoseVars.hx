@@ -33,12 +33,6 @@ class PlayersLeftGameResetThoseVars extends FlxText
 		// get any class file from this instance. for example, __scene_game_room._iDsCreateAndMain.__game_house_taxi_cafe...
 		__scene_game_room = scene_game_room;
 	}
-
-	override public function destroy()
-	{
-		
-		super.destroy();
-	}
 	
 	/******************************
 	 * get the user that had time expired or left the game room. this is needed so that when timer runs out for that player, the game will continue for the other players, but if that player then exits the room then the game will start the game for the other player the second time. this code is used so that the second time the players start playing will not happen.
@@ -322,4 +316,11 @@ class PlayersLeftGameResetThoseVars extends FlxText
 		// this is needed so that restart offer and draw offer will work again.
 		Reg._totalPlayersInRoom = _totalPlayers - 2; // a value of 2 is needed here. a 1 because the user has not yet been removed from the usernamesDynamic var and another 1 because _totalPlayersInRoom starts at a value of 0 but _totalPlayers var starts at a value of 1.
 	}
+	
+	override public function destroy()
+	{
+		
+		super.destroy();
+	}
+	
 }

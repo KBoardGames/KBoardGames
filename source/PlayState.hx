@@ -449,7 +449,345 @@ class PlayState extends FlxState
 		Reg._hasUserConnectedToServer = true; // this var is misleading. game in offline mode cannot be played unless this var is moved outside of a Reg._game_offline_vs_cpu check.
 	}
 
+	/******************************
+	 * player is entering the lobby.
+	 */
+	private function lobbyEnter():Void
+	{
+		if (Reg._game_offline_vs_cpu == false  && Reg._game_offline_vs_player == false && _clientDisconnect == false)
+		{
+			if (Reg._goBackToLobby == true || Reg._loginSuccessfulWasRead == true && Reg._doOnce == true)
+			{
+				FlxG.mouse.reset();
+				FlxG.mouse.enabled = true;
+						
+				Reg._doOnce = false; 
+				Reg._goBackToLobby = false;
+				__scene_lobby.active = true;
+				
+				//ActionInput.enable();
+	
+				if (Reg._lobbyDisplay == true) {Reg._lobbyDisplay = false;  __scene_lobby.display(); }		
+				
+				__scene_lobby.visible = true;			
+				__scene_lobby.__boxscroller.visible = true;
+				
+				if (RegCustom._chat_when_at_lobby_enabled[Reg._tn] == true)
+				{
+					GameChatter.__boxscroller2.visible = true;
+				}
+				
+				__scene_waiting_room.visible = false;
+				__scene_waiting_room.active = false;
+								
+				// stop a debug notice. this is not used in vs computer mode.
+				if (Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false)
+				{
+					//OnlinePlayersList.__game_chatter.visible = false;
+					//OnlinePlayersList.__game_chatter.active = false;
+				}
+				
+				__scene_create_room.visible = false;
+			}
+		}
+	}
+	
+	/******************************
+	 * everything inside this block is ran when a game is first started at every move.
+	 */
+	private function enterGameRoom():Void
+	{
+		if (Reg._gameRoom == true)
+		{
+			if (Reg._doStartGameOnce == true)
+			{
+				// the host player always moves first.
+				if (RegTypedef._dataTournaments._move_piece == false
+				&&  Reg._gameHost == false)
+					Reg._playerCanMovePiece = false; 
+				
+				if (Reg._game_offline_vs_cpu == false 
+				&&  Reg._game_offline_vs_player == false
+				&&  __scene_waiting_room != null
+				&&  SceneWaitingRoom.__game_chatter != null)
+				{
+					SceneWaitingRoom.__game_chatter.visible = false;
+					SceneWaitingRoom.__game_chatter.active = false;
+					
+					__scene_waiting_room.visible = false;
+					__scene_waiting_room.active = false;
+									
+				}
+
+				if (Reg._createGameRoom == true)
+				{
+					Reg._createGameRoom = false;							
+									
+					if (__scene_game_room != null)
+					{
+						remove(__scene_game_room);
+						__scene_game_room.destroy();
+					}					
+					
+				}
+				
+				__scene_game_room = new SceneGameRoom(__ids_win_lose_or_draw, __chess_check_or_checkmate);
+				add(__scene_game_room);					
+				
+				__scene_game_room.active = true;
+				__scene_game_room.visible = true;
+								
+				if (Reg._gameId == 0) 
+				{
+					
+					// this is needed because the first notation is not printed for checkers.
+					if (Reg._notation_output == true)
+					{
+						if (Reg._game_offline_vs_cpu == true
+						||  Reg._game_offline_vs_player == true) 
+						{
+							SceneGameRoom.__game_history_and_notations.notationPrint();
+						}
+					}
+				}
+				
+				
+			}
 			
+			
+			gameMessagesAtSubState(); // should a message be displayed?
+			if (Reg._createGameRoom == false && Reg._doStartGameOnce == false)
+			{
+				if (Reg._gameId <= 1)
+				{
+									
+					// should the scroller text be displayed?
+					if (Reg._gameId == 1 
+					&&  SceneGameRoom.__game_history_and_notations != null
+					&&  RegCustom._chess_opening_moves_enabled[Reg._tn] == true)
+						SceneGameRoom.__game_history_and_notations.gameNotationScrollerText(); 
+						
+				}						
+					
+				if (Reg._pieceMovedUpdateServer == true)
+				{
+					Reg._pieceMovedUpdateServer = false;
+					
+					if (RegTypedef._dataTournaments._move_piece == true)
+					{
+						// needed to display game over messages after a player in tournament game moves a game piece.
+						if (Reg._gameHost == true)
+						{
+							Reg._gameHost = false;
+							Reg._playerMoving = 1;
+							Reg._playerNotMoving = 0;
+						}
+						
+						else
+						{
+							Reg._gameHost = true;
+							Reg._playerMoving = 0;
+							Reg._playerNotMoving = 1;
+						}
+						
+					}
+					
+					// send gameboard data to server.
+					__scene_game_room._iDsCreateAndMain.gameIdSendDataToServer(); 
+					
+					if (RegTypedef._dataTournaments._move_piece == true)
+					{
+						Reg._gameOverForPlayer = true;
+						Reg._gameOverForAllPlayers = true;
+						RegFunctions.playerAllStop();
+						
+						RegTypedef._dataTournaments._time_remaining_player2 = Std.string(RegTypedef._dataPlayers._moveTimeRemaining[1]);
+						RegTypedef._dataTournaments._time_remaining_player1 = Std.string(RegTypedef._dataPlayers._moveTimeRemaining[0]);
+												
+						PlayState.clientSocket.send("Tournament Chess Standard 8 Put", RegTypedef._dataTournaments);
+						haxe.Timer.delay(function (){}, Reg2._event_sleep);
+					}
+				}
+			}
+			
+			if (Reg._doStartGameOnce == true)
+			{						
+				Reg._doStartGameOnce = false;  // TODO does this var need to be anywhere?
+			
+			}
+			
+				
+		}
+	}
+	/******************************
+	 * restart the game for either p1 vs computer or p1 vs p2,p3,p4.
+	 */
+	private function restartGame():Void
+	{
+		if (Reg._createGameRoom == true 
+		&& Reg._game_offline_vs_cpu == true 
+		&& Reg._game_online_vs_cpu == false
+		|| Reg._createGameRoom == true 
+		&& Reg._game_offline_vs_player == true 
+		&& Reg._game_online_vs_cpu == false)
+		{
+			RegTypedef.resetTypedefData();					
+			Reg.resetRegVars();
+			Reg2.resetRegVars();
+			RegCustom.resetRegVars();
+			RegTriggers.resetTriggers();
+			
+			if (RegTypedef._dataTournaments._move_piece == false)
+			{
+				Reg._playerMoving = 0;
+				Reg._playerNotMoving = 1;
+			}
+			
+			_lobbyRoomChat = false;
+			Reg._loggedIn = true;
+			Reg._doStartGameOnce = true;
+			Reg._at_create_room = false;
+			Reg._at_waiting_room = false;
+			RegTypedef._dataMisc._room = 5;
+			RegTypedef._dataMisc._roomState[3] = 6; 
+			RegTypedef._dataMisc._gameRoom = true;
+			Reg._gameRoom = true;
+			Reg._gameHost = true;
+			Reg._gameOverForPlayer = false;
+			
+			//getPlayersNamesAndAvatars();
+			
+			Reg._playerCanMovePiece = true;
+			Reg._playerMoving = 0;
+								
+			Reg._move_number_current = 0;
+			Reg._move_number_next = 0;
+			Reg._gameJumpTo = 0; 
+		}
+	
+		if (Reg._createGameRoom == true
+		&&  Reg._game_offline_vs_cpu == false
+		&&  Reg._game_offline_vs_player == false
+		||  Reg._createGameRoom == true
+		&&  Reg._game_online_vs_cpu == true)
+		{
+			RegTypedef.resetTypedefData();
+		
+			Reg.resetRegVars(); 
+			Reg2.resetRegVars();
+			RegCustom.resetRegVars();
+			RegTriggers.resetTriggers();
+			
+			if (RegTypedef._dataTournaments._move_piece == false)
+			{
+				if (Reg._gameHost == true) Reg._playerCanMovePiece = true;
+				else 
+				{				
+					Reg._otherPlayer = true;
+					Reg._playerCanMovePiece = false;
+				}
+				
+			}
+			
+			if (RegTypedef._dataTournaments._move_piece == false)
+			{
+				Reg._playerMoving = 0;
+				Reg._playerNotMoving = 1;
+			}
+			
+			if (Reg._game_online_vs_cpu == true) 
+				RegTypedef._dataPlayers._spectatorPlaying = true;	
+			Reg._at_create_room = true;
+			Reg._at_waiting_room = true;
+			_lobbyRoomChat = false;
+			Reg._goBackToLobby = false;
+			Reg._loggedIn = true;
+			Reg._doStartGameOnce = true;
+			Reg._gameRoom = true;
+			Reg._hasUserConnectedToServer = true;
+			
+			if (RegTypedef._dataTournaments._move_piece == false)
+				Reg._move_number_next = 0;
+			//if (__scene_waiting_room.visible == false) Reg._loginSuccessfulWasRead = true;
+			Reg._doOnce = false;			
+			Reg._lobbyDisplay = false;
+			//Reg._gameOverForPlayer = false;
+			
+			
+	//RegTypedef._dataMisc._roomPlayerLimit[RegTypedef._dataMisc._room] = 3;	
+			
+		}
+	}
+	
+	
+	private function gameMessagesAtSubState():Void
+	{
+		//############################# CHESS PROMOTION
+		if (Reg._chessPromote == true)
+		{
+			Reg._chessPromote = false;			
+			openSubState(new ChessPromote());
+		}
+		
+	}	
+	
+	private function gameMessage():Void
+	{
+		if (Reg._chessCheckmateBypass == true
+		&& Reg._gameMessage != "Check" 
+		&& Reg._gameMessage != "White piece wins."
+		&& Reg._gameMessage != "Black piece wins."
+		|| Reg._gameMessage == "") return;
+	
+		openSubState( new GameMessage());		
+		Reg._outputMessage = false;
+	}
+	
+	/******************************
+	 * if player clicks the watch game button or enters into the waiting room then these typedefs need to be updated.
+	 */
+	public static function allTypedefRoomUpdate(_room:Int):Void
+	{
+		RegTypedef._dataGame._room = _room;
+		RegTypedef._dataGame0._room = _room;// this line is needed or else the server will not be able to send back the data or will send back to the wrong client. remember that the server broadcasts to a room using the room var. 
+		RegTypedef._dataGame1._room = _room;
+		RegTypedef._dataGame2._room = _room;
+		RegTypedef._dataGame3._room = _room;
+		RegTypedef._dataGame4._room = _room;
+		
+		RegTypedef._dataGameMessage._room = 	_room;
+		RegTypedef._dataQuestions._room = 		_room;
+		RegTypedef._dataTournaments._room = 	_room;
+		RegTypedef._dataOnlinePlayers._room = 	_room;
+		RegTypedef._dataPlayers._room = 		_room; 
+		RegTypedef._dataMovement._room = 		_room; 
+		RegTypedef._dataStatistics._room = 		_room; 
+
+	}
+	
+	/******************************
+	 * _dataMisc does not been this assignment a value because it already has the correct username from the "Is logging In" network event. This function is needed or else there will be a null error at server for the username when saving user actions to the server log file. _dataGame is not used here because its not needed for server log file. hence, in this board game its not a location where a player can go.
+	 */
+	public static function allTypedefUsernameUpdate(_username:String):Void
+	{
+		RegTypedef._dataGame0._username = _username;
+		
+		RegTypedef._dataGame1._username = _username;
+		RegTypedef._dataGame2._username = _username;
+		RegTypedef._dataGame3._username = _username;
+		RegTypedef._dataGame4._username = _username;
+		
+		RegTypedef._dataGameMessage._username = 	_username;
+		RegTypedef._dataDailyQuests._username = 	_username;
+		RegTypedef._dataQuestions._username = 		_username;
+		RegTypedef._dataTournaments._username = 	_username;
+		RegTypedef._dataOnlinePlayers._username = 	_username;
+		RegTypedef._dataPlayers._username = 		_username;
+		RegTypedef._dataMovement._username = 		_username; 
+		RegTypedef._dataStatistics._username = 		_username;
+		RegTypedef._dataHouse._username = 			_username;
+	}
+	
 	/******************************
 	 * Function that is called once every frame.
 	 */
@@ -835,345 +1173,5 @@ class PlayState extends FlxState
 		}
 		
 	}
-
-	/******************************
-	 * player is entering the lobby.
-	 */
-	private function lobbyEnter():Void
-	{
-		if (Reg._game_offline_vs_cpu == false  && Reg._game_offline_vs_player == false && _clientDisconnect == false)
-		{
-			if (Reg._goBackToLobby == true || Reg._loginSuccessfulWasRead == true && Reg._doOnce == true)
-			{
-				FlxG.mouse.reset();
-				FlxG.mouse.enabled = true;
-						
-				Reg._doOnce = false; 
-				Reg._goBackToLobby = false;
-				__scene_lobby.active = true;
-				
-				//ActionInput.enable();
-	
-				if (Reg._lobbyDisplay == true) {Reg._lobbyDisplay = false;  __scene_lobby.display(); }		
-				
-				__scene_lobby.visible = true;			
-				__scene_lobby.__boxscroller.visible = true;
-				
-				if (RegCustom._chat_when_at_lobby_enabled[Reg._tn] == true)
-				{
-					GameChatter.__boxscroller2.visible = true;
-				}
-				
-				__scene_waiting_room.visible = false;
-				__scene_waiting_room.active = false;
-								
-				// stop a debug notice. this is not used in vs computer mode.
-				if (Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false)
-				{
-					//OnlinePlayersList.__game_chatter.visible = false;
-					//OnlinePlayersList.__game_chatter.active = false;
-				}
-				
-				__scene_create_room.visible = false;
-			}
-		}
-	}
-	
-	/******************************
-	 * everything inside this block is ran when a game is first started at every move.
-	 */
-	private function enterGameRoom():Void
-	{
-		if (Reg._gameRoom == true)
-		{
-			if (Reg._doStartGameOnce == true)
-			{
-				// the host player always moves first.
-				if (RegTypedef._dataTournaments._move_piece == false
-				&&  Reg._gameHost == false)
-					Reg._playerCanMovePiece = false; 
-				
-				if (Reg._game_offline_vs_cpu == false 
-				&&  Reg._game_offline_vs_player == false
-				&&  __scene_waiting_room != null
-				&&  SceneWaitingRoom.__game_chatter != null)
-				{
-					SceneWaitingRoom.__game_chatter.visible = false;
-					SceneWaitingRoom.__game_chatter.active = false;
-					
-					__scene_waiting_room.visible = false;
-					__scene_waiting_room.active = false;
-									
-				}
-
-				if (Reg._createGameRoom == true)
-				{
-					Reg._createGameRoom = false;							
-									
-					if (__scene_game_room != null)
-					{
-						remove(__scene_game_room);
-						__scene_game_room.destroy();
-					}					
-					
-				}
-				
-				__scene_game_room = new SceneGameRoom(__ids_win_lose_or_draw, __chess_check_or_checkmate);
-				add(__scene_game_room);					
-				
-				__scene_game_room.active = true;
-				__scene_game_room.visible = true;
-								
-				if (Reg._gameId == 0) 
-				{
-					
-					// this is needed because the first notation is not printed for checkers.
-					if (Reg._notation_output == true)
-					{
-						if (Reg._game_offline_vs_cpu == true
-						||  Reg._game_offline_vs_player == true) 
-						{
-							SceneGameRoom.__game_history_and_notations.notationPrint();
-						}
-					}
-				}
-				
-				
-			}
-			
-			
-			gameMessagesAtSubState(); // should a message be displayed?
-			if (Reg._createGameRoom == false && Reg._doStartGameOnce == false)
-			{
-				if (Reg._gameId <= 1)
-				{
-									
-					// should the scroller text be displayed?
-					if (Reg._gameId == 1 
-					&&  SceneGameRoom.__game_history_and_notations != null
-					&&  RegCustom._chess_opening_moves_enabled[Reg._tn] == true)
-						SceneGameRoom.__game_history_and_notations.gameNotationScrollerText(); 
-						
-				}						
-					
-				if (Reg._pieceMovedUpdateServer == true)
-				{
-					Reg._pieceMovedUpdateServer = false;
-					
-					if (RegTypedef._dataTournaments._move_piece == true)
-					{
-						// needed to display game over messages after a player in tournament game moves a game piece.
-						if (Reg._gameHost == true)
-						{
-							Reg._gameHost = false;
-							Reg._playerMoving = 1;
-							Reg._playerNotMoving = 0;
-						}
-						
-						else
-						{
-							Reg._gameHost = true;
-							Reg._playerMoving = 0;
-							Reg._playerNotMoving = 1;
-						}
-						
-					}
-					
-					// send gameboard data to server.
-					__scene_game_room._iDsCreateAndMain.gameIdSendDataToServer(); 
-					
-					if (RegTypedef._dataTournaments._move_piece == true)
-					{
-						Reg._gameOverForPlayer = true;
-						Reg._gameOverForAllPlayers = true;
-						RegFunctions.playerAllStop();
-						
-						RegTypedef._dataTournaments._time_remaining_player2 = Std.string(RegTypedef._dataPlayers._moveTimeRemaining[1]);
-						RegTypedef._dataTournaments._time_remaining_player1 = Std.string(RegTypedef._dataPlayers._moveTimeRemaining[0]);
-												
-						PlayState.clientSocket.send("Tournament Chess Standard 8 Put", RegTypedef._dataTournaments);
-						haxe.Timer.delay(function (){}, Reg2._event_sleep);
-					}
-				}
-			}
-			
-			if (Reg._doStartGameOnce == true)
-			{						
-				Reg._doStartGameOnce = false;  // TODO does this var need to be anywhere?
-			
-			}
-			
-				
-		}
-	}
-	/******************************
-	 * restart the game for either p1 vs computer or p1 vs p2,p3,p4.
-	 */
-	private function restartGame():Void
-	{
-		if (Reg._createGameRoom == true 
-		&& Reg._game_offline_vs_cpu == true 
-		&& Reg._game_online_vs_cpu == false
-		|| Reg._createGameRoom == true 
-		&& Reg._game_offline_vs_player == true 
-		&& Reg._game_online_vs_cpu == false)
-		{
-			RegTypedef.resetTypedefData();					
-			Reg.resetRegVars();
-			Reg2.resetRegVars();
-			RegCustom.resetRegVars();
-			RegTriggers.resetTriggers();
-			
-			if (RegTypedef._dataTournaments._move_piece == false)
-			{
-				Reg._playerMoving = 0;
-				Reg._playerNotMoving = 1;
-			}
-			
-			_lobbyRoomChat = false;
-			Reg._loggedIn = true;
-			Reg._doStartGameOnce = true;
-			Reg._at_create_room = false;
-			Reg._at_waiting_room = false;
-			RegTypedef._dataMisc._room = 5;
-			RegTypedef._dataMisc._roomState[3] = 6; 
-			RegTypedef._dataMisc._gameRoom = true;
-			Reg._gameRoom = true;
-			Reg._gameHost = true;
-			Reg._gameOverForPlayer = false;
-			
-			//getPlayersNamesAndAvatars();
-			
-			Reg._playerCanMovePiece = true;
-			Reg._playerMoving = 0;
-								
-			Reg._move_number_current = 0;
-			Reg._move_number_next = 0;
-			Reg._gameJumpTo = 0; 
-		}
-	
-		if (Reg._createGameRoom == true
-		&&  Reg._game_offline_vs_cpu == false
-		&&  Reg._game_offline_vs_player == false
-		||  Reg._createGameRoom == true
-		&&  Reg._game_online_vs_cpu == true)
-		{
-			RegTypedef.resetTypedefData();
-		
-			Reg.resetRegVars(); 
-			Reg2.resetRegVars();
-			RegCustom.resetRegVars();
-			RegTriggers.resetTriggers();
-			
-			if (RegTypedef._dataTournaments._move_piece == false)
-			{
-				if (Reg._gameHost == true) Reg._playerCanMovePiece = true;
-				else 
-				{				
-					Reg._otherPlayer = true;
-					Reg._playerCanMovePiece = false;
-				}
-				
-			}
-			
-			if (RegTypedef._dataTournaments._move_piece == false)
-			{
-				Reg._playerMoving = 0;
-				Reg._playerNotMoving = 1;
-			}
-			
-			if (Reg._game_online_vs_cpu == true) 
-				RegTypedef._dataPlayers._spectatorPlaying = true;	
-			Reg._at_create_room = true;
-			Reg._at_waiting_room = true;
-			_lobbyRoomChat = false;
-			Reg._goBackToLobby = false;
-			Reg._loggedIn = true;
-			Reg._doStartGameOnce = true;
-			Reg._gameRoom = true;
-			Reg._hasUserConnectedToServer = true;
-			
-			if (RegTypedef._dataTournaments._move_piece == false)
-				Reg._move_number_next = 0;
-			//if (__scene_waiting_room.visible == false) Reg._loginSuccessfulWasRead = true;
-			Reg._doOnce = false;			
-			Reg._lobbyDisplay = false;
-			//Reg._gameOverForPlayer = false;
-			
-			
-	//RegTypedef._dataMisc._roomPlayerLimit[RegTypedef._dataMisc._room] = 3;	
-			
-		}
-	}
-	
-	
-	private function gameMessagesAtSubState():Void
-	{
-		//############################# CHESS PROMOTION
-		if (Reg._chessPromote == true)
-		{
-			Reg._chessPromote = false;			
-			openSubState(new ChessPromote());
-		}
-		
-	}	
-	
-	private function gameMessage():Void
-	{
-		if (Reg._chessCheckmateBypass == true
-		&& Reg._gameMessage != "Check" 
-		&& Reg._gameMessage != "White piece wins."
-		&& Reg._gameMessage != "Black piece wins."
-		|| Reg._gameMessage == "") return;
-	
-		openSubState( new GameMessage());		
-		Reg._outputMessage = false;
-	}
-	
-	/******************************
-	 * if player clicks the watch game button or enters into the waiting room then these typedefs need to be updated.
-	 */
-	public static function allTypedefRoomUpdate(_room:Int):Void
-	{
-		RegTypedef._dataGame._room = _room;
-		RegTypedef._dataGame0._room = _room;// this line is needed or else the server will not be able to send back the data or will send back to the wrong client. remember that the server broadcasts to a room using the room var. 
-		RegTypedef._dataGame1._room = _room;
-		RegTypedef._dataGame2._room = _room;
-		RegTypedef._dataGame3._room = _room;
-		RegTypedef._dataGame4._room = _room;
-		
-		RegTypedef._dataGameMessage._room = 	_room;
-		RegTypedef._dataQuestions._room = 		_room;
-		RegTypedef._dataTournaments._room = 	_room;
-		RegTypedef._dataOnlinePlayers._room = 	_room;
-		RegTypedef._dataPlayers._room = 		_room; 
-		RegTypedef._dataMovement._room = 		_room; 
-		RegTypedef._dataStatistics._room = 		_room; 
-
-	}
-	
-	/******************************
-	 * _dataMisc does not been this assignment a value because it already has the correct username from the "Is logging In" network event. This function is needed or else there will be a null error at server for the username when saving user actions to the server log file. _dataGame is not used here because its not needed for server log file. hence, in this board game its not a location where a player can go.
-	 */
-	public static function allTypedefUsernameUpdate(_username:String):Void
-	{
-		RegTypedef._dataGame0._username = _username;
-		
-		RegTypedef._dataGame1._username = _username;
-		RegTypedef._dataGame2._username = _username;
-		RegTypedef._dataGame3._username = _username;
-		RegTypedef._dataGame4._username = _username;
-		
-		RegTypedef._dataGameMessage._username = 	_username;
-		RegTypedef._dataDailyQuests._username = 	_username;
-		RegTypedef._dataQuestions._username = 		_username;
-		RegTypedef._dataTournaments._username = 	_username;
-		RegTypedef._dataOnlinePlayers._username = 	_username;
-		RegTypedef._dataPlayers._username = 		_username;
-		RegTypedef._dataMovement._username = 		_username; 
-		RegTypedef._dataStatistics._username = 		_username;
-		RegTypedef._dataHouse._username = 			_username;
-	}
-	
 	
 }//

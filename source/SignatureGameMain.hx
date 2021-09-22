@@ -1163,158 +1163,6 @@ class SignatureGameMain extends FlxState
 		SignatureGameServicesCircleImages.setRentBonusAndBuildingGroups(3);
 	}
 	
-	override public function update(elapsed:Float):Void 
-	{
-		// computer is moving and a pay message box is open. this delays the box from closing.
-		if (_ticksStartForPayMortgageMessageBox == true)
-		{
-			_ticksPayMortgage = RegFunctions.incrementTicks(_ticksPayMortgage, 60 / Reg._framerate);
-			if (_ticksPayMortgage >= 100) _ticksPayMortgage = 0;		
-			if (_ticksPayMortgage == 0) 
-			{
-				// if can pay the mortgage.
-				if (RegTypedef._dataPlayers._cash[Reg._move_number_next] - _mortgageLandPrice[Reg._move_number_next][_mortgageLandPriceCurrentUnitIndex] >= 0)
-				{
-					Reg._yesNoKeyPressValueAtMessage = 1;
-				}
-				
-				else
-				{
-					Reg._yesNoKeyPressValueAtMessage = 2;
-				}				
-				
-				_ticksStartForPayMortgageMessageBox = false;
-			}
-		}
-		
-		if (Reg._buttonCodeValues != "") buttonCodeValues();
-		
-		// a not enough cash was triggered at SignatureGameInnerUnitsEvents class. this code block changes the end turn button into a pay now. player needs to select a unit where the cash can be taken from. so some vars are set to make those units mouse clickable. 
-		if (RegTriggers._notEnoughCash == true)
-		{
-			RegTriggers._notEnoughCash = false;			
-			
-			_isInDebt = true;
-			_buttonEndTurnOrPayNow.label.text = "Pay Now"; // this stops the end turn event. now player can only end turn after clicking this button when player has enough cash to pay the debt.
-			
-			RegTriggers._highlightOnlyOuterUnits = true;
-			RegTriggers._signatureGameUnitImage = true;
-			
-			// this is the message what will be displayed when the player does not have enough cash to pay the debt and the player mouse clicks the "Pay Now" button.
-			_stringNotEnoughCash = Std.string( SignatureGameMain._unitTitlesArray[Reg._gameDiceMaximumIndex[Reg._move_number_next]]);
-			
-		}
-		
-		// _displayDebtStuff is set to true when _isInDebt is true at SignatureGameInnerUnitsEvents.hx. this code block displays the buttons needed to take the player out of debt but only if the total cash value for that player is less than the debt to be paid.
-		if (RegTriggers._signatureGameUnitImage == true 
-		&& 	RegTriggers._highlightOnlyOuterUnits == true
-		&&  RegTriggers._displayDebtStuff == true)
-		{
-			RegTriggers._displayDebtStuff = false;
-			
-			// enter loop only if the total cash for that player is less then the debt needed to be paid.
-			if (Reg._gameUniqueValueForPiece[Reg._gameYYold][Reg._gameXXold] - 1 == Reg._move_number_current && RegTypedef._dataPlayers._cash[Reg._move_number_current] < _totalDebtAmount)
-			{
-				_buttonSellHouse.active = true;
-				_buttonSellHouse.visible = true;
-				
-				_buttonBuyMortgage.active = true;
-				_buttonBuyMortgage.visible = true;
-				
-				shouldEndNowButtonBeActive();
-				
-				// displays the unit that might be able to take the player out of debt, at the right side of the background header.
-				_unitImageDebt.loadGraphic("assets/images/signatureGame/"+_p2+".png", false);
-				_unitImageDebt.visible = true;
-				
-				_unitTitleDebt.text = Std.string( _unitTitlesArray[_p2]);
-				_unitTitleDebt.x = (_unitBG.x + (_unitBG.width / 1.3335)) - (_unitTitleDebt.fieldWidth / 2);
-				_unitTitleDebt.visible = true;
-			}
-			
-			else
-			{
-				// if here, then player is able to pay debt.
-				_buttonSellHouse.visible = false;
-				_buttonSellHouse.active = false;
-				
-				_buttonBuyMortgage.visible = false;
-				_buttonBuyMortgage.active = false;
-				
-			}
-		}
-		
-		// make sure that player's cash does not go into a negative value.
-		if (RegTypedef._dataPlayers._cash[Reg._move_number_next] < 0)
-			RegTypedef._dataPlayers._cash[Reg._move_number_next] = 0;
-		
-		// must make this null so that the check for is null can be correctly done. without this code the check for if (!= null) can have the correct outcome.
-		if (RegTriggers._tradeProposalOffer == true && _replyTradeProposal == null)
-		{
-			if (Reg._game_offline_vs_cpu == true) buttonsTradeInactive();
-		
-			RegTriggers._signatureGameUnitImage = true;
-			RegTriggers._highlightOnlyOuterUnits = true;
-		
-			if (_replyTradeProposal != null)
-			{
-				remove(_replyTradeProposal);
-				_replyTradeProposal = null; // must make this null so that the check for is null can be correctly done. without this code the check for if (!= null) can have the correct outcome.
-			}
-			
-			if (Reg._game_offline_vs_cpu == true && Reg._move_number_current > 0) _replyTradeProposal = new MessageBoxTradeProposal("Yes", "No", false, true);
-			else _replyTradeProposal = new MessageBoxTradeProposal("Yes", "No", true);
-			
-			add(_replyTradeProposal);
-			_replyTradeProposal.createMessage(2, 2, true, true, true);
-
-			_replyTradeProposal.display("Trade Proposal.", RegTypedef._dataGameMessage._gameMessage);
-			_replyTradeProposal.popupMessageShow(); 
-			
-			if (Reg._game_offline_vs_cpu == true)
-			{
-				_unitYoursButton.set_toggled(false);
-				_unitOthersButton.set_toggled(false);
-				
-				_unitYoursButton.active = false;
-				_unitOthersButton.active = false;
-			}
-			
-		}
-		
-		// finish the trade request. the other player has replied to the trade request. change the unit and cash values for the players.
-		if (RegTriggers._tradeWasAnswered == true && _tradeSuccessfulDoOnce == false)
-		{
-			background2.visible = false;
-			_textGeneralMessage3.visible = false;
-			
-			//buttonsTradeActive();
-			
-			
-			_tradeSuccessfulDoOnce = true;
-
-			_buttonTradeProposal.visible = false;
-			_buttonTradeProposal.active = false;
-			
-			_buttonGoBack.visible = false;
-			_buttonGoBack.active = false;
-			
-			_buttonResetTradeProposal.visible = false;
-			_buttonResetTradeProposal.active = false;
-	
-			buttonsTradeInactive();
-
-			// this function changes ownership of yours and other player's units.
-			if (_tradeAnsweredAs == true) finishTradeingUnits();	
-			
-			shouldEndNowButtonBeActive();
-			
-			
-		}
-		
-		super.update(elapsed);
-	}	
-	
 	private function shouldEndNowButtonBeActive():Void
 	{
 		if (_buttonEndTurnOrPayNow != null)
@@ -1341,7 +1189,6 @@ class SignatureGameMain extends FlxState
 		Reg._move_number_current = _count;
 		
 	}
-	
 		
 	public static function finishTradeingUnits():Void
 	{
@@ -3151,4 +2998,157 @@ class SignatureGameMain extends FlxState
 			
 		}
 	}
-}//
+	
+	override public function update(elapsed:Float):Void 
+	{
+		// computer is moving and a pay message box is open. this delays the box from closing.
+		if (_ticksStartForPayMortgageMessageBox == true)
+		{
+			_ticksPayMortgage = RegFunctions.incrementTicks(_ticksPayMortgage, 60 / Reg._framerate);
+			if (_ticksPayMortgage >= 100) _ticksPayMortgage = 0;		
+			if (_ticksPayMortgage == 0) 
+			{
+				// if can pay the mortgage.
+				if (RegTypedef._dataPlayers._cash[Reg._move_number_next] - _mortgageLandPrice[Reg._move_number_next][_mortgageLandPriceCurrentUnitIndex] >= 0)
+				{
+					Reg._yesNoKeyPressValueAtMessage = 1;
+				}
+				
+				else
+				{
+					Reg._yesNoKeyPressValueAtMessage = 2;
+				}				
+				
+				_ticksStartForPayMortgageMessageBox = false;
+			}
+		}
+		
+		if (Reg._buttonCodeValues != "") buttonCodeValues();
+		
+		// a not enough cash was triggered at SignatureGameInnerUnitsEvents class. this code block changes the end turn button into a pay now. player needs to select a unit where the cash can be taken from. so some vars are set to make those units mouse clickable. 
+		if (RegTriggers._notEnoughCash == true)
+		{
+			RegTriggers._notEnoughCash = false;			
+			
+			_isInDebt = true;
+			_buttonEndTurnOrPayNow.label.text = "Pay Now"; // this stops the end turn event. now player can only end turn after clicking this button when player has enough cash to pay the debt.
+			
+			RegTriggers._highlightOnlyOuterUnits = true;
+			RegTriggers._signatureGameUnitImage = true;
+			
+			// this is the message what will be displayed when the player does not have enough cash to pay the debt and the player mouse clicks the "Pay Now" button.
+			_stringNotEnoughCash = Std.string( SignatureGameMain._unitTitlesArray[Reg._gameDiceMaximumIndex[Reg._move_number_next]]);
+			
+		}
+		
+		// _displayDebtStuff is set to true when _isInDebt is true at SignatureGameInnerUnitsEvents.hx. this code block displays the buttons needed to take the player out of debt but only if the total cash value for that player is less than the debt to be paid.
+		if (RegTriggers._signatureGameUnitImage == true 
+		&& 	RegTriggers._highlightOnlyOuterUnits == true
+		&&  RegTriggers._displayDebtStuff == true)
+		{
+			RegTriggers._displayDebtStuff = false;
+			
+			// enter loop only if the total cash for that player is less then the debt needed to be paid.
+			if (Reg._gameUniqueValueForPiece[Reg._gameYYold][Reg._gameXXold] - 1 == Reg._move_number_current && RegTypedef._dataPlayers._cash[Reg._move_number_current] < _totalDebtAmount)
+			{
+				_buttonSellHouse.active = true;
+				_buttonSellHouse.visible = true;
+				
+				_buttonBuyMortgage.active = true;
+				_buttonBuyMortgage.visible = true;
+				
+				shouldEndNowButtonBeActive();
+				
+				// displays the unit that might be able to take the player out of debt, at the right side of the background header.
+				_unitImageDebt.loadGraphic("assets/images/signatureGame/"+_p2+".png", false);
+				_unitImageDebt.visible = true;
+				
+				_unitTitleDebt.text = Std.string( _unitTitlesArray[_p2]);
+				_unitTitleDebt.x = (_unitBG.x + (_unitBG.width / 1.3335)) - (_unitTitleDebt.fieldWidth / 2);
+				_unitTitleDebt.visible = true;
+			}
+			
+			else
+			{
+				// if here, then player is able to pay debt.
+				_buttonSellHouse.visible = false;
+				_buttonSellHouse.active = false;
+				
+				_buttonBuyMortgage.visible = false;
+				_buttonBuyMortgage.active = false;
+				
+			}
+		}
+		
+		// make sure that player's cash does not go into a negative value.
+		if (RegTypedef._dataPlayers._cash[Reg._move_number_next] < 0)
+			RegTypedef._dataPlayers._cash[Reg._move_number_next] = 0;
+		
+		// must make this null so that the check for is null can be correctly done. without this code the check for if (!= null) can have the correct outcome.
+		if (RegTriggers._tradeProposalOffer == true && _replyTradeProposal == null)
+		{
+			if (Reg._game_offline_vs_cpu == true) buttonsTradeInactive();
+		
+			RegTriggers._signatureGameUnitImage = true;
+			RegTriggers._highlightOnlyOuterUnits = true;
+		
+			if (_replyTradeProposal != null)
+			{
+				remove(_replyTradeProposal);
+				_replyTradeProposal = null; // must make this null so that the check for is null can be correctly done. without this code the check for if (!= null) can have the correct outcome.
+			}
+			
+			if (Reg._game_offline_vs_cpu == true && Reg._move_number_current > 0) _replyTradeProposal = new MessageBoxTradeProposal("Yes", "No", false, true);
+			else _replyTradeProposal = new MessageBoxTradeProposal("Yes", "No", true);
+			
+			add(_replyTradeProposal);
+			_replyTradeProposal.createMessage(2, 2, true, true, true);
+
+			_replyTradeProposal.display("Trade Proposal.", RegTypedef._dataGameMessage._gameMessage);
+			_replyTradeProposal.popupMessageShow(); 
+			
+			if (Reg._game_offline_vs_cpu == true)
+			{
+				_unitYoursButton.set_toggled(false);
+				_unitOthersButton.set_toggled(false);
+				
+				_unitYoursButton.active = false;
+				_unitOthersButton.active = false;
+			}
+			
+		}
+		
+		// finish the trade request. the other player has replied to the trade request. change the unit and cash values for the players.
+		if (RegTriggers._tradeWasAnswered == true && _tradeSuccessfulDoOnce == false)
+		{
+			background2.visible = false;
+			_textGeneralMessage3.visible = false;
+			
+			//buttonsTradeActive();
+			
+			
+			_tradeSuccessfulDoOnce = true;
+
+			_buttonTradeProposal.visible = false;
+			_buttonTradeProposal.active = false;
+			
+			_buttonGoBack.visible = false;
+			_buttonGoBack.active = false;
+			
+			_buttonResetTradeProposal.visible = false;
+			_buttonResetTradeProposal.active = false;
+	
+			buttonsTradeInactive();
+
+			// this function changes ownership of yours and other player's units.
+			if (_tradeAnsweredAs == true) finishTradeingUnits();	
+			
+			shouldEndNowButtonBeActive();
+			
+			
+		}
+		
+		super.update(elapsed);
+	}	
+	
+}//

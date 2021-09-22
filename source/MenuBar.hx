@@ -179,6 +179,23 @@ class MenuBar extends FlxGroup
 		if (Reg._at_leaderboards == true) menu_leaderboards();
 	}
 	
+	public function options():Void
+	{
+		if (RegCustom._house_feature_enabled[Reg._tn] == true)
+		{
+			RegHouse.resetHouseAtLobby();
+		}
+		
+		if (RegCustom._house_feature_enabled[Reg._tn] == true)
+		{
+			RegTypedef.resetHouseData(); // this is needed to avoid a crash.	
+			RegHouse.resetHouseAtLobby();
+			
+			PlayState.clientSocket.send("House Load", RegTypedef._dataHouse);
+			haxe.Timer.delay(function (){}, Reg2._event_sleep); 
+		} else RegTriggers._returnToLobbyMakeButtonsActive = true;
+	}
+	
 	private function menu_lobby():Void
 	{
 		// this button is not visible. it is placed under the house button and is used by other buttons, in case the house feature is disabled, so they can still be horizontally positioned on the menu bar.
@@ -446,23 +463,6 @@ class MenuBar extends FlxGroup
 		else FlxG.switchState(new MenuState());
 	}
 	
-	public function options():Void
-	{
-		if (RegCustom._house_feature_enabled[Reg._tn] == true)
-		{
-			RegHouse.resetHouseAtLobby();
-		}
-		
-		if (RegCustom._house_feature_enabled[Reg._tn] == true)
-		{
-			RegTypedef.resetHouseData(); // this is needed to avoid a crash.	
-			RegHouse.resetHouseAtLobby();
-			
-			PlayState.clientSocket.send("House Load", RegTypedef._dataHouse);
-			haxe.Timer.delay(function (){}, Reg2._event_sleep); 
-		} else RegTriggers._returnToLobbyMakeButtonsActive = true;
-	}
-	
 	private function set_all_menu_bar_elements_not_active():Void
 	{
 		if (_buttonHouse_under != null)
@@ -609,106 +609,6 @@ class MenuBar extends FlxGroup
 			_scene_leaderboards_exit.visible = false;
 			_scene_leaderboards_exit.active = false;
 		}
-	}
-	
-	override public function destroy()
-	{
-		if (__house != null)
-		{
-			remove(__house);
-			__house.destroy();
-		}
-		
-		if (__miscellaneous_menu != null)
-		{
-			__miscellaneous_menu.visible = false;
-			remove(__miscellaneous_menu);
-			__miscellaneous_menu.destroy();
-		}
-		
-		//#############################
-		// start of house main menu
-		if (_bgHorizontal != null)
-		{
-			_bgHorizontal.destroy();
-			_bgHorizontal = null;
-		}
-		
-		if (_to_lobby != null)
-		{
-			_to_lobby.destroy();
-			_to_lobby = null;
-		}
-		
-		if (_buttonToFurniturePutMenu != null)
-		{
-			_buttonToFurniturePutMenu.destroy();
-			_buttonToFurniturePutMenu = null;
-		}
-		
-		if (_buttonToFoundationPutMenu != null)
-		{
-			_buttonToFoundationPutMenu.destroy();
-			_buttonToFoundationPutMenu = null;
-		}
-	
-		if (_save != null)
-		{
-			_save.destroy();
-			_save = null;
-		}
-		
-		//#############################
-		// end house main menu.
-		
-		super.destroy();
-	}
-	
-	override public function update(elapsed:Float):Void 
-	{
-		if (RegCustom._house_feature_enabled[Reg._tn] == true)
-		{
-			if (RegTriggers._new_the_house == true)
-			{
-				RegTriggers._new_the_house = false;
-				
-				if (__house == null)
-				{
-					__house = new House();
-					add(__house);
-					
-					RegTriggers._houseDrawSpritesDoNotEnter = true;
-				}	
-			}
-		}
-		
-		//######################## house
-		if (Reg._at_house == true)
-		{
-			FlxG.mouse.enabled = true;
-			active = true;
-			
-			// fix a camera display bug where the _buttonToFurnitureGetMenu can also be clicked from the right side of the screen because of the map scrolling part of the scene. setting this to active in an else statement is not needed because they are set active elsewhere in the code.
-			if (FlxG.mouse.x > FlxG.width / 2
-			&&  FlxG.mouse.y >= FlxG.height - 50) 
-			{
-				if (_buttonToFurnitureGetMenu != null)
-					_buttonToFurnitureGetMenu.active = false;
-				if (_buttonToFurniturePutMenu != null)
-					_buttonToFurniturePutMenu.active = false;
-			}
-							
-			if (Reg._buttonCodeValues != "") buttonCodeValues();
-			
-			#if html5
-				_save.active = false;
-			#end
-		}
-		// end house
-		//#############################
-		
-		
-		super.update(elapsed);
 	}
 	
 	/******************************
@@ -1313,4 +1213,105 @@ class MenuBar extends FlxGroup
 		visible = false;
 		destroy();
 	}
+		
+	override public function destroy()
+	{
+		if (__house != null)
+		{
+			remove(__house);
+			__house.destroy();
+		}
+		
+		if (__miscellaneous_menu != null)
+		{
+			__miscellaneous_menu.visible = false;
+			remove(__miscellaneous_menu);
+			__miscellaneous_menu.destroy();
+		}
+		
+		//#############################
+		// start of house main menu
+		if (_bgHorizontal != null)
+		{
+			_bgHorizontal.destroy();
+			_bgHorizontal = null;
+		}
+		
+		if (_to_lobby != null)
+		{
+			_to_lobby.destroy();
+			_to_lobby = null;
+		}
+		
+		if (_buttonToFurniturePutMenu != null)
+		{
+			_buttonToFurniturePutMenu.destroy();
+			_buttonToFurniturePutMenu = null;
+		}
+		
+		if (_buttonToFoundationPutMenu != null)
+		{
+			_buttonToFoundationPutMenu.destroy();
+			_buttonToFoundationPutMenu = null;
+		}
+	
+		if (_save != null)
+		{
+			_save.destroy();
+			_save = null;
+		}
+		
+		//#############################
+		// end house main menu.
+		
+		super.destroy();
+	}
+	
+	override public function update(elapsed:Float):Void 
+	{
+		if (RegCustom._house_feature_enabled[Reg._tn] == true)
+		{
+			if (RegTriggers._new_the_house == true)
+			{
+				RegTriggers._new_the_house = false;
+				
+				if (__house == null)
+				{
+					__house = new House();
+					add(__house);
+					
+					RegTriggers._houseDrawSpritesDoNotEnter = true;
+				}	
+			}
+		}
+		
+		//######################## house
+		if (Reg._at_house == true)
+		{
+			FlxG.mouse.enabled = true;
+			active = true;
+			
+			// fix a camera display bug where the _buttonToFurnitureGetMenu can also be clicked from the right side of the screen because of the map scrolling part of the scene. setting this to active in an else statement is not needed because they are set active elsewhere in the code.
+			if (FlxG.mouse.x > FlxG.width / 2
+			&&  FlxG.mouse.y >= FlxG.height - 50) 
+			{
+				if (_buttonToFurnitureGetMenu != null)
+					_buttonToFurnitureGetMenu.active = false;
+				if (_buttonToFurniturePutMenu != null)
+					_buttonToFurniturePutMenu.active = false;
+			}
+							
+			if (Reg._buttonCodeValues != "") buttonCodeValues();
+			
+			#if html5
+				_save.active = false;
+			#end
+		}
+		// end house
+		//#############################
+		
+		
+		super.update(elapsed);
+	}
+	
 }//

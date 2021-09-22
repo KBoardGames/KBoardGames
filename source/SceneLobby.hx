@@ -156,7 +156,20 @@ class SceneLobby extends FlxState
 		
 		// for the user kicking or banning message box see "Is Action Needed For Player" event. that event calls RegTriggers._actionMessage which displays the message at platState.hx
 	}
-	
+		
+	public function options():Void
+	{
+		_lobby_data_received = false;
+		_lobby_data_received_do_once = true;
+				
+		PlayState._text_logging_in.text = "";
+		Reg._at_lobby = true;
+		
+		_didPopulateList = false;
+		
+		__menu_bar.options();
+	}
+		
 	public function display():Void
 	{	
 		RegFunctions.fontsSharpen();		
@@ -385,38 +398,7 @@ class SceneLobby extends FlxState
 		options();
 				
 	}
-	
-	override public function destroy()
-	{
-		if (_title != null) 
-		{	
-			_title.destroy();
-			_title_background.destroy();			
-		}	
 		
-		if (__boxscroller != null && RegTypedef._dataMisc._userLocation == 0)
-		{
-			cameras.remove( __boxscroller );
-			__boxscroller.destroy();
-			__boxscroller = null;
-		}
-		
-				
-		if (group != null) group.destroy();
-		
-		if (__menu_bar.__miscellaneous_menu != null)
-		{
-			__menu_bar.__miscellaneous_menu.visible = false;
-			remove(__menu_bar.__miscellaneous_menu);
-			__menu_bar.__miscellaneous_menu.destroy();
-		}
-		
-		_number = 0;
-		_didPopulateList = false;
-	
-		super.destroy();
-	}
-	
 	public function requestLobbyData():Void
 	{
 		RegTypedef._dataMisc._room = 0;
@@ -498,18 +480,306 @@ class SceneLobby extends FlxState
 		
 	}
 	
-	
-	public function options():Void
+	private function buttonClicked(_num):Void
 	{
-		_lobby_data_received = false;
+		#if html5
+			if (_num < 3) gotoRoom(_num);
+		#else			
+			gotoRoom(_num);
+		#end
+	}
+		
+	/******************************
+	 * go to the room where the player waits for another player to play a game. else go to create room, Reg._getRoomData
+	 */
+	private function gotoRoom(_num:Int):Void
+	{		
+		_number = _num;
+		
+		// these are used to send a request to "get room data". at that event, _lobby_data_received is set to true then at this class that var is read along with _lobby_data_received_do_once to execute rather the player can enter the creating room or the waiting room. The vars also help to refresh the lobby with current data.
+		_lobby_data_received = false; 
 		_lobby_data_received_do_once = true;
-				
-		PlayState._text_logging_in.text = "";
+		
+		// go to create room.
+		Reg._getRoomData = true;		
+	}
+	
+	private function roomFull(message:Int, number_room_full:Int):Void
+	{
+		_message = message;
+		_number_room_full = number_room_full;
+		
+		//group.visible = false;
+		group.active = false;		
+
+		Reg._messageId = 2000;
+		Reg._buttonCodeValues = "l1010";
+		SceneGameRoom.messageBoxMessageOrder();
+	
+	}
+	
+	private function dataNotYetReadyForWaitingRoom(_number:Int):Void
+	{
+		_number_room_full = _number;
+		
+		//group.visible = false;
+		group.active = false;		
+
+		Reg._messageId = 2010;
+		Reg._buttonCodeValues = "l1030";
+		SceneGameRoom.messageBoxMessageOrder();
+		
+	}
+	
+	private function watchGame(_number:Int):Void
+	{		
+		setNotActiveForButtons();
+		
+		RegTypedef._dataMisc._spectatorWatching = true;
+		RegTypedef._dataPlayers._spectatorPlaying = false;
+		RegTypedef._dataPlayers._spectatorWatching = true;
+		
+		Reg._gameId = RegTypedef._dataMisc._roomGameIds[_number];
+		RegTypedef._dataMisc._room = _number;
+		PlayState.allTypedefRoomUpdate(_number);
+		
+		Reg._move_number_next = 0;
+		RegTypedef._dataPlayers._moveNumberDynamic[0] = 0;
+		RegTypedef._dataMisc._roomState[_number] = 8;
+		RegTypedef._dataMisc._userLocation = 3;
+		RegTypedef._dataMovement._username_room_host = RegTypedef._dataMisc._roomHostUsername[_number];
+		RegTypedef._dataMovement._gid = RegTypedef._dataMisc._gid[_number];
+		RegTypedef._dataMovement._spectatorWatching = 1;
+		
+		PlayState.clientSocket.send("Get Statistics Win Loss Draw", RegTypedef._dataPlayers); 	
+		haxe.Timer.delay(function (){}, Reg2._event_sleep);
+		
+		PlayState.clientSocket.send("Greater RoomState Value", RegTypedef._dataMisc); 
+		haxe.Timer.delay(function (){}, Reg2._event_sleep);
+
+	}
+	
+	/******************************
+	 * this function is called when going to MiscellaneousMenu.hx, Leaderboards.hx or house.hx class.
+	 */
+	public function setNotActiveForButtons():Void
+	{
+		Reg._at_lobby = false;
+		HouseScrollMap._map_offset_x = 0;
+		HouseScrollMap._map_offset_y = 0;
+		
+		if (group != null)
+		{
+			// put this group off screen so that elements such as lobby buttons cannot be clicked.
+			group.setPosition(5000, 0);
+			group.active = false;
+		}
+		
+		if (_group_button != null)
+		{
+			for (i in 0... _group_button.length)
+			{
+				_group_button[i].active = false;
+			}
+		}
+		
+		if (__boxscroller != null)
+		{
+			__boxscroller.visible = false;
+			__boxscroller.active = false;
+		}
+		
+		if (GameChatter.__boxscroller2 != null)
+		{
+			GameChatter.__boxscroller2.visible = false;
+			GameChatter.__boxscroller2.active = false;
+		}
+		
+		if (GameChatter.__boxscroller3 != null)
+		{
+			GameChatter.__boxscroller3.visible = false;
+			GameChatter.__boxscroller3.active = false;
+		}
+		
+		if (RegCustom._chat_when_at_lobby_enabled[Reg._tn] == true)
+		{
+			__game_chatter.visible = false;
+			__game_chatter.active = false;
+		}
+		
+		if (RegCustom._house_feature_enabled[Reg._tn] == true)
+		{
+			if (__menu_bar._buttonHouse != null) __menu_bar._buttonHouse.active = false;
+		}
+		
+		if (__menu_bar._buttonMiscMenu != null) 
+			__menu_bar._buttonMiscMenu.active = false;
+		if (__menu_bar._button_daily_quests != null) 
+			__menu_bar._button_daily_quests.active = false;
+		if (__menu_bar._button_leaderboards != null) 
+			__menu_bar._button_leaderboards.active = false;
+		if (__menu_bar._button_tournaments != null) 
+			__menu_bar._button_tournaments.active = false;
+		
+		if (_button_lobby_refresh != null)
+		{
+			_button_lobby_refresh.visible = false;
+			_button_lobby_refresh.active = false;
+		}
+		
+		_title_background.visible = false;
+		_title.visible = false;
+		
+		_t1.visible = false;
+		_t2.visible = false;
+		_t3.visible = false;
+		_t4.visible = false;
+		_t5.visible = false;
+		_t6.visible = false;
+	}
+	
+	/******************************
+	 * this function is called when returning from MiscellaneousMenu.hx or house.hx class.
+	 */
+	public function setActiveForButtons():Void
+	{
 		Reg._at_lobby = true;
+		HouseScrollMap._map_offset_x = 0;
+		HouseScrollMap._map_offset_y = 0;
 		
+		if (group != null)
+		{
+			group.active = true;
+			group.setPosition(0, 0);
+		}
+		
+		if (_group_button != null)
+		{
+			for (i in 0... _group_button.length)
+			{
+				_group_button[i].active = true;
+			}
+		}
+		
+		if (__boxscroller != null) 
+		{
+			__boxscroller.active = true;
+			__boxscroller.visible = true;
+			
+		}
+		
+		if (GameChatter.__boxscroller2 != null
+		&& GameChatter._groupChatterScroller.x == 0)
+		{
+			GameChatter.__boxscroller2.active = true;
+			GameChatter.__boxscroller2.visible = true;
+		}
+		
+		if (GameChatter.__boxscroller3 != null
+		&& GameChatter._groupChatterScroller.x == 0)
+		{
+			GameChatter.__boxscroller3.active = true;
+		}
+		
+		if (RegCustom._chat_when_at_lobby_enabled[Reg._tn] == true)
+		{
+			SceneLobby.__game_chatter.active = true;
+			SceneLobby.__game_chatter.visible = true;
+		}
+		
+		RegTriggers._ticks_buttons_menuBar = true;
+		
+		if (_button_lobby_refresh != null)
+		{
+			_button_lobby_refresh.active = true;
+			_button_lobby_refresh.visible = true;
+		}
+		
+		_title_background.visible = true;
+		_title.visible = true;
+		
+		_t1.visible = true;
+		_t2.visible = true;
+		_t3.visible = true;
+		_t4.visible = true;
+		_t5.visible = true;
+		_t6.visible = true;
+	}
+	
+	// this shows the menuBar buttons after a brief second.
+	private function ticks_buttons_menuBar():Void
+	{
+		if (RegCustom._house_feature_enabled[Reg._tn] == true)
+		{
+			if (__menu_bar._buttonHouse != null) 
+			{
+				__menu_bar._buttonHouse.active = true;
+				__menu_bar._buttonHouse.visible = true;
+			}
+		}
+		
+		if (__menu_bar._buttonMiscMenu != null) 
+			__menu_bar._buttonMiscMenu.active = true;
+		if (__menu_bar._button_daily_quests != null) 
+			__menu_bar._button_daily_quests.active = true;
+		if (__menu_bar._button_leaderboards != null) 
+			__menu_bar._button_leaderboards.active = true;
+		if (__menu_bar._button_tournaments != null) 
+			__menu_bar._button_tournaments.active = true;
+		
+		if (__menu_bar._buttonMiscMenu != null) 
+			__menu_bar._buttonMiscMenu.visible = true;
+		if (__menu_bar._button_daily_quests != null) 
+			__menu_bar._button_daily_quests.visible = true;
+		if (__menu_bar._button_leaderboards != null) 
+			__menu_bar._button_leaderboards.visible = true;
+		if (__menu_bar._button_tournaments != null) 
+			__menu_bar._button_tournaments.visible = true;
+		
+		
+	}
+
+	private function button_refresh():Void
+	{
+		// player is at lobby, so a check for room lock is not needed to be sent to this event.
+		RegTypedef._dataMisc._roomCheckForLock[0] = 0;
+		
+		// used for bug tracking. see function receive() at TcpClient.
+		RegTypedef._dataMisc._triggerEvent = "foo"; // anything can be used here.
+		
+		PlayState.clientSocket.send("Get Room Data", RegTypedef._dataMisc);
+		haxe.Timer.delay(function (){}, Reg2._event_sleep);
+	}
+	
+	override public function destroy()
+	{
+		if (_title != null) 
+		{	
+			_title.destroy();
+			_title_background.destroy();			
+		}	
+		
+		if (__boxscroller != null && RegTypedef._dataMisc._userLocation == 0)
+		{
+			cameras.remove( __boxscroller );
+			__boxscroller.destroy();
+			__boxscroller = null;
+		}
+		
+				
+		if (group != null) group.destroy();
+		
+		if (__menu_bar.__miscellaneous_menu != null)
+		{
+			__menu_bar.__miscellaneous_menu.visible = false;
+			remove(__menu_bar.__miscellaneous_menu);
+			__menu_bar.__miscellaneous_menu.destroy();
+		}
+		
+		_number = 0;
 		_didPopulateList = false;
-		
-		__menu_bar.options();
+	
+		super.destroy();
 	}
 	
 	override public function update(elapsed:Float):Void 
@@ -915,274 +1185,4 @@ class SceneLobby extends FlxState
 		super.update(elapsed);
 	}
 	
-	private function buttonClicked(_num):Void
-	{
-		#if html5
-			if (_num < 3) gotoRoom(_num);
-		#else			
-			gotoRoom(_num);
-		#end
-	}
-		
-	/******************************
-	 * go to the room where the player waits for another player to play a game. else go to create room, Reg._getRoomData
-	 */
-	private function gotoRoom(_num:Int):Void
-	{		
-		_number = _num;
-		
-		// these are used to send a request to "get room data". at that event, _lobby_data_received is set to true then at this class that var is read along with _lobby_data_received_do_once to execute rather the player can enter the creating room or the waiting room. The vars also help to refresh the lobby with current data.
-		_lobby_data_received = false; 
-		_lobby_data_received_do_once = true;
-		
-		// go to create room.
-		Reg._getRoomData = true;		
-	}
-	
-	private function roomFull(message:Int, number_room_full:Int):Void
-	{
-		_message = message;
-		_number_room_full = number_room_full;
-		
-		//group.visible = false;
-		group.active = false;		
-
-		Reg._messageId = 2000;
-		Reg._buttonCodeValues = "l1010";
-		SceneGameRoom.messageBoxMessageOrder();
-	
-	}
-	
-	private function dataNotYetReadyForWaitingRoom(_number:Int):Void
-	{
-		_number_room_full = _number;
-		
-		//group.visible = false;
-		group.active = false;		
-
-		Reg._messageId = 2010;
-		Reg._buttonCodeValues = "l1030";
-		SceneGameRoom.messageBoxMessageOrder();
-		
-	}
-	
-	private function watchGame(_number:Int):Void
-	{		
-		setNotActiveForButtons();
-		
-		RegTypedef._dataMisc._spectatorWatching = true;
-		RegTypedef._dataPlayers._spectatorPlaying = false;
-		RegTypedef._dataPlayers._spectatorWatching = true;
-		
-		Reg._gameId = RegTypedef._dataMisc._roomGameIds[_number];
-		RegTypedef._dataMisc._room = _number;
-		PlayState.allTypedefRoomUpdate(_number);
-		
-		Reg._move_number_next = 0;
-		RegTypedef._dataPlayers._moveNumberDynamic[0] = 0;
-		RegTypedef._dataMisc._roomState[_number] = 8;
-		RegTypedef._dataMisc._userLocation = 3;
-		RegTypedef._dataMovement._username_room_host = RegTypedef._dataMisc._roomHostUsername[_number];
-		RegTypedef._dataMovement._gid = RegTypedef._dataMisc._gid[_number];
-		RegTypedef._dataMovement._spectatorWatching = 1;
-		
-		PlayState.clientSocket.send("Get Statistics Win Loss Draw", RegTypedef._dataPlayers); 	
-		haxe.Timer.delay(function (){}, Reg2._event_sleep);
-		
-		PlayState.clientSocket.send("Greater RoomState Value", RegTypedef._dataMisc); 
-		haxe.Timer.delay(function (){}, Reg2._event_sleep);
-
-	}
-	
-	/******************************
-	 * this function is called when going to MiscellaneousMenu.hx, Leaderboards.hx or house.hx class.
-	 */
-	public function setNotActiveForButtons():Void
-	{
-		Reg._at_lobby = false;
-		HouseScrollMap._map_offset_x = 0;
-		HouseScrollMap._map_offset_y = 0;
-		
-		if (group != null)
-		{
-			// put this group off screen so that elements such as lobby buttons cannot be clicked.
-			group.setPosition(5000, 0);
-			group.active = false;
-		}
-		
-		if (_group_button != null)
-		{
-			for (i in 0... _group_button.length)
-			{
-				_group_button[i].active = false;
-			}
-		}
-		
-		if (__boxscroller != null)
-		{
-			__boxscroller.visible = false;
-			__boxscroller.active = false;
-		}
-		
-		if (GameChatter.__boxscroller2 != null)
-		{
-			GameChatter.__boxscroller2.visible = false;
-			GameChatter.__boxscroller2.active = false;
-		}
-		
-		if (GameChatter.__boxscroller3 != null)
-		{
-			GameChatter.__boxscroller3.visible = false;
-			GameChatter.__boxscroller3.active = false;
-		}
-		
-		if (RegCustom._chat_when_at_lobby_enabled[Reg._tn] == true)
-		{
-			__game_chatter.visible = false;
-			__game_chatter.active = false;
-		}
-		
-		if (RegCustom._house_feature_enabled[Reg._tn] == true)
-		{
-			if (__menu_bar._buttonHouse != null) __menu_bar._buttonHouse.active = false;
-		}
-		
-		if (__menu_bar._buttonMiscMenu != null) 
-			__menu_bar._buttonMiscMenu.active = false;
-		if (__menu_bar._button_daily_quests != null) 
-			__menu_bar._button_daily_quests.active = false;
-		if (__menu_bar._button_leaderboards != null) 
-			__menu_bar._button_leaderboards.active = false;
-		if (__menu_bar._button_tournaments != null) 
-			__menu_bar._button_tournaments.active = false;
-		
-		if (_button_lobby_refresh != null)
-		{
-			_button_lobby_refresh.visible = false;
-			_button_lobby_refresh.active = false;
-		}
-		
-		_title_background.visible = false;
-		_title.visible = false;
-		
-		_t1.visible = false;
-		_t2.visible = false;
-		_t3.visible = false;
-		_t4.visible = false;
-		_t5.visible = false;
-		_t6.visible = false;
-	}
-	
-	/******************************
-	 * this function is called when returning from MiscellaneousMenu.hx or house.hx class.
-	 */
-	public function setActiveForButtons():Void
-	{
-		Reg._at_lobby = true;
-		HouseScrollMap._map_offset_x = 0;
-		HouseScrollMap._map_offset_y = 0;
-		
-		if (group != null)
-		{
-			group.active = true;
-			group.setPosition(0, 0);
-		}
-		
-		if (_group_button != null)
-		{
-			for (i in 0... _group_button.length)
-			{
-				_group_button[i].active = true;
-			}
-		}
-		
-		if (__boxscroller != null) 
-		{
-			__boxscroller.active = true;
-			__boxscroller.visible = true;
-			
-		}
-		
-		if (GameChatter.__boxscroller2 != null
-		&& GameChatter._groupChatterScroller.x == 0)
-		{
-			GameChatter.__boxscroller2.active = true;
-			GameChatter.__boxscroller2.visible = true;
-		}
-		
-		if (GameChatter.__boxscroller3 != null
-		&& GameChatter._groupChatterScroller.x == 0)
-		{
-			GameChatter.__boxscroller3.active = true;
-		}
-		
-		if (RegCustom._chat_when_at_lobby_enabled[Reg._tn] == true)
-		{
-			SceneLobby.__game_chatter.active = true;
-			SceneLobby.__game_chatter.visible = true;
-		}
-		
-		RegTriggers._ticks_buttons_menuBar = true;
-		
-		if (_button_lobby_refresh != null)
-		{
-			_button_lobby_refresh.active = true;
-			_button_lobby_refresh.visible = true;
-		}
-		
-		_title_background.visible = true;
-		_title.visible = true;
-		
-		_t1.visible = true;
-		_t2.visible = true;
-		_t3.visible = true;
-		_t4.visible = true;
-		_t5.visible = true;
-		_t6.visible = true;
-	}
-	
-	// this shows the menuBar buttons after a brief second.
-	private function ticks_buttons_menuBar():Void
-	{
-		if (RegCustom._house_feature_enabled[Reg._tn] == true)
-		{
-			if (__menu_bar._buttonHouse != null) 
-			{
-				__menu_bar._buttonHouse.active = true;
-				__menu_bar._buttonHouse.visible = true;
-			}
-		}
-		
-		if (__menu_bar._buttonMiscMenu != null) 
-			__menu_bar._buttonMiscMenu.active = true;
-		if (__menu_bar._button_daily_quests != null) 
-			__menu_bar._button_daily_quests.active = true;
-		if (__menu_bar._button_leaderboards != null) 
-			__menu_bar._button_leaderboards.active = true;
-		if (__menu_bar._button_tournaments != null) 
-			__menu_bar._button_tournaments.active = true;
-		
-		if (__menu_bar._buttonMiscMenu != null) 
-			__menu_bar._buttonMiscMenu.visible = true;
-		if (__menu_bar._button_daily_quests != null) 
-			__menu_bar._button_daily_quests.visible = true;
-		if (__menu_bar._button_leaderboards != null) 
-			__menu_bar._button_leaderboards.visible = true;
-		if (__menu_bar._button_tournaments != null) 
-			__menu_bar._button_tournaments.visible = true;
-		
-		
-	}
-
-	private function button_refresh():Void
-	{
-		// player is at lobby, so a check for room lock is not needed to be sent to this event.
-		RegTypedef._dataMisc._roomCheckForLock[0] = 0;
-		
-		// used for bug tracking. see function receive() at TcpClient.
-		RegTypedef._dataMisc._triggerEvent = "foo"; // anything can be used here.
-		
-		PlayState.clientSocket.send("Get Room Data", RegTypedef._dataMisc);
-		haxe.Timer.delay(function (){}, Reg2._event_sleep);
-	}
 }//

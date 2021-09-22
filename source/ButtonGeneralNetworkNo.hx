@@ -119,6 +119,17 @@ class ButtonGeneralNetworkNo extends FlxUIButton
 		_timer.active = false;
 	}
 	
+	private function makeActive(i:FlxTimer):Void
+	{
+		if (_id == 2)
+		{
+			active = true;
+			alpha = 1;
+			
+			Reg2._boxScroller_is_scrolling = false;
+		}
+	}
+	
 	override public function draw():Void
 	{
 		if (justReleased == true && _id > 0)
@@ -177,15 +188,4 @@ class ButtonGeneralNetworkNo extends FlxUIButton
 		}
 	}
 	
-	private function makeActive(i:FlxTimer):Void
-	{
-		if (_id == 2)
-		{
-			active = true;
-			alpha = 1;
-			
-			Reg2._boxScroller_is_scrolling = false;
-		}
-	}
-
 }//

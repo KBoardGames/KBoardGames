@@ -57,6 +57,43 @@ class SignatureGameReferenceImages extends FlxSprite {
 		
 	}
 
+	public function houseTaxiCafeOwnership(_pValue:Int):Void
+	{
+		Reg._gameHouseTaxiCabOrCafeStoreValueOfUnit[Reg._gameDiceMaximumIndex[Reg._move_number_next]] = 0;
+		//if (Reg._gameYYnew2 > -1 && SignatureGameSelect._tradeAnsweredAs == false) RegTypedef._dataGame4._gameHouseTaxiCabOrCafeStoreForPiece[Reg._gameYYnew2][Reg._gameXXnew2] = _pValue;
+						
+		if (_pValue == 0) 
+		{
+			animation.add("houseTaxiCafe", [0], 30, true);
+			animation.play("houseTaxiCafe");
+		}
+		
+		if (_pValue == 1) 
+		{
+			animation.add("houseTaxiCafe1", [1], 30, true);
+			animation.play("houseTaxiCafe1");
+		}
+		
+		if (_pValue == 2) 
+		{
+			animation.add("houseTaxiCafe2", [2], 30, true);
+			animation.play("houseTaxiCafe2");
+		}
+		
+		if (_pValue == 3) 
+		{
+			animation.add("houseTaxiCafe3", [3], 30, true);
+			animation.play("houseTaxiCafe3");
+		}
+		
+		if (_pValue == 4) 
+		{
+			animation.add("houseTaxiCafe4", [4], 30, true);
+			animation.play("houseTaxiCafe4");
+		}
+			
+	}
+
 	override public function update (elapsed:Float)
 	{
 		if (Reg._gameId == 4 && Reg._gameOverForPlayer == false
@@ -98,42 +135,4 @@ class SignatureGameReferenceImages extends FlxSprite {
 		super.update(elapsed);
 	}
 	
-	public function houseTaxiCafeOwnership(_pValue:Int):Void
-	{
-		Reg._gameHouseTaxiCabOrCafeStoreValueOfUnit[Reg._gameDiceMaximumIndex[Reg._move_number_next]] = 0;
-		//if (Reg._gameYYnew2 > -1 && SignatureGameSelect._tradeAnsweredAs == false) RegTypedef._dataGame4._gameHouseTaxiCabOrCafeStoreForPiece[Reg._gameYYnew2][Reg._gameXXnew2] = _pValue;
-						
-		if (_pValue == 0) 
-		{
-			animation.add("houseTaxiCafe", [0], 30, true);
-			animation.play("houseTaxiCafe");
-		}
-		
-		if (_pValue == 1) 
-		{
-			animation.add("houseTaxiCafe1", [1], 30, true);
-			animation.play("houseTaxiCafe1");
-		}
-		
-		if (_pValue == 2) 
-		{
-			animation.add("houseTaxiCafe2", [2], 30, true);
-			animation.play("houseTaxiCafe2");
-		}
-		
-		if (_pValue == 3) 
-		{
-			animation.add("houseTaxiCafe3", [3], 30, true);
-			animation.play("houseTaxiCafe3");
-		}
-		
-		if (_pValue == 4) 
-		{
-			animation.add("houseTaxiCafe4", [4], 30, true);
-			animation.play("houseTaxiCafe4");
-		}
-		
-	
-	}
-
 }

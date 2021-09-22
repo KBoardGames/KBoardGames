@@ -219,6 +219,11 @@ class Tournaments extends FlxGroup
 		PlayState.clientSocket.send("Greater RoomState Value", RegTypedef._dataMisc); 
 		haxe.Timer.delay(function (){}, Reg2._event_sleep);
 	}
+		
+	override public function destroy()
+	{
+		super.destroy();
+	}
 	
 	override public function update(elapsed:Float):Void
 	{
@@ -230,9 +235,5 @@ class Tournaments extends FlxGroup
 		
 		super.update(elapsed);
 	}	
-	
-	override public function destroy()
-	{
-		super.destroy();
-	}
+
 }

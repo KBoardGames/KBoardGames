@@ -267,6 +267,32 @@ class SceneCreateRoom extends FlxState
 		
 	}
 	
+	public function options():Void
+	{
+		
+		//#############################
+		// this button is not added to the _group, so it will not scroll with the other buttons.
+		__menu_bar = new MenuBar();
+		add(__menu_bar);
+		
+		// might need to recreate the scrollbar to bring it back up.
+
+		Reg._roomPlayerLimit = 0;
+		Reg._gameId = 0;
+		_game_highlighted.setPosition(100, 120);
+		
+		_textMaximumPlayersForGame.text = "2";
+		
+		_buttonHumanOrComputerGame.label.text = "Human";
+				
+		_title.text = "Creating Room " + Std.string(RegTypedef._dataMisc._room);
+		_title.setPosition(0, 20);
+		_title.visible = true;
+		_title.screenCenter(X);
+
+		game(); 
+	}
+	
 	public function amountOfPlayersForGame():Void
 	{
 		_minusTotalPlayersForGame = new ButtonGeneralNetworkNo(423 - _offsetX - _offsetX2, 130 + (1 * 70 + 1) + _offset_y, "-", 40, 40, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, playersTotalToggleMinus);
@@ -306,34 +332,7 @@ class SceneCreateRoom extends FlxState
 			_temp = Std.parseInt(_textMaximumPlayersForGame.text) + 1;
 			_textMaximumPlayersForGame.text = Std.string(_temp);
 		}
-	}
-	
-	
-	public function options():Void
-	{
-		
-		//#############################
-		// this button is not added to the _group, so it will not scroll with the other buttons.
-		__menu_bar = new MenuBar();
-		add(__menu_bar);
-		
-		// might need to recreate the scrollbar to bring it back up.
-
-		Reg._roomPlayerLimit = 0;
-		Reg._gameId = 0;
-		_game_highlighted.setPosition(100, 120);
-		
-		_textMaximumPlayersForGame.text = "2";
-		
-		_buttonHumanOrComputerGame.label.text = "Human";
-				
-		_title.text = "Creating Room " + Std.string(RegTypedef._dataMisc._room);
-		_title.setPosition(0, 20);
-		_title.visible = true;
-		_title.screenCenter(X);
-
-		game(); 
-	}
+	}	
 	
 	public function game(_num:Int = 0):Void // checkers
 	{
@@ -387,6 +386,74 @@ class SceneCreateRoom extends FlxState
 		if (_buttonAllowSpectatorsGame.label.text == "Yes")
 			_buttonAllowSpectatorsGame.label.text = "No";
 		else _buttonAllowSpectatorsGame.label.text = "Yes";
+	}
+	
+	private function buttonAgainstGame():Void
+	{
+		_buttonHumanOrComputerGame.visible = false;
+	}
+			
+	public static function createRoomOnlineAgainstCPU():Void
+	{
+		RegTypedef._dataPlayers._room = RegTypedef._dataMisc._room;
+		
+		if (Reg._game_online_vs_cpu == true
+		&&  Reg._gameId == 1) 
+		{			
+			RegTypedef._dataPlayers._gameName = "Chess";
+			RegTypedef._dataPlayers._gameId = 1;
+			
+			RegTypedef._dataPlayers._usernamesDynamic[0] = "";
+			RegTypedef._dataPlayers._usernamesDynamic[1] = "";
+			RegTypedef._dataPlayers._usernamesDynamic[2] = "";
+			RegTypedef._dataPlayers._usernamesDynamic[3] = "";
+			
+			RegTypedef._dataPlayers._username = RegTypedef._dataPlayers._usernamesDynamic[0] = RegTypedef._dataPlayers._usernamesStatic[0] = RegTypedef._dataAccount._username;
+			
+			RegTypedef._dataMisc._roomLockMessage = "";
+			RegTypedef._dataMisc._roomIsLocked[RegTypedef._dataMisc._room] = 0;
+			RegTypedef._dataMisc._roomCheckForLock[RegTypedef._dataMisc._room] = 0;
+			
+			RegTypedef._dataMisc._userLocation = 2;
+			RegTypedef._dataMisc._roomState[RegTypedef._dataMisc._room] = 7;
+			RegTypedef._dataMisc._gameRoom = true;
+			//RegTypedef._dataMisc._roomHostUsername[RegTypedef._dataMisc._room] = RegTypedef._dataMisc._username;
+			RegTypedef._dataMisc._roomPlayerCurrentTotal[RegTypedef._dataMisc._room] = 2;
+			RegTypedef._dataMisc._roomPlayerLimit[RegTypedef._dataMisc._room] = 2;			
+			RegTypedef._dataMisc._vsComputer[RegTypedef._dataMisc._room] = 1;
+			RegTypedef._dataMisc._allowSpectators[RegTypedef._dataMisc._room] = 0;
+			RegTypedef._dataMisc._roomGameIds[RegTypedef._dataMisc._room] = 1;
+			
+			Reg._gameOverForPlayer = false;
+			Reg._gameOverForAllPlayers = false;
+			Reg._gameHost = true;
+			
+			RegTypedef._dataMisc._gameRoom = true;
+			
+			PlayState.clientSocket.send("Greater RoomState Value", RegTypedef._dataMisc); 
+			haxe.Timer.delay(function (){}, Reg2._event_sleep);
+			
+			Reg._alreadyOnlineHost = false;
+			Reg._alreadyOnlineUser = false;
+						
+			Reg.playChessVsCPU();
+			Reg._game_offline_vs_player = false;
+			//ActionInput.enable();			
+			
+		}
+		
+			
+		RegTypedef._dataPlayers._usernamesDynamic[1] = Reg2._offline_cpu_host_name2;
+		RegTypedef._dataPlayers._avatarNumber[1] = RegCustom._profile_avatar_number2[Reg._tn];
+		
+	}
+	
+	private function toggleAgainstHumanOrComputer():Void
+	{
+		if (_buttonHumanOrComputerGame.label.text == "Computer")
+			_buttonHumanOrComputerGame.label.text = "Human";
+		else
+			_buttonHumanOrComputerGame.label.text = "Computer";
 	}
 	
 	override public function update(elapsed:Float):Void 
@@ -468,71 +535,4 @@ class SceneCreateRoom extends FlxState
 		super.update(elapsed);
 	}
 	
-	private function buttonAgainstGame():Void
-	{
-		_buttonHumanOrComputerGame.visible = false;
-	}
-			
-	public static function createRoomOnlineAgainstCPU():Void
-	{
-		RegTypedef._dataPlayers._room = RegTypedef._dataMisc._room;
-		
-		if (Reg._game_online_vs_cpu == true
-		&&  Reg._gameId == 1) 
-		{			
-			RegTypedef._dataPlayers._gameName = "Chess";
-			RegTypedef._dataPlayers._gameId = 1;
-			
-			RegTypedef._dataPlayers._usernamesDynamic[0] = "";
-			RegTypedef._dataPlayers._usernamesDynamic[1] = "";
-			RegTypedef._dataPlayers._usernamesDynamic[2] = "";
-			RegTypedef._dataPlayers._usernamesDynamic[3] = "";
-			
-			RegTypedef._dataPlayers._username = RegTypedef._dataPlayers._usernamesDynamic[0] = RegTypedef._dataPlayers._usernamesStatic[0] = RegTypedef._dataAccount._username;
-			
-			RegTypedef._dataMisc._roomLockMessage = "";
-			RegTypedef._dataMisc._roomIsLocked[RegTypedef._dataMisc._room] = 0;
-			RegTypedef._dataMisc._roomCheckForLock[RegTypedef._dataMisc._room] = 0;
-			
-			RegTypedef._dataMisc._userLocation = 2;
-			RegTypedef._dataMisc._roomState[RegTypedef._dataMisc._room] = 7;
-			RegTypedef._dataMisc._gameRoom = true;
-			//RegTypedef._dataMisc._roomHostUsername[RegTypedef._dataMisc._room] = RegTypedef._dataMisc._username;
-			RegTypedef._dataMisc._roomPlayerCurrentTotal[RegTypedef._dataMisc._room] = 2;
-			RegTypedef._dataMisc._roomPlayerLimit[RegTypedef._dataMisc._room] = 2;			
-			RegTypedef._dataMisc._vsComputer[RegTypedef._dataMisc._room] = 1;
-			RegTypedef._dataMisc._allowSpectators[RegTypedef._dataMisc._room] = 0;
-			RegTypedef._dataMisc._roomGameIds[RegTypedef._dataMisc._room] = 1;
-			
-			Reg._gameOverForPlayer = false;
-			Reg._gameOverForAllPlayers = false;
-			Reg._gameHost = true;
-			
-			RegTypedef._dataMisc._gameRoom = true;
-			
-			PlayState.clientSocket.send("Greater RoomState Value", RegTypedef._dataMisc); 
-			haxe.Timer.delay(function (){}, Reg2._event_sleep);
-			
-			Reg._alreadyOnlineHost = false;
-			Reg._alreadyOnlineUser = false;
-						
-			Reg.playChessVsCPU();
-			Reg._game_offline_vs_player = false;
-			//ActionInput.enable();			
-			
-		}
-		
-			
-		RegTypedef._dataPlayers._usernamesDynamic[1] = Reg2._offline_cpu_host_name2;
-		RegTypedef._dataPlayers._avatarNumber[1] = RegCustom._profile_avatar_number2[Reg._tn];
-		
-	}
-	
-	private function toggleAgainstHumanOrComputer():Void
-	{
-		if (_buttonHumanOrComputerGame.label.text == "Computer")
-			_buttonHumanOrComputerGame.label.text = "Human";
-		else
-			_buttonHumanOrComputerGame.label.text = "Computer";
-	}
 }

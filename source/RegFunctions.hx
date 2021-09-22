@@ -398,7 +398,7 @@ class RegFunctions
 	/******************************
 	 * save theme when when user saves preferences at the configuration menu.
 	 */
-	static function save_theme():Void
+	static public function save_theme():Void
 	{
 		var _directory = StringTools.replace(Path.directory(Sys.programPath()), "\\", "/") + "/themes/";
 		var saveFile = sys.io.File.write(_directory + RegCustom._theme_name[Reg._tn]);

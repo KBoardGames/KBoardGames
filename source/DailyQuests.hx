@@ -173,25 +173,6 @@ class DailyQuests extends FlxGroup
 		drawGaugeFilled();
 	}
 	
-	override public function destroy()
-	{		
-		if (_group != null)
-		{
-			_group.destroy();
-			_group = null;
-		}
-		
-		if (__boxscroller != null)
-		{
-			__boxscroller.visible = false;			
-			cameras.remove(__boxscroller);
-			__boxscroller.destroy();
-			__boxscroller = null;
-		}
-		
-		super.destroy();
-	}
-	
 	/******************************
 	 * These are the reward icons. When the dashed filled icon reaches one of these icons then a daily reward can be claimed.
 	 */
@@ -312,41 +293,6 @@ class DailyQuests extends FlxGroup
 
 	}
 
-	override public function update(elapsed:Float):Void
-	{
-		if (RegTriggers.__daily_quests == true)
-		{
-			RegTriggers.__daily_quests = false;
-			options();
-		}
-		
-		if (_ticks < 5) _ticks += 1;
-		
-		// if at SceneMenu then set __boxScroller active to false so that a mouse click at SceneMenu cannot trigger a button click at __boxScroller.
-		if (_ticks >= 5 && _group != null && Reg.__menu_bar != null)
-		{
-			if (FlxG.mouse.y >= FlxG.height - 50)
-			{
-				_group.active = false;
-				__boxscroller._verticalScrollbar.active = false;
-				__boxscroller._horizontalScrollbar.active = false;
-				__boxscroller.active = false;
-			}
-					
-			else
-			{
-				_group.active = true;
-				__boxscroller.active = true;
-				__boxscroller._verticalScrollbar.active = true;
-				__boxscroller._horizontalScrollbar.active = true;
-			}
-		}
-		
-		if (Reg._buttonCodeValues != "") buttonCodeValues();
-		
-		super.update(elapsed);
-	}
-	
 	/******************************
 	 * at the time a button is created, a Reg._buttonCodeValues will be given a value. that value is used here to determine what block of code to read. 
 	 * a Reg._yesNoKeyPressValueAtMessage with a value of one means that the "yes" button was clicked. a value of two refers to button with text of "no". 
@@ -430,4 +376,59 @@ class DailyQuests extends FlxGroup
 		PlayState.clientSocket.send("Daily Reward Save", RegTypedef._dataStatistics);
 		haxe.Timer.delay(function (){}, Reg2._event_sleep);
 	}
+		
+	override public function destroy()
+	{		
+		if (_group != null)
+		{
+			_group.destroy();
+			_group = null;
+		}
+		
+		if (__boxscroller != null)
+		{
+			__boxscroller.visible = false;			
+			cameras.remove(__boxscroller);
+			__boxscroller.destroy();
+			__boxscroller = null;
+		}
+		
+		super.destroy();
+	}	
+	
+	override public function update(elapsed:Float):Void
+	{
+		if (RegTriggers.__daily_quests == true)
+		{
+			RegTriggers.__daily_quests = false;
+			options();
+		}
+		
+		if (_ticks < 5) _ticks += 1;
+		
+		// if at SceneMenu then set __boxScroller active to false so that a mouse click at SceneMenu cannot trigger a button click at __boxScroller.
+		if (_ticks >= 5 && _group != null && Reg.__menu_bar != null)
+		{
+			if (FlxG.mouse.y >= FlxG.height - 50)
+			{
+				_group.active = false;
+				__boxscroller._verticalScrollbar.active = false;
+				__boxscroller._horizontalScrollbar.active = false;
+				__boxscroller.active = false;
+			}
+					
+			else
+			{
+				_group.active = true;
+				__boxscroller.active = true;
+				__boxscroller._verticalScrollbar.active = true;
+				__boxscroller._horizontalScrollbar.active = true;
+			}
+		}
+		
+		if (Reg._buttonCodeValues != "") buttonCodeValues();
+		
+		super.update(elapsed);
+	}
+	
 }//

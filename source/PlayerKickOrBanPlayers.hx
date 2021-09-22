@@ -121,110 +121,6 @@ class PlayerKickOrBanPlayers extends FlxState
 		Reg._actionWho = RegTypedef._dataPlayers._actionWho = RegTypedef._dataPlayers._usernamesDynamic[_num-1]; 
 				
 	}
-
-	
-	override public function update(elapsed:Float):Void 
-	{	
-		textKickOrBan1.text = Std.string(RegTypedef._dataPlayers._usernamesDynamic[0]);
-		
-		
-		// at server, RegTypedef._dataPlayers._usernamesDynamic are grabbed from the MySQL database, and here at client, at __scene_waiting_room, the event "Get Statistics Win Loss Draw" gets the current players, populates this var and here we determine if a name should be displayed to screen.
-		
-		// enter if player exists for this room.
-		if (RegTypedef._dataPlayers._usernamesDynamic[1] != "" && RegTypedef._dataPlayers._actionWho != RegTypedef._dataPlayers._usernamesDynamic[1])
-		{
-			// set the text of the players name to both players 1's text and button
-			textKickOrBan2.text = RegTypedef._dataPlayers._usernamesDynamic[1];buttonKickOrBan2.label.text = " " + RegTypedef._dataPlayers._usernamesDynamic[1];
-			
-			// if this condition is true then player is host of the room. display the buttons over top of the text.
-			if (Std.string(RegTypedef._dataAccount._username) == Std.string(RegTypedef._dataPlayers._usernamesDynamic[0]))
-			{
-				buttonKickOrBan2.active = true;
-				buttonKickOrBan2.visible = true;
-				textKickOrBan2.visible = false; // needed because the last character of a long name can be seen peeking out of the right side of the buttonKickOrBan2 button.
-			}
-			
-			else if (Reg._buttonCodeValues != "p1000")
-			{
-				buttonKickOrBan2.visible = false;
-				buttonKickOrBan2.active = false;
-				textKickOrBan2.visible = true;
-			}			
-		}	
-		else if (RegTypedef._dataPlayers._usernamesDynamic[1] == "" && Reg._buttonCodeValues != "p1000") // player does not exist so delete button.
-		{
-			buttonKickOrBan2.label.text = "";
-			textKickOrBan2.text = "";
-			
-			buttonKickOrBan2.visible = false;
-			buttonKickOrBan2.active = false;
-			textKickOrBan2.visible = true;
-		}
-		
-		// this block of code is almost the same as the above but it is for player 3. remember that arrays always start at 0 not 1.
-		if (RegTypedef._dataPlayers._usernamesDynamic[2] != "" && RegTypedef._dataPlayers._actionWho != RegTypedef._dataPlayers._usernamesDynamic[2])
-		{
-			textKickOrBan3.text = RegTypedef._dataPlayers._usernamesDynamic[2];buttonKickOrBan3.label.text = " " + RegTypedef._dataPlayers._usernamesDynamic[2];
-			
-			if (Std.string(RegTypedef._dataAccount._username) == Std.string(RegTypedef._dataPlayers._usernamesDynamic[0]))
-			{
-				buttonKickOrBan3.active = true;
-				buttonKickOrBan3.visible = true;
-				textKickOrBan3.visible = false;
-			}
-			
-			else if (Reg._buttonCodeValues != "p1000")
-			{
-				buttonKickOrBan3.visible = false;
-				buttonKickOrBan3.active = false;
-				textKickOrBan3.visible = true;
-			}
-			
-		}	
-		else if (RegTypedef._dataPlayers._usernamesDynamic[2] == "" && Reg._buttonCodeValues != "p1000")
-		{
-			buttonKickOrBan3.label.text = "";
-			textKickOrBan3.text = "";
-			
-			buttonKickOrBan3.visible = false;
-			buttonKickOrBan3.active = false;
-			textKickOrBan3.visible = true;
-		}
-			
-						
-		if (RegTypedef._dataPlayers._usernamesDynamic[3] != "" && RegTypedef._dataPlayers._actionWho != RegTypedef._dataPlayers._usernamesDynamic[3])
-		{
-			textKickOrBan4.text = RegTypedef._dataPlayers._usernamesDynamic[3];buttonKickOrBan4.label.text = " " + RegTypedef._dataPlayers._usernamesDynamic[3];
-			
-			if (Std.string(RegTypedef._dataAccount._username) == Std.string(RegTypedef._dataPlayers._usernamesDynamic[0]))
-			{
-				buttonKickOrBan4.active = true;
-				buttonKickOrBan4.visible = true;
-				textKickOrBan4.visible = false;
-			}
-			
-			else if (Reg._buttonCodeValues != "p1000")
-			{
-				buttonKickOrBan4.visible = false;
-				buttonKickOrBan4.active = false;
-				textKickOrBan4.visible = true;
-			}
-			
-		}	
-		else if (RegTypedef._dataPlayers._usernamesDynamic[3] == "" && Reg._buttonCodeValues != "p1000")
-		{
-			buttonKickOrBan4.label.text = "";
-			textKickOrBan4.text = "";
-			
-			buttonKickOrBan4.visible = false;
-			buttonKickOrBan4.active = false;
-			textKickOrBan4.visible = true;
-		}
-		
-		if (Reg._buttonCodeValues != "") buttonCodeValues();
-		
-		super.update(elapsed);
-	}
 	
 	private function buttonCodeValues():Void
 	{
@@ -262,6 +158,110 @@ class PlayerKickOrBanPlayers extends FlxState
 			Reg._yesNoKeyPressValueAtMessage = 0;
 
 		}
+	}	
+	
+	override public function update(elapsed:Float):Void 
+	{	
+		textKickOrBan1.text = Std.string(RegTypedef._dataPlayers._usernamesDynamic[0]);
+				
+		// at server, RegTypedef._dataPlayers._usernamesDynamic are grabbed from the MySQL database, and here at client, at __scene_waiting_room, the event "Get Statistics Win Loss Draw" gets the current players, populates this var and here we determine if a name should be displayed to screen.
+		
+		// enter if player exists for this room.
+		if (RegTypedef._dataPlayers._usernamesDynamic[1] != "" && RegTypedef._dataPlayers._actionWho != RegTypedef._dataPlayers._usernamesDynamic[1])
+		{
+			// set the text of the players name to both players 1's text and button
+			textKickOrBan2.text = RegTypedef._dataPlayers._usernamesDynamic[1];buttonKickOrBan2.label.text = " " + RegTypedef._dataPlayers._usernamesDynamic[1];
+			
+			// if this condition is true then player is host of the room. display the buttons over top of the text.
+			if (Std.string(RegTypedef._dataAccount._username) == Std.string(RegTypedef._dataPlayers._usernamesDynamic[0]))
+			{
+				buttonKickOrBan2.active = true;
+				buttonKickOrBan2.visible = true;
+				textKickOrBan2.visible = false; // needed because the last character of a long name can be seen peeking out of the right side of the buttonKickOrBan2 button.
+			}
+			
+			else if (Reg._buttonCodeValues != "p1000")
+			{
+				buttonKickOrBan2.visible = false;
+				buttonKickOrBan2.active = false;
+				textKickOrBan2.visible = true;
+			}			
+		}	
+		
+		else if (RegTypedef._dataPlayers._usernamesDynamic[1] == "" && Reg._buttonCodeValues != "p1000") // player does not exist so delete button.
+		{
+			buttonKickOrBan2.label.text = "";
+			textKickOrBan2.text = "";
+			
+			buttonKickOrBan2.visible = false;
+			buttonKickOrBan2.active = false;
+			textKickOrBan2.visible = true;
+		}
+		
+		// this block of code is almost the same as the above but it is for player 3. remember that arrays always start at 0 not 1.
+		if (RegTypedef._dataPlayers._usernamesDynamic[2] != "" && RegTypedef._dataPlayers._actionWho != RegTypedef._dataPlayers._usernamesDynamic[2])
+		{
+			textKickOrBan3.text = RegTypedef._dataPlayers._usernamesDynamic[2];buttonKickOrBan3.label.text = " " + RegTypedef._dataPlayers._usernamesDynamic[2];
+			
+			if (Std.string(RegTypedef._dataAccount._username) == Std.string(RegTypedef._dataPlayers._usernamesDynamic[0]))
+			{
+				buttonKickOrBan3.active = true;
+				buttonKickOrBan3.visible = true;
+				textKickOrBan3.visible = false;
+			}
+			
+			else if (Reg._buttonCodeValues != "p1000")
+			{
+				buttonKickOrBan3.visible = false;
+				buttonKickOrBan3.active = false;
+				textKickOrBan3.visible = true;
+			}
+			
+		}	
+		
+		else if (RegTypedef._dataPlayers._usernamesDynamic[2] == "" && Reg._buttonCodeValues != "p1000")
+		{
+			buttonKickOrBan3.label.text = "";
+			textKickOrBan3.text = "";
+			
+			buttonKickOrBan3.visible = false;
+			buttonKickOrBan3.active = false;
+			textKickOrBan3.visible = true;
+		}
+		
+		if (RegTypedef._dataPlayers._usernamesDynamic[3] != "" && RegTypedef._dataPlayers._actionWho != RegTypedef._dataPlayers._usernamesDynamic[3])
+		{
+			textKickOrBan4.text = RegTypedef._dataPlayers._usernamesDynamic[3];buttonKickOrBan4.label.text = " " + RegTypedef._dataPlayers._usernamesDynamic[3];
+			
+			if (Std.string(RegTypedef._dataAccount._username) == Std.string(RegTypedef._dataPlayers._usernamesDynamic[0]))
+			{
+				buttonKickOrBan4.active = true;
+				buttonKickOrBan4.visible = true;
+				textKickOrBan4.visible = false;
+			}
+			
+			else if (Reg._buttonCodeValues != "p1000")
+			{
+				buttonKickOrBan4.visible = false;
+				buttonKickOrBan4.active = false;
+				textKickOrBan4.visible = true;
+			}
+			
+		}	
+	
+		else if (RegTypedef._dataPlayers._usernamesDynamic[3] == "" && Reg._buttonCodeValues != "p1000")
+		{
+			buttonKickOrBan4.label.text = "";
+			textKickOrBan4.text = "";
+			
+			buttonKickOrBan4.visible = false;
+			buttonKickOrBan4.active = false;
+			textKickOrBan4.visible = true;
+		}
+		
+		if (Reg._buttonCodeValues != "") buttonCodeValues();
+		
+		super.update(elapsed);
 	}
 	
 }

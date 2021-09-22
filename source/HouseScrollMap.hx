@@ -122,6 +122,58 @@ class HouseScrollMap extends FlxState
 
 	}
 	
+	private function mapScrollUp():Void
+	{
+		_ticks_up = 0;
+				
+		if (__house._tracker.y > 377.5)
+		{
+			__house._tracker.y -= 72;
+			_map_offset_y -= 72;
+			
+			_ticks_up_fast = 11;
+		}
+	}
+	
+	private function mapScrollDown():Void
+	{
+		_ticks_down = 0;
+		
+		if (__house._tracker.y < 72*(__house._floorTileAmount - 6) - __house._trackerDefaultPosition + 72)
+		{
+			__house._tracker.y += 72;
+			_map_offset_y += 72;
+			
+			_ticks_down_fast = 11;
+		}
+	}
+	
+	private function mapScrollLeft():Void
+	{
+		_ticks_left = 0;
+						
+		if (__house._tracker.x > 692.5)
+		{
+			__house._tracker.x -= 102;
+			_map_offset_x -= 102;
+			
+			_ticks_left_fast = 11;
+		}
+	}
+	
+	private function mapScrollRight():Void
+	{
+		_ticks_right = 0;
+				
+		if (__house._tracker.x < 102*(__house._floorTileAmount - 5) - __house._trackerDefaultPosition + 102)
+		{
+			__house._tracker.x += 102;
+			_map_offset_x += 102;
+			
+			_ticks_right_fast = 11;
+		}
+	}
+	
 	override public function destroy()
 	{		
 		if (_sprite_ticks_up != null)
@@ -271,58 +323,6 @@ class HouseScrollMap extends FlxState
 		}
 			
 		super.update(elapsed);
-	}
-	
-	private function mapScrollUp():Void
-	{
-		_ticks_up = 0;
-				
-		if (__house._tracker.y > 377.5)
-		{
-			__house._tracker.y -= 72;
-			_map_offset_y -= 72;
-			
-			_ticks_up_fast = 11;
-		}
-	}
-	
-	private function mapScrollDown():Void
-	{
-		_ticks_down = 0;
-		
-		if (__house._tracker.y < 72*(__house._floorTileAmount - 6) - __house._trackerDefaultPosition + 72)
-		{
-			__house._tracker.y += 72;
-			_map_offset_y += 72;
-			
-			_ticks_down_fast = 11;
-		}
-	}
-	
-	private function mapScrollLeft():Void
-	{
-		_ticks_left = 0;
-						
-		if (__house._tracker.x > 692.5)
-		{
-			__house._tracker.x -= 102;
-			_map_offset_x -= 102;
-			
-			_ticks_left_fast = 11;
-		}
-	}
-	
-	private function mapScrollRight():Void
-	{
-		_ticks_right = 0;
-				
-		if (__house._tracker.x < 102*(__house._floorTileAmount - 5) - __house._trackerDefaultPosition + 102)
-		{
-			__house._tracker.x += 102;
-			_map_offset_x += 102;
-			
-			_ticks_right_fast = 11;
-		}
 	}
 	
 		

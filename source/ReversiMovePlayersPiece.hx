@@ -45,7 +45,66 @@ class ReversiMovePlayersPiece extends FlxSprite {
 		else loadGraphic("assets/images/reversi/" + pieceValue + ".png", false); // load the different game pieces.
 
 	}
-
+	private function displayImage(yy:Int, xx:Int):Void
+	{
+		if (Reg._otherPlayer == false)
+		{
+			if (Reg._playerMoving == 0)
+			{
+				loadGraphic("assets/images/reversi/1.png", false);
+				Reg._gamePointValueForPiece[yy][xx] = 1;
+			}
+			else
+			{
+				loadGraphic("assets/images/reversi/11.png", false);
+				Reg._gamePointValueForPiece[yy][xx] = 11;	
+			}
+		}
+		
+		else
+		{
+			if (Reg._playerMoving == 0)
+			{
+				loadGraphic("assets/images/reversi/11.png", false);
+				Reg._gamePointValueForPiece[yy][xx] = 11;
+			}
+			else
+			{
+				loadGraphic("assets/images/reversi/1.png", false);
+				Reg._gamePointValueForPiece[yy][xx] = 1;	
+			}
+		}
+	}
+	
+	private function groupPlayer():Void
+	{
+		// since this unit now has an image, add it to a group. if this unit already had an image of the other player's piece then that image will be removed from its group. see below.
+		if (Reg._groupPlayer1 != null && Reg._groupPlayer2 != null)
+		{
+			// here is a complicated loop that adds groups so that moved or jumped pieces are owned by the correct player. this code works so there is no need to understand it.
+			if (Reg._game_offline_vs_cpu == true || Reg._game_offline_vs_player == true)
+			{
+				if (Reg._otherPlayer == false)
+				{
+					if (Reg._gameHost == false ) Reg._groupPlayer2.add(this);			
+					else Reg._groupPlayer1.add(this);
+				}
+				else
+				{
+					if (Reg._gameHost == false ) Reg._groupPlayer1.add(this);			
+					else Reg._groupPlayer2.add(this);
+				}
+			}
+			else
+			{
+				if (Reg._playerMoving == 0 ) Reg._groupPlayer1.add(this);				
+				else Reg._groupPlayer2.add(this);
+				
+			}
+		}
+		
+	}
+	
 	override public function update (elapsed:Float)
 	{	
 		RegFunctions.is_player_attacker(false); // a value of false then the player hosts a game known as the defender. true, if being hosted. eg, array[Reg._playerMoving][value][yy][xx]. playerAttacker is the opposite of the defender. so if Reg._playerMoving = 0 then its the player hosting the game while Reg._playerNotMoving which has a value of 1 had accepted the game at the chatroom.
@@ -225,67 +284,5 @@ class ReversiMovePlayersPiece extends FlxSprite {
 		 
 		super.update(elapsed);		
 	}
-	
-	private function displayImage(yy:Int, xx:Int):Void
-	{
-		if (Reg._otherPlayer == false)
-		{
-			if (Reg._playerMoving == 0)
-			{
-				loadGraphic("assets/images/reversi/1.png", false);
-				Reg._gamePointValueForPiece[yy][xx] = 1;
-			}
-			else
-			{
-				loadGraphic("assets/images/reversi/11.png", false);
-				Reg._gamePointValueForPiece[yy][xx] = 11;	
-			}
-		}
-		
-		else
-		{
-			if (Reg._playerMoving == 0)
-			{
-				loadGraphic("assets/images/reversi/11.png", false);
-				Reg._gamePointValueForPiece[yy][xx] = 11;
-			}
-			else
-			{
-				loadGraphic("assets/images/reversi/1.png", false);
-				Reg._gamePointValueForPiece[yy][xx] = 1;	
-			}
-		}
-	}
-	
-	private function groupPlayer():Void
-	{
-		// since this unit now has an image, add it to a group. if this unit already had an image of the other player's piece then that image will be removed from its group. see below.
-		if (Reg._groupPlayer1 != null && Reg._groupPlayer2 != null)
-		{
-			// here is a complicated loop that adds groups so that moved or jumped pieces are owned by the correct player. this code works so there is no need to understand it.
-			if (Reg._game_offline_vs_cpu == true || Reg._game_offline_vs_player == true)
-			{
-				if (Reg._otherPlayer == false)
-				{
-					if (Reg._gameHost == false ) Reg._groupPlayer2.add(this);			
-					else Reg._groupPlayer1.add(this);
-				}
-				else
-				{
-					if (Reg._gameHost == false ) Reg._groupPlayer1.add(this);			
-					else Reg._groupPlayer2.add(this);
-				}
-			}
-			else
-			{
-				if (Reg._playerMoving == 0 ) Reg._groupPlayer1.add(this);				
-				else Reg._groupPlayer2.add(this);
-				
-			}
-		}
-	
-		
-	}
-	
 	
 }

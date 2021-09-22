@@ -189,59 +189,8 @@ class SignatureGameInformationCards extends FlxState
 		//_tableColumn3Row4.scrollFactor.set(0, 0);
 		add(_tableColumn3Row4);
 		
-	}
+	}	
 	
-	
-	override public function update(elapsed:Float):Void 
-	{				
-		super.update(elapsed);
-		
-		if (Reg._gameOverForPlayer == false && Reg._gameId == 4
-		|| RegTypedef._dataPlayers._spectatorPlaying == true && Reg._gameId == 4)
-		{
-			// remember the unit where you were at last move. that information card will be displayed next move.
-			if (_signatureGameUnitNumberCurrent[Reg._move_number_next]
-			!= _signatureGameUnitNumberSelect[Reg._move_number_next] && _signatureGameUnitNumberSelect[Reg._move_number_next] != -1)
-			{
-				_signatureGameUnitNumberCurrent[Reg._move_number_next]
-			= _signatureGameUnitNumberSelect[Reg._move_number_next];
-				
-				useSwutchJumpTo(_signatureGameUnitNumberCurrent[Reg._move_number_next]);
-			}
-			
-			// display the signature game card that has rent and houses, taxi or cafe information.
-			if (RegTriggers._signatureGameUnitImage == false && Reg._gameDiceCurrentIndex[Reg._move_number_next] == Reg._gameDiceMaximumIndex[Reg._move_number_next]
-			)
-			{
-				_p = -1;
-				
-				useSwutchJumpTo(_p);
-				//TODO is this needed. RegTriggers._signatureGame = false;
-			}
-			
-			// mouse click a unit not the number wheel.
-			else if (ActionInput.justPressed() == true && RegTriggers._signatureGameUnitImage == true)
-			{	
-				// current mouse click values are stored in these Reg vars.
-				var yy:Int = Reg._gameYYold;
-				var xx:Int = Reg._gameXXold;
-			
-				if (ActionInput.coordinateX() > _startX + (xx * 75) 
-				&& ActionInput.coordinateX() < _startX + 75 + (xx * 75) 
-				&& ActionInput.coordinateY() > _startY + (yy * 75)
-				&& ActionInput.coordinateY() < _startY + 75 + (yy * 75)
-				)
-				{				
-					if (RegTriggers._signatureGameUnitImage == true)
-						_p = Reg._gamePointValueForPiece[Reg._gameYYold][Reg._gameXXold] - 1;
-								
-					useSwutchJumpTo(_p);
-					RegTriggers._signatureGame = false;
-				}
-			}
-		}
-	}
-
 	/******************************
 	* this function deals with updating the information card, this data at the far left side of the screen. this function is entered when a mouse click on a unit or the player moves to a unit.
 	*/
@@ -489,4 +438,55 @@ class SignatureGameInformationCards extends FlxState
 				
 		SignatureGameMain._displayCardDataOnceAfterDiceRoll = false;
 	}
+	
+	override public function update(elapsed:Float):Void 
+	{				
+		super.update(elapsed);
+		
+		if (Reg._gameOverForPlayer == false && Reg._gameId == 4
+		|| RegTypedef._dataPlayers._spectatorPlaying == true && Reg._gameId == 4)
+		{
+			// remember the unit where you were at last move. that information card will be displayed next move.
+			if (_signatureGameUnitNumberCurrent[Reg._move_number_next]
+			!= _signatureGameUnitNumberSelect[Reg._move_number_next] && _signatureGameUnitNumberSelect[Reg._move_number_next] != -1)
+			{
+				_signatureGameUnitNumberCurrent[Reg._move_number_next]
+			= _signatureGameUnitNumberSelect[Reg._move_number_next];
+				
+				useSwutchJumpTo(_signatureGameUnitNumberCurrent[Reg._move_number_next]);
+			}
+			
+			// display the signature game card that has rent and houses, taxi or cafe information.
+			if (RegTriggers._signatureGameUnitImage == false && Reg._gameDiceCurrentIndex[Reg._move_number_next] == Reg._gameDiceMaximumIndex[Reg._move_number_next]
+			)
+			{
+				_p = -1;
+				
+				useSwutchJumpTo(_p);
+				//TODO is this needed. RegTriggers._signatureGame = false;
+			}
+			
+			// mouse click a unit not the number wheel.
+			else if (ActionInput.justPressed() == true && RegTriggers._signatureGameUnitImage == true)
+			{	
+				// current mouse click values are stored in these Reg vars.
+				var yy:Int = Reg._gameYYold;
+				var xx:Int = Reg._gameXXold;
+			
+				if (ActionInput.coordinateX() > _startX + (xx * 75) 
+				&& ActionInput.coordinateX() < _startX + 75 + (xx * 75) 
+				&& ActionInput.coordinateY() > _startY + (yy * 75)
+				&& ActionInput.coordinateY() < _startY + 75 + (yy * 75)
+				)
+				{				
+					if (RegTriggers._signatureGameUnitImage == true)
+						_p = Reg._gamePointValueForPiece[Reg._gameYYold][Reg._gameXXold] - 1;
+								
+					useSwutchJumpTo(_p);
+					RegTriggers._signatureGame = false;
+				}
+			}
+		}
+	}
+
 }

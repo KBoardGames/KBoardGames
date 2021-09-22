@@ -86,44 +86,7 @@ class HouseMapFurniture extends FlxGroup
 		_house_rotate_icon.visible = false;
 		add(_house_rotate_icon);
 	}
-	
-	override public function destroy()
-	{
-		if (_bg_behind_item != null)
-		{
-			_bg_behind_item.destroy();
-			_bg_behind_item = null;
-		}
-			
-		if (_house_drag_icon != null)
-		{
-			_house_drag_icon.destroy();
-			_house_drag_icon = null;
-		}
 		
-		if (_house_rotate_icon != null)
-		{
-			_house_rotate_icon.destroy();
-			_house_rotate_icon = null;
-		}
-		
-		super.destroy();
-		
-
-	}
-
-	override public function update(elapsed:Float):Void
-	{
-		// if player returned to lobby then this var is false so don't update().
-		if (Reg._at_house == false) return;
-		if (RegHouse._house_main_menu_button_number != 1)
-		{
-			return;
-		}
-				
-		super.update(elapsed);
-	}
-	
 	public function member_move(_member:Int):Void
 	{
 		for (i in 0...RegHouse._totalPurchased + 1)
@@ -446,4 +409,40 @@ class HouseMapFurniture extends FlxGroup
 		
 	}
 	
+	override public function destroy()
+	{
+		if (_bg_behind_item != null)
+		{
+			_bg_behind_item.destroy();
+			_bg_behind_item = null;
+		}
+			
+		if (_house_drag_icon != null)
+		{
+			_house_drag_icon.destroy();
+			_house_drag_icon = null;
+		}
+		
+		if (_house_rotate_icon != null)
+		{
+			_house_rotate_icon.destroy();
+			_house_rotate_icon = null;
+		}
+		
+		super.destroy();
+		
+
+	}
+
+	override public function update(elapsed:Float):Void
+	{
+		// if player returned to lobby then this var is false so don't update().
+		if (Reg._at_house == false) return;
+		if (RegHouse._house_main_menu_button_number != 1)
+		{
+			return;
+		}
+				
+		super.update(elapsed);
+	}
 }

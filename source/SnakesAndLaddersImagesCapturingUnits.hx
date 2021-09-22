@@ -61,8 +61,8 @@ class SnakesAndLaddersImagesCapturingUnits extends FlxSprite
 		}
 		else
 		{
-			if (_id == 1) loadGraphic("assets/images/capturingUnitsNoTransparency1.png", false);
-			if (_id == 2) loadGraphic("assets/images/capturingUnitsNoTransparency2.png", false);
+			if (_id == 1) loadGraphic("assets/images/capturingUnitsNoTransparency2.png", false);
+			if (_id == 2) loadGraphic("assets/images/capturingUnitsNoTransparency1.png", false);
 			if (_id == 3) loadGraphic("assets/images/snakesLadders/player/14.png", false);
 			if (_id == 4) loadGraphic("assets/images/snakesLadders/player/19.png", false);
 		}

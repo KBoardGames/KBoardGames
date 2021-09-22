@@ -385,213 +385,7 @@ class House extends FlxGroup
 		__house_scroll_map.options(); // clear vars.		
 		
 	}
-	
-	override public function destroy()
-	{
-		if (_bg != null)
-		{
-			_bg.destroy();
-			_bg = null;
-		}
 		
-		if (__house_furniture_items_front != null)
-		{
-			__house_furniture_items_front.destroy();
-			__house_furniture_items_front = null;
-		}
-		
-		if (__house_furniture_items_back != null)
-		{
-			__house_furniture_items_back.destroy();
-			__house_furniture_items_back = null;
-		}
-		
-		if (_housePageMapFloorHover != null)
-		{
-			_housePageMapFloorHover.destroy();
-			_housePageMapFloorHover = null;
-		}
-		
-		if (__house_furniture_get != null)
-		{
-			__house_furniture_get.destroy();
-			__house_furniture_get = null;
-		}
-		
-		if (__house_menu_furniture != null)
-		{
-			__house_menu_furniture.destroy();
-			__house_menu_furniture = null;
-		}
-		
-		if (__house_menu_main != null)
-		{
-			__house_menu_main.destroy();
-			__house_menu_main = null;
-		}
-		
-		if (_tracker != null)
-		{
-			_tracker.destroy();
-			_tracker = null;
-		}
-		
-		if (__house_foundation_put != null)
-		{
-			__house_foundation_put.destroy();
-			__house_foundation_put = null;
-		}
-		
-		if (__house_furniture_put != null)
-		{
-			__house_furniture_put.destroy();
-			__house_furniture_put = null;
-		}
-		
-		super.destroy();
-	}
-
-	override public function update(elapsed:Float):Void
-	{
-		
-		if (RegTriggers._houseDrawSpritesDoNotEnter == true)
-		{
-			RegTriggers._houseDrawSpritesDoNotEnter = false;
-			options();
-			
-			PlayState.__scene_lobby.__menu_bar.scene_house_return_to_lobby();
-		}
-		
-		// if player returned to lobby then this var is false so don't update().
-		if (Reg._at_house == false) return;
-		
-		if (_houseDataLoaded == true)
-		{			
-			if (RegHouse._house_main_menu_button_number <= 1) 
-			{
-				_housePageMapFloorHover.visible = false;
-			}
-			
-			else
-			{
-				// this highlights the select unit. hide if at the panel.
-				if (FlxG.mouse.x > 373) _housePageMapFloorHover.visible = true;
-				else _housePageMapFloorHover.visible = false;
-			}
-			
-			// fix a camera display bug where the following buttons can also be clicked from the right side of the screen because of the chatter boxScroller scrolling part of the scene.
-			if (_ticks_menu_bar == 1)
-			{
-				if (FlxG.mouse.x > FlxG.width / 2 + HouseScrollMap._map_offset_x
-				&&  FlxG.mouse.y >= FlxG.height - 50) 
-				{
-					__house_menu_main._buttonToFurnitureGetMenu.active = false;
-					__house_menu_main._buttonToFurniturePutMenu.active = false;	
-					__house_menu_main._buttonToFoundationPutMenu.active = false;
-				}
-				else
-				{
-					__house_menu_main._buttonToFurnitureGetMenu.active = true;
-					__house_menu_main._buttonToFurniturePutMenu.active = true;
-					__house_menu_main._buttonToFoundationPutMenu.active = true;
-				}
-			}
-			
-			// only enter this code after a update() elapsed so that the button's text is displayed correctly. 
-			if (_ticks_build_buttons == 1)
-			{
-				if (FlxG.mouse.x > 373 + HouseScrollMap._map_offset_x) 
-				{
-					__house_foundation_put._buttonItemPosition1.active = false;
-					__house_foundation_put._buttonItemPosition2.active = false;
-					__house_foundation_put._buttonItemRemoveTile.active = false;
-				}
-				else
-				{
-					__house_foundation_put._buttonItemPosition1.active = true;
-					__house_foundation_put._buttonItemPosition2.active = true;
-					__house_foundation_put._buttonItemRemoveTile.active = true;
-				}
-			}
-			
-			_ticks_menu_bar = 1;
-			if (__house_menu_main._buttonToFoundationPutMenu.has_toggle == true)
-				_ticks_build_buttons = 1;
-			
-			// -------------------------- map hover needed to get map floor id.
-			if (ActionInput.coordinateX() < FlxG.width + HouseScrollMap._map_offset_x
-			&&  ActionInput.coordinateY() > 50 
-			&&  ActionInput.coordinateY() < FlxG.height - 50 + HouseScrollMap._map_offset_y
-			&& _housePageMapFloorHover.visible == true)
-			{	
-				var _tile_offset_x:Float = 0; // used to position the items on the map.
-				var _tile_offset_y:Float = 0;
-				
-				// pixel of value 102 is the center of row 1. For each row after the first row, its value and minus 3 is used for the next row, for a if condition of mouse.x greater value. the _xx value of plus 3 is given to each row so that a if condition of mouse.x lesser value. when the mouse is within those coordinates then the hover image will display.
-				var _xx:Int = 102;
-				
-				for (y in 0...21)
-				{
-					if (FlxMath.isOdd(y))
-					{				
-						// since y value in this loop is read after the row is drawn, these values refers to the first tile of the new row.
-						_tile_offset_x = 101.5; // for every second row we use this value.
-					}
-					
-					else
-					{
-						_tile_offset_x = 0;
-					}			
-					
-					for (x in 0... 11)
-					{// do every second row.
-						
-						// ii is used to minus its value when past the half was point of the images y value. so, at the top of the image, _xx is used to increase its value so the first few pixels at x center will highlight the hover image if mouse is overtop of those pixels. At the next row, the _xx value increases. When at the halfway point of the images y value, the _xx values needs to decrease. The ii var is used to do just that.
-						var ii:Int = 0;
-						
-						// 72 row for the first vertical half of image.
-						for (i in 1...73)
-						{
-							if (i >= 36) ii -= 1;
-							else ii += 1;
-							
-							// if the mouse is within this region then display the hover image. a value of 203 is the images width. _tile_start_offset_x just moves the image over so many pixels from the edge of scene. i * 2 basically checks for two y rows.
-							if (ActionInput.coordinateX() >= (x * 203) + (_tile_offset_x + _tile_start_offset_x + 373) + (_xx - (ii * 3))
-							&&  ActionInput.coordinateX() <= (x * 203) + (_tile_offset_x + _tile_start_offset_x + 373) + (_xx + (ii * 3) - 1)
-							&&  ActionInput.coordinateY() >= (y * _tile_offset_y) + _tile_start_offset_y + (i * 2) - 1
-							&&  ActionInput.coordinateY() <= (y * _tile_offset_y) + _tile_start_offset_y + (i * 2) + 1	
-							)
-							{
-								if (FlxMath.isOdd(y) && x < Std.int(_floorTileAmount/2)-5
-								||  FlxMath.isEven(y))
-								{
-									_housePageMapFloorHover.x = (x * 203) + _tile_offset_x + _tile_start_offset_x + 373;
-									_housePageMapFloorHover.y = (y * _tile_offset_y) + _tile_start_offset_y;
-								}
-								
-								_hover_x = Std.int(x);
-								_hover_y = Std.int(y);
-								_hover_p_value = x + (y * Std.int(((_floorTileAmount/2)-4))); // this value is passed to a class to display the instance.
-							}					
-						}				
-						
-						
-					}
-					
-					// a value of 71 is about half vertical of image.
-					_tile_offset_y = 71.5;
-				}
-			}
-			// ------------------------- end of map hover.
-			
-			
-			_tracker.x = _tracker_start_x + HouseScrollMap._map_offset_x;
-			_tracker.y = _tracker_start_y + HouseScrollMap._map_offset_y;
-		}
-		
-		super.update(elapsed);
-	}
-	
 	/******************************
 	 * set this button not active when another toggle button at HouseMenuMain.hx is selected.
 	 */
@@ -800,6 +594,212 @@ class House extends FlxGroup
 		// reset vars.
 		__house_foundation_put._item_selected_x = 0;
 		__house_foundation_put._item_selected_y = 0;
+	}	
+	
+	override public function destroy()
+	{
+		if (_bg != null)
+		{
+			_bg.destroy();
+			_bg = null;
+		}
+		
+		if (__house_furniture_items_front != null)
+		{
+			__house_furniture_items_front.destroy();
+			__house_furniture_items_front = null;
+		}
+		
+		if (__house_furniture_items_back != null)
+		{
+			__house_furniture_items_back.destroy();
+			__house_furniture_items_back = null;
+		}
+		
+		if (_housePageMapFloorHover != null)
+		{
+			_housePageMapFloorHover.destroy();
+			_housePageMapFloorHover = null;
+		}
+		
+		if (__house_furniture_get != null)
+		{
+			__house_furniture_get.destroy();
+			__house_furniture_get = null;
+		}
+		
+		if (__house_menu_furniture != null)
+		{
+			__house_menu_furniture.destroy();
+			__house_menu_furniture = null;
+		}
+		
+		if (__house_menu_main != null)
+		{
+			__house_menu_main.destroy();
+			__house_menu_main = null;
+		}
+		
+		if (_tracker != null)
+		{
+			_tracker.destroy();
+			_tracker = null;
+		}
+		
+		if (__house_foundation_put != null)
+		{
+			__house_foundation_put.destroy();
+			__house_foundation_put = null;
+		}
+		
+		if (__house_furniture_put != null)
+		{
+			__house_furniture_put.destroy();
+			__house_furniture_put = null;
+		}
+		
+		super.destroy();
+	}
+
+	override public function update(elapsed:Float):Void
+	{
+		
+		if (RegTriggers._houseDrawSpritesDoNotEnter == true)
+		{
+			RegTriggers._houseDrawSpritesDoNotEnter = false;
+			options();
+			
+			PlayState.__scene_lobby.__menu_bar.scene_house_return_to_lobby();
+		}
+		
+		// if player returned to lobby then this var is false so don't update().
+		if (Reg._at_house == false) return;
+		
+		if (_houseDataLoaded == true)
+		{			
+			if (RegHouse._house_main_menu_button_number <= 1) 
+			{
+				_housePageMapFloorHover.visible = false;
+			}
+			
+			else
+			{
+				// this highlights the select unit. hide if at the panel.
+				if (FlxG.mouse.x > 373) _housePageMapFloorHover.visible = true;
+				else _housePageMapFloorHover.visible = false;
+			}
+			
+			// fix a camera display bug where the following buttons can also be clicked from the right side of the screen because of the chatter boxScroller scrolling part of the scene.
+			if (_ticks_menu_bar == 1)
+			{
+				if (FlxG.mouse.x > FlxG.width / 2 + HouseScrollMap._map_offset_x
+				&&  FlxG.mouse.y >= FlxG.height - 50) 
+				{
+					__house_menu_main._buttonToFurnitureGetMenu.active = false;
+					__house_menu_main._buttonToFurniturePutMenu.active = false;	
+					__house_menu_main._buttonToFoundationPutMenu.active = false;
+				}
+				else
+				{
+					__house_menu_main._buttonToFurnitureGetMenu.active = true;
+					__house_menu_main._buttonToFurniturePutMenu.active = true;
+					__house_menu_main._buttonToFoundationPutMenu.active = true;
+				}
+			}
+			
+			// only enter this code after a update() elapsed so that the button's text is displayed correctly. 
+			if (_ticks_build_buttons == 1)
+			{
+				if (FlxG.mouse.x > 373 + HouseScrollMap._map_offset_x) 
+				{
+					__house_foundation_put._buttonItemPosition1.active = false;
+					__house_foundation_put._buttonItemPosition2.active = false;
+					__house_foundation_put._buttonItemRemoveTile.active = false;
+				}
+				else
+				{
+					__house_foundation_put._buttonItemPosition1.active = true;
+					__house_foundation_put._buttonItemPosition2.active = true;
+					__house_foundation_put._buttonItemRemoveTile.active = true;
+				}
+			}
+			
+			_ticks_menu_bar = 1;
+			if (__house_menu_main._buttonToFoundationPutMenu.has_toggle == true)
+				_ticks_build_buttons = 1;
+			
+			// -------------------------- map hover needed to get map floor id.
+			if (ActionInput.coordinateX() < FlxG.width + HouseScrollMap._map_offset_x
+			&&  ActionInput.coordinateY() > 50 
+			&&  ActionInput.coordinateY() < FlxG.height - 50 + HouseScrollMap._map_offset_y
+			&& _housePageMapFloorHover.visible == true)
+			{	
+				var _tile_offset_x:Float = 0; // used to position the items on the map.
+				var _tile_offset_y:Float = 0;
+				
+				// pixel of value 102 is the center of row 1. For each row after the first row, its value and minus 3 is used for the next row, for a if condition of mouse.x greater value. the _xx value of plus 3 is given to each row so that a if condition of mouse.x lesser value. when the mouse is within those coordinates then the hover image will display.
+				var _xx:Int = 102;
+				
+				for (y in 0...21)
+				{
+					if (FlxMath.isOdd(y))
+					{				
+						// since y value in this loop is read after the row is drawn, these values refers to the first tile of the new row.
+						_tile_offset_x = 101.5; // for every second row we use this value.
+					}
+					
+					else
+					{
+						_tile_offset_x = 0;
+					}			
+					
+					for (x in 0... 11)
+					{// do every second row.
+						
+						// ii is used to minus its value when past the half was point of the images y value. so, at the top of the image, _xx is used to increase its value so the first few pixels at x center will highlight the hover image if mouse is overtop of those pixels. At the next row, the _xx value increases. When at the halfway point of the images y value, the _xx values needs to decrease. The ii var is used to do just that.
+						var ii:Int = 0;
+						
+						// 72 row for the first vertical half of image.
+						for (i in 1...73)
+						{
+							if (i >= 36) ii -= 1;
+							else ii += 1;
+							
+							// if the mouse is within this region then display the hover image. a value of 203 is the images width. _tile_start_offset_x just moves the image over so many pixels from the edge of scene. i * 2 basically checks for two y rows.
+							if (ActionInput.coordinateX() >= (x * 203) + (_tile_offset_x + _tile_start_offset_x + 373) + (_xx - (ii * 3))
+							&&  ActionInput.coordinateX() <= (x * 203) + (_tile_offset_x + _tile_start_offset_x + 373) + (_xx + (ii * 3) - 1)
+							&&  ActionInput.coordinateY() >= (y * _tile_offset_y) + _tile_start_offset_y + (i * 2) - 1
+							&&  ActionInput.coordinateY() <= (y * _tile_offset_y) + _tile_start_offset_y + (i * 2) + 1	
+							)
+							{
+								if (FlxMath.isOdd(y) && x < Std.int(_floorTileAmount/2)-5
+								||  FlxMath.isEven(y))
+								{
+									_housePageMapFloorHover.x = (x * 203) + _tile_offset_x + _tile_start_offset_x + 373;
+									_housePageMapFloorHover.y = (y * _tile_offset_y) + _tile_start_offset_y;
+								}
+								
+								_hover_x = Std.int(x);
+								_hover_y = Std.int(y);
+								_hover_p_value = x + (y * Std.int(((_floorTileAmount/2)-4))); // this value is passed to a class to display the instance.
+							}					
+						}				
+						
+						
+					}
+					
+					// a value of 71 is about half vertical of image.
+					_tile_offset_y = 71.5;
+				}
+			}
+			// ------------------------- end of map hover.
+			
+			
+			_tracker.x = _tracker_start_x + HouseScrollMap._map_offset_x;
+			_tracker.y = _tracker_start_y + HouseScrollMap._map_offset_y;
+		}
+		
+		super.update(elapsed);
 	}
 	
 }//

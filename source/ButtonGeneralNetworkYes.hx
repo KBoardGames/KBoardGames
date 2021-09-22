@@ -148,6 +148,16 @@ class ButtonGeneralNetworkYes extends FlxUIButton
 		//colorTransform = new ColorTransform(0, 0, 0.3);
 	}
 	
+	private function makeActive(i:FlxTimer):Void
+	{
+		FlxG.mouse.enabled = true;
+		active = true;
+		alpha = 1;			
+		
+		Reg2._boxScroller_is_scrolling = false;
+		Reg2._lobby_button_alpha = 0.3;
+	}
+	
 	override public function draw():Void
 	{
 		// daily quest, misc, create room, online list, etc buttons.
@@ -289,16 +299,6 @@ class ButtonGeneralNetworkYes extends FlxUIButton
 			Reg2._boxScroller_is_scrolling = false;
 		}
 		
-	}
-	
-	private function makeActive(i:FlxTimer):Void
-	{
-		FlxG.mouse.enabled = true;
-		active = true;
-		alpha = 1;			
-		
-		Reg2._boxScroller_is_scrolling = false;
-		Reg2._lobby_button_alpha = 0.3;
 	}
 	
 }

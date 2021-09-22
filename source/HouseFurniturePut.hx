@@ -238,6 +238,48 @@ class HouseFurniturePut extends FlxState
 		
 	
 	}
+		
+	public static function textAndspriteRefreshPanel():Void
+	{
+		for (i in 0...200)
+		{
+			if (i <= RegHouse._totalPurchased)
+			{
+				_group_text[i].text = RegHouse._namesPurchased[i+1] + ".";
+				_group_text[i].x = -10 + (373 / 2) - _group_text[i].width / 2; // -10 is scrollbar width. 373 is scene width - map width.
+				
+				_group_sprite[i].loadGraphic("assets/images/house/furniture/get/" + RegHouse._sprite_number[i] + ".png", true, 100, 100);
+				_group_sprite[i].animation.add("0", [0], 30, false);
+				_group_sprite[i].animation.add("1", [1], 30, false);
+				_group_sprite[i].animation.play("0");
+			}
+			
+			else if (_group_text[i] != null)
+			{
+				_group_text[i].text = "Unit " + Std.string(i+1) + " is empty.";
+				
+				_group_sprite[i].loadGraphic("assets/images/houseItem.png", true, 100, 100);
+				_group_sprite[i].animation.add("0", [0], 30, false);
+				_group_sprite[i].animation.play("0");
+				
+			}
+		}
+		
+	}
+		
+	/******************************
+	 * this is needed to set the group at the top of the panel. boxScroller.scroll.y changes in value when its content changes. The result would be _group.y value offsetting at boxScroller. 
+	 */
+	public function fixScrollbarElementOffsetY():Void
+	{
+		// might need to recreate the scrollbar to bring it back up.
+		
+		// this is needed to set the group at the top of the panel. boxScroller.scroll.y changes in value when its content changes. The result would be _group.y value offsetting at boxScroller. 		
+		_group.y = __boxscroller.scroll.y - 260; // _offset_y;
+			
+		// now that the top of the boxScroller is fixed we need to set this so that the last element is correctly displayed. without this code the last element would not be seen or may be seen party cut off at the bottom of the boxScroller.
+		__boxscroller.content.height += Std.int(__boxscroller.scroll.y) + _offset_y;
+	}
 	
 	override public function destroy()
 	{
@@ -345,45 +387,4 @@ class HouseFurniturePut extends FlxState
 		super.update(elapsed);
 	}
 	
-	public static function textAndspriteRefreshPanel():Void
-	{
-		for (i in 0...200)
-		{
-			if (i <= RegHouse._totalPurchased)
-			{
-				_group_text[i].text = RegHouse._namesPurchased[i+1] + ".";
-				_group_text[i].x = -10 + (373 / 2) - _group_text[i].width / 2; // -10 is scrollbar width. 373 is scene width - map width.
-				
-				_group_sprite[i].loadGraphic("assets/images/house/furniture/get/" + RegHouse._sprite_number[i] + ".png", true, 100, 100);
-				_group_sprite[i].animation.add("0", [0], 30, false);
-				_group_sprite[i].animation.add("1", [1], 30, false);
-				_group_sprite[i].animation.play("0");
-			}
-			
-			else if (_group_text[i] != null)
-			{
-				_group_text[i].text = "Unit " + Std.string(i+1) + " is empty.";
-				
-				_group_sprite[i].loadGraphic("assets/images/houseItem.png", true, 100, 100);
-				_group_sprite[i].animation.add("0", [0], 30, false);
-				_group_sprite[i].animation.play("0");
-				
-			}
-		}
-		
-	}
-		
-	/******************************
-	 * this is needed to set the group at the top of the panel. boxScroller.scroll.y changes in value when its content changes. The result would be _group.y value offsetting at boxScroller. 
-	 */
-	public function fixScrollbarElementOffsetY():Void
-	{
-		// might need to recreate the scrollbar to bring it back up.
-		
-		// this is needed to set the group at the top of the panel. boxScroller.scroll.y changes in value when its content changes. The result would be _group.y value offsetting at boxScroller. 		
-		_group.y = __boxscroller.scroll.y - 260; // _offset_y;
-			
-		// now that the top of the boxScroller is fixed we need to set this so that the last element is correctly displayed. without this code the last element would not be seen or may be seen party cut off at the bottom of the boxScroller.
-		__boxscroller.content.height += Std.int(__boxscroller.scroll.y) + _offset_y;
-	}
 }//

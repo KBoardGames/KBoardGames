@@ -16,10 +16,6 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-import yaml.Yaml;
-import yaml.Parser;
-import yaml.Renderer;
-import yaml.util.ObjectMap;
 import flixel.FlxG;
 import flixel.addons.ui.FlxUIButton;
 import flixel.text.FlxText.FlxTextAlign;
@@ -32,11 +28,12 @@ import flixel.FlxCamera;
 import flixel.FlxSubState;
 import flixel.text.FlxText;
 import flixel.util.FlxTimer;
-import haxe.ds.ArraySort;
 import flixel.group.FlxSpriteGroup;
 import flixel.addons.ui.FlxInputText;
-import vendor.ibwwg.FlxScrollableArea;
-import openfl.display.StageQuality;
+import flixel.util.FlxSpriteUtil.LineStyle;
+import flixel.ui.FlxButton;
+import flixel.util.FlxSpriteUtil;
+import flixel.system.FlxAssets.FlxGraphicAsset;
 import flixel.math.FlxRect;
 import flixel.ui.FlxBar;
 import flixel.FlxCamera.FlxCameraFollowStyle;
@@ -44,19 +41,21 @@ import flixel.math.FlxMath;
 import flixel.util.FlxSave;
 import flixel.FlxGame;
 import flixel.FlxState;
-import openfl.display.Sprite;
 import haxe.Http;
+import haxe.Timer;
+import haxe.io.Path;
+import haxe.ds.ArraySort;
+import openfl.display.StageQuality;
 import openfl.Lib;
 import openfl.errors.Error;
 import openfl.net.URLRequest;
-import haxe.Timer;
-import haxe.io.Path;
-import flixel.util.FlxSpriteUtil.LineStyle;
+import openfl.display.Sprite;
 import vendor.mphx.client.Client;
-import flixel.ui.FlxButton;
-import flixel.util.FlxSpriteUtil;
-import flixel.system.FlxAssets.FlxGraphicAsset;
-
+import vendor.ibwwg.FlxScrollableArea;
+import yaml.Yaml;
+import yaml.Parser;
+import yaml.Renderer;
+import yaml.util.ObjectMap;
 
 #if !html5
 	import sys.FileSystem;

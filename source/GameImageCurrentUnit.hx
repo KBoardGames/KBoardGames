@@ -51,56 +51,6 @@ class GameImageCurrentUnit extends FlxSprite
 		visible = false;
 	}
 
-	override public function update (elapsed:Float)
-	{
-		if (RegTypedef._dataMisc._spectatorWatching == false
-		||  RegTypedef._dataTournaments._move_piece == true)
-		{
-			if (Reg._checkmate == false && Reg._gameOverForPlayer == false)
-			{
-				RegFunctions.is_player_attacker(false); // a value of false then the player hosts a game known as the defender. true, if being hosted. eg, array[Reg._playerMoving][value][yy][xx]. playerAttacker is the opposite of the defender. so if Reg._playerMoving = 0 then its the player hosting the game while Reg._playerNotMoving which has a value of 1 had accepted the game at the chatroom.
-				if (Reg._at_input_keyboard == false)
-				{
-					if (Reg._playerCanMovePiece == true || RegTriggers._tradeProposalOffer == true || Reg._gameId == 4)
-					 {		 
-						// playing against the computer and its the computers turn...
-						if (Reg._gameId != 4 && Reg._playerMoving == 1 && Reg._game_offline_vs_cpu == true && Reg._gameId != 0
-						)
-						{
-							// the XY coordinate equals the start of the board plus the unit coordinate times the width/height of this image.
-							 var xx:Int = 1;						
-							 var yy:Int = 1;
-							 
-							 visible = false;			
-						}
-						
-						else
-						{
-							// highlight units when at your piece.
-							if (Reg._gameId == 0) highlightCheckers();
-							if (Reg._gameId == 1) highlightChess();
-							if (Reg._gameId == 2) highlightReversi();
-							if (Reg._gameId == 4) highlightSignatureGame();
-							
-						}
-						
-						
-					} else if (visible == true) visible = false;
-				}
-				 
-				if (Reg._gameId == 4 && RegTriggers._signatureGameUnitImage == false || Reg._gameId == 4 && Reg._buttonCodeValues != "")
-				visible = false;
-				
-			} else if (visible == true) visible = false;
-				
-			// if mouse is not at the game board.
-			if (ActionInput.coordinateX() < _startX || ActionInput.coordinateX() > _startX + (7 * 75) + 75)
-			visible = false;
-			
-			super.update(elapsed);
-		}
-	}
-
 	private function highlightCheckers():Void
 	{
 		// checkers and chess
@@ -262,8 +212,58 @@ class GameImageCurrentUnit extends FlxSprite
 					}
 				}
 			}
-		}
-	
+		}	
 
 	}
+		
+	override public function update (elapsed:Float)
+	{
+		if (RegTypedef._dataMisc._spectatorWatching == false
+		||  RegTypedef._dataTournaments._move_piece == true)
+		{
+			if (Reg._checkmate == false && Reg._gameOverForPlayer == false)
+			{
+				RegFunctions.is_player_attacker(false); // a value of false then the player hosts a game known as the defender. true, if being hosted. eg, array[Reg._playerMoving][value][yy][xx]. playerAttacker is the opposite of the defender. so if Reg._playerMoving = 0 then its the player hosting the game while Reg._playerNotMoving which has a value of 1 had accepted the game at the chatroom.
+				if (Reg._at_input_keyboard == false)
+				{
+					if (Reg._playerCanMovePiece == true || RegTriggers._tradeProposalOffer == true || Reg._gameId == 4)
+					 {		 
+						// playing against the computer and its the computers turn...
+						if (Reg._gameId != 4 && Reg._playerMoving == 1 && Reg._game_offline_vs_cpu == true && Reg._gameId != 0
+						)
+						{
+							// the XY coordinate equals the start of the board plus the unit coordinate times the width/height of this image.
+							 var xx:Int = 1;						
+							 var yy:Int = 1;
+							 
+							 visible = false;			
+						}
+						
+						else
+						{
+							// highlight units when at your piece.
+							if (Reg._gameId == 0) highlightCheckers();
+							if (Reg._gameId == 1) highlightChess();
+							if (Reg._gameId == 2) highlightReversi();
+							if (Reg._gameId == 4) highlightSignatureGame();
+							
+						}
+						
+						
+					} else if (visible == true) visible = false;
+				}
+				 
+				if (Reg._gameId == 4 && RegTriggers._signatureGameUnitImage == false || Reg._gameId == 4 && Reg._buttonCodeValues != "")
+				visible = false;
+				
+			} else if (visible == true) visible = false;
+				
+			// if mouse is not at the game board.
+			if (ActionInput.coordinateX() < _startX || ActionInput.coordinateX() > _startX + (7 * 75) + 75)
+			visible = false;
+			
+			super.update(elapsed);
+		}
+	}
+
 }

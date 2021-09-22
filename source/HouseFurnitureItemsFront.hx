@@ -55,26 +55,7 @@ class HouseFurnitureItemsFront extends FlxGroup
 		
 		options();
 	}
-	
-	override public function destroy()
-	{
-		super.destroy();
-	}
-
-	override public function update(elapsed:Float):Void
-	{
-		// if player returned to lobby then this var is false so don't update().
-		if (Reg._at_house == false) return;
 		
-		if (RegTriggers._furnitureItemSpriteAddToMapFront == true)
-		{
-			RegTriggers._furnitureItemSpriteAddToMapFront = false;
-			spriteBoughtAddToScene();
-		}
-		
-		super.update(elapsed);
-	}
-	
 	private function options():Void
 	{
 		// -1 because item 0.png refers to the first item. a value of 1 here is really two items.
@@ -123,7 +104,6 @@ class HouseFurnitureItemsFront extends FlxGroup
 			}
 		}
 	}
-
 	
 	public function spriteBoughtAddToScene():Void
 	{
@@ -160,6 +140,25 @@ class HouseFurnitureItemsFront extends FlxGroup
 		// RegHouse._totalPurchased starts at a value of -1. when an furniture item is bought the value is 0 for the first item. since the RegHouse._namesPurchased array starts at 0 and that array is used for the no text selected item, we need a +2 here.
 		//RegHouse._namesPurchased[RegHouse._totalPurchased+2] = RegHouse._namesCanPurchase[HouseFurnitureGet._idCurrentItemPurchased];
 		
-		
 	}
+	
+	override public function destroy()
+	{
+		super.destroy();
+	}
+
+	override public function update(elapsed:Float):Void
+	{
+		// if player returned to lobby then this var is false so don't update().
+		if (Reg._at_house == false) return;
+		
+		if (RegTriggers._furnitureItemSpriteAddToMapFront == true)
+		{
+			RegTriggers._furnitureItemSpriteAddToMapFront = false;
+			spriteBoughtAddToScene();
+		}
+		
+		super.update(elapsed);
+	}
+	
 }

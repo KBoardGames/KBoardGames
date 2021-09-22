@@ -62,6 +62,149 @@ class IDsHistoryButtons extends FlxSprite {
 		options();
 	}
 	
+	private function options():Void
+	{
+		if (_id == 1) animation.add("default", [0,0,0], 1, true, false);
+		if (_id == 2) animation.add("default", [0,0,0], 1, true, false);
+		if (_id == 3) animation.add("default", [0,0,0], 1, true, true);
+		if (_id == 4) animation.add("default", [0,0,0], 1, true, true);
+		
+		animation.play("default", false);
+	}
+	
+	public static function historyFastForward():Void
+	{
+		_history_moving_forward = true;
+		
+		if (Reg._gameId == 0)
+		{
+			if (CheckersMovePlayersPiece._triggerMovePiece1a == false
+			&&  CheckersMovePlayersPiece._triggerMovePiece1b == false
+			&&  CheckersMovePlayersPiece._triggerMovePiece2a == false)
+			{
+				if (Reg._step < Reg._moveHistoryPieceLocationOld1.length) 
+				{
+					Reg._step += 1;
+					CheckersMovePlayersPiece.historyMovePieceForwards();
+				}
+				
+				// tournament is now over for this player. we place the code here so that the history is shown when entering the room from the preview button.
+				else if (RegTypedef._dataTournaments._game_over == 1)
+				{
+					Reg._gameOverForAllPlayers = true;
+					Reg._gameOverForPlayer = true;
+				}
+			}
+		}
+		
+		if (Reg._gameId == 1)
+		{
+			if (ChessMovePlayersPiece._triggerMovePiece1a == false
+			&&  ChessMovePlayersPiece._triggerMovePiece1b == false
+			&&  ChessMovePlayersPiece._triggerMovePiece2a == false
+			&&  ChessMovePlayersPiece._triggerMovePiece2b == false)
+			{
+				if (Reg._step < Reg._moveHistoryPieceLocationOld1.length) 
+				{
+					Reg._step += 1;
+					ChessMovePlayersPiece.historyMovePieceForwards();
+				}
+				
+				// tournament is now over for this player. we place the code here so that the history is shown when entering the room from the preview button.
+				else if (RegTypedef._dataTournaments._game_over == 1)
+				{
+					Reg._gameOverForAllPlayers = true;
+					Reg._gameOverForPlayer = true;
+				}
+			}
+		}
+		
+	}
+		
+	private function historyForward():Void
+	{
+		_history_moving_forward = true;
+		
+		if (Reg._gameId == 0)
+		{
+			if (Reg._step == 0) Reg._step;
+			
+			if (Reg._step < Reg._moveHistoryPieceLocationOld1.length) 
+			{
+				Reg._step += 1;
+				CheckersMovePlayersPiece.historyMovePieceForwards();
+			}
+		}
+		
+		if (Reg._gameId == 1)
+		{
+			if (Reg._step < Reg._moveHistoryPieceLocationOld1.length) 
+			{
+				Reg._step += 1;
+				ChessMovePlayersPiece.historyMovePieceForwards();	
+			}
+		}
+	}
+
+	public static function historyBackward():Void
+	{
+		_history_moving_forward = false;
+		
+		if (Reg._gameId == 0)
+		{
+			if (Reg._step > 0 )
+			{
+				Reg._step -= 1;
+				CheckersMovePlayersPiece.historyMovePieceBackwards();
+			}
+		}
+		
+		if (Reg._gameId == 1)
+		{
+			if (Reg._step > 0 ) 
+			{
+				Reg._step -= 1;
+				ChessMovePlayersPiece.historyMovePieceBackwards();
+			}
+		}
+	}
+	
+	private function historyRewind():Void
+	{
+		_history_moving_forward = false;
+		
+		if (Reg._gameId == 0)
+		{
+			if (CheckersMovePlayersPiece._triggerMovePiece1a == false
+			&&  CheckersMovePlayersPiece._triggerMovePiece1b == false
+			&&  CheckersMovePlayersPiece._triggerMovePiece2a == false)
+			{
+				if (Reg._step > 0 )
+				{
+					Reg._step -= 1;
+					CheckersMovePlayersPiece.historyMovePieceBackwards();
+				}
+				
+				
+			}
+		}
+		
+		if (Reg._gameId == 1)
+		{
+			if (ChessMovePlayersPiece._triggerMovePiece1a == false
+			&&  ChessMovePlayersPiece._triggerMovePiece1b == false
+			&&  ChessMovePlayersPiece._triggerMovePiece2a == false
+			&&  ChessMovePlayersPiece._triggerMovePiece2b == false)
+			{
+				if (Reg._step > 0 ) 
+				{
+					Reg._step -= 1;
+					ChessMovePlayersPiece.historyMovePieceBackwards();
+				}
+			}
+		}
+	}
+	
 	override public function update (elapsed:Float)
 	{
 		if (visible == true
@@ -204,147 +347,4 @@ class IDsHistoryButtons extends FlxSprite {
 		
 	}
 	
-	
-	public static function historyFastForward():Void
-	{
-		_history_moving_forward = true;
-		
-		if (Reg._gameId == 0)
-		{
-			if (CheckersMovePlayersPiece._triggerMovePiece1a == false
-			&&  CheckersMovePlayersPiece._triggerMovePiece1b == false
-			&&  CheckersMovePlayersPiece._triggerMovePiece2a == false)
-			{
-				if (Reg._step < Reg._moveHistoryPieceLocationOld1.length) 
-				{
-					Reg._step += 1;
-					CheckersMovePlayersPiece.historyMovePieceForwards();
-				}
-				
-				// tournament is now over for this player. we place the code here so that the history is shown when entering the room from the preview button.
-				else if (RegTypedef._dataTournaments._game_over == 1)
-				{
-					Reg._gameOverForAllPlayers = true;
-					Reg._gameOverForPlayer = true;
-				}
-			}
-		}
-		
-		if (Reg._gameId == 1)
-		{
-			if (ChessMovePlayersPiece._triggerMovePiece1a == false
-			&&  ChessMovePlayersPiece._triggerMovePiece1b == false
-			&&  ChessMovePlayersPiece._triggerMovePiece2a == false
-			&&  ChessMovePlayersPiece._triggerMovePiece2b == false)
-			{
-				if (Reg._step < Reg._moveHistoryPieceLocationOld1.length) 
-				{
-					Reg._step += 1;
-					ChessMovePlayersPiece.historyMovePieceForwards();
-				}
-				
-				// tournament is now over for this player. we place the code here so that the history is shown when entering the room from the preview button.
-				else if (RegTypedef._dataTournaments._game_over == 1)
-				{
-					Reg._gameOverForAllPlayers = true;
-					Reg._gameOverForPlayer = true;
-				}
-			}
-		}
-		
-	}
-		
-	private function historyForward():Void
-	{
-		_history_moving_forward = true;
-		
-		if (Reg._gameId == 0)
-		{
-			if (Reg._step == 0) Reg._step;
-			
-			if (Reg._step < Reg._moveHistoryPieceLocationOld1.length) 
-			{
-				Reg._step += 1;
-				CheckersMovePlayersPiece.historyMovePieceForwards();
-			}
-		}
-		
-		if (Reg._gameId == 1)
-		{
-			if (Reg._step < Reg._moveHistoryPieceLocationOld1.length) 
-			{
-				Reg._step += 1;
-				ChessMovePlayersPiece.historyMovePieceForwards();	
-			}
-		}
-	}
-
-	public static function historyBackward():Void
-	{
-		_history_moving_forward = false;
-		
-		if (Reg._gameId == 0)
-		{
-			if (Reg._step > 0 )
-			{
-				Reg._step -= 1;
-				CheckersMovePlayersPiece.historyMovePieceBackwards();
-			}
-		}
-		
-		if (Reg._gameId == 1)
-		{
-			if (Reg._step > 0 ) 
-			{
-				Reg._step -= 1;
-				ChessMovePlayersPiece.historyMovePieceBackwards();
-			}
-		}
-	}
-	
-	private function historyRewind():Void
-	{
-		_history_moving_forward = false;
-		
-		if (Reg._gameId == 0)
-		{
-			if (CheckersMovePlayersPiece._triggerMovePiece1a == false
-			&&  CheckersMovePlayersPiece._triggerMovePiece1b == false
-			&&  CheckersMovePlayersPiece._triggerMovePiece2a == false)
-			{
-				if (Reg._step > 0 )
-				{
-					Reg._step -= 1;
-					CheckersMovePlayersPiece.historyMovePieceBackwards();
-				}
-				
-				
-			}
-		}
-		
-		if (Reg._gameId == 1)
-		{
-			if (ChessMovePlayersPiece._triggerMovePiece1a == false
-			&&  ChessMovePlayersPiece._triggerMovePiece1b == false
-			&&  ChessMovePlayersPiece._triggerMovePiece2a == false
-			&&  ChessMovePlayersPiece._triggerMovePiece2b == false)
-			{
-				if (Reg._step > 0 ) 
-				{
-					Reg._step -= 1;
-					ChessMovePlayersPiece.historyMovePieceBackwards();
-				}
-			}
-		}
-	}
-	
-	private function options():Void
-	{
-		if (_id == 1) animation.add("default", [0,0,0], 1, true, false);
-		if (_id == 2) animation.add("default", [0,0,0], 1, true, false);
-		if (_id == 3) animation.add("default", [0,0,0], 1, true, true);
-		if (_id == 4) animation.add("default", [0,0,0], 1, true, true);
-		
-		animation.play("default", false);
-	}
 }

@@ -244,7 +244,7 @@ class Reg2 extends FlxGroup
 		_messageBox_y = 242;
 		_dragBox_x = 8;
 		_dragBox_y = 17;
-		_title_x = 60;
+		_title_x = 45;
 		_title_y = 15;
 		_button1_x = 585;
 		_button1_y = 12;

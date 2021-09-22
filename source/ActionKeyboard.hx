@@ -128,11 +128,6 @@ class ActionKeyboard extends FlxGroup
 		drawButtons();
 	}
 		
-	override public function destroy():Void
-	{		
-		super.destroy();
-	}
-	
 	public function close():Void
 	{
 		RegTriggers._keyboard_opened = false;
@@ -194,5 +189,10 @@ class ActionKeyboard extends FlxGroup
 			// else send the key that was clicked to the input field.
 			else Reg2._key_output = _keys[(_num + _toggle_keys)];
 		}
+	}
+	
+	override public function destroy():Void
+	{		
+		super.destroy();
 	}
 }

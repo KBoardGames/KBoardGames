@@ -508,9 +508,6 @@ class RegCustom
 		_sound_enabled.splice(0, _sound_enabled.length);
 		_sound_enabled.push(true);		
 		
-		_profile_username_p1 = "";
-		_profile_username_p2 = "";		
-		
 		var _directory = StringTools.replace(Path.directory(Sys.programPath()), "\\", "/") + "/themes/";
 		
 		// create the default theme in because there might be another theme already in the themes folder and without a default theme the client will crash because the Reg._tn of the default theme will not be zero.

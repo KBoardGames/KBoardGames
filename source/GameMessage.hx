@@ -61,6 +61,18 @@ class GameMessage extends FlxSubState
 		visible = true;
 	}
 	
+	private function closeMessage(i:FlxTimer):Void
+	{
+		visible = false;
+		close();
+	}
+
+	override public function destroy()
+	{
+		super.destroy();
+	}
+	
+	
 	override public function update(elapsed:Float):Void 
 	{
 		if (FlxG.mouse.pressed == true)
@@ -72,15 +84,4 @@ class GameMessage extends FlxSubState
 		super.update(elapsed);
 	}	
 	
-	override public function destroy()
-	{
-		super.destroy();
-	}
-	
-	private function closeMessage(i:FlxTimer):Void
-	{
-		visible = false;
-		close();
-	}
-
 }

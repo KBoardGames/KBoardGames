@@ -200,6 +200,41 @@ class HouseFoundationPut extends FlxGroup
 	
 	}
 	
+	/******************************
+	 * button used to remove a tile. when this button text reads "Remove Tile Off" then when pressing the mouse button on a map tile that tile will be removed and an empty tile will be displayed at that location.
+	 */
+	private function buttonRemoveTile():Void
+	{
+		if (_buttonItemRemoveTile.label.text == "Remove Tile Off")
+		{
+			_buttonItemRemoveTile.label.text = "Remove Tile On";
+		}
+			
+		else if (_buttonItemRemoveTile.label.text == "Remove Tile On")
+		{
+			_buttonItemRemoveTile.label.text = "Remove Tile Off";
+		}
+		
+	}
+	
+	private function buttonPositionToggle1():Void
+	{
+		_buttonItemPosition1.set_toggled(true);
+		_buttonItemPosition1.has_toggle = true;
+		
+		_buttonItemPosition2.set_toggled(false);
+		_buttonItemPosition2.has_toggle = false;
+	}
+	
+	private function buttonPositionToggle2():Void
+	{
+		_buttonItemPosition2.set_toggled(true);
+		_buttonItemPosition2.has_toggle = true;
+		
+		_buttonItemPosition1.set_toggled(false);
+		_buttonItemPosition1.has_toggle = false;
+	}
+	
 	override public function destroy()
 	{
 		if (_bg != null)
@@ -370,39 +405,4 @@ class HouseFoundationPut extends FlxGroup
 		super.update(elapsed);
 	}
 	
-		
-	/******************************
-	 * button used to remove a tile. when this button text reads "Remove Tile Off" then when pressing the mouse button on a map tile that tile will be removed and an empty tile will be displayed at that location.
-	 */
-	private function buttonRemoveTile():Void
-	{
-		if (_buttonItemRemoveTile.label.text == "Remove Tile Off")
-		{
-			_buttonItemRemoveTile.label.text = "Remove Tile On";
-		}
-			
-		else if (_buttonItemRemoveTile.label.text == "Remove Tile On")
-		{
-			_buttonItemRemoveTile.label.text = "Remove Tile Off";
-		}
-		
-	}
-	
-	private function buttonPositionToggle1():Void
-	{
-		_buttonItemPosition1.set_toggled(true);
-		_buttonItemPosition1.has_toggle = true;
-		
-		_buttonItemPosition2.set_toggled(false);
-		_buttonItemPosition2.has_toggle = false;
-	}
-	
-	private function buttonPositionToggle2():Void
-	{
-		_buttonItemPosition2.set_toggled(true);
-		_buttonItemPosition2.has_toggle = true;
-		
-		_buttonItemPosition1.set_toggled(false);
-		_buttonItemPosition1.has_toggle = false;
-	}
 }

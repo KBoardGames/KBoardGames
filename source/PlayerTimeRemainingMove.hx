@@ -214,6 +214,271 @@ class PlayerTimeRemainingMove extends FlxState
 		}
 		
 	}
+		
+	public static function formatTime(_time:Int):String
+	{
+		var _minutes:Int = 0;
+		var _seconds:Int = 0;
+		
+		// to get the number of full minutes, divide the number of total seconds by 60 (60 seconds / minute):
+		if (_time > 0)
+		{
+			_minutes = Math.floor(_time / 60);
+		
+			// And to get the remaining seconds, multiply the full minutes with 60 and subtract from the total seconds:
+			_seconds = _time - _minutes * 60;
+		}
+		
+		if (_seconds < 10) return _minutes + ":0" + _seconds;
+		else return _minutes + ":" + _seconds;
+		
+	}
+	
+	// by taking the Reg_gameOver var check away from this class, it gives a chance for all other players to set the time to zero when a player's time reaches zero.
+	private function moveZeroReached():Void
+	{
+		if (Reg._atTimerZeroFunction == false && _ticksStart == Reg._framerate * 2)
+		{
+			if (RegTypedef._dataPlayers._moveTimeRemaining[Reg._move_number_next] <= 0 
+			&&  Reg._playerWaitingAtGameRoom == false
+			&&  RegTypedef._dataPlayers._spectatorPlaying == true) // this line is only read once because Reg._playerWaitingAtGameRoom is set to true below since player is now waiting in game room for another game. 
+			{
+				if (Reg._gameOverForPlayer == true) return;
+				else Reg._atTimerZeroFunction = true;
+				
+				Reg2._removePlayerFromTypedefPlayers = true;
+				
+				if (Reg._move_number_next == 0) 
+				{
+					_textMoveTimer1.text = "0";
+					Reg._textTimeRemainingToMove1 = "0";
+					updateStats(Reg._move_number_next);
+				}
+				
+				if (Reg._move_number_next == 1) 
+				{
+					_textMoveTimer2.text = "0";
+					Reg._textTimeRemainingToMove2 = "0";
+					updateStats(Reg._move_number_next);
+					
+				}
+				
+				if (Reg._move_number_next == 2) 
+				{
+					_textMoveTimer3.text = "0";
+					Reg._textTimeRemainingToMove3 = "0";
+					updateStats(Reg._move_number_next);
+					
+				}
+				
+				if (Reg._move_number_next == 3) 
+				{
+					_textMoveTimer4.text = "0";
+					Reg._textTimeRemainingToMove4 = "0";
+					updateStats(Reg._move_number_next);
+					
+				}
+				
+				var _foundPlayer:Bool = false;
+				
+				for (i in 0...4)
+				{
+					// get the username that holds the current move number. the difference between _usernamesDynamic and _usernamesStatic is that a username can get removed from the list of _usernamesDynamic, but the _usernamesStatic will always have the same names through out the actions within the game room.
+					if (RegTypedef._dataPlayers._usernamesStatic[i] == RegTypedef._dataPlayers._usernamesDynamic[Reg._move_number_next])
+					{
+						// currently this player is still at the game room but no longer playing the game.
+						RegTypedef._dataPlayers._gamePlayersValues[i] = 0;	
+						Reg._playerIDs = i;
+						_foundPlayer = true;
+					}
+				}
+				
+									
+				Reg._playerWaitingAtGameRoom = true; // the player has no more time left and has not left the game room yet so set this var true so that gamePlayer var can be used at "Player Left Game Room" event.
+				
+			
+				var _totalPlayers:Int = 0;
+				
+				// get total players still playing game.
+				for (i in 0...Reg._roomPlayerLimit)
+				{
+					if (RegTypedef._dataPlayers._usernamesDynamic[i] != "")
+					{
+						_totalPlayers += 1;
+					}
+				}	
+				
+				
+				
+				if (_totalPlayers <= 2)
+				{
+					// all players game over for this game.
+					for (i in 0...4)
+					{
+						// currently this player is still at the game room but no longer playing the game.
+						RegTypedef._dataPlayers._gamePlayersValues[i] = 0;	
+						Reg._playerIDs = i;
+					}
+
+					//RegTypedef._dataPlayers._usernamesDynamic = RegTypedef._dataPlayers._usernamesStatic.copy();					
+				}
+				
+				// if true then this is the player who had time expire.
+				if (_foundPlayer == true)
+				{
+					// save _gamePlayersValues values to database because this function sets this var for the player that time expired to 0, so that the player is no longer playing game. near the bottom of this class, a lose to game stats will be given to this player.
+					PlayState.clientSocket.send("Game Players Values", RegTypedef._dataPlayers); 
+					haxe.Timer.delay(function (){}, Reg2._event_sleep);
+					
+					if (_totalPlayers >= 2 && Reg._move_number_current == Reg._move_number_next)
+					{
+						PlayState.clientSocket.send("Player Left Game", RegTypedef._dataPlayers);
+						haxe.Timer.delay(function (){}, Reg2._event_sleep);
+					}
+					
+				}
+				// else, this is now or was a two player game. for each player (time will run out at both clients at the same time), update the gamePlayers var.
+				else if (_totalPlayers <= 1) 
+				{
+					PlayState.clientSocket.send("Game Players Values", RegTypedef._dataPlayers); 
+					haxe.Timer.delay(function (){}, Reg2._event_sleep);
+				}					
+								
+				// note that player has left the game but player might still be at the game room.
+				if (Reg._game_offline_vs_cpu == false  && Reg._game_offline_vs_player == false && Reg._gameHost == true)
+				{				
+					RegTypedef._dataPlayers._moveTimeRemaining[0] = 0;
+					RegTypedef._dataPlayers._moveTimeRemaining[1] = 0;
+					RegTypedef._dataPlayers._moveTimeRemaining[2] = 0;
+					RegTypedef._dataPlayers._moveTimeRemaining[3] = 0;
+				}		
+				
+				
+				__scene_game_room.buttonHideAll(); // hide the restart, draw and lobby buttons because a restart button, for example, should not be shown when a player leave the game room or time expires.
+				
+				if (Reg._move_number_current == Reg._move_number_next)
+				{
+					RegTriggers._messageLoss = "You lose.";
+					RegTriggers._loss = true;					
+				}
+				
+				if ( Reg._roomPlayerLimit - Reg._playerOffset <= 2 )
+				{
+					RegFunctions.playerAllStop();
+				}				
+
+			}
+			
+			else if (Reg._game_offline_vs_cpu == true 
+			&& RegTypedef._dataPlayers._moveTimeRemaining[1] <= 0 
+			&& Reg._playerWaitingAtGameRoom == false
+			|| Reg._game_offline_vs_player == true 
+			&& RegTypedef._dataPlayers._moveTimeRemaining[1] <= 0 
+			&& Reg._playerWaitingAtGameRoom == false)
+			{
+				Reg2._removePlayerFromTypedefPlayers = false;
+				
+				Reg._playerIDs = 0;
+				
+				RegTriggers._messageLoss = "CPU losses.";
+				RegTriggers._loss = true;
+				
+				Reg._textTimeRemainingToMove2 = "0"; 
+				Reg._playerWaitingAtGameRoom = true;
+				
+				updateStats(Reg._move_number_next);
+
+				RegTypedef._dataPlayers._moveTimeRemaining[0] = 0;
+				RegTypedef._dataPlayers._moveTimeRemaining[1] = 0;
+				RegTypedef._dataPlayers._moveTimeRemaining[2] = 0;
+				RegTypedef._dataPlayers._moveTimeRemaining[3] = 0;
+
+				
+				if ( Reg._roomPlayerLimit - Reg._playerOffset <= 2 )
+				{
+					Reg._gameOverForPlayer = true;					
+					RegFunctions.playerAllStop();
+				}
+				
+				Reg._atTimerZeroFunction = true;
+			}
+			
+			else // when there is only two playing remaining and we are at this function then both players enter here at the same time.
+			{
+				if (Reg._game_offline_vs_cpu == true 
+				||  Reg._game_offline_vs_player == true)
+				{
+					for (i in 0...4)
+					{
+						// if we are here then only two players were playing the game, so loop through the array to find the other player.
+						if (RegTypedef._dataMisc._username != RegTypedef._dataPlayers._usernamesDynamic[i] && RegTypedef._dataPlayers._usernamesDynamic[i] != "")
+						{							
+							RegTriggers._messageLoss = "You lose.";
+							RegTriggers._loss = true;
+							
+							Reg._gameOverForPlayer = true;
+							Reg._gameOverForAllPlayers = true;
+							RegFunctions.playerAllStop();
+						}
+					}
+				}
+			}
+			
+			_ticksStart = 0;
+		}
+		
+	}
+	
+	public function updateStats(_playerNumber:Int):Void
+	{
+		var _totalPlayers:Int = 0; // get total players still playing game.
+		
+		// get total players still playing game.
+		for (i in 0...4)
+		{
+			if (RegTypedef._dataPlayers._usernamesDynamic[i] != "" && RegTypedef._dataPlayers._moveTimeRemaining[i] > 0)
+			{
+				_totalPlayers += 1;
+			}
+		}		
+		
+		// the value of _totalPlayers is a bit misleading. the value refers to a two player game. the player that entered this function still should register a lose and is still playing a game but is not added to this vars total because time remaining is zero.
+		if (_totalPlayers > 1)
+		{
+			// not that _playerNumber = Reg._move_number_next.
+			if (Reg._move_number_current == _playerNumber)
+			{
+				Reg._gameOverForPlayer = true;
+				
+				if (Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false) 
+				{
+					PlayState.clientSocket.send("Save Lose Stats", RegTypedef._dataPlayers);	
+					haxe.Timer.delay(function (){}, Reg2._event_sleep);
+				}
+			}
+		}
+			
+		else // 2 players.
+		{
+			Reg._gameOverForPlayer = true;
+				
+			// the value of _totalPlayers is a bit misleading. the value refers to a two player game. the player that entered this function still should register a lose and is still playing a game but is not added to this vars total because time remaining is zero.
+			if (_totalPlayers == 1 && Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false && Reg._move_number_current == _playerNumber) 
+			{
+				PlayState.clientSocket.send("Save Lose Stats For Both", RegTypedef._dataPlayers);
+				haxe.Timer.delay(function (){}, Reg2._event_sleep);
+			}
+		}
+		
+		switch (Reg._gameId)
+		{
+			case 0: __scene_game_room._finalizeWhenGameOver.id0();
+			case 1: __scene_game_room._finalizeWhenGameOver.id1();
+			case 2: __scene_game_room._finalizeWhenGameOver.id2();
+			case 3: __scene_game_room._finalizeWhenGameOver.id3();
+			case 4: __scene_game_room._finalizeWhenGameOver.id4();
+		}
+	}
 	
 	override public function destroy()
 	{
@@ -594,271 +859,4 @@ class PlayerTimeRemainingMove extends FlxState
 		super.update(elapsed);	
 	}
 	
-		
-	
-	
-	public static function formatTime(_time:Int):String
-	{
-		var _minutes:Int = 0;
-		var _seconds:Int = 0;
-		
-		// to get the number of full minutes, divide the number of total seconds by 60 (60 seconds / minute):
-		if (_time > 0)
-		{
-			_minutes = Math.floor(_time / 60);
-		
-			// And to get the remaining seconds, multiply the full minutes with 60 and subtract from the total seconds:
-			_seconds = _time - _minutes * 60;
-		}
-		
-		if (_seconds < 10) return _minutes + ":0" + _seconds;
-		else return _minutes + ":" + _seconds;
-		
-	}
-	
-	// by taking the Reg_gameOver var check away from this class, it gives a chance for all other players to set the time to zero when a player's time reaches zero.
-	private function moveZeroReached():Void
-	{
-		if (Reg._atTimerZeroFunction == false && _ticksStart == Reg._framerate * 2)
-		{
-			if (RegTypedef._dataPlayers._moveTimeRemaining[Reg._move_number_next] <= 0 
-			&&  Reg._playerWaitingAtGameRoom == false
-			&&  RegTypedef._dataPlayers._spectatorPlaying == true) // this line is only read once because Reg._playerWaitingAtGameRoom is set to true below since player is now waiting in game room for another game. 
-			{
-				if (Reg._gameOverForPlayer == true) return;
-				else Reg._atTimerZeroFunction = true;
-				
-				Reg2._removePlayerFromTypedefPlayers = true;
-				
-				if (Reg._move_number_next == 0) 
-				{
-					_textMoveTimer1.text = "0";
-					Reg._textTimeRemainingToMove1 = "0";
-					updateStats(Reg._move_number_next);
-				}
-				
-				if (Reg._move_number_next == 1) 
-				{
-					_textMoveTimer2.text = "0";
-					Reg._textTimeRemainingToMove2 = "0";
-					updateStats(Reg._move_number_next);
-					
-				}
-				
-				if (Reg._move_number_next == 2) 
-				{
-					_textMoveTimer3.text = "0";
-					Reg._textTimeRemainingToMove3 = "0";
-					updateStats(Reg._move_number_next);
-					
-				}
-				
-				if (Reg._move_number_next == 3) 
-				{
-					_textMoveTimer4.text = "0";
-					Reg._textTimeRemainingToMove4 = "0";
-					updateStats(Reg._move_number_next);
-					
-				}
-				
-				var _foundPlayer:Bool = false;
-				
-				for (i in 0...4)
-				{
-					// get the username that holds the current move number. the difference between _usernamesDynamic and _usernamesStatic is that a username can get removed from the list of _usernamesDynamic, but the _usernamesStatic will always have the same names through out the actions within the game room.
-					if (RegTypedef._dataPlayers._usernamesStatic[i] == RegTypedef._dataPlayers._usernamesDynamic[Reg._move_number_next])
-					{
-						// currently this player is still at the game room but no longer playing the game.
-						RegTypedef._dataPlayers._gamePlayersValues[i] = 0;	
-						Reg._playerIDs = i;
-						_foundPlayer = true;
-					}
-				}
-				
-									
-				Reg._playerWaitingAtGameRoom = true; // the player has no more time left and has not left the game room yet so set this var true so that gamePlayer var can be used at "Player Left Game Room" event.
-				
-			
-				var _totalPlayers:Int = 0;
-				
-				// get total players still playing game.
-				for (i in 0...Reg._roomPlayerLimit)
-				{
-					if (RegTypedef._dataPlayers._usernamesDynamic[i] != "")
-					{
-						_totalPlayers += 1;
-					}
-				}	
-				
-				
-				
-				if (_totalPlayers <= 2)
-				{
-					// all players game over for this game.
-					for (i in 0...4)
-					{
-						// currently this player is still at the game room but no longer playing the game.
-						RegTypedef._dataPlayers._gamePlayersValues[i] = 0;	
-						Reg._playerIDs = i;
-					}
-
-					//RegTypedef._dataPlayers._usernamesDynamic = RegTypedef._dataPlayers._usernamesStatic.copy();					
-				}
-				
-				// if true then this is the player who had time expire.
-				if (_foundPlayer == true)
-				{
-					// save _gamePlayersValues values to database because this function sets this var for the player that time expired to 0, so that the player is no longer playing game. near the bottom of this class, a lose to game stats will be given to this player.
-					PlayState.clientSocket.send("Game Players Values", RegTypedef._dataPlayers); 
-					haxe.Timer.delay(function (){}, Reg2._event_sleep);
-					
-					if (_totalPlayers >= 2 && Reg._move_number_current == Reg._move_number_next)
-					{
-						PlayState.clientSocket.send("Player Left Game", RegTypedef._dataPlayers);
-						haxe.Timer.delay(function (){}, Reg2._event_sleep);
-					}
-					
-				}
-				// else, this is now or was a two player game. for each player (time will run out at both clients at the same time), update the gamePlayers var.
-				else if (_totalPlayers <= 1) 
-				{
-					PlayState.clientSocket.send("Game Players Values", RegTypedef._dataPlayers); 
-					haxe.Timer.delay(function (){}, Reg2._event_sleep);
-				}					
-								
-				// note that player has left the game but player might still be at the game room.
-				if (Reg._game_offline_vs_cpu == false  && Reg._game_offline_vs_player == false && Reg._gameHost == true)
-				{				
-					RegTypedef._dataPlayers._moveTimeRemaining[0] = 0;
-					RegTypedef._dataPlayers._moveTimeRemaining[1] = 0;
-					RegTypedef._dataPlayers._moveTimeRemaining[2] = 0;
-					RegTypedef._dataPlayers._moveTimeRemaining[3] = 0;
-				}		
-				
-				
-				__scene_game_room.buttonHideAll(); // hide the restart, draw and lobby buttons because a restart button, for example, should not be shown when a player leave the game room or time expires.
-				
-				if (Reg._move_number_current == Reg._move_number_next)
-				{
-					RegTriggers._messageLoss = "You lose.";
-					RegTriggers._loss = true;					
-				}
-				
-				if ( Reg._roomPlayerLimit - Reg._playerOffset <= 2 )
-				{
-					RegFunctions.playerAllStop();
-				}				
-
-			}
-			
-			else if (Reg._game_offline_vs_cpu == true 
-			&& RegTypedef._dataPlayers._moveTimeRemaining[1] <= 0 
-			&& Reg._playerWaitingAtGameRoom == false
-			|| Reg._game_offline_vs_player == true 
-			&& RegTypedef._dataPlayers._moveTimeRemaining[1] <= 0 
-			&& Reg._playerWaitingAtGameRoom == false)
-			{
-				Reg2._removePlayerFromTypedefPlayers = false;
-				
-				Reg._playerIDs = 0;
-				
-				RegTriggers._messageLoss = "CPU losses.";
-				RegTriggers._loss = true;
-				
-				Reg._textTimeRemainingToMove2 = "0"; 
-				Reg._playerWaitingAtGameRoom = true;
-				
-				updateStats(Reg._move_number_next);
-
-				RegTypedef._dataPlayers._moveTimeRemaining[0] = 0;
-				RegTypedef._dataPlayers._moveTimeRemaining[1] = 0;
-				RegTypedef._dataPlayers._moveTimeRemaining[2] = 0;
-				RegTypedef._dataPlayers._moveTimeRemaining[3] = 0;
-
-				
-				if ( Reg._roomPlayerLimit - Reg._playerOffset <= 2 )
-				{
-					Reg._gameOverForPlayer = true;					
-					RegFunctions.playerAllStop();
-				}
-				
-				Reg._atTimerZeroFunction = true;
-			}
-			
-			else // when there is only two playing remaining and we are at this function then both players enter here at the same time.
-			{
-				if (Reg._game_offline_vs_cpu == true 
-				||  Reg._game_offline_vs_player == true)
-				{
-					for (i in 0...4)
-					{
-						// if we are here then only two players were playing the game, so loop through the array to find the other player.
-						if (RegTypedef._dataMisc._username != RegTypedef._dataPlayers._usernamesDynamic[i] && RegTypedef._dataPlayers._usernamesDynamic[i] != "")
-						{							
-							RegTriggers._messageLoss = "You lose.";
-							RegTriggers._loss = true;
-							
-							Reg._gameOverForPlayer = true;
-							Reg._gameOverForAllPlayers = true;
-							RegFunctions.playerAllStop();
-						}
-					}
-				}
-			}
-			
-			_ticksStart = 0;
-		}
-		
-	}
-	
-	public function updateStats(_playerNumber:Int):Void
-	{
-		var _totalPlayers:Int = 0; // get total players still playing game.
-		
-		// get total players still playing game.
-		for (i in 0...4)
-		{
-			if (RegTypedef._dataPlayers._usernamesDynamic[i] != "" && RegTypedef._dataPlayers._moveTimeRemaining[i] > 0)
-			{
-				_totalPlayers += 1;
-			}
-		}		
-		
-		// the value of _totalPlayers is a bit misleading. the value refers to a two player game. the player that entered this function still should register a lose and is still playing a game but is not added to this vars total because time remaining is zero.
-		if (_totalPlayers > 1)
-		{
-			// not that _playerNumber = Reg._move_number_next.
-			if (Reg._move_number_current == _playerNumber)
-			{
-				Reg._gameOverForPlayer = true;
-				
-				if (Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false) 
-				{
-					PlayState.clientSocket.send("Save Lose Stats", RegTypedef._dataPlayers);	
-					haxe.Timer.delay(function (){}, Reg2._event_sleep);
-				}
-			}
-		}
-			
-		else // 2 players.
-		{
-			Reg._gameOverForPlayer = true;
-				
-			// the value of _totalPlayers is a bit misleading. the value refers to a two player game. the player that entered this function still should register a lose and is still playing a game but is not added to this vars total because time remaining is zero.
-			if (_totalPlayers == 1 && Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false && Reg._move_number_current == _playerNumber) 
-			{
-				PlayState.clientSocket.send("Save Lose Stats For Both", RegTypedef._dataPlayers);
-				haxe.Timer.delay(function (){}, Reg2._event_sleep);
-			}
-		}
-		
-		switch (Reg._gameId)
-		{
-			case 0: __scene_game_room._finalizeWhenGameOver.id0();
-			case 1: __scene_game_room._finalizeWhenGameOver.id1();
-			case 2: __scene_game_room._finalizeWhenGameOver.id2();
-			case 3: __scene_game_room._finalizeWhenGameOver.id3();
-			case 4: __scene_game_room._finalizeWhenGameOver.id4();
-		}
-	}
 }

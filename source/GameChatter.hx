@@ -252,6 +252,27 @@ class GameChatter extends FlxGroup
 		
 	}
 	
+	public function options():Void
+	{
+		if (_id != ID) return;
+		
+		if (Reg._rememberChatterIsOpen == true) 
+		{
+			_groupChatterScroller.x = 0;
+			_chatterOpenCloseButton.label.text = "Close Chat";
+		}
+		else
+		{
+			_groupChatterScroller.x = 375; // if you want chatter open by default change the value to 0;
+			_chatterOpenCloseButton.label.text = "Open Chat";
+		}
+		
+		
+		createInputChat();
+		
+	
+	}
+	
 	private function canTypeInChatter():Void
 	{
 		if (_id != ID) return;
@@ -276,32 +297,10 @@ class GameChatter extends FlxGroup
 			
 			_chatInputButton.visible = false;
 			_chatInputButton.active = false;
-		}
-		
+		}		
 		
 	}
-	
-	public function options():Void
-	{
-		if (_id != ID) return;
 		
-		if (Reg._rememberChatterIsOpen == true) 
-		{
-			_groupChatterScroller.x = 0;
-			_chatterOpenCloseButton.label.text = "Close Chat";
-		}
-		else
-		{
-			_groupChatterScroller.x = 375; // if you want chatter open by default change the value to 0;
-			_chatterOpenCloseButton.label.text = "Open Chat";
-		}
-		
-		
-		createInputChat();
-		
-	
-	}
-	
 	private function chatInputFromButton():Void
 	{
 		if (_id != ID) return;
@@ -372,6 +371,177 @@ class GameChatter extends FlxGroup
 		_groupChatterScroller.add(_input_chat);
 	
 	}
+	
+	/******************************
+	 * this function is called from the PlayState event "Chat Send".
+	 * @param	name	the player sending the data.
+	 * @param	txt		the data the player sent.
+	 */
+	public function chatSent(name:String, txt:String):Void
+	{
+		if (_id != ID) return;
+		
+		// the text of i is now the next text in the list. do this for every member in the list but that the text used for the input text.
+		for (i in 0... _group_text_member_total - 1)
+		{
+			_group_text[i].text = _group_text[(i + 1)].text;
+			_group_text[i].updateHitbox();
+				
+		}
+		
+		// this is the sent text.
+		_group_text[(_group_text_member_total-1)].text = name + txt;
+		_group_text[(_group_text_member_total)].updateHitbox();
+		
+		//  if user typed in a long text then the field height will be greater than normal. the previous text in the list will need to be placed correctly before that text. this recalculates the text field height for every member in the group.
+		for (i in 1... _group_text_member_total)
+		{
+			_group_text[i].y = _group_text[(i - 1)].y + _group_text[(i - 1)].textField.height + 22;
+			// hack to make the height between lines the same size when elements might have a different height.
+			_group_text[i].y -= _group_text[(i - 1)].textField.height / 9;
+			_group_text[i].setPosition(1400, _group_text[i].y);
+			_group_text[i].updateHitbox();
+			
+		}
+		
+		boxScroller();
+	}
+	
+	/**
+	 * if adding more __boxScrollers here, remember to see MenuBar.hx disconnect function and add __boxscroller code there. See that function for the example.
+	 */
+	private function boxScroller():Void
+	{
+		if (_id != ID) return;
+		
+		if (Reg._game_offline_vs_player == false 
+		&&  Reg._game_offline_vs_cpu == false
+		&&  Reg._game_online_vs_cpu == false)
+		{
+			// lobby.		
+			if (RegTypedef._dataMisc._userLocation == 0 
+			&&  RegCustom._chat_when_at_lobby_enabled[Reg._tn] == true
+			&&  _id == 2 && _id == ID)
+			{
+				// cannot check for camera instance here if not null because it is static and doing so will give an error when you re-enter this scene from title.
+				if (__boxscroller2 != null) FlxG.cameras.remove(__boxscroller2);
+				__boxscroller2 = new FlxScrollableArea( new FlxRect( 1040, 0, 360, FlxG.height - 200), new FlxRect( 1040, 0, 360, _group.height), ResizeMode.NONE, 0, 100, -1, FlxColor.LIME, null, 1, false, true); // _scrollbar_offset_y = 175(height)-50(-50 from y value). eg, 175-50.
+				
+				FlxG.cameras.add( __boxscroller2 );
+				__boxscroller2.antialiasing = true;
+				__boxscroller2.pixelPerfectRender = true;
+			}
+			
+			// waiting room.
+			else if (RegTypedef._dataMisc._userLocation > 0
+			&&  	 RegTypedef._dataMisc._userLocation < 3
+			&&		 _id == 3 && _id == ID)
+			{
+				if (__boxscroller3 != null) FlxG.cameras.remove(__boxscroller3);
+				__boxscroller3 = new FlxScrollableArea( new FlxRect( 1040, 0, 360, FlxG.height - 200), new FlxRect( 1040, 0, 360, _group.height), ResizeMode.NONE, 0, 100, -1, FlxColor.LIME, null, 2, false, true); // _scrollbar_offset_y = 175(height)-50(-50 from y value). eg, 175-50.
+				
+				FlxG.cameras.add( __boxscroller3 );
+				__boxscroller3.antialiasing = true;
+				__boxscroller3.pixelPerfectRender = true;
+			}
+			
+			// game room.
+			else if (RegTypedef._dataMisc._userLocation == 3
+			&& 		_id == 4 && _id == ID)
+			{	
+				if (__boxscroller4 != null) FlxG.cameras.remove(__boxscroller4);
+				__boxscroller4 = new FlxScrollableArea( new FlxRect( 1040, 0, 360, FlxG.height - 200), new FlxRect( 1040, 0, 360, _group.height), ResizeMode.NONE, 0, 100, -1, FlxColor.LIME, null, 3, false, true); // _scrollbar_offset_y = 175(height)-50(-50 from y value). eg, 175-50.
+				
+				if (_chatterOpenCloseButton.label.text == "Open Chat")
+					__boxscroller4.visible = false;
+				
+				FlxG.cameras.add( __boxscroller4 );
+				__boxscroller4.antialiasing = true;
+				__boxscroller4.pixelPerfectRender = true; 
+									
+			}
+						
+			
+		}	
+	}
+	
+	/******************************
+	 * clear the chatter output text.
+	 */
+	public function clearText():Void
+	{
+		for (i in 0..._group_text_member_total + 1)
+		{
+			_group_text[i].text = "";
+		}
+	}
+
+	private function openCloseChatter():Void
+	{
+		if (_id != ID) return;
+		
+		// if chatter is displayed then prepare to scroll it off the screen.
+		if (_groupChatterScroller.x == 0 && _chatterOpenCloseButton.active == true)
+		{
+			_chatterOpenCloseButton.active = false;
+			_scrollRight = true;
+			_scrollLeft = false;
+			_chatterIsOpen = false;
+			
+			_input_chat.visible = false;
+			_input_chat.active = false;
+			
+			_chatInputButton.visible = false;
+			_chatInputButton.active = false;
+			
+			if (RegTypedef._dataMisc._userLocation == 3)
+			{
+				GameChatter.__boxscroller4.visible = false;
+				GameChatter.__boxscroller4.active = false;
+			}
+					
+		}
+		
+		// open it.
+		if (_groupChatterScroller.x > 0 && _chatterOpenCloseButton.active == true)
+		{
+			_chatterOpenCloseButton.active = false;
+			_scrollRight = false;
+			_scrollLeft = true;
+			
+			var _count:Int = 0;
+			
+			if (RegTypedef._dataPlayers._usernamesDynamic[0] == "") _count += 1;
+			if (RegTypedef._dataPlayers._usernamesDynamic[1] == "") _count += 1;
+			if (RegTypedef._dataPlayers._usernamesDynamic[2] == "") _count += 1;
+			if (RegTypedef._dataPlayers._usernamesDynamic[3] == "") _count += 1;
+			
+			if (RegTypedef._dataMisc._userLocation == 3)
+			{
+				GameChatter.__boxscroller4.active = true;
+				GameChatter.__boxscroller4.visible = true;				
+			}
+			
+			_chatterIsOpen = true;
+		}
+	}
+	
+	/******************************
+	 * change the chatter button label text.
+	 */
+	public static function changeButtonLabel():Void
+	{
+		if (_groupChatterScroller != null && Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false )
+		{
+			if (_chatterOpenCloseButton.label != null)
+			{
+				if (_groupChatterScroller.x == 0) _chatterOpenCloseButton.label.text = "Close Chat";
+				else _chatterOpenCloseButton.label.text = "Open Chat";
+				
+			}
+		}
+	}
+	
 	
 	override public function destroy()
 	{
@@ -624,174 +794,5 @@ class GameChatter extends FlxGroup
 		
 		super.update(elapsed);
 	}
-
-	/******************************
-	 * this function is called from the PlayState event "Chat Send".
-	 * @param	name	the player sending the data.
-	 * @param	txt		the data the player sent.
-	 */
-	public function chatSent(name:String, txt:String):Void
-	{
-		if (_id != ID) return;
-		
-		// the text of i is now the next text in the list. do this for every member in the list but that the text used for the input text.
-		for (i in 0... _group_text_member_total - 1)
-		{
-			_group_text[i].text = _group_text[(i + 1)].text;
-			_group_text[i].updateHitbox();
-				
-		}
-		
-		// this is the sent text.
-		_group_text[(_group_text_member_total-1)].text = name + txt;
-		_group_text[(_group_text_member_total)].updateHitbox();
-		
-		//  if user typed in a long text then the field height will be greater than normal. the previous text in the list will need to be placed correctly before that text. this recalculates the text field height for every member in the group.
-		for (i in 1... _group_text_member_total)
-		{
-			_group_text[i].y = _group_text[(i - 1)].y + _group_text[(i - 1)].textField.height + 22;
-			// hack to make the height between lines the same size when elements might have a different height.
-			_group_text[i].y -= _group_text[(i - 1)].textField.height / 9;
-			_group_text[i].setPosition(1400, _group_text[i].y);
-			_group_text[i].updateHitbox();
-			
-		}
-		
-		boxScroller();
-	}
 	
-	/**
-	 * if adding more __boxScrollers here, remember to see MenuBar.hx disconnect function and add __boxscroller code there. See that function for the example.
-	 */
-	private function boxScroller():Void
-	{
-		if (_id != ID) return;
-		
-		if (Reg._game_offline_vs_player == false 
-		&&  Reg._game_offline_vs_cpu == false
-		&&  Reg._game_online_vs_cpu == false)
-		{
-			// lobby.		
-			if (RegTypedef._dataMisc._userLocation == 0 
-			&&  RegCustom._chat_when_at_lobby_enabled[Reg._tn] == true
-			&&  _id == 2 && _id == ID)
-			{
-				// cannot check for camera instance here if not null because it is static and doing so will give an error when you re-enter this scene from title.
-				if (__boxscroller2 != null) FlxG.cameras.remove(__boxscroller2);
-				__boxscroller2 = new FlxScrollableArea( new FlxRect( 1040, 0, 360, FlxG.height - 200), new FlxRect( 1040, 0, 360, _group.height), ResizeMode.NONE, 0, 100, -1, FlxColor.LIME, null, 1, false, true); // _scrollbar_offset_y = 175(height)-50(-50 from y value). eg, 175-50.
-				
-				FlxG.cameras.add( __boxscroller2 );
-				__boxscroller2.antialiasing = true;
-				__boxscroller2.pixelPerfectRender = true;
-			}
-			
-			// waiting room.
-			else if (RegTypedef._dataMisc._userLocation > 0
-			&&  	 RegTypedef._dataMisc._userLocation < 3
-			&&		 _id == 3 && _id == ID)
-			{
-				if (__boxscroller3 != null) FlxG.cameras.remove(__boxscroller3);
-				__boxscroller3 = new FlxScrollableArea( new FlxRect( 1040, 0, 360, FlxG.height - 200), new FlxRect( 1040, 0, 360, _group.height), ResizeMode.NONE, 0, 100, -1, FlxColor.LIME, null, 2, false, true); // _scrollbar_offset_y = 175(height)-50(-50 from y value). eg, 175-50.
-				
-				FlxG.cameras.add( __boxscroller3 );
-				__boxscroller3.antialiasing = true;
-				__boxscroller3.pixelPerfectRender = true;
-			}
-			
-			// game room.
-			else if (RegTypedef._dataMisc._userLocation == 3
-			&& 		_id == 4 && _id == ID)
-			{	
-				if (__boxscroller4 != null) FlxG.cameras.remove(__boxscroller4);
-				__boxscroller4 = new FlxScrollableArea( new FlxRect( 1040, 0, 360, FlxG.height - 200), new FlxRect( 1040, 0, 360, _group.height), ResizeMode.NONE, 0, 100, -1, FlxColor.LIME, null, 3, false, true); // _scrollbar_offset_y = 175(height)-50(-50 from y value). eg, 175-50.
-				
-				if (_chatterOpenCloseButton.label.text == "Open Chat")
-					__boxscroller4.visible = false;
-				
-				FlxG.cameras.add( __boxscroller4 );
-				__boxscroller4.antialiasing = true;
-				__boxscroller4.pixelPerfectRender = true; 
-									
-			}
-						
-			
-		}	
-	}
-	
-	/******************************
-	 * clear the chatter output text.
-	 */
-	public function clearText():Void
-	{
-		for (i in 0..._group_text_member_total + 1)
-		{
-			_group_text[i].text = "";
-		}
-	}
-
-	private function openCloseChatter():Void
-	{
-		if (_id != ID) return;
-		
-		// if chatter is displayed then prepare to scroll it off the screen.
-		if (_groupChatterScroller.x == 0 && _chatterOpenCloseButton.active == true)
-		{
-			_chatterOpenCloseButton.active = false;
-			_scrollRight = true;
-			_scrollLeft = false;
-			_chatterIsOpen = false;
-			
-			_input_chat.visible = false;
-			_input_chat.active = false;
-			
-			_chatInputButton.visible = false;
-			_chatInputButton.active = false;
-			
-			if (RegTypedef._dataMisc._userLocation == 3)
-			{
-				GameChatter.__boxscroller4.visible = false;
-				GameChatter.__boxscroller4.active = false;
-			}
-					
-		}
-		
-		// open it.
-		if (_groupChatterScroller.x > 0 && _chatterOpenCloseButton.active == true)
-		{
-			_chatterOpenCloseButton.active = false;
-			_scrollRight = false;
-			_scrollLeft = true;
-			
-			var _count:Int = 0;
-			
-			if (RegTypedef._dataPlayers._usernamesDynamic[0] == "") _count += 1;
-			if (RegTypedef._dataPlayers._usernamesDynamic[1] == "") _count += 1;
-			if (RegTypedef._dataPlayers._usernamesDynamic[2] == "") _count += 1;
-			if (RegTypedef._dataPlayers._usernamesDynamic[3] == "") _count += 1;
-			
-			if (RegTypedef._dataMisc._userLocation == 3)
-			{
-				GameChatter.__boxscroller4.active = true;
-				GameChatter.__boxscroller4.visible = true;				
-			}
-			
-			_chatterIsOpen = true;
-		}
-	}
-	
-	/******************************
-	 * change the chatter button label text.
-	 */
-	public static function changeButtonLabel():Void
-	{
-		if (_groupChatterScroller != null && Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false )
-		{
-			if (_chatterOpenCloseButton.label != null)
-			{
-				if (_groupChatterScroller.x == 0) _chatterOpenCloseButton.label.text = "Close Chat";
-				else _chatterOpenCloseButton.label.text = "Open Chat";
-				
-			}
-		}
-	}
 }//

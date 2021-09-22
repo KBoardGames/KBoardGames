@@ -140,62 +140,6 @@ class GameHistoryAndNotations extends FlxGroup
 		
 	}
 	
-	override public function destroy()
-	{
-		if (_box != null)
-		{
-			remove(_box);
-			_box.destroy();
-		}
-		
-		if (_messageForBoxScroller != null)
-		{
-			remove(_messageForBoxScroller);
-			_messageForBoxScroller.destroy();
-			_messageForBoxScroller = null;
-		}
-		
-		if (__boxscroller != null)
-		{
-			cameras.remove(__boxscroller);
-			__boxscroller.destroy();
-			__boxscroller = null;
-		}
-		
-		if (_boxScrollerGroup != null)
-		{
-			remove(_boxScrollerGroup);
-			_boxScrollerGroup.destroy();
-			_boxScrollerGroup = null;
-		}
-		
-		if (_notation != null)
-		{
-			remove(_notation);
-			_notation.destroy();
-			_notation = null;
-		}
-		
-		
-		if (_scrollingTextP1 != null) 
-		{
-			remove(_scrollingTextP1);
-			_scrollingTextP1.destroy();
-			_scrollingTextP1 = null;
-		}
-		
-		if (_scrollingTextP2 != null) 
-		{
-			remove(_scrollingTextP2);
-			_scrollingTextP2.destroy();
-			_scrollingTextP2 = null;
-		}
-		
-		
-		super.destroy();
-	}
-
-
 	/******************************
 	 * removes the notation camera and boxScroller when text changes so that creating the boxScroller will not be needed which will only decrease the framerate after awhile.
 	 */
@@ -695,6 +639,61 @@ class GameHistoryAndNotations extends FlxGroup
 			
 			Reg._ecoOpeningsNotationsOutput = "";			
 		}
-	}
+	}	
 	
+	override public function destroy()
+	{
+		if (_box != null)
+		{
+			remove(_box);
+			_box.destroy();
+		}
+		
+		if (_messageForBoxScroller != null)
+		{
+			remove(_messageForBoxScroller);
+			_messageForBoxScroller.destroy();
+			_messageForBoxScroller = null;
+		}
+		
+		if (__boxscroller != null)
+		{
+			cameras.remove(__boxscroller);
+			__boxscroller.destroy();
+			__boxscroller = null;
+		}
+		
+		if (_boxScrollerGroup != null)
+		{
+			remove(_boxScrollerGroup);
+			_boxScrollerGroup.destroy();
+			_boxScrollerGroup = null;
+		}
+		
+		if (_notation != null)
+		{
+			remove(_notation);
+			_notation.destroy();
+			_notation = null;
+		}
+		
+		
+		if (_scrollingTextP1 != null) 
+		{
+			remove(_scrollingTextP1);
+			_scrollingTextP1.destroy();
+			_scrollingTextP1 = null;
+		}
+		
+		if (_scrollingTextP2 != null) 
+		{
+			remove(_scrollingTextP2);
+			_scrollingTextP2.destroy();
+			_scrollingTextP2 = null;
+		}
+		
+		
+		super.destroy();
+	}
+
 }

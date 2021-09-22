@@ -1393,9 +1393,6 @@ class IDsCreateAndMain extends FlxState
 		}
 	}
 	
-	
-	
-	
 	public function dice(X:Float, Y:Float):Void
 	{
 		__number_wheel = new NumberWheel(X, Y);

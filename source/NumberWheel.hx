@@ -37,6 +37,11 @@ class NumberWheel extends FlxSprite
 		
 	}
 	
+	private function showRotator(i:FlxTimer):Void
+	{
+		visible = true;
+	}
+	
 	override public function update(elapsed:Float):Void 
 	{
 		if (RegTypedef._dataPlayers._spectatorWatching == false)
@@ -142,8 +147,4 @@ class NumberWheel extends FlxSprite
 		super.update(elapsed);
 	}
 	
-	private function showRotator(i:FlxTimer):Void
-	{
-		visible = true;
-	}
 }

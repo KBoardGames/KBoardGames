@@ -247,353 +247,7 @@ class MenuState extends FlxState
 				
 		}	
 		
-	}
-			
-	override public function update(elapsed:Float):Void
-	{
-		if (_ticks_startup < 20) _ticks_startup += 1;
-		
-		if (_ticks_startup == 1)
-		{
-			#if !html5
-				initializeGameMenu();			// for save/load configuration.
-			#end
-						
-			startupFunctions();
-			drawBOTbuttonsOnScene();
-			chess_skill_level_setup();
-			
-			#if !html5
-				if (_client_online == true)
-				{
-					if (Reg2._eventName[0] == "") Internet.getAllEvents();
-					if (Reg2._eventName[0] == "") Internet.getAllEvents();
-					if (Reg2._eventName[0] == "") Internet.getAllEvents();
-				}
-			#end
-			//https://stackoverflow.com/questions/36822025/execute-url-path-in-external-program-in-haxe
-			//case "Linux", "BSD", "Android": Sys.command("xdg-open", [url]);
-			//case "Mac": Sys.command("open", [url]);
-			//case "Windows": Sys.command("start", [url]);
-			//Sys.command("start", ["https://localhost"]);
-			//Sys.command("start", ["Games.exe"]);
-			// Example, just use... Sys.command("batch.bat");
-			/*	
-			#if !html5
-				if (Reg._do_play_title_music_once == true)
-				{
-					Reg._do_play_title_music_once = false;
-					
-					var _path = StringTools.replace(Path.directory(Sys.programPath()), "\\", "/");
-					
-					var bytes = File.getBytes(_path + "/intro_1.ogg");
-					_music = new Sound();
-					_music.loadCompressedDataFromByteArray(bytes.getData(), bytes.length);
-					_sound_channel = _music.play();
-					_sound_channel.soundTransform = new SoundTransform(1, 0);
-					
-				}
-			#end
-			*/
-			Reg._hasUserConnectedToServer = false;
-			Reg._notation_output = true;
-			
-			// the title of the game.
-			_title = new FlxText(0, 0, 0, Reg._websiteNameTitle);
-			_title.setFormat(Reg._fontTitle, 69, FlxColor.YELLOW);
-			_title.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 3);
-			_title.scrollFactor.set();
-			_title.y = 25;
-			_title.screenCenter(X);
-			add(_title);
-			
-			if (_client_online == false)
-			{
-				_title_sub = new FlxText(0, 0, 0, "Offline mode");
-				_title_sub.setFormat(Reg._fontTitle, Reg._font_size, FlxColor.YELLOW);
-				_title_sub.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.PURPLE, 1);
-				_title_sub.scrollFactor.set();
-				_title_sub.y = 100;
-				_title_sub.screenCenter(X);
-				add(_title_sub);
-			}		
-			
-			_clicked = false; // the sound does not play for the icons the first time. this is the fix.
-			
-			titleIcons();
-			
-			if (_button_b1.has_toggle == true)
-				RegCustom._chess_skill_level_online = 0;
-			
-			if (_button_b2.has_toggle == true)
-				RegCustom._chess_skill_level_online = 1;
-			
-			if (_button_b3.has_toggle == true)
-				RegCustom._chess_skill_level_online = 2;
-			
-			#if !html5
-				draw_event_scheduler();
-			#end
-			
-			_text_version_display = new FlxText(0, 0, 0, "V" + Reg._version);
-			_text_version_display.setFormat(Reg._fontDefault, 22);
-			_text_version_display.scrollFactor.set();
-						
-			if (Reg._websiteNameTitle != Reg._websiteNameTitleCompare)
-			{
-				_text_version_display.text = "Powered by " + Reg._websiteNameTitleCompare + ". " + _text_version_display.text;				
-			}
-			
-			_text_version_display.setPosition(FlxG.width - _text_version_display.fieldWidth - 15, FlxG.height - 40);
-			add(_text_version_display);	
-				
-			Reg._gameJumpTo = 0;
-						 
-			_ticks_startup = 30;
-		}
-		
-		// normal update() stuff.
-		if (_ticks_startup == 30)
-		{
-			if (Reg._buttonCodeValues != "") buttonCodeValues();
-		
-			// every time a user connects to the server, the server create a file with the name of the users host name. If the host name matches the name of the file, in the host directory at server, then that means there is already a client opened at that device. Therefore do the following.
-			if (Reg._clientDisconnected == true 
-			||  Reg._displayOneDeviceErrorMessage == true
-			||  Reg._cannotConnectToServer == true
-			||  Reg._serverDisconnected == true 
-			||  RegTriggers._kickOrBan == true 
-			||  Reg._isThisServerPaidMember == false 
-			||  Reg._hostname_message == true 
-			||  Reg._ip_message == true 
-			||  Reg._login_failed == true)
-			{
-
-				if (Reg._clientDisconnected == true)
-					_str = "Client disconnected from server because of player inactivity.";
-				
-				else if (Reg._cannotConnectToServer == true) 	
-					_str = "Cannot connect to server. Check the website to see if the server is online. Are you in airplane mode?"; //"This server will shutdown after 30 minutes expires because of server and/or client maintenance. Check the website for more information.";// 
-
-				else if (RegTriggers._kickOrBan == true)	
-					_str = Reg._kickOrBanMessage;
-
-				else if (Reg._serverDisconnected == true)	
-					_str = "Server either disconnected or dropped client.";
-
-				else if (Reg._alreadyOnlineUser == true)	
-					_str = "You cannot log in twice using the same username.";
-				
-				else if (Reg._alreadyOnlineHost == true)	
-					_str = "You cannot log in twice using the same device.";
-				
-				else if (Reg._isThisServerPaidMember == false)
-					_str = "The server " + Reg._ipAddress + " is not active. Try a different server.";
-				
-				else if (Reg._hostname_message == true)
-					_str = "Failed to get your hostname. Is the web server online?";
-				
-				else if (Reg._ip_message == true)
-					_str = "Failed to get the ip from the website address. Is the website online?";
-					
-				else if (Reg._login_failed == true) 
-					_str = "Login failed. Is your username at " + Reg._websiteNameTitle + " website identical to the username at the configuration menu?";
-					
-				Reg._messageId = 10;
-				Reg._buttonCodeValues = "m1000";
-				SceneGameRoom.messageBoxMessageOrder();
-				
-				buttonsIconsNotActive();
-				
-				Reg._clientDisconnected = false;
-				Reg._displayOneDeviceErrorMessage = false;
-				Reg._cannotConnectToServer = false;
-				Reg._serverDisconnected = false;
-				Reg._alreadyOnlineHost = false;
-				Reg._alreadyOnlineUser = false;
-				Reg._isThisServerPaidMember = true;
-				Reg._kickOrBanMessage = "";
-				RegTriggers._kickOrBan = false;
-				Reg._hostname_message = false;
-				Reg._ip_message = false;
-				Reg._login_failed = false;				
-				
-			}
-
-			// this block of code is needed so that the connect button will try to connect again.
-			if (Reg._yesNoKeyPressValueAtMessage > 0 && Reg._buttonCodeValues == "m1000")
-			{
-				Reg._yesNoKeyPressValueAtMessage = 0;
-				Reg._buttonCodeValues = "";
-				
-				buttonsIconsActive();
-			}
-						
-			#if !html5
-				if (_eventSchedulerHover != null)
-				{
-					if (Reg._gameJumpTo == 0)
-					{
-						_eventSchedulerHover.visible = false;
-						
-						if (ActionInput.overlaps(_eventSchedulerHover)
-						&&	_eventSchedulerHover.active == true)
-						{			
-							_eventSchedulerHover.visible = true;
-						}
-							
-						if (ActionInput.overlaps(_eventSchedulerHover) 
-						&& ActionInput.justPressed() == true
-						&& _is_active == true
-						)
-						{
-							if (RegCustom._sound_enabled[Reg._tn] == true
-							&&  Reg2._boxScroller_is_scrolling == false)
-								FlxG.sound.play("click", 1, false);
-						
-							#if !html5
-								if (_exitProgram != null) _exitProgram.active = false;
-							#end
-							
-							if (_eventSchedulerHover != null) _eventSchedulerHover.active = false;					
-							buttonsIconsNotActive();
-							
-							FlxG.switchState(new EventSchedule());
-						}
-					}
-				}
-			
-			#end
-			
-			if (RegTriggers._mainStateMakeActiveElements == true)
-			{
-				RegTriggers._mainStateMakeActiveElements = false;				
-				buttonsIconsActive();
-			}
-							
-			if (_group_sprite.length > 0)
-			{
-				for (i in 0... 6)
-				{
-					if (ActionInput.overlaps(_group_sprite[i]) == true
-					&&  _group_sprite[i].active == true
-					)
-					{
-						var _y:Float = 0;
-						var _x:Int = 0;
-						
-						if (i > 3 && i < 9)
-						{
-							_y = 79;
-							_x = - 4;
-						}
-						
-						_group_sprite[i].setPosition(_icon_offset_x + ((i + _x) * 79), 440 + _y + _offset_icons_and__event_scheduler_y);
-						_game_highlighted.setPosition(_icon_offset_x + ((i + _x) * 79), 440 + _y + _offset_icons_and__event_scheduler_y);
-						_game_highlighted.visible = true;
-							
-						if (i == 0) 
-							_text_title_icon_description.text = "Multiplayer Online. (World)";
-						if (i == 1)
-							_text_title_icon_description.text = "Offline (Player vs Player)";
-						if (i == 2)
-							_text_title_icon_description.text = "Nothing here yet.";
-						if (i == 3)
-							_text_title_icon_description.text = "Configuration Menu. (Gear)";
-						if (i == 4)
-							_text_title_icon_description.text = "Client Help. (Question)";
-						if (i == 5)
-							_text_title_icon_description.text = "Credits. (Attribution)";
-							
-						// next go to the next for() code block above this for() code.
-					}
-				}
-			}			
-			
-			// hide the gear configuration icon if true.
-			#if html5
-				_group_sprite[0].active = false;
-				_group_sprite[0].alpha = 0.25;
-				
-				_group_sprite[2].active = false;
-				_group_sprite[2].alpha = 0.25;
-				
-				_group_sprite[3].active = false;
-				_group_sprite[3].alpha = 0.25;
-			#end
-			
-			if (ActionInput.justPressed() == true
-			&& _group_sprite.length > 0)
-			{		
-				for (i in 0... 6)
-				{
-					if (ActionInput.overlaps(_group_sprite[i]) == true
-					&&  _group_sprite[i].active == true
-					&&	RegTriggers._buttons_set_not_active == false)
-					{
-						if (RegCustom._sound_enabled[Reg._tn] == true
-						&&  Reg2._boxScroller_is_scrolling == false)
-							FlxG.sound.play("click", 1, false);
-					
-						_clicked = true;
-					}
-				}
-			}
-			
-			else if (ActionInput.justReleased() == true
-			&&  _group_sprite.length > 0
-			&&  _clicked == true)
-			{
-				for (i in 0... 6)
-				{
-					if (ActionInput.overlaps(_group_sprite[i]) == true
-					&&  _group_sprite[i].active == true
-					&&	RegTriggers._buttons_set_not_active == false)
-						titleMenu(i);
-				}
-			}
-		}
-		
-		if (Reg._yesNoKeyPressValueAtMessage == 1 && Reg._buttonCodeValues == "a1000")
-		{
-			Reg._buttonCodeValues = "";
-			Reg._yesNoKeyPressValueAtMessage = 0;
-
-			FlxG.openURL("http://kboardgames.com/forum/viewtopic.php?f=10&t=13","_blank"); 
-			
-			buttonsIconsActive();
-		}
-	
-		if (Reg._yesNoKeyPressValueAtMessage >= 2 && Reg._buttonCodeValues == "a1000")
-		{
-			Reg._buttonCodeValues = "";
-			Reg._yesNoKeyPressValueAtMessage = 0;
-			
-			buttonsIconsActive();
-		}
-		
-		// should message box be displayed?
-		if (Reg._messageId > 0 && Reg._messageId != 1000000
-		&&	RegTriggers._buttons_set_not_active == false)
-		{
-			var _msg = new IdsMessageBox();
-			add(_msg);
-		}
-		
-		super.update(elapsed);
-		
-		/*
-		#if !html5
-			if (FlxG.mouse.justPressed == true)
-			{
-				if (Reg._startFullscreen == true) FlxG.fullscreen = true; 
-				
-				if (_sound_channel != null)
-					_sound_channel.stop();
-			}
-		#end
-		*/
-	}
+	}	
 	
 	public function draw_event_scheduler():Void
 	{
@@ -1719,5 +1373,351 @@ class MenuState extends FlxState
 			_exit();
 		});
 		#end
+	}	
+	
+	override public function update(elapsed:Float):Void
+	{
+		if (_ticks_startup < 20) _ticks_startup += 1;
+		
+		if (_ticks_startup == 1)
+		{
+			#if !html5
+				initializeGameMenu();			// for save/load configuration.
+			#end
+						
+			startupFunctions();
+			drawBOTbuttonsOnScene();
+			chess_skill_level_setup();
+			
+			#if !html5
+				if (_client_online == true)
+				{
+					if (Reg2._eventName[0] == "") Internet.getAllEvents();
+					if (Reg2._eventName[0] == "") Internet.getAllEvents();
+					if (Reg2._eventName[0] == "") Internet.getAllEvents();
+				}
+			#end
+			//https://stackoverflow.com/questions/36822025/execute-url-path-in-external-program-in-haxe
+			//case "Linux", "BSD", "Android": Sys.command("xdg-open", [url]);
+			//case "Mac": Sys.command("open", [url]);
+			//case "Windows": Sys.command("start", [url]);
+			//Sys.command("start", ["https://localhost"]);
+			//Sys.command("start", ["Games.exe"]);
+			// Example, just use... Sys.command("batch.bat");
+			/*	
+			#if !html5
+				if (Reg._do_play_title_music_once == true)
+				{
+					Reg._do_play_title_music_once = false;
+					
+					var _path = StringTools.replace(Path.directory(Sys.programPath()), "\\", "/");
+					
+					var bytes = File.getBytes(_path + "/intro_1.ogg");
+					_music = new Sound();
+					_music.loadCompressedDataFromByteArray(bytes.getData(), bytes.length);
+					_sound_channel = _music.play();
+					_sound_channel.soundTransform = new SoundTransform(1, 0);
+					
+				}
+			#end
+			*/
+			Reg._hasUserConnectedToServer = false;
+			Reg._notation_output = true;
+			
+			// the title of the game.
+			_title = new FlxText(0, 0, 0, Reg._websiteNameTitle);
+			_title.setFormat(Reg._fontTitle, 69, FlxColor.YELLOW);
+			_title.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 3);
+			_title.scrollFactor.set();
+			_title.y = 25;
+			_title.screenCenter(X);
+			add(_title);
+			
+			if (_client_online == false)
+			{
+				_title_sub = new FlxText(0, 0, 0, "Offline mode");
+				_title_sub.setFormat(Reg._fontTitle, Reg._font_size, FlxColor.YELLOW);
+				_title_sub.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.PURPLE, 1);
+				_title_sub.scrollFactor.set();
+				_title_sub.y = 100;
+				_title_sub.screenCenter(X);
+				add(_title_sub);
+			}		
+			
+			_clicked = false; // the sound does not play for the icons the first time. this is the fix.
+			
+			titleIcons();
+			
+			if (_button_b1.has_toggle == true)
+				RegCustom._chess_skill_level_online = 0;
+			
+			if (_button_b2.has_toggle == true)
+				RegCustom._chess_skill_level_online = 1;
+			
+			if (_button_b3.has_toggle == true)
+				RegCustom._chess_skill_level_online = 2;
+			
+			#if !html5
+				draw_event_scheduler();
+			#end
+			
+			_text_version_display = new FlxText(0, 0, 0, "V" + Reg._version);
+			_text_version_display.setFormat(Reg._fontDefault, 22);
+			_text_version_display.scrollFactor.set();
+						
+			if (Reg._websiteNameTitle != Reg._websiteNameTitleCompare)
+			{
+				_text_version_display.text = "Powered by " + Reg._websiteNameTitleCompare + ". " + _text_version_display.text;				
+			}
+			
+			_text_version_display.setPosition(FlxG.width - _text_version_display.fieldWidth - 15, FlxG.height - 40);
+			add(_text_version_display);	
+				
+			Reg._gameJumpTo = 0;
+						 
+			_ticks_startup = 30;
+		}
+		
+		// normal update() stuff.
+		if (_ticks_startup == 30)
+		{
+			if (Reg._buttonCodeValues != "") buttonCodeValues();
+		
+			// every time a user connects to the server, the server create a file with the name of the users host name. If the host name matches the name of the file, in the host directory at server, then that means there is already a client opened at that device. Therefore do the following.
+			if (Reg._clientDisconnected == true 
+			||  Reg._displayOneDeviceErrorMessage == true
+			||  Reg._cannotConnectToServer == true
+			||  Reg._serverDisconnected == true 
+			||  RegTriggers._kickOrBan == true 
+			||  Reg._isThisServerPaidMember == false 
+			||  Reg._hostname_message == true 
+			||  Reg._ip_message == true 
+			||  Reg._login_failed == true)
+			{
+
+				if (Reg._clientDisconnected == true)
+					_str = "Client disconnected from server because of player inactivity.";
+				
+				else if (Reg._cannotConnectToServer == true) 	
+					_str = "Cannot connect to server. Check the website to see if the server is online. Are you in airplane mode?"; //"This server will shutdown after 30 minutes expires because of server and/or client maintenance. Check the website for more information.";// 
+
+				else if (RegTriggers._kickOrBan == true)	
+					_str = Reg._kickOrBanMessage;
+
+				else if (Reg._serverDisconnected == true)	
+					_str = "Server either disconnected or dropped client.";
+
+				else if (Reg._alreadyOnlineUser == true)	
+					_str = "You cannot log in twice using the same username.";
+				
+				else if (Reg._alreadyOnlineHost == true)	
+					_str = "You cannot log in twice using the same device.";
+				
+				else if (Reg._isThisServerPaidMember == false)
+					_str = "The server " + Reg._ipAddress + " is not active. Try a different server.";
+				
+				else if (Reg._hostname_message == true)
+					_str = "Failed to get your hostname. Is the web server online?";
+				
+				else if (Reg._ip_message == true)
+					_str = "Failed to get the ip from the website address. Is the website online?";
+					
+				else if (Reg._login_failed == true) 
+					_str = "Login failed. Is your username at " + Reg._websiteNameTitle + " website identical to the username at the configuration menu?";
+					
+				Reg._messageId = 10;
+				Reg._buttonCodeValues = "m1000";
+				SceneGameRoom.messageBoxMessageOrder();
+				
+				buttonsIconsNotActive();
+				
+				Reg._clientDisconnected = false;
+				Reg._displayOneDeviceErrorMessage = false;
+				Reg._cannotConnectToServer = false;
+				Reg._serverDisconnected = false;
+				Reg._alreadyOnlineHost = false;
+				Reg._alreadyOnlineUser = false;
+				Reg._isThisServerPaidMember = true;
+				Reg._kickOrBanMessage = "";
+				RegTriggers._kickOrBan = false;
+				Reg._hostname_message = false;
+				Reg._ip_message = false;
+				Reg._login_failed = false;				
+				
+			}
+
+			// this block of code is needed so that the connect button will try to connect again.
+			if (Reg._yesNoKeyPressValueAtMessage > 0 && Reg._buttonCodeValues == "m1000")
+			{
+				Reg._yesNoKeyPressValueAtMessage = 0;
+				Reg._buttonCodeValues = "";
+				
+				buttonsIconsActive();
+			}
+						
+			#if !html5
+				if (_eventSchedulerHover != null)
+				{
+					if (Reg._gameJumpTo == 0)
+					{
+						_eventSchedulerHover.visible = false;
+						
+						if (ActionInput.overlaps(_eventSchedulerHover)
+						&&	_eventSchedulerHover.active == true)
+						{			
+							_eventSchedulerHover.visible = true;
+						}
+							
+						if (ActionInput.overlaps(_eventSchedulerHover) 
+						&& ActionInput.justPressed() == true
+						&& _is_active == true
+						)
+						{
+							if (RegCustom._sound_enabled[Reg._tn] == true
+							&&  Reg2._boxScroller_is_scrolling == false)
+								FlxG.sound.play("click", 1, false);
+						
+							#if !html5
+								if (_exitProgram != null) _exitProgram.active = false;
+							#end
+							
+							if (_eventSchedulerHover != null) _eventSchedulerHover.active = false;					
+							buttonsIconsNotActive();
+							
+							FlxG.switchState(new EventSchedule());
+						}
+					}
+				}
+			
+			#end
+			
+			if (RegTriggers._mainStateMakeActiveElements == true)
+			{
+				RegTriggers._mainStateMakeActiveElements = false;				
+				buttonsIconsActive();
+			}
+							
+			if (_group_sprite.length > 0)
+			{
+				for (i in 0... 6)
+				{
+					if (ActionInput.overlaps(_group_sprite[i]) == true
+					&&  _group_sprite[i].active == true
+					)
+					{
+						var _y:Float = 0;
+						var _x:Int = 0;
+						
+						if (i > 3 && i < 9)
+						{
+							_y = 79;
+							_x = - 4;
+						}
+						
+						_group_sprite[i].setPosition(_icon_offset_x + ((i + _x) * 79), 440 + _y + _offset_icons_and__event_scheduler_y);
+						_game_highlighted.setPosition(_icon_offset_x + ((i + _x) * 79), 440 + _y + _offset_icons_and__event_scheduler_y);
+						_game_highlighted.visible = true;
+							
+						if (i == 0) 
+							_text_title_icon_description.text = "Multiplayer Online. (World)";
+						if (i == 1)
+							_text_title_icon_description.text = "Offline (Player vs Player)";
+						if (i == 2)
+							_text_title_icon_description.text = "Nothing here yet.";
+						if (i == 3)
+							_text_title_icon_description.text = "Configuration Menu. (Gear)";
+						if (i == 4)
+							_text_title_icon_description.text = "Client Help. (Question)";
+						if (i == 5)
+							_text_title_icon_description.text = "Credits. (Attribution)";
+							
+						// next go to the next for() code block above this for() code.
+					}
+				}
+			}			
+			
+			// hide the gear configuration icon if true.
+			#if html5
+				_group_sprite[0].active = false;
+				_group_sprite[0].alpha = 0.25;
+				
+				_group_sprite[2].active = false;
+				_group_sprite[2].alpha = 0.25;
+				
+				_group_sprite[3].active = false;
+				_group_sprite[3].alpha = 0.25;
+			#end
+			
+			if (ActionInput.justPressed() == true
+			&& _group_sprite.length > 0)
+			{		
+				for (i in 0... 6)
+				{
+					if (ActionInput.overlaps(_group_sprite[i]) == true
+					&&  _group_sprite[i].active == true
+					&&	RegTriggers._buttons_set_not_active == false)
+					{
+						if (RegCustom._sound_enabled[Reg._tn] == true
+						&&  Reg2._boxScroller_is_scrolling == false)
+							FlxG.sound.play("click", 1, false);
+					
+						_clicked = true;
+					}
+				}
+			}
+			
+			else if (ActionInput.justReleased() == true
+			&&  _group_sprite.length > 0
+			&&  _clicked == true)
+			{
+				for (i in 0... 6)
+				{
+					if (ActionInput.overlaps(_group_sprite[i]) == true
+					&&  _group_sprite[i].active == true
+					&&	RegTriggers._buttons_set_not_active == false)
+						titleMenu(i);
+				}
+			}
+		}
+		
+		if (Reg._yesNoKeyPressValueAtMessage == 1 && Reg._buttonCodeValues == "a1000")
+		{
+			Reg._buttonCodeValues = "";
+			Reg._yesNoKeyPressValueAtMessage = 0;
+
+			FlxG.openURL("http://kboardgames.com/forum/viewtopic.php?f=10&t=13","_blank"); 
+			
+			buttonsIconsActive();
+		}
+	
+		if (Reg._yesNoKeyPressValueAtMessage >= 2 && Reg._buttonCodeValues == "a1000")
+		{
+			Reg._buttonCodeValues = "";
+			Reg._yesNoKeyPressValueAtMessage = 0;
+			
+			buttonsIconsActive();
+		}
+		
+		// should message box be displayed?
+		if (Reg._messageId > 0 && Reg._messageId != 1000000
+		&&	RegTriggers._buttons_set_not_active == false)
+		{
+			var _msg = new IdsMessageBox();
+			add(_msg);
+		}
+		
+		super.update(elapsed);
+		
+		/*
+		#if !html5
+			if (FlxG.mouse.justPressed == true)
+			{
+				if (Reg._startFullscreen == true) FlxG.fullscreen = true; 
+				
+				if (_sound_channel != null)
+					_sound_channel.stop();
+			}
+		#end
+		*/
 	}
 }

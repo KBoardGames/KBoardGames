@@ -268,211 +268,7 @@ class SnakesAndLaddersMovePlayersPiece extends FlxSprite {
 				}
 			}
 		}		
-	}
-	
-	
-	override public function update (elapsed:Float)
-	{
-		if (Reg._gameOverForPlayer == false && Reg._gameId == 3)
-		{
-			// ######### MOVE PIECE TO UNIT #################################
-			// this loop moves a piece that was clicked to the empty unit selected.
-			if (Reg._gameMovePiece == true && Reg._gameDidFirstMove == true) // _gameId with a value of 0 is snakes and ladders.
-			{			
-				if (_id == 1 || _id == 2) isThereMovement();
-			}
-							
-			// move the piece.
-			if (Reg._hasPieceMovedFinished == 2 
-			&&  Reg._gameDiceCurrentIndex[Reg._playerMoving] 
-			==  Reg._gameDiceMaximumIndex[Reg._playerMoving]
-			)
-			{
-				// this code is needed to update highlighted capturing unit. the moved to unit.
-				for (yy in 0...8)
-				{
-					for (xx in 0...8)
-					{
-						// move can be made. create the new var used to move piece.
-						if (Reg._gamePointValueForPiece[yy][xx] == Reg._gameDiceMaximumIndex[Reg._playerMoving])
-						{
-							if (ID == _id && _id == 1)
-							{							
-								Reg._gameYYnewA = yy;
-								Reg._gameXXnewA = xx;
-							}
-							
-							else if (ID == _id && _id == 2)
-							{
-								Reg._gameYYnewB = yy;
-								Reg._gameXXnewB = xx;
-							}
-						}
-					}
-				}
-					
-				RegTriggers._eventForAllPlayers = true; // triggers an event at PlayStateNetworkEventsIds.
-				
-				// for a 2 player game, this code forces only 1 piece to be moved per player. for an offline game, this code moves pieces normally.
-				if (Reg._move_number_current == Reg._move_number_next
-				||  Reg._game_offline_vs_cpu == true
-				||  Reg._game_offline_vs_player == true )
-				{
-					if (_id == 1 || _id == 2)
-					 {				 
-						// end the game if piece is at the end of the board.
-						if (Reg._gameDiceMaximumIndex[Reg._playerMoving] >= 64)
-						{
-							__ids_win_lose_or_draw.canPlayerMove2();
-							Reg._playerCanMovePiece = false;						
-						}
-						
-						else 
-						{
-							Reg._number_wheel_ticks = 0;
-							Reg._playerCanMovePiece = true;
-						}
-						
-						// second time here, so the backdoor piece was updated. trigger the change of players.
-						if (Reg._triggerNextStuffToDo == 1 && Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false && Reg._rolledA6 == false) Reg._pieceMovedUpdateServer = true;
-						
-						// if here then piece has been moved. prepare the vars to end movement. the Reg._isThisPieceAtBackdoor below these lines, will determine if at the back door, the other player, if the piece should be updated. update if Reg._isThisPieceAtBackdoor is true.
-						Reg._hasPieceMovedFinished = 0;
-						Reg._gameDidFirstMove = false;
-						
-						if (Reg._backdoorMoveValue != -1)
-							RegTypedef._dataGame3._gameUnitNumberNew = Reg._backdoorMoveValue;
-						Reg._backdoorMoveValue = -1;
-						
-						Reg._gameMovePiece = false;
-						_doOnce = false;
-						
-						if (Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false)
-						{
-							if (Reg._triggerNextStuffToDo == 1)
-							{
-								 if (Reg._rolledA6 == true)
-								 {
-									// did the other player roll a 6. pass the roll dice message to that player, so that the player will only move again when received this message. because sometime the player not rolling has not finished moving.
-									if (Reg._isThisPieceAtBackdoor == false)
-									{								
-										Reg._gameMessage = "Roll dice again.";
-										RegTypedef._dataGameMessage._gameMessage = "Other player rolls dice again.";
-										
-										// send message to server then server to other client.
-										PlayState.clientSocket.send("Game Message Not Sender", RegTypedef._dataGameMessage);
-										haxe.Timer.delay(function (){}, Reg2._event_sleep);
-										
-										Reg._gameHost = true;
-										RegFunctions.is_player_attacker(true);
-										
-										Reg._gameDidFirstMove = false;
-										Reg._outputMessage = true;
-										Reg._number_wheel_ticks = 0;
-										Reg._playerCanMovePiece = true;
-									}
-									
-									else
-									{
-										// other player that is waiting to move piece.
-										Reg._gameHost = false;
-										RegFunctions.is_player_attacker(false);
-										
-										Reg._gameDidFirstMove = true;
-										Reg._playerCanMovePiece = false;
-									}
-								
-									Reg._hasPieceMovedFinished = 0;
-									Reg._triggerNextStuffToDo = 0;
-									Reg._backdoorMoveValue = -1;
-																		
-									return;
-								}
-								
-							}
-							
-							// Reg._isThisPieceAtBackdoor is set to true at SnakesAndLaddersClickMe.hx if Reg._backdoorMoveValue != -1
-							if (Reg._isThisPieceAtBackdoor == true) 
-							{
-								Reg._isThisPieceAtBackdoor = false;
-								Reg._number_wheel_ticks = 0;
-								Reg._playerCanMovePiece = true;
-								
-								Reg._gameHost = true;
-								RegFunctions.is_player_attacker(true);
-						
-							}
-							else
-							{
-								// update the server because it is the other players turn to move piece.
-								if (Reg._playerCanMovePiece == true) 
-								{						
-									// this is needed for basic notation buttons use.
-									Reg._moveNumberCurrentForNotation = Reg._move_number_next;
-						
-									Reg._move_number_next += 1;
-																
-									// what player moves next. a value of 3 means its the third player. eg, Reg._gameDiceCurrentIndex[2] stores the location of the third player's piece.
-									if (Reg._move_number_next >= 2)
-									Reg._move_number_next = 0;
-									
-									Reg._playerCanMovePiece = false;
-									
-									Reg._pieceMovedUpdateServer = true;		
-									//Reg._triggerNextStuffToDo = 0;
-									Reg._rolledA6 = false;
-									
-									Reg._gameHost = false;
-									RegFunctions.is_player_attacker(false);
-								}
-								else 
-								{
-									Reg._number_wheel_ticks = 0;
-									Reg._playerCanMovePiece = true;
-								}								
-							}
-						}
-						
-						else
-						{	// do this if not playing online. the other player can now move the piece. 2 player mode.
-							if (Reg._triggerNextStuffToDo == 0)
-							{							
-								// this is needed for basic notation buttons use.
-								Reg._moveNumberCurrentForNotation = Reg._move_number_next;
-								if (Reg._backdoorMoveValue != -1)
-									RegTypedef._dataGame3._gameUnitNumberNew = Reg._backdoorMoveValue;
-								Reg._backdoorMoveValue = -1;
-						
-								Reg._move_number_next += 1;
-																
-								// what player moves next. a value of 3 means its the third player. eg, Reg._gameDiceCurrentIndex[2] stores the location of the third player's piece.
-								if (Reg._move_number_next >= 2)
-								Reg._move_number_next = 0;
-								
-								
-								if (Reg._gameHost == false) 
-								{
-									Reg._gameHost = true;
-									RegFunctions.is_player_attacker(true);
-								}
-								else 
-								{
-									Reg._gameHost = false;
-									RegFunctions.is_player_attacker(false);
-								}
-								
-							} else  Reg._triggerNextStuffToDo = 0;
-						}
-					 }
-				}
-				
-				
-			}  
-		}
-		
-		
-		super.update(elapsed);		
-	}
+	}	
 	
 	private function movePieceNormally():Void
 	{
@@ -678,4 +474,208 @@ class SnakesAndLaddersMovePlayersPiece extends FlxSprite {
 		y -= 15; // there is 75 height pixels per game board unit. 75 / 15 = 5. so 5 piece movements per unit.	
 			
 	}
+	
+	override public function update (elapsed:Float)
+	{
+		if (Reg._gameOverForPlayer == false && Reg._gameId == 3)
+		{
+			// ######### MOVE PIECE TO UNIT #################################
+			// this loop moves a piece that was clicked to the empty unit selected.
+			if (Reg._gameMovePiece == true && Reg._gameDidFirstMove == true) // _gameId with a value of 0 is snakes and ladders.
+			{			
+				if (_id == 1 || _id == 2) isThereMovement();
+			}
+							
+			// move the piece.
+			if (Reg._hasPieceMovedFinished == 2 
+			&&  Reg._gameDiceCurrentIndex[Reg._playerMoving] 
+			==  Reg._gameDiceMaximumIndex[Reg._playerMoving]
+			)
+			{
+				// this code is needed to update highlighted capturing unit. the moved to unit.
+				for (yy in 0...8)
+				{
+					for (xx in 0...8)
+					{
+						// move can be made. create the new var used to move piece.
+						if (Reg._gamePointValueForPiece[yy][xx] == Reg._gameDiceMaximumIndex[Reg._playerMoving])
+						{
+							if (ID == _id && _id == 1)
+							{							
+								Reg._gameYYnewA = yy;
+								Reg._gameXXnewA = xx;
+							}
+							
+							else if (ID == _id && _id == 2)
+							{
+								Reg._gameYYnewB = yy;
+								Reg._gameXXnewB = xx;
+							}
+						}
+					}
+				}
+					
+				RegTriggers._eventForAllPlayers = true; // triggers an event at PlayStateNetworkEventsIds.
+				
+				// for a 2 player game, this code forces only 1 piece to be moved per player. for an offline game, this code moves pieces normally.
+				if (Reg._move_number_current == Reg._move_number_next
+				||  Reg._game_offline_vs_cpu == true
+				||  Reg._game_offline_vs_player == true )
+				{
+					if (_id == 1 || _id == 2)
+					 {				 
+						// end the game if piece is at the end of the board.
+						if (Reg._gameDiceMaximumIndex[Reg._playerMoving] >= 64)
+						{
+							__ids_win_lose_or_draw.canPlayerMove2();
+							Reg._playerCanMovePiece = false;						
+						}
+						
+						else 
+						{
+							Reg._number_wheel_ticks = 0;
+							Reg._playerCanMovePiece = true;
+						}
+						
+						// second time here, so the backdoor piece was updated. trigger the change of players.
+						if (Reg._triggerNextStuffToDo == 1 && Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false && Reg._rolledA6 == false) Reg._pieceMovedUpdateServer = true;
+						
+						// if here then piece has been moved. prepare the vars to end movement. the Reg._isThisPieceAtBackdoor below these lines, will determine if at the back door, the other player, if the piece should be updated. update if Reg._isThisPieceAtBackdoor is true.
+						Reg._hasPieceMovedFinished = 0;
+						Reg._gameDidFirstMove = false;
+						
+						if (Reg._backdoorMoveValue != -1)
+							RegTypedef._dataGame3._gameUnitNumberNew = Reg._backdoorMoveValue;
+						Reg._backdoorMoveValue = -1;
+						
+						Reg._gameMovePiece = false;
+						_doOnce = false;
+						
+						if (Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false)
+						{
+							if (Reg._triggerNextStuffToDo == 1)
+							{
+								 if (Reg._rolledA6 == true)
+								 {
+									// did the other player roll a 6. pass the roll dice message to that player, so that the player will only move again when received this message. because sometime the player not rolling has not finished moving.
+									if (Reg._isThisPieceAtBackdoor == false)
+									{								
+										Reg._gameMessage = "Roll dice again.";
+										RegTypedef._dataGameMessage._gameMessage = "Other player rolls dice again.";
+										
+										// send message to server then server to other client.
+										PlayState.clientSocket.send("Game Message Not Sender", RegTypedef._dataGameMessage);
+										haxe.Timer.delay(function (){}, Reg2._event_sleep);
+										
+										Reg._gameHost = true;
+										RegFunctions.is_player_attacker(true);
+										
+										Reg._gameDidFirstMove = false;
+										Reg._outputMessage = true;
+										Reg._number_wheel_ticks = 0;
+										Reg._playerCanMovePiece = true;
+									}
+									
+									else
+									{
+										// other player that is waiting to move piece.
+										Reg._gameHost = false;
+										RegFunctions.is_player_attacker(false);
+										
+										Reg._gameDidFirstMove = true;
+										Reg._playerCanMovePiece = false;
+									}
+								
+									Reg._hasPieceMovedFinished = 0;
+									Reg._triggerNextStuffToDo = 0;
+									Reg._backdoorMoveValue = -1;
+																		
+									return;
+								}
+								
+							}
+							
+							// Reg._isThisPieceAtBackdoor is set to true at SnakesAndLaddersClickMe.hx if Reg._backdoorMoveValue != -1
+							if (Reg._isThisPieceAtBackdoor == true) 
+							{
+								Reg._isThisPieceAtBackdoor = false;
+								Reg._number_wheel_ticks = 0;
+								Reg._playerCanMovePiece = true;
+								
+								Reg._gameHost = true;
+								RegFunctions.is_player_attacker(true);
+						
+							}
+							else
+							{
+								// update the server because it is the other players turn to move piece.
+								if (Reg._playerCanMovePiece == true) 
+								{						
+									// this is needed for basic notation buttons use.
+									Reg._moveNumberCurrentForNotation = Reg._move_number_next;
+						
+									Reg._move_number_next += 1;
+																
+									// what player moves next. a value of 3 means its the third player. eg, Reg._gameDiceCurrentIndex[2] stores the location of the third player's piece.
+									if (Reg._move_number_next >= 2)
+									Reg._move_number_next = 0;
+									
+									Reg._playerCanMovePiece = false;
+									
+									Reg._pieceMovedUpdateServer = true;		
+									//Reg._triggerNextStuffToDo = 0;
+									Reg._rolledA6 = false;
+									
+									Reg._gameHost = false;
+									RegFunctions.is_player_attacker(false);
+								}
+								else 
+								{
+									Reg._number_wheel_ticks = 0;
+									Reg._playerCanMovePiece = true;
+								}								
+							}
+						}
+						
+						else
+						{	// do this if not playing online. the other player can now move the piece. 2 player mode.
+							if (Reg._triggerNextStuffToDo == 0)
+							{							
+								// this is needed for basic notation buttons use.
+								Reg._moveNumberCurrentForNotation = Reg._move_number_next;
+								if (Reg._backdoorMoveValue != -1)
+									RegTypedef._dataGame3._gameUnitNumberNew = Reg._backdoorMoveValue;
+								Reg._backdoorMoveValue = -1;
+						
+								Reg._move_number_next += 1;
+																
+								// what player moves next. a value of 3 means its the third player. eg, Reg._gameDiceCurrentIndex[2] stores the location of the third player's piece.
+								if (Reg._move_number_next >= 2)
+								Reg._move_number_next = 0;
+								
+								
+								if (Reg._gameHost == false) 
+								{
+									Reg._gameHost = true;
+									RegFunctions.is_player_attacker(true);
+								}
+								else 
+								{
+									Reg._gameHost = false;
+									RegFunctions.is_player_attacker(false);
+								}
+								
+							} else  Reg._triggerNextStuffToDo = 0;
+						}
+					 }
+				}
+				
+				
+			}  
+		}
+		
+		
+		super.update(elapsed);		
+	}
+	
 } //

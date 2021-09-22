@@ -203,67 +203,6 @@ class MessageBox extends FlxGroup
 		popupMessageShow();
 	}
 	
-	override public function destroy()
-	{		
-		_timeDo.stop();
-		
-		if (_buttonMessageOK != null)
-		{
-			remove(_buttonMessageOK);
-			_buttonMessageOK.destroy();
-		}
-		
-		if (_button1 != null)
-		{
-			remove(_button1);
-			_button1.destroy();
-		}
-		
-		if (_button5 != null)
-		{
-			remove(_button5);
-			_button5.destroy();
-		}
-			
-		if (_button6 != null)
-		{
-			remove(_button6);
-			_button6.destroy();
-		}
-		
-		
-		super.destroy();
-	}
-	
-	override public function update(elapsed:Float):Void 
-	{	
-		if (Reg._messageId == _id)
-		{
-			if (_useTimer == true)
-			{
-				_timeDo.run = function() 
-				{
-					// minus 1 from total move var.
-					if (_timeRemaining > 0)	_timeRemaining -= 1;
-
-					_textTimer.text = formatTime(_timeRemaining);			
-					if (_timeRemaining <= 0) moveZeroReached();
-				}
-			}
-
-			if (GameChatter._input_chat != null)
-			{
-				if (GameChatter._input_chat.hasFocus == true)
-				{
-					return;
-				}
-			}
-			
-		}
-
-		super.update(elapsed);
-	}
-	
 	private function hideButtons():Void
 	{
 		_messageBox.visible = false;
@@ -490,5 +429,67 @@ class MessageBox extends FlxGroup
 			
 			
 		} 
+	}	
+	
+	override public function destroy()
+	{		
+		_timeDo.stop();
+		
+		if (_buttonMessageOK != null)
+		{
+			remove(_buttonMessageOK);
+			_buttonMessageOK.destroy();
+		}
+		
+		if (_button1 != null)
+		{
+			remove(_button1);
+			_button1.destroy();
+		}
+		
+		if (_button5 != null)
+		{
+			remove(_button5);
+			_button5.destroy();
+		}
+			
+		if (_button6 != null)
+		{
+			remove(_button6);
+			_button6.destroy();
+		}
+		
+		
+		super.destroy();
 	}
+	
+	override public function update(elapsed:Float):Void 
+	{	
+		if (Reg._messageId == _id)
+		{
+			if (_useTimer == true)
+			{
+				_timeDo.run = function() 
+				{
+					// minus 1 from total move var.
+					if (_timeRemaining > 0)	_timeRemaining -= 1;
+
+					_textTimer.text = formatTime(_timeRemaining);			
+					if (_timeRemaining <= 0) moveZeroReached();
+				}
+			}
+
+			if (GameChatter._input_chat != null)
+			{
+				if (GameChatter._input_chat.hasFocus == true)
+				{
+					return;
+				}
+			}
+			
+		}
+
+		super.update(elapsed);
+	}
+	
 }//

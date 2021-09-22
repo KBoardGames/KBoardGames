@@ -92,28 +92,6 @@ class NewAccount extends FlxGroup
 		
 	}
 	
-	override public function update(elapsed:Float):Void
-	{
-		if (Reg._yesNoKeyPressValueAtMessage > 0 && Reg._buttonCodeValues == "e1000")
-		{
-			Reg._yesNoKeyPressValueAtMessage = 0;
-			
-			if (_button_b1.has_toggle == true)
-				RegTypedef._dataStatistics._chess_elo_rating = 800;
-			
-			else if (_button_b2.has_toggle == true)
-				RegTypedef._dataStatistics._chess_elo_rating = 1200;
-			
-			else if (_button_b3.has_toggle == true)
-				RegTypedef._dataStatistics._chess_elo_rating = 1600;
-						
-			PlayState.clientSocket.send("Save New Account Configurations", RegTypedef._dataStatistics);
-			closeState();
-		}
-		
-		super.update(elapsed);
-	}
-	
 	private function set_chess_elo_button_toggle():Void
 	{
 		_button_b1.set_toggled(false);
@@ -173,4 +151,27 @@ class NewAccount extends FlxGroup
 	{
 		super.destroy();
 	}
+	
+	override public function update(elapsed:Float):Void
+	{
+		if (Reg._yesNoKeyPressValueAtMessage > 0 && Reg._buttonCodeValues == "e1000")
+		{
+			Reg._yesNoKeyPressValueAtMessage = 0;
+			
+			if (_button_b1.has_toggle == true)
+				RegTypedef._dataStatistics._chess_elo_rating = 800;
+			
+			else if (_button_b2.has_toggle == true)
+				RegTypedef._dataStatistics._chess_elo_rating = 1200;
+			
+			else if (_button_b3.has_toggle == true)
+				RegTypedef._dataStatistics._chess_elo_rating = 1600;
+						
+			PlayState.clientSocket.send("Save New Account Configurations", RegTypedef._dataStatistics);
+			closeState();
+		}
+		
+		super.update(elapsed);
+	}
+	
 }

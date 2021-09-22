@@ -119,7 +119,156 @@ class CheckersMovePlayersPiece extends FlxSprite {
 		else loadGraphic("assets/images/checkers/" + pieceValue + ".png", false); // load the different game pieces.
 
 	}
+	
+	private function histroyChangeImage():Void
+	{		
+		if (_triggerMovePiece1a == true && _id == _triggerIdValueOld - 1)
+		{
+			_triggerMovePiece1a = false;
+			_triggerIdValueOld = -1;
+			
+			if (_triggerImageValueOld == 0)	loadGraphic("assets/images/0.png", false);
+			else loadGraphic("assets/images/checkers/" + _triggerImageValueOld + ".png", false);
+			
+		}
+		
+		if (_triggerMovePiece1b == true && _id == _triggerIdValueNew - 1)
+		{
+			_triggerMovePiece1b = false;
+			_triggerIdValueNew = -1;
+			
+			if (_triggerImageValueNew == 0)	loadGraphic("assets/images/0.png", false);
+			else loadGraphic("assets/images/checkers/" + _triggerImageValueNew + ".png", false);
+			
+		}
+		
+		if (_triggerMovePiece2a == true && _id == _triggerIdValueOld2 - 1)
+		{
+			_triggerMovePiece2a = false;
+			_triggerIdValueOld2 = -1;
+			
+			if (_triggerImageValueOld2 == 0) loadGraphic("assets/images/0.png", false);
+			else loadGraphic("assets/images/checkers/" + _triggerImageValueOld2 + ".png", false);
+						
+		}
+	}
+		
+	private function groupPlayer():Void
+	{
+		// since this unit now has an image, add it to a group. if this unit already had an image of the other player's piece then that image will be removed from its group. see below.
+		if (Reg._groupPlayer1 != null && Reg._groupPlayer2 != null)
+		{
+			// here is a complicated loop that adds groups so that moved or jumped pieces are owned by the correct player. this code works so there is no need to understand it.
+			if (Reg._otherPlayer == false)
+			{
+				if (Reg._gameHost == false ) Reg._groupPlayer2.add(this);				
+				else Reg._groupPlayer1.add(this);
+			}
+			else
+			{
+				if (Reg._gameHost == false ) Reg._groupPlayer1.add(this);				
+				else Reg._groupPlayer2.add(this);
+			}
+		}
+	
+		Reg._otherPlayer = false;
+	}
+	
+	public static function historyMovePieceForwards():Void
+	{	
+		Reg._step -= 1;
+	
+		// moving piece normally or jumping over piece.
+		// if these values are true then this piece should be moved.
+		if (Reg._moveHistoryPieceLocationOld1[Reg._step] !=
+		    Reg._moveHistoryPieceLocationNew1[Reg._step])
+		{
+			// set the image value for the first piece.
+			_triggerImageValueOld = Reg._moveHistoryPieceValueOld1[Reg._step];
+			
+			// get this id of this piece so that piece can be moved.
+			_triggerIdValueNew = Reg._moveHistoryPieceLocationNew1[Reg._step];
+			
+			// set the image value for the first piece.
+			_triggerImageValueNew = Reg._moveHistoryPieceValueNew1[Reg._step];
+			
+			// get this id of this piece so that piece can be moved.
+			_triggerIdValueOld = Reg._moveHistoryPieceLocationOld1[Reg._step];
+			
+			_triggerMovePiece1a = true; // trigger the event so that move is moved.
+			_triggerMovePiece1b = true;
+			
+			Reg._gameYYold = RegFunctions.getPfindYY2(Reg._moveHistoryPieceLocationOld1[Reg._step]);
+			Reg._gameXXold = RegFunctions.getPfindXX2(Reg._moveHistoryPieceLocationOld1[Reg._step]);
+			
+			Reg._gameYYnew = RegFunctions.getPfindYY2(Reg._moveHistoryPieceLocationNew1[Reg._step]);
+			Reg._gameXXnew = RegFunctions.getPfindXX2(Reg._moveHistoryPieceLocationNew1[Reg._step]);
+		}
+		
+		// Middle piece.
+		// if these values are true then there is a second piece to move.
+		if (Reg._moveHistoryPieceLocationOld2[Reg._step] !=
+		    Reg._moveHistoryPieceLocationNew2[Reg._step])
+		{
+			// set the image value for the second piece.
+			_triggerImageValueOld2 = Reg._moveHistoryPieceValueNew2[Reg._step];
+			
+			// get this id of this piece so that piece can be moved.
+			_triggerIdValueOld2 = Reg._moveHistoryPieceLocationOld2[Reg._step];
+			
+			_triggerMovePiece2a = true; // trigger the event so that move is moved.
 
+		}
+		
+		Reg._step += 1;
+		
+	}
+	
+	public static function historyMovePieceBackwards():Void
+	{	
+		// moving piece normally or jumping over piece.
+		// if these values are true then this piece should be moved.
+		if (Reg._moveHistoryPieceLocationOld1[Reg._step] !=
+		    Reg._moveHistoryPieceLocationNew1[Reg._step])
+		{
+			// set the image value for the first piece.
+			_triggerImageValueOld = Reg._moveHistoryPieceValueOld1[Reg._step];
+			
+			// get this id of this piece so that piece can be moved.
+			_triggerIdValueNew = Reg._moveHistoryPieceLocationOld1[Reg._step];
+			
+			// set the image value for the first piece.
+			_triggerImageValueNew = Reg._moveHistoryPieceValueNew1[Reg._step];
+			
+			// get this id of this piece so that piece can be moved.
+			_triggerIdValueOld = Reg._moveHistoryPieceLocationNew1[Reg._step];
+			
+			_triggerMovePiece1a = true; // trigger the event so that move is moved.
+			_triggerMovePiece1b = true;
+			
+			Reg._gameYYold = RegFunctions.getPfindYY2(Reg._moveHistoryPieceLocationOld1[Reg._step]);
+			Reg._gameXXold = RegFunctions.getPfindXX2(Reg._moveHistoryPieceLocationOld1[Reg._step]);
+			
+			Reg._gameYYnew = RegFunctions.getPfindYY2(Reg._moveHistoryPieceLocationNew1[Reg._step]);
+			Reg._gameXXnew = RegFunctions.getPfindXX2(Reg._moveHistoryPieceLocationNew1[Reg._step]);
+		}
+		
+		// Middle piece.
+		// if these values are true then there is a second piece to move.
+		if (Reg._moveHistoryPieceLocationOld2[Reg._step] !=
+		    Reg._moveHistoryPieceLocationNew2[Reg._step])
+		{
+			// set the image value for the second piece.
+			_triggerImageValueOld2 = Reg._moveHistoryPieceValueOld2[Reg._step];
+			
+			// get this id of this piece so that piece can be moved.
+			_triggerIdValueOld2 = Reg._moveHistoryPieceLocationOld2[Reg._step];
+			
+			_triggerMovePiece2a = true; // trigger the event so that move is moved.
+		}		
+
+	}	
+	
 	override public function update (elapsed:Float)
 	{	
 		RegFunctions.is_player_attacker(false); // a value of false then the player hosts a game known as the defender. true, if being hosted. eg, array[Reg._playerMoving][value][yy][xx]. playerAttacker is the opposite of the defender. so if Reg._playerMoving = 0 then its the player hosting the game while Reg._playerNotMoving which has a value of 1 had accepted the game at the chatroom.
@@ -500,157 +649,6 @@ class CheckersMovePlayersPiece extends FlxSprite {
 		histroyChangeImage();
 		
 		super.update(elapsed);		
-	}
-	
-	private function histroyChangeImage():Void
-	{		
-		if (_triggerMovePiece1a == true && _id == _triggerIdValueOld - 1)
-		{
-			_triggerMovePiece1a = false;
-			_triggerIdValueOld = -1;
-			
-			if (_triggerImageValueOld == 0)	loadGraphic("assets/images/0.png", false);
-			else loadGraphic("assets/images/checkers/" + _triggerImageValueOld + ".png", false);
-			
-		}
-		
-		if (_triggerMovePiece1b == true && _id == _triggerIdValueNew - 1)
-		{
-			_triggerMovePiece1b = false;
-			_triggerIdValueNew = -1;
-			
-			if (_triggerImageValueNew == 0)	loadGraphic("assets/images/0.png", false);
-			else loadGraphic("assets/images/checkers/" + _triggerImageValueNew + ".png", false);
-			
-		}
-		
-		if (_triggerMovePiece2a == true && _id == _triggerIdValueOld2 - 1)
-		{
-			_triggerMovePiece2a = false;
-			_triggerIdValueOld2 = -1;
-			
-			if (_triggerImageValueOld2 == 0) loadGraphic("assets/images/0.png", false);
-			else loadGraphic("assets/images/checkers/" + _triggerImageValueOld2 + ".png", false);
-						
-		}
-	}
-		
-	private function groupPlayer():Void
-	{
-		// since this unit now has an image, add it to a group. if this unit already had an image of the other player's piece then that image will be removed from its group. see below.
-		if (Reg._groupPlayer1 != null && Reg._groupPlayer2 != null)
-		{
-			// here is a complicated loop that adds groups so that moved or jumped pieces are owned by the correct player. this code works so there is no need to understand it.
-			if (Reg._otherPlayer == false)
-			{
-				if (Reg._gameHost == false ) Reg._groupPlayer2.add(this);				
-				else Reg._groupPlayer1.add(this);
-			}
-			else
-			{
-				if (Reg._gameHost == false ) Reg._groupPlayer1.add(this);				
-				else Reg._groupPlayer2.add(this);
-			}
-		}
-	
-		Reg._otherPlayer = false;
-	}
-	
-	public static function historyMovePieceForwards():Void
-	{	
-		Reg._step -= 1;
-	
-		// moving piece normally or jumping over piece.
-		// if these values are true then this piece should be moved.
-		if (Reg._moveHistoryPieceLocationOld1[Reg._step] !=
-		    Reg._moveHistoryPieceLocationNew1[Reg._step])
-		{
-			// set the image value for the first piece.
-			_triggerImageValueOld = Reg._moveHistoryPieceValueOld1[Reg._step];
-			
-			// get this id of this piece so that piece can be moved.
-			_triggerIdValueNew = Reg._moveHistoryPieceLocationNew1[Reg._step];
-			
-			// set the image value for the first piece.
-			_triggerImageValueNew = Reg._moveHistoryPieceValueNew1[Reg._step];
-			
-			// get this id of this piece so that piece can be moved.
-			_triggerIdValueOld = Reg._moveHistoryPieceLocationOld1[Reg._step];
-			
-			_triggerMovePiece1a = true; // trigger the event so that move is moved.
-			_triggerMovePiece1b = true;
-			
-			Reg._gameYYold = RegFunctions.getPfindYY2(Reg._moveHistoryPieceLocationOld1[Reg._step]);
-			Reg._gameXXold = RegFunctions.getPfindXX2(Reg._moveHistoryPieceLocationOld1[Reg._step]);
-			
-			Reg._gameYYnew = RegFunctions.getPfindYY2(Reg._moveHistoryPieceLocationNew1[Reg._step]);
-			Reg._gameXXnew = RegFunctions.getPfindXX2(Reg._moveHistoryPieceLocationNew1[Reg._step]);
-		}
-		
-		// Middle piece.
-		// if these values are true then there is a second piece to move.
-		if (Reg._moveHistoryPieceLocationOld2[Reg._step] !=
-		    Reg._moveHistoryPieceLocationNew2[Reg._step])
-		{
-			// set the image value for the second piece.
-			_triggerImageValueOld2 = Reg._moveHistoryPieceValueNew2[Reg._step];
-			
-			// get this id of this piece so that piece can be moved.
-			_triggerIdValueOld2 = Reg._moveHistoryPieceLocationOld2[Reg._step];
-			
-			_triggerMovePiece2a = true; // trigger the event so that move is moved.
-
-		}
-		
-		Reg._step += 1;
-		
-	}
-	
-	public static function historyMovePieceBackwards():Void
-	{	
-		// moving piece normally or jumping over piece.
-		// if these values are true then this piece should be moved.
-		if (Reg._moveHistoryPieceLocationOld1[Reg._step] !=
-		    Reg._moveHistoryPieceLocationNew1[Reg._step])
-		{
-			// set the image value for the first piece.
-			_triggerImageValueOld = Reg._moveHistoryPieceValueOld1[Reg._step];
-			
-			// get this id of this piece so that piece can be moved.
-			_triggerIdValueNew = Reg._moveHistoryPieceLocationOld1[Reg._step];
-			
-			// set the image value for the first piece.
-			_triggerImageValueNew = Reg._moveHistoryPieceValueNew1[Reg._step];
-			
-			// get this id of this piece so that piece can be moved.
-			_triggerIdValueOld = Reg._moveHistoryPieceLocationNew1[Reg._step];
-			
-			_triggerMovePiece1a = true; // trigger the event so that move is moved.
-			_triggerMovePiece1b = true;
-			
-			Reg._gameYYold = RegFunctions.getPfindYY2(Reg._moveHistoryPieceLocationOld1[Reg._step]);
-			Reg._gameXXold = RegFunctions.getPfindXX2(Reg._moveHistoryPieceLocationOld1[Reg._step]);
-			
-			Reg._gameYYnew = RegFunctions.getPfindYY2(Reg._moveHistoryPieceLocationNew1[Reg._step]);
-			Reg._gameXXnew = RegFunctions.getPfindXX2(Reg._moveHistoryPieceLocationNew1[Reg._step]);
-		}
-		
-		// Middle piece.
-		// if these values are true then there is a second piece to move.
-		if (Reg._moveHistoryPieceLocationOld2[Reg._step] !=
-		    Reg._moveHistoryPieceLocationNew2[Reg._step])
-		{
-			// set the image value for the second piece.
-			_triggerImageValueOld2 = Reg._moveHistoryPieceValueOld2[Reg._step];
-			
-			// get this id of this piece so that piece can be moved.
-			_triggerIdValueOld2 = Reg._moveHistoryPieceLocationOld2[Reg._step];
-			
-			_triggerMovePiece2a = true; // trigger the event so that move is moved.
-			
-		}
-		
-
 	}
 	
 }

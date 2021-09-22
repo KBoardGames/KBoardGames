@@ -236,15 +236,6 @@ class SceneGameRoom extends FlxState
 		
 		
 	}
-
-	override public function destroy()
-	{
-		remove(_iDsCreateAndMain);
-		_iDsCreateAndMain.destroy();
-						
-		super.destroy();
-	}
-	
 	
 	private function spectatorWatchingMessageBoxMessage():Void
 	{
@@ -314,6 +305,909 @@ class SceneGameRoom extends FlxState
 			}
 		}
 		
+	}	
+	
+	private function howManyPlayersAreInGameRoom():Int
+	{
+		var _count:Int = 0;
+
+		// used to count how many players are in room.
+		if (RegTypedef._dataPlayers._usernamesStatic[0] != "")
+			_count += 1;
+		if (RegTypedef._dataPlayers._usernamesStatic[1] != "") 
+			_count += 1;
+		if (RegTypedef._dataPlayers._usernamesStatic[2] != "") 
+			_count += 1;
+		if (RegTypedef._dataPlayers._usernamesStatic[3] != "") 
+			_count += 1;
+		
+		return _count;
+	}
+	
+	// player left the game and there is still 2 or more players playing the game, so remove the player's piece and remove player's timer text and anything else that need to be removed from the stage and then new again some other classes so that the other players' pieces for those players still in room playing the game will the correct move order of those other players.
+	public function removePlayersDataFromStage():Void
+	{
+		_iDsCreateAndMain.removeSpriteGroup();
+		
+		if (Reg._gameId == 4)
+		{
+			Reg._triggerNextStuffToDo = 0;			
+			_iDsCreateAndMain.addSpriteGroup();
+		}
+		
+		gamePlayerWhosTurnToMove();
+		gamePlayerTimeRemainingMove(); 
+
+				
+		Reg._playerWaitingAtGameRoom = false;
+	}
+	
+	// TODO Message boxes can no longer be stacked on each other because a message box that is displayed will stop user from clicking the scene underneath it. therefore, remove messageBoxMessageOrder() code and all references to it.
+	public static function messageBoxMessageOrder():Void
+	{
+		for (i in 0...Reg._messageFocusId.length)
+		{
+			if (Reg._messageFocusId[i] == Reg._messageId)
+			Reg._messageFocusId.splice(i, 1);
+			
+			if (Reg._buttonCodeFocusValues[i] == Reg._buttonCodeValues)
+			Reg._buttonCodeFocusValues.splice(i, 1);
+		}
+		
+		Reg._messageFocusId.push(0);
+		Reg._messageFocusId[Reg._messageFocusId.length - 1] = Reg._messageId;
+		
+		Reg._buttonCodeFocusValues.push("");
+		Reg._buttonCodeFocusValues[Reg._buttonCodeFocusValues.length - 1] = Reg._buttonCodeValues;
+	}
+		
+	
+	private function addChatterAndGameTime():Void
+	{
+		IDsCreateAndMain.timeGivenForEachGame(); 
+		
+		gamePlayerWhosTurnToMove();
+		gamePlayerTimeRemainingMove(); 
+		
+		for (i in 1...5)
+		{
+			if (Reg._gameId < 2) gameHistoryButtonsDisplayIt(i);
+		}
+		
+		gameIDRightSidePanel();
+				
+	}
+	
+	
+	public function buttonShowAll():Void
+	{				
+		if (buttonReturnToTitle != null)
+		{
+			buttonReturnToTitle.active = true;
+			buttonReturnToTitle.visible = true;
+		}
+		
+		if (buttonReturnToLobby != null)
+		{
+			buttonReturnToLobby.active = true;
+			buttonReturnToLobby.visible = true;
+		}
+	
+		
+		if (buttonStartRestartGame != null && Reg._game_offline_vs_cpu == true
+		||  buttonStartRestartGame != null && Reg._game_offline_vs_player == true)
+		{
+			if (RegTypedef._dataPlayers._spectatorWatching == false
+			&& Reg._game_online_vs_cpu == false)
+			{
+				buttonStartRestartGame.active = true;	
+				buttonStartRestartGame.visible = true;
+			}
+		}	
+		
+		if (buttonDrawGame != null && Reg._game_offline_vs_cpu == false
+		&&  Reg._game_offline_vs_player == false)
+		{		
+			if (Reg._gameOverForPlayer == false
+			&&  Reg._roomPlayerLimit - Reg._playerOffset > 1
+			&&  Reg._gameOverForAllPlayers == false 
+			&&  RegTypedef._dataPlayers._spectatorWatching == false)
+			{
+				buttonDrawGame.active = true;
+				buttonDrawGame.visible = true;
+				
+				buttonQuitGame.active = true;
+				buttonQuitGame.visible = true;
+			}	
+		}
+			
+	}
+	
+	/******************************
+	 * hide the restart, draw and lobby buttons because a restart button, for example, should not be shown when a player leave the game room.
+	 */
+	public function buttonHideAll():Void
+	{
+		if (Reg._game_offline_vs_player == true
+		||	Reg._game_offline_vs_cpu == true) return;
+		
+		if (buttonReturnToTitle != null)
+		{
+			buttonReturnToTitle.visible = false;
+			buttonReturnToTitle.active = false;
+		}
+		
+		if (buttonReturnToTitle2 != null)
+		{
+			buttonReturnToTitle2.visible = false;
+			buttonReturnToTitle2.active = false;
+		}
+				
+		if (buttonReturnToLobby != null)
+		{
+			buttonReturnToLobby.visible = false;
+			buttonReturnToLobby.active = false;
+		}	
+		
+		if (buttonStartRestartGame != null)
+		{
+			buttonStartRestartGame.visible = false;
+			buttonStartRestartGame.active = false;
+		}
+		
+		if (buttonStartRestartGame2 != null)
+		{
+			buttonStartRestartGame2.visible = false;
+			buttonStartRestartGame2.active = false;
+		}
+			
+		if (buttonDrawGame != null)
+		{
+			buttonDrawGame.visible = false;
+			buttonDrawGame.active = false;
+		}
+				
+		if (buttonQuitGame != null)
+		{
+			buttonQuitGame.visible = false;
+			buttonQuitGame.active = false;
+		}	
+	}
+
+	private function toggleButtonsAsChatterScrolls():Void
+	{
+		Reg._buttonCodeValues = "";
+		
+		// this is not perfect. user is able to click button even though it is behind chatter but not when chatter is fully closed. there is no way around this limitation because Haxeflixel buttons cannot tell when there is another object on top of it.
+		if (Reg._gameRoom == true && GameChatter._title_background.x > 1040)
+		{
+			var _state:Bool = true;
+			
+			gameButtonActive(_state);
+			gameButtonVisible(_state);
+		}
+		
+		if (Reg._gameRoom == true && GameChatter._title_background.x <= 1040)
+		{
+			var _state:Bool = false;
+			gameButtonActive(_state);
+			gameButtonVisible(_state);
+		}
+	}
+	
+	/******************************
+	 * toggles the active state of a button or text underneath chatter.
+	 * @param	_state	not active if false.
+	 */
+	private function gameButtonActive(_state:Bool):Void
+	{
+		if (buttonReturnToTitle != null) buttonReturnToTitle.active = _state;
+		if (buttonReturnToLobby != null) buttonReturnToLobby.active = _state;
+		
+		if (__game_chatter != null) GameChatter.changeButtonLabel();
+	}
+	
+	/******************************
+	 * toggles the visibility state of a button or text underneath chatter.
+	 * @param	_state	not visible if false.
+	 */
+	private function gameButtonVisible(_state:Bool):Void
+	{
+		if (__game_chatter != null) GameChatter.changeButtonLabel();
+	}
+	
+	/******************************
+	 * at the time a button is created, a Reg._buttonCodeValues will be given a value. that value is used here to determine what block of code to read. 
+	 * a Reg._yesNoKeyPressValueAtMessage with a value of one means that the "yes" button was clicked. a value of two refers to button with text of "no". 
+	 */
+	public function buttonCodeValues():Void
+	{
+		// return to lobby
+		if (Reg._yesNoKeyPressValueAtMessage == 1 && Reg._buttonCodeValues == "g1000")
+		{
+			Reg._yesNoKeyPressValueAtMessage = 0;
+			Reg._playerWaitingAtGameRoom = false;			
+			
+			// clear chatter then hide this FlxState.
+			//if (Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false) GameChatter.clearText();
+			
+			if (PlayState._clientDisconnect == false)
+			{
+				if (Reg._game_online_vs_cpu == false
+				&&  __game_chatter != null) 
+					__game_chatter.visible = false;
+				
+				visible = false;
+			}
+			
+			else
+			{
+				GameChatter._chatterOpenCloseButton.visible = false;
+				GameChatter._chatterOpenCloseButton.active = false;
+								
+				buttonStartRestartGame.visible = false;
+				buttonStartRestartGame.active = false;
+				buttonReturnToTitle.visible = false;
+				buttonReturnToTitle.active = false;
+				buttonReturnToLobby.visible = false;
+				buttonReturnToLobby.active = false;
+				buttonDrawGame.visible = false;
+				buttonDrawGame.active = false;
+				buttonQuitGame.visible = false;
+				buttonQuitGame.active = false;
+			}
+			
+			RegTypedef._dataMisc._gameRoom = false;			
+			RegTypedef._dataMisc._username = RegTypedef._dataAccount._username;
+			
+			Reg._game_offline_vs_cpu = false;
+			Reg._game_online_vs_cpu = false;
+			
+			Reg._gameOverForPlayer = true;
+			
+			if (RegTypedef._dataMisc._spectatorWatching == false)
+			{
+				for (i in 0...4)
+				{
+					if (RegTypedef._dataPlayers._username == RegTypedef._dataPlayers._usernamesStatic[i])
+					{
+						if (Reg._gameOverForPlayer == true) RegTypedef._dataPlayers._gamePlayersValues[i] = 3; // stats already saved so set this to 3
+						else RegTypedef._dataPlayers._gamePlayersValues[i] = 2;
+						
+						PlayState.clientSocket.send("Game Players Values", RegTypedef._dataPlayers);
+						haxe.Timer.delay(function (){}, Reg2._event_sleep);
+					}
+				}	
+			}
+			
+			else go_back_to_lobby();			
+			
+			// stop any sound playing.			
+			if (FlxG.sound.music != null && FlxG.sound.music.playing == true) FlxG.sound.music.stop();		
+			
+			// destroy game notation if exists.
+			if (__game_history_and_notations != null)
+				__game_history_and_notations.destroy();			
+			
+		}
+		
+		// leaving room canceled
+		if (Reg._yesNoKeyPressValueAtMessage >= 2 && Reg._buttonCodeValues == "g1000")
+		{			
+			Reg._buttonCodeValues = "";
+			Reg._yesNoKeyPressValueAtMessage = 0;
+		
+		}
+		
+		// disconnect then return to title.
+		if (Reg._yesNoKeyPressValueAtMessage == 1 && Reg._buttonCodeValues == "g1002")
+		{
+			if (Reg._game_online_vs_cpu == true || RegTypedef._dataMisc._spectatorWatching == false && Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false && RegTypedef._dataPlayers._gamePlayersValues[Reg._move_number_next] == 1) 
+			{
+				PlayState.clientSocket.send("Save Lose Stats", RegTypedef._dataPlayers);
+				haxe.Timer.delay(function (){}, Reg2._event_sleep);
+				
+				// do NOT use "Player Left Game Room" here. you will get a player left game, a lose was saved to player stats message after a normal game has ended.
+				PlayState.clientSocket.send("Player Left Game", RegTypedef._dataPlayers);		
+				haxe.Timer.delay(function (){}, Reg2._event_sleep);
+				
+				Reg._game_offline_vs_cpu = false;
+				Reg._game_online_vs_cpu = false;
+				
+				Reg._disconnectNow = true;	
+			}			
+		}
+		
+		// return to title screen cancelled
+		if (Reg._yesNoKeyPressValueAtMessage >= 2 && Reg._buttonCodeValues == "g1002")
+		{			
+			Reg._buttonCodeValues = "";
+			Reg._yesNoKeyPressValueAtMessage = 0;
+
+		}
+		// leave __scene_waiting_room, this is what happens when the other player leaves the room.
+		if (Reg._yesNoKeyPressValueAtMessage > 0 && Reg._buttonCodeValues == "g1005"
+		||  Reg._yesNoKeyPressValueAtMessage > 0 && Reg._buttonCodeValues == "g1005b")
+		{			
+			Reg._yesNoKeyPressValueAtMessage = 0;
+		
+			if (GameChatter != null && RegTypedef._dataPlayers._spectatorWatching == false)
+			{
+				// player has left so we can now click the chatter button.
+				if (RegCustom._chat_when_at_room_enabled[Reg._tn] == true)
+				{
+					GameChatter._chatterOpenCloseButton.active = true;
+					GameChatter._chatterOpenCloseButton.visible = true;
+				}
+			}
+			
+			buttonShowAll();
+			Reg._buttonCodeValues = "";
+			
+		}
+				
+		// draw offer.
+		if (Reg._yesNoKeyPressValueAtMessage == 1 &&  Reg._buttonCodeValues == "g1004")
+		{
+			Reg._buttonCodeValues = "";
+			Reg._yesNoKeyPressValueAtMessage = 0;			
+			
+			PlayState.clientSocket.send("Draw Offer", RegTypedef._dataQuestions);
+			haxe.Timer.delay(function (){}, Reg2._event_sleep);
+		}
+		
+		// draw button canceled.
+		if (Reg._yesNoKeyPressValueAtMessage >= 2 && Reg._buttonCodeValues == "g1004")
+		{			
+			Reg._buttonCodeValues = "";
+			Reg._yesNoKeyPressValueAtMessage = 0;
+			
+		}
+		
+		
+		// restart game.
+		if (Reg._yesNoKeyPressValueAtMessage == 1 &&  Reg._buttonCodeValues == "g1030")
+		{
+			Reg._buttonCodeValues = "";
+			Reg._yesNoKeyPressValueAtMessage = 0;			
+			Reg._notation_output = false;
+			
+			if (Reg._game_offline_vs_cpu == true || Reg._game_offline_vs_player == true) 
+			{
+				if (Reg._game_online_vs_cpu == true)
+				{
+					SceneCreateRoom.createRoomOnlineAgainstCPU();
+				}
+				
+				else Reg._gameJumpTo = 0;
+				
+				Reg._gameOverForAllPlayers = false;
+				Reg._gameOverForPlayer = false;
+				Reg._createGameRoom = true;
+			}
+			else 
+			{
+				PlayState.clientSocket.send("Restart Offer", RegTypedef._dataQuestions);
+				haxe.Timer.delay(function (){}, Reg2._event_sleep);
+			}
+		}
+		
+		// restart canceled.
+		if (Reg._yesNoKeyPressValueAtMessage >= 2 &&  Reg._buttonCodeValues == "g1030")
+		{
+			Reg._buttonCodeValues = "";
+			Reg._yesNoKeyPressValueAtMessage = 0;
+			
+		}
+		
+		// draw accepted.
+		if (Reg._yesNoKeyPressValueAtMessage == 1 && Reg._buttonCodeValues == "g1010")
+		{
+			Reg._buttonCodeValues = "";
+			Reg._yesNoKeyPressValueAtMessage = 0;
+			
+			RegTypedef._dataQuestions._drawAnsweredAs = true;
+			PlayState.clientSocket.send("Draw Answered As", RegTypedef._dataQuestions);	
+			haxe.Timer.delay(function (){}, Reg2._event_sleep);
+		}
+		
+		// draw button, not accepted.
+		if (Reg._yesNoKeyPressValueAtMessage >= 2 &&  Reg._buttonCodeValues == "g1010")
+		{
+			Reg._buttonCodeValues = "";
+			Reg._yesNoKeyPressValueAtMessage = 0;
+			
+			RegTypedef._dataQuestions._drawAnsweredAs = false;
+			PlayState.clientSocket.send("Draw Answered As", RegTypedef._dataQuestions);
+			haxe.Timer.delay(function (){}, Reg2._event_sleep);
+		}
+		
+		// restart game accepted.
+		if (Reg._yesNoKeyPressValueAtMessage == 1 && Reg._buttonCodeValues == "g1011")
+		{
+			Reg._buttonCodeValues = "";
+			Reg._yesNoKeyPressValueAtMessage = 0;
+			
+			RegTypedef._dataQuestions._restartGameAnsweredAs = true;
+			PlayState.clientSocket.send("Restart Answered As", RegTypedef._dataQuestions);
+			haxe.Timer.delay(function (){}, Reg2._event_sleep);
+		}
+		
+		// restart game not accepted.
+		if (Reg._yesNoKeyPressValueAtMessage >= 2 &&  Reg._buttonCodeValues == "g1011")
+		{
+			Reg._buttonCodeValues = "";
+			Reg._yesNoKeyPressValueAtMessage = 0;
+			
+			RegTypedef._dataQuestions._restartGameAnsweredAs = false;
+			PlayState.clientSocket.send("Restart Answered As", RegTypedef._dataQuestions);
+			haxe.Timer.delay(function (){}, Reg2._event_sleep);	
+		}
+		
+		// this win block code is needed so that the next message that pops up does not automatically close.
+		if (Reg._yesNoKeyPressValueAtMessage == 1 && Reg._buttonCodeValues == "g1020")
+		{			
+			Reg._buttonCodeValues = "";
+			Reg._yesNoKeyPressValueAtMessage = 0;
+			
+			buttonShowAll();
+		}
+		
+		// loss.
+		if (Reg._yesNoKeyPressValueAtMessage == 1 && Reg._buttonCodeValues == "g1021")
+		{			
+			Reg._buttonCodeValues = "";
+			Reg._yesNoKeyPressValueAtMessage = 0;
+			
+			buttonShowAll();
+		}
+		
+		// quit game. yes button selected.
+		if (Reg._yesNoKeyPressValueAtMessage == 1 && Reg._buttonCodeValues == "g1050")
+		{			
+			Reg._buttonCodeValues = "";
+			Reg._yesNoKeyPressValueAtMessage = 0;
+			
+			buttonShowAll();
+			
+			for (i in 0...4)
+			{
+				if (RegTypedef._dataMisc._username == RegTypedef._dataPlayers._usernamesStatic[i])
+				{
+					// currently this player is still at the game room but player requested to quit game, so set these values to 4.
+					RegTypedef._dataPlayers._gamePlayersValues[i] = 4;	
+					Reg._playerIDs = i;
+				}
+			}
+			
+			RegTriggers._messageLoss = "You lose.";
+				
+			RegTriggers._loss = true; // show a message box message from SceneGameRoom.hx
+				
+			Reg._gameOverForPlayer = true;
+			Reg._playerWaitingAtGameRoom = true;
+			RegTypedef._dataPlayers._quitGame = true;
+			
+			buttonHideAll();
+			
+			if (Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false) 
+			{				
+				var _totalPlayers:Int = 0; // get total players still playing game.
+				// get total players still playing game.
+				for (i in 0...4)
+				{
+					if (RegTypedef._dataPlayers._usernamesDynamic[i] != "" && RegTypedef._dataPlayers._moveTimeRemaining[i] > 0)
+					{
+						_totalPlayers += 1;
+					}
+				}
+				
+				_totalPlayers -= 1;
+				
+				// the value of _totalPlayers is a bit misleading. the value refers to a two player game. the player that entered this function still should register a lose and is still playing a game but is not added to this vars total because time remaining is zero.
+				if (_totalPlayers > 1)
+				{					
+					Reg._gameOverForPlayer = true;
+					
+					if (Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false) 
+					{
+						PlayState.clientSocket.send("Save Lose Stats", RegTypedef._dataPlayers);	
+						haxe.Timer.delay(function (){}, Reg2._event_sleep);
+					}
+				}
+								
+				else // 2 players.
+				{
+					Reg._gameOverForPlayer = true;
+						
+					// the value of _totalPlayers is a bit misleading. the value refers to a two player game. the player that entered this function still should register a lose and is still playing a game but is not added to this vars total because time remaining is zero.
+					if (_totalPlayers == 1 && Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false) 
+					{
+						PlayState.clientSocket.send("Save Lose Stats For Both", RegTypedef._dataPlayers);	
+						haxe.Timer.delay(function (){}, Reg2._event_sleep);
+					}
+				}
+				
+								
+				PlayState.clientSocket.send("Game Players Values", RegTypedef._dataPlayers);
+				haxe.Timer.delay(function (){}, Reg2._event_sleep);
+				
+				PlayState.clientSocket.send("Player Left Game", RegTypedef._dataPlayers);
+				haxe.Timer.delay(function (){}, Reg2._event_sleep);
+				
+				for (i in 0...4)
+				{
+					if (RegTypedef._dataMisc._username == RegTypedef._dataPlayers._usernamesStatic[i])
+					{
+						// currently this player is still at the game room but player requested to quit game, so set these values to 4.
+						RegTypedef._dataPlayers._gamePlayersValues[i] = 0;	
+						Reg._playerIDs = i;
+					}
+				}
+				
+				PlayState.clientSocket.send("Game Players Values", RegTypedef._dataPlayers);
+				haxe.Timer.delay(function (){}, Reg2._event_sleep);
+			}
+			
+		}
+		
+		// quit game. no button selected.
+		if (Reg._yesNoKeyPressValueAtMessage >= 2 && Reg._buttonCodeValues == "g1050")
+		{			
+			Reg._buttonCodeValues = "";
+			Reg._yesNoKeyPressValueAtMessage = 0;
+			
+			buttonShowAll();
+		}
+		
+		// player1 lost online game
+		if (Reg._yesNoKeyPressValueAtMessage == 1 && Reg._buttonCodeValues == "g1101")
+		{			
+			Reg._buttonCodeValues = "";
+			Reg._yesNoKeyPressValueAtMessage = 0;
+			
+			buttonShowAll();
+		}
+		
+		// player2 lost online game
+		if (Reg._yesNoKeyPressValueAtMessage == 1 && Reg._buttonCodeValues == "g1102")
+		{			
+			Reg._buttonCodeValues = "";
+			Reg._yesNoKeyPressValueAtMessage = 0;
+			
+			buttonShowAll();
+		}
+		
+		// player3 lost online game
+		if (Reg._yesNoKeyPressValueAtMessage == 1 && Reg._buttonCodeValues == "g1103")
+		{			
+			Reg._buttonCodeValues = "";
+			Reg._yesNoKeyPressValueAtMessage = 0;
+			
+			buttonShowAll();
+		}
+		
+		// player4 lost online game
+		if (Reg._yesNoKeyPressValueAtMessage == 1 && Reg._buttonCodeValues == "g1104")
+		{			
+			Reg._buttonCodeValues = "";
+			Reg._yesNoKeyPressValueAtMessage = 0;
+			
+			buttonShowAll();
+		}
+		
+		// draw.
+		if (Reg._yesNoKeyPressValueAtMessage == 1 && Reg._buttonCodeValues == "g1022")
+		{			
+			Reg._buttonCodeValues = "";
+			Reg._yesNoKeyPressValueAtMessage = 0;
+			
+			buttonShowAll();
+		}
+		
+		// tournament eliminated.
+		if (Reg._yesNoKeyPressValueAtMessage == 1 && Reg._buttonCodeValues == "g1200")
+		{			
+			Reg._buttonCodeValues = "";
+			Reg._yesNoKeyPressValueAtMessage = 0;
+		}
+	}
+	
+	
+	private function messageStartRestartGame():Void
+	{
+		FlxG.mouse.enabled = false;
+		
+		Reg._messageId = 16210;
+		Reg._buttonCodeValues = "g1030";
+		messageBoxMessageOrder();
+		
+		// should this message box be displayed?
+		if (RegCustom._start_game_offline_confirmation[Reg._tn] == true
+		&&  Reg._game_offline_vs_cpu == true 
+		||  RegCustom._start_game_offline_confirmation[Reg._tn] == true
+		&&  Reg._game_offline_vs_player == true
+		)
+		{
+			Reg._yesNoKeyPressValueAtMessage = 1;
+		}
+		
+	}
+	
+	private function messageReturnToTitle():Void
+	{
+		FlxG.mouse.enabled = false;
+		Reg._buttonCodeValues = "g1002";
+			
+		if (Reg._game_offline_vs_player == true 
+		||	Reg._game_offline_vs_cpu == true
+		) 
+		{
+			FlxG.switchState(new MenuState());
+		}
+		
+		if (RegCustom._to_title_from_game_room_confirmation[Reg._tn] == false)		
+			Reg._yesNoKeyPressValueAtMessage = 1;
+				
+		else
+		{
+			Reg._messageId = 16250;			
+			messageBoxMessageOrder();
+		}
+	}
+	
+	private function messageReturnToLobby():Void
+	{
+		FlxG.mouse.enabled = false;
+		Reg._buttonCodeValues = "g1000";
+				
+		if (RegCustom._to_lobby_from_game_room_confirmation[Reg._tn] == false)
+		{
+			Reg._yesNoKeyPressValueAtMessage = 1;
+		}
+		
+		else
+		{
+			Reg._messageId = 16300;
+			messageBoxMessageOrder();
+		}
+		
+	}
+	
+	private function messageQuitGame():Void
+	{
+		FlxG.mouse.enabled = false;
+		
+		Reg._messageId = 16350;
+		Reg._buttonCodeValues = "g1050";	
+		messageBoxMessageOrder();
+	}
+	
+	private function messageDrawOffer():Void
+	{
+		FlxG.mouse.enabled = false;
+		
+		Reg._messageId = 16400;
+		Reg._buttonCodeValues = "g1004";
+		messageBoxMessageOrder();
+	}
+	
+	private function messageReceiveDrawOffer():Void
+	{
+		Reg._messageId = 16450;
+		Reg._buttonCodeValues = "g1010";	
+		messageBoxMessageOrder();		
+		
+	}
+	
+	private function messageReceiveRestartOffer():Void
+	{	
+		Reg._messageId = 16500;
+		Reg._buttonCodeValues = "g1011";	
+		messageBoxMessageOrder();
+		
+		if (RegCustom._accept_automatic_start_game_request[Reg._tn] == true
+		&&  Reg2._do_once_accept_game_start_request == false)
+		{
+			Reg2._do_once_accept_game_start_request = true;
+			Reg._yesNoKeyPressValueAtMessage = 1;			
+		}
+		
+	}
+		
+	// draw this class to screen.
+	public function gamePlayerWhosTurnToMove():Void
+	{
+		if (_playerWhosTurnToMove != null)
+		{
+			_playerWhosTurnToMove.visible = false;
+			_playerWhosTurnToMove.destroy();
+			_playerWhosTurnToMove = null;
+		}
+		
+		_playerWhosTurnToMove = new PlayerWhosTurnToMove();
+		_playerWhosTurnToMove.visible = true;
+		add(_playerWhosTurnToMove);
+	}
+	
+	public function gamePlayerTimeRemainingMove():Void
+	{	
+		if (_playerTimeRemainingMove != null)
+		{
+			_playerTimeRemainingMove.visible = false;
+			_playerTimeRemainingMove.destroy();
+			_playerTimeRemainingMove = null;
+		}
+
+		if (RegCustom._timer_enabled[Reg._tn] == true
+		||  RegTypedef._dataTournaments._move_piece == true) // always enabled for tournament play.
+		{
+			_playerTimeRemainingMove = new PlayerTimeRemainingMove(IDsCreateAndMain._t, this);
+			_playerTimeRemainingMove.visible = true;
+			add(_playerTimeRemainingMove);
+		}
+		
+		// this is needed.
+		if (Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false)
+		{
+			PlayState.clientSocket.send("Player Move Time Remaining", RegTypedef._dataPlayers);
+			haxe.Timer.delay(function (){}, Reg2._event_sleep);
+		}
+		
+	}
+
+	// draw this class to screen.
+	private function gameHistoryButtonsDisplayIt(i:Int):Void
+	{
+		var _iDsHistoryButtons = new IDsHistoryButtons(FlxG.width - 405 + (i * 75), FlxG.height - 453, i); 
+		add(_iDsHistoryButtons);
+	}
+	
+	// draw this class to screen.
+	private function gameAddHUD():Void
+	{
+		if (_hud != null) _hud.destroy();
+		_hud = new HUD();
+		add(_hud);
+	}
+	
+	public function gameIDRightSidePanel():Void
+	{
+		if (Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false)
+		{
+			buttonStartRestartGame = new ButtonGeneralNetworkYes(FlxG.width - 363, FlxG.height - 237, "Start Game", 160 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, messageStartRestartGame, RegCustom._button_color[Reg._tn], false, 1000);
+			
+			if (Reg._gameHost == true
+			&&  RegTypedef._dataPlayers._spectatorWatching == false)
+				buttonStartRestartGame.label.text = "Start Game";
+			else 
+			{
+				buttonStartRestartGame.visible = false;
+				buttonStartRestartGame.active = false;
+			}
+			
+			buttonStartRestartGame.label.font = Reg._fontDefault;
+			add(buttonStartRestartGame);
+						
+		}
+		
+		else
+		{
+			// offline
+			buttonStartRestartGame2 = new ButtonGeneralNetworkNo(FlxG.width - 363, FlxG.height - 137, "Start Game", 175, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, messageStartRestartGame, RegCustom._button_color[Reg._tn], false, 1);
+			buttonStartRestartGame2.label.font = Reg._fontDefault;
+		add(buttonStartRestartGame2); 
+		
+		}
+				
+		
+		if (Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false)
+		{
+			buttonReturnToTitle = new ButtonGeneralNetworkYes(FlxG.width - 183, FlxG.height - 187, "To Title", 160 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, messageReturnToTitle, RegCustom._button_color[Reg._tn], false, 1001);
+			buttonReturnToTitle.label.font = Reg._fontDefault;
+			add(buttonReturnToTitle);
+			
+		}			
+		
+		if (Reg._game_offline_vs_cpu == true || Reg._game_offline_vs_player == true)
+		{
+			// offline
+			buttonReturnToTitle2 = new ButtonGeneralNetworkNo(FlxG.width - 183, FlxG.height - 137, "To Title", 160 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, messageReturnToTitle, RegCustom._button_color[Reg._tn], false, 1);
+			buttonReturnToTitle2.label.font = Reg._fontDefault;
+			add(buttonReturnToTitle2);
+			
+		}
+		
+		if (Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false)
+		{
+			buttonDrawGame = new ButtonGeneralNetworkYes(FlxG.width - 363, FlxG.height -  187, "Draw", 160 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, messageDrawOffer, RegCustom._button_color[Reg._tn], false, 1002);
+			buttonDrawGame.label.font = Reg._fontDefault;
+			buttonDrawGame.visible = false;
+			buttonDrawGame.active = false;
+			add(buttonDrawGame);
+		}
+		
+		// Reg._game_online_vs_cpu code is needed to show this button while playing an online game.
+		if (Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false)
+		{
+			buttonReturnToLobby = new ButtonGeneralNetworkYes(FlxG.width - 183, FlxG.height - 237, "To Lobby", 160 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, messageReturnToLobby, RegCustom._button_color[Reg._tn], false, 1003);
+			buttonReturnToLobby.label.font = Reg._fontDefault;
+			add(buttonReturnToLobby);
+		}
+		
+		if (Reg._game_online_vs_cpu == true)
+		{
+			buttonReturnToLobby = new ButtonGeneralNetworkYes(FlxG.width - 183, FlxG.height - 187, "To Lobby", 160 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, messageReturnToLobby, RegCustom._button_color[Reg._tn], false, 1004);
+			buttonReturnToLobby.label.font = Reg._fontDefault;
+			add(buttonReturnToLobby);
+		}
+		
+		// Reg._game_online_vs_cpu code is needed to show this button while playing an online game.
+		if (Reg._game_online_vs_cpu == true || Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false)
+		{
+			buttonQuitGame = new ButtonGeneralNetworkYes(FlxG.width - 363, FlxG.height - 137, "Quit Game", 160 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, messageQuitGame, RegCustom._button_color[Reg._tn], false, 1005);
+			buttonQuitGame.label.font = Reg._fontDefault;
+			buttonQuitGame.visible = false;
+			buttonQuitGame.active = false;
+			add(buttonQuitGame);
+		}
+
+	}
+	
+	public static function go_back_to_lobby():Void
+	{
+		// go back tolooby
+		PlayState.clientSocket.send("Lesser RoomState Value", RegTypedef._dataMisc);
+		haxe.Timer.delay(function (){}, Reg2._event_sleep);
+		
+		// display the lobby.
+		PlayersLeftGameResetThoseVars.playerRepopulateTypedefPlayers();
+		RegTypedef.resetTypedefDataSome();
+		Reg.resetRegVars();
+		Reg2.resetRegVars();
+		RegCustom.resetRegVars();
+		RegTriggers.resetTriggers();
+		
+		Reg._game_online_vs_cpu = false;
+		Reg._gameOverForPlayer = true;
+		Reg._alreadyOnlineUser = true;
+		Reg._loggedIn = true; 
+		Reg._createGameRoom = false;
+		Reg._loginSuccessfulWasRead = false;
+		Reg._doOnce = true;			
+		Reg._at_create_room = false;
+		Reg._at_waiting_room = false;
+		Reg._doStartGameOnce = false;
+		Reg._gameRoom = false;
+		Reg._hasUserConnectedToServer = true;
+		Reg._lobbyDisplay = false;			
+		Reg._clearDoubleMessage = true;			
+		Reg._rememberChatterIsOpen = false;
+		//Reg._goBackToLobby = true;
+		
+		SceneWaitingRoom._textPlayer1Stats.text = "";
+		SceneWaitingRoom._textPlayer2Stats.text = "";
+		SceneWaitingRoom._textPlayer3Stats.text = "";
+		SceneWaitingRoom._textPlayer4Stats.text = "";
+		
+		RegTriggers._lobby = true;
+	}
+
+	public function printNotation():Void
+	{		
+		if (Reg2._updateNotation == true && Reg._chessCheckBypass == false) 
+		{
+			__game_history_and_notations.notationPrint();
+			Reg2._updateNotation = false;
+		}
+	}	
+	
+	override public function destroy()
+	{
+		remove(_iDsCreateAndMain);
+		_iDsCreateAndMain.destroy();
+						
+		super.destroy();
 	}
 	
 	override public function update(elapsed:Float):Void 
@@ -1216,901 +2110,4 @@ class SceneGameRoom extends FlxState
 		super.update(elapsed);
 		
 	}
-	
-	private function howManyPlayersAreInGameRoom():Int
-	{
-		var _count:Int = 0;
-
-		// used to count how many players are in room.
-		if (RegTypedef._dataPlayers._usernamesStatic[0] != "")
-			_count += 1;
-		if (RegTypedef._dataPlayers._usernamesStatic[1] != "") 
-			_count += 1;
-		if (RegTypedef._dataPlayers._usernamesStatic[2] != "") 
-			_count += 1;
-		if (RegTypedef._dataPlayers._usernamesStatic[3] != "") 
-			_count += 1;
-		
-		return _count;
-	}
-	
-	// player left the game and there is still 2 or more players playing the game, so remove the player's piece and remove player's timer text and anything else that need to be removed from the stage and then new again some other classes so that the other players' pieces for those players still in room playing the game will the correct move order of those other players.
-	public function removePlayersDataFromStage():Void
-	{
-		_iDsCreateAndMain.removeSpriteGroup();
-		
-		if (Reg._gameId == 4)
-		{
-			Reg._triggerNextStuffToDo = 0;			
-			_iDsCreateAndMain.addSpriteGroup();
-		}
-		
-		gamePlayerWhosTurnToMove();
-		gamePlayerTimeRemainingMove(); 
-
-				
-		Reg._playerWaitingAtGameRoom = false;
-	}
-	
-	// TODO Message boxes can no longer be stacked on each other because a message box that is displayed will stop user from clicking the scene underneath it. therefore, remove messageBoxMessageOrder() code and all references to it.
-	public static function messageBoxMessageOrder():Void
-	{
-		for (i in 0...Reg._messageFocusId.length)
-		{
-			if (Reg._messageFocusId[i] == Reg._messageId)
-			Reg._messageFocusId.splice(i, 1);
-			
-			if (Reg._buttonCodeFocusValues[i] == Reg._buttonCodeValues)
-			Reg._buttonCodeFocusValues.splice(i, 1);
-		}
-		
-		Reg._messageFocusId.push(0);
-		Reg._messageFocusId[Reg._messageFocusId.length - 1] = Reg._messageId;
-		
-		Reg._buttonCodeFocusValues.push("");
-		Reg._buttonCodeFocusValues[Reg._buttonCodeFocusValues.length - 1] = Reg._buttonCodeValues;
-	}
-		
-	
-	private function addChatterAndGameTime():Void
-	{
-		IDsCreateAndMain.timeGivenForEachGame(); 
-		
-		gamePlayerWhosTurnToMove();
-		gamePlayerTimeRemainingMove(); 
-		
-		for (i in 1...5)
-		{
-			if (Reg._gameId < 2) gameHistoryButtonsDisplayIt(i);
-		}
-		
-		gameIDRightSidePanel();
-				
-	}
-	
-	
-	public function buttonShowAll():Void
-	{				
-		if (buttonReturnToTitle != null)
-		{
-			buttonReturnToTitle.active = true;
-			buttonReturnToTitle.visible = true;
-		}
-		
-		if (buttonReturnToLobby != null)
-		{
-			buttonReturnToLobby.active = true;
-			buttonReturnToLobby.visible = true;
-		}
-	
-		
-		if (buttonStartRestartGame != null && Reg._game_offline_vs_cpu == true
-		||  buttonStartRestartGame != null && Reg._game_offline_vs_player == true)
-		{
-			if (RegTypedef._dataPlayers._spectatorWatching == false
-			&& Reg._game_online_vs_cpu == false)
-			{
-				buttonStartRestartGame.active = true;	
-				buttonStartRestartGame.visible = true;
-			}
-		}	
-		
-		if (buttonDrawGame != null && Reg._game_offline_vs_cpu == false
-		&&  Reg._game_offline_vs_player == false)
-		{		
-			if (Reg._gameOverForPlayer == false
-			&&  Reg._roomPlayerLimit - Reg._playerOffset > 1
-			&&  Reg._gameOverForAllPlayers == false 
-			&&  RegTypedef._dataPlayers._spectatorWatching == false)
-			{
-				buttonDrawGame.active = true;
-				buttonDrawGame.visible = true;
-				
-				buttonQuitGame.active = true;
-				buttonQuitGame.visible = true;
-			}	
-		}
-			
-	}
-	
-	/******************************
-	 * hide the restart, draw and lobby buttons because a restart button, for example, should not be shown when a player leave the game room.
-	 */
-	public function buttonHideAll():Void
-	{
-		if (Reg._game_offline_vs_player == true
-		||	Reg._game_offline_vs_cpu == true) return;
-		
-		if (buttonReturnToTitle != null)
-		{
-			buttonReturnToTitle.visible = false;
-			buttonReturnToTitle.active = false;
-		}
-		
-		if (buttonReturnToTitle2 != null)
-		{
-			buttonReturnToTitle2.visible = false;
-			buttonReturnToTitle2.active = false;
-		}
-				
-		if (buttonReturnToLobby != null)
-		{
-			buttonReturnToLobby.visible = false;
-			buttonReturnToLobby.active = false;
-		}	
-		
-		if (buttonStartRestartGame != null)
-		{
-			buttonStartRestartGame.visible = false;
-			buttonStartRestartGame.active = false;
-		}
-		
-		if (buttonStartRestartGame2 != null)
-		{
-			buttonStartRestartGame2.visible = false;
-			buttonStartRestartGame2.active = false;
-		}
-			
-		if (buttonDrawGame != null)
-		{
-			buttonDrawGame.visible = false;
-			buttonDrawGame.active = false;
-		}
-				
-		if (buttonQuitGame != null)
-		{
-			buttonQuitGame.visible = false;
-			buttonQuitGame.active = false;
-		}	
-	}
-
-	private function toggleButtonsAsChatterScrolls():Void
-	{
-		Reg._buttonCodeValues = "";
-		
-		// this is not perfect. user is able to click button even though it is behind chatter but not when chatter is fully closed. there is no way around this limitation because Haxeflixel buttons cannot tell when there is another object on top of it.
-		if (Reg._gameRoom == true && GameChatter._title_background.x > 1040)
-		{
-			var _state:Bool = true;
-			
-			gameButtonActive(_state);
-			gameButtonVisible(_state);
-		}
-		
-		if (Reg._gameRoom == true && GameChatter._title_background.x <= 1040)
-		{
-			var _state:Bool = false;
-			gameButtonActive(_state);
-			gameButtonVisible(_state);
-		}
-	}
-	
-	/******************************
-	 * toggles the active state of a button or text underneath chatter.
-	 * @param	_state	not active if false.
-	 */
-	private function gameButtonActive(_state:Bool):Void
-	{
-		if (buttonReturnToTitle != null) buttonReturnToTitle.active = _state;
-		if (buttonReturnToLobby != null) buttonReturnToLobby.active = _state;
-		
-		if (__game_chatter != null) GameChatter.changeButtonLabel();
-	}
-	
-	/******************************
-	 * toggles the visibility state of a button or text underneath chatter.
-	 * @param	_state	not visible if false.
-	 */
-	private function gameButtonVisible(_state:Bool):Void
-	{
-		if (__game_chatter != null) GameChatter.changeButtonLabel();
-	}
-	
-	/******************************
-	 * at the time a button is created, a Reg._buttonCodeValues will be given a value. that value is used here to determine what block of code to read. 
-	 * a Reg._yesNoKeyPressValueAtMessage with a value of one means that the "yes" button was clicked. a value of two refers to button with text of "no". 
-	 */
-	public function buttonCodeValues():Void
-	{
-		// return to lobby
-		if (Reg._yesNoKeyPressValueAtMessage == 1 && Reg._buttonCodeValues == "g1000")
-		{
-			Reg._yesNoKeyPressValueAtMessage = 0;
-			Reg._playerWaitingAtGameRoom = false;			
-			
-			// clear chatter then hide this FlxState.
-			//if (Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false) GameChatter.clearText();
-			
-			if (PlayState._clientDisconnect == false)
-			{
-				if (Reg._game_online_vs_cpu == false
-				&&  __game_chatter != null) 
-					__game_chatter.visible = false;
-				
-				visible = false;
-			}
-			
-			else
-			{
-				GameChatter._chatterOpenCloseButton.visible = false;
-				GameChatter._chatterOpenCloseButton.active = false;
-								
-				buttonStartRestartGame.visible = false;
-				buttonStartRestartGame.active = false;
-				buttonReturnToTitle.visible = false;
-				buttonReturnToTitle.active = false;
-				buttonReturnToLobby.visible = false;
-				buttonReturnToLobby.active = false;
-				buttonDrawGame.visible = false;
-				buttonDrawGame.active = false;
-				buttonQuitGame.visible = false;
-				buttonQuitGame.active = false;
-			}
-			
-			RegTypedef._dataMisc._gameRoom = false;			
-			RegTypedef._dataMisc._username = RegTypedef._dataAccount._username;
-			
-			Reg._game_offline_vs_cpu = false;
-			Reg._game_online_vs_cpu = false;
-			
-			Reg._gameOverForPlayer = true;
-			
-			if (RegTypedef._dataMisc._spectatorWatching == false)
-			{
-				for (i in 0...4)
-				{
-					if (RegTypedef._dataPlayers._username == RegTypedef._dataPlayers._usernamesStatic[i])
-					{
-						if (Reg._gameOverForPlayer == true) RegTypedef._dataPlayers._gamePlayersValues[i] = 3; // stats already saved so set this to 3
-						else RegTypedef._dataPlayers._gamePlayersValues[i] = 2;
-						
-						PlayState.clientSocket.send("Game Players Values", RegTypedef._dataPlayers);
-						haxe.Timer.delay(function (){}, Reg2._event_sleep);
-					}
-				}	
-			}
-			
-			else go_back_to_lobby();			
-			
-			// stop any sound playing.			
-			if (FlxG.sound.music != null && FlxG.sound.music.playing == true) FlxG.sound.music.stop();		
-			
-			// destroy game notation if exists.
-			if (__game_history_and_notations != null)
-				__game_history_and_notations.destroy();			
-			
-		}
-		
-		// leaving room canceled
-		if (Reg._yesNoKeyPressValueAtMessage >= 2 && Reg._buttonCodeValues == "g1000")
-		{			
-			Reg._buttonCodeValues = "";
-			Reg._yesNoKeyPressValueAtMessage = 0;
-		
-		}
-		
-		// disconnect then return to title.
-		if (Reg._yesNoKeyPressValueAtMessage == 1 && Reg._buttonCodeValues == "g1002")
-		{
-			if (Reg._game_online_vs_cpu == true || RegTypedef._dataMisc._spectatorWatching == false && Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false && RegTypedef._dataPlayers._gamePlayersValues[Reg._move_number_next] == 1) 
-			{
-				PlayState.clientSocket.send("Save Lose Stats", RegTypedef._dataPlayers);
-				haxe.Timer.delay(function (){}, Reg2._event_sleep);
-				
-				// do NOT use "Player Left Game Room" here. you will get a player left game, a lose was saved to player stats message after a normal game has ended.
-				PlayState.clientSocket.send("Player Left Game", RegTypedef._dataPlayers);		
-				haxe.Timer.delay(function (){}, Reg2._event_sleep);
-				
-				Reg._game_offline_vs_cpu = false;
-				Reg._game_online_vs_cpu = false;
-				
-				Reg._disconnectNow = true;	
-			}			
-		}
-		
-		// return to title screen cancelled
-		if (Reg._yesNoKeyPressValueAtMessage >= 2 && Reg._buttonCodeValues == "g1002")
-		{			
-			Reg._buttonCodeValues = "";
-			Reg._yesNoKeyPressValueAtMessage = 0;
-
-		}
-		// leave __scene_waiting_room, this is what happens when the other player leaves the room.
-		if (Reg._yesNoKeyPressValueAtMessage > 0 && Reg._buttonCodeValues == "g1005"
-		||  Reg._yesNoKeyPressValueAtMessage > 0 && Reg._buttonCodeValues == "g1005b")
-		{			
-			Reg._yesNoKeyPressValueAtMessage = 0;
-		
-			if (GameChatter != null && RegTypedef._dataPlayers._spectatorWatching == false)
-			{
-				// player has left so we can now click the chatter button.
-				if (RegCustom._chat_when_at_room_enabled[Reg._tn] == true)
-				{
-					GameChatter._chatterOpenCloseButton.active = true;
-					GameChatter._chatterOpenCloseButton.visible = true;
-				}
-			}
-			
-			buttonShowAll();
-			Reg._buttonCodeValues = "";
-			
-		}
-				
-		// draw offer.
-		if (Reg._yesNoKeyPressValueAtMessage == 1 &&  Reg._buttonCodeValues == "g1004")
-		{
-			Reg._buttonCodeValues = "";
-			Reg._yesNoKeyPressValueAtMessage = 0;			
-			
-			PlayState.clientSocket.send("Draw Offer", RegTypedef._dataQuestions);
-			haxe.Timer.delay(function (){}, Reg2._event_sleep);
-		}
-		
-		// draw button canceled.
-		if (Reg._yesNoKeyPressValueAtMessage >= 2 && Reg._buttonCodeValues == "g1004")
-		{			
-			Reg._buttonCodeValues = "";
-			Reg._yesNoKeyPressValueAtMessage = 0;
-			
-		}
-		
-		
-		// restart game.
-		if (Reg._yesNoKeyPressValueAtMessage == 1 &&  Reg._buttonCodeValues == "g1030")
-		{
-			Reg._buttonCodeValues = "";
-			Reg._yesNoKeyPressValueAtMessage = 0;			
-			Reg._notation_output = false;
-			
-			if (Reg._game_offline_vs_cpu == true || Reg._game_offline_vs_player == true) 
-			{
-				if (Reg._game_online_vs_cpu == true)
-				{
-					SceneCreateRoom.createRoomOnlineAgainstCPU();
-				}
-				
-				else Reg._gameJumpTo = 0;
-				
-				Reg._gameOverForAllPlayers = false;
-				Reg._gameOverForPlayer = false;
-				Reg._createGameRoom = true;
-			}
-			else 
-			{
-				PlayState.clientSocket.send("Restart Offer", RegTypedef._dataQuestions);
-				haxe.Timer.delay(function (){}, Reg2._event_sleep);
-			}
-		}
-		
-		// restart canceled.
-		if (Reg._yesNoKeyPressValueAtMessage >= 2 &&  Reg._buttonCodeValues == "g1030")
-		{
-			Reg._buttonCodeValues = "";
-			Reg._yesNoKeyPressValueAtMessage = 0;
-			
-		}
-		
-		// draw accepted.
-		if (Reg._yesNoKeyPressValueAtMessage == 1 && Reg._buttonCodeValues == "g1010")
-		{
-			Reg._buttonCodeValues = "";
-			Reg._yesNoKeyPressValueAtMessage = 0;
-			
-			RegTypedef._dataQuestions._drawAnsweredAs = true;
-			PlayState.clientSocket.send("Draw Answered As", RegTypedef._dataQuestions);	
-			haxe.Timer.delay(function (){}, Reg2._event_sleep);
-		}
-		
-		// draw button, not accepted.
-		if (Reg._yesNoKeyPressValueAtMessage >= 2 &&  Reg._buttonCodeValues == "g1010")
-		{
-			Reg._buttonCodeValues = "";
-			Reg._yesNoKeyPressValueAtMessage = 0;
-			
-			RegTypedef._dataQuestions._drawAnsweredAs = false;
-			PlayState.clientSocket.send("Draw Answered As", RegTypedef._dataQuestions);
-			haxe.Timer.delay(function (){}, Reg2._event_sleep);
-		}
-		
-		// restart game accepted.
-		if (Reg._yesNoKeyPressValueAtMessage == 1 && Reg._buttonCodeValues == "g1011")
-		{
-			Reg._buttonCodeValues = "";
-			Reg._yesNoKeyPressValueAtMessage = 0;
-			
-			RegTypedef._dataQuestions._restartGameAnsweredAs = true;
-			PlayState.clientSocket.send("Restart Answered As", RegTypedef._dataQuestions);
-			haxe.Timer.delay(function (){}, Reg2._event_sleep);
-		}
-		
-		// restart game not accepted.
-		if (Reg._yesNoKeyPressValueAtMessage >= 2 &&  Reg._buttonCodeValues == "g1011")
-		{
-			Reg._buttonCodeValues = "";
-			Reg._yesNoKeyPressValueAtMessage = 0;
-			
-			RegTypedef._dataQuestions._restartGameAnsweredAs = false;
-			PlayState.clientSocket.send("Restart Answered As", RegTypedef._dataQuestions);
-			haxe.Timer.delay(function (){}, Reg2._event_sleep);	
-		}
-		
-		// this win block code is needed so that the next message that pops up does not automatically close.
-		if (Reg._yesNoKeyPressValueAtMessage == 1 && Reg._buttonCodeValues == "g1020")
-		{			
-			Reg._buttonCodeValues = "";
-			Reg._yesNoKeyPressValueAtMessage = 0;
-			
-			buttonShowAll();
-		}
-		
-		// loss.
-		if (Reg._yesNoKeyPressValueAtMessage == 1 && Reg._buttonCodeValues == "g1021")
-		{			
-			Reg._buttonCodeValues = "";
-			Reg._yesNoKeyPressValueAtMessage = 0;
-			
-			buttonShowAll();
-		}
-		
-		// quit game. yes button selected.
-		if (Reg._yesNoKeyPressValueAtMessage == 1 && Reg._buttonCodeValues == "g1050")
-		{			
-			Reg._buttonCodeValues = "";
-			Reg._yesNoKeyPressValueAtMessage = 0;
-			
-			buttonShowAll();
-			
-			for (i in 0...4)
-			{
-				if (RegTypedef._dataMisc._username == RegTypedef._dataPlayers._usernamesStatic[i])
-				{
-					// currently this player is still at the game room but player requested to quit game, so set these values to 4.
-					RegTypedef._dataPlayers._gamePlayersValues[i] = 4;	
-					Reg._playerIDs = i;
-				}
-			}
-			
-			RegTriggers._messageLoss = "You lose.";
-				
-			RegTriggers._loss = true; // show a message box message from SceneGameRoom.hx
-				
-			Reg._gameOverForPlayer = true;
-			Reg._playerWaitingAtGameRoom = true;
-			RegTypedef._dataPlayers._quitGame = true;
-			
-			buttonHideAll();
-			
-			if (Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false) 
-			{				
-				var _totalPlayers:Int = 0; // get total players still playing game.
-				// get total players still playing game.
-				for (i in 0...4)
-				{
-					if (RegTypedef._dataPlayers._usernamesDynamic[i] != "" && RegTypedef._dataPlayers._moveTimeRemaining[i] > 0)
-					{
-						_totalPlayers += 1;
-					}
-				}
-				
-				_totalPlayers -= 1;
-				
-				// the value of _totalPlayers is a bit misleading. the value refers to a two player game. the player that entered this function still should register a lose and is still playing a game but is not added to this vars total because time remaining is zero.
-				if (_totalPlayers > 1)
-				{					
-					Reg._gameOverForPlayer = true;
-					
-					if (Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false) 
-					{
-						PlayState.clientSocket.send("Save Lose Stats", RegTypedef._dataPlayers);	
-						haxe.Timer.delay(function (){}, Reg2._event_sleep);
-					}
-				}
-								
-				else // 2 players.
-				{
-					Reg._gameOverForPlayer = true;
-						
-					// the value of _totalPlayers is a bit misleading. the value refers to a two player game. the player that entered this function still should register a lose and is still playing a game but is not added to this vars total because time remaining is zero.
-					if (_totalPlayers == 1 && Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false) 
-					{
-						PlayState.clientSocket.send("Save Lose Stats For Both", RegTypedef._dataPlayers);	
-						haxe.Timer.delay(function (){}, Reg2._event_sleep);
-					}
-				}
-				
-								
-				PlayState.clientSocket.send("Game Players Values", RegTypedef._dataPlayers);
-				haxe.Timer.delay(function (){}, Reg2._event_sleep);
-				
-				PlayState.clientSocket.send("Player Left Game", RegTypedef._dataPlayers);
-				haxe.Timer.delay(function (){}, Reg2._event_sleep);
-				
-				for (i in 0...4)
-				{
-					if (RegTypedef._dataMisc._username == RegTypedef._dataPlayers._usernamesStatic[i])
-					{
-						// currently this player is still at the game room but player requested to quit game, so set these values to 4.
-						RegTypedef._dataPlayers._gamePlayersValues[i] = 0;	
-						Reg._playerIDs = i;
-					}
-				}
-				
-				PlayState.clientSocket.send("Game Players Values", RegTypedef._dataPlayers);
-				haxe.Timer.delay(function (){}, Reg2._event_sleep);
-			}
-			
-		}
-		
-		// quit game. no button selected.
-		if (Reg._yesNoKeyPressValueAtMessage >= 2 && Reg._buttonCodeValues == "g1050")
-		{			
-			Reg._buttonCodeValues = "";
-			Reg._yesNoKeyPressValueAtMessage = 0;
-			
-			buttonShowAll();
-		}
-		
-		// player1 lost online game
-		if (Reg._yesNoKeyPressValueAtMessage == 1 && Reg._buttonCodeValues == "g1101")
-		{			
-			Reg._buttonCodeValues = "";
-			Reg._yesNoKeyPressValueAtMessage = 0;
-			
-			buttonShowAll();
-		}
-		
-		// player2 lost online game
-		if (Reg._yesNoKeyPressValueAtMessage == 1 && Reg._buttonCodeValues == "g1102")
-		{			
-			Reg._buttonCodeValues = "";
-			Reg._yesNoKeyPressValueAtMessage = 0;
-			
-			buttonShowAll();
-		}
-		
-		// player3 lost online game
-		if (Reg._yesNoKeyPressValueAtMessage == 1 && Reg._buttonCodeValues == "g1103")
-		{			
-			Reg._buttonCodeValues = "";
-			Reg._yesNoKeyPressValueAtMessage = 0;
-			
-			buttonShowAll();
-		}
-		
-		// player4 lost online game
-		if (Reg._yesNoKeyPressValueAtMessage == 1 && Reg._buttonCodeValues == "g1104")
-		{			
-			Reg._buttonCodeValues = "";
-			Reg._yesNoKeyPressValueAtMessage = 0;
-			
-			buttonShowAll();
-		}
-		
-		// draw.
-		if (Reg._yesNoKeyPressValueAtMessage == 1 && Reg._buttonCodeValues == "g1022")
-		{			
-			Reg._buttonCodeValues = "";
-			Reg._yesNoKeyPressValueAtMessage = 0;
-			
-			buttonShowAll();
-		}
-		
-		// tournament eliminated.
-		if (Reg._yesNoKeyPressValueAtMessage == 1 && Reg._buttonCodeValues == "g1200")
-		{			
-			Reg._buttonCodeValues = "";
-			Reg._yesNoKeyPressValueAtMessage = 0;
-		}
-	}
-	
-	
-	private function messageStartRestartGame():Void
-	{
-		FlxG.mouse.enabled = false;
-		
-		Reg._messageId = 16210;
-		Reg._buttonCodeValues = "g1030";
-		messageBoxMessageOrder();
-		
-		// should this message box be displayed?
-		if (RegCustom._start_game_offline_confirmation[Reg._tn] == true
-		&&  Reg._game_offline_vs_cpu == true 
-		||  RegCustom._start_game_offline_confirmation[Reg._tn] == true
-		&&  Reg._game_offline_vs_player == true
-		)
-		{
-			Reg._yesNoKeyPressValueAtMessage = 1;
-		}
-		
-	}
-	
-	private function messageReturnToTitle():Void
-	{
-		FlxG.mouse.enabled = false;
-		Reg._buttonCodeValues = "g1002";
-			
-		if (Reg._game_offline_vs_player == true 
-		||	Reg._game_offline_vs_cpu == true
-		) 
-		{
-			FlxG.switchState(new MenuState());
-		}
-		
-		if (RegCustom._to_title_from_game_room_confirmation[Reg._tn] == false)		
-			Reg._yesNoKeyPressValueAtMessage = 1;
-				
-		else
-		{
-			Reg._messageId = 16250;			
-			messageBoxMessageOrder();
-		}
-	}
-	
-	private function messageReturnToLobby():Void
-	{
-		FlxG.mouse.enabled = false;
-		Reg._buttonCodeValues = "g1000";
-				
-		if (RegCustom._to_lobby_from_game_room_confirmation[Reg._tn] == false)
-		{
-			Reg._yesNoKeyPressValueAtMessage = 1;
-		}
-		
-		else
-		{
-			Reg._messageId = 16300;
-			messageBoxMessageOrder();
-		}
-		
-	}
-	
-	private function messageQuitGame():Void
-	{
-		FlxG.mouse.enabled = false;
-		
-		Reg._messageId = 16350;
-		Reg._buttonCodeValues = "g1050";	
-		messageBoxMessageOrder();
-	}
-	
-	private function messageDrawOffer():Void
-	{
-		FlxG.mouse.enabled = false;
-		
-		Reg._messageId = 16400;
-		Reg._buttonCodeValues = "g1004";
-		messageBoxMessageOrder();
-	}
-	
-	private function messageReceiveDrawOffer():Void
-	{
-		Reg._messageId = 16450;
-		Reg._buttonCodeValues = "g1010";	
-		messageBoxMessageOrder();		
-		
-	}
-	
-	private function messageReceiveRestartOffer():Void
-	{	
-		Reg._messageId = 16500;
-		Reg._buttonCodeValues = "g1011";	
-		messageBoxMessageOrder();
-		
-		if (RegCustom._accept_automatic_start_game_request[Reg._tn] == true
-		&&  Reg2._do_once_accept_game_start_request == false)
-		{
-			Reg2._do_once_accept_game_start_request = true;
-			Reg._yesNoKeyPressValueAtMessage = 1;			
-		}
-		
-	}
-		
-	// draw this class to screen.
-	public function gamePlayerWhosTurnToMove():Void
-	{
-		if (_playerWhosTurnToMove != null)
-		{
-			_playerWhosTurnToMove.visible = false;
-			_playerWhosTurnToMove.destroy();
-			_playerWhosTurnToMove = null;
-		}
-		
-		_playerWhosTurnToMove = new PlayerWhosTurnToMove();
-		_playerWhosTurnToMove.visible = true;
-		add(_playerWhosTurnToMove);
-	}
-	
-	public function gamePlayerTimeRemainingMove():Void
-	{	
-		if (_playerTimeRemainingMove != null)
-		{
-			_playerTimeRemainingMove.visible = false;
-			_playerTimeRemainingMove.destroy();
-			_playerTimeRemainingMove = null;
-		}
-
-		if (RegCustom._timer_enabled[Reg._tn] == true
-		||  RegTypedef._dataTournaments._move_piece == true) // always enabled for tournament play.
-		{
-			_playerTimeRemainingMove = new PlayerTimeRemainingMove(IDsCreateAndMain._t, this);
-			_playerTimeRemainingMove.visible = true;
-			add(_playerTimeRemainingMove);
-		}
-		
-		// this is needed.
-		if (Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false)
-		{
-			PlayState.clientSocket.send("Player Move Time Remaining", RegTypedef._dataPlayers);
-			haxe.Timer.delay(function (){}, Reg2._event_sleep);
-		}
-		
-	}
-
-	// draw this class to screen.
-	private function gameHistoryButtonsDisplayIt(i:Int):Void
-	{
-		var _iDsHistoryButtons = new IDsHistoryButtons(FlxG.width - 405 + (i * 75), FlxG.height - 453, i); 
-		add(_iDsHistoryButtons);
-	}
-	
-	// draw this class to screen.
-	private function gameAddHUD():Void
-	{
-		if (_hud != null) _hud.destroy();
-		_hud = new HUD();
-		add(_hud);
-	}
-	
-	public function gameIDRightSidePanel():Void
-	{
-		if (Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false)
-		{
-			buttonStartRestartGame = new ButtonGeneralNetworkYes(FlxG.width - 363, FlxG.height - 237, "Start Game", 160 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, messageStartRestartGame, RegCustom._button_color[Reg._tn], false, 1000);
-			
-			if (Reg._gameHost == true
-			&&  RegTypedef._dataPlayers._spectatorWatching == false)
-				buttonStartRestartGame.label.text = "Start Game";
-			else 
-			{
-				buttonStartRestartGame.visible = false;
-				buttonStartRestartGame.active = false;
-			}
-			
-			buttonStartRestartGame.label.font = Reg._fontDefault;
-			add(buttonStartRestartGame);
-						
-		}
-		
-		else
-		{
-			// offline
-			buttonStartRestartGame2 = new ButtonGeneralNetworkNo(FlxG.width - 363, FlxG.height - 137, "Start Game", 175, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, messageStartRestartGame, RegCustom._button_color[Reg._tn], false, 1);
-			buttonStartRestartGame2.label.font = Reg._fontDefault;
-		add(buttonStartRestartGame2); 
-		
-		}
-				
-		
-		if (Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false)
-		{
-			buttonReturnToTitle = new ButtonGeneralNetworkYes(FlxG.width - 183, FlxG.height - 187, "To Title", 160 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, messageReturnToTitle, RegCustom._button_color[Reg._tn], false, 1001);
-			buttonReturnToTitle.label.font = Reg._fontDefault;
-			add(buttonReturnToTitle);
-			
-		}			
-		
-		if (Reg._game_offline_vs_cpu == true || Reg._game_offline_vs_player == true)
-		{
-			// offline
-			buttonReturnToTitle2 = new ButtonGeneralNetworkNo(FlxG.width - 183, FlxG.height - 137, "To Title", 160 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, messageReturnToTitle, RegCustom._button_color[Reg._tn], false, 1);
-			buttonReturnToTitle2.label.font = Reg._fontDefault;
-			add(buttonReturnToTitle2);
-			
-		}
-		
-		if (Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false)
-		{
-			buttonDrawGame = new ButtonGeneralNetworkYes(FlxG.width - 363, FlxG.height -  187, "Draw", 160 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, messageDrawOffer, RegCustom._button_color[Reg._tn], false, 1002);
-			buttonDrawGame.label.font = Reg._fontDefault;
-			buttonDrawGame.visible = false;
-			buttonDrawGame.active = false;
-			add(buttonDrawGame);
-		}
-		
-		// Reg._game_online_vs_cpu code is needed to show this button while playing an online game.
-		if (Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false)
-		{
-			buttonReturnToLobby = new ButtonGeneralNetworkYes(FlxG.width - 183, FlxG.height - 237, "To Lobby", 160 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, messageReturnToLobby, RegCustom._button_color[Reg._tn], false, 1003);
-			buttonReturnToLobby.label.font = Reg._fontDefault;
-			add(buttonReturnToLobby);
-		}
-		
-		if (Reg._game_online_vs_cpu == true)
-		{
-			buttonReturnToLobby = new ButtonGeneralNetworkYes(FlxG.width - 183, FlxG.height - 187, "To Lobby", 160 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, messageReturnToLobby, RegCustom._button_color[Reg._tn], false, 1004);
-			buttonReturnToLobby.label.font = Reg._fontDefault;
-			add(buttonReturnToLobby);
-		}
-		
-		// Reg._game_online_vs_cpu code is needed to show this button while playing an online game.
-		if (Reg._game_online_vs_cpu == true || Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false)
-		{
-			buttonQuitGame = new ButtonGeneralNetworkYes(FlxG.width - 363, FlxG.height - 137, "Quit Game", 160 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, messageQuitGame, RegCustom._button_color[Reg._tn], false, 1005);
-			buttonQuitGame.label.font = Reg._fontDefault;
-			buttonQuitGame.visible = false;
-			buttonQuitGame.active = false;
-			add(buttonQuitGame);
-		}
-
-	}
-	
-	public static function go_back_to_lobby():Void
-	{
-		// go back tolooby
-		PlayState.clientSocket.send("Lesser RoomState Value", RegTypedef._dataMisc);
-		haxe.Timer.delay(function (){}, Reg2._event_sleep);
-		
-		// display the lobby.
-		PlayersLeftGameResetThoseVars.playerRepopulateTypedefPlayers();
-		RegTypedef.resetTypedefDataSome();
-		Reg.resetRegVars();
-		Reg2.resetRegVars();
-		RegCustom.resetRegVars();
-		RegTriggers.resetTriggers();
-		
-		Reg._game_online_vs_cpu = false;
-		Reg._gameOverForPlayer = true;
-		Reg._alreadyOnlineUser = true;
-		Reg._loggedIn = true; 
-		Reg._createGameRoom = false;
-		Reg._loginSuccessfulWasRead = false;
-		Reg._doOnce = true;			
-		Reg._at_create_room = false;
-		Reg._at_waiting_room = false;
-		Reg._doStartGameOnce = false;
-		Reg._gameRoom = false;
-		Reg._hasUserConnectedToServer = true;
-		Reg._lobbyDisplay = false;			
-		Reg._clearDoubleMessage = true;			
-		Reg._rememberChatterIsOpen = false;
-		//Reg._goBackToLobby = true;
-		
-		SceneWaitingRoom._textPlayer1Stats.text = "";
-		SceneWaitingRoom._textPlayer2Stats.text = "";
-		SceneWaitingRoom._textPlayer3Stats.text = "";
-		SceneWaitingRoom._textPlayer4Stats.text = "";
-		
-		RegTriggers._lobby = true;
-	}
-
-	public function printNotation():Void
-	{		
-		if (Reg2._updateNotation == true && Reg._chessCheckBypass == false) 
-		{
-			__game_history_and_notations.notationPrint();
-			Reg2._updateNotation = false;
-		}
-	}
-	
-	
 }//

@@ -152,38 +152,6 @@ class SceneWaitingRoom extends FlxState
 		//ActionInput.enable();
 	}
 	
-	override public function destroy()
-	{
-		if (__boxscroller != null)
-		{
-			cameras.remove( __boxscroller );
-			__boxscroller.destroy();			
-			__boxscroller = null;
-		}
-		
-		super.destroy();
-	}
-	
-	public function boxScroller():Void
-	{
-		if (RegCustom._chat_when_at_room_enabled[Reg._tn] == true)
-		{
-			// make a scrollbar-enabled camera for it (a FlxScrollableArea)	
-			if (__boxscroller != null) FlxG.cameras.remove(__boxscroller);
-			__boxscroller = new FlxScrollableArea( new FlxRect(0, 0, 1390-360, FlxG.height - 50), new FlxRect(0, 0, 1390, 21000), ResizeMode.NONE, 0, 100, -1, FlxColor.LIME, null, 0);	
-		}
-		
-		else
-		{
-			if (__boxscroller != null) FlxG.cameras.remove(__boxscroller);
-			__boxscroller = new FlxScrollableArea( new FlxRect(0, 0, 1400, FlxG.height - 50), new FlxRect(0, 0, 1400, 21000), ResizeMode.FIT_WIDTH, 0, 100, -1, FlxColor.LIME, null, 0);	
-		}
-	
-		FlxG.cameras.add( __boxscroller );
-		__boxscroller.antialiasing = true;
-		__boxscroller.pixelPerfectRender = true;
-	}
-	
 	public function options():Void
 	{
 		Reg._at_waiting_room = true;
@@ -243,6 +211,26 @@ class SceneWaitingRoom extends FlxState
 			add(__game_chatter);
 		}
 	}
+		
+	public function boxScroller():Void
+	{
+		if (RegCustom._chat_when_at_room_enabled[Reg._tn] == true)
+		{
+			// make a scrollbar-enabled camera for it (a FlxScrollableArea)	
+			if (__boxscroller != null) FlxG.cameras.remove(__boxscroller);
+			__boxscroller = new FlxScrollableArea( new FlxRect(0, 0, 1390-360, FlxG.height - 50), new FlxRect(0, 0, 1390, 21000), ResizeMode.NONE, 0, 100, -1, FlxColor.LIME, null, 0);	
+		}
+		
+		else
+		{
+			if (__boxscroller != null) FlxG.cameras.remove(__boxscroller);
+			__boxscroller = new FlxScrollableArea( new FlxRect(0, 0, 1400, FlxG.height - 50), new FlxRect(0, 0, 1400, 21000), ResizeMode.FIT_WIDTH, 0, 100, -1, FlxColor.LIME, null, 0);	
+		}
+	
+		FlxG.cameras.add( __boxscroller );
+		__boxscroller.antialiasing = true;
+		__boxscroller.pixelPerfectRender = true;
+	}
 	
 	public function addRemovePlayerCheck():Void
 	{	
@@ -255,26 +243,6 @@ class SceneWaitingRoom extends FlxState
 
 		PlayState.clientSocket.send("Get Room Players", RegTypedef._dataMisc);
 		haxe.Timer.delay(function (){}, Reg2._event_sleep);
-	}
-
-	override public function update(elapsed:Float):Void 
-	{
-		if (FlxG.mouse.enabled == false)
-			_ticks_button_network += 1;
-			
-		if (_ticks_button_network > 200)
-		{
-			_ticks_button_network = 0;
-			
-			FlxG.mouse.reset();
-			FlxG.mouse.enabled = true;
-		}
-
-		// TODO make this code everywhere that's needed, such as at SceneGameRoom.hx.
-		if (Reg._buttonCodeValues != "") buttonCodeValues();
-			
-		super.update(elapsed);
-					
 	}
 	
 	/******************************
@@ -543,6 +511,36 @@ class SceneWaitingRoom extends FlxState
 
 		
 	}
-	
 		
+	override public function destroy()
+	{
+		if (__boxscroller != null)
+		{
+			cameras.remove( __boxscroller );
+			__boxscroller.destroy();			
+			__boxscroller = null;
+		}
+		
+		super.destroy();
+	}
+	
+	override public function update(elapsed:Float):Void 
+	{
+		if (FlxG.mouse.enabled == false)
+			_ticks_button_network += 1;
+			
+		if (_ticks_button_network > 200)
+		{
+			_ticks_button_network = 0;
+			
+			FlxG.mouse.reset();
+			FlxG.mouse.enabled = true;
+		}
+
+		// TODO make this code everywhere that's needed, such as at SceneGameRoom.hx.
+		if (Reg._buttonCodeValues != "") buttonCodeValues();
+			
+		super.update(elapsed);
+					
+	}
 }

@@ -211,7 +211,7 @@ class IdsMessageBox extends FlxGroup
 						var _str:String = "";		
 						if (Reg._roomPlayerLimit > 2) _str = "s";
 											
-						if (Reg._game_offline_vs_cpu == true || Reg._game_offline_vs_player == true) _msg = new MessageBox(16210, "Yes", "No", true, true, true, false, "Start another game?", "Would You like to start another game?");
+						if (Reg._game_offline_vs_cpu == true || Reg._game_offline_vs_player == true) _msg = new MessageBox(16210, "Yes", "No", true, true, true, false, "Start game?", "Would You like to start a game?");
 								
 						else
 						{
