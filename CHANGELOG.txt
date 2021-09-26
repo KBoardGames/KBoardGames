@@ -1,15 +1,57 @@
-Version 1.16.1. Date: 2021-8-28
+Version 1.16.10. Upcoming.
 
 New Features.
 
+	Custom themes is now a new feature for the client. Users can now have custom configuration settings for the client by creating a YAML parser file. Placing that file into the themes folder will set that theme as selectable.
+
+	Renamed the word NPC to BOT.
+	
+	Most scenes can now have a fixed background color.
+	
+	At the configuration menu, users can now change the display of the background, border and text of a button.
+	
+	After the mouse clicks a button, that buttons is set as transparent and inactive for some time to address server hammering. Buttons will remain unclickable until timer makes them active. 
+	
 	Updated the credits scene.
 
-	Put back mouse wheel function for FlxScrollableArea.
+	Put back mouse wheel function for FlxScrollableArea. Scenes that use the scrollbars can now be dragged vertically and horizontally simultaneously.
+	
+	At the game room, a gradient background can be displayed.
+	
+	Background brightest.
+	
+	Notation panel can now have the same color as the game room background.
+	
+	Text at the notation panel can now have a custom color.
+	
+Feature changed.
 
-	Renamed word npc to bot.
-
+	Improved the appearance of the configuration menu.
+	
+	Added 7 more chess sets.
+	
+	Changed the background of the title scene.
+	
 Bugs fixed.
 
+	When username from profile was selected at a title scene's toggle button and that username was not named Guest 1 or Guest 2, when that username was then changed to Guest 1 or Guest 2 at profile, the client would crash from a null object reference.
+	
+	In the wheel estate (signature game), the land ownership colors were displayed incorrectly.
+	
+	When user opened client help dialog box then entered credits page, mouse button feature would not enable.
+	
+	Fixed some display bugs while re-entering some scene using the menu bar.
+	
+	Return to lobby from waiting room button when clicked showed a confirmation message box when return to lobby confirmation was set to false at the configuration menu. 
+	
+	Return to title scene from an offline game would freeze client when return to title screen confirmation was set to false at the configuration menu.
+	
+	A player had returned to lobby message notice was not seen at game room when automatic start of game was enabled.
+	
+	In a offline game of snakes and ladders, the units showing the moved from location of each player were in the reverse color.
+
+	Buttons at the Event Schedule class did not have correct colors.
+	
 	Fixed new account scene bug.
 
 Version 1.15.13. Date: 2021-8-27
