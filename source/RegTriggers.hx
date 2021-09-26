@@ -84,7 +84,7 @@ class RegTriggers
 	public static var _highlightOnlyOuterUnits:Bool = false;
 	
 	/******************************
-	 * used to call options() function at SignatureGame.hx.
+	 * used to call initialize() function at SignatureGame.hx.
 	 */
 	public static var _signatureGame:Bool = false;
 	
@@ -149,7 +149,7 @@ class RegTriggers
 	public static var _returnToLobbyMakeButtonsActive:Bool = false;
 	
 	/******************************
-	 * When lobby is first entered, this is used to load the first part of house options(). this helps to increase the first load up time of house.
+	 * When lobby is first entered, this is used to load the first part of house initialize(). this helps to increase the first load up time of house.
 	 */
 	public static var _houseDrawSpritesDoNotEnter:Bool;
 	

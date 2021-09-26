@@ -98,7 +98,7 @@ class HouseScrollMap extends FlxState
 	}
 	
 	// when returning the house, these vars need to be cleared so that the map works again.
-	public function options():Void
+	public function initialize():Void
 	{
 		_ticks_up = 0;
 		_ticks_down = 0;

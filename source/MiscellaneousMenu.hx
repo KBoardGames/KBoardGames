@@ -51,7 +51,7 @@ class MiscellaneousMenu extends FlxGroup
 		
 		var _title = new FlxText(0, 0, 0, "Miscellaneous Menu");
 		_title.setFormat(Reg._fontDefault, 50, FlxColor.YELLOW);
-		_title.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 3);
+		_title.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 3);
 		_title.scrollFactor.set();
 		_title.setPosition(15, 15);
 		_title.screenCenter(X);
@@ -66,7 +66,7 @@ class MiscellaneousMenu extends FlxGroup
 		_gameOptions.fieldWidth = FlxG.width - 100;
 		add(_gameOptions);
 		
-		var _statisticsAll = new ButtonGeneralNetworkYes(30, 175, "Statistics", 200 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, statisticsAll);
+		var _statisticsAll = new ButtonGeneralNetworkYes(30, 175, "Statistics", 200 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, statisticsAll, RegCustom._button_color[Reg._tn]);
 		_statisticsAll.label.font = Reg._fontDefault;
 		add(_statisticsAll);
 		

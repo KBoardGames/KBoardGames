@@ -1244,11 +1244,17 @@ class IDsCreateAndMain extends FlxState
 		
 		if (RegCustom._game_room_gradient_background_enabled[Reg._tn] == true)
 		{
-			_background_scene = new FlxSprite(0, -44, "assets/images/gameboardBackground" + Std.string(RegCustom._game_room_gradient_background_image_number[Reg._tn]) + ".jpg"); // 44 is half of hud height.
+			_background_scene = new FlxSprite(0, -44, "assets/images/gameboardGradientBackground" + Std.string(RegCustom._game_room_gradient_background_image_number[Reg._tn]) + ".jpg"); // 44 is half of hud height.
 			_background_scene.scrollFactor.set(0, 0);
 			if (RegCustom._game_room_gradient_background_alpha_enabled[Reg._tn] == true)
 				_background_scene.alpha = 0.25;
 			add(_background_scene);
+		}
+		
+		else if (RegCustom._client_background_enabled[Reg._tn] == true)
+		{
+			_background_scene_color.color = MenuConfigurationsGeneral.color_client_background();
+			_background_scene_color.alpha = RegCustom._background_brightness[Reg._tn];
 		}
 		
 		if (RegCustom._gameboard_border_enabled[Reg._tn] == true)

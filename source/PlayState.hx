@@ -64,6 +64,11 @@ class PlayState extends FlxState
     private var _closeSocket:Bool = false;
    
 	/******************************
+	 * background image for the login scene.
+	 */
+	private var _game_board_image:FlxSprite;
+	
+	/******************************
 	* the title of this state.
 	*/
 	private var title:FlxText;
@@ -72,11 +77,16 @@ class PlayState extends FlxState
 	 * server data displayed at front door.
 	 */
 	public static var _text_server_login_data:FlxText;
-   
+    public static var _text_server_login_data2:TextGeneral;
+	public static var _text_server_login_data3:TextGeneral;
+	public static var _text_server_login_data4:TextGeneral;
+	
 	/******************************
 	 * this gives the user a list of events displayed at front door as they are completed because logging in to the lobby takes a few seconds. 
 	 */
 	public static var _text_client_login_data:FlxText;
+	public static var _text_client_login_data2:FlxText;
+	public static var _text_client_login_data3:FlxText;
 	
 	/******************************
 	 * text the client is trying to login to server.
@@ -135,7 +145,15 @@ class PlayState extends FlxState
 		FlxG.autoPause = false;	// this class will pause when not in focus.
 				
 		getPlayersNamesAndAvatars();
-				
+		
+		// gameboard image.
+		_game_board_image = new FlxSprite(0,0);
+		_game_board_image.loadGraphic("assets/images/background.jpg", false);
+		_game_board_image.alpha = 0.17;
+		_game_board_image.scrollFactor.set(0, 0);
+		_game_board_image.updateHitbox();
+		add(_game_board_image);
+		
 		//------------------------------
 		title = new FlxText(0, 0, 0, "Front Door");
 		title.setFormat(Reg._fontDefault, 50, FlxColor.YELLOW);
@@ -148,13 +166,13 @@ class PlayState extends FlxState
 			title.visible = false;
 		}
 		
-		title.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 3);
+		title.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 3);
 		title.screenCenter(X);
 		add(title);
 		
 		_text_server_login_data = new FlxText(0, 0, 0, "");
-		_text_server_login_data.setFormat(Reg._fontDefault, Reg._font_size);
 		_text_server_login_data.scrollFactor.set(0, 0);
+		_text_server_login_data.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 1);
 		_text_server_login_data.setPosition(15, FlxG.height / 2 - 200);
 		if (Reg._gameJumpTo == -1 ) _text_server_login_data.visible = true;
 		else 
@@ -163,13 +181,59 @@ class PlayState extends FlxState
 			_text_server_login_data.visible = false;
 		}
 		
-		_text_server_login_data.setFormat(Reg._fontDefault, Reg._font_size);
+		_text_server_login_data.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.YELLOW);
 		add(_text_server_login_data);
 		
+		
+		_text_server_login_data2 = new TextGeneral(0, 0, 0, "");
+		_text_server_login_data2.scrollFactor.set(0, 0);
+		_text_server_login_data2.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 1);
+		_text_server_login_data2.setPosition(15, FlxG.height / 2 - 200 + 45);
+		if (Reg._gameJumpTo == -1 ) _text_server_login_data2.visible = true;
+		else 
+		{
+			Reg._gameJumpTo = 0;
+			_text_server_login_data2.visible = false;
+		}
+		
+		_text_server_login_data2.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.WHITE);
+		add(_text_server_login_data2);
+		
+		
+		_text_server_login_data3 = new TextGeneral(15, _text_server_login_data2.y + 80, 0, "");
+		_text_server_login_data3.scrollFactor.set(0, 0);
+		_text_server_login_data3.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 1);
+		if (Reg._gameJumpTo == -1 ) _text_server_login_data3.visible = true;
+		else 
+		{
+			Reg._gameJumpTo = 0;
+			_text_server_login_data3.visible = false;
+		}
+		
+		_text_server_login_data3.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.WHITE);
+		add(_text_server_login_data3);
+		
+		
+		_text_server_login_data4 = new TextGeneral(15, _text_server_login_data3.y + 80, 0, "");
+		_text_server_login_data4.scrollFactor.set(0, 0);
+		_text_server_login_data4.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 1);
+		if (Reg._gameJumpTo == -1 ) _text_server_login_data4.visible = true;
+		else 
+		{
+			Reg._gameJumpTo = 0;
+			_text_server_login_data4.visible = false;
+		}
+		
+		
+		_text_server_login_data4.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.WHITE);
+		add(_text_server_login_data4);
+		
+		
+		
 		_text_client_login_data = new FlxText(0, 0, 0, "");
-		_text_client_login_data.setFormat(Reg._fontDefault, Reg._font_size);
 		_text_client_login_data.scrollFactor.set(0, 0);
-		_text_client_login_data.setPosition(FlxG.width / 2, FlxG.height / 2 - 200);
+		_text_client_login_data.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
+		_text_client_login_data.setPosition(FlxG.width / 2, _text_server_login_data.y);
 		if (Reg._gameJumpTo == -1 ) _text_client_login_data.visible = true;
 		else 
 		{
@@ -177,12 +241,46 @@ class PlayState extends FlxState
 			_text_client_login_data.visible = false;
 		}
 		
-		_text_client_login_data.setFormat(Reg._fontDefault, Reg._font_size);
+		_text_client_login_data.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.YELLOW);
 		add(_text_client_login_data);
 		
-		_text_logging_in = new FlxText(0, 650, 0, "Logging in to server. Please Wait...");
-		_text_logging_in.setFormat(Reg._fontDefault, Reg._font_size);
+		
+		_text_client_login_data2 = new FlxText(0, 0, 0, "");
+		_text_client_login_data2.scrollFactor.set(0, 0);
+		_text_client_login_data2.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
+		_text_client_login_data2.setPosition(FlxG.width / 2, _text_server_login_data2.y);
+		if (Reg._gameJumpTo == -1 ) _text_client_login_data2.visible = true;
+		else 
+		{
+			Reg._gameJumpTo = 0;
+			_text_client_login_data2.visible = false;
+		}
+		
+		_text_client_login_data2.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.WHITE);
+		add(_text_client_login_data2);
+		
+		
+		
+		_text_client_login_data3 = new FlxText(0, 0, 0, "");
+		_text_client_login_data3.scrollFactor.set(0, 0);
+		_text_client_login_data3.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
+		_text_client_login_data3.setPosition(FlxG.width / 2, _text_server_login_data3.y);
+		if (Reg._gameJumpTo == -1 ) _text_client_login_data3.visible = true;
+		else 
+		{
+			Reg._gameJumpTo = 0;
+			_text_client_login_data3.visible = false;
+		}
+		
+		_text_client_login_data3.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.WHITE);
+		add(_text_client_login_data3);
+		
+		
+		
+		_text_logging_in = new FlxText(0, 700, 0, "Logging in to server...");
+		_text_logging_in.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.PURPLE);
 		_text_logging_in.scrollFactor.set(0, 0);
+		_text_logging_in.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		_text_logging_in.screenCenter(X);
 		add(_text_logging_in);			
 		
@@ -854,10 +952,17 @@ class PlayState extends FlxState
 					// login successful. do the following once.
 					if (Reg._doUpdate == true)
 					{
-						Reg._doUpdate = false;				
-						title.visible = false;
+						Reg._doUpdate = false;
+						_game_board_image.visible = false;
+						title.visible = false;						
 						_text_server_login_data.visible = false;
+						_text_server_login_data2.visible = false;
+						_text_server_login_data3.visible = false;
+						_text_server_login_data4.visible = false;
+						
 						_text_client_login_data.visible = false;
+						_text_client_login_data2.visible = false;
+						_text_client_login_data3.visible = false;
 						
 						#if !html5
 							saveClientConfig();
@@ -967,7 +1072,7 @@ class PlayState extends FlxState
 			__scene_lobby.__boxscroller.visible = true;
 			
 			__scene_lobby.setActiveForButtons();			
-			__scene_lobby.options();
+			__scene_lobby.initialize();
 			
 			if (SceneLobby.__game_chatter != null)
 			{
@@ -1021,7 +1126,7 @@ class PlayState extends FlxState
 			__scene_create_room.active = true;
 			__scene_create_room.visible = true;
 			
-			__scene_create_room.options();
+			__scene_create_room.initialize();
 			
 			Reg._updateScrollbarBringUp = true; 
 		}
@@ -1070,7 +1175,7 @@ class PlayState extends FlxState
 			
 			__scene_waiting_room.active = true;			
 			__scene_waiting_room.visible = false;			
-			__scene_waiting_room.options();
+			__scene_waiting_room.initialize();
 			__scene_waiting_room.visible = true;
 			
 			if (SceneWaitingRoom.__game_chatter != null)

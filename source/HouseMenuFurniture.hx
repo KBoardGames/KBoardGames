@@ -110,7 +110,7 @@ class HouseMenuFurniture extends FlxGroup
 		_text_house_coins.text = "House Coins: " + Std.string(RegTypedef._dataStatistics._houseCoins);
 		_text_house_coins.font = Reg._fontDefault;
 		_text_house_coins.color = FlxColor.WHITE;
-		_text_house_coins.setBorderStyle(FlxTextBorderStyle.OUTLINE, 0xFF222222, 2);
+		_text_house_coins.setBorderStyle(FlxTextBorderStyle.SHADOW, 0xFF222222, 2);
 		_text_house_coins.scrollFactor.set(0, 0);
 		_text_house_coins.visible = false;
 		add(_text_house_coins);
@@ -120,7 +120,7 @@ class HouseMenuFurniture extends FlxGroup
 		_text_of_item_selected = new FlxText(570, 18, 0, "No item selected.", 24);
 		_text_of_item_selected.font = Reg._fontDefault;
 		_text_of_item_selected.color = FlxColor.WHITE;
-		_text_of_item_selected.setBorderStyle(FlxTextBorderStyle.OUTLINE, 0xFF222222, 2);
+		_text_of_item_selected.setBorderStyle(FlxTextBorderStyle.SHADOW, 0xFF222222, 2);
 		_text_of_item_selected.scrollFactor.set(0, 0);
 		_text_of_item_selected.visible = false;
 		add(_text_of_item_selected);
@@ -128,32 +128,32 @@ class HouseMenuFurniture extends FlxGroup
 		_text_order = new FlxText(570, 67, 0, "Item Z-order.", 24);
 		_text_order.font = Reg._fontDefault;
 		_text_order.color = FlxColor.WHITE;
-		_text_order.setBorderStyle(FlxTextBorderStyle.OUTLINE, 0xFF222222, 2);
+		_text_order.setBorderStyle(FlxTextBorderStyle.SHADOW, 0xFF222222, 2);
 		_text_order.scrollFactor.set(0, 0);
 		_text_order.visible = false;
 		add(_text_order);
 		
 		// bring the selected image minus 1 in z-order.
-		_stack_item_backwards = new ButtonGeneralNetworkNo(_text_order.x + 200, 57, "<", 35, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, stack_item_backwards);	
+		_stack_item_backwards = new ButtonGeneralNetworkNo(_text_order.x + 200, 57, "<", 35, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, stack_item_backwards, RegCustom._button_color[Reg._tn]);	
 		//_stack_item_backwards.label.font = Reg._fontDefault;	
 		_stack_item_backwards.visible = false;
 		_stack_item_backwards.active = false;
 		add(_stack_item_backwards);	
 		
-		_stack_item_forwards = new ButtonGeneralNetworkNo(_text_order.x + 250, 57, ">", 35, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, stack_item_forwards);		
+		_stack_item_forwards = new ButtonGeneralNetworkNo(_text_order.x + 250, 57, ">", 35, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, stack_item_forwards, RegCustom._button_color[Reg._tn]);		
 		//_stack_item_forwards.label.font = Reg._fontDefault;
 		_stack_item_forwards.visible = false;
 		_stack_item_forwards.active = false;
 		add(_stack_item_forwards);
 				
-		_button_item_behind_walls = new ButtonGeneralNetworkNo(620 + 350, 57, "", 160 + 65, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, toggle_item_front_or_back_walls);		
+		_button_item_behind_walls = new ButtonGeneralNetworkNo(620 + 350, 57, "", 160 + 65, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, toggle_item_front_or_back_walls, RegCustom._button_color[Reg._tn]);		
 		_button_item_behind_walls.label.font = Reg._fontDefault;
 		_button_item_behind_walls.visible = false;
 		_button_item_behind_walls.active = false;
 		add(_button_item_behind_walls);
 		
 				// 620 = lobby button location. this button is hide/show.
-		_button_is_hidden = new ButtonGeneralNetworkNo(620 + 600, 57, "", 160 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, item_toggle_visibility);		
+		_button_is_hidden = new ButtonGeneralNetworkNo(620 + 600, 57, "", 160 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, item_toggle_visibility, RegCustom._button_color[Reg._tn]);		
 		_button_is_hidden.label.font = Reg._fontDefault;
 		_button_is_hidden.visible = false;
 		_button_is_hidden.active = false;

@@ -74,7 +74,7 @@ class ButtonAlwaysActiveNetworkYes extends FlxUIButton
 		
 		resize(button_width, button_height);
 		setLabelFormat(Reg._fontDefault, (Reg._font_size-1), RegCustom._button_text_color[Reg._tn], FlxTextAlign.CENTER);
-		label.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 1);
+		label.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 4);
 		autoCenterLabel();
 		
 		var _lineStyle = { thickness: 8.0, color: RegCustom._button_border_color[Reg._tn]};

@@ -77,6 +77,22 @@ class RegCustom
 	 * apply a 10% alpha to the notation panel.
 	 */
 	public static var _notation_panel_10_percent_alpha_enabled:Array<Bool> = [];
+	
+	/******************************
+	 * same background color as the game room?
+	 */
+	public static var _notation_panel_same_background_color_enabled:Array<Bool> = [];
+	
+	/******************************
+	 * gameboard notation background color.
+	 */
+	public static var _notation_panel_background_color_number:Array<Int> = [];
+	public static var _notation_panel_background_color_enabled:Array<Bool> = [];
+	
+	/******************************
+	 * gameboard notation text color.
+	 */
+	public static var _notation_panel_text_color_number:Array<Int> = [];
 		
 	/******************************
 	 * display gradient background image for game room.
@@ -87,6 +103,16 @@ class RegCustom
 	 * image number used to display the gradient background image for game room.
 	 */
 	public static var _game_room_gradient_background_image_number:Array<Int> = [];
+	
+	/******************************
+	 * display static background image for game room.
+	 */
+	public static var _client_background_enabled:Array<Bool> = [];
+	
+	/******************************
+	 * image number used to display the static background image for game room.
+	 */
+	public static var _client_background_image_number:Array<Int> = [];
 	
 	/******************************
 	 * display an alpha to the gameboard gradient background if the background is enabled.
@@ -146,12 +172,12 @@ class RegCustom
 	/******************************
 	 * the color of the selected chess set for player 1.
 	 */
-	public static var _chess_set_for_player1_color:Array<Int> = [];
+	public static var _chess_set_for_player1_color_number:Array<Int> = [];
 	
 	/******************************
 	 * the color of the selected chess set for player 2.
 	 */
-	public static var _chess_set_for_player2_color:Array<Int> = [];
+	public static var _chess_set_for_player2_color_number:Array<Int> = [];
 	
 	/******************************
 	 * the brightness of the random background color of a scene when random background colors are used.
@@ -388,6 +414,12 @@ class RegCustom
 		_game_room_gradient_background_image_number.splice(0, _game_room_gradient_background_image_number.length);
 		_game_room_gradient_background_image_number.push(4);
 		
+		_client_background_enabled.splice(0, _client_background_enabled.length);
+		_client_background_enabled.push(false);
+		
+		_client_background_image_number.splice(0, _client_background_image_number.length);
+		_client_background_image_number.push(4);
+		
 		_game_room_gradient_background_alpha_enabled.splice(0, _game_room_gradient_background_alpha_enabled.length);
 		_game_room_gradient_background_alpha_enabled.push(false);
 		
@@ -418,11 +450,11 @@ class RegCustom
 		_chess_set_for_player2.splice(0, _chess_set_for_player2.length);
 		_chess_set_for_player2.push(2);
 		
-		_chess_set_for_player1_color.splice(0, _chess_set_for_player1_color.length);
-		_chess_set_for_player1_color.push(25);
+		_chess_set_for_player1_color_number.splice(0, _chess_set_for_player1_color_number.length);
+		_chess_set_for_player1_color_number.push(1);
 		
-		_chess_set_for_player2_color.splice(0, _chess_set_for_player2_color.length);
-		_chess_set_for_player2_color.push(26);
+		_chess_set_for_player2_color_number.splice(0, _chess_set_for_player2_color_number.length);
+		_chess_set_for_player2_color_number.push(25);
 		
 		_chess_opening_moves_enabled.splice(0, _chess_opening_moves_enabled.length);
 		_chess_opening_moves_enabled.push(true);	
@@ -434,10 +466,10 @@ class RegCustom
 		_background_brightness.push(0.45);
 		
 		_button_color_number.splice(0, _button_color_number.length);
-		_button_color_number.push(3);
+		_button_color_number.push(16);
 		
 		_button_border_color_number.splice(0, _button_border_color_number.length);
-		_button_border_color_number.push(4);
+		_button_border_color_number.push(1);
 		
 		_button_text_color_number.splice(0, _button_text_color_number.length);
 		_button_text_color_number.push(1);
@@ -460,6 +492,18 @@ class RegCustom
 		_notation_panel_10_percent_alpha_enabled.splice(0, _notation_panel_10_percent_alpha_enabled.length);
 		_notation_panel_10_percent_alpha_enabled.push(true);
 		
+		_notation_panel_same_background_color_enabled.splice(0, _notation_panel_same_background_color_enabled.length);
+		_notation_panel_same_background_color_enabled.push(false);
+		
+		_notation_panel_background_color_enabled.splice(0, _notation_panel_background_color_enabled.length);
+		_notation_panel_background_color_enabled.push(false);
+		
+		_notation_panel_background_color_number.splice(0, _notation_panel_background_color_number.length);
+		_notation_panel_background_color_number.push(1);
+		
+		_notation_panel_text_color_number.splice(0, _notation_panel_text_color_number.length);
+		_notation_panel_text_color_number.push(1);
+				
 		_profile_avatar_number1.splice(0, _profile_avatar_number1.length);
 		_profile_avatar_number1.push("0.png");
 		

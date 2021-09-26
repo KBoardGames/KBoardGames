@@ -109,9 +109,9 @@ class ButtonGeneralNetworkNo extends FlxUIButton
 						
 		resize(button_width, button_height);
 		setLabelFormat(Reg._fontDefault, (Reg._font_size-1), RegCustom._button_text_color[Reg._tn], FlxTextAlign.CENTER);
-		label.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 1);
+		label.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 4);
 		autoCenterLabel();
-
+		
 		var _lineStyle = { thickness: 8.0, color: RegCustom._button_border_color[Reg._tn]};
 		FlxSpriteUtil.drawRect(this, 0, 0, _button_width, _button_height + 10, innerColor, _lineStyle);
 		
@@ -157,7 +157,7 @@ class ButtonGeneralNetworkNo extends FlxUIButton
 	
 	// this function must not be removed. also stops double firing of button sound at ActionKeyboard.hx.
 	override public function update(elapsed:Float):Void
-	{
+	{				
 		if (alpha == 1
 		&&	RegTriggers._buttons_set_not_active == false)
 		{

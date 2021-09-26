@@ -185,7 +185,7 @@ class MenuState extends FlxState
 	{
 		var _gameOptions = new FlxText(30, 620, 0, "What is your chess skill level for offline play?");
 		_gameOptions.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.YELLOW);
-		_gameOptions.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 2);
+		_gameOptions.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		_gameOptions.scrollFactor.set();
 		add(_gameOptions);
 		
@@ -437,12 +437,12 @@ class MenuState extends FlxState
 	private function startupFunctions():Void
 	{
 		// gameboard image.
-		var _gameBoardImage = new FlxSprite(0,0);
-		_gameBoardImage.loadGraphic("assets/images/background.jpg", false);
-		_gameBoardImage.alpha = 0.15;
-		_gameBoardImage.scrollFactor.set(0, 0);
-		_gameBoardImage.updateHitbox();
-		add(_gameBoardImage);
+		var _game_board_image = new FlxSprite(0,0);
+		_game_board_image.loadGraphic("assets/images/background.jpg", false);
+		_game_board_image.alpha = 0.17;
+		_game_board_image.scrollFactor.set(0, 0);
+		_game_board_image.updateHitbox();
+		add(_game_board_image);
 		
 		buttonFullScreen();				// toggle window/fullscreen mode
 		
@@ -806,7 +806,7 @@ class MenuState extends FlxState
 
 		var _textEventSchedule = new FlxText(0, 0, 0, "Event Schedule");
 		_textEventSchedule.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.YELLOW);
-		_textEventSchedule.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 2);
+		_textEventSchedule.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		_textEventSchedule.setPosition(_intCalendarCoordinateX + _offsetBgColumnX + 72, _intCalendarCoordinateY + _offsetEventColumn1Y + _offsetBgColumnY - 87 );
 		_textEventSchedule.scrollFactor.set();
 		_textEventSchedule.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.PURPLE, 1);
@@ -1024,7 +1024,7 @@ class MenuState extends FlxState
 		#end
 		
 		_text_title_icon_description.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.YELLOW);
-		_text_title_icon_description.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 2);
+		_text_title_icon_description.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		_text_title_icon_description.scrollFactor.set();
 		_text_title_icon_description.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.PURPLE, 1);
 		add(_text_title_icon_description);
@@ -1120,7 +1120,7 @@ class MenuState extends FlxState
 			var _bot_text = new FlxText(15, 180, 0, "Click bot player button then click multiplayer online icon.");
 			_bot_text.scrollFactor.set();
 			_bot_text.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.YELLOW);
-			_bot_text.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 2);
+			_bot_text.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 			add(_bot_text);	
 			
 			if (_bot_ben == null)
@@ -1427,7 +1427,7 @@ class MenuState extends FlxState
 			// the title of the game.
 			_title = new FlxText(0, 0, 0, Reg._websiteNameTitle);
 			_title.setFormat(Reg._fontTitle, 69, FlxColor.YELLOW);
-			_title.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 3);
+			_title.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 3);
 			_title.scrollFactor.set();
 			_title.y = 25;
 			_title.screenCenter(X);

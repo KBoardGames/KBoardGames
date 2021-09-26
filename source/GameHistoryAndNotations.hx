@@ -94,9 +94,24 @@ class GameHistoryAndNotations extends FlxGroup
 		if (RegCustom._notation_panel_enabled[Reg._tn] == true)
 		{
 			_notation = new FlxSprite(0, 0);
-			_notation.makeGraphic(337, FlxG.height - Reg._offsetScreenY + 13, FlxColor.BLACK);
+			
+			if (RegCustom._notation_panel_background_color_enabled[Reg._tn] == true)
+			{
+				_notation.makeGraphic(337, FlxG.height - Reg._offsetScreenY + 13, MenuConfigurationsGeneral.notation_panel_background_color());
+			}
+			
+			else
+			{
+				if (RegCustom._notation_panel_same_background_color_enabled[Reg._tn] == false)
+				_notation.makeGraphic(337, FlxG.height - Reg._offsetScreenY + 13, FlxColor.BLACK);
+				else
+					_notation.makeGraphic(337, FlxG.height - Reg._offsetScreenY + 13, FlxColor.TRANSPARENT);
+			}
+			
 			if (RegCustom._notation_panel_10_percent_alpha_enabled[Reg._tn] == true)
-				_notation.alpha = 0.60;
+				if (RegCustom._notation_panel_same_background_color_enabled[Reg._tn] == false)
+					_notation.alpha = 0.60;
+					
 			_notation.scrollFactor.set(0, 0);
 			add(_notation);
 		}
@@ -104,10 +119,11 @@ class GameHistoryAndNotations extends FlxGroup
 		// text to be displayed at the boxScroller.
 		_messageForBoxScroller = new FlxText(30, FlxG.height, 0, "");
 		_messageForBoxScroller.setFormat(null, Reg._font_size, FlxColor.WHITE, LEFT);
-		//_messageForBoxScroller.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 1);
+		_messageForBoxScroller.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 1);
 		_messageForBoxScroller.offset.set(0, 10);
 		_messageForBoxScroller.font = Reg._fontDefault;
 		_messageForBoxScroller.text = "Notations:\r\r";
+		_messageForBoxScroller.color = MenuConfigurationsGeneral.notation_panel_text_color();	
 		add(_messageForBoxScroller);
 		_boxScrollerGroup.add(_messageForBoxScroller);
 		

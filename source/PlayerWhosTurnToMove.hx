@@ -40,14 +40,14 @@ class PlayerWhosTurnToMove extends FlxState
 		
 		var _textPlayer1 = new FlxText(FlxG.width - 352, Reg._unitYgameBoardLocation[0] + 55, 0, "", 20);
 		_textPlayer1.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.CYAN);
-		_textPlayer1.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 2);
+		_textPlayer1.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		_textPlayer1.text = "P1";		
 		_textPlayer1.scrollFactor.set(0, 0);
 		add(_textPlayer1);
 		
 		var _textPlayer2 = new FlxText(FlxG.width - 267, Reg._unitYgameBoardLocation[0] + 55, 0, "", 20);
 		_textPlayer2.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.CYAN);
-		_textPlayer2.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 2);
+		_textPlayer2.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		_textPlayer2.text = "P2";		
 		_textPlayer2.scrollFactor.set(0, 0);
 		add(_textPlayer2);
@@ -56,7 +56,7 @@ class PlayerWhosTurnToMove extends FlxState
 		{		
 			var _textPlayer3 = new FlxText(FlxG.width - 183, Reg._unitYgameBoardLocation[0] + 55, 0, "", 20);
 			_textPlayer3.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.CYAN);
-			_textPlayer3.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 2);
+			_textPlayer3.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 			_textPlayer3.text = "P3";		
 			_textPlayer3.scrollFactor.set(0, 0);
 			add(_textPlayer3);
@@ -66,7 +66,7 @@ class PlayerWhosTurnToMove extends FlxState
 		{
 			var _textPlayer4 = new FlxText(FlxG.width - 98, Reg._unitYgameBoardLocation[0] + 55, 0, "", 20);
 			_textPlayer4.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.CYAN);
-			_textPlayer4.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 2);
+			_textPlayer4.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 			_textPlayer4.text = "P4";		
 			_textPlayer4.scrollFactor.set(0, 0);
 			add(_textPlayer4);
@@ -76,8 +76,8 @@ class PlayerWhosTurnToMove extends FlxState
 		if (Reg._gameId < 3 && RegCustom._move_total_enabled[Reg._tn] == true)
 		{
 			_move_total = new FlxText(FlxG.width - 352, FlxG.height - 357, 0, "Total Move:" + RegTypedef._dataPlayers._moveTotal);
-			_move_total.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.PINK);
-			_move_total.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 2);
+			_move_total.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.ORANGE);
+			_move_total.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 			_move_total.scrollFactor.set();
 			add(_move_total);
 		}
@@ -91,7 +91,7 @@ class PlayerWhosTurnToMove extends FlxState
 		
 		if (RegCustom._move_total_enabled[Reg._tn] == true)
 		{
-			if (Reg._gameId < 3) _move_total.text = "Move Total: " + RegTypedef._dataPlayers._moveTotal;
+			if (Reg._gameId < 3) _move_total.text = "Total Moves: " + RegTypedef._dataPlayers._moveTotal;
 		}
 		
 		// when it is the other players turn to move, this var is changed and the white box underneath the P1, P2, P3 or P4 moves, the second condition is, if player has a trade request and that player is the same as the requested player then highlight that player unit the request timer is finished or the player has clicked a request message box button.

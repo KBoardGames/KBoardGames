@@ -140,7 +140,7 @@ class SceneGameRoom extends FlxState
 		
 		_title = new FlxText(0, 0, 0, "");
 		_title.setFormat(Reg._fontDefault, 50, FlxColor.YELLOW);
-		_title.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 3);
+		_title.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 3);
 		_title.scrollFactor.set();
 		if (RegTypedef._dataMisc._room <= 9) 
 			_title.setPosition(FlxG.width - 275, 20);
@@ -235,6 +235,91 @@ class SceneGameRoom extends FlxState
 		}
 		
 		
+	}
+	
+	public function gameIDRightSidePanel():Void
+	{
+		var _y_offset = 1; // horizontal alignment to the baseline of the gameboard.
+		
+		if (Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false)
+		{
+			buttonStartRestartGame = new ButtonGeneralNetworkYes(FlxG.width - 363, FlxG.height - 237 - _y_offset , "Start Game", 160 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, messageStartRestartGame, RegCustom._button_color[Reg._tn], false, 1000);
+			
+			if (Reg._gameHost == true
+			&&  RegTypedef._dataPlayers._spectatorWatching == false)
+				buttonStartRestartGame.label.text = "Start Game";
+			else 
+			{
+				buttonStartRestartGame.visible = false;
+				buttonStartRestartGame.active = false;
+			}
+			
+			buttonStartRestartGame.label.font = Reg._fontDefault;
+			add(buttonStartRestartGame);
+						
+		}
+		
+		else
+		{
+			// offline
+			buttonStartRestartGame2 = new ButtonGeneralNetworkNo(FlxG.width - 363, FlxG.height - 137 - _y_offset, "Start Game", 175, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, messageStartRestartGame, RegCustom._button_color[Reg._tn], false, 1);
+			buttonStartRestartGame2.label.font = Reg._fontDefault;
+		add(buttonStartRestartGame2); 
+		
+		}
+				
+		
+		if (Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false)
+		{
+			buttonReturnToTitle = new ButtonGeneralNetworkYes(FlxG.width - 183, FlxG.height - 187 - _y_offset, "To Title", 160 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, messageReturnToTitle, RegCustom._button_color[Reg._tn], false, 1001);
+			buttonReturnToTitle.label.font = Reg._fontDefault;
+			add(buttonReturnToTitle);
+			
+		}			
+		
+		if (Reg._game_offline_vs_cpu == true || Reg._game_offline_vs_player == true)
+		{
+			// offline
+			buttonReturnToTitle2 = new ButtonGeneralNetworkNo(FlxG.width - 183, FlxG.height - 137 - _y_offset, "To Title", 160 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, messageReturnToTitle, RegCustom._button_color[Reg._tn], false, 1);
+			buttonReturnToTitle2.label.font = Reg._fontDefault;
+			add(buttonReturnToTitle2);
+			
+		}
+		
+		if (Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false)
+		{
+			buttonDrawGame = new ButtonGeneralNetworkYes(FlxG.width - 363, FlxG.height -  187 - _y_offset, "Draw", 160 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, messageDrawOffer, RegCustom._button_color[Reg._tn], false, 1002);
+			buttonDrawGame.label.font = Reg._fontDefault;
+			buttonDrawGame.visible = false;
+			buttonDrawGame.active = false;
+			add(buttonDrawGame);
+		}
+		
+		// Reg._game_online_vs_cpu code is needed to show this button while playing an online game.
+		if (Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false)
+		{
+			buttonReturnToLobby = new ButtonGeneralNetworkYes(FlxG.width - 183, FlxG.height - 237 - _y_offset, "To Lobby", 160 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, messageReturnToLobby, RegCustom._button_color[Reg._tn], false, 1003);
+			buttonReturnToLobby.label.font = Reg._fontDefault;
+			add(buttonReturnToLobby);
+		}
+		
+		if (Reg._game_online_vs_cpu == true)
+		{
+			buttonReturnToLobby = new ButtonGeneralNetworkYes(FlxG.width - 183, FlxG.height - 187 - _y_offset, "To Lobby", 160 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, messageReturnToLobby, RegCustom._button_color[Reg._tn], false, 1004);
+			buttonReturnToLobby.label.font = Reg._fontDefault;
+			add(buttonReturnToLobby);
+		}
+		
+		// Reg._game_online_vs_cpu code is needed to show this button while playing an online game.
+		if (Reg._game_online_vs_cpu == true || Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false)
+		{
+			buttonQuitGame = new ButtonGeneralNetworkYes(FlxG.width - 363, FlxG.height - 137 - _y_offset, "Quit Game", 160 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, messageQuitGame, RegCustom._button_color[Reg._tn], false, 1005);
+			buttonQuitGame.label.font = Reg._fontDefault;
+			buttonQuitGame.visible = false;
+			buttonQuitGame.active = false;
+			add(buttonQuitGame);
+		}
+
 	}
 	
 	private function spectatorWatchingMessageBoxMessage():Void
@@ -1071,88 +1156,6 @@ class SceneGameRoom extends FlxState
 		add(_hud);
 	}
 	
-	public function gameIDRightSidePanel():Void
-	{
-		if (Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false)
-		{
-			buttonStartRestartGame = new ButtonGeneralNetworkYes(FlxG.width - 363, FlxG.height - 237, "Start Game", 160 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, messageStartRestartGame, RegCustom._button_color[Reg._tn], false, 1000);
-			
-			if (Reg._gameHost == true
-			&&  RegTypedef._dataPlayers._spectatorWatching == false)
-				buttonStartRestartGame.label.text = "Start Game";
-			else 
-			{
-				buttonStartRestartGame.visible = false;
-				buttonStartRestartGame.active = false;
-			}
-			
-			buttonStartRestartGame.label.font = Reg._fontDefault;
-			add(buttonStartRestartGame);
-						
-		}
-		
-		else
-		{
-			// offline
-			buttonStartRestartGame2 = new ButtonGeneralNetworkNo(FlxG.width - 363, FlxG.height - 137, "Start Game", 175, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, messageStartRestartGame, RegCustom._button_color[Reg._tn], false, 1);
-			buttonStartRestartGame2.label.font = Reg._fontDefault;
-		add(buttonStartRestartGame2); 
-		
-		}
-				
-		
-		if (Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false)
-		{
-			buttonReturnToTitle = new ButtonGeneralNetworkYes(FlxG.width - 183, FlxG.height - 187, "To Title", 160 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, messageReturnToTitle, RegCustom._button_color[Reg._tn], false, 1001);
-			buttonReturnToTitle.label.font = Reg._fontDefault;
-			add(buttonReturnToTitle);
-			
-		}			
-		
-		if (Reg._game_offline_vs_cpu == true || Reg._game_offline_vs_player == true)
-		{
-			// offline
-			buttonReturnToTitle2 = new ButtonGeneralNetworkNo(FlxG.width - 183, FlxG.height - 137, "To Title", 160 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, messageReturnToTitle, RegCustom._button_color[Reg._tn], false, 1);
-			buttonReturnToTitle2.label.font = Reg._fontDefault;
-			add(buttonReturnToTitle2);
-			
-		}
-		
-		if (Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false)
-		{
-			buttonDrawGame = new ButtonGeneralNetworkYes(FlxG.width - 363, FlxG.height -  187, "Draw", 160 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, messageDrawOffer, RegCustom._button_color[Reg._tn], false, 1002);
-			buttonDrawGame.label.font = Reg._fontDefault;
-			buttonDrawGame.visible = false;
-			buttonDrawGame.active = false;
-			add(buttonDrawGame);
-		}
-		
-		// Reg._game_online_vs_cpu code is needed to show this button while playing an online game.
-		if (Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false)
-		{
-			buttonReturnToLobby = new ButtonGeneralNetworkYes(FlxG.width - 183, FlxG.height - 237, "To Lobby", 160 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, messageReturnToLobby, RegCustom._button_color[Reg._tn], false, 1003);
-			buttonReturnToLobby.label.font = Reg._fontDefault;
-			add(buttonReturnToLobby);
-		}
-		
-		if (Reg._game_online_vs_cpu == true)
-		{
-			buttonReturnToLobby = new ButtonGeneralNetworkYes(FlxG.width - 183, FlxG.height - 187, "To Lobby", 160 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, messageReturnToLobby, RegCustom._button_color[Reg._tn], false, 1004);
-			buttonReturnToLobby.label.font = Reg._fontDefault;
-			add(buttonReturnToLobby);
-		}
-		
-		// Reg._game_online_vs_cpu code is needed to show this button while playing an online game.
-		if (Reg._game_online_vs_cpu == true || Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false)
-		{
-			buttonQuitGame = new ButtonGeneralNetworkYes(FlxG.width - 363, FlxG.height - 137, "Quit Game", 160 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, messageQuitGame, RegCustom._button_color[Reg._tn], false, 1005);
-			buttonQuitGame.label.font = Reg._fontDefault;
-			buttonQuitGame.visible = false;
-			buttonQuitGame.active = false;
-			add(buttonQuitGame);
-		}
-
-	}
 	
 	public static function go_back_to_lobby():Void
 	{
@@ -2065,7 +2068,7 @@ class SceneGameRoom extends FlxState
 		&& Reg._gameDidFirstMove == true)
 		{
 			RegTriggers._signatureGame = false;
-			_iDsCreateAndMain.__signature_game.options();
+			_iDsCreateAndMain.__signature_game.initialize();
 			if (Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false && Reg._game_online_vs_cpu == false) Reg._triggerNextStuffToDo = 3;
 		}
 

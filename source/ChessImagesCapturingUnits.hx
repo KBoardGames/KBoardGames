@@ -106,7 +106,9 @@ class ChessImagesCapturingUnits extends FlxSprite {
 					visible = true;
 				
 				// king moving to unit, highlights.
-				else if (Reg._capturingUnitsForImages[Reg._playerMoving][_yID][_xID] > 0 
+				else if (Reg._game_offline_vs_player == false
+				&&		 Reg._game_offline_vs_cpu == false
+				&&		 Reg._capturingUnitsForImages[Reg._playerMoving][_yID][_xID] > 0 
 				&& 		 Reg._capturingUnitsForPieces[Reg._playerNotMoving][_yID][_xID] <= 2
 				&&		 Reg._chessIsKingMoving == true 
 				&&		 RegCustom._show_capturing_units[Reg._tn] == true)

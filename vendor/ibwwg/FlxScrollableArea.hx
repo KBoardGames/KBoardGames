@@ -7,7 +7,6 @@ import flixel.FlxState;
 import flixel.math.FlxPoint;
 import flixel.math.FlxRect;
 import flixel.util.FlxColor;
-import vendor.ibwwg.FlxScrollbar.FlxScrollbarOrientation;
 
 /**
  * An area of the screen that has automatic scrollbars, if needed.
@@ -49,8 +48,8 @@ class FlxScrollableArea extends FlxCamera
 	public var scrollbarThickness:Int = 4;
 	#end
 	private var _state:FlxState;
-	public var _horizontalScrollbar:FlxScrollbar;
-	public var _verticalScrollbar:FlxScrollbar;
+	public var _horizontalScrollbar:FlxScrollbarHorizontal;
+	public var _verticalScrollbar:FlxScrollbarVertical;
 	private var _scrollbarColour:FlxColor;
 	private var _resizeModeGoal:ResizeMode;
 	private var _id:Int = 0;
@@ -93,10 +92,10 @@ class FlxScrollableArea extends FlxCamera
 		scroll.x = content.x;
 		scroll.y = content.y;
 			
-		_horizontalScrollbar = new FlxScrollbar( viewPort.x, 0, 1, scrollbarThickness, FlxScrollbarOrientation.HORIZONTAL, content_height_extra, ScrollbarColour, this, false, viewPort, MouseWheelMultiplier, content.width, content.height, _id);
+		_horizontalScrollbar = new FlxScrollbarHorizontal( viewPort.x, 0, 1, scrollbarThickness, content_height_extra, ScrollbarColour, this, false, viewPort, MouseWheelMultiplier, content.width, content.height, _id);
 		if (viewPort.x == 0) _state.add( _horizontalScrollbar); // do not at this bar if scrollarea is to the right side. this is the only way to remove it because two scrollareas share the same scene.
 
-		_verticalScrollbar = new FlxScrollbar( 0, 0, scrollbarThickness, 1, FlxScrollbarOrientation.VERTICAL, content_height_extra, ScrollbarColour, this, false, viewPort, MouseWheelMultiplier, content.width, content.height, _id, vertical_bar_bring_up, vertical_bar_bring_down);
+		_verticalScrollbar = new FlxScrollbarVertical( 0, 0, scrollbarThickness, 1, content_height_extra, ScrollbarColour, this, false, viewPort, MouseWheelMultiplier, content.width, content.height, _id, vertical_bar_bring_up, vertical_bar_bring_down);
 		_state.add( _verticalScrollbar);		
 		
 		_verticalScrollbar.scrollFactor.set(0, 0);

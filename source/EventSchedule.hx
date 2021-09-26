@@ -273,6 +273,12 @@ class EventSchedule extends FlxState
 		_background_scene_color.scrollFactor.set(0, 0);
 		add(_background_scene_color);
 		
+		if (RegCustom._client_background_enabled[Reg._tn] == true)
+		{
+			_background_scene_color.color = MenuConfigurationsGeneral.color_client_background();
+			_background_scene_color.alpha = RegCustom._background_brightness[Reg._tn];
+		}
+		
 		var _calendarBackground = new FlxSprite(0, 0);
 		_calendarBackground.loadGraphic("assets/images/calendarGrid.png", false);
 		_calendarBackground.scrollFactor.set(0, 0);	
@@ -295,7 +301,7 @@ class EventSchedule extends FlxState
 		_textCalendarTitle.scrollFactor.set();
 		_textCalendarTitle.text = "Event Schedule. " + Std.string(_intYear) + "-" + _textMonth + "-" + Std.string(_intDay);
 		_textCalendarTitle.setFormat(Reg._fontTitle, 44, FlxColor.YELLOW);
-		_textCalendarTitle.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 3);
+		_textCalendarTitle.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 3);
 		_textCalendarTitle.screenCenter(X);
 		_textCalendarTitle.x += 40;
 		_textCalendarTitle.y = 20;

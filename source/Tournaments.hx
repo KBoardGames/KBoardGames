@@ -64,7 +64,7 @@ class Tournaments extends FlxGroup
 		
 		_title = new FlxText(0, 0, 0, "Tournaments Menu");
 		_title.setFormat(Reg._fontDefault, 50, FlxColor.YELLOW);
-		_title.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 3);
+		_title.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 3);
 		_title.scrollFactor.set();
 		_title.setPosition(15, 15);
 		_title.screenCenter(X);

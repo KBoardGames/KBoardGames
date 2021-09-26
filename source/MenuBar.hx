@@ -179,7 +179,7 @@ class MenuBar extends FlxGroup
 		if (Reg._at_leaderboards == true) menu_leaderboards();
 	}
 	
-	public function options():Void
+	public function initialize():Void
 	{
 		if (RegCustom._house_feature_enabled[Reg._tn] == true)
 		{
@@ -630,7 +630,7 @@ class MenuBar extends FlxGroup
 		
 		if (RegTriggers._houseFirstPartComplete == true)
 		{
-			__house.options_part2();
+			__house.initialize2();
 			
 			RegTriggers._houseFirstPartComplete = false;
 		}
@@ -1216,21 +1216,13 @@ class MenuBar extends FlxGroup
 		
 	override public function destroy()
 	{
-		if (__house != null)
-		{
-			remove(__house);
-			__house.destroy();
-		}
-		
 		if (__miscellaneous_menu != null)
 		{
 			__miscellaneous_menu.visible = false;
 			remove(__miscellaneous_menu);
 			__miscellaneous_menu.destroy();
 		}
-		
-		//#############################
-		// start of house main menu
+
 		if (_bgHorizontal != null)
 		{
 			_bgHorizontal.destroy();
@@ -1260,9 +1252,6 @@ class MenuBar extends FlxGroup
 			_save.destroy();
 			_save = null;
 		}
-		
-		//#############################
-		// end house main menu.
 		
 		super.destroy();
 	}

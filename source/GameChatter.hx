@@ -252,7 +252,7 @@ class GameChatter extends FlxGroup
 		
 	}
 	
-	public function options():Void
+	public function initialize():Void
 	{
 		if (_id != ID) return;
 		

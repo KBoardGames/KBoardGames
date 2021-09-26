@@ -110,7 +110,7 @@ class DailyQuests extends FlxGroup
 	/******************************
 	 * when this class is created, a event "Daily Quests" is called and the quests data is populated at that event from NetworkEventsMain.hx then this function is called to draw stuff to scene. 
 	 */
-	public function options():Void
+	public function initialize():Void
 	{
 		FlxG.mouse.enabled = true;
 		_ticks = 0;
@@ -401,7 +401,7 @@ class DailyQuests extends FlxGroup
 		if (RegTriggers.__daily_quests == true)
 		{
 			RegTriggers.__daily_quests = false;
-			options();
+			initialize();
 		}
 		
 		if (_ticks < 5) _ticks += 1;

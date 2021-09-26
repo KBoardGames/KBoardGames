@@ -130,7 +130,7 @@ class HUD extends FlxState
 		_row_username = new FlxText(35, FlxG.height - 91, 0, "Name", 0);
 		_row_username.scrollFactor.set();
 		_row_username.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.YELLOW);
-		_row_username.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 2);
+		_row_username.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		add(_row_username);
 		
 		if (Reg._game_online_vs_cpu == false 
@@ -140,14 +140,14 @@ class HUD extends FlxState
 			_row_win_total = new FlxText(35, FlxG.height - 61, 0, "Wins", 0);
 			_row_win_total.scrollFactor.set();
 			_row_win_total.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.YELLOW);
-			_row_win_total.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 2);
+			_row_win_total.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 			add(_row_win_total);
 		}
 		
 		_row_other = new FlxText(35, FlxG.height - 31, 0, "", 0);
 		_row_other.scrollFactor.set();
 		_row_other.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.YELLOW);
-		_row_other.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 2);
+		_row_other.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		add(_row_other);
 		if (Reg._gameId <= 1) _row_other.text = "Turns";
 		else if (Reg._gameId == 4) _row_other.text = "Cash";
@@ -228,25 +228,25 @@ class HUD extends FlxState
 		_row_username_p1 = new FlxText(_image_profile_avatar_p1.x + 85, FlxG.height - 91, 0, "", 20);
 		_row_username_p1.scrollFactor.set();
 		_row_username_p1.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.LIME);
-		_row_username_p1.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 2);
+		_row_username_p1.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		add(_row_username_p1);
 		
 		_row_username_p2 = new FlxText(_image_profile_avatar_p2.x + 85, FlxG.height - 91, 0, "", 20);
 		_row_username_p2.scrollFactor.set();
 		_row_username_p2.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.LIME);
-		_row_username_p2.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 2);
+		_row_username_p2.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		add(_row_username_p2);
 		
 		_row_username_p3 = new FlxText(_image_profile_avatar_p3.x + 85, FlxG.height - 91, 0, "", 20);
 		_row_username_p3.scrollFactor.set();
 		_row_username_p3.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.LIME);
-		_row_username_p3.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 2);
+		_row_username_p3.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		add(_row_username_p3);
 		
 		_row_username_p4 = new FlxText(_image_profile_avatar_p4.x + 85, FlxG.height - 91, 0, "", 20);
 		_row_username_p4.scrollFactor.set();
 		_row_username_p4.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.LIME);
-		_row_username_p4.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 2);
+		_row_username_p4.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		add(_row_username_p4);
 		
 		//--------------------------
@@ -257,25 +257,25 @@ class HUD extends FlxState
 			_row_total_wins_p1 = new FlxText(_image_profile_avatar_p1.x + 85, FlxG.height - 61, 0, "", 20);
 			_row_total_wins_p1.scrollFactor.set();
 			_row_total_wins_p1.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.LIME);
-			_row_total_wins_p1.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 2);
+			_row_total_wins_p1.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 			add(_row_total_wins_p1);
 					
 			_row_total_wins_p2 = new FlxText(_image_profile_avatar_p2.x + 85, FlxG.height - 61, 0, "", 20);
 			_row_total_wins_p2.scrollFactor.set();
 			_row_total_wins_p2.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.LIME);
-			_row_total_wins_p2.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 2);
+			_row_total_wins_p2.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 			add(_row_total_wins_p2);
 			
 			_row_total_wins_p3 = new FlxText(_image_profile_avatar_p3.x + 85, FlxG.height - 61, 0, "", 20);
 			_row_total_wins_p3.scrollFactor.set();
 			_row_total_wins_p3.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.LIME);
-			_row_total_wins_p3.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 2);
+			_row_total_wins_p3.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 			add(_row_total_wins_p3);
 			
 			_row_total_wins_p4 = new FlxText(_image_profile_avatar_p4.x + 85, FlxG.height - 61, 0, "", 20);
 			_row_total_wins_p4.scrollFactor.set();
 			_row_total_wins_p4.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.LIME);
-			_row_total_wins_p4.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 2);
+			_row_total_wins_p4.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 			add(_row_total_wins_p4);
 		}
 		//--------------------------
@@ -283,25 +283,25 @@ class HUD extends FlxState
 		_row_total_other_p1 = new FlxText(_image_profile_avatar_p1.x + 85, FlxG.height - 31, 0, "", 20);
 		_row_total_other_p1.scrollFactor.set();
 		_row_total_other_p1.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.LIME);
-		_row_total_other_p1.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 2);
+		_row_total_other_p1.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		add(_row_total_other_p1);
 		
 		_row_total_other_p2 = new FlxText(_image_profile_avatar_p2.x + 85, FlxG.height - 31, 0, "", 20);
 		_row_total_other_p2.scrollFactor.set();
 		_row_total_other_p2.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.LIME);
-		_row_total_other_p2.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 2);
+		_row_total_other_p2.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		add(_row_total_other_p2);
 		
 		_row_total_other_p3 = new FlxText(_image_profile_avatar_p3.x + 85, FlxG.height - 31, 0, "", 20);
 		_row_total_other_p3.scrollFactor.set();
 		_row_total_other_p3.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.LIME);
-		_row_total_other_p3.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 2);
+		_row_total_other_p3.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		add(_row_total_other_p3);
 		
 		_row_total_other_p4 = new FlxText(_image_profile_avatar_p4.x + 85, FlxG.height - 31, 0, "", 20);
 		_row_total_other_p4.scrollFactor.set();
 		_row_total_other_p4.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.LIME);
-		_row_total_other_p4.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 2);
+		_row_total_other_p4.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		add(_row_total_other_p4);		
 		//--------------------------
 		

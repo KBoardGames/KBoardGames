@@ -59,10 +59,10 @@ class IDsHistoryButtons extends FlxSprite {
 		if (id == 1 || id == 4) loadGraphic("assets/images/1.png", true);
 		else loadGraphic("assets/images/2.png", true);
 	
-		options();
+		initialize();
 	}
 	
-	private function options():Void
+	private function initialize():Void
 	{
 		if (_id == 1) animation.add("default", [0,0,0], 1, true, false);
 		if (_id == 2) animation.add("default", [0,0,0], 1, true, false);
@@ -237,13 +237,13 @@ class IDsHistoryButtons extends FlxSprite {
 							else  _triggerFastForward = false;
 						}
 						
-						options();
+						initialize();
 					}
 					
 					
 				}			
 				
-				else options();
+				else initialize();
 			}
 		}
 	

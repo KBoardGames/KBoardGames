@@ -48,7 +48,7 @@ class MenuStateOfflinePlayers extends MenuState
 		// the title of the game.
 		var title = new FlxText(0, 0, 0, "Player 1 vs Player 2");
 		title.setFormat(Reg._fontTitle, 69, FlxColor.YELLOW);
-		title.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 3);
+		title.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 3);
 		title.scrollFactor.set();
 		title.screenCenter(X);
 		add(title);

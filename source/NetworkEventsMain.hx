@@ -173,15 +173,15 @@ class NetworkEventsMain extends FlxState
 		PlayState.clientSocket.events.on("Join",function (_data){
 			if (_data.id != RegTypedef._dataAccount.id) return;
 			
-			PlayState._text_server_login_data.text += "Server Data.\n\n";
-			PlayState._text_server_login_data.text += "Clients connected: " + Std.string(_data._clients_connected) + ".\n";
-			PlayState._text_server_login_data.text += "Send data immediately: " + Std.string(_data._server_fast_send) + ".\n";
-			PlayState._text_server_login_data.text += "Blocking: " + Std.string(_data._server_blocking) + ".\n";
+			PlayState._text_server_login_data.text = "Server Data.\n\n";
+			PlayState._text_server_login_data2.text = "Clients connected: " + Std.string(_data._clients_connected) + ".\n";
+			PlayState._text_server_login_data3.text = "Send data immediately: " + Std.string(_data._server_fast_send) + ".\n";
+			PlayState._text_server_login_data4.text = "Blocking: " + Std.string(_data._server_blocking) + ".\n";
 			
 			
-			PlayState._text_client_login_data.text += "Clients Data.\n\n";
-			PlayState._text_client_login_data.text += "Welcome: " + RegTypedef._dataAccount._username + ".\n";
-			PlayState._text_client_login_data.text += ""
+			PlayState._text_client_login_data.text = "Clients Data.\n\n";
+			PlayState._text_client_login_data2.text = "Welcome: " + RegTypedef._dataAccount._username + ".\n";
+			PlayState._text_client_login_data3.text = ""
 				+ "Last known IP: " + _data._ip + ".\n";
 			
 			RegTypedef._dataAccount = _data;

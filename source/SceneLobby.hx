@@ -157,7 +157,7 @@ class SceneLobby extends FlxState
 		// for the user kicking or banning message box see "Is Action Needed For Player" event. that event calls RegTriggers._actionMessage which displays the message at platState.hx
 	}
 		
-	public function options():Void
+	public function initialize():Void
 	{
 		_lobby_data_received = false;
 		_lobby_data_received_do_once = true;
@@ -167,7 +167,7 @@ class SceneLobby extends FlxState
 		
 		_didPopulateList = false;
 		
-		__menu_bar.options();
+		__menu_bar.initialize();
 	}
 		
 	public function display():Void
@@ -191,7 +191,7 @@ class SceneLobby extends FlxState
 		
 		_title = new FlxText(15, 4, 0, "Lobby");
 		_title.setFormat(Reg._fontDefault, 50, FlxColor.YELLOW);
-		_title.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 3);
+		_title.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 3);
 		_title.scrollFactor.set(1,0);
 		_title.visible = true;
 		add(_title);
@@ -215,6 +215,12 @@ class SceneLobby extends FlxState
 		_buttonState[8] = "Watch";
 		
 		var _color_table_rows = FlxColor.fromHSB(FlxG.random.int(1, 360), 0.8, (RegCustom._background_brightness[Reg._tn]-0.10));
+		
+		if (RegCustom._client_background_enabled[Reg._tn] == true)
+		{
+			_color_table_rows = MenuConfigurationsGeneral.color_client_background();
+			_color_table_rows.alphaFloat = 0.15;
+		}
 		
 		// Create the text boxes underneath the buttons. Note that the last count ends before another loop, so only 26 loops will be made. 
 		for (i in 1...27)
@@ -395,7 +401,7 @@ class SceneLobby extends FlxState
 		add(__menu_bar);
 				
 		setNotActiveForButtons();
-		options();
+		initialize();
 				
 	}
 		

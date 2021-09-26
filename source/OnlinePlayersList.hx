@@ -75,6 +75,12 @@ class OnlinePlayersList extends FlxState
 
 		var _color_table_rows = FlxColor.fromHSB((__scene_waiting_room._color_ra+25), 0.8, (RegCustom._background_brightness[Reg._tn]-0.10));
 		
+		if (RegCustom._client_background_enabled[Reg._tn] == true)
+		{
+			_color_table_rows = MenuConfigurationsGeneral.color_client_background();
+			_color_table_rows.alphaFloat = 0.15;
+		}
+		
 		group = cast add(new FlxSpriteGroup());
 				
 		_title_background = new FlxSprite(0, 0);
@@ -84,7 +90,7 @@ class OnlinePlayersList extends FlxState
 		
 		_title = new FlxText(0, 20, 0, "");
 		_title.setFormat(Reg._fontDefault, 50, FlxColor.YELLOW);
-		_title.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 3);
+		_title.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 3);
 		_title.screenCenter(X);
 		_title.visible = true;
 		add(_title);	

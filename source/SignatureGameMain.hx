@@ -563,7 +563,7 @@ class SignatureGameMain extends FlxState
 	/******************************
 	 * the second time entering this class, instead of renewing the class, this options function will be used. 
 	 */
-	public function options():Void
+	public function initialize():Void
 	{
 		if (Reg._game_offline_vs_cpu == true && Reg._move_number_current > 0)
 		{

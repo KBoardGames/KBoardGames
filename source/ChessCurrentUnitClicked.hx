@@ -368,7 +368,7 @@ class ChessCurrentUnitClicked extends FlxSprite
 								
 								Reg._chessCheckBypass = false;
 								
-								//ChessMoveCPUsPiece.options(); // reset vars.
+								//ChessMoveCPUsPiece.initialize(); // reset vars.
 								
 							}
 							

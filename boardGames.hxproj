@@ -22,16 +22,15 @@
     <class path="C:\HaxeToolkit\haxe\lib\yaml\2,0,1" />
     <class path="C:\HaxeToolkit\haxe\lib\flixel-ui\2,3,2" />
     <class path="source" />
-    <class path="export\neko\haxe" />
   </classpaths>
   <!-- Build options -->
   <build>
-    <option directives="flixel=4.6.1&#xA;openfl=8.9.0&#xA;lime=7.3.0&#xA;flixel-addons=2.7.5&#xA;yaml=2.0.1&#xA;flixel-ui=2.3.2&#xA;no-inline&#xA;lime-openal&#xA;no_console&#xA;FLX_RECORD&#xA;native&#xA;lime-curl&#xA;openfl-native&#xA;openfl-disable-handle-error&#xA;lime-harfbuzz&#xA;FLX_NO_FOCUS_LOST_SCREEN&#xA;HXCPP_DEBUGGER&#xA;tools=7.3.0&#xA;lime-cairo&#xA;NAPE_NO_INLINE&#xA;lime-opengl&#xA;no-compilation&#xA;FLX_NO_TOUCH&#xA;lime-native&#xA;lime-vorbis&#xA;FLX_NO_SOUND_TRAY&#xA;lime-cffi&#xA;fdb&#xA;windows&#xA;desktop&#xA;no_console" />
+    <option directives="flixel=4.6.1&#xA;openfl=8.9.0&#xA;lime=7.3.0&#xA;flixel-addons=2.7.5&#xA;yaml=2.0.1&#xA;flixel-ui=2.3.2&#xA;no-inline&#xA;lime-openal&#xA;no_console&#xA;FLX_RECORD&#xA;native&#xA;lime-curl&#xA;openfl-native&#xA;openfl-disable-handle-error&#xA;lime-harfbuzz&#xA;FLX_NO_FOCUS_LOST_SCREEN&#xA;HXCPP_DEBUGGER&#xA;tools=7.3.0&#xA;lime-cairo&#xA;NAPE_NO_INLINE&#xA;lime-opengl&#xA;no-compilation&#xA;FLX_NO_TOUCH&#xA;lime-native&#xA;lime-vorbis&#xA;FLX_NO_SOUND_TRAY&#xA;lime-cffi&#xA;windows&#xA;desktop&#xA;no_console" />
     <option flashStrict="False" />
     <option noInlineOnDebug="False" />
     <option mainClass="ApplicationMain" />
     <option enabledebug="False" />
-    <option additional="--macro openfl._internal.macros.ExtraParams.include()&#xA;--macro lime._internal.macros.DefineMacro.run()&#xA;--remap flash:openfl&#xA;--macro flixel.system.macros.FlxDefines.run()&#xA;-debug " />
+    <option additional="--macro openfl._internal.macros.ExtraParams.include()&#xA;--macro lime._internal.macros.DefineMacro.run()&#xA;--remap flash:openfl&#xA;--macro flixel.system.macros.FlxDefines.run()&#xA;--no-output " />
   </build>
   <!-- haxelib libraries -->
   <haxelib>

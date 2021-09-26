@@ -53,10 +53,10 @@ class HouseFurnitureItemsFront extends FlxGroup
 		_group = new FlxSpriteGroup();
 		//add(_group);
 		
-		options();
+		initialize();
 	}
 		
-	private function options():Void
+	private function initialize():Void
 	{
 		// -1 because item 0.png refers to the first item. a value of 1 here is really two items.
 		RegHouse._totalPurchased = RegHouse._sprite_number.length-1;

@@ -73,7 +73,7 @@ class MenuConfigurationsOutput extends FlxGroup
 		_title.setFormat(Reg._fontDefault, 30, FlxColor.ORANGE);
 		_title.scrollFactor.set(0, 0);
 				
-		options();
+		initialize();
 		
 		// a negative x value moves the boxScroller in the opposite direction.
 		if (__boxscroller != null) FlxG.cameras.remove(__boxscroller);
@@ -113,7 +113,7 @@ class MenuConfigurationsOutput extends FlxGroup
 		button_theme_should_hide();
 	}
 	
-	public function options():Void
+	public function initialize():Void
 	{
 		if (__menu_configurations_general != null)
 			remove(__menu_configurations_general);
@@ -299,7 +299,7 @@ class MenuConfigurationsOutput extends FlxGroup
 			add(__menu_bar);
 		
 		sceneMenuButtons();
-		options();
+		initialize();
 		buttonGeneral();
 		
 	}
@@ -333,7 +333,7 @@ class MenuConfigurationsOutput extends FlxGroup
 			add(__menu_bar);
 			
 		sceneMenuButtons();
-		options();
+		initialize();
 		buttonGeneral();
 		
 	}

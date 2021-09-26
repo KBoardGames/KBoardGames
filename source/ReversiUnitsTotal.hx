@@ -33,26 +33,26 @@ class ReversiUnitsTotal extends FlxGroup
 		
 		var _p1 = new FlxText(FlxG.width - 352, FlxG.height - 320, 0, "P1 Total Score: ", 20);
 		_p1.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.PINK);
-		_p1.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 2);
+		_p1.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		_p1.scrollFactor.set(0, 0);
 		add(_p1);
 		
 		_player1_units_total = new FlxText(FlxG.width - 97, FlxG.height - 320, 0, "0", 20);
 		_player1_units_total.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.PINK);
-		_player1_units_total.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 2);
+		_player1_units_total.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		_player1_units_total.text = "0";
 		_player1_units_total.scrollFactor.set(0, 0);
 		add(_player1_units_total);
 		
 		var _p2 = new FlxText(FlxG.width - 352, FlxG.height - 287, 0, "P2 Total Score: ", 20);
 		_p2.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.PINK);
-		_p2.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 2);
+		_p2.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		_p2.scrollFactor.set(0, 0);
 		add(_p2);
 		
 		_player2_units_total = new FlxText(FlxG.width - 97, FlxG.height - 287, 0, "", 20);
 		_player2_units_total.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.PINK);
-		_player2_units_total.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 2);
+		_player2_units_total.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		_player2_units_total.text = "0";
 		_player2_units_total.scrollFactor.set(0, 0);
 		add(_player2_units_total);

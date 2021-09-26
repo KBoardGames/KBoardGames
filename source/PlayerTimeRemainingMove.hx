@@ -81,8 +81,8 @@ class PlayerTimeRemainingMove extends FlxState
 		// move timer text.
 		var _textMoveTimer = new FlxText(FlxG.width - 252, 172 - _offsetY, 0, "", 20);
 		_textMoveTimer.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.ORANGE);
-		_textMoveTimer.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 2);
-		_textMoveTimer.text = "Move Timer.";		
+		_textMoveTimer.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
+		_textMoveTimer.text = "Move Timer";		
 		_textMoveTimer.scrollFactor.set(0, 0);
 		add(_textMoveTimer);
 		
@@ -125,14 +125,14 @@ class PlayerTimeRemainingMove extends FlxState
 		// p1 text.
 		var _textPlayers = new FlxText(FlxG.width - 352, 175+ (1 * 45) - _offsetY, 0, "", 20);
 		_textPlayers.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.ORANGE);
-		_textPlayers.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 2);
+		_textPlayers.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		_textPlayers.text = "P1";		
 		_textPlayers.scrollFactor.set(0, 0);
 		add(_textPlayers);
 
 		var _textPlayers = new FlxText(FlxG.width - 181, 175 + (1 * 45) - _offsetY, 0, "", 20);
 		_textPlayers.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.ORANGE);
-		_textPlayers.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 2);
+		_textPlayers.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		_textPlayers.text = "P2";		
 		_textPlayers.scrollFactor.set(0, 0);
 		add(_textPlayers);
@@ -142,7 +142,7 @@ class PlayerTimeRemainingMove extends FlxState
 			// p3 text.
 			_textPlayer3 = new FlxText(FlxG.width - 352, 175 + (2 * 45) - _offsetY, 0, "", 20);
 			_textPlayer3.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.ORANGE);
-			_textPlayer3.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 2);
+			_textPlayer3.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 			_textPlayer3.text = "P3";		
 			_textPlayer3.scrollFactor.set(0, 0);
 			add(_textPlayer3);	
@@ -153,7 +153,7 @@ class PlayerTimeRemainingMove extends FlxState
 			// p4 text.
 			_textPlayer4 = new FlxText(FlxG.width - 181, 175 + (2 * 45) - _offsetY, 0, "", 20);
 			_textPlayer4.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.ORANGE);
-			_textPlayer4.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 2);
+			_textPlayer4.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 			_textPlayer4.text = "P4";		
 			_textPlayer4.scrollFactor.set(0, 0);
 			add(_textPlayer4);

@@ -85,7 +85,13 @@ class SceneWaitingRoom extends FlxState
 		
 		_color_ra = FlxG.random.int(1, 335);
 		_color = FlxColor.fromHSB(_color_ra, 0.75, RegCustom._background_brightness[Reg._tn]);
-				
+		
+		if (RegCustom._client_background_enabled[Reg._tn] == true)
+		{
+			_color = MenuConfigurationsGeneral.color_client_background();
+			_color.alphaFloat = RegCustom._background_brightness[Reg._tn];
+		}
+		
 		// creates the invite table and also sends the invite request to the server.
 		__online_players_list = new OnlinePlayersList(this);
 		add(__online_players_list);
@@ -152,7 +158,7 @@ class SceneWaitingRoom extends FlxState
 		//ActionInput.enable();
 	}
 	
-	public function options():Void
+	public function initialize():Void
 	{
 		Reg._at_waiting_room = true;
 		boxScroller();

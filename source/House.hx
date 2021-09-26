@@ -163,7 +163,7 @@ class House extends FlxGroup
 	/******************************
 	 * this function draws the default tiles and news all the classes needed for house such as "furniture put".
 	 */
-	private function options():Void
+	private function initialize():Void
 	{
 		_tile_start_offset_x = 10 + 208 * 2; // 208 is width of tile.
 		_tile_start_offset_y = 31 + 147 * 2;
@@ -280,12 +280,10 @@ class House extends FlxGroup
 			}
 		}
 		
-		//options_part2();
-	
 		RegTriggers._houseFirstPartComplete = true;
 	}
 		
-	public function options_part2():Void
+	public function initialize2():Void
 	{		
 		//------------------------ items that the player can buy are displayed at the put panel and also on the map in front of the foundations.
 		__house_furniture_items_front = new HouseFurnitureItemsFront();
@@ -319,13 +317,13 @@ class House extends FlxGroup
 		__house_scroll_map = new HouseScrollMap(this);
 		add(__house_scroll_map);
 		
-		options2();
+		initialize3();
 	}
 	
 	/******************************
 	 * this function draws the _tracker. that center of screen object is used to scroll the scene. The camera focuses on it.
 	 */
-	public function options2():Void
+	public function initialize3():Void
 	{
 		FlxG.mouse.enabled = true;
 		
@@ -382,7 +380,7 @@ class House extends FlxGroup
 		__house_scroll_map.active = true;
 		__house_scroll_map.visible = true;
 		
-		__house_scroll_map.options(); // clear vars.		
+		__house_scroll_map.initialize(); // clear vars.		
 		
 	}
 		
@@ -667,7 +665,7 @@ class House extends FlxGroup
 		if (RegTriggers._houseDrawSpritesDoNotEnter == true)
 		{
 			RegTriggers._houseDrawSpritesDoNotEnter = false;
-			options();
+			initialize();
 			
 			PlayState.__scene_lobby.__menu_bar.scene_house_return_to_lobby();
 		}

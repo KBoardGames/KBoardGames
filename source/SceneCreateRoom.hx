@@ -104,7 +104,7 @@ class SceneCreateRoom extends FlxState
 		
 		_title = new FlxText(0, 0, 0, "Creating Room " + Std.string(RegTypedef._dataMisc._room));
 		_title.setFormat(Reg._fontDefault, 50, FlxColor.YELLOW);
-		_title.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 3);
+		_title.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 3);
 		_title.scrollFactor.set();
 		_title.setPosition(0, 20);
 		_title.visible = true;
@@ -261,13 +261,13 @@ class SceneCreateRoom extends FlxState
 		
 		//#############################
 		
-		options();
+		initialize();
 		
 		_game_highlighted.setPosition(100, 120);
 		
 	}
 	
-	public function options():Void
+	public function initialize():Void
 	{
 		
 		//#############################

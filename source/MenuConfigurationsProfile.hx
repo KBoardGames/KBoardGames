@@ -100,6 +100,7 @@ class MenuConfigurationsProfile extends FlxGroup
 		
 		var _text_title_player = new FlxText(0, 100, 0, "Player username and avatar");
 		_text_title_player.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.ORANGE);
+		_text_title_player.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		_text_title_player.screenCenter(X);
 		_group.add(_text_title_player);
 		
@@ -107,6 +108,7 @@ class MenuConfigurationsProfile extends FlxGroup
 		_profile_general_instructions.setFormat(Reg._fontDefault, Reg._font_size);
 		_profile_general_instructions.fieldWidth = FlxG.width - 90;
 		_profile_general_instructions.y = _text_title_player.y + 50;
+		_profile_general_instructions.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		_group.add(_profile_general_instructions);
 		
 		_button_p1 = new ButtonToggleFlxState(0, 0, 1, "Player 1", 180, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, buttonP1);
@@ -127,6 +129,7 @@ class MenuConfigurationsProfile extends FlxGroup
 		var _text_username = new FlxText(15, 0, 0, "Username");
 		_text_username.setFormat(Reg._fontDefault, Reg._font_size);
 		_text_username.y = _button_p1.y + 65;
+		_text_username.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		_group.add(_text_username);	
 		
 		// type username here.
@@ -136,6 +139,7 @@ class MenuConfigurationsProfile extends FlxGroup
 		_usernameInput.y = _button_p1.y + 65;
 		if (RegCustom._profile_username_p1 != "Guest 1")
 			_usernameInput.text = RegCustom._profile_username_p1;
+		_usernameInput.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		_group.add(_usernameInput);
 		
 		// fix a bug where typing in the username input field puts the second character before the first character.
@@ -145,12 +149,14 @@ class MenuConfigurationsProfile extends FlxGroup
 		_text_title_avatar.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.ORANGE);
 		_text_title_avatar.screenCenter(X);
 		_text_title_avatar.y = _usernameInput.y + 65;
+		_text_title_avatar.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		_group.add(_text_title_avatar);
 		
 		_profile_avatar_notice = new FlxText(15, 250, 0, _text_current_avatar_for_player + "1");
 		_profile_avatar_notice.setFormat(Reg._fontDefault, Reg._font_size);
 		_profile_avatar_notice.fieldWidth = FlxG.width - 90;
 		_profile_avatar_notice.y = _text_title_avatar.y + 55;
+		_profile_avatar_notice.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		_group.add(_profile_avatar_notice);
 		
 		_image_profile_avatar = new FlxSprite(15, 300);
@@ -162,6 +168,7 @@ class MenuConfigurationsProfile extends FlxGroup
 		_avatar_notice.setFormat(Reg._fontDefault, Reg._font_size);
 		_avatar_notice.fieldWidth = FlxG.width - 90;
 		_avatar_notice.y = _image_profile_avatar.y + 100;
+		_avatar_notice.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		_group.add(_avatar_notice);
 		
 		_group_sprite.splice(0, _group_sprite.length);

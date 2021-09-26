@@ -183,17 +183,17 @@ class HouseFoundationPut extends FlxGroup
 		_item_hover.visible = false;
 		add(_item_hover);
 				
-		_buttonItemPosition1 = new ButtonToggleFlxState(17, FlxG.height - 95-100, 1, "North-West", 160, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, buttonPositionToggle1);
+		_buttonItemPosition1 = new ButtonToggleFlxState(17, FlxG.height - 95-100, 1, "North-West", 160, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, buttonPositionToggle1, RegCustom._button_color[Reg._tn]);
 		_buttonItemPosition1.label.font = Reg._fontDefault;	
 		_buttonItemPosition1.set_toggled(true);
 		_buttonItemPosition1.has_toggle = true;
 		add(_buttonItemPosition1);
 		
-		_buttonItemPosition2 = new ButtonToggleFlxState(160 + 30, FlxG.height - 95-100, 2, "North-East", 160, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, buttonPositionToggle2);
+		_buttonItemPosition2 = new ButtonToggleFlxState(160 + 30, FlxG.height - 95-100, 2, "North-East", 160, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, buttonPositionToggle2, RegCustom._button_color[Reg._tn]);
 		_buttonItemPosition2.label.font = Reg._fontDefault;		
 		add(_buttonItemPosition2);
 		
-		_buttonItemRemoveTile = new ButtonGeneralNetworkNo(17+40+7, FlxG.height - 130, "Remove Tile On", 240 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, buttonRemoveTile);
+		_buttonItemRemoveTile = new ButtonGeneralNetworkNo(17+40+7, FlxG.height - 130, "Remove Tile On", 240 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, buttonRemoveTile, RegCustom._button_color[Reg._tn]);
 		_buttonItemRemoveTile.label.font = Reg._fontDefault;
 		add(_buttonItemRemoveTile);
 		
