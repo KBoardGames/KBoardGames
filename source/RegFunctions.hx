@@ -539,9 +539,21 @@ class RegFunctions
 					RegCustom._theme_name.push("");
 					RegCustom._theme_name[Reg._tn] = _file;
 					
-					// do something with file
-					var data = Yaml.read(_path); 
-
+				}
+				
+				if (!sys.FileSystem.isDirectory(_path) 
+				&& _file != "default.yaml"
+				&& 	sys.io.File.getContent(_path) != "")
+				{
+					var data:Dynamic = null;
+					
+					try 
+					{
+						// do something with file
+						data = Yaml.read(_path); 
+					}
+					catch (e:Dynamic){}
+						
 					try
 					{
 						var _array_tmp = Std.string(data.get("_gameboard_units_odd_shade_number"));
@@ -939,7 +951,7 @@ class RegFunctions
 						var _tmp = Std.string(data.get("_sound_enabled"));
 						RegCustom._sound_enabled[Reg._tn] = false;
 						if (_tmp == "true") RegCustom._sound_enabled[Reg._tn] = true;
-						}
+					}
 					catch (e:Dynamic){}
 					
 				} 

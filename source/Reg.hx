@@ -45,7 +45,7 @@ class Reg
 	 * only change the version number here. this value must be changed every time this complete program with dll's are copied to the localhost/files/windows folder.
 	 * no need to copy this var then paste to the bottom of this class because this value does not change while client is running.
 	 */
-	public static var _version:String = "1.15.13";
+	public static var _version:String = "1.16.10";
 	
 	/******************************
 	 * total games available in this release.
