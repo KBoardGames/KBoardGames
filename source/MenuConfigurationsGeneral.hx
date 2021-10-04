@@ -26,7 +26,7 @@ import flixel.addons.effects.chainable.FlxGlitchEffect;
 class MenuConfigurationsGeneral extends FlxGroup
 {
 	/******************************
-	* anything added to this group will be placed inside of the boxScroller field. 
+	* anything added to this group will be placed inside of the scrollable area field. 
 	*/
 	public var _group:FlxSpriteGroup;	
 	
@@ -50,6 +50,11 @@ class MenuConfigurationsGeneral extends FlxGroup
 	 */
 	private var _offset_y:Int = 30;
 	
+	/******************************
+	 * space between rows.
+	 */
+	private var _offset_rows_y:Int = 30;
+		
 	// this class is created when clicking the gear button. It is used to display scrollbar configuration content of either games, general or profile category.
 	private var __menu_configurations_output:MenuConfigurationsOutput;
 	
@@ -188,6 +193,12 @@ class MenuConfigurationsGeneral extends FlxGroup
 	private var _sprite_notation_panel_text_color:FlxSprite;
 	
 	/******************************
+	 * this shows the selected background color of the scene header title and footer menu if saved.
+	 */
+	private var _sprite_background_header_title_color:FlxSprite;
+	private var _sprite_background_footer_menu_color:FlxSprite;
+	
+	/******************************
 	 * this changes the gradient background image of the game room.
 	 */
 	private var _button_game_room_gradient_background_minus:ButtonGeneralNetworkNo;
@@ -284,6 +295,12 @@ class MenuConfigurationsGeneral extends FlxGroup
 	private var _button_border_color:ButtonGeneralNetworkNo;
 	private var _button_text_color:ButtonGeneralNetworkNo;
 	private var _button_color_output:ButtonGeneralNetworkNo;
+	private var _button_music_enabled:ButtonGeneralNetworkNo;
+	private var _button_sound_enabled:ButtonGeneralNetworkNo;
+	private var _button_background_header_title_number_minus:ButtonGeneralNetworkNo;
+	private var _button_background_header_title_number_plus:ButtonGeneralNetworkNo;
+	private var _button_background_footer_menu_number_minus:ButtonGeneralNetworkNo;
+	private var _button_background_footer_menu_number_plus:ButtonGeneralNetworkNo;
 	
 	/******************************
 	 * moves the button down,
@@ -462,7 +479,7 @@ class MenuConfigurationsGeneral extends FlxGroup
 		var _question_gameboard_border_enabled = new TextGeneral(15, 0, 800, "Show border?\r\n", 8, true, true);
 		_question_gameboard_border_enabled.setFormat(Reg._fontDefault, Reg._font_size);
 		_question_gameboard_border_enabled.x = _gameboard_border_title.x;
-		_question_gameboard_border_enabled.y = _button_gameboard_border_plus.height + _button_gameboard_border_plus.y + 30;
+		_question_gameboard_border_enabled.y = _button_gameboard_border_plus.height + _button_gameboard_border_plus.y + _offset_rows_y;
 		_question_gameboard_border_enabled.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		_group.add(_question_gameboard_border_enabled);
 		
@@ -475,7 +492,7 @@ class MenuConfigurationsGeneral extends FlxGroup
 		
 		var _question_gameboard_coordinates_enabled = new TextGeneral(15, 0, 800, "Show coordinates?\r\n", 8, true, true);
 		_question_gameboard_coordinates_enabled.setFormat(Reg._fontDefault, Reg._font_size);
-		_question_gameboard_coordinates_enabled.y = _button_gameboard_border_enabled.height + _button_gameboard_border_enabled.y + 45;
+		_question_gameboard_coordinates_enabled.y = _button_gameboard_border_enabled.height + _button_gameboard_border_enabled.y + _offset_rows_y + _offset_rows_y / 2;
 		_question_gameboard_coordinates_enabled.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		_group.add(_question_gameboard_coordinates_enabled);
 		
@@ -488,7 +505,7 @@ class MenuConfigurationsGeneral extends FlxGroup
 		
 		var _question_notation_panel_10_percent_alpha_enabled = new TextGeneral(15, 0, 800, "Apply 40% transparency to the notation panel?");
 		_question_notation_panel_10_percent_alpha_enabled.setFormat(Reg._fontDefault, Reg._font_size);
-		_question_notation_panel_10_percent_alpha_enabled.y = _button_gameboard_coordinates_enabled.height + _button_gameboard_coordinates_enabled.y + 30;
+		_question_notation_panel_10_percent_alpha_enabled.y = _button_gameboard_coordinates_enabled.height + _button_gameboard_coordinates_enabled.y + _offset_rows_y;
 		_question_notation_panel_10_percent_alpha_enabled.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		_group.add(_question_notation_panel_10_percent_alpha_enabled);
 		
@@ -501,7 +518,7 @@ class MenuConfigurationsGeneral extends FlxGroup
 		
 		var _question_notation_panel_same_background_color = new TextGeneral(15, 0, 800, "Is notation panel same background color as game room?");
 		_question_notation_panel_same_background_color .setFormat(Reg._fontDefault, Reg._font_size);
-		_question_notation_panel_same_background_color .y = _button_notation_panel_10_percent_alpha_enabled.height + _button_notation_panel_10_percent_alpha_enabled.y + 30;
+		_question_notation_panel_same_background_color .y = _button_notation_panel_10_percent_alpha_enabled.height + _button_notation_panel_10_percent_alpha_enabled.y + _offset_rows_y;
 		_question_notation_panel_same_background_color.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		_group.add(_question_notation_panel_same_background_color);
 		
@@ -515,7 +532,7 @@ class MenuConfigurationsGeneral extends FlxGroup
 		
 		var _question_notation_panel_background_color = new TextGeneral(15, 0, 800, "Notation panel background color. This overrides all notation background preferences.", 8, true, true);
 		_question_notation_panel_background_color.setFormat(Reg._fontDefault, Reg._font_size);
-		_question_notation_panel_background_color.y = _button_notation_panel_same_background_color_enabled.height + _button_notation_panel_same_background_color_enabled.y + 30;
+		_question_notation_panel_background_color.y = _button_notation_panel_same_background_color_enabled.height + _button_notation_panel_same_background_color_enabled.y + _offset_rows_y;
 		_question_notation_panel_background_color.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		_group.add(_question_notation_panel_background_color);
 		
@@ -548,7 +565,7 @@ class MenuConfigurationsGeneral extends FlxGroup
 		
 		var _question_notation_panel_text_color_number = new TextGeneral(15, 0, 800, "Notation panel text color?");
 		_question_notation_panel_text_color_number.setFormat(Reg._fontDefault, Reg._font_size);
-		_question_notation_panel_text_color_number.y = _button_notation_panel_background_color_enabled.height + _button_notation_panel_background_color_enabled.y + 30;
+		_question_notation_panel_text_color_number.y = _button_notation_panel_background_color_enabled.height + _button_notation_panel_background_color_enabled.y + _offset_rows_y;
 		_question_notation_panel_text_color_number.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		_group.add(_question_notation_panel_text_color_number);
 		
@@ -563,7 +580,6 @@ class MenuConfigurationsGeneral extends FlxGroup
 		
 		_group_button.push(_button_notation_panel_text_color_number_plus);
 		_group.add(_group_button[18]);
-		
 		
 		_sprite_notation_panel_text_color = new FlxSprite(_button_notation_panel_text_color_number_plus.x + _button_notation_panel_text_color_number_plus.width + 45, _button_notation_panel_text_color_number_plus.y - 12);
 		_sprite_notation_panel_text_color.loadGraphic("assets/images/capturingUnits.png", false, 75, 75);
@@ -586,7 +602,7 @@ class MenuConfigurationsGeneral extends FlxGroup
 		
 		var _question_gameboard_even_units_show_enabled = new TextGeneral(15, 0, 800, "Show even gameboard units?");
 		_question_gameboard_even_units_show_enabled.setFormat(Reg._fontDefault, Reg._font_size);
-		_question_gameboard_even_units_show_enabled.y = _button_notation_panel_enabled.height + _button_notation_panel_enabled.y + 30;
+		_question_gameboard_even_units_show_enabled.y = _button_notation_panel_enabled.height + _button_notation_panel_enabled.y + _offset_rows_y;
 		_question_gameboard_even_units_show_enabled.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		_group.add(_question_gameboard_even_units_show_enabled);
 		
@@ -600,7 +616,7 @@ class MenuConfigurationsGeneral extends FlxGroup
 		//----------------------------
 		var _question_game_room_gradient_background_enabled = new TextGeneral(15, 0, 800, "Display a gameboard gradient background?\r\n\r\n");
 		_question_game_room_gradient_background_enabled.setFormat(Reg._fontDefault, Reg._font_size);
-		_question_game_room_gradient_background_enabled.y = _button_gameboard_even_units_show_enabled.height + _button_gameboard_even_units_show_enabled.y + 30;
+		_question_game_room_gradient_background_enabled.y = _button_gameboard_even_units_show_enabled.height + _button_gameboard_even_units_show_enabled.y + _offset_rows_y;
 		_question_game_room_gradient_background_enabled.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		_group.add(_question_game_room_gradient_background_enabled);
 		
@@ -663,7 +679,7 @@ class MenuConfigurationsGeneral extends FlxGroup
 			//---------------------------
 		var _question_game_room_gradient_background_alpha_enabled = new TextGeneral(15, 0, 800, "Apply a 75% transparency to the gameboard gradient background?", 8, true, true);
 		_question_game_room_gradient_background_alpha_enabled.setFormat(Reg._fontDefault, Reg._font_size);
-		_question_game_room_gradient_background_alpha_enabled.y = _button_game_room_background_enabled.height + _button_game_room_background_enabled.y + 60;
+		_question_game_room_gradient_background_alpha_enabled.y = _button_game_room_background_enabled.height + _button_game_room_background_enabled.y + _offset_rows_y * 2;
 		_question_game_room_gradient_background_alpha_enabled.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		_group.add(_question_game_room_gradient_background_alpha_enabled);
 		
@@ -677,7 +693,7 @@ class MenuConfigurationsGeneral extends FlxGroup
 		//----------------------------
 		_question_show_leaderboard = new TextGeneral(15, 0, 800, "Show leading competitors in various game statistics? (leaderboard.)", 8, true, true);
 		_question_show_leaderboard.setFormat(Reg._fontDefault, Reg._font_size);
-		_question_show_leaderboard.y = _button_game_room_gradient_background_alpha_enabled.height + _button_game_room_gradient_background_alpha_enabled.y + 30;
+		_question_show_leaderboard.y = _button_game_room_gradient_background_alpha_enabled.height + _button_game_room_gradient_background_alpha_enabled.y + _offset_rows_y;
 		_question_show_leaderboard.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		_group.add(_question_show_leaderboard);
 		
@@ -690,7 +706,7 @@ class MenuConfigurationsGeneral extends FlxGroup
 		
 		_house_feature_question = new TextGeneral(15, 0, 800, "Enable the house side game?");
 		_house_feature_question.setFormat(Reg._fontDefault, Reg._font_size);
-		_house_feature_question.y = _button_leaderboard_enabled.height + _button_leaderboard_enabled.y + 30;
+		_house_feature_question.y = _button_leaderboard_enabled.height + _button_leaderboard_enabled.y + _offset_rows_y;
 		_house_feature_question.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		_group.add(_house_feature_question);
 		
@@ -703,7 +719,7 @@ class MenuConfigurationsGeneral extends FlxGroup
 		
 		var _question_save_goto_lobby = new TextGeneral(15, 0, 800, "Go back to the title scene after these configuration options are saved?", 8, true, true);
 		_question_save_goto_lobby.setFormat(Reg._fontDefault, Reg._font_size);
-		_question_save_goto_lobby.y = _button_house_feature_enabled.height + _button_house_feature_enabled.y + 30;
+		_question_save_goto_lobby.y = _button_house_feature_enabled.height + _button_house_feature_enabled.y + _offset_rows_y;
 		_question_save_goto_lobby.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		_group.add(_question_save_goto_lobby);
 		
@@ -716,7 +732,7 @@ class MenuConfigurationsGeneral extends FlxGroup
 		
 		var _save_start_game_request_question = new TextGeneral(15, 0, 800, "Should host of the room automatically send a start game request to other player(s) after entering the game room?", 8, true, true);
 		_save_start_game_request_question.setFormat(Reg._fontDefault, Reg._font_size);
-		_save_start_game_request_question.y = _button_save_goto_lobby_enabled.height + _button_save_goto_lobby_enabled.y + 30;
+		_save_start_game_request_question.y = _button_save_goto_lobby_enabled.height + _button_save_goto_lobby_enabled.y + _offset_rows_y;
 		_save_start_game_request_question.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		_group.add(_save_start_game_request_question);
 		
@@ -729,7 +745,7 @@ class MenuConfigurationsGeneral extends FlxGroup
 		
 		var _question_start_game_offline_confirmation = new TextGeneral(15, 0, 800, "Start a game in offline mode without confirmation?");
 		_question_start_game_offline_confirmation.setFormat(Reg._fontDefault, Reg._font_size);
-		_question_start_game_offline_confirmation.y = _button_send_automatic_start_game_request.height + _button_send_automatic_start_game_request.y + 30;
+		_question_start_game_offline_confirmation.y = _button_send_automatic_start_game_request.height + _button_send_automatic_start_game_request.y + _offset_rows_y;
 		_question_start_game_offline_confirmation.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		_group.add(_question_start_game_offline_confirmation);
 		
@@ -742,7 +758,7 @@ class MenuConfigurationsGeneral extends FlxGroup
 		
 		var _question_accept_start_game_request = new TextGeneral(15, 0, 800, "Automatically accept a start game request after entering the game room?", 8, true, true);
 		_question_accept_start_game_request.setFormat(Reg._fontDefault, Reg._font_size);
-		_question_accept_start_game_request.y = _button_start_game_offline_confirmation.height + _button_start_game_offline_confirmation.y + 30;
+		_question_accept_start_game_request.y = _button_start_game_offline_confirmation.height + _button_start_game_offline_confirmation.y + _offset_rows_y;
 		_question_accept_start_game_request.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		_group.add(_question_accept_start_game_request);
 		
@@ -755,7 +771,7 @@ class MenuConfigurationsGeneral extends FlxGroup
 			
 		var _question_to_lobby_waiting_room_confirmation = new TextGeneral(15, 0, 800, "At waiting room do you need confirmation before returning to lobby?", 8, true, true);
 		_question_to_lobby_waiting_room_confirmation.setFormat(Reg._fontDefault, Reg._font_size);
-		_question_to_lobby_waiting_room_confirmation.y = _button_accept_automatic_start_game_request.height + _button_accept_automatic_start_game_request.y + 30;
+		_question_to_lobby_waiting_room_confirmation.y = _button_accept_automatic_start_game_request.height + _button_accept_automatic_start_game_request.y + _offset_rows_y;
 		_question_to_lobby_waiting_room_confirmation.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		_group.add(_question_to_lobby_waiting_room_confirmation);
 		
@@ -768,7 +784,7 @@ class MenuConfigurationsGeneral extends FlxGroup
 		
 		var _question_to_lobby_game_room_confirmation = new TextGeneral(15, 0, 800, "At game room do you need confirmation before returning to lobby?", 8, true, true);
 		_question_to_lobby_game_room_confirmation.setFormat(Reg._fontDefault, Reg._font_size);
-		_question_to_lobby_game_room_confirmation.y = _button_to_lobby_waiting_room_confirmation.height + _button_to_lobby_waiting_room_confirmation.y + 30;
+		_question_to_lobby_game_room_confirmation.y = _button_to_lobby_waiting_room_confirmation.height + _button_to_lobby_waiting_room_confirmation.y + _offset_rows_y;
 		_question_to_lobby_game_room_confirmation.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		_group.add(_question_to_lobby_game_room_confirmation);
 		
@@ -781,7 +797,7 @@ class MenuConfigurationsGeneral extends FlxGroup
 				
 		var _question_to_game_room_from_waiting_room = new TextGeneral(15, 0, 800, "At waiting room do you need confirmation before entering game room?", 8, true, true);
 		_question_to_game_room_from_waiting_room.setFormat(Reg._fontDefault, Reg._font_size);
-		_question_to_game_room_from_waiting_room.y = _button_to_lobby_game_room_confirmation.height + _button_to_lobby_game_room_confirmation.y + 30;
+		_question_to_game_room_from_waiting_room.y = _button_to_lobby_game_room_confirmation.height + _button_to_lobby_game_room_confirmation.y + _offset_rows_y;
 		_question_to_game_room_from_waiting_room.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		_group.add(_question_to_game_room_from_waiting_room);
 		
@@ -794,7 +810,7 @@ class MenuConfigurationsGeneral extends FlxGroup
 		
 		var _question_to_title_from_game_room = new TextGeneral(15, 0, 800, "Do you need confirmation before returning to title?");
 		_question_to_title_from_game_room.setFormat(Reg._fontDefault, Reg._font_size);
-		_question_to_title_from_game_room.y = _button_to_game_room_from_waiting_room.height + _button_to_game_room_from_waiting_room.y + 30;
+		_question_to_title_from_game_room.y = _button_to_game_room_from_waiting_room.height + _button_to_game_room_from_waiting_room.y + _offset_rows_y;
 		_question_to_title_from_game_room.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		_group.add(_question_to_title_from_game_room);
 		
@@ -807,7 +823,7 @@ class MenuConfigurationsGeneral extends FlxGroup
 		
 		var _question_chat_turn_off_for_lobby = new TextGeneral(15, 0, 800, "Enable chat when at lobby?");
 		_question_chat_turn_off_for_lobby.setFormat(Reg._fontDefault, Reg._font_size);
-		_question_chat_turn_off_for_lobby.y = _button_to_title_from_game_room.height + _button_to_title_from_game_room.y + 30;
+		_question_chat_turn_off_for_lobby.y = _button_to_title_from_game_room.height + _button_to_title_from_game_room.y + _offset_rows_y;
 		_question_chat_turn_off_for_lobby.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		_group.add(_question_chat_turn_off_for_lobby);
 		
@@ -820,7 +836,7 @@ class MenuConfigurationsGeneral extends FlxGroup
 		
 		var _question_chat_turn_off_for_room = new TextGeneral(15, 0, 800, "Enable chat when at any room?");
 		_question_chat_turn_off_for_room.setFormat(Reg._fontDefault, Reg._font_size);
-		_question_chat_turn_off_for_room.y = _button_chat_turn_off_for_lobby.height + _button_chat_turn_off_for_lobby.y + 30;
+		_question_chat_turn_off_for_room.y = _button_chat_turn_off_for_lobby.height + _button_chat_turn_off_for_lobby.y + _offset_rows_y;
 		_question_chat_turn_off_for_room.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		_group.add(_question_chat_turn_off_for_room);
 		
@@ -833,7 +849,7 @@ class MenuConfigurationsGeneral extends FlxGroup
 				
 		var _question_move_timer = new TextGeneral(15, 0, 800, "Enable the player's piece move timer? Note: tournament play ignores this feature.", 8, true, true);
 		_question_move_timer.setFormat(Reg._fontDefault, Reg._font_size);
-		_question_move_timer.y = _button_chat_turn_off_when_in_room.height + _button_chat_turn_off_when_in_room.y + 30;
+		_question_move_timer.y = _button_chat_turn_off_when_in_room.height + _button_chat_turn_off_when_in_room.y + _offset_rows_y;
 		_question_move_timer.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		_group.add(_question_move_timer);
 		
@@ -846,7 +862,7 @@ class MenuConfigurationsGeneral extends FlxGroup
 				
 		var _question_move_total = new TextGeneral(15, 0, 800, "Display the player's move total text?");
 		_question_move_total.setFormat(Reg._fontDefault, Reg._font_size);
-		_question_move_total.y = _button_move_timer.height + _button_move_timer.y + 30;
+		_question_move_total.y = _button_move_timer.height + _button_move_timer.y + _offset_rows_y;
 		_question_move_total.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		_group.add(_question_move_total);
 		
@@ -859,7 +875,7 @@ class MenuConfigurationsGeneral extends FlxGroup
 		
 		var _question_show_capturing_units = new TextGeneral(15, 0, 800, "Display legal moves (capturing units)?");
 		_question_show_capturing_units.setFormat(Reg._fontDefault, Reg._font_size);
-		_question_show_capturing_units.y = _button_move_total.height + _button_move_total.y + 30;
+		_question_show_capturing_units.y = _button_move_total.height + _button_move_total.y + _offset_rows_y;
 		_question_show_capturing_units.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		_group.add(_question_show_capturing_units);
 		
@@ -893,7 +909,7 @@ class MenuConfigurationsGeneral extends FlxGroup
 		//-----------------------------
 		var _question_background_brightness = new TextGeneral(15, 0, 800, "Background brightness? 0 is black. 1 is full bright.");
 		_question_background_brightness.setFormat(Reg._fontDefault, Reg._font_size);
-		_question_background_brightness.y = _button_show_capturing_units.height + _button_show_capturing_units.y + 30;
+		_question_background_brightness.y = _button_show_capturing_units.height + _button_show_capturing_units.y + _offset_rows_y;
 		_question_background_brightness.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		_group.add(_question_background_brightness);
 		
@@ -916,7 +932,7 @@ class MenuConfigurationsGeneral extends FlxGroup
 		
 		var _question_button_colors = new TextGeneral(15, 0, 800, "Change the appearance of all client buttons?", 8, true, true);
 		_question_button_colors.setFormat(Reg._fontDefault, Reg._font_size);
-		_question_button_colors.y = _button_background_brightness_minus.height + _button_background_brightness_minus.y + 30;
+		_question_button_colors.y = _button_background_brightness_minus.height + _button_background_brightness_minus.y + _offset_rows_y;
 		_question_button_colors.fieldWidth = 400;
 		_question_button_colors.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		_group.add(_question_button_colors);
@@ -950,8 +966,86 @@ class MenuConfigurationsGeneral extends FlxGroup
 		_group.add(_button_color_output);
 		
 		//-----------------------------
+		var _question_music_enabled = new TextGeneral(15, 0, 800, "Enable music?");
+		_question_music_enabled.setFormat(Reg._fontDefault, Reg._font_size);
+		_question_music_enabled.y = _button_color_output.height + _button_color_output.y + _offset_rows_y;
+		_question_music_enabled.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
+		_group.add(_question_music_enabled);
+		
+		_button_music_enabled = new ButtonGeneralNetworkNo(850, _question_music_enabled.y + _offset_button_y, "", 100, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, null, RegCustom._button_color[Reg._tn]);
+		_button_music_enabled.label.font = Reg._fontDefault;
+		_button_music_enabled.label.text = Std.string(RegCustom._music_enabled[Reg._tn]);
+		
+		_group_button.push(_button_music_enabled);
+		_group.add(_group_button[50]);
+		//-----------------------------
+		
+		var _question_sound_enabled = new TextGeneral(15, 0, 800, "Enable sound?");
+		_question_sound_enabled.setFormat(Reg._fontDefault, Reg._font_size);
+		_question_sound_enabled.y = _button_music_enabled.height + _button_music_enabled.y + _offset_rows_y;
+		_question_sound_enabled.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
+		_group.add(_question_sound_enabled);
+		
+		_button_sound_enabled = new ButtonGeneralNetworkNo(850, _question_sound_enabled.y + _offset_button_y, "", 100, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, null, RegCustom._button_color[Reg._tn]);
+		_button_sound_enabled.label.font = Reg._fontDefault;
+		_button_sound_enabled.label.text = Std.string(RegCustom._sound_enabled[Reg._tn]);
+		
+		_group_button.push(_button_sound_enabled);
+		_group.add(_group_button[51]);
+		
+		//-----------------------------
+		var _question_background_header_title_number = new TextGeneral(15, 0, 800, "Background color of scene header title?");
+		_question_background_header_title_number.setFormat(Reg._fontDefault, Reg._font_size);
+		_question_background_header_title_number.y = _button_sound_enabled.height + _button_sound_enabled.y + _offset_rows_y;
+		_question_background_header_title_number.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
+		_group.add(_question_background_header_title_number);
+		
+		_button_background_header_title_number_minus = new ButtonGeneralNetworkNo(850, _question_background_header_title_number.y + _offset_button_y, "-", 35, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, null, RegCustom._button_color[Reg._tn]);
+		_button_background_header_title_number_minus.label.font = Reg._fontDefault;
+	
+		_group_button.push(_button_background_header_title_number_minus);
+		_group.add(_group_button[52]);		
+		
+		_button_background_header_title_number_plus = new ButtonGeneralNetworkNo(_button_background_header_title_number_minus.x + _button_background_header_title_number_minus.label.fieldWidth + 15, _button_background_header_title_number_minus.y + 7, "+", 35, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, null, RegCustom._button_color[Reg._tn]);
+		_button_background_header_title_number_plus.label.font = Reg._fontDefault;
+		
+		_group_button.push(_button_background_header_title_number_plus);
+		_group.add(_group_button[53]);
+		
+		_sprite_background_header_title_color = new FlxSprite(_button_background_header_title_number_plus.x + _button_background_header_title_number_plus.width + 45, _button_background_header_title_number_plus.y - 12);
+		_sprite_background_header_title_color.loadGraphic("assets/images/capturingUnits.png", false, 75, 75);
+		_sprite_background_header_title_color.color = background_header_title_color();
+		_group.add(_sprite_background_header_title_color);
+		
+		//-----------------------------
+		
+		var _question_background_footer_menu_number = new TextGeneral(15, 0, 800, "Background color of scene footer menu?");
+		_question_background_footer_menu_number.setFormat(Reg._fontDefault, Reg._font_size);
+		_question_background_footer_menu_number.y = _button_background_header_title_number_minus.height + _button_background_header_title_number_minus.y + _offset_rows_y;
+		_question_background_footer_menu_number.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
+		_group.add(_question_background_footer_menu_number);
+		
+		_button_background_footer_menu_number_minus = new ButtonGeneralNetworkNo(850, _question_background_footer_menu_number.y + _offset_button_y, "-", 35, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, null, RegCustom._button_color[Reg._tn]);
+		_button_background_footer_menu_number_minus.label.font = Reg._fontDefault;
+	
+		_group_button.push(_button_background_footer_menu_number_minus);
+		_group.add(_group_button[54]);		
+		
+		_button_background_footer_menu_number_plus = new ButtonGeneralNetworkNo(_button_background_footer_menu_number_minus.x + _button_background_footer_menu_number_minus.label.fieldWidth + 15, _button_background_footer_menu_number_minus.y + 7, "+", 35, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, null, RegCustom._button_color[Reg._tn]);
+		_button_background_footer_menu_number_plus.label.font = Reg._fontDefault;
+		
+		_group_button.push(_button_background_footer_menu_number_plus);
+		_group.add(_group_button[55]);
+		
+		_sprite_background_footer_menu_color = new FlxSprite(_button_background_footer_menu_number_plus.x + _button_background_footer_menu_number_plus.width + 45, _button_background_footer_menu_number_plus.y - 12);
+		_sprite_background_footer_menu_color.loadGraphic("assets/images/capturingUnits.png", false, 75, 75);
+		_sprite_background_footer_menu_color.color = background_footer_menu_color();
+		_group.add(_sprite_background_footer_menu_color);
+		
+		
+		//-----------------------------
 		// DO NOT FORGET TO UPDATE THE buttonNumber() FUNCTiON.
-		var _text_empty = new ButtonGeneralNetworkNo(0, _button_background_brightness_minus.y + 250, "", 100, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, null, RegCustom._button_color[Reg._tn]);
+		var _text_empty = new ButtonGeneralNetworkNo(0, _button_background_footer_menu_number_plus.y + 250, "", 100, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, null, RegCustom._button_color[Reg._tn]);
 		_text_empty.visible = false;
 		_group.add(_text_empty);
 		
@@ -1049,6 +1143,12 @@ class MenuConfigurationsGeneral extends FlxGroup
 			case 47: apply_button_background_color();
 			case 48: apply_button_border_color();
 			case 49: apply_button_text_color();
+			case 50: toggle_music_enabled();
+			case 51: toggle_sound_enabled();
+			case 52: background_header_title_number_minus();
+			case 53: background_header_title_number_plus();
+			case 54: background_footer_menu_number_minus();
+			case 55: background_footer_menu_number_plus();
 		}
 	}
 		
@@ -1158,13 +1258,13 @@ class MenuConfigurationsGeneral extends FlxGroup
 		if (RegCustom._gameboard_units_odd_color_number[Reg._tn][_id] == 16) _color = 0xFF333c57;
 		if (RegCustom._gameboard_units_odd_color_number[Reg._tn][_id] == 17) _color = 0xFF9c5b3e;
 		if (RegCustom._gameboard_units_odd_color_number[Reg._tn][_id] == 18) _color = 0xFF573139;
-		if (RegCustom._gameboard_units_odd_color_number[Reg._tn][_id] == 19) _color = 0xFF4c7554;
-		if (RegCustom._gameboard_units_odd_color_number[Reg._tn][_id] == 20) _color = 0xFFded943;
-		if (RegCustom._gameboard_units_odd_color_number[Reg._tn][_id] == 21) _color = 0x881a1c2c;
-		if (RegCustom._gameboard_units_odd_color_number[Reg._tn][_id] == 22) _color = 0x885d275d;
-		if (RegCustom._gameboard_units_odd_color_number[Reg._tn][_id] == 23) _color = 0x88b13e53;
-		if (RegCustom._gameboard_units_odd_color_number[Reg._tn][_id] == 24) _color = 0x88ef7d57;
-		if (RegCustom._gameboard_units_odd_color_number[Reg._tn][_id] == 25) _color = 0x88a4844d;
+		if (RegCustom._gameboard_units_odd_color_number[Reg._tn][_id] == 19) _color = 0xFF005711;
+		if (RegCustom._gameboard_units_odd_color_number[Reg._tn][_id] == 20) _color = 0xFFded943;		
+		if (RegCustom._gameboard_units_odd_color_number[Reg._tn][_id] == 21) _color = 0xFF141623;
+		if (RegCustom._gameboard_units_odd_color_number[Reg._tn][_id] == 22) _color = 0xFF300a30;
+		if (RegCustom._gameboard_units_odd_color_number[Reg._tn][_id] == 23) _color = 0xFFb7465b;
+		if (RegCustom._gameboard_units_odd_color_number[Reg._tn][_id] == 24) _color = 0xFF563226;
+		if (RegCustom._gameboard_units_odd_color_number[Reg._tn][_id] == 25) _color = 0xFF222222;
 	
 		return _color;
 	}
@@ -1212,13 +1312,13 @@ class MenuConfigurationsGeneral extends FlxGroup
 		if (RegCustom._gameboard_units_even_color_number[Reg._tn][_id] == 16) _color = 0xFF333c57;
 		if (RegCustom._gameboard_units_even_color_number[Reg._tn][_id] == 17) _color = 0xFF9c5b3e;
 		if (RegCustom._gameboard_units_even_color_number[Reg._tn][_id] == 18) _color = 0xFF573139;
-		if (RegCustom._gameboard_units_even_color_number[Reg._tn][_id] == 19) _color = 0xFF4c7554;
+		if (RegCustom._gameboard_units_even_color_number[Reg._tn][_id] == 19) _color = 0xFF005711;
 		if (RegCustom._gameboard_units_even_color_number[Reg._tn][_id] == 20) _color = 0xFFded943;
-		if (RegCustom._gameboard_units_even_color_number[Reg._tn][_id] == 21) _color = 0x881a1c2c;
-		if (RegCustom._gameboard_units_even_color_number[Reg._tn][_id] == 22) _color = 0x885d275d;
-		if (RegCustom._gameboard_units_even_color_number[Reg._tn][_id] == 23) _color = 0x88b13e53;
-		if (RegCustom._gameboard_units_even_color_number[Reg._tn][_id] == 24) _color = 0x88ef7d57;
-		if (RegCustom._gameboard_units_even_color_number[Reg._tn][_id] == 25) _color = 0x88a4844d;
+		if (RegCustom._gameboard_units_even_color_number[Reg._tn][_id] == 21) _color = 0xFF141623;
+		if (RegCustom._gameboard_units_even_color_number[Reg._tn][_id] == 22) _color = 0xFF300a30;
+		if (RegCustom._gameboard_units_even_color_number[Reg._tn][_id] == 23) _color = 0xFFb7465b;
+		if (RegCustom._gameboard_units_even_color_number[Reg._tn][_id] == 24) _color = 0xFF563226;
+		if (RegCustom._gameboard_units_even_color_number[Reg._tn][_id] == 25) _color = 0xFF222222;
 		
 		return _color;
 	}
@@ -1372,13 +1472,13 @@ class MenuConfigurationsGeneral extends FlxGroup
 		if (RegCustom._client_background_image_number[Reg._tn] == 16) _color = 0xFF333c57;
 		if (RegCustom._client_background_image_number[Reg._tn] == 17) _color = 0xFF9c5b3e;
 		if (RegCustom._client_background_image_number[Reg._tn] == 18) _color = 0xFF573139;
-		if (RegCustom._client_background_image_number[Reg._tn] == 19) _color = 0xFF4c7554;
+		if (RegCustom._client_background_image_number[Reg._tn] == 19) _color = 0xFF005711;
 		if (RegCustom._client_background_image_number[Reg._tn] == 20) _color = 0xFFded943;
-		if (RegCustom._client_background_image_number[Reg._tn] == 21) _color = 0x881a1c2c;
-		if (RegCustom._client_background_image_number[Reg._tn] == 22) _color = 0x885d275d;
-		if (RegCustom._client_background_image_number[Reg._tn] == 23) _color = 0x88b13e53;
-		if (RegCustom._client_background_image_number[Reg._tn] == 24) _color = 0x88ef7d57;
-		if (RegCustom._client_background_image_number[Reg._tn] == 25) _color = 0x88a4844d;
+		if (RegCustom._client_background_image_number[Reg._tn] == 21) _color = 0xFF141623;
+		if (RegCustom._client_background_image_number[Reg._tn] == 22) _color = 0xFF300a30;
+		if (RegCustom._client_background_image_number[Reg._tn] == 23) _color = 0xFFb7465b;
+		if (RegCustom._client_background_image_number[Reg._tn] == 24) _color = 0xFF563226;
+		if (RegCustom._client_background_image_number[Reg._tn] == 25) _color = 0xFF222222;
 	
 		return _color;
 	}
@@ -1669,13 +1769,13 @@ class MenuConfigurationsGeneral extends FlxGroup
 		if (RegCustom._notation_panel_background_color_number[Reg._tn] == 16) _color = 0xFF333c57;
 		if (RegCustom._notation_panel_background_color_number[Reg._tn] == 17) _color = 0xFF9c5b3e;
 		if (RegCustom._notation_panel_background_color_number[Reg._tn] == 18) _color = 0xFF573139;
-		if (RegCustom._notation_panel_background_color_number[Reg._tn] == 19) _color = 0xFF4c7554;
+		if (RegCustom._notation_panel_background_color_number[Reg._tn] == 19) _color = 0xFF005711;
 		if (RegCustom._notation_panel_background_color_number[Reg._tn] == 20) _color = 0xFFded943;
-		if (RegCustom._notation_panel_background_color_number[Reg._tn] == 21) _color = 0x881a1c2c;
-		if (RegCustom._notation_panel_background_color_number[Reg._tn] == 22) _color = 0x885d275d;
-		if (RegCustom._notation_panel_background_color_number[Reg._tn] == 23) _color = 0x88b13e53;
-		if (RegCustom._notation_panel_background_color_number[Reg._tn] == 24) _color = 0x88ef7d57;
-		if (RegCustom._notation_panel_background_color_number[Reg._tn] == 25) _color = 0x88a4844d;
+		if (RegCustom._notation_panel_background_color_number[Reg._tn] == 21) _color = 0xFF141623;
+		if (RegCustom._notation_panel_background_color_number[Reg._tn] == 22) _color = 0xFF300a30;
+		if (RegCustom._notation_panel_background_color_number[Reg._tn] == 23) _color = 0xFFb7465b;
+		if (RegCustom._notation_panel_background_color_number[Reg._tn] == 24) _color = 0xFF563226;
+		if (RegCustom._notation_panel_background_color_number[Reg._tn] == 25) _color = 0xFF222222;
 	
 		return _color;
 	}
@@ -1721,13 +1821,13 @@ class MenuConfigurationsGeneral extends FlxGroup
 		if (RegCustom._notation_panel_text_color_number[Reg._tn] == 16) _color = 0xFF333c57;
 		if (RegCustom._notation_panel_text_color_number[Reg._tn] == 17) _color = 0xFF9c5b3e;
 		if (RegCustom._notation_panel_text_color_number[Reg._tn] == 18) _color = 0xFF573139;
-		if (RegCustom._notation_panel_text_color_number[Reg._tn] == 19) _color = 0xFF4c7554;
+		if (RegCustom._notation_panel_text_color_number[Reg._tn] == 19) _color = 0xFF005711;
 		if (RegCustom._notation_panel_text_color_number[Reg._tn] == 20) _color = 0xFFded943;
-		if (RegCustom._notation_panel_text_color_number[Reg._tn] == 21) _color = 0x881a1c2c;
-		if (RegCustom._notation_panel_text_color_number[Reg._tn] == 22) _color = 0x885d275d;
-		if (RegCustom._notation_panel_text_color_number[Reg._tn] == 23) _color = 0x88b13e53;
-		if (RegCustom._notation_panel_text_color_number[Reg._tn] == 24) _color = 0x88ef7d57;
-		if (RegCustom._notation_panel_text_color_number[Reg._tn] == 25) _color = 0x88a4844d;
+		if (RegCustom._notation_panel_text_color_number[Reg._tn] == 21) _color = 0xFF141623;
+		if (RegCustom._notation_panel_text_color_number[Reg._tn] == 22) _color = 0xFF300a30;
+		if (RegCustom._notation_panel_text_color_number[Reg._tn] == 23) _color = 0xFFb7465b;
+		if (RegCustom._notation_panel_text_color_number[Reg._tn] == 24) _color = 0xFF563226;
+		if (RegCustom._notation_panel_text_color_number[Reg._tn] == 25) _color = 0xFF222222;
 	
 		return _color;
 	}
@@ -1792,7 +1892,7 @@ class MenuConfigurationsGeneral extends FlxGroup
 		else if (RegCustom._background_brightness[Reg._tn] > 0.15)
 			RegCustom._background_brightness[Reg._tn] -= 0.05;
 		
-		__menu_configurations_output.__boxscroller.bgColor = FlxColor.fromHSB(__menu_configurations_output._bg_color, 0.8, RegCustom._background_brightness[Reg._tn]);
+		__menu_configurations_output.__scrollable_area.bgColor = FlxColor.fromHSB(__menu_configurations_output._bg_color, 0.8, RegCustom._background_brightness[Reg._tn]);
 		
 		_text_random_background_brightness.text = Std.string(RegCustom._background_brightness[Reg._tn]);
 	}
@@ -1805,7 +1905,7 @@ class MenuConfigurationsGeneral extends FlxGroup
 			
 		else if (RegCustom._background_brightness[Reg._tn] < 0.85) RegCustom._background_brightness[Reg._tn] += 0.05;
 		
-		__menu_configurations_output.__boxscroller.bgColor = FlxColor.fromHSB(__menu_configurations_output._bg_color, 0.8, RegCustom._background_brightness[Reg._tn]);
+		__menu_configurations_output.__scrollable_area.bgColor = FlxColor.fromHSB(__menu_configurations_output._bg_color, 0.8, RegCustom._background_brightness[Reg._tn]);
 		
 		_text_random_background_brightness.text = Std.string(RegCustom._background_brightness[Reg._tn]);
 	}
@@ -1823,16 +1923,24 @@ class MenuConfigurationsGeneral extends FlxGroup
 		
 		// the below code will remove the example buttonfrom the scene.  
 		// the button will be redisplay to show the new button's fill color.
+		var _offset = 0;
+		
 		if (_button_color_output != null)
 		{			
 			_group.remove(_button_color_output);
 			remove(_button_color_output);
 			_button_color_output.destroy();
+			
+			// when using __scrollable_area we need to put the camera off screen so that the normal FlxStage buttons do not fire when the __scrollable_area y value is offset. So if the __scrollable_area is y offset by 300, the FlxState underneath will still fire the buttons that were added to the stage at the same FlxState y values.
+			// this is needed to display the new button at the correct coordinates.
+			_offset = -500;
 		}
 		
-		_button_color_output = new ButtonGeneralNetworkNo(_question_button_colors_output.x + _question_button_colors_output.fieldWidth + 15, _button_border_color.y + 7, "Example", 110, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, null, RegCustom._button_color[Reg._tn]);
+		_button_color_output = new ButtonGeneralNetworkNo(_question_button_colors_output.x + _question_button_colors_output.fieldWidth + 15, _button_border_color.y + 7 + _offset, "Example", 110, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, null, RegCustom._button_color[Reg._tn]);
 		_button_color_output.label.font = Reg._fontDefault;
+		_button_color_output.scrollFactor.set(0, 0);
 		_group.add(_button_color_output);
+		add(_button_color_output);
 	}
 		
 	private function apply_button_border_color()
@@ -1845,16 +1953,24 @@ class MenuConfigurationsGeneral extends FlxGroup
 		
 		// the below code will remove the example buttonfrom the scene.  
 		// the button will be redisplay to show the new button's fill color.
+		var _offset = 0;
+		
 		if (_button_color_output != null)
 		{			
 			_group.remove(_button_color_output);
 			remove(_button_color_output);
 			_button_color_output.destroy();
+			
+			// when using __scrollable_area we need to put the camera off screen so that the normal FlxStage buttons do not fire when the __scrollable_area y value is offset. So if the __scrollable_area is y offset by 300, the FlxState underneath will still fire the buttons that were added to the stage at the same FlxState y values.
+			// this is needed to display the new button at the correct coordinates.
+			_offset = -500;
 		}
 		
-		_button_color_output = new ButtonGeneralNetworkNo(_question_button_colors_output.x + _question_button_colors_output.fieldWidth + 15, _button_border_color.y + 7, "Example", 110, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, null, RegCustom._button_color[Reg._tn]);
+		_button_color_output = new ButtonGeneralNetworkNo(_question_button_colors_output.x + _question_button_colors_output.fieldWidth + 15, _button_border_color.y + 7 + _offset, "Example", 110, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, null, RegCustom._button_color[Reg._tn]);
 		_button_color_output.label.font = Reg._fontDefault;
+		_button_color_output.scrollFactor.set(0, 0);
 		_group.add(_button_color_output);
+		add(_button_color_output);
 	}
 	
 	private function apply_button_text_color()
@@ -1867,16 +1983,24 @@ class MenuConfigurationsGeneral extends FlxGroup
 		
 		// the below code will remove the example buttonfrom the scene.  
 		// the button will be redisplay to show the new button's fill color.
+		var _offset = 0;
+		
 		if (_button_color_output != null)
 		{			
 			_group.remove(_button_color_output);
 			remove(_button_color_output);
 			_button_color_output.destroy();
+			
+			// when using __scrollable_area we need to put the camera off screen so that the normal FlxStage buttons do not fire when the __scrollable_area y value is offset. So if the __scrollable_area is y offset by 300, the FlxState underneath will still fire the buttons that were added to the stage at the same FlxState y values.
+			// this is needed to display the new button at the correct coordinates.
+			_offset = -500;
 		}
 		
-		_button_color_output = new ButtonGeneralNetworkNo(_question_button_colors_output.x + _question_button_colors_output.fieldWidth + 15, _button_border_color.y + 7, "Example", 110, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, null, RegCustom._button_color[Reg._tn]);
+		_button_color_output = new ButtonGeneralNetworkNo(_question_button_colors_output.x + _question_button_colors_output.fieldWidth + 15, _button_border_color.y + 7 + _offset, "Example", 110, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, null, RegCustom._button_color[Reg._tn]);
 		_button_color_output.label.font = Reg._fontDefault;
+		_button_color_output.scrollFactor.set(0, 0);
 		_group.add(_button_color_output);
+		add(_button_color_output);
 	}
 	
 	/******************************
@@ -1904,13 +2028,13 @@ class MenuConfigurationsGeneral extends FlxGroup
 		if (RegCustom._button_color_number[Reg._tn] == 16) _color = 0xFF333c57;
 		if (RegCustom._button_color_number[Reg._tn] == 17) _color = 0xFF9c5b3e;
 		if (RegCustom._button_color_number[Reg._tn] == 18) _color = 0xFF573139;
-		if (RegCustom._button_color_number[Reg._tn] == 19) _color = 0xFF4c7554;
+		if (RegCustom._button_color_number[Reg._tn] == 19) _color = 0xFF005711;
 		if (RegCustom._button_color_number[Reg._tn] == 20) _color = 0xFFded943;
-		if (RegCustom._button_color_number[Reg._tn] == 21) _color = 0x881a1c2c;
-		if (RegCustom._button_color_number[Reg._tn] == 22) _color = 0x885d275d;
-		if (RegCustom._button_color_number[Reg._tn] == 23) _color = 0x88b13e53;
-		if (RegCustom._button_color_number[Reg._tn] == 24) _color = 0x88ef7d57;
-		if (RegCustom._button_color_number[Reg._tn] == 25) _color = 0x88333333;
+		if (RegCustom._button_color_number[Reg._tn] == 21) _color = 0xFF141623;
+		if (RegCustom._button_color_number[Reg._tn] == 22) _color = 0xFF300a30;
+		if (RegCustom._button_color_number[Reg._tn] == 23) _color = 0xFFb7465b;
+		if (RegCustom._button_color_number[Reg._tn] == 24) _color = 0xFF563226;
+		if (RegCustom._button_color_number[Reg._tn] == 25) _color = 0xFF222222;
 		
 		return _color;
 	}
@@ -1940,13 +2064,13 @@ class MenuConfigurationsGeneral extends FlxGroup
 		if (RegCustom._button_border_color_number[Reg._tn] == 16) _color = 0xFF333c57;
 		if (RegCustom._button_border_color_number[Reg._tn] == 17) _color = 0xFF9c5b3e;
 		if (RegCustom._button_border_color_number[Reg._tn] == 18) _color = 0xFF573139;
-		if (RegCustom._button_border_color_number[Reg._tn] == 19) _color = 0xFF4c7554;
+		if (RegCustom._button_border_color_number[Reg._tn] == 19) _color = 0xFF005711;
 		if (RegCustom._button_border_color_number[Reg._tn] == 20) _color = 0xFFded943;
-		if (RegCustom._button_border_color_number[Reg._tn] == 21) _color = 0x881a1c2c;
-		if (RegCustom._button_border_color_number[Reg._tn] == 22) _color = 0x885d275d;
-		if (RegCustom._button_border_color_number[Reg._tn] == 23) _color = 0x88b13e53;
-		if (RegCustom._button_border_color_number[Reg._tn] == 24) _color = 0x88ef7d57;
-		if (RegCustom._button_border_color_number[Reg._tn] == 25) _color = 0x88333333;
+		if (RegCustom._button_border_color_number[Reg._tn] == 21) _color = 0xFF141623;
+		if (RegCustom._button_border_color_number[Reg._tn] == 22) _color = 0xFF300a30;
+		if (RegCustom._button_border_color_number[Reg._tn] == 23) _color = 0xFFb7465b;
+		if (RegCustom._button_border_color_number[Reg._tn] == 24) _color = 0xFF563226;
+		if (RegCustom._button_border_color_number[Reg._tn] == 25) _color = 0xFF222222;
 		
 		return _color;
 	}
@@ -1976,14 +2100,134 @@ class MenuConfigurationsGeneral extends FlxGroup
 		if (RegCustom._button_text_color_number[Reg._tn] == 16) _color = 0xFF333c57;
 		if (RegCustom._button_text_color_number[Reg._tn] == 17) _color = 0xFF9c5b3e;
 		if (RegCustom._button_text_color_number[Reg._tn] == 18) _color = 0xFF573139;
-		if (RegCustom._button_text_color_number[Reg._tn] == 19) _color = 0xFF4c7554;
+		if (RegCustom._button_text_color_number[Reg._tn] == 19) _color = 0xFF005711;
 		if (RegCustom._button_text_color_number[Reg._tn] == 20) _color = 0xFFded943;
-		if (RegCustom._button_text_color_number[Reg._tn] == 21) _color = 0x881a1c2c;
-		if (RegCustom._button_text_color_number[Reg._tn] == 22) _color = 0x885d275d;
-		if (RegCustom._button_text_color_number[Reg._tn] == 23) _color = 0x88b13e53;
-		if (RegCustom._button_text_color_number[Reg._tn] == 24) _color = 0x88ef7d57;
-		if (RegCustom._button_text_color_number[Reg._tn] == 25) _color = 0x88a4844d;
+		if (RegCustom._button_text_color_number[Reg._tn] == 21) _color = 0xFF141623;
+		if (RegCustom._button_text_color_number[Reg._tn] == 22) _color = 0xFF300a30;
+		if (RegCustom._button_text_color_number[Reg._tn] == 23) _color = 0xFFb7465b;
+		if (RegCustom._button_text_color_number[Reg._tn] == 24) _color = 0xFF563226;
+		if (RegCustom._button_text_color_number[Reg._tn] == 25) _color = 0xFF222222;
 			
+		return _color;
+	}
+	
+	private function toggle_music_enabled():Void
+	{
+		if (RegCustom._music_enabled[Reg._tn] == false)
+			RegCustom._music_enabled[Reg._tn] = true;
+		else
+			RegCustom._music_enabled[Reg._tn] = false;
+			
+		_button_music_enabled.label.text = Std.string(RegCustom._music_enabled[Reg._tn]);
+	}
+	
+	private function toggle_sound_enabled():Void
+	{
+		if (RegCustom._sound_enabled[Reg._tn] == false)
+			RegCustom._sound_enabled[Reg._tn] = true;
+		else
+			RegCustom._sound_enabled[Reg._tn] = false;
+			
+		_button_sound_enabled.label.text = Std.string(RegCustom._sound_enabled[Reg._tn]);
+	}
+	
+	private function background_header_title_number_minus()
+	{
+		RegCustom._background_header_title_number[Reg._tn] -= 1;
+		if (RegCustom._background_header_title_number[Reg._tn] == 0) RegCustom._background_header_title_number[Reg._tn] = 25;
+		
+		_sprite_background_header_title_color.color = background_header_title_color();
+	}
+	
+	private function background_header_title_number_plus()
+	{
+		RegCustom._background_header_title_number[Reg._tn] += 1;
+		if (RegCustom._background_header_title_number[Reg._tn] == 26) RegCustom._background_header_title_number[Reg._tn] = 1;
+		
+		_sprite_background_header_title_color.color = background_header_title_color();
+	}	
+		
+	public static function background_header_title_color():FlxColor
+	{
+		
+		var _color:FlxColor = 0xFFFFFFFF;
+		
+		if (RegCustom._background_header_title_number[Reg._tn] == 1) _color = 0xFFFFFFFF;
+		if (RegCustom._background_header_title_number[Reg._tn] == 2) _color = 0xFF5d275d;
+		if (RegCustom._background_header_title_number[Reg._tn] == 3) _color = 0xFFcb0025;
+		if (RegCustom._background_header_title_number[Reg._tn] == 4) _color = 0xFFef7d57;
+		if (RegCustom._background_header_title_number[Reg._tn] == 5) _color = 0xFFa4844d;
+		if (RegCustom._background_header_title_number[Reg._tn] == 6) _color = 0xFFa7f070;
+		if (RegCustom._background_header_title_number[Reg._tn] == 7) _color = 0xFF38b764;
+		if (RegCustom._background_header_title_number[Reg._tn] == 8) _color = 0xFF257179;
+		if (RegCustom._background_header_title_number[Reg._tn] == 9) _color = 0xFF29366f;
+		if (RegCustom._background_header_title_number[Reg._tn] == 10) _color = 0xFF3b5dc9;
+		if (RegCustom._background_header_title_number[Reg._tn] == 11) _color = 0xFF41a6f6;
+		if (RegCustom._background_header_title_number[Reg._tn] == 12) _color = 0xFF73eff7;
+		if (RegCustom._background_header_title_number[Reg._tn] == 13) _color = 0xFFcccccc;
+		if (RegCustom._background_header_title_number[Reg._tn] == 14) _color = 0xFF94b0c2;
+		if (RegCustom._background_header_title_number[Reg._tn] == 15) _color = 0xFF566c86;
+		if (RegCustom._background_header_title_number[Reg._tn] == 16) _color = 0xFF333c57;
+		if (RegCustom._background_header_title_number[Reg._tn] == 17) _color = 0xFF9c5b3e;
+		if (RegCustom._background_header_title_number[Reg._tn] == 18) _color = 0xFF573139;
+		if (RegCustom._background_header_title_number[Reg._tn] == 19) _color = 0xFF005711;
+		if (RegCustom._background_header_title_number[Reg._tn] == 20) _color = 0xFFded943;
+		if (RegCustom._background_header_title_number[Reg._tn] == 21) _color = 0xFF141623;
+		if (RegCustom._background_header_title_number[Reg._tn] == 22) _color = 0xFF300a30;
+		if (RegCustom._background_header_title_number[Reg._tn] == 23) _color = 0xFFb7465b;
+		if (RegCustom._background_header_title_number[Reg._tn] == 24) _color = 0xFF563226;
+		if (RegCustom._background_header_title_number[Reg._tn] == 25) _color = 0xFF222222;
+	
+		return _color;
+	}
+	
+	private function background_footer_menu_number_minus()
+	{
+		RegCustom._background_footer_menu_number[Reg._tn] -= 1;
+		if (RegCustom._background_footer_menu_number[Reg._tn] == 0) RegCustom._background_footer_menu_number[Reg._tn] = 25;
+		
+		_sprite_background_footer_menu_color.color = background_footer_menu_color();
+	}
+	
+	private function background_footer_menu_number_plus()
+	{
+		RegCustom._background_footer_menu_number[Reg._tn] += 1;
+		if (RegCustom._background_footer_menu_number[Reg._tn] == 26) RegCustom._background_footer_menu_number[Reg._tn] = 1;
+		
+		_sprite_background_footer_menu_color.color = background_footer_menu_color();
+	}	
+		
+	public static function background_footer_menu_color():FlxColor
+	{
+		
+		var _color:FlxColor = 0xFFFFFFFF;
+		
+		if (RegCustom._background_footer_menu_number[Reg._tn] == 1) _color = 0xFFFFFFFF;
+		if (RegCustom._background_footer_menu_number[Reg._tn] == 2) _color = 0xFF5d275d;
+		if (RegCustom._background_footer_menu_number[Reg._tn] == 3) _color = 0xFFcb0025;
+		if (RegCustom._background_footer_menu_number[Reg._tn] == 4) _color = 0xFFef7d57;
+		if (RegCustom._background_footer_menu_number[Reg._tn] == 5) _color = 0xFFa4844d;
+		if (RegCustom._background_footer_menu_number[Reg._tn] == 6) _color = 0xFFa7f070;
+		if (RegCustom._background_footer_menu_number[Reg._tn] == 7) _color = 0xFF38b764;
+		if (RegCustom._background_footer_menu_number[Reg._tn] == 8) _color = 0xFF257179;
+		if (RegCustom._background_footer_menu_number[Reg._tn] == 9) _color = 0xFF29366f;
+		if (RegCustom._background_footer_menu_number[Reg._tn] == 10) _color = 0xFF3b5dc9;
+		if (RegCustom._background_footer_menu_number[Reg._tn] == 11) _color = 0xFF41a6f6;
+		if (RegCustom._background_footer_menu_number[Reg._tn] == 12) _color = 0xFF73eff7;
+		if (RegCustom._background_footer_menu_number[Reg._tn] == 13) _color = 0xFFcccccc;
+		if (RegCustom._background_footer_menu_number[Reg._tn] == 14) _color = 0xFF94b0c2;
+		if (RegCustom._background_footer_menu_number[Reg._tn] == 15) _color = 0xFF566c86;
+		if (RegCustom._background_footer_menu_number[Reg._tn] == 16) _color = 0xFF333c57;
+		if (RegCustom._background_footer_menu_number[Reg._tn] == 17) _color = 0xFF9c5b3e;
+		if (RegCustom._background_footer_menu_number[Reg._tn] == 18) _color = 0xFF573139;
+		if (RegCustom._background_footer_menu_number[Reg._tn] == 19) _color = 0xFF005711;
+		if (RegCustom._background_footer_menu_number[Reg._tn] == 20) _color = 0xFFded943;
+		if (RegCustom._background_footer_menu_number[Reg._tn] == 21) _color = 0xFF141623;
+		if (RegCustom._background_footer_menu_number[Reg._tn] == 22) _color = 0xFF300a30;
+		if (RegCustom._background_footer_menu_number[Reg._tn] == 23) _color = 0xFFb7465b;
+		if (RegCustom._background_footer_menu_number[Reg._tn] == 24) _color = 0xFF563226;
+		if (RegCustom._background_footer_menu_number[Reg._tn] == 25) _color = 0xFF222222;
+	
 		return _color;
 	}
 	
@@ -2023,20 +2267,9 @@ class MenuConfigurationsGeneral extends FlxGroup
 				}
 			}
 			
-			// if same as above but mouse is not pressed.
-			else if (FlxG.mouse.y + ButtonGeneralNetworkNo._scrollarea_offset_y >= _group_button[i]._startY &&  FlxG.mouse.y + ButtonGeneralNetworkNo._scrollarea_offset_y <= _group_button[i]._startY + _group_button[i]._button_height 
-			&& FlxG.mouse.x + ButtonGeneralNetworkNo._scrollarea_offset_x >= _group_button[i]._startX &&  FlxG.mouse.x + ButtonGeneralNetworkNo._scrollarea_offset_x <= _group_button[i]._startX + _group_button[i]._button_width)
-			{
-				if (Reg._tn > 0)
-				{
-					_group_button[i].active = true;				
-					break;
-				}
-			}
-		
 		}
 		
-		//############################# code for toggle buttons. used along with __boxScroller scroll offset.
+		//############################# code for toggle buttons. used along with __scrollable_area scroll offset.
 		for (i in 0... _group_button_toggle.length)
 		{
 			// if mouse is on the button plus any offset made by the box scroller and mouse is pressed...
@@ -2044,22 +2277,13 @@ class MenuConfigurationsGeneral extends FlxGroup
 			&& FlxG.mouse.x + ButtonToggleFlxState._scrollarea_offset_x >= _group_button_toggle[i]._startX &&  FlxG.mouse.x + ButtonToggleFlxState._scrollarea_offset_x <= _group_button_toggle[i]._startX + _group_button_toggle[i]._button_width && FlxG.mouse.justPressed == true )
 			{
 				_id = i;
-				_group_button_toggle[i].active = true;
 				buttonNumberToggle();
 				
 				if (RegCustom._sound_enabled[Reg._tn] == true
-				&&  Reg2._boxScroller_is_scrolling == false)
+				&&  Reg2._scrollable_area_is_scrolling == false)
 					FlxG.sound.play("click", 1, false);
 			}
 			
-			// if mouse is not at a button that set it not active.
-			else if (FlxG.mouse.y + ButtonGeneralNetworkNo._scrollarea_offset_y < _group_button_toggle[i]._startY 
-			|| 		 FlxG.mouse.y + ButtonGeneralNetworkNo._scrollarea_offset_y > _group_button_toggle[i]._startY + _group_button_toggle[i]._button_height
-			|| 		 FlxG.mouse.x + ButtonGeneralNetworkNo._scrollarea_offset_x < _group_button_toggle[i]._startX 
-			|| 		 FlxG.mouse.x + ButtonGeneralNetworkNo._scrollarea_offset_x > _group_button_toggle[i]._startX + _group_button_toggle[i]._button_width)			
-			{
-				_group_button_toggle[i].active = false;				
-			}
 		}
 
 		

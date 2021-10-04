@@ -24,9 +24,16 @@ package;
  */
 class MenuConfigurationsGames extends FlxGroup
 {
+	private var _ticks_for_button_offset:Int = 0;
+	
 	private var _offset_x:Int = -50;
 	private var _offset_y:Int = 50;
 	private var _offset:Int = 30;	
+	
+	/******************************
+	 * space between rows.
+	 */
+	private var _offset_rows_y:Int = 30;
 	
 	private var _button_games:ButtonToggleFlxState;	
 
@@ -36,7 +43,10 @@ class MenuConfigurationsGames extends FlxGroup
 	private var _group_sprite:Array<FlxSprite> = [];
 	
 	private var _sprite_chess_future_capturing_units:FlxSprite;
+	private var _sprite_chess_future_capturing_units_bg:FlxSprite;
+	
 	private var _sprite_chess_path_to_king:FlxSprite;
+	private var _sprite_chess_path_to_king_bg:FlxSprite;
 	
 	/******************************
 	 * display the pawn of the selected game board chess set.
@@ -75,7 +85,7 @@ class MenuConfigurationsGames extends FlxGroup
 	private var _sprite_display_king_from_p2_chess_set:FlxSprite;
 	
 	/******************************
-	* anything added to this group will be placed inside of the boxScroller field. 
+	* anything added to this group will be placed inside of the scrollable area field. 
 	*/
 	public var _group:FlxSpriteGroup;
 	
@@ -135,7 +145,7 @@ class MenuConfigurationsGames extends FlxGroup
 	
 	public function sceneGames():Void
 	{
-		_group = cast add(new FlxSpriteGroup());
+		_group = cast add(new FlxSpriteGroup());		
 		_group_button.splice(0, _group_button.length);
 				
 		var _game_minutes = new FlxText(0, 100, 0, "Minutes");
@@ -163,7 +173,7 @@ class MenuConfigurationsGames extends FlxGroup
 		_group_button.push(_checkers_minus_minutes);
 		_group.add(_group_button[0]);
 		
-		_checkers_game_minutes = new FlxText(_checkers_minus_minutes.x + 48, _title_checkers_game_minutes.y, 0, Std.string(RegCustom._time_remaining_for_game[0]));
+		_checkers_game_minutes = new FlxText(_checkers_minus_minutes.x + 48, _title_checkers_game_minutes.y, 0, Std.string(RegCustom._time_remaining_for_game[Reg._tn][0]));
 		_checkers_game_minutes.setFormat(Reg._fontDefault, Reg._font_size);
 		_checkers_game_minutes.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		_group.add(_checkers_game_minutes);
@@ -190,7 +200,7 @@ class MenuConfigurationsGames extends FlxGroup
 		_group_button.push(_chess_minus_minutes);
 		_group.add(_group_button[2]);
 				
-		_chess_game_minutes = new FlxText(_chess_minus_minutes.x + 48, _title_chess_game_minutes.y, 0, Std.string(RegCustom._time_remaining_for_game[1]));
+		_chess_game_minutes = new FlxText(_chess_minus_minutes.x + 48, _title_chess_game_minutes.y, 0, Std.string(RegCustom._time_remaining_for_game[Reg._tn][1]));
 		_chess_game_minutes.setFormat(Reg._fontDefault, Reg._font_size);
 		_chess_game_minutes.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		_group.add(_chess_game_minutes);
@@ -217,7 +227,7 @@ class MenuConfigurationsGames extends FlxGroup
 		_group_button.push(_reversi_minus_minutes);
 		_group.add(_group_button[4]);
 				
-		_reversi_game_minutes = new FlxText(_reversi_minus_minutes.x + 48, _title_reversi_game_minutes.y, 0, Std.string(RegCustom._time_remaining_for_game[2]));
+		_reversi_game_minutes = new FlxText(_reversi_minus_minutes.x + 48, _title_reversi_game_minutes.y, 0, Std.string(RegCustom._time_remaining_for_game[Reg._tn][2]));
 		_reversi_game_minutes.setFormat(Reg._fontDefault, Reg._font_size);
 		_reversi_game_minutes.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		_group.add(_reversi_game_minutes);
@@ -244,7 +254,7 @@ class MenuConfigurationsGames extends FlxGroup
 		_group_button.push(_snakes_ladders_minus_minutes);
 		_group.add(_group_button[6]);
 				
-		_snakes_ladders_game_minutes = new FlxText(_snakes_ladders_minus_minutes.x + 48, _title_snakes_ladders_game_minutes.y, 0, Std.string(RegCustom._time_remaining_for_game[3]));
+		_snakes_ladders_game_minutes = new FlxText(_snakes_ladders_minus_minutes.x + 48, _title_snakes_ladders_game_minutes.y, 0, Std.string(RegCustom._time_remaining_for_game[Reg._tn][3]));
 		_snakes_ladders_game_minutes.setFormat(Reg._fontDefault, Reg._font_size);
 		_snakes_ladders_game_minutes.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		_group.add(_snakes_ladders_game_minutes);
@@ -271,7 +281,7 @@ class MenuConfigurationsGames extends FlxGroup
 		_group_button.push(_signature_minus_minutes);
 		_group.add(_group_button[8]);
 				
-		_signature_game_minutes = new FlxText(_signature_minus_minutes.x + 48, _title_signature_game_minutes.y, 0, Std.string(RegCustom._time_remaining_for_game[4]));
+		_signature_game_minutes = new FlxText(_signature_minus_minutes.x + 48, _title_signature_game_minutes.y, 0, Std.string(RegCustom._time_remaining_for_game[Reg._tn][4]));
 		_signature_game_minutes.setFormat(Reg._fontDefault, Reg._font_size);
 		_signature_game_minutes.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		_group.add(_signature_game_minutes);
@@ -327,7 +337,7 @@ class MenuConfigurationsGames extends FlxGroup
 		
 		var _question_chess_show_last_piece_moved = new TextGeneral(15, 0, 800, "Show last piece moved?");
 		_question_chess_show_last_piece_moved.setFormat(Reg._fontDefault, Reg._font_size);
-		_question_chess_show_last_piece_moved.y = _button_chess_opening_moves_enabled.height + _button_chess_opening_moves_enabled.y + 30;
+		_question_chess_show_last_piece_moved.y = _button_chess_opening_moves_enabled.height + _button_chess_opening_moves_enabled.y + _offset_rows_y;
 		_question_chess_show_last_piece_moved.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		_group.add(_question_chess_show_last_piece_moved);
 		
@@ -340,7 +350,7 @@ class MenuConfigurationsGames extends FlxGroup
 		
 		var _question_chess_computer_thinking_enabled = new TextGeneral(15, 0, 800, "Show computer spinner image when thinking?");
 		_question_chess_computer_thinking_enabled.setFormat(Reg._fontDefault, Reg._font_size);
-		_question_chess_computer_thinking_enabled.y = _button_chess_show_last_piece_moved.height + _button_chess_show_last_piece_moved.y + 30;
+		_question_chess_computer_thinking_enabled.y = _button_chess_show_last_piece_moved.height + _button_chess_show_last_piece_moved.y + _offset_rows_y;
 		_question_chess_computer_thinking_enabled.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		_group.add(_question_chess_computer_thinking_enabled);
 		
@@ -353,7 +363,7 @@ class MenuConfigurationsGames extends FlxGroup
 		
 		var _question_chess_future_capturing_units_enabled = new TextGeneral(15, 0, 800, "The future capturing units feature show upcoming attacks to the king and is only available while playing against the computer with a chess skill level of beginner. Enabled the futute capturing units feature?", 8, true, true);
 		_question_chess_future_capturing_units_enabled.setFormat(Reg._fontDefault, Reg._font_size);
-		_question_chess_future_capturing_units_enabled.y = _button_chess_computer_thinking_enabled.height +  _button_chess_computer_thinking_enabled.y + 30;
+		_question_chess_future_capturing_units_enabled.y = _button_chess_computer_thinking_enabled.height +  _button_chess_computer_thinking_enabled.y + _offset_rows_y;
 		_question_chess_future_capturing_units_enabled.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		_group.add(_question_chess_future_capturing_units_enabled);
 		
@@ -379,7 +389,7 @@ class MenuConfigurationsGames extends FlxGroup
 		_group_button.push(_button_chess_future_capturing_units_plus);
 		_group.add(_group_button[16]);
 		
-		var _sprite_chess_future_capturing_units_bg = new FlxSprite(_button_chess_future_capturing_units_plus.x + _button_chess_future_capturing_units_plus.width + 45, _button_chess_future_capturing_units_plus.y - 10, "assets/images/blackBackground.jpg");
+		_sprite_chess_future_capturing_units_bg = new FlxSprite(_button_chess_future_capturing_units_plus.x + _button_chess_future_capturing_units_plus.width + 45, _button_chess_future_capturing_units_plus.y - 10, "assets/images/blackBackground.jpg");
 		_group.add(_sprite_chess_future_capturing_units_bg);
 		
 		_sprite_chess_future_capturing_units = new FlxSprite(_button_chess_future_capturing_units_plus.x + _button_chess_future_capturing_units_plus.width + 45, _button_chess_future_capturing_units_plus.y - 10);
@@ -424,7 +434,7 @@ class MenuConfigurationsGames extends FlxGroup
 		_sprite_chess_path_to_king.color = RegFunctions.color_path_to_king();
 		_group.add(_sprite_chess_path_to_king);
 		
-		var _sprite_chess_path_to_king_bg = new FlxSprite(_button_chess_path_to_king_plus.x + _button_chess_path_to_king_plus.width + 45, _button_chess_path_to_king_plus.y - 10, "assets/images/dailyQuestsBorder1.png");
+		_sprite_chess_path_to_king_bg = new FlxSprite(_button_chess_path_to_king_plus.x + _button_chess_path_to_king_plus.width + 45, _button_chess_path_to_king_plus.y - 10, "assets/images/dailyQuestsBorder1.png");
 		_group.add(_sprite_chess_path_to_king_bg);
 		
 		//##############################
@@ -449,32 +459,32 @@ class MenuConfigurationsGames extends FlxGroup
 		_group_button.push(_button_chess_set_for_player1_plus);
 		_group.add(_group_button[21]);
 		
-		_sprite_display_pawn_from_p1_chess_set = new FlxSprite(_button_chess_set_for_player1_plus.x + _button_chess_set_for_player1_plus.width + 30, _button_chess_set_for_player1_plus.y + 20);
+		_sprite_display_pawn_from_p1_chess_set = new FlxSprite(_button_chess_set_for_player1_plus.x + _button_chess_set_for_player1_plus.width + _offset_rows_y, _button_chess_set_for_player1_plus.y + 20);
 		_sprite_display_pawn_from_p1_chess_set.loadGraphic("assets/images/chess/set" + RegCustom._chess_set_for_player1[Reg._tn] + "/1.png", false, 75, 75);
 		_sprite_display_pawn_from_p1_chess_set.color = RegFunctions.draw_update_board_p1_set_color();
 		_group.add(_sprite_display_pawn_from_p1_chess_set);
 		
-		_sprite_display_bishop_from_p1_chess_set = new FlxSprite(_button_chess_set_for_player1_plus.x + _button_chess_set_for_player1_plus.width + 30 + 90, _button_chess_set_for_player1_plus.y + 20);
+		_sprite_display_bishop_from_p1_chess_set = new FlxSprite(_button_chess_set_for_player1_plus.x + _button_chess_set_for_player1_plus.width + _offset_rows_y + 90, _button_chess_set_for_player1_plus.y + 20);
 		_sprite_display_bishop_from_p1_chess_set.loadGraphic("assets/images/chess/set" + RegCustom._chess_set_for_player1[Reg._tn] + "/2.png", false, 75, 75);
 		_sprite_display_bishop_from_p1_chess_set.color = RegFunctions.draw_update_board_p1_set_color();
 		_group.add(_sprite_display_bishop_from_p1_chess_set);
 		
-		_sprite_display_horse_from_p1_chess_set = new FlxSprite(_button_chess_set_for_player1_plus.x + _button_chess_set_for_player1_plus.width + 30 + (2 * 90), _button_chess_set_for_player1_plus.y + 20);
+		_sprite_display_horse_from_p1_chess_set = new FlxSprite(_button_chess_set_for_player1_plus.x + _button_chess_set_for_player1_plus.width + _offset_rows_y + (2 * 90), _button_chess_set_for_player1_plus.y + 20);
 		_sprite_display_horse_from_p1_chess_set.loadGraphic("assets/images/chess/set" + RegCustom._chess_set_for_player1[Reg._tn] + "/3.png", false, 75, 75);
 		_sprite_display_horse_from_p1_chess_set.color = RegFunctions.draw_update_board_p1_set_color();
 		_group.add(_sprite_display_horse_from_p1_chess_set);
 		
-		_sprite_display_rook_from_p1_chess_set = new FlxSprite(_button_chess_set_for_player1_plus.x + _button_chess_set_for_player1_plus.width + 30 + (3 * 90), _button_chess_set_for_player1_plus.y + 20);
+		_sprite_display_rook_from_p1_chess_set = new FlxSprite(_button_chess_set_for_player1_plus.x + _button_chess_set_for_player1_plus.width + _offset_rows_y + (3 * 90), _button_chess_set_for_player1_plus.y + 20);
 		_sprite_display_rook_from_p1_chess_set.loadGraphic("assets/images/chess/set" + RegCustom._chess_set_for_player1[Reg._tn] + "/4.png", false, 75, 75);
 		_sprite_display_rook_from_p1_chess_set.color = RegFunctions.draw_update_board_p1_set_color();
 		_group.add(_sprite_display_rook_from_p1_chess_set);
 		
-		_sprite_display_queen_from_p1_chess_set = new FlxSprite(_button_chess_set_for_player1_plus.x + _button_chess_set_for_player1_plus.width + 30 + (4 * 90), _button_chess_set_for_player1_plus.y + 20);
+		_sprite_display_queen_from_p1_chess_set = new FlxSprite(_button_chess_set_for_player1_plus.x + _button_chess_set_for_player1_plus.width + _offset_rows_y + (4 * 90), _button_chess_set_for_player1_plus.y + 20);
 		_sprite_display_queen_from_p1_chess_set.loadGraphic("assets/images/chess/set" + RegCustom._chess_set_for_player1[Reg._tn] + "/5.png", false, 75, 75);
 		_sprite_display_queen_from_p1_chess_set.color = RegFunctions.draw_update_board_p1_set_color();
 		_group.add(_sprite_display_queen_from_p1_chess_set);
 		
-		_sprite_display_king_from_p1_chess_set = new FlxSprite(_button_chess_set_for_player1_plus.x + _button_chess_set_for_player1_plus.width + 30 + (5 * 90), _button_chess_set_for_player1_plus.y + 20);
+		_sprite_display_king_from_p1_chess_set = new FlxSprite(_button_chess_set_for_player1_plus.x + _button_chess_set_for_player1_plus.width + _offset_rows_y + (5 * 90), _button_chess_set_for_player1_plus.y + 20);
 		_sprite_display_king_from_p1_chess_set.loadGraphic("assets/images/chess/set" + RegCustom._chess_set_for_player1[Reg._tn] + "/6.png", false, 75, 75);
 		_sprite_display_king_from_p1_chess_set.color = RegFunctions.draw_update_board_p1_set_color();
 		_group.add(_sprite_display_king_from_p1_chess_set);
@@ -504,7 +514,7 @@ class MenuConfigurationsGames extends FlxGroup
 		
 		var _question_chess_set_for_player2 = new TextGeneral(15, 0, 0, "Player 2 chess piece set.");
 		_question_chess_set_for_player2.setFormat(Reg._fontDefault, Reg._font_size);
-		_question_chess_set_for_player2.y = _button_chess_set_for_player1_color_plus.height + _button_chess_set_for_player1_color_plus.y + 30;
+		_question_chess_set_for_player2.y = _button_chess_set_for_player1_color_plus.height + _button_chess_set_for_player1_color_plus.y + _offset_rows_y;
 		_question_chess_set_for_player2.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		_group.add(_question_chess_set_for_player2);
 		
@@ -522,32 +532,32 @@ class MenuConfigurationsGames extends FlxGroup
 		_group_button.push(_button_chess_set_for_player2_plus);
 		_group.add(_group_button[25]);
 		
-		_sprite_display_pawn_from_p2_chess_set = new FlxSprite(_button_chess_set_for_player2_plus.x + _button_chess_set_for_player2_plus.width + 30, _button_chess_set_for_player2_plus.y + 20);
+		_sprite_display_pawn_from_p2_chess_set = new FlxSprite(_button_chess_set_for_player2_plus.x + _button_chess_set_for_player2_plus.width + _offset_rows_y, _button_chess_set_for_player2_plus.y + 20);
 		_sprite_display_pawn_from_p2_chess_set.loadGraphic("assets/images/chess/set" + RegCustom._chess_set_for_player2[Reg._tn] + "/1.png", false, 75, 75);
 		_sprite_display_pawn_from_p2_chess_set.color = RegFunctions.draw_update_board_p2_set_color();
 		_group.add(_sprite_display_pawn_from_p2_chess_set);
 		
-		_sprite_display_bishop_from_p2_chess_set = new FlxSprite(_button_chess_set_for_player2_plus.x + _button_chess_set_for_player2_plus.width + 30 + 90, _button_chess_set_for_player2_plus.y + 20);
+		_sprite_display_bishop_from_p2_chess_set = new FlxSprite(_button_chess_set_for_player2_plus.x + _button_chess_set_for_player2_plus.width + _offset_rows_y + 90, _button_chess_set_for_player2_plus.y + 20);
 		_sprite_display_bishop_from_p2_chess_set.loadGraphic("assets/images/chess/set" + RegCustom._chess_set_for_player2[Reg._tn] + "/2.png", false, 75, 75);
 		_sprite_display_bishop_from_p2_chess_set.color = RegFunctions.draw_update_board_p2_set_color();
 		_group.add(_sprite_display_bishop_from_p2_chess_set);
 		
-		_sprite_display_horse_from_p2_chess_set = new FlxSprite(_button_chess_set_for_player2_plus.x + _button_chess_set_for_player2_plus.width + 30 + (2 * 90), _button_chess_set_for_player2_plus.y + 20);
+		_sprite_display_horse_from_p2_chess_set = new FlxSprite(_button_chess_set_for_player2_plus.x + _button_chess_set_for_player2_plus.width + _offset_rows_y + (2 * 90), _button_chess_set_for_player2_plus.y + 20);
 		_sprite_display_horse_from_p2_chess_set.loadGraphic("assets/images/chess/set" + RegCustom._chess_set_for_player2[Reg._tn] + "/3.png", false, 75, 75);
 		_sprite_display_horse_from_p2_chess_set.color = RegFunctions.draw_update_board_p2_set_color();
 		_group.add(_sprite_display_horse_from_p2_chess_set);
 		
-		_sprite_display_rook_from_p2_chess_set = new FlxSprite(_button_chess_set_for_player2_plus.x + _button_chess_set_for_player2_plus.width + 30 + (3 * 90), _button_chess_set_for_player2_plus.y + 20);
+		_sprite_display_rook_from_p2_chess_set = new FlxSprite(_button_chess_set_for_player2_plus.x + _button_chess_set_for_player2_plus.width + _offset_rows_y + (3 * 90), _button_chess_set_for_player2_plus.y + 20);
 		_sprite_display_rook_from_p2_chess_set.loadGraphic("assets/images/chess/set" + RegCustom._chess_set_for_player2[Reg._tn] + "/4.png", false, 75, 75);
 		_sprite_display_rook_from_p2_chess_set.color = RegFunctions.draw_update_board_p2_set_color();
 		_group.add(_sprite_display_rook_from_p2_chess_set);
 		
-		_sprite_display_queen_from_p2_chess_set = new FlxSprite(_button_chess_set_for_player2_plus.x + _button_chess_set_for_player2_plus.width + 30 + (4 * 90), _button_chess_set_for_player2_plus.y + 20);
+		_sprite_display_queen_from_p2_chess_set = new FlxSprite(_button_chess_set_for_player2_plus.x + _button_chess_set_for_player2_plus.width + _offset_rows_y + (4 * 90), _button_chess_set_for_player2_plus.y + 20);
 		_sprite_display_queen_from_p2_chess_set.loadGraphic("assets/images/chess/set" + RegCustom._chess_set_for_player2[Reg._tn] + "/5.png", false, 75, 75);
 		_sprite_display_queen_from_p2_chess_set.color = RegFunctions.draw_update_board_p2_set_color();
 		_group.add(_sprite_display_queen_from_p2_chess_set);
 		
-		_sprite_display_king_from_p2_chess_set = new FlxSprite(_button_chess_set_for_player2_plus.x + _button_chess_set_for_player2_plus.width + 30 + (5 * 90), _button_chess_set_for_player2_plus.y + 20);
+		_sprite_display_king_from_p2_chess_set = new FlxSprite(_button_chess_set_for_player2_plus.x + _button_chess_set_for_player2_plus.width + _offset_rows_y + (5 * 90), _button_chess_set_for_player2_plus.y + 20);
 		_sprite_display_king_from_p2_chess_set.loadGraphic("assets/images/chess/set" + RegCustom._chess_set_for_player2[Reg._tn] + "/6.png", false, 75, 75);
 		_sprite_display_king_from_p2_chess_set.color = RegFunctions.draw_update_board_p2_set_color();
 		_group.add(_sprite_display_king_from_p2_chess_set);
@@ -629,9 +639,9 @@ class MenuConfigurationsGames extends FlxGroup
 	private function minusMinutes(_id:Int):Void
 	{
 		// minus 5 from the total time for the game selected.
-		if (RegCustom._time_remaining_for_game[_id]
+		if (RegCustom._time_remaining_for_game[Reg._tn][_id]
 		!=  RegCustom._timer_minimum_permitted_for_game[_id])
-			RegCustom._time_remaining_for_game[_id] -= 5;	
+			RegCustom._time_remaining_for_game[Reg._tn][_id] -= 5;	
 		
 		updateGameMinutes(_id);
 	}
@@ -643,9 +653,9 @@ class MenuConfigurationsGames extends FlxGroup
 	private function plusMinutes(_id:Int):Void
 	{
 		// plus 5 from the total time for the game selected.
-		if (RegCustom._time_remaining_for_game[_id]
+		if (RegCustom._time_remaining_for_game[Reg._tn][_id]
 		!=  RegCustom._timer_maximum_permitted_for_game[_id])
-			RegCustom._time_remaining_for_game[_id] += 5;	
+			RegCustom._time_remaining_for_game[Reg._tn][_id] += 5;	
 		
 		updateGameMinutes(_id);
 	}
@@ -658,11 +668,11 @@ class MenuConfigurationsGames extends FlxGroup
 		switch (_id)
 		{
 			// checkers
-			case 0: _checkers_game_minutes.text = Std.string(RegCustom._time_remaining_for_game[0]);
-			case 1: _chess_game_minutes.text = Std.string(RegCustom._time_remaining_for_game[1]);
-			case 2: _reversi_game_minutes.text = Std.string(RegCustom._time_remaining_for_game[2]);
-			case 3: _snakes_ladders_game_minutes.text = Std.string(RegCustom._time_remaining_for_game[3]);
-			case 4: _signature_game_minutes.text = Std.string(RegCustom._time_remaining_for_game[4]);
+			case 0: _checkers_game_minutes.text = Std.string(RegCustom._time_remaining_for_game[Reg._tn][0]);
+			case 1: _chess_game_minutes.text = Std.string(RegCustom._time_remaining_for_game[Reg._tn][1]);
+			case 2: _reversi_game_minutes.text = Std.string(RegCustom._time_remaining_for_game[Reg._tn][2]);
+			case 3: _snakes_ladders_game_minutes.text = Std.string(RegCustom._time_remaining_for_game[Reg._tn][3]);
+			case 4: _signature_game_minutes.text = Std.string(RegCustom._time_remaining_for_game[Reg._tn][4]);
 		}
 	}
 		
@@ -716,9 +726,19 @@ class MenuConfigurationsGames extends FlxGroup
 	private function save_chess_future_capturing_units():Void
 	{
 		if (RegCustom._chess_future_capturing_units_enabled[Reg._tn] == false)
+		{
 			RegCustom._chess_future_capturing_units_enabled[Reg._tn] = true;
+		
+			_sprite_chess_future_capturing_units.visible = true;
+			_sprite_chess_future_capturing_units_bg.visible = true;
+		}
 		else
+		{
 			RegCustom._chess_future_capturing_units_enabled[Reg._tn] = false;
+		
+			_sprite_chess_future_capturing_units.visible = false;
+			_sprite_chess_future_capturing_units_bg.visible = false;
+		}
 			
 		_button_chess_future_capturing_units_enabled.label.text = Std.string(RegCustom._chess_future_capturing_units_enabled[Reg._tn]);
 	}
@@ -744,9 +764,19 @@ class MenuConfigurationsGames extends FlxGroup
 	private function save_chess_path_to_king():Void
 	{
 		if (RegCustom._chess_path_to_king_enabled[Reg._tn] == false)
+		{
 			RegCustom._chess_path_to_king_enabled[Reg._tn] = true;
+		
+			_sprite_chess_path_to_king.visible = true;
+			_sprite_chess_path_to_king_bg.visible = true;
+		}
 		else
+		{
 			RegCustom._chess_path_to_king_enabled[Reg._tn] = false;
+		
+			_sprite_chess_path_to_king.visible = false;
+			_sprite_chess_path_to_king_bg.visible = false;
+		}
 			
 		_button_chess_path_to_king_enabled.label.text = Std.string(RegCustom._chess_path_to_king_enabled[Reg._tn]);
 	}
@@ -885,6 +915,18 @@ class MenuConfigurationsGames extends FlxGroup
 	
 	override public function update(elapsed:Float):Void
 	{
+		super.update(elapsed);	
+		
+		if (RegCustom._chess_future_capturing_units_enabled[Reg._tn] == false)
+			_sprite_chess_future_capturing_units_bg.visible = false;
+		if (RegCustom._chess_future_capturing_units_enabled[Reg._tn] == false)
+			_sprite_chess_future_capturing_units.visible = false;
+		
+		if (RegCustom._chess_path_to_king_enabled[Reg._tn] == false)
+			_sprite_chess_path_to_king.visible = false;
+		if (RegCustom._chess_path_to_king_enabled[Reg._tn] == false)
+			_sprite_chess_path_to_king_bg.visible = false;
+			
 		for (i in 0... _group_button.length)
 		{
 			// if mouse is on the button plus any offset made by the box scroller and mouse is pressed...
@@ -893,14 +935,17 @@ class MenuConfigurationsGames extends FlxGroup
 			{
 				if (Reg._tn > 0)
 				{
-					_group_button[i].active = true;	
+					_group_button[i].active = true;
 					buttonNumber(i);
-					break;
 				}
 			}		
 			
+			else 
+			{
+				
+			}		
 		}
-
-		super.update(elapsed);		
+		
+		
 	}
 }

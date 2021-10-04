@@ -30,6 +30,7 @@ class OnlinePlayersList extends FlxState
 	*/
     public var _title:FlxText;
 	public var _title_background:FlxSprite;
+	public var _title_background_large:FlxSprite;
 	
 	/******************************
 	 * moves everything up by these many pixels.
@@ -57,7 +58,7 @@ class OnlinePlayersList extends FlxState
 	public var _onlinePlayersListTicks:Int = 0;
 	
 	
-	public static var _didPopulateList:Bool = false; // do not new FlxText or button the second time. only one field at a coordinate permitted.
+	public static var _populate_table_body:Bool = false; // do not new FlxText or button the second time. only one field at a coordinate permitted.
 	
 	public static var _doOnce:Bool = false;
 	
@@ -67,7 +68,7 @@ class OnlinePlayersList extends FlxState
 		
 		RegFunctions.fontsSharpen();
 		
-		_didPopulateList = false;
+		_populate_table_body = false;
 		_doOnce = false;
 		
 		__scene_waiting_room = scene_waiting_room;
@@ -83,15 +84,18 @@ class OnlinePlayersList extends FlxState
 		
 		group = cast add(new FlxSpriteGroup());
 				
+		_title_background_large = new FlxSprite(0, 0);
+		_title_background_large.makeGraphic(FlxG.width - 50, 110);
+		_title_background_large.color = __scene_waiting_room._color;
+		add(_title_background_large);
+		
 		_title_background = new FlxSprite(0, 0);
-		_title_background.makeGraphic(FlxG.width - 50, 110);
-		_title_background.color = __scene_waiting_room._color;
+		_title_background.visible = true;
+		_title_background.alpha = 1;
+		_title_background.scrollFactor.set(0, 0);
 		add(_title_background);
 		
-		_title = new FlxText(0, 20, 0, "");
-		_title.setFormat(Reg._fontDefault, 50, FlxColor.YELLOW);
-		_title.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 3);
-		_title.screenCenter(X);
+		_title = new FlxText(15, 0, 0, "");
 		_title.visible = true;
 		add(_title);	
 		
@@ -155,7 +159,7 @@ class OnlinePlayersList extends FlxState
 	public function populateOnlineList(i:Int):Void
 	{
 		//.......................
-		if (_didPopulateList == false && RegTypedef._dataOnlinePlayers._usernamesOnline != null)
+		if (_populate_table_body == false && RegTypedef._dataOnlinePlayers._usernamesOnline != null)
 		{
 			// TODO For the online players list at the waiting room, make the data in those columns each into a sprite group or text group because currently doing a destroy() will only remove the last element.
 			_onlineUserListUsernames = new OnlinePlayersText(35, 145 - _offset_y + ((i + 1) * 70), 0, "", 20, i);
@@ -208,7 +212,7 @@ class OnlinePlayersList extends FlxState
 		var _count = group.members.length-1;
 		
 		var _title_sub_background = new FlxSprite(0, 110);
-		_title_sub_background.makeGraphic(FlxG.width - 40, 50, FlxColor.WHITE); 
+		_title_sub_background.makeGraphic(FlxG.width, 50, FlxColor.WHITE); 
 		_title_sub_background.scrollFactor.set(1, 0);
 		group.add(_title_sub_background);
 		group.members[(_count + 1)].scrollFactor.set(1, 0);
@@ -243,13 +247,13 @@ class OnlinePlayersList extends FlxState
 			
 		if (i == 120)
 		{
-			_didPopulateList = true;
+			_populate_table_body = true;
 		}
 	}
 	
 	public function sendInviteConfirm(_num:Int):Void
 	{
-		if (FlxG.mouse.y < FlxG.height - 50) // don't trigger mouse click when not at boxScroller. these values are from WaitingRoom _title_background and bodyBg. 
+		if (FlxG.mouse.y < FlxG.height - 50) // don't trigger mouse click when not at scrollable area. these values are from WaitingRoom _title_background and bodyBg. 
 		{
 			Reg._messageId = 12003;
 			Reg._buttonCodeValues = "o1000";
@@ -278,7 +282,7 @@ class OnlinePlayersList extends FlxState
 			}
 		}		
 		
-		_didPopulateList = false; // do not new FlxText or button the second time. only one field at a coordinate permitted.	
+		_populate_table_body = false; // do not new FlxText or button the second time. only one field at a coordinate permitted.	
 		_doOnce = false;
 		
 				
@@ -287,11 +291,11 @@ class OnlinePlayersList extends FlxState
 		
 	override public function update(elapsed:Float):Void 
 	{	
-		// this block of code is needed to make boxScroller not active when user clicks the chatter button. without this code, the chatter window would not be seen.
+		// this block of code is needed to make scrollable area not active when user clicks the chatter button. without this code, the chatter window would not be seen.
 		if (GameChatter._chatterIsOpen == true)
 		{
-			__scene_waiting_room.__boxscroller.active = false; // remove from camera, so that the chatter can be seen.			
-		} else __scene_waiting_room.__boxscroller.active = true;
+			__scene_waiting_room.__scrollable_area.active = false; // remove from camera, so that the chatter can be seen.			
+		} else __scene_waiting_room.__scrollable_area.active = true;
 		//...................................
 		
 		// invite player to room.
@@ -342,7 +346,7 @@ class OnlinePlayersList extends FlxState
 		||  _count == 3 && SceneWaitingRoom._textPlayer3Stats.text != ""
 		||  _count == 4 && SceneWaitingRoom._textPlayer4Stats.text != "")
 		{
-			// fix a camera display bug where the return to lobby an invite buttons can also be clicked from the right side of the screen because of the chatter boxScroller scrolling part of the scene.
+			// fix a camera display bug where the return to lobby an invite buttons can also be clicked from the right side of the screen because of the chatter scrollable area scrolling part of the scene.
 			if (FlxG.mouse.x > FlxG.width / 2
 			&&  FlxG.mouse.y >= FlxG.height - 50
 			&&  __scene_waiting_room.__menu_bar._button_return_to_lobby_from_waiting_room.visible == true

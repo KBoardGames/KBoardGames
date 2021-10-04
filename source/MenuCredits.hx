@@ -26,6 +26,9 @@ class MenuCredits extends FlxState
 {	
 	public var _text:FlxText;
 	
+	private var _title:FlxText;
+	private var _title_background:FlxSprite;
+	
 	public function new():Void
 	{
 		super();	
@@ -40,13 +43,18 @@ class MenuCredits extends FlxState
 		background.screenCenter(X);
 		add(background);	
 		
-		var _title = new FlxText(0, 0, 0, "Credits");
-		_title.setFormat(Reg._fontDefault, 30, FlxColor.ORANGE);
-		_title.scrollFactor.set();
-		_title.setPosition(15, 15);
-		_title.screenCenter(X);
-		add(_title);
+		_title_background = new FlxSprite(0, 0);
+		_title_background.makeGraphic(FlxG.width, 55, Reg._background_header_title_color); 
+		_title_background.scrollFactor.set(0,0);
+		add(_title_background);
 		
+		_title = new FlxText(15, 4, 0, "Credits");
+		_title.setFormat(Reg._fontDefault, 50, FlxColor.YELLOW);
+		_title.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 3);
+		_title.scrollFactor.set(0,0);
+		_title.visible = true;
+		add(_title);
+				
 		var _title_sub = new FlxText(0, 0, 0, "Giving Credit");
 		_title_sub.setFormat(Reg._fontDefault, 30, FlxColor.ORANGE);
 		_title_sub.scrollFactor.set();

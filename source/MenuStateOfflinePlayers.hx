@@ -27,6 +27,7 @@ class MenuStateOfflinePlayers extends MenuState
 	
 	override public function create():Void
 	{
+		Reg._at_game_room = false;
 		Reg._alreadyOnlineHost = false;
 		Reg._alreadyOnlineUser = false;
 		RegTypedef.resetTypedefData();
@@ -46,13 +47,18 @@ class MenuStateOfflinePlayers extends MenuState
 		startupFunctions();
 				
 		// the title of the game.
-		var title = new FlxText(0, 0, 0, "Player 1 vs Player 2");
-		title.setFormat(Reg._fontTitle, 69, FlxColor.YELLOW);
-		title.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 3);
-		title.scrollFactor.set();
-		title.screenCenter(X);
-		add(title);
+		_title_background = new FlxSprite(0, 0);
+		_title_background.makeGraphic(FlxG.width, 55, Reg._background_header_title_color); 
+		_title_background.scrollFactor.set(0,0);
+		add(_title_background);
 		
+		_title = new FlxText(15, 4, 0, "Player 1 vs Player 2");
+		_title.setFormat(Reg._fontDefault, 50, FlxColor.YELLOW);
+		_title.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 3);
+		_title.scrollFactor.set(0,0);
+		_title.visible = true;
+		add(_title);
+
 		var _checkers = new ButtonGeneralNetworkNo(0, (FlxG.height - 340) / 2 + 40, "Checkers", 350 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, playCheckers, RegCustom._button_color[Reg._tn], false);
 		_checkers.label.font = Reg._fontDefault;
 		_checkers.screenCenter(X);

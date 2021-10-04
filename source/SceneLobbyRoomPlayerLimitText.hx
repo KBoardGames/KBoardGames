@@ -19,7 +19,7 @@
 package;
 
 /**
- * lobby boxScroller data, such as, game title, room player limit, room button. 
+ * lobby scrollable area data, such as, game title, room player limit, room button. 
  * @author kboardgames.com
  */
 class SceneLobbyRoomPlayerLimitText extends FlxText
@@ -41,7 +41,7 @@ class SceneLobbyRoomPlayerLimitText extends FlxText
 
 	override public function update(elapsed:Float):Void 
 	{			
-		// this code is needed so that it refreshes the lobby boxScroller data without new the text.
+		// this code is needed so that it refreshes the lobby scrollable area data without new the text.
 		for (i in 0...27)
 		{
 			var _host:String = RegTypedef._dataMisc._roomHostUsername[i];

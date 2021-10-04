@@ -249,7 +249,7 @@ class MessageBox extends FlxGroup
 			
 			// button does not fire when this code is in the button class.
 			if (RegCustom._sound_enabled[Reg._tn] == true
-			&&  Reg2._boxScroller_is_scrolling == false)
+			&&  Reg2._scrollable_area_is_scrolling == false)
 				FlxG.sound.play("click", 1, false);
 				
 			popupMessageHide();
@@ -320,7 +320,7 @@ class MessageBox extends FlxGroup
 			
 			// button does not fire when this code is in the button class.
 			if (RegCustom._sound_enabled[Reg._tn] == true
-			&&  Reg2._boxScroller_is_scrolling == false)
+			&&  Reg2._scrollable_area_is_scrolling == false)
 				FlxG.sound.play("click", 1, false);
 				
 			popupMessageHide();
@@ -339,7 +339,7 @@ class MessageBox extends FlxGroup
 			
 			// button does not fire when this code is in the button class.
 			if (RegCustom._sound_enabled[Reg._tn] == true
-			&&  Reg2._boxScroller_is_scrolling == false)
+			&&  Reg2._scrollable_area_is_scrolling == false)
 				FlxG.sound.play("click", 1, false);
 				
 			popupMessageHide();

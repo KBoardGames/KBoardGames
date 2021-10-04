@@ -37,6 +37,7 @@ class Tournaments extends FlxGroup
 	 * the title of this scene.
 	 */
 	private var _title:FlxText;
+	private var _title_background:FlxSprite;
 		
 	/******************************
 	 * go to game room
@@ -53,24 +54,18 @@ class Tournaments extends FlxGroup
 		__menu_bar = new MenuBar();
 		add(__menu_bar);
 		
-		var background = new FlxSprite(0, 0);
-		background.makeGraphic(FlxG.width, FlxG.height-50, FlxColor.BLACK);
-		background.setPosition(0, 0);
-		background.scrollFactor.set();	
-		background.screenCenter(X);
-		add(background);	
+		_title_background = new FlxSprite(0, 0);
+		_title_background.makeGraphic(FlxG.width, 55, Reg._background_header_title_color); 
+		_title_background.scrollFactor.set(0, 0);
+		add(_title_background);
 		
-		var i:Int = 0;
-		
-		_title = new FlxText(0, 0, 0, "Tournaments Menu");
+		_title = new FlxText(15, 4, 0, "Tournaments");
 		_title.setFormat(Reg._fontDefault, 50, FlxColor.YELLOW);
 		_title.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 3);
-		_title.scrollFactor.set();
-		_title.setPosition(15, 15);
-		_title.screenCenter(X);
+		_title.scrollFactor.set(0,0);
+		_title.visible = true;
 		add(_title);
-		
-		
+			
 	}
 	
 	public function _tournament_standard_8():Void

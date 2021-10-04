@@ -299,8 +299,8 @@ class House extends FlxGroup
 		add(__house_map_furniture);
 				
 		__house_furniture_put = new HouseFurniturePut(this);
-		__house_furniture_put.__boxscroller.visible = false;
-		__house_furniture_put.__boxscroller.active = false;		
+		__house_furniture_put.__scrollable_area.visible = false;
+		__house_furniture_put.__scrollable_area.active = false;		
 		__house_furniture_put.visible = false;
 		__house_furniture_put.active = false;
 		add(__house_furniture_put);
@@ -403,9 +403,9 @@ class House extends FlxGroup
 		
 		//Reg._updateScrollbarBringUp = true;
 		
-		__house_furniture_put.__boxscroller.visible = false;
+		__house_furniture_put.__scrollable_area.visible = false;
 		__house_furniture_put.visible = false;
-		__house_furniture_put.__boxscroller.active = false;
+		__house_furniture_put.__scrollable_area.active = false;
 		__house_furniture_put.active = false;
 	}	
 	
@@ -425,9 +425,9 @@ class House extends FlxGroup
 		
 		//Reg._updateScrollbarBringUp = true;
 		
-		__house_furniture_get.__boxscroller.visible = false;
+		__house_furniture_get.__scrollable_area.visible = false;
 		__house_furniture_get.visible = false;
-		__house_furniture_get.__boxscroller.active = false;
+		__house_furniture_get.__scrollable_area.active = false;
 		__house_furniture_get.active = false;
 	}
 	
@@ -472,8 +472,8 @@ class House extends FlxGroup
 	public function	activeFurnitureGetElements():Void
 	{		
 		__house_furniture_get.active = true;		
-		__house_furniture_get.__boxscroller.active = true;
-		__house_furniture_get.__boxscroller.visible = true;
+		__house_furniture_get.__scrollable_area.active = true;
+		__house_furniture_get.__scrollable_area.visible = true;
 		__house_furniture_get._background.visible = true;
 		__house_furniture_get._bgTitle.visible = true;
 		__house_furniture_get._title.visible = true;
@@ -486,8 +486,8 @@ class House extends FlxGroup
 		if (__house_furniture_put != null)
 		{
 			__house_furniture_put.active = true;		
-			__house_furniture_put.__boxscroller.active = true;
-			__house_furniture_put.__boxscroller.visible = true;
+			__house_furniture_put.__scrollable_area.active = true;
+			__house_furniture_put.__scrollable_area.visible = true;
 			__house_furniture_put._background.visible = true;
 			__house_furniture_put._bgTitle.visible = true;
 			__house_furniture_put._title.visible = true;
@@ -545,9 +545,9 @@ class House extends FlxGroup
 		__house_foundation_put.active = false;
 		
 		__house_furniture_put.active = true;
-		__house_furniture_put.__boxscroller.active = true;		
+		__house_furniture_put.__scrollable_area.active = true;		
 		__house_furniture_put.visible = true;
-		__house_furniture_put.__boxscroller.visible = true;
+		__house_furniture_put.__scrollable_area.visible = true;
 		
 		__house_menu_furniture._stack_item_backwards.active = true;
 		__house_menu_furniture._stack_item_forwards.active = true;
@@ -581,9 +581,9 @@ class House extends FlxGroup
 		//__house_menu_main._buttonToFoundationPutMenu.active = false;
 
 		
-		__house_furniture_put.__boxscroller.visible = false;
+		__house_furniture_put.__scrollable_area.visible = false;
 		__house_furniture_put.visible = false;
-		__house_furniture_put.__boxscroller.active = false;
+		__house_furniture_put.__scrollable_area.active = false;
 		__house_furniture_put.active = false;
 		
 		__house_foundation_put.active = true;
@@ -687,7 +687,7 @@ class House extends FlxGroup
 				else _housePageMapFloorHover.visible = false;
 			}
 			
-			// fix a camera display bug where the following buttons can also be clicked from the right side of the screen because of the chatter boxScroller scrolling part of the scene.
+			// fix a camera display bug where the following buttons can also be clicked from the right side of the screen because of the chatter scrollable area scrolling part of the scene.
 			if (_ticks_menu_bar == 1)
 			{
 				if (FlxG.mouse.x > FlxG.width / 2 + HouseScrollMap._map_offset_x

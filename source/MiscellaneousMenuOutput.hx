@@ -25,11 +25,13 @@ package;
 class MiscellaneousMenuOutput extends FlxState
 {	
 	/******************************
-	* anything added to this group will be placed inside of the boxScroller field. 
+	* anything added to this group will be placed inside of the scrollable area field. 
 	*/
 	public static var group:FlxSpriteGroup;	
-	public var __boxscroller:FlxScrollableArea;	
+	public var __scrollable_area:FlxScrollableArea;	
 	private var _title:FlxText;
+	private var _title_background:FlxSprite;
+	
 	private var _height:Float; // used to display the next button or next text data underneath the previous button or text. without this var, the texts, images and buttons would all be displayed at the same line.
 	
 	public var __menu_bar:MenuBar;
@@ -60,7 +62,7 @@ class MiscellaneousMenuOutput extends FlxState
 		// put the group off-screen
 		group.setPosition(5000, 0);		
 		
-		// the boxScroller would not work without at least one sprite added to the boxScrollerGroup.
+		// the scrollable area would not work without at least one sprite added to the scrollable areaGroup.
 		var _box = new FlxSprite();
 		_box.makeGraphic(1, 1, FlxColor.BLACK);
 		_box.setPosition(0, 0);
@@ -76,31 +78,29 @@ class MiscellaneousMenuOutput extends FlxState
 				
 			
 		// make a scrollbar-enabled camera for it (a FlxScrollableArea)	
-		if (__boxscroller != null) FlxG.cameras.remove(__boxscroller);
-		__boxscroller = new FlxScrollableArea( new FlxRect( 0, 0, FlxG.width, FlxG.height-55), group.getHitbox(), ResizeMode.NONE, 0, 100, -1, FlxColor.LIME, null, 0, true);
-		add(__boxscroller);
-		FlxG.cameras.add( __boxscroller );
-		__boxscroller.antialiasing = true;
-		__boxscroller.pixelPerfectRender = true;
+		if (__scrollable_area != null) FlxG.cameras.remove(__scrollable_area);
+		__scrollable_area = new FlxScrollableArea( new FlxRect( 0, 0, FlxG.width, FlxG.height-55), group.getHitbox(), ResizeMode.NONE, 0, 100, -1, FlxColor.LIME, null, 0, true);
+		add(__scrollable_area);
+		FlxG.cameras.add( __scrollable_area );
+		__scrollable_area.antialiasing = true;
+		__scrollable_area.pixelPerfectRender = true;
 				
 		__menu_bar = new MenuBar();
 		add(__menu_bar);
 		
-		var _title_background = new FlxSprite(0, 0);
-		_title_background.makeGraphic(FlxG.width - 40, 100, 0xFF000000); 
-		_title_background.scrollFactor.set(0, 0);
+		_title_background = new FlxSprite(0, 0);
+		_title_background.makeGraphic(FlxG.width, 55, Reg._background_header_title_color); 
+		_title_background.scrollFactor.set(0,0);
 		add(_title_background);
-		
-		if (_int == 30) _title = new FlxText(0, 0, 0, "Game Statistics");
-		else _title = new FlxText(0, 0, 0, "Game Instructions");
+					
+		if (_int == 30) _title = new FlxText(15, 4, 0, "Game Statistics");
+		else _title = new FlxText(14, 4, 0, "Game Instructions");
 		
 		_title.setFormat(Reg._fontDefault, 50, FlxColor.YELLOW);
 		_title.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 3);
-		_title.scrollFactor.set();
-		_title.setPosition(0, 20);
+		_title.scrollFactor.set(0, 0);
 		_title.visible = true;
-		_title.screenCenter(X);
-		_title.x -= 20; // minus the width of the boxScroller track.
+		_title.x -= 20; // minus the width of the scrollable area track.
 		add(_title);
 		
 		_close = new ButtonGeneralNetworkYes(0, FlxG.height-40, "Exit", 150 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, closeState, RegCustom._button_color[Reg._tn], false);
@@ -457,7 +457,7 @@ class MiscellaneousMenuOutput extends FlxState
 		
 		RegTriggers._makeMiscellaneousMenuClassActive = true;
 		
-		__boxscroller.visible = false;
+		__scrollable_area.visible = false;
 		Reg._at_misc = true;
 		
 		visible = false;
@@ -467,11 +467,11 @@ class MiscellaneousMenuOutput extends FlxState
 	
 	override public function destroy()
 	{
-		if (__boxscroller != null)
+		if (__scrollable_area != null)
 		{			
-			cameras.remove(__boxscroller);
-			__boxscroller.destroy();
-			__boxscroller = null;
+			cameras.remove(__scrollable_area);
+			__scrollable_area.destroy();
+			__scrollable_area = null;
 		}
 		
 		

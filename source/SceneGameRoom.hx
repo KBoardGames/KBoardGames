@@ -95,6 +95,11 @@ class SceneGameRoom extends FlxState
 	{
 		super();
 		
+		Reg._at_game_room = true;
+		
+		// this is needed because if message box was centered to screen, it would overlap part of the right side scrollbar at lobby. if true then we are at the game room so center the message box since there is no scrollbar to the right of the scene.
+		Reg2._messageBox_x = 380;
+		
 		Reg2._lobby_button_alpha = 1;
 		RegTriggers._buttons_set_not_active = false;
 		
@@ -110,11 +115,11 @@ class SceneGameRoom extends FlxState
 		
 		if (Reg._game_offline_vs_player == false && Reg._game_offline_vs_cpu == false && Reg._game_online_vs_cpu == false)
 		{
-			if (GameChatter.__boxscroller2 != null)	
-				GameChatter.__boxscroller2.visible = false;
+			if (GameChatter.__scrollable_area2 != null)	
+				GameChatter.__scrollable_area2.visible = false;
 			
-			if (GameChatter.__boxscroller3 != null)
-				GameChatter.__boxscroller3.visible = false;
+			if (GameChatter.__scrollable_area3 != null)
+				GameChatter.__scrollable_area3.visible = false;
 		}
 		
 		Reg._buttonCodeValues = "";
@@ -206,10 +211,10 @@ class SceneGameRoom extends FlxState
 			__game_chatter = new GameChatter(4, this);
 			__game_chatter.visible = true;
 			
-			if (GameChatter.__boxscroller4 != null)
+			if (GameChatter.__scrollable_area4 != null)
 			{
-				GameChatter.__boxscroller4.visible = false;
-				GameChatter.__boxscroller4.active = false;
+				GameChatter.__scrollable_area4.visible = false;
+				GameChatter.__scrollable_area4.active = false;
 			}
 			
 			GameChatter._groupChatterScroller.x = 375; // 375 work with below var to hide,

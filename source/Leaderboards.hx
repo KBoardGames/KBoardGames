@@ -37,10 +37,10 @@ class Leaderboards extends FlxGroup
 	private var _offset2:Int = 43;
 	
 	/******************************
-	* anything added to this group will be placed inside of the boxScroller field. 
+	* anything added to this group will be placed inside of the scrollable area field. 
 	*/
 	public var _group:FlxSpriteGroup;	
-	public var __boxscroller:FlxScrollableArea;	
+	public var __scrollable_area:FlxScrollableArea;	
 	
 	public var _title_background:FlxSprite;
 	public var _title:FlxText;
@@ -148,12 +148,12 @@ class Leaderboards extends FlxGroup
 			_group.setPosition(0, 0);
 					
 			// make a scrollbar-enabled camera for it (a FlxScrollableArea)
-			if (__boxscroller != null) FlxG.cameras.remove(__boxscroller);
-			__boxscroller = new FlxScrollableArea( new FlxRect( 0, 0, FlxG.width, FlxG.height - 45), _group.getHitbox(), ResizeMode.NONE, 0, 100, -1, FlxColor.LIME, null, 0, true);
-			add(__boxscroller);
-			FlxG.cameras.add( __boxscroller );
-			__boxscroller.antialiasing = true;
-			__boxscroller.pixelPerfectRender = true;
+			if (__scrollable_area != null) FlxG.cameras.remove(__scrollable_area);
+			__scrollable_area = new FlxScrollableArea( new FlxRect( 0, 0, FlxG.width, FlxG.height - 45), _group.getHitbox(), ResizeMode.NONE, 0, 100, -1, FlxColor.LIME, null, 0, true);
+			add(__scrollable_area);
+			FlxG.cameras.add( __scrollable_area );
+			__scrollable_area.antialiasing = true;
+			__scrollable_area.pixelPerfectRender = true;
 					
 			
 			var __menu_bar = new MenuBar();

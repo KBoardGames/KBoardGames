@@ -1232,7 +1232,10 @@ class IDsCreateAndMain extends FlxState
 		RegFunctions._gameMenu = new FlxSave(); // initialize		
 		RegFunctions._gameMenu.bind("ConfigurationsMenu"); // bind to the named save slot.
 		
+		RegCustom.resetConfigurationVars();
 		RegFunctions.loadConfig();
+		if (Reg._tn == 0) RegCustom.resetConfigurationVars2();
+		
 		PlayState.getPlayersNamesAndAvatars();
 				
 		// fill the screen with a random color.
@@ -1426,7 +1429,7 @@ class IDsCreateAndMain extends FlxState
 		if (RegTypedef._dataTournaments._move_piece == false)
 		{
 			// time is set at the MenuConfigurationsGames.hx file. we times it by 60 to create the seconds allowed for the game.
-			_t = RegCustom._time_remaining_for_game[_num] * 60;
+			_t = RegCustom._time_remaining_for_game[Reg._tn][_num] * 60;
 		}
 		
 		RegTypedef._dataPlayers._timeTotal = _t;

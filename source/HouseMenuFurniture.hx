@@ -442,7 +442,7 @@ class HouseMenuFurniture extends FlxGroup
 					&& ActionInput.justReleased())
 					{
 						if (RegCustom._sound_enabled[Reg._tn] == true
-						&&  Reg2._boxScroller_is_scrolling == false)
+						&&  Reg2._scrollable_area_is_scrolling == false)
 							FlxG.sound.play("click", 1, false);
 						
 						if (RegHouse._item_direction_facing[_members-1] == 0)

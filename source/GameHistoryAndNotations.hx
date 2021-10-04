@@ -27,22 +27,22 @@ class GameHistoryAndNotations extends FlxGroup
 	/******************************
 	 * text to be displayed at the scroller.
 	 */
-	public static var _messageForBoxScroller:FlxText;
+	public static var _message_for_scrollable_area:FlxText;
 	
 	/******************************
-	 * the boxScroller would not work without at least one sprite added to the boxScrollerGroup.
+	 * the scrollable area would not work without at least one sprite added to the scrollable areaGroup.
 	 */
 	public static var _box:FlxSprite;
 	
 	/******************************
-	 * add any object to this group. those objects added will be displayed at the boxScroller.
+	 * add any object to this group. those objects added will be displayed at the scrollable area.
 	 */
-	public static var _boxScrollerGroup:FlxSpriteGroup;
+	public static var _group_scrollable_area:FlxSpriteGroup;
 	
 	/******************************
 	 * pointer to the scroller.
 	 */
-	public static var __boxscroller:FlxScrollableArea;
+	public static var __scrollable_area:FlxScrollableArea;
 	
 	/******************************
 	 * an image used as a border that surrounds the scrollableArea.
@@ -70,15 +70,15 @@ class GameHistoryAndNotations extends FlxGroup
 				
 		RegFunctions.fontsSharpen();
 		
-		// add any object to this group. those objects added will be displayed at the boxScroller.
-		_boxScrollerGroup = cast add(new FlxSpriteGroup());
+		// add any object to this group. those objects added will be displayed at the scrollable area.
+		_group_scrollable_area = cast add(new FlxSpriteGroup());
 
-		// the boxScroller would not work without at least one sprite added to the boxScrollerGroup.
+		// the scrollable area would not work without at least one sprite added to the scrollable areaGroup.
 		_box = new FlxSprite();
 		_box.makeGraphic(1, 1, FlxColor.BLACK);
 		_box.setPosition(0, 0);
 		add(_box);
-		_boxScrollerGroup.add(_box);
+		_group_scrollable_area.add(_box);
 
 		// this text is needed to fix a bug. it shows a scroll bar by feeding new lines to the FlxScrollableArea. this scrollbar move up until its bottom edge reaches the bottom of the FlxScrollableArea.
 		var _text = new FlxText(40, FlxG.height - Reg._offsetScreenY + 13, 0, "");
@@ -88,7 +88,7 @@ class GameHistoryAndNotations extends FlxGroup
 		_text.text = "this will fix\n a display\n bug. \n by making new lines. \n";
 		_text.visible = false; // the bug will still be fixed.
 		add(_text);
-		_boxScrollerGroup.add(_text);
+		_group_scrollable_area.add(_text);
 		
 		// used to darken the scrollableArea region.
 		if (RegCustom._notation_panel_enabled[Reg._tn] == true)
@@ -116,48 +116,48 @@ class GameHistoryAndNotations extends FlxGroup
 			add(_notation);
 		}
 		
-		// text to be displayed at the boxScroller.
-		_messageForBoxScroller = new FlxText(30, FlxG.height, 0, "");
-		_messageForBoxScroller.setFormat(null, Reg._font_size, FlxColor.WHITE, LEFT);
-		_messageForBoxScroller.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 1);
-		_messageForBoxScroller.offset.set(0, 10);
-		_messageForBoxScroller.font = Reg._fontDefault;
-		_messageForBoxScroller.text = "Notations:\r\r";
-		_messageForBoxScroller.color = MenuConfigurationsGeneral.notation_panel_text_color();	
-		add(_messageForBoxScroller);
-		_boxScrollerGroup.add(_messageForBoxScroller);
+		// text to be displayed at the scrollable area.
+		_message_for_scrollable_area = new FlxText(30, FlxG.height, 0, "");
+		_message_for_scrollable_area.setFormat(null, Reg._font_size, FlxColor.WHITE, LEFT);
+		_message_for_scrollable_area.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 1);
+		_message_for_scrollable_area.offset.set(0, 10);
+		_message_for_scrollable_area.font = Reg._fontDefault;
+		_message_for_scrollable_area.text = "Notations:\r\r";
+		_message_for_scrollable_area.color = MenuConfigurationsGeneral.notation_panel_text_color();	
+		add(_message_for_scrollable_area);
+		_group_scrollable_area.add(_message_for_scrollable_area);
 		
 		//----------
-		if (__boxscroller != null)
+		if (__scrollable_area != null)
 		{
-			FlxG.cameras.remove(__boxscroller);
-			__boxscroller.destroy();
-			__boxscroller = null;
+			FlxG.cameras.remove(__scrollable_area);
+			__scrollable_area.destroy();
+			__scrollable_area = null;
 		}
 		
 		// make a scrollbar-enabled camera for it (a FlxScrollableArea).
-		if (__boxscroller != null) FlxG.cameras.remove(__boxscroller);
-		__boxscroller = new FlxScrollableArea( new FlxRect( 0, 0, 357, FlxG.height - 90), _boxScrollerGroup.getHitbox(), ResizeMode.NONE, 0, 100, -1, FlxColor.LIME, null, 0, false, false);
+		if (__scrollable_area != null) FlxG.cameras.remove(__scrollable_area);
+		__scrollable_area = new FlxScrollableArea( new FlxRect( 0, 0, 357, FlxG.height - 90), _group_scrollable_area.getHitbox(), ResizeMode.NONE, 0, 100, -1, FlxColor.LIME, null, 0, false, false);
 		
-		FlxG.cameras.add(__boxscroller);
-		__boxscroller.antialiasing = true;
-		__boxscroller.pixelPerfectRender = true;
+		FlxG.cameras.add(__scrollable_area);
+		__scrollable_area.antialiasing = true;
+		__scrollable_area.pixelPerfectRender = true;
 	}
 
 	public static function notationShare():Void
 	{
 		// make a scrollbar-enabled camera for it (a FlxScrollableArea).
-		if (__boxscroller != null) FlxG.cameras.remove(__boxscroller);
-		__boxscroller = new FlxScrollableArea( new FlxRect( 0, 0, 357, FlxG.height - 90), _boxScrollerGroup.getHitbox(), ResizeMode.NONE, 0, 100, -1, FlxColor.LIME, null, 0, false, true);
+		if (__scrollable_area != null) FlxG.cameras.remove(__scrollable_area);
+		__scrollable_area = new FlxScrollableArea( new FlxRect( 0, 0, 357, FlxG.height - 90), _group_scrollable_area.getHitbox(), ResizeMode.NONE, 0, 100, -1, FlxColor.LIME, null, 0, false, true);
 		
-		FlxG.cameras.add(__boxscroller);
-		__boxscroller.antialiasing = true;
-		__boxscroller.pixelPerfectRender = true;
+		FlxG.cameras.add(__scrollable_area);
+		__scrollable_area.antialiasing = true;
+		__scrollable_area.pixelPerfectRender = true;
 		
 	}
 	
 	/******************************
-	 * removes the notation camera and boxScroller when text changes so that creating the boxScroller will not be needed which will only decrease the framerate after awhile.
+	 * removes the notation camera and scrollable area when text changes so that creating the scrollable area will not be needed which will only decrease the framerate after awhile.
 	 */
 	public static function notationReset():Void
 	{
@@ -165,11 +165,11 @@ class GameHistoryAndNotations extends FlxGroup
 		Reg._chessStrippedNotationTemp = "";
 		
 		
-		if (__boxscroller != null)
+		if (__scrollable_area != null)
 		{
-			FlxG.cameras.remove(__boxscroller);
-			__boxscroller.destroy();
-			__boxscroller = null;
+			FlxG.cameras.remove(__scrollable_area);
+			__scrollable_area.destroy();
+			__scrollable_area = null;
 		}
 		
 		notationShare();
@@ -283,7 +283,7 @@ class GameHistoryAndNotations extends FlxGroup
 		// should the notation panel be displayed?
 		if (RegCustom._notation_panel_enabled[Reg._tn] == false) return;
 		
-		var _textTemp:String = ""; // used to store pieces of text. when finished the this var will be copied to _messageForBoxScroller.text.	
+		var _textTemp:String = ""; // used to store pieces of text. when finished the this var will be copied to _message_for_scrollable_area.text.	
 		var _letter:String = "";
 		
 		if (Tournaments._piece_move_completed == false) historyBasic();
@@ -375,9 +375,9 @@ class GameHistoryAndNotations extends FlxGroup
 			// when text is printed to screen, player 1 and the other player both share the same notation print line. _gameNotationMoveNumber increments after the other player moves. _gameNotationOddEven is used to toggle between player 1 and other player so that they can both be printed to the same line.
 			if (Reg._gameNotationOddEven > 0)
 			{
-				if (Reg._gameNotationOddEven == 1)	_messageForBoxScroller.text += Std.string(Reg._gameNotationMoveNumber + 1) + ". " + _textTemp;
+				if (Reg._gameNotationOddEven == 1)	_message_for_scrollable_area.text += Std.string(Reg._gameNotationMoveNumber + 1) + ". " + _textTemp;
 				
-				if (Reg._gameNotationOddEven == 2)	_messageForBoxScroller.text += " " + _textTemp + "\n";
+				if (Reg._gameNotationOddEven == 2)	_message_for_scrollable_area.text += " " + _textTemp + "\n";
 			}
 			
 			Reg._gameNotationOddEven += 1;
@@ -665,25 +665,25 @@ class GameHistoryAndNotations extends FlxGroup
 			_box.destroy();
 		}
 		
-		if (_messageForBoxScroller != null)
+		if (_message_for_scrollable_area != null)
 		{
-			remove(_messageForBoxScroller);
-			_messageForBoxScroller.destroy();
-			_messageForBoxScroller = null;
+			remove(_message_for_scrollable_area);
+			_message_for_scrollable_area.destroy();
+			_message_for_scrollable_area = null;
 		}
 		
-		if (__boxscroller != null)
+		if (__scrollable_area != null)
 		{
-			cameras.remove(__boxscroller);
-			__boxscroller.destroy();
-			__boxscroller = null;
+			cameras.remove(__scrollable_area);
+			__scrollable_area.destroy();
+			__scrollable_area = null;
 		}
 		
-		if (_boxScrollerGroup != null)
+		if (_group_scrollable_area != null)
 		{
-			remove(_boxScrollerGroup);
-			_boxScrollerGroup.destroy();
-			_boxScrollerGroup = null;
+			remove(_group_scrollable_area);
+			_group_scrollable_area.destroy();
+			_group_scrollable_area = null;
 		}
 		
 		if (_notation != null)

@@ -19,7 +19,7 @@
 package;
 
 /**
- * lobby boxScroller data, every username displayed at host of room. 
+ * lobby scrollable area data, every username displayed at host of room. 
  * @author kboardgames.com
  */
 class SceneLobbyRoomHostUsernameText extends FlxText
@@ -41,7 +41,7 @@ class SceneLobbyRoomHostUsernameText extends FlxText
 	
 	override public function update(elapsed:Float):Void 
 	{			
-		// this code is needed so that it refreshes the lobby boxScroller data without new the text.
+		// this code is needed so that it refreshes the lobby scrollable area data without new the text.
 		for (i in 0...27)
 		{
 			var _host:String = RegTypedef._dataMisc._roomHostUsername[i];

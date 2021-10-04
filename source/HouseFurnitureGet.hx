@@ -30,7 +30,7 @@ class HouseFurnitureGet extends FlxGroup
 	public var _background:FlxSprite;
 	
 	/******************************
-	 * the background behind the title. this does not move with boxScroller.
+	 * the background behind the title. this does not move with scrollable area.
 	 */
 	public var _bgTitle:FlxSprite;
 	
@@ -40,14 +40,14 @@ class HouseFurnitureGet extends FlxGroup
 	public var _title:FlxText;
 		
 	/******************************
-	* anything added to this group will be placed inside of the boxScroller field. 
+	* anything added to this group will be placed inside of the scrollable area field. 
 	*/
 	private static var _group:FlxSpriteGroup;	
 	
 	/******************************
 	 * An area of the screen that has automatic scrollbars, if needed.
 	 */
-	public var __boxscroller:FlxScrollableArea;	
+	public var __scrollable_area:FlxScrollableArea;	
 	
 	/******************************
 	 * used to display the next button or next text data underneath the previous button or text. without this var, the texts, images and buttons would all be displayed at the same line.
@@ -55,7 +55,7 @@ class HouseFurnitureGet extends FlxGroup
 	private var _height:Float;
 	
 	/******************************
-	 * the boxScroller would not work without at least one sprite added to the boxScrollerGroup.
+	 * the scrollable area would not work without at least one sprite added to the scrollable areaGroup.
 	 */
 	private	var _box:FlxSprite;
 	
@@ -116,7 +116,7 @@ class HouseFurnitureGet extends FlxGroup
 		_group = cast add(new FlxSpriteGroup());		
 		_group.setPosition(0, 0); // put the group off-screen
 		
-		// the boxScroller would not work without at least one sprite added to the boxScrollerGroup.
+		// the scrollable area would not work without at least one sprite added to the scrollable areaGroup.
 		_box = new FlxSprite();
 		_box.makeGraphic(1, 1, FlxColor.BLACK);
 		_box.setPosition(0, 0);
@@ -198,15 +198,15 @@ class HouseFurnitureGet extends FlxGroup
 		_group.add(_buttonForScrollBar);
 		
 		// make a scrollbar-enabled camera for it (a FlxScrollableArea)	
-		if (__boxscroller != null) FlxG.cameras.remove(__boxscroller);
-		__boxscroller = new FlxScrollableArea( new FlxRect( 0, 0, 373, FlxG.height-50), new FlxRect( 0, 0, 350, 199 * 200), ResizeMode.NONE, 444, 100, -1, FlxColor.LIME, null, 100, true);
-		add(__boxscroller);
+		if (__scrollable_area != null) FlxG.cameras.remove(__scrollable_area);
+		__scrollable_area = new FlxScrollableArea( new FlxRect( 0, 0, 373, FlxG.height-50), new FlxRect( 0, 0, 350, 199 * 200), ResizeMode.NONE, 444, 100, -1, FlxColor.LIME, null, 100, true);
+		add(__scrollable_area);
 		
 		fixScrollbarElementOffsetY();
 				
-		FlxG.cameras.add( __boxscroller );
-		__boxscroller.antialiasing = true;
-		__boxscroller.pixelPerfectRender = true;
+		FlxG.cameras.add( __scrollable_area );
+		__scrollable_area.antialiasing = true;
+		__scrollable_area.pixelPerfectRender = true;
 		
 		_bgTitle = new FlxSprite(0, 0);
 		_bgTitle.makeGraphic(353, 60);
@@ -315,11 +315,11 @@ class HouseFurnitureGet extends FlxGroup
 	{
 		// might need to recreate the scrollbar to bring it back up.
 		
-		// this is needed to set the group at the top of the panel. boxScroller.scroll.y changes in value when its content changes. The result would be group.y value offsetting at boxScroller. 		
-		_group.y = __boxscroller.scroll.y - 260; // _offset_y;
+		// this is needed to set the group at the top of the panel. scrollable area.scroll.y changes in value when its content changes. The result would be group.y value offsetting at scrollable area. 		
+		_group.y = __scrollable_area.scroll.y - 260; // _offset_y;
 			
-		// now that the top of the boxScroller is fixed we need to set this so that the last element is correctly displayed. without this code the last element would not be seen or may be seen party cut off at the bottom of the boxScroller.
-		__boxscroller.content.height += Std.int(__boxscroller.scroll.y) + _offset_y;
+		// now that the top of the scrollable area is fixed we need to set this so that the last element is correctly displayed. without this code the last element would not be seen or may be seen party cut off at the bottom of the scrollable area.
+		__scrollable_area.content.height += Std.int(__scrollable_area.scroll.y) + _offset_y;
 	}
 	
 	override public function destroy()
@@ -372,11 +372,11 @@ class HouseFurnitureGet extends FlxGroup
 			_sprite = null;
 		}
 		
-		if (__boxscroller != null)
+		if (__scrollable_area != null)
 		{
-			cameras.remove(__boxscroller);
-			__boxscroller.destroy();
-			__boxscroller = null;
+			cameras.remove(__scrollable_area);
+			__scrollable_area.destroy();
+			__scrollable_area = null;
 		}
 		
 		
@@ -394,8 +394,8 @@ class HouseFurnitureGet extends FlxGroup
 		{
 			if (ActionInput.coordinateX() - HouseScrollMap._map_offset_x > _group_sprite[i].x
 			&&  ActionInput.coordinateX() - HouseScrollMap._map_offset_x < _group_sprite[i].x + 100
-			&&  ActionInput.coordinateY() - HouseScrollMap._map_offset_y + __boxscroller.scroll.y > _group_sprite[i].y
-			&&  ActionInput.coordinateY() - HouseScrollMap._map_offset_y + __boxscroller.scroll.y < _group_sprite[i].y + 100)
+			&&  ActionInput.coordinateY() - HouseScrollMap._map_offset_y + __scrollable_area.scroll.y > _group_sprite[i].y
+			&&  ActionInput.coordinateY() - HouseScrollMap._map_offset_y + __scrollable_area.scroll.y < _group_sprite[i].y + 100)
 			{
 				_group_sprite[i].animation.play("1");
 				
@@ -403,7 +403,7 @@ class HouseFurnitureGet extends FlxGroup
 				if (ActionInput.justPressed() == true)
 				{
 					if (RegCustom._sound_enabled[Reg._tn] == true
-					&&  Reg2._boxScroller_is_scrolling == false)
+					&&  Reg2._scrollable_area_is_scrolling == false)
 						FlxG.sound.play("click", 1, false);
 				}
 					

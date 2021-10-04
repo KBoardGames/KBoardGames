@@ -24,6 +24,9 @@ package;
  */
 class DailyQuests extends FlxGroup
 {
+	private var _title:FlxText;
+	private var _title_background:FlxSprite;
+	
 	/******************************
 	 * the bar displayed behind the quest description and total quest value completed.
 	 */
@@ -47,14 +50,14 @@ class DailyQuests extends FlxGroup
 	private var _height_between_bars:Int = 130;	
 	
 	/******************************
-	 * instead of "add" to scene, we add to "_group.add" so that if you pass the group to the __boxscroller or if we need to hide them all, calling this var directly is more easer to do.
+	 * instead of "add" to scene, we add to "_group.add" so that if you pass the group to the __scrollable_area or if we need to hide them all, calling this var directly is more easer to do.
 	 */
 	public var _group:FlxSpriteGroup;
 	
 	/******************************
 	 * used to scroll the scene.
 	 */
-	public var __boxscroller:FlxScrollableArea;	
+	public var __scrollable_area:FlxScrollableArea;	
 	
 	/******************************
 	 * used as an element id. if a value of 1, then array[_id] will call the second element. not the first because arrays always start at 0.
@@ -62,7 +65,7 @@ class DailyQuests extends FlxGroup
 	private var _id:Int = 1; 
 	
 	/******************************
-	 * a code used to stop the __boxScroller from scrolling when at the SceneMenu will stops the __boxScroller from displaying correctly when entering this class. this is the fix. used to display the __boxScroller underneath the SceneMenu.
+	 * a code used to stop the __scrollable_area from scrolling when at the SceneMenu will stops the __scrollable_area from displaying correctly when entering this class. this is the fix. used to display the __scrollable_area underneath the SceneMenu.
 	 */
 	private var _ticks:Int = 0; 
 	
@@ -125,11 +128,11 @@ class DailyQuests extends FlxGroup
 		_bar_value_current[7] = Std.parseInt(RegTypedef._dataDailyQuests._checkers_get_6_kings);
 		_bar_value_current[8] = Std.parseInt(RegTypedef._dataDailyQuests._play_all_5_board_games); 
 
-		var _title = new FlxText(0, 0, 0, "Daily Quests.");
-		_title.setFormat(Reg._fontDefault, 30, FlxColor.ORANGE);
-		_title.scrollFactor.set(0, 0);
-		_title.setPosition(15, 15);
-		_title.screenCenter(X);
+		_title = new FlxText(15, 4, 0, "Daily Quests");
+		_title.setFormat(Reg._fontDefault, 50, FlxColor.YELLOW);
+		_title.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 3);
+		_title.scrollFactor.set(0,0);
+		_title.visible = true;
 				
 		_group = cast add(new FlxSpriteGroup());
 
@@ -150,22 +153,21 @@ class DailyQuests extends FlxGroup
 		_button.visible = false;
 		_group.add(_button);
 		
-		// a negative x value moves the boxScroller in the opposite direction.
-		if (__boxscroller != null) FlxG.cameras.remove(__boxscroller);
-		__boxscroller = new FlxScrollableArea(new FlxRect( 0, 0, FlxG.width, FlxG.height-50), new FlxRect( 0, 0, FlxG.width-40, _group.height), ResizeMode.NONE, 0, 100, -1, FlxColor.LIME, null, 100, true);
-		__boxscroller.bgColor = 0xFF000066;
-		FlxG.cameras.add( __boxscroller );
-		__boxscroller.antialiasing = true;
-		__boxscroller.pixelPerfectRender = true;
+		// a negative x value moves the scrollable area in the opposite direction.
+		if (__scrollable_area != null) FlxG.cameras.remove(__scrollable_area);
+		__scrollable_area = new FlxScrollableArea(new FlxRect( 0, 0, FlxG.width, FlxG.height-50), new FlxRect( 0, 0, FlxG.width-40, _group.height), ResizeMode.NONE, 0, 100, -1, FlxColor.LIME, null, 100, true);
+		__scrollable_area.bgColor = 0xFF000066;
+		FlxG.cameras.add( __scrollable_area );
+		__scrollable_area.antialiasing = true;
+		__scrollable_area.pixelPerfectRender = true;
 		
 		//-----------------------------
 		// none scrollable background behind title.
-		var background = new FlxSprite(0, 0);
-		background.makeGraphic(FlxG.width, 200, 0xFF220000);
-		background.setPosition(0, 0);
-		background.scrollFactor.set(0, 0);
-		add(background);
-		
+		_title_background = new FlxSprite(0, 0);
+		_title_background.makeGraphic(FlxG.width, 55, Reg._background_header_title_color); 
+		_title_background.scrollFactor.set(0, 0);
+		add(_title_background);
+				
 		add(_title);
 		
 		drawRewardIconsAndText();
@@ -385,12 +387,12 @@ class DailyQuests extends FlxGroup
 			_group = null;
 		}
 		
-		if (__boxscroller != null)
+		if (__scrollable_area != null)
 		{
-			__boxscroller.visible = false;			
-			cameras.remove(__boxscroller);
-			__boxscroller.destroy();
-			__boxscroller = null;
+			__scrollable_area.visible = false;			
+			cameras.remove(__scrollable_area);
+			__scrollable_area.destroy();
+			__scrollable_area = null;
 		}
 		
 		super.destroy();
@@ -406,23 +408,23 @@ class DailyQuests extends FlxGroup
 		
 		if (_ticks < 5) _ticks += 1;
 		
-		// if at SceneMenu then set __boxScroller active to false so that a mouse click at SceneMenu cannot trigger a button click at __boxScroller.
+		// if at SceneMenu then set __scrollable_area active to false so that a mouse click at SceneMenu cannot trigger a button click at __scrollable_area.
 		if (_ticks >= 5 && _group != null && Reg.__menu_bar != null)
 		{
 			if (FlxG.mouse.y >= FlxG.height - 50)
 			{
 				_group.active = false;
-				__boxscroller._verticalScrollbar.active = false;
-				__boxscroller._horizontalScrollbar.active = false;
-				__boxscroller.active = false;
+				__scrollable_area._verticalScrollbar.active = false;
+				__scrollable_area._horizontalScrollbar.active = false;
+				__scrollable_area.active = false;
 			}
 					
 			else
 			{
 				_group.active = true;
-				__boxscroller.active = true;
-				__boxscroller._verticalScrollbar.active = true;
-				__boxscroller._horizontalScrollbar.active = true;
+				__scrollable_area.active = true;
+				__scrollable_area._verticalScrollbar.active = true;
+				__scrollable_area._horizontalScrollbar.active = true;
 			}
 		}
 		

@@ -193,10 +193,10 @@ class Reg2 extends FlxGroup
 	/******************************
 	 * while scrolling the page, this stops a sound from firing when mouse goes overtop of a button or image. the reason for a sound is that some buttons or images only need a mouse press not a release and when scrolling the page, a mouse press is used.
 	 */
-	public static var _boxScroller_is_scrolling = false;
+	public static var _scrollable_area_is_scrolling = false;
 	
 	/******************************
-	 * this is used at BoxScroller. each time a button is clicked at the lobby, this value is plus 1. at the ButtonGeneralNetworkYes.hx class when alpha is set to 1 then this is minus 1. the boxScroller will not scroll unless this value is 0.
+	 * this is used at scrollable area. each time a button is clicked at the lobby, this value is plus 1. at the ButtonGeneralNetworkYes.hx class when alpha is set to 1 then this is minus 1. the scrollable area will not scroll unless this value is 0.
 	 */
 	public static var _lobby_button_alpha:Float = 0.3;
 	
@@ -226,7 +226,7 @@ class Reg2 extends FlxGroup
 	{
 		resetMessageBox();
 		
-		_boxScroller_is_scrolling = false;
+		_scrollable_area_is_scrolling = false;
 		_message_box_just_closed = false;
 		_offline_cpu_host_name2 = "";
 		_offline_cpu_host_name3 = "";
@@ -240,7 +240,7 @@ class Reg2 extends FlxGroup
 	
 	public static function resetMessageBox():Void
 	{
-		_messageBox_x = 360;
+		_messageBox_x = 370;
 		_messageBox_y = 242;
 		_dragBox_x = 8;
 		_dragBox_y = 17;

@@ -19,7 +19,7 @@
 package;
 
 /**
- * lobby boxScroller data, such as, room state, room game. 
+ * lobby scrollable area data, such as, room state, room game. 
  * @author kboardgames.com
  */
 class SceneLobbyGameTitleText extends FlxText
@@ -42,7 +42,7 @@ class SceneLobbyGameTitleText extends FlxText
 	
 	override public function update(elapsed:Float):Void 
 	{
-		// this code is needed so that it refreshes the lobby boxScroller data without new the text.
+		// this code is needed so that it refreshes the lobby scrollable area data without new the text.
 		for (i in 0...27)
 		{			
 			if (i == _id) 

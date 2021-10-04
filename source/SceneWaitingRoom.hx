@@ -65,7 +65,7 @@ class SceneWaitingRoom extends FlxState
 	
 	// background underneath the stats.
 	private var bodyBg:FlxSprite;
-	public var __boxscroller:FlxScrollableArea;
+	public var __scrollable_area:FlxScrollableArea;
 	
 	/******************************
 	 * scene color
@@ -161,9 +161,9 @@ class SceneWaitingRoom extends FlxState
 	public function initialize():Void
 	{
 		Reg._at_waiting_room = true;
-		boxScroller();
+		scrollable_area();
 		
-		__online_players_list._title_background.color = _color;
+		__online_players_list._title_background_large.color = _color;
 		bodyBg.color = _color;
 		
 		if (RegTypedef._dataTournaments._move_piece == false)
@@ -175,11 +175,14 @@ class SceneWaitingRoom extends FlxState
 		var _gameName = RegFunctions.gameName(RegTypedef._dataMisc._roomGameIds[RegTypedef._dataMisc._room]);
 		RegTypedef._dataPlayers._gameName = _gameName;
 		
+		__online_players_list._title_background.makeGraphic(FlxG.width, 55, Reg._background_header_title_color); 
+		__online_players_list._title_background.scrollFactor.set(1,0);
+		__online_players_list._title_background.visible = true;
+		
 		__online_players_list._title.text = "Room " + Std.string(RegTypedef._dataMisc._room ) + " - " + _gameName + " ";
 		__online_players_list._title.visible = true;
-		__online_players_list._title.x = ((FlxG.width  - 360) / 2) - (__online_players_list._title.textField.textWidth / 2); // 360 = chatter width.
-		if (RegCustom._chat_when_at_room_enabled[Reg._tn] == false)
-			__online_players_list._title.screenCenter(X);
+		__online_players_list._title.setFormat(Reg._fontDefault, 50, FlxColor.YELLOW);
+		__online_players_list._title.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 3);
 		
 		
 		// computer resources are at a maximum when populating the user online list. clicking these buttons at that time would not trigger an event. so hide them until all fields are populated.
@@ -211,31 +214,31 @@ class SceneWaitingRoom extends FlxState
 		{
 			__game_chatter = new GameChatter(3);
 			__game_chatter.visible = false;
-			GameChatter.__boxscroller3.visible = false;
-			GameChatter.__boxscroller3.active = false;
+			GameChatter.__scrollable_area3.visible = false;
+			GameChatter.__scrollable_area3.active = false;
 			GameChatter._groupChatterScroller.x = 0; // value of 360 work with below var to hide,
 			add(__game_chatter);
 		}
 	}
 		
-	public function boxScroller():Void
+	public function scrollable_area():Void
 	{
 		if (RegCustom._chat_when_at_room_enabled[Reg._tn] == true)
 		{
 			// make a scrollbar-enabled camera for it (a FlxScrollableArea)	
-			if (__boxscroller != null) FlxG.cameras.remove(__boxscroller);
-			__boxscroller = new FlxScrollableArea( new FlxRect(0, 0, 1390-360, FlxG.height - 50), new FlxRect(0, 0, 1390, 21000), ResizeMode.NONE, 0, 100, -1, FlxColor.LIME, null, 0);	
+			if (__scrollable_area != null) FlxG.cameras.remove(__scrollable_area);
+			__scrollable_area = new FlxScrollableArea( new FlxRect(0, 0, 1390-360, FlxG.height - 50), new FlxRect(0, 0, 1390, 21000), ResizeMode.NONE, 0, 100, -1, FlxColor.LIME, null, 0);	
 		}
 		
 		else
 		{
-			if (__boxscroller != null) FlxG.cameras.remove(__boxscroller);
-			__boxscroller = new FlxScrollableArea( new FlxRect(0, 0, 1400, FlxG.height - 50), new FlxRect(0, 0, 1400, 21000), ResizeMode.FIT_WIDTH, 0, 100, -1, FlxColor.LIME, null, 0);	
+			if (__scrollable_area != null) FlxG.cameras.remove(__scrollable_area);
+			__scrollable_area = new FlxScrollableArea( new FlxRect(0, 0, 1400, FlxG.height - 50), new FlxRect(0, 0, 1400, 21000), ResizeMode.FIT_WIDTH, 0, 100, -1, FlxColor.LIME, null, 0);	
 		}
 	
-		FlxG.cameras.add( __boxscroller );
-		__boxscroller.antialiasing = true;
-		__boxscroller.pixelPerfectRender = true;
+		FlxG.cameras.add( __scrollable_area );
+		__scrollable_area.antialiasing = true;
+		__scrollable_area.pixelPerfectRender = true;
 	}
 	
 	public function addRemovePlayerCheck():Void
@@ -432,8 +435,8 @@ class SceneWaitingRoom extends FlxState
 			haxe.Timer.delay(function (){}, Reg2._event_sleep);
 			
 			
-			__boxscroller.visible = false;
-			__boxscroller.active = false;
+			__scrollable_area.visible = false;
+			__scrollable_area.active = false;
 			
 			Reg._totalPlayersInRoom = RegTypedef._dataMisc._roomPlayerLimit[RegTypedef._dataMisc._room] - 1;
 			
@@ -470,8 +473,8 @@ class SceneWaitingRoom extends FlxState
 			Reg._buttonCodeValues = "";
 			Reg._yesNoKeyPressValueAtMessage = 0;
 			
-			__boxscroller.visible = false;
-			__boxscroller.active = false;
+			__scrollable_area.visible = false;
+			__scrollable_area.active = false;
 				
 			
 			PlayState.clientSocket.send("Lesser RoomState Value", RegTypedef._dataMisc);
@@ -520,11 +523,11 @@ class SceneWaitingRoom extends FlxState
 		
 	override public function destroy()
 	{
-		if (__boxscroller != null)
+		if (__scrollable_area != null)
 		{
-			cameras.remove( __boxscroller );
-			__boxscroller.destroy();			
-			__boxscroller = null;
+			cameras.remove( __scrollable_area );
+			__scrollable_area.destroy();			
+			__scrollable_area = null;
 		}
 		
 		super.destroy();

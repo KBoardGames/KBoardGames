@@ -36,10 +36,11 @@ class MenuConfigurationsOutput extends FlxGroup
 	/******************************
 	 * An area of the screen that has automatic scrollbars, if needed.
 	 */
-	public var __boxscroller:FlxScrollableArea;	
+	public var __scrollable_area:FlxScrollableArea;	
 	public var _bg_color:Int = 0;
 	
 	public var _title:FlxText; // title of a scene.
+	private var _title_background:FlxSprite;
 	
 	// theme menu.
 	private var _button_theme_minus:ButtonGeneralNetworkNo;
@@ -49,7 +50,7 @@ class MenuConfigurationsOutput extends FlxGroup
 	/******************************
 	 * this is the "Configuration Menu: " for the title text that a scene can add to. when clicking a button at the SceneMenu, the scene name will append to this var. for example, "Configuration Menu: Avatars.".
 	 */
-	private var _text_for_title:String = "Configuration Menu: ";
+	private var _text_for_title:String = "Configuration: ";
 	
 	public var __menu_configurations_general:MenuConfigurationsGeneral;
 	public var __menu_configurations_profile:MenuConfigurationsProfile;
@@ -69,20 +70,22 @@ class MenuConfigurationsOutput extends FlxGroup
 		RegFunctions._gameMenu = new FlxSave(); // initialize		
 		RegFunctions._gameMenu.bind("ConfigurationsMenu"); // bind to the named save slot.
 		
-		_title = new FlxText(15, 0, 0, _text_for_title + "General");
-		_title.setFormat(Reg._fontDefault, 30, FlxColor.ORANGE);
-		_title.scrollFactor.set(0, 0);
+		_title = new FlxText(15, 4, 0, _text_for_title + "General");
+		_title.setFormat(Reg._fontDefault, 50, FlxColor.YELLOW);
+		_title.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 3);
+		_title.scrollFactor.set(0,0);
+		_title.visible = true;
 				
 		initialize();
 		
-		// a negative x value moves the boxScroller in the opposite direction.
-		if (__boxscroller != null) FlxG.cameras.remove(__boxscroller);
-		__boxscroller = new FlxScrollableArea(new FlxRect( 0, 0, FlxG.width, FlxG.height - 50), __menu_configurations_profile._group.getHitbox(), ResizeMode.NONE, 0, 100, -1, FlxColor.LIME, null, 100, true);		
+		// a negative x value moves the scrollable area in the opposite direction.
+		if (__scrollable_area != null) FlxG.cameras.remove(__scrollable_area);
+		__scrollable_area = new FlxScrollableArea(new FlxRect( 0, 0, FlxG.width, FlxG.height - 50), __menu_configurations_profile._group.getHitbox(), ResizeMode.NONE, 0, 100, -1, FlxColor.LIME, null, 100, true);		
 		_bg_color = FlxG.random.int(1, 360);
-		__boxscroller.bgColor = FlxColor.fromHSB(_bg_color, 0.8, RegCustom._background_brightness[Reg._tn]);
-		FlxG.cameras.add( __boxscroller );
-		__boxscroller.antialiasing = true;
-		__boxscroller.pixelPerfectRender = true;
+		__scrollable_area.bgColor = FlxColor.fromHSB(_bg_color, 0.8, RegCustom._background_brightness[Reg._tn]);
+		FlxG.cameras.add( __scrollable_area );
+		__scrollable_area.antialiasing = true;
+		__scrollable_area.pixelPerfectRender = true;
 		
 		//----------------------------
 		__menu_bar = new MenuBar(true);
@@ -101,16 +104,17 @@ class MenuConfigurationsOutput extends FlxGroup
 		
 		//-----------------------------
 		// none scrollable background behind title.
-		var background = new FlxSprite(0, 0);
-		background.makeGraphic(FlxG.width, 50, 0xFF000000);
-		background.setPosition(0, 0);
-		background.scrollFactor.set(0, 0);
-		add(background);	
+		_title_background = new FlxSprite(0, 0);
+		_title_background.makeGraphic(FlxG.width, 55, Reg._background_header_title_color); 
+		_title_background.scrollFactor.set(0,0);
+		add(_title_background);
 		
 		add(_title);		
 		
 		theme_menu();
 		button_theme_should_hide();
+		
+		
 	}
 	
 	public function initialize():Void
@@ -195,10 +199,15 @@ class MenuConfigurationsOutput extends FlxGroup
 		__menu_configurations_games._group.setPosition(-5000, 0);
 		__menu_configurations_games.active = false;
 		
-		__boxscroller.content = __menu_configurations_profile._group.getHitbox();
-		__boxscroller._verticalScrollbar._content_height = __menu_configurations_profile._group.height;
-		__boxscroller.scroll.y = 0; // bring the scrollbar back to the top.
-		__boxscroller._verticalScrollbar._stale = true; // redraw the bar.
+		__scrollable_area.content = __menu_configurations_profile._group.getHitbox();
+		__scrollable_area._verticalScrollbar._content_height = __menu_configurations_profile._group.height;
+		__scrollable_area.scroll.y = 0; // bring the scrollbar back to the top.
+		__scrollable_area._verticalScrollbar._stale = true; // redraw the bar.
+		
+		// when using __scrollable_area we need to put the camera off screen so that the normal FlxStage buttons do not fire when the __scrollable_area y value is offset. So if the __scrollable_area is y offset by 300, the FlxState underneath will still fire the buttons that were added to the stage at the same FlxState y values.
+		__menu_configurations_profile._group.y = 500;
+		__scrollable_area.content.y = 500;
+		__scrollable_area.scroll.y = 500;
 	}
 	
 	/******************************
@@ -229,11 +238,51 @@ class MenuConfigurationsOutput extends FlxGroup
 		__menu_configurations_profile._group.setPosition(-5000, 0);
 		__menu_configurations_profile.active = false;
 		
-		__boxscroller.content = __menu_configurations_general._group.getHitbox();
-		__boxscroller._verticalScrollbar._content_height = __menu_configurations_general._group.height;
-		__boxscroller.scroll.y = 0; // bring the scrollbar back to the top.
-		__boxscroller._verticalScrollbar._stale = true; // redraw the bar.
+		__scrollable_area.content = __menu_configurations_general._group.getHitbox();
+		__scrollable_area._verticalScrollbar._content_height = __menu_configurations_general._group.height;
+		__scrollable_area.scroll.y = 0; // bring the scrollbar back to the top.
+		__scrollable_area._verticalScrollbar._stale = true; // redraw the bar.
 		
+		// when using __scrollable_area we need to put the camera off screen so that the normal FlxStage buttons do not fire when the __scrollable_area y value is offset. So if the __scrollable_area is y offset by 300, the FlxState underneath will still fire the buttons that were added to the stage at the same FlxState y values.
+		__menu_configurations_general._group.y = 500;
+		__scrollable_area.content.y = 500;
+		__scrollable_area.scroll.y = 500;
+	}
+	
+	public function buttonGames():Void
+	{
+		_title.text = _text_for_title + "Games.";
+		
+		buttonToggle();
+		
+		if (_button_games != null)
+		{
+			_button_games.has_toggle = true;
+			_button_games.set_toggled(true);	
+		}
+		
+		__menu_configurations_games.active = true;
+		__menu_configurations_games._group.active = true;
+		__menu_configurations_games._group.setPosition(0, 0);
+		__menu_configurations_games._group.visible = true;
+		
+		__menu_configurations_general.active = true;
+		__menu_configurations_general._group.setPosition( -5000, 0);
+		__menu_configurations_general.active = false;
+		
+		__menu_configurations_profile.active = true;
+		__menu_configurations_profile._group.setPosition(-5000, 0);
+		__menu_configurations_profile.active = false;
+				
+		__scrollable_area.content = __menu_configurations_games._group.getHitbox();
+		__scrollable_area._verticalScrollbar._content_height = __menu_configurations_games._group.height;
+		__scrollable_area.scroll.y = 0; // bring the scrollbar back to the top.
+		__scrollable_area._verticalScrollbar._stale = true; // redraw the bar.
+		
+		// when using __scrollable_area we need to put the camera off screen so that the normal FlxStage buttons do not fire when the __scrollable_area y value is offset. So if the __scrollable_area is y offset by 300, the FlxState underneath will still fire the buttons that were added to the stage at the same FlxState y values.
+		__menu_configurations_games._group.y = 500;
+		__scrollable_area.content.y = 500;
+		__scrollable_area.scroll.y = 500;
 	}
 	
 	private function theme_menu():Void
@@ -248,7 +297,7 @@ class MenuConfigurationsOutput extends FlxGroup
 			}
 		}
 				
-		var _text = new FlxText(870, 5, 0, "Theme", Reg._font_size);
+		var _text = new FlxText(870, 8, 0, "Theme", Reg._font_size);
 		_text.font = Reg._fontDefault;
 		_text.scrollFactor.set(0, 0);
 		add(_text);
@@ -362,38 +411,6 @@ class MenuConfigurationsOutput extends FlxGroup
 		}
 	}
 	
-	public function buttonGames():Void
-	{
-		_title.text = _text_for_title + "Games.";
-		
-		buttonToggle();
-		
-		if (_button_games != null)
-		{
-			_button_games.has_toggle = true;
-			_button_games.set_toggled(true);	
-		}
-		
-		__menu_configurations_games.active = true;
-		__menu_configurations_games._group.active = true;
-		__menu_configurations_games._group.setPosition(0, 0);
-		__menu_configurations_games._group.visible = true;
-		
-		__menu_configurations_general.active = true;
-		__menu_configurations_general._group.setPosition( -5000, 0);
-		__menu_configurations_general.active = false;
-		
-		__menu_configurations_profile.active = true;
-		__menu_configurations_profile._group.setPosition(-5000, 0);
-		__menu_configurations_profile.active = false;
-				
-		__boxscroller.content = __menu_configurations_games._group.getHitbox();
-		__boxscroller._verticalScrollbar._content_height = __menu_configurations_games._group.height;
-		__boxscroller.scroll.y = 0; // bring the scrollbar back to the top.
-		__boxscroller._verticalScrollbar._stale = true; // redraw the bar.
-	}
-	
-	
 	private function sceneMenuButtons():Void
 	{
 		if (_save != null) remove(_save); 
@@ -433,21 +450,40 @@ class MenuConfigurationsOutput extends FlxGroup
 	private function saveConfig():Void
 	{
 		if (__menu_configurations_profile._button_p1.has_toggle == true)
+		{
 			__menu_configurations_profile._image_profile_avatar.loadGraphic("vendor/multiavatar/" + RegCustom._profile_avatar_number1[Reg._tn]);
+		
+			if (RegCustom._profile_username_p1[Reg._tn] == "")
+			{
+				RegCustom._profile_username_p1[Reg._tn] = "Guest 1";
+				__menu_configurations_profile._usernameInput.text = "Guest 1";
+			}
+		}
 		else
+		{
 			__menu_configurations_profile._image_profile_avatar.loadGraphic("vendor/multiavatar/" + RegCustom._profile_avatar_number2[Reg._tn]);
+		
+			if (RegCustom._profile_username_p2[Reg._tn] == "")
+			{
+				RegCustom._profile_username_p2[Reg._tn] = "Guest 2";
+				__menu_configurations_profile._usernameInput.text = "Guest 2";
+			}
+		}
+		
+		// reset theme vars back to default if this value is zero.
+		if (Reg._tn == 0) RegCustom.resetConfigurationVars2;
 		
 		RegFunctions.saveConfig();
 	}
 	
 	override public function update(elapsed:Float):Void
 	{
-		// send the offset of the boxScroller to the button class so that when scrolling the boxScroller, the buttons will not be fired at an incorrect scene location. for example, without this offset, when scrolling to the right about 100 pixels worth, the button could fire at 100 pixels to the right of the button's far right location.
-		ButtonGeneralNetworkNo._scrollarea_offset_x = __boxscroller.scroll.x;
-		ButtonGeneralNetworkNo._scrollarea_offset_y = __boxscroller.scroll.y;
-		ButtonToggleFlxState._scrollarea_offset_x = __boxscroller.scroll.x;
-		ButtonToggleFlxState._scrollarea_offset_y = __boxscroller.scroll.y;
-		
+		// send the offset of the scrollable area to the button class so that when scrolling the scrollable area, the buttons will not be fired at an incorrect scene location. for example, without this offset, when scrolling to the right about 100 pixels worth, the button could fire at 100 pixels to the right of the button's far right location.
+		ButtonGeneralNetworkNo._scrollarea_offset_x = __scrollable_area.scroll.x;
+		ButtonGeneralNetworkNo._scrollarea_offset_y = __scrollable_area.scroll.y - 500;
+		ButtonToggleFlxState._scrollarea_offset_x = __scrollable_area.scroll.x;
+		ButtonToggleFlxState._scrollarea_offset_y = __scrollable_area.scroll.y - 500;
+				
 		if (RegTriggers._config_menu_save_notice == true)
 		{
 			RegTriggers._config_menu_save_notice = false;

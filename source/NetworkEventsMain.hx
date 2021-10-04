@@ -482,16 +482,16 @@ class NetworkEventsMain extends FlxState
 				
 				else if (Reg._gameMessage == "Check" && Reg._chessCheckBypass == false) 
 				{
-					GameHistoryAndNotations._messageForBoxScroller.text = GameHistoryAndNotations._messageForBoxScroller.text.substr(0, GameHistoryAndNotations._messageForBoxScroller.text.length);
+					GameHistoryAndNotations._message_for_scrollable_area.text = GameHistoryAndNotations._message_for_scrollable_area.text.substr(0, GameHistoryAndNotations._message_for_scrollable_area.text.length);
 					
-					GameHistoryAndNotations._messageForBoxScroller.text = GameHistoryAndNotations._messageForBoxScroller.text + "+";
+					GameHistoryAndNotations._message_for_scrollable_area.text = GameHistoryAndNotations._message_for_scrollable_area.text + "+";
 				}
 				
 				if (Reg._gameMessage == "Checkmate" && Reg._chessCheckBypass == false) 
 				{
-					GameHistoryAndNotations._messageForBoxScroller.text = GameHistoryAndNotations._messageForBoxScroller.text.substr(0, GameHistoryAndNotations._messageForBoxScroller.text.length);
+					GameHistoryAndNotations._message_for_scrollable_area.text = GameHistoryAndNotations._message_for_scrollable_area.text.substr(0, GameHistoryAndNotations._message_for_scrollable_area.text.length);
 					
-					GameHistoryAndNotations._messageForBoxScroller.text = GameHistoryAndNotations._messageForBoxScroller.text + "++";
+					GameHistoryAndNotations._message_for_scrollable_area.text = GameHistoryAndNotations._message_for_scrollable_area.text + "++";
 				}
 								
 				if (Reg._gameMessage != "") 
@@ -1406,8 +1406,8 @@ class NetworkEventsMain extends FlxState
 			{
 				if (RegTypedef._dataMisc._userLocation == 0)
 				{
-					// boxScroller at GameLobby needs to be inactive so that when invite message box is displayed, player cannot create a room which when player cancels the room creation, the player will be stuck with only a black screen.
-					__scene_lobby.group.active = false;
+					// scrollable area at GameLobby needs to be inactive so that when invite message box is displayed, player cannot create a room which when player cancels the room creation, the player will be stuck with only a black screen.
+					__scene_lobby._group_scrollable_area.active = false;
 					
 					Reg._messageId = 2003;
 					Reg._buttonCodeValues = "l1000";
@@ -1457,8 +1457,8 @@ class NetworkEventsMain extends FlxState
 				
 				RegTypedef._dataMisc._userLocation = 3;			
 				
-				__scene_waiting_room.__boxscroller.visible = false;
-				__scene_waiting_room.__boxscroller.active = false;
+				__scene_waiting_room.__scrollable_area.visible = false;
+				__scene_waiting_room.__scrollable_area.active = false;
 				
 				Reg._createGameRoom = true;
 								
@@ -1906,8 +1906,8 @@ class NetworkEventsMain extends FlxState
 				Reg._playerNotMoving = 0;
 			}
 			
-			RegTypedef._dataPlayers._moveTimeRemaining[1] = RegCustom._time_remaining_for_game[1] = Std.parseInt(_data._time_remaining_player2);
-			RegTypedef._dataPlayers._moveTimeRemaining[0] = RegCustom._time_remaining_for_game[0] = Std.parseInt(_data._time_remaining_player1);
+			RegTypedef._dataPlayers._moveTimeRemaining[1] = RegCustom._time_remaining_for_game[Reg._tn][1] = Std.parseInt(_data._time_remaining_player2);
+			RegTypedef._dataPlayers._moveTimeRemaining[0] = RegCustom._time_remaining_for_game[Reg._tn][0] = Std.parseInt(_data._time_remaining_player1);
 			
 			Reg._textTimeRemainingToMove1 = PlayerTimeRemainingMove.formatTime(RegTypedef._dataPlayers._moveTimeRemaining[0]);
 			Reg._textTimeRemainingToMove2 = PlayerTimeRemainingMove.formatTime(RegTypedef._dataPlayers._moveTimeRemaining[1]);
@@ -2593,7 +2593,7 @@ class NetworkEventsMain extends FlxState
 					Reg._buttonCodeValues = "r1004";
 					
 					Reg._displayActionMessage = true;
-					__scene_waiting_room.__boxscroller.visible = false;
+					__scene_waiting_room.__scrollable_area.visible = false;
 					__scene_waiting_room.visible = false;
 				} 
 				else 
@@ -2605,7 +2605,7 @@ class NetworkEventsMain extends FlxState
 					if (RegTypedef._dataMisc._userLocation == 2 && Reg._at_create_room == false)
 					{
 						__scene_waiting_room.mainButtonsAndTexts();
-						__scene_waiting_room.__boxscroller.visible = true;
+						__scene_waiting_room.__scrollable_area.visible = true;
 						__scene_waiting_room.visible = true;
 					}
 				}	

@@ -19,6 +19,7 @@
 // If the game crashes without an error then copy the music files to the bin folder.
 package;
 
+import flixel.math.FlxPoint;
 import openfl.media.Sound;
 import openfl.media.SoundChannel;
 import openfl.media.SoundTransform;
@@ -29,6 +30,7 @@ import openfl.media.SoundTransform;
  */
 class MenuState extends FlxState
 {
+	public var _title_background:FlxSprite;
 	public var _title:FlxText;
 	public var _title_sub:FlxText;
 		
@@ -119,6 +121,7 @@ class MenuState extends FlxState
 	{
 		persistentDraw = true;
 		persistentUpdate = false;
+		Reg._at_game_room = false;
 		
 		_is_active = true;
 		_ip = Reg._ipAddress;
@@ -133,8 +136,8 @@ class MenuState extends FlxState
 		
 		// turn of chat for guests. we don't want guests swearing at everyone.
 		#if html5
-			RegCustom._turn_off_chat_when_at_lobby[Reg._tn] = true;
-			RegCustom._turn_off_chat_when_at_room[Reg._tn] = true;
+			RegCustom._chat_when_at_lobby_enabled[Reg._tn] = false;
+			RegCustom._chat_when_at_room_enabled[Reg._tn] = false;
 			RegCustom._timer_enabled[Reg._tn] = false;
 			
 			// 886 = current first icon x position (multiplaer icon) for neko/cpp, times 79 which is 64 pixels for the icon plus 15 more for the space between the icons. 64 is the icon width / 2.
@@ -152,14 +155,18 @@ class MenuState extends FlxState
 			//------------------------------
 			RegFunctions._gameMenu = new FlxSave(); // initialize		
 			RegFunctions._gameMenu.bind("ConfigurationsMenu"); // bind to the named save slot.
-		
+			
 			// we use true here so that some items are loaded. a value of false is the default for this function so that so items are only loaded when a condition is met.
-			RegFunctions.loadConfig(true);
 			RegCustom.resetConfigurationVars();
+			RegFunctions.loadConfig(true);
+			if (Reg._tn == 0) RegCustom.resetConfigurationVars2();			
+			
 			RegFunctions.themes_recursive_file_loop();
 			
 			RegCustom.assign_colors();
 		
+		#else
+			RegCustom.resetConfigurationVars();		
 		#end
 		
 		Reg.resetRegVarsOnce(); 
@@ -167,6 +174,7 @@ class MenuState extends FlxState
 		Reg2.resetRegVarsOnce();
 		Reg2.resetRegVars();
 		RegCustom.resetRegVars();
+		
 		ChessECO.ECOlists();
 			
 		RegCustom._chess_skill_level_online = RegCustom._chess_skill_level_offline;
@@ -253,6 +261,20 @@ class MenuState extends FlxState
 	{
 		if (_client_online == true)
 		{
+			var _eventScheduler_bg_border = new FlxSprite(0, 0);
+			_eventScheduler_bg_border.makeGraphic(351 + 16, 118 + 16, 0xff333333);
+			_eventScheduler_bg_border.scrollFactor.set(0, 0);	
+			_eventScheduler_bg_border.scale.set(1.05, 1.05);
+			_eventScheduler_bg_border.setPosition(200 - 8, 440 - 8 + _offset_icons_and__event_scheduler_y);
+			add(_eventScheduler_bg_border);
+			
+			var _eventScheduler_bg = new FlxSprite(0, 0);
+			_eventScheduler_bg.makeGraphic(351 + 12, 118 + 12, 0xff000005);
+			_eventScheduler_bg.scrollFactor.set(0, 0);	
+			_eventScheduler_bg.scale.set(1.05, 1.05);
+			_eventScheduler_bg.setPosition(200 - 6, 440 - 6 + _offset_icons_and__event_scheduler_y);
+			add(_eventScheduler_bg);
+			
 			_eventScheduler = new FlxSprite(0, 0);
 			_eventScheduler.loadGraphic("assets/images/eventScheduler.png", false);
 			_eventScheduler.scrollFactor.set(0, 0);	
@@ -439,7 +461,7 @@ class MenuState extends FlxState
 		// gameboard image.
 		var _game_board_image = new FlxSprite(0,0);
 		_game_board_image.loadGraphic("assets/images/background.jpg", false);
-		_game_board_image.alpha = 0.17;
+		_game_board_image.alpha = 0.14;
 		_game_board_image.scrollFactor.set(0, 0);
 		_game_board_image.updateHitbox();
 		add(_game_board_image);
@@ -537,12 +559,12 @@ class MenuState extends FlxState
 	public function tryToConnect():Void
 	{
 		#if html5
-			RegCustom._profile_username_p1 = "Guest";
+			RegCustom._profile_username_p1[Reg._tn] = "Guest";
 		
 		#end
 		
-		if (RegCustom._profile_username_p1 == "" 
-		||  RegCustom._profile_username_p1 == "Guest 1") 
+		if (RegCustom._profile_username_p1[Reg._tn] == "" 
+		||  RegCustom._profile_username_p1[Reg._tn] == "Guest 1") 
 		{
 			goingOnlineIsUsernameSet();
 		}
@@ -1031,17 +1053,30 @@ class MenuState extends FlxState
 		
 		_group_sprite.splice(0, _group_sprite.length);
 		
-		// add title here by increase the max number then go to titleMenu then go to the bottom of update(). 
+		var _sprite_bg_border = new FlxSprite(20, 120);
+		_sprite_bg_border.makeGraphic(272 + 47, 144 + 16, 0xff333333);
+		_sprite_bg_border.scrollFactor.set(0, 0);
+		_sprite_bg_border.setPosition(_icon_offset_x - 11, 440 + _offset_icons_and__event_scheduler_y - 11);
+		add(_sprite_bg_border);
+		
+		// 15 is the space between icons. 43 is the total space.
+		var _sprite_bg = new FlxSprite(20, 120);
+		_sprite_bg.makeGraphic(272 + 43, 141 + 15, 0xff000005);
+		_sprite_bg.scrollFactor.set(0, 0);
+		_sprite_bg.setPosition(_icon_offset_x - 9, 440 + _offset_icons_and__event_scheduler_y - 9);
+		add(_sprite_bg);	
+				
 		for (i in 0...6)
 		{
+			// add title here by increase the max number then go to titleMenu then go to the bottom of update(). 
 			// all gameboards images are stored in frames.
 			_sprite = new FlxSprite(20, 120);
 			_sprite.loadGraphic("assets/images/titleUnit.png", true, 64, 64);
 						
 			_sprite.scrollFactor.set(0, 0);
-			_sprite.visible = false;
+			//_sprite.visible = false;
 			_sprite.updateHitbox();
-			add(_sprite);			
+			add(_sprite);	
 			
 			// add this member to _group_sprite.			
 			_group_sprite.push(_sprite);
@@ -1056,7 +1091,7 @@ class MenuState extends FlxState
 				_x = - 4;
 			}
 			
-			_group_sprite[i].setPosition(_icon_offset_x + ((i + _x) * 79), 440 + _y + _offset_icons_and__event_scheduler_y);
+			_group_sprite[i].setPosition(_icon_offset_x - 2 + ((i + _x) * 79), 440 + _y - 2 + _offset_icons_and__event_scheduler_y);
 			_group_sprite[i].animation.add(Std.string(i), [i], 30, false);
 			_group_sprite[i].animation.play(Std.string(i));
 			_group_sprite[i].visible = true;
@@ -1071,14 +1106,14 @@ class MenuState extends FlxState
 		
 		// when clicking on a game image, this image has a border that highlighted it.
 		// all gameboards images are stored in frames.
-		_game_highlighted = new FlxSprite(_icon_offset_x, 440 + _offset_icons_and__event_scheduler_y);
+		_game_highlighted = new FlxSprite(_icon_offset_x - 2, 440 + _offset_icons_and__event_scheduler_y - 2);
 		
 		#if html5
 			// TODO sys.ssl certificate commands are needed so that html5 can connect to server.
-			_game_highlighted.x = _icon_offset_x + 79;
+			_game_highlighted.x = _icon_offset_x + 77;
 		#end
 		
-		_game_highlighted.loadGraphic("assets/images/titleUnitBorderHover.png", true, 64, 64); // height is the same value as width.
+		_game_highlighted.loadGraphic("assets/images/titleUnitBorderHover.png", true, 66, 66); // height is the same value as width.
 		_game_highlighted.scrollFactor.set(0, 0);
 		_game_highlighted.animation.add("play", [0, 1], 10, true);
 		_game_highlighted.animation.play("play");
@@ -1158,18 +1193,17 @@ class MenuState extends FlxState
 				add(_bot_zak);
 			}
 			
-			// add the none bot name as the last button from the configuration menu.
-			if (RegCustom._profile_username_p1 != ""
-			&&	RegCustom._profile_username_p1 != "Guest 1"
-			&&	RegCustom._profile_username_p1 != "Guest 2"
-			&&	RegCustom._profile_username_p1 != "Bot ben".toLowerCase()
-			&&	RegCustom._profile_username_p1 != "Bot tina".toLowerCase()
-			&&	RegCustom._profile_username_p1 != "Bot piper".toLowerCase()
-			&&	RegCustom._profile_username_p1 != "Bot amy".toLowerCase()
-			&&	RegCustom._profile_username_p1 != "Bot zak".toLowerCase()
+			// add the none bot name as the last button displayed at this scene. the name is from the configuration menu. this list of names is only seen when application build is set to debug.
+			if (RegCustom._profile_username_p1[Reg._tn] != ""
+			&&	RegCustom._profile_username_p1[Reg._tn] != "Guest 2"
+			&&	RegCustom._profile_username_p1[Reg._tn] != "Bot ben".toLowerCase()
+			&&	RegCustom._profile_username_p1[Reg._tn] != "Bot tina".toLowerCase()
+			&&	RegCustom._profile_username_p1[Reg._tn] != "Bot piper".toLowerCase()
+			&&	RegCustom._profile_username_p1[Reg._tn] != "Bot amy".toLowerCase()
+			&&	RegCustom._profile_username_p1[Reg._tn] != "Bot zak".toLowerCase()
 			)
 			{
-				_profile_username_p1 = new ButtonUnique(750+90, 230, RegCustom._profile_username_p1, 150, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, profile_username_p1, RegCustom._button_color[Reg._tn], false, 1);
+				_profile_username_p1 = new ButtonUnique(750+90, 230, RegCustom._profile_username_p1[Reg._tn], 150, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, profile_username_p1, RegCustom._button_color[Reg._tn], false, 1);
 				_profile_username_p1.label.font = Reg._fontDefault;
 				add(_profile_username_p1);
 			}
@@ -1190,29 +1224,29 @@ class MenuState extends FlxState
 			
 			else
 			{
-				if (RegCustom._profile_username_p1 == "Bot ben".toLowerCase())
+				if (RegCustom._profile_username_p1[Reg._tn] == "Bot ben".toLowerCase())
 					botUseBenOnline();
 				
-				else if (RegCustom._profile_username_p1 == "Bot tina".toLowerCase())
+				else if (RegCustom._profile_username_p1[Reg._tn] == "Bot tina".toLowerCase())
 					botUseTinaOnline();
 				
-				else if (RegCustom._profile_username_p1 == "Bot piper".toLowerCase())
+				else if (RegCustom._profile_username_p1[Reg._tn] == "Bot piper".toLowerCase())
 					botUsePiperOnline();			
 				
-				else if (RegCustom._profile_username_p1 == "Bot amy".toLowerCase())
+				else if (RegCustom._profile_username_p1[Reg._tn] == "Bot amy".toLowerCase())
 					botUseAmyOnline();
 				
-				else if (RegCustom._profile_username_p1 == "Bot zak".toLowerCase())
+				else if (RegCustom._profile_username_p1[Reg._tn] == "Bot zak".toLowerCase())
 					botUseZakOnline();				
 				
-				else if (RegCustom._profile_username_p1 != ""
-				&&	RegCustom._profile_username_p1 != "Guest 1"
-				&&	RegCustom._profile_username_p1 != "Guest 2"
-				&&	RegCustom._profile_username_p1 != "Bot ben".toLowerCase()
-				&&	RegCustom._profile_username_p1 != "Bot tina".toLowerCase()
-				&&	RegCustom._profile_username_p1 != "Bot piper".toLowerCase()
-				&&	RegCustom._profile_username_p1 != "Bot amy".toLowerCase()
-				&&	RegCustom._profile_username_p1 != "Bot zak".toLowerCase()
+				else if (RegCustom._profile_username_p1[Reg._tn] != ""
+				&&	RegCustom._profile_username_p1[Reg._tn] != "Guest 1"
+				&&	RegCustom._profile_username_p1[Reg._tn] != "Guest 2"
+				&&	RegCustom._profile_username_p1[Reg._tn] != "Bot ben".toLowerCase()
+				&&	RegCustom._profile_username_p1[Reg._tn] != "Bot tina".toLowerCase()
+				&&	RegCustom._profile_username_p1[Reg._tn] != "Bot piper".toLowerCase()
+				&&	RegCustom._profile_username_p1[Reg._tn] != "Bot amy".toLowerCase()
+				&&	RegCustom._profile_username_p1[Reg._tn] != "Bot zak".toLowerCase()
 				) 
 					profile_username_p1();
 				
@@ -1237,7 +1271,7 @@ class MenuState extends FlxState
 		_bot_zak.has_toggle = false;
 		_bot_zak.set_toggled(false);
 		
-		if (RegCustom._profile_username_p1 != ""
+		if (RegCustom._profile_username_p1[Reg._tn] != ""
 		&&	_profile_username_p1 != null)
 		{
 			_profile_username_p1.has_toggle = false;
@@ -1304,7 +1338,7 @@ class MenuState extends FlxState
 	{
 		if (_profile_username_p1 != null)
 		{
-			RegTypedef._dataAccount._username = RegCustom._profile_username_p1;
+			RegTypedef._dataAccount._username = RegCustom._profile_username_p1[Reg._tn];
 			Reg2._menu_state_username_p1 = 5;
 			
 			bot_no_toggle();
@@ -1424,15 +1458,18 @@ class MenuState extends FlxState
 			Reg._hasUserConnectedToServer = false;
 			Reg._notation_output = true;
 			
-			// the title of the game.
-			_title = new FlxText(0, 0, 0, Reg._websiteNameTitle);
-			_title.setFormat(Reg._fontTitle, 69, FlxColor.YELLOW);
-			_title.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 3);
-			_title.scrollFactor.set();
-			_title.y = 25;
-			_title.screenCenter(X);
-			add(_title);
+			_title_background = new FlxSprite(0, 0);
+			_title_background.makeGraphic(FlxG.width, 55, Reg._background_header_title_color); 
+			_title_background.scrollFactor.set(0, 0);
+			add(_title_background);
 			
+			_title = new FlxText(15, 4, 0, Reg._websiteNameTitle);
+			_title.setFormat(Reg._fontDefault, 50, FlxColor.YELLOW);
+			_title.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 3);
+			_title.scrollFactor.set(0,0);
+			_title.visible = true;
+			add(_title);
+						
 			if (_client_online == false)
 			{
 				_title_sub = new FlxText(0, 0, 0, "Offline mode");
@@ -1574,7 +1611,7 @@ class MenuState extends FlxState
 						)
 						{
 							if (RegCustom._sound_enabled[Reg._tn] == true
-							&&  Reg2._boxScroller_is_scrolling == false)
+							&&  Reg2._scrollable_area_is_scrolling == false)
 								FlxG.sound.play("click", 1, false);
 						
 							#if !html5
@@ -1614,8 +1651,8 @@ class MenuState extends FlxState
 							_x = - 4;
 						}
 						
-						_group_sprite[i].setPosition(_icon_offset_x + ((i + _x) * 79), 440 + _y + _offset_icons_and__event_scheduler_y);
-						_game_highlighted.setPosition(_icon_offset_x + ((i + _x) * 79), 440 + _y + _offset_icons_and__event_scheduler_y);
+						_group_sprite[i].setPosition(_icon_offset_x - 2 + ((i + _x) * 79), 440 + _y - 2 + _offset_icons_and__event_scheduler_y);
+						_game_highlighted.setPosition(_icon_offset_x - 2 + ((i + _x) * 79), 440 + _y - 2 + _offset_icons_and__event_scheduler_y);
 						_game_highlighted.visible = true;
 							
 						if (i == 0) 
@@ -1638,8 +1675,8 @@ class MenuState extends FlxState
 			
 			// hide the gear configuration icon if true.
 			#if html5
-				_group_sprite[0].active = false;
-				_group_sprite[0].alpha = 0.25;
+				//_group_sprite[0].active = false;
+				//_group_sprite[0].alpha = 0.25;
 				
 				_group_sprite[2].active = false;
 				_group_sprite[2].alpha = 0.25;
@@ -1658,7 +1695,7 @@ class MenuState extends FlxState
 					&&	RegTriggers._buttons_set_not_active == false)
 					{
 						if (RegCustom._sound_enabled[Reg._tn] == true
-						&&  Reg2._boxScroller_is_scrolling == false)
+						&&  Reg2._scrollable_area_is_scrolling == false)
 							FlxG.sound.play("click", 1, false);
 					
 						_clicked = true;
@@ -1720,4 +1757,4 @@ class MenuState extends FlxState
 		#end
 		*/
 	}
-}
+}//

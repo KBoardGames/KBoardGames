@@ -141,14 +141,16 @@ class MenuBar extends FlxGroup
 		if (_at_chatter == false) 
 		{
 			_background = new FlxSprite(0, FlxG.height - 50);
-			_background.makeGraphic(FlxG.width, 50, Reg._menubar_color);
+			_background.makeGraphic(FlxG.width, 50, Reg._background_footer_menu_color);
+			
 		}
 		else 
 		{
 			_background = new FlxSprite(FlxG.width-373, FlxG.height - 50);
-			_background.makeGraphic(FlxG.width-373, 50, Reg._menubar_color);
+			_background.makeGraphic(FlxG.width-373, 50, Reg._background_footer_menu_color);
 		}
 		
+		_background.alpha = 1;
 		_background.scrollFactor.set(0, 0);	
 		add(_background);
 			
@@ -455,9 +457,9 @@ class MenuBar extends FlxGroup
 	{
 		Reg2._miscMenuIparameter = 0;
 		
-		if (GameChatter.__boxscroller2 != null)	GameChatter.__boxscroller2 = null;
-		if (GameChatter.__boxscroller3 != null)	GameChatter.__boxscroller3 = null;
-		if (GameChatter.__boxscroller4 != null)	GameChatter.__boxscroller4 = null;
+		if (GameChatter.__scrollable_area2 != null)	GameChatter.__scrollable_area2 = null;
+		if (GameChatter.__scrollable_area3 != null)	GameChatter.__scrollable_area3 = null;
+		if (GameChatter.__scrollable_area4 != null)	GameChatter.__scrollable_area4 = null;
 		
 		if (_from_menuState == false) PlayState.prepareToDisconnect(); //Reg._disconnectNow = true;
 		else FlxG.switchState(new MenuState());
@@ -485,10 +487,10 @@ class MenuBar extends FlxGroup
 			
 		if (__daily_quests != null)
 		{
-			if (__daily_quests.__boxscroller != null)
+			if (__daily_quests.__scrollable_area != null)
 			{
-				__daily_quests.__boxscroller.visible = false;
-				__daily_quests.__boxscroller.active = false;
+				__daily_quests.__scrollable_area.visible = false;
+				__daily_quests.__scrollable_area.active = false;
 			}	
 		}
 		
@@ -506,10 +508,10 @@ class MenuBar extends FlxGroup
 
 		if (__leaderboards != null)
 		{
-			if (__leaderboards.__boxscroller != null)
+			if (__leaderboards.__scrollable_area != null)
 			{
-				__leaderboards.__boxscroller.visible = false;
-				__leaderboards.__boxscroller.active = false;
+				__leaderboards.__scrollable_area.visible = false;
+				__leaderboards.__scrollable_area.active = false;
 				
 			}
 		}
@@ -638,11 +640,7 @@ class MenuBar extends FlxGroup
 		ButtonToggleHouse._id_selected = 1;
 		__house.active = true;			
 		__house.visible = true;
-		
-		//if (Reg._at_house == true)
-		//{
 		__house.optionsMakeActive();
-		
 		__house.activeFurnitureGetElements();
 		__house._houseDataLoaded = true;
 
@@ -650,10 +648,8 @@ class MenuBar extends FlxGroup
 		FlxG.mouse.enabled = true;
 		Reg2._lobby_button_alpha = 0.3;
 		//}
-
-		PlayState.__scene_lobby._t2.visible = false; // hide a lobby text that the house scrollbar would should.
 		
-		PlayState.__scene_lobby.setNotActiveForButtons();
+		PlayState.__scene_lobby.set_not_active_for_buttons();
 		__house.buttonToFurnitureGetMenu();
 	}
 	
@@ -664,8 +660,6 @@ class MenuBar extends FlxGroup
 	{
 		set_all_menu_bar_elements_not_active(); // reset buttons to false because just after closing a dialog box, that class will reset state of buttons back to active.
 		
-		PlayState.__scene_lobby._t2.visible = true;		
-		
 		if (__house.__house_foundation_put != null)
 		{
 			__house.__house_foundation_put.visible = false;
@@ -674,8 +668,8 @@ class MenuBar extends FlxGroup
 		
 		if (__house.__house_furniture_get != null)
 		{
-			__house.__house_furniture_get.__boxscroller.visible = false;
-			__house.__house_furniture_get.__boxscroller.active = false;
+			__house.__house_furniture_get.__scrollable_area.visible = false;
+			__house.__house_furniture_get.__scrollable_area.active = false;
 			__house.__house_furniture_get.visible = false;
 			__house.__house_furniture_get.active = false;		
 		}
@@ -690,8 +684,8 @@ class MenuBar extends FlxGroup
 		
 		if (__house.__house_furniture_put != null)
 		{
-			__house.__house_furniture_put.__boxscroller.visible = false;
-			__house.__house_furniture_put.__boxscroller.active = false;
+			__house.__house_furniture_put.__scrollable_area.visible = false;
+			__house.__house_furniture_put.__scrollable_area.active = false;
 			__house.__house_furniture_put.visible = false;
 			__house.__house_furniture_put.active = false;
 		}
@@ -699,7 +693,7 @@ class MenuBar extends FlxGroup
 		__house.visible = false;
 		__house.active = false;	
 		
-		if (RegTypedef._dataStatistics._chess_elo_rating > 0) PlayState.__scene_lobby.setActiveForButtons();
+		if (RegTypedef._dataStatistics._chess_elo_rating > 0) PlayState.__scene_lobby.set_active_for_buttons();
 		Reg._at_house = false;
 		
 		if (_tracker != null) remove(_tracker);
@@ -720,7 +714,7 @@ class MenuBar extends FlxGroup
 		{
 			Reg2._checked_for_new_account = true;
 			
-			PlayState.__scene_lobby.setNotActiveForButtons();
+			PlayState.__scene_lobby.set_not_active_for_buttons();
 			
 			if (__new_account != null)
 			{
@@ -868,7 +862,7 @@ class MenuBar extends FlxGroup
 		FlxG.mouse.enabled = true;
 		
 		Reg._at_leaderboards = true;
-		PlayState.__scene_lobby.setNotActiveForButtons();
+		PlayState.__scene_lobby.set_not_active_for_buttons();
 		
 		__leaderboards = new Leaderboards();		
 		add(__leaderboards);
@@ -888,9 +882,9 @@ class MenuBar extends FlxGroup
 		// this stop the clicking of this button when not at this buttons scene.
 		if (RegTypedef._dataMisc._room > 0) return; 
 		
-		PlayState.__scene_lobby.setNotActiveForButtons();
+		PlayState.__scene_lobby.set_not_active_for_buttons();
 		
-		// we call the stats here because when entering the stats _boxscroller that scene might not have got the stats data. sometimes we need to call an event twice, especially important data as this. 
+		// we call the stats here because when entering the stats _scrollable area that scene might not have got the stats data. sometimes we need to call an event twice, especially important data as this. 
 		Reg2._miscMenuIparameter = 0;
 		PlayState.clientSocket.send("Get Statistics All", RegTypedef._dataStatistics);
 		haxe.Timer.delay(function (){}, Reg2._event_sleep);
@@ -918,7 +912,7 @@ class MenuBar extends FlxGroup
 		FlxG.mouse.reset();
 		FlxG.mouse.enabled = true;
 		
-		PlayState.__scene_lobby.setNotActiveForButtons();
+		PlayState.__scene_lobby.set_not_active_for_buttons();
 		
 		if (__daily_quests != null)
 		{
@@ -957,7 +951,7 @@ class MenuBar extends FlxGroup
 		PlayState.clientSocket.send("Tournament Chess Standard 8 Get", RegTypedef._dataTournaments);
 		haxe.Timer.delay(function (){}, Reg2._event_sleep);
 		
-		PlayState.__scene_lobby.setNotActiveForButtons();
+		PlayState.__scene_lobby.set_not_active_for_buttons();
 		_button_tournaments.active = false;
 	}
 
@@ -1082,7 +1076,7 @@ class MenuBar extends FlxGroup
 		}
 	}	
 	
-	// refresh a list, a boxScroller with users that can be invited to the room.
+	// refresh a list, a scrollable area with users that can be invited to the room.
 	public function scene_waiting_room_refresh_online_list():Void
 	{
 		for (i in 0...121)

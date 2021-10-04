@@ -76,7 +76,7 @@ class ActionInput
 	}
 	
 	/******************************
-	 * used for boxScroller
+	 * used for scrollable area
 	 */
 	static public function pressed():Bool
 	{

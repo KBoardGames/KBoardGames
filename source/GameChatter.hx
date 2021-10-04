@@ -50,12 +50,12 @@ class GameChatter extends FlxGroup
 	public var _displayPlayer2NameOnce:Bool = false;
 	
 	/******************************
-	 * chatter __boxScroller text.
+	 * chatter __scrollable_area text.
 	 */
 	private var _group_text:Array<FlxText> = []; // access members here.
 	
 	/******************************
-	 * currently holds 100 lines of chatter __boxScroller text.
+	 * currently holds 100 lines of chatter __scrollable_area text.
 	 */
 	private var _group_text_member_total:Int = 100;
 	
@@ -107,25 +107,25 @@ class GameChatter extends FlxGroup
 	/******************************
 	 * lobby
 	 */
-	public static var __boxscroller2:FlxScrollableArea; 
+	public static var __scrollable_area2:FlxScrollableArea; 
 	
 	/******************************
 	 * waiting room.
 	 */
-	public static var __boxscroller3:FlxScrollableArea;
+	public static var __scrollable_area3:FlxScrollableArea;
 	
 	/******************************
 	 * game room.
 	 */
-	public static var __boxscroller4:FlxScrollableArea;
+	public static var __scrollable_area4:FlxScrollableArea;
 	
 	/******************************
-	 * the boxScroller would not work without at least one sprite added to the boxScrollerGroup.
+	 * the scrollable area would not work without at least one sprite added to the scrollable areaGroup.
 	 */
 	private var _box:FlxSprite;
 	
 	/******************************
-	 * when this class is created the id at the constructor is passed to a function and at that function depending on this value, a __boxScroller for lobby, or waiting... will be used.
+	 * when this class is created the id at the constructor is passed to a function and at that function depending on this value, a __scrollable_area for lobby, or waiting... will be used.
 	 */
 	private var _id:Int = 0;
 	
@@ -169,7 +169,7 @@ class GameChatter extends FlxGroup
 		//else _groupChatterScroller.x = 375; // if you want chatter open by default change the value to 0;
 		
 			
-		// the boxScroller would not work without at least one sprite added to the boxScrollerGroup.
+		// the scrollable area would not work without at least one sprite added to the scrollable areaGroup.
 		_box = new FlxSprite();
 		_box.makeGraphic(1, 1, FlxColor.BLACK);
 		_box.setPosition(1045, 0);
@@ -237,7 +237,7 @@ class GameChatter extends FlxGroup
 		else _chatterOpenCloseButton.label.text = "Close Chat";				
 		add(_chatterOpenCloseButton);		
 		
-		boxScroller();
+		scrollable_area();
 		//-----------------------------------
 		
 		// the chatter output button that is beside the _input_chat.
@@ -404,13 +404,13 @@ class GameChatter extends FlxGroup
 			
 		}
 		
-		boxScroller();
+		scrollable_area();
 	}
 	
 	/**
-	 * if adding more __boxScrollers here, remember to see MenuBar.hx disconnect function and add __boxscroller code there. See that function for the example.
+	 * if adding more __scrollable_areas here, remember to see MenuBar.hx disconnect function and add __scrollable_area code there. See that function for the example.
 	 */
-	private function boxScroller():Void
+	private function scrollable_area():Void
 	{
 		if (_id != ID) return;
 		
@@ -424,12 +424,12 @@ class GameChatter extends FlxGroup
 			&&  _id == 2 && _id == ID)
 			{
 				// cannot check for camera instance here if not null because it is static and doing so will give an error when you re-enter this scene from title.
-				if (__boxscroller2 != null) FlxG.cameras.remove(__boxscroller2);
-				__boxscroller2 = new FlxScrollableArea( new FlxRect( 1040, 0, 360, FlxG.height - 200), new FlxRect( 1040, 0, 360, _group.height), ResizeMode.NONE, 0, 100, -1, FlxColor.LIME, null, 1, false, true); // _scrollbar_offset_y = 175(height)-50(-50 from y value). eg, 175-50.
+				if (__scrollable_area2 != null) FlxG.cameras.remove(__scrollable_area2);
+				__scrollable_area2 = new FlxScrollableArea( new FlxRect( 1040, 0, 360, FlxG.height - 200), new FlxRect( 1040, 0, 360, _group.height), ResizeMode.NONE, 0, 100, -1, FlxColor.LIME, null, 1, false, true); // _scrollbar_offset_y = 175(height)-50(-50 from y value). eg, 175-50.
 				
-				FlxG.cameras.add( __boxscroller2 );
-				__boxscroller2.antialiasing = true;
-				__boxscroller2.pixelPerfectRender = true;
+				FlxG.cameras.add( __scrollable_area2 );
+				__scrollable_area2.antialiasing = true;
+				__scrollable_area2.pixelPerfectRender = true;
 			}
 			
 			// waiting room.
@@ -437,27 +437,27 @@ class GameChatter extends FlxGroup
 			&&  	 RegTypedef._dataMisc._userLocation < 3
 			&&		 _id == 3 && _id == ID)
 			{
-				if (__boxscroller3 != null) FlxG.cameras.remove(__boxscroller3);
-				__boxscroller3 = new FlxScrollableArea( new FlxRect( 1040, 0, 360, FlxG.height - 200), new FlxRect( 1040, 0, 360, _group.height), ResizeMode.NONE, 0, 100, -1, FlxColor.LIME, null, 2, false, true); // _scrollbar_offset_y = 175(height)-50(-50 from y value). eg, 175-50.
+				if (__scrollable_area3 != null) FlxG.cameras.remove(__scrollable_area3);
+				__scrollable_area3 = new FlxScrollableArea( new FlxRect( 1040, 0, 360, FlxG.height - 200), new FlxRect( 1040, 0, 360, _group.height), ResizeMode.NONE, 0, 100, -1, FlxColor.LIME, null, 2, false, true); // _scrollbar_offset_y = 175(height)-50(-50 from y value). eg, 175-50.
 				
-				FlxG.cameras.add( __boxscroller3 );
-				__boxscroller3.antialiasing = true;
-				__boxscroller3.pixelPerfectRender = true;
+				FlxG.cameras.add( __scrollable_area3 );
+				__scrollable_area3.antialiasing = true;
+				__scrollable_area3.pixelPerfectRender = true;
 			}
 			
 			// game room.
 			else if (RegTypedef._dataMisc._userLocation == 3
 			&& 		_id == 4 && _id == ID)
 			{	
-				if (__boxscroller4 != null) FlxG.cameras.remove(__boxscroller4);
-				__boxscroller4 = new FlxScrollableArea( new FlxRect( 1040, 0, 360, FlxG.height - 200), new FlxRect( 1040, 0, 360, _group.height), ResizeMode.NONE, 0, 100, -1, FlxColor.LIME, null, 3, false, true); // _scrollbar_offset_y = 175(height)-50(-50 from y value). eg, 175-50.
+				if (__scrollable_area4 != null) FlxG.cameras.remove(__scrollable_area4);
+				__scrollable_area4 = new FlxScrollableArea( new FlxRect( 1040, 0, 360, FlxG.height - 200), new FlxRect( 1040, 0, 360, _group.height), ResizeMode.NONE, 0, 100, -1, FlxColor.LIME, null, 3, false, true); // _scrollbar_offset_y = 175(height)-50(-50 from y value). eg, 175-50.
 				
 				if (_chatterOpenCloseButton.label.text == "Open Chat")
-					__boxscroller4.visible = false;
+					__scrollable_area4.visible = false;
 				
-				FlxG.cameras.add( __boxscroller4 );
-				__boxscroller4.antialiasing = true;
-				__boxscroller4.pixelPerfectRender = true; 
+				FlxG.cameras.add( __scrollable_area4 );
+				__scrollable_area4.antialiasing = true;
+				__scrollable_area4.pixelPerfectRender = true; 
 									
 			}
 						
@@ -496,8 +496,8 @@ class GameChatter extends FlxGroup
 			
 			if (RegTypedef._dataMisc._userLocation == 3)
 			{
-				GameChatter.__boxscroller4.visible = false;
-				GameChatter.__boxscroller4.active = false;
+				GameChatter.__scrollable_area4.visible = false;
+				GameChatter.__scrollable_area4.active = false;
 			}
 					
 		}
@@ -518,8 +518,8 @@ class GameChatter extends FlxGroup
 			
 			if (RegTypedef._dataMisc._userLocation == 3)
 			{
-				GameChatter.__boxscroller4.active = true;
-				GameChatter.__boxscroller4.visible = true;				
+				GameChatter.__scrollable_area4.active = true;
+				GameChatter.__scrollable_area4.visible = true;				
 			}
 			
 			_chatterIsOpen = true;
@@ -551,29 +551,29 @@ class GameChatter extends FlxGroup
 		_scrollRight = false;
 		_chatterIsOpen = false;
 
-		if (__boxscroller2 != null
+		if (__scrollable_area2 != null
 		&&  RegTypedef._dataMisc._userLocation == 0)
 		{
-			__boxscroller2.destroy();
-			cameras.remove( __boxscroller2 );
-			__boxscroller2 = null;
+			__scrollable_area2.destroy();
+			cameras.remove( __scrollable_area2 );
+			__scrollable_area2 = null;
 		}
 		
-		if (__boxscroller3 != null
+		if (__scrollable_area3 != null
 		&&  RegTypedef._dataMisc._userLocation > 0
 		&&  RegTypedef._dataMisc._userLocation < 3)
 		{
-			__boxscroller3.destroy();
-			cameras.remove( __boxscroller3 );
-			__boxscroller3 = null;
+			__scrollable_area3.destroy();
+			cameras.remove( __scrollable_area3 );
+			__scrollable_area3 = null;
 		}
 		
-		if (__boxscroller4 != null
+		if (__scrollable_area4 != null
 		&&  RegTypedef._dataMisc._userLocation == 3)
 		{
-			__boxscroller4.destroy();
-			cameras.remove( __boxscroller4 );
-			__boxscroller4 = null;
+			__scrollable_area4.destroy();
+			cameras.remove( __scrollable_area4 );
+			__scrollable_area4 = null;
 		}
 		
 		super.destroy();
@@ -604,20 +604,20 @@ class GameChatter extends FlxGroup
 				_scrollRight = false;	
 				Reg._buttonCodeValues = "c10000";
 				
-				if (__boxscroller2 != null 
+				if (__scrollable_area2 != null 
 				&& RegTypedef._dataMisc._userLocation == 0)
 				{
-					__boxscroller2.visible = false;
+					__scrollable_area2.visible = false;
 				}
 				
-				else if (__boxscroller3 != null
+				else if (__scrollable_area3 != null
 				&& 		 RegTypedef._dataMisc._userLocation > 0
 				&& 		 RegTypedef._dataMisc._userLocation < 3)
-						__boxscroller3.visible = false;
+						__scrollable_area3.visible = false;
 				
-				else if (__boxscroller4 != null)
+				else if (__scrollable_area4 != null)
 				{					
-					__boxscroller4.visible = false;
+					__scrollable_area4.visible = false;
 					__scene_game_room.buttonShowAll();
 				}
 				
@@ -637,18 +637,18 @@ class GameChatter extends FlxGroup
 				_scrollLeft = false;	
 				Reg._buttonCodeValues = "c10000";
 				
-				if (__boxscroller2 != null 
+				if (__scrollable_area2 != null 
 				&& RegTypedef._dataMisc._userLocation == 0)
-					__boxscroller2.visible = true;
+					__scrollable_area2.visible = true;
 				
-				else if (__boxscroller3 != null
+				else if (__scrollable_area3 != null
 				&& 		 RegTypedef._dataMisc._userLocation > 0
 				&& 		 RegTypedef._dataMisc._userLocation < 3)
-					__boxscroller3.visible = true;
+					__scrollable_area3.visible = true;
 				
-				else if (__boxscroller4 != null)
+				else if (__scrollable_area4 != null)
 				{
-					__boxscroller4.visible = true;
+					__scrollable_area4.visible = true;
 					__scene_game_room.buttonHideAll();
 				}
 				
@@ -656,14 +656,14 @@ class GameChatter extends FlxGroup
 			}
 		}
 		
-		// this is needed or else when other player sends a message and our chat is closed, the boxScroller will display.
-		if (__boxscroller4 != null)
+		// this is needed or else when other player sends a message and our chat is closed, the scrollable area will display.
+		if (__scrollable_area4 != null)
 		{
 			if (_chatterOpenCloseButton.label.text == "Open Chat")
-				__boxscroller4.visible = false;
+				__scrollable_area4.visible = false;
 					
 			else
-				__boxscroller4.visible = true;
+				__scrollable_area4.visible = true;
 		}
 		
 		//---------------------------------------------------------------------

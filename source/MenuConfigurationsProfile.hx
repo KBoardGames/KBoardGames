@@ -52,7 +52,7 @@ class MenuConfigurationsProfile extends FlxGroup
 	private var _image_avatar_highlighted:FlxSprite;
 		
 	/******************************
-	* anything added to this group will be placed inside of the boxScroller field. 
+	* anything added to this group will be placed inside of the scrollable area field. 
 	*/
 	public var _group:FlxSpriteGroup;	
 	
@@ -137,8 +137,7 @@ class MenuConfigurationsProfile extends FlxGroup
 		_usernameInput.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.BLACK, FlxTextAlign.RIGHT);
 		_usernameInput.x += _text_username.textField.width + 15;
 		_usernameInput.y = _button_p1.y + 65;
-		if (RegCustom._profile_username_p1 != "Guest 1")
-			_usernameInput.text = RegCustom._profile_username_p1;
+		_usernameInput.text = RegCustom._profile_username_p1[Reg._tn];
 		_usernameInput.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		_group.add(_usernameInput);
 		
@@ -227,17 +226,21 @@ class MenuConfigurationsProfile extends FlxGroup
 		}
 	}
 	
+	/*****************************
+	 *  button used to change username and profile image to player 1.
+	 */
 	private function buttonP1():Void
 	{
+		if (RegCustom._sound_enabled[Reg._tn] == true
+		&&  Reg2._scrollable_area_is_scrolling == false)
+			FlxG.sound.play("click", 1, false);
+		
 		_profile_avatar_notice.text = _text_current_avatar_for_player + "1";
-				
+		
+		if (RegCustom._profile_username_p1[Reg._tn] == "") RegCustom._profile_username_p1[Reg._tn] = "Guest 1";
+		
 		if (_button_p1.has_toggle == false)
-		{
-			RegCustom._profile_username_p2 = _usernameInput.text;
-			
-			if (RegCustom._profile_username_p1 == "Guest 1") _usernameInput.text = "";
-			else _usernameInput.text = RegCustom._profile_username_p1;
-		}
+			_usernameInput.text = RegCustom._profile_username_p1[Reg._tn];
 		
 		_image_profile_avatar.loadGraphic("vendor/multiavatar/" + RegCustom._profile_avatar_number1[Reg._tn]);
 		
@@ -248,18 +251,22 @@ class MenuConfigurationsProfile extends FlxGroup
 		_button_p2.has_toggle = false;
 	}
 	
+	/*****************************
+	 *  button used to change username and profile image to player 2.
+	 */
 	private function buttonP2():Void
 	{
+		if (RegCustom._sound_enabled[Reg._tn] == true
+		&&  Reg2._scrollable_area_is_scrolling == false)
+			FlxG.sound.play("click", 1, false);
+	
 		_profile_avatar_notice.text = _text_current_avatar_for_player + "2";
 		
+		if (RegCustom._profile_username_p2[Reg._tn] == "") RegCustom._profile_username_p2[Reg._tn] = "Guest 2";
+		
 		if (_button_p2.has_toggle == false)
-		{
-			RegCustom._profile_username_p1 = _usernameInput.text;
-		
-			if (RegCustom._profile_username_p2 == "Guest 2") _usernameInput.text = "";
-			else _usernameInput.text = RegCustom._profile_username_p2;
-		}
-		
+			_usernameInput.text = RegCustom._profile_username_p2[Reg._tn];
+				
 		_image_profile_avatar.loadGraphic("vendor/multiavatar/" + RegCustom._profile_avatar_number2[Reg._tn]);
 		
 		_button_p2.set_toggled(true);
@@ -297,11 +304,11 @@ class MenuConfigurationsProfile extends FlxGroup
 			
 			for (i in 0... Reg._avatar_total)
 			{
-				// __boxscroller.scroll.y is needed so that when the boxScroller has been scrolled that var is used to offset the mouse.y value. it is needed to highlight avatars that are outside of the normal scene y coordinates
+				// __scrollable_area.scroll.y is needed so that when the scrollable area has been scrolled that var is used to offset the mouse.y value. it is needed to highlight avatars that are outside of the normal scene y coordinates
 				if (FlxG.mouse.x > _group_sprite[i].x
 				&&  FlxG.mouse.x < _group_sprite[i].x + 75
-				&&  FlxG.mouse.y + __menu_configurations_output.__boxscroller.scroll.y > _group_sprite[i].y
-				&&  FlxG.mouse.y + __menu_configurations_output.__boxscroller.scroll.y < _group_sprite[i].y + 75
+				&&  FlxG.mouse.y + __menu_configurations_output.__scrollable_area.scroll.y > _group_sprite[i].y
+				&&  FlxG.mouse.y + __menu_configurations_output.__scrollable_area.scroll.y < _group_sprite[i].y + 75
 				&&  FlxG.mouse.y < FlxG.height - 50)
 				{					
 					_image_avatar_highlighted.x = 
@@ -314,7 +321,7 @@ class MenuConfigurationsProfile extends FlxGroup
 					if (ActionInput.justPressed() == true)
 					{
 						if (RegCustom._sound_enabled[Reg._tn] == true
-						&&  Reg2._boxScroller_is_scrolling == false)
+						&&  Reg2._scrollable_area_is_scrolling == false)
 							FlxG.sound.play("click", 1, false);
 						
 						if (_button_p1.has_toggle == true)
@@ -496,10 +503,10 @@ class MenuConfigurationsProfile extends FlxGroup
 		
 		//------------------------------
 		if (_button_p1.has_toggle == true) 
-			RegCustom._profile_username_p1 = _usernameInput.text;
+			RegCustom._profile_username_p1[Reg._tn] = _usernameInput.text;
 		
 		if (_button_p2.has_toggle == true) 
-			RegCustom._profile_username_p2 = _usernameInput.text;
+			RegCustom._profile_username_p2[Reg._tn] = _usernameInput.text;
 				
 		//-------------------------------
 		
@@ -521,14 +528,14 @@ class MenuConfigurationsProfile extends FlxGroup
 		if (ActionInput.justPressed() == true
 		&&  FlxG.mouse.x > _usernameInput.x
 		&&  FlxG.mouse.x < _usernameInput.x + _usernameInput.width
-		&&  FlxG.mouse.y + __menu_configurations_output.__boxscroller.scroll.y > _usernameInput.y
-		&&  FlxG.mouse.y + __menu_configurations_output.__boxscroller.scroll.y < _usernameInput.y + _usernameInput.height
+		&&  FlxG.mouse.y + __menu_configurations_output.__scrollable_area.scroll.y > _usernameInput.y
+		&&  FlxG.mouse.y + __menu_configurations_output.__scrollable_area.scroll.y < _usernameInput.y + _usernameInput.height
 		&&  FlxG.mouse.y < FlxG.height - 50)
 		{
 			_usernameInput.hasFocus = true;
 			
 			if (RegCustom._sound_enabled[Reg._tn] == true
-			&&  Reg2._boxScroller_is_scrolling == false)
+			&&  Reg2._scrollable_area_is_scrolling == false)
 				FlxG.sound.play("click", 1, false);
 							
 			#if mobile

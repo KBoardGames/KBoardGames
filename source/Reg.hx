@@ -45,7 +45,7 @@ class Reg
 	 * only change the version number here. this value must be changed every time this complete program with dll's are copied to the localhost/files/windows folder.
 	 * no need to copy this var then paste to the bottom of this class because this value does not change while client is running.
 	 */
-	public static var _version:String = "1.16.10";
+	public static var _version:String = "1.17.1";
 	
 	/******************************
 	 * total games available in this release.
@@ -217,7 +217,7 @@ class Reg
 	 * if true then the keyboard is being used. this is needed so that the buttons do not go inactive for a few milliseconds at ButtonGeneral class. we want the buttons always responsive to user input.
 	 */
 	public static var _at_input_keyboard:Bool = false;
-	
+	public static var _at_game_room:Bool = false;
 	public static var _at_configuration_menu:Bool = false;
 	
 	/******************************
@@ -2005,7 +2005,8 @@ class Reg
 	 */
 	public static var _number_wheel_ticks:Int = 0;
 	
-	public static var _menubar_color:FlxColor;
+	public static var _background_header_title_color:FlxColor;
+	public static var _background_footer_menu_color:FlxColor;
 	
 	/*****************************
 	 * display a message only once when the spectator watching enters the game room.
@@ -2169,7 +2170,7 @@ class Reg
 	 */
 	public static function set_for_public():Void
 	{		
-		var _public = false;
+		var _public = true;
 		
 		if (_public == false)
 		{
@@ -2261,7 +2262,8 @@ class Reg
 		_useThirdPartyIpAddress = true; // set this true to enable paid server feature. paid members can host their own domain and that domain can be selected at MenuState as an option to connect to that server.
 		
 		//############################# END CONFIG
-		_menubar_color = FlxColor.fromHSB(FlxG.random.int(1, 335), 0.75, RegCustom._background_brightness[_tn]);
+		_background_header_title_color = MenuConfigurationsGeneral.background_header_title_color();
+		_background_footer_menu_color = MenuConfigurationsGeneral.background_footer_menu_color();
 		
 		_p_all_static1 = 
 	[ 0,  1,  2,  3,  4,  5,  6,  7,  8,  9
@@ -2634,8 +2636,9 @@ class Reg
 		_clearDoubleMessage = false;
 		_at_create_room = false;
 		_at_waiting_room = false;
-		_at_input_keyboard = false;
+		_at_game_room = false; // do not use here.
 		_at_configuration_menu = false;
+		_at_game_room = false;
 		_loginSuccessfulWasRead = false;
 		_doOnce = true;
 		_spectator_start_timer = false;

@@ -9,7 +9,7 @@ class WebsocketClient implements IClient
 
 	var websocket : js.html.WebSocket;
 
-	public var events:mphx.utils.event.impl.ClientEventManager;
+	public var events:vendor.mphx.utils.event.impl.ClientEventManager;
 	public var serializer:ISerializer;
 
 	var port:Int;
@@ -18,8 +18,8 @@ class WebsocketClient implements IClient
 	var ready = false;
 	var messageQueue:Array<Dynamic>;
 
-	public var onConnectionClose :mphx.utils.Error.ClientError->Void; //Server close the connection (with the reason)
-	public var onConnectionError :mphx.utils.Error.ClientError->Void;
+	public var onConnectionClose :vendor.mphx.utils.Error.ClientError->Void; //Server close the connection (with the reason)
+	public var onConnectionError :vendor.mphx.utils.Error.ClientError->Void;
 	public var onConnectionEstablished :Void->Void;
 
 	//WEBSOCKET API FOR HAXE DOES NOT HAVE setFastSend
@@ -28,9 +28,9 @@ class WebsocketClient implements IClient
 
 	public function new(_ip:String,_port:Int)
 	{
-		events = new mphx.utils.event.impl.ClientEventManager();
+		events = new vendor.mphx.utils.event.impl.ClientEventManager();
 
-		serializer = new mphx.serialization.impl.HaxeSerializer();
+		serializer = new vendor.mphx.serialization.impl.HaxeSerializer();
 
 		ip = _ip;
 		port = _port;
@@ -104,6 +104,6 @@ class WebsocketClient implements IClient
 
 	public function close (){
 		websocket.close();
-		if (onConnectionClose != null) onConnectionClose(mphx.utils.Error.ClientError.DroppedConnection);
+		if (onConnectionClose != null) onConnectionClose(vendor.mphx.utils.Error.ClientError.DroppedConnection);
 	}
 }

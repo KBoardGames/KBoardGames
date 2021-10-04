@@ -53,14 +53,14 @@ class ButtonGeneralNetworkYes extends FlxUIButton
 	private var _use_down_click:Bool = true;
 
 	/******************************
-	 * used at __boxScroller to offset the mouse x/y coordinates when the __boxScroller is scrolled. without these vars when the __boxScroller is scrolled stage buttons underneath the __boxscroller will fire.
-	 * remember, a group is added to the stage and the group is added to the __boxScroller. So the two buttons, one not seen because it is behind the __boxscroller camera, will fire unless these vars are used.
+	 * used at __scrollable_area to offset the mouse x/y coordinates when the __scrollable_area is scrolled. without these vars when the __scrollable_area is scrolled stage buttons underneath the __scrollable_area will fire.
+	 * remember, a group is added to the stage and the group is added to the __scrollable_area. So the two buttons, one not seen because it is behind the __scrollable_area camera, will fire unless these vars are used.
 	 */
 	public static var _scrollarea_offset_x:Float;
 
 	/******************************
-	 * used at __boxScroller to offset the mouse x/y coordinates when the __boxScroller is scrolled. without these vars when the __boxScroller is scrolled stage buttons underneath the __boxscroller will fire.
-	 * remember, a group is added to the stage and the group is added to the __boxScroller. So the two buttons, one not seen because it is behind the __boxscroller camera, will fire unless these vars are used.
+	 * used at __scrollable_area to offset the mouse x/y coordinates when the __scrollable_area is scrolled. without these vars when the __scrollable_area is scrolled stage buttons underneath the __scrollable_area will fire.
+	 * remember, a group is added to the stage and the group is added to the __scrollable_area. So the two buttons, one not seen because it is behind the __scrollable_area camera, will fire unless these vars are used.
 	 */
 	public static var _scrollarea_offset_y:Float;
 
@@ -128,7 +128,11 @@ class ButtonGeneralNetworkYes extends FlxUIButton
 		_scrollarea_offset_y = 0;
 		
 		resize(button_width, button_height);
+		
+		// sets the label color and centers the text. the label color is the color of the button.
 		setLabelFormat(Reg._fontDefault, (Reg._font_size-1), RegCustom._button_text_color[Reg._tn], FlxTextAlign.CENTER);
+		
+		// this is the shadow underneath the text.
 		label.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 4);
 		autoCenterLabel();
 		
@@ -154,7 +158,7 @@ class ButtonGeneralNetworkYes extends FlxUIButton
 		active = true;
 		alpha = 1;			
 		
-		Reg2._boxScroller_is_scrolling = false;
+		Reg2._scrollable_area_is_scrolling = false;
 		Reg2._lobby_button_alpha = 0.3;
 	}
 	
@@ -173,7 +177,7 @@ class ButtonGeneralNetworkYes extends FlxUIButton
 		&& _id == ID)
 		{
 			alpha = 0.3;			
-			Reg2._boxScroller_is_scrolling = false;
+			Reg2._scrollable_area_is_scrolling = false;
 		}
 		
 		if (FlxG.mouse.justPressed == true
@@ -187,7 +191,7 @@ class ButtonGeneralNetworkYes extends FlxUIButton
 			
 			Reg2._lobby_button_alpha = 0.3;
 			RegTriggers._buttons_set_not_active = true;
-			Reg2._boxScroller_is_scrolling = false;
+			Reg2._scrollable_area_is_scrolling = false;
 		}
 		
 		if (justReleased == true && _id >= 1000 && _id <= 2000
@@ -201,7 +205,7 @@ class ButtonGeneralNetworkYes extends FlxUIButton
 			_timer.reset();
 			_timer.update(1);
 			
-			Reg2._boxScroller_is_scrolling = false;
+			Reg2._scrollable_area_is_scrolling = false;
 			
 		}
 		
@@ -217,7 +221,7 @@ class ButtonGeneralNetworkYes extends FlxUIButton
 			_timer.update(1);
 			
 			Reg2._lobby_button_alpha = 0.3;
-			Reg2._boxScroller_is_scrolling = false;
+			Reg2._scrollable_area_is_scrolling = false;
 		}
 		
 		// make alpha 1 for lobby buttons but after message box closes.
@@ -231,7 +235,7 @@ class ButtonGeneralNetworkYes extends FlxUIButton
 			_timer3.update(1);
 			
 			Reg2._lobby_button_alpha = 0.3;
-			Reg2._boxScroller_is_scrolling = false;
+			Reg2._scrollable_area_is_scrolling = false;
 		}
 		
 		super.draw();
@@ -240,7 +244,8 @@ class ButtonGeneralNetworkYes extends FlxUIButton
 	// this function must not be removed. also stops double firing of button sound at ActionKeyboard.hx.
 	override public function update(elapsed:Float):Void
 	{
-		if (RegTriggers._buttons_set_not_active == false)
+		if (RegTriggers._buttons_set_not_active == false
+		&& _id == ID)
 		{		
 			if (ActionInput.overlaps(this, null)
 			&&  FlxG.mouse.justPressed == true
@@ -248,9 +253,11 @@ class ButtonGeneralNetworkYes extends FlxUIButton
 			&&	alpha == 1
 			&& _id == ID) 
 			{
+				// this button has been pressed. remove focus from the chatter input box.
 				if (GameChatter._input_chat != null) GameChatter._input_chat.hasFocus = false;
+				
 				if (RegCustom._sound_enabled[Reg._tn] == true
-				&&  Reg2._boxScroller_is_scrolling == false)
+				&&  Reg2._scrollable_area_is_scrolling == false)
 					FlxG.sound.play("click", 1, false);
 					
 				if (_id == 1
@@ -296,7 +303,7 @@ class ButtonGeneralNetworkYes extends FlxUIButton
 			Reg._buttonCodeValues = "";
 			alpha = 1;
 			Reg2._lobby_button_alpha = 0.3;
-			Reg2._boxScroller_is_scrolling = false;
+			Reg2._scrollable_area_is_scrolling = false;
 		}
 		
 	}

@@ -17,8 +17,11 @@
 */
 
 package;
-import sys.net.Address;
-import sys.net.Host;
+
+#if !html5
+	import sys.net.Address;
+	import sys.net.Host;
+#end
 
 /**
  * ...
@@ -69,9 +72,14 @@ class PlayState extends FlxState
 	private var _game_board_image:FlxSprite;
 	
 	/******************************
+	 * scene title background.
+	 */
+	private var _title_background:FlxSprite;
+	
+	/******************************
 	* the title of this state.
 	*/
-	private var title:FlxText;
+	private var _title:FlxText;
 			
 	/******************************
 	 * server data displayed at front door.
@@ -138,8 +146,9 @@ class PlayState extends FlxState
 			//------------------------------
 			RegFunctions._gameMenu = new FlxSave(); // initialize		
 			RegFunctions._gameMenu.bind("ConfigurationsMenu"); // bind to the named save slot.
-			
+			RegCustom.resetConfigurationVars();
 			RegFunctions.loadConfig();
+			if (Reg._tn == 0) RegCustom.resetConfigurationVars2();
 		#end
 				
 		FlxG.autoPause = false;	// this class will pause when not in focus.
@@ -149,26 +158,28 @@ class PlayState extends FlxState
 		// gameboard image.
 		_game_board_image = new FlxSprite(0,0);
 		_game_board_image.loadGraphic("assets/images/background.jpg", false);
-		_game_board_image.alpha = 0.17;
+		_game_board_image.alpha = 0.14;
 		_game_board_image.scrollFactor.set(0, 0);
 		_game_board_image.updateHitbox();
 		add(_game_board_image);
 		
 		//------------------------------
-		title = new FlxText(0, 0, 0, "Front Door");
-		title.setFormat(Reg._fontDefault, 50, FlxColor.YELLOW);
-		title.scrollFactor.set(0, 0);
-		title.setPosition(0, 20);
-		if (Reg._gameJumpTo == -1 ) title.visible = true;
+		_title_background = new FlxSprite(0, 0);
+		_title_background.makeGraphic(FlxG.width, 55, Reg._background_header_title_color); 
+		_title_background.scrollFactor.set(0, 0);
+		add(_title_background);
+				
+		_title = new FlxText(15, 4, 0, "Front Door");
+		_title.setFormat(Reg._fontDefault, 50, FlxColor.YELLOW);
+		_title.scrollFactor.set(0, 0);
+		_title.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 3);
+		if (Reg._gameJumpTo == -1 ) _title.visible = true;
 		else 
 		{
 			Reg._gameJumpTo = 0;
-			title.visible = false;
+			_title.visible = false;
 		}
-		
-		title.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 3);
-		title.screenCenter(X);
-		add(title);
+		add(_title);
 		
 		_text_server_login_data = new FlxText(0, 0, 0, "");
 		_text_server_login_data.scrollFactor.set(0, 0);
@@ -394,10 +405,10 @@ class PlayState extends FlxState
 		if (Reg._loggedIn == false)
 		{
 			if (RegTypedef._dataPlayers._usernamesDynamic[0] == "")
-				RegTypedef._dataPlayers._usernamesDynamic[0] = RegCustom._profile_username_p1;
+				RegTypedef._dataPlayers._usernamesDynamic[0] = RegCustom._profile_username_p1[Reg._tn];
 			
 			if (Reg._game_offline_vs_player == true)
-				RegTypedef._dataPlayers._usernamesDynamic[1] = RegCustom._profile_username_p2;
+				RegTypedef._dataPlayers._usernamesDynamic[1] = RegCustom._profile_username_p2[Reg._tn];
 			else
 				RegTypedef._dataPlayers._usernamesDynamic[1] = Reg2._offline_cpu_host_name2;
 				
@@ -466,9 +477,14 @@ class PlayState extends FlxState
 		
 		if (Reg._game_online_vs_cpu == true || Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false)		
 		{
-			try{
-				clientSocket = new vendor.mphx.client.Client(Reg._ipAddress, Reg._port);
-				
+			try
+			{
+				#if html5				
+					clientSocket = new vendor.mphx.client.impl.WebsocketClient(Reg._ipAddress, Reg._port);
+				#else
+					clientSocket = new vendor.mphx.client.Client(Reg._ipAddress, Reg._port);
+				#end
+					
 				// cannot connect to server.
 				clientSocket.onConnectionError = function (s)
 				{
@@ -481,13 +497,16 @@ class PlayState extends FlxState
 				clientSocket.connect();	
 				
 				if (RegTypedef._dataAccount._username == "")
-					RegTypedef._dataAccount._username = RegCustom._profile_username_p1;
+					RegTypedef._dataAccount._username = RegCustom._profile_username_p1[Reg._tn];
 				
 				RegTypedef._dataAccount._host = Internet.getIP();
 				RegTypedef._dataAccount._ip = Internet.getIP(); 
-	
+				
+				if (Reg._clientReadyForPublicRelease == false) RegTypedef._dataAccount._ip = RegTypedef._dataAccount._host = "127.0.0.1"; 
+				
 				clientSocket.send("Join", RegTypedef._dataAccount); // go to the event "join" at server then at server at event join there could be a broadcast that will send data to a client event.
 				haxe.Timer.delay(function (){}, Reg2._event_sleep);
+				
 			}	
 			
 			catch (e:Dynamic)
@@ -495,7 +514,6 @@ class PlayState extends FlxState
 				#if neko
 					trace(e);
 				#end
-				
 			}		
 		
 		
@@ -516,9 +534,9 @@ class PlayState extends FlxState
 			add(__scene_create_room);
 			
 			__scene_waiting_room = new SceneWaitingRoom();
-			__scene_waiting_room.boxScroller();
-			__scene_waiting_room.__boxscroller.visible = false;
-			__scene_waiting_room.__boxscroller.active = false;
+			__scene_waiting_room.scrollable_area();
+			__scene_waiting_room.__scrollable_area.visible = false;
+			__scene_waiting_room.__scrollable_area.active = false;
 			__scene_waiting_room.visible = false;
 			__scene_waiting_room.active = false;
 			add(__scene_waiting_room);
@@ -568,11 +586,11 @@ class PlayState extends FlxState
 				if (Reg._lobbyDisplay == true) {Reg._lobbyDisplay = false;  __scene_lobby.display(); }		
 				
 				__scene_lobby.visible = true;			
-				__scene_lobby.__boxscroller.visible = true;
+				__scene_lobby.__scrollable_area.visible = true;
 				
 				if (RegCustom._chat_when_at_lobby_enabled[Reg._tn] == true)
 				{
-					GameChatter.__boxscroller2.visible = true;
+					GameChatter.__scrollable_area2.visible = true;
 				}
 				
 				__scene_waiting_room.visible = false;
@@ -954,7 +972,10 @@ class PlayState extends FlxState
 					{
 						Reg._doUpdate = false;
 						_game_board_image.visible = false;
-						title.visible = false;						
+						
+						_title_background.visible = false;
+						_title.visible = false;	
+						
 						_text_server_login_data.visible = false;
 						_text_server_login_data2.visible = false;
 						_text_server_login_data3.visible = false;
@@ -1053,13 +1074,13 @@ class PlayState extends FlxState
 				GameChatter._groupChatterScroller.x = 0;
 			
 			// this check is needed because user might be coming from creating room.
-			if (GameChatter.__boxscroller3 != null)
+			if (GameChatter.__scrollable_area3 != null)
 			{
 				SceneWaitingRoom.__game_chatter.visible = false;
-				GameChatter.__boxscroller3.visible = false;
+				GameChatter.__scrollable_area3.visible = false;
 			
 				SceneWaitingRoom.__game_chatter.active = false;
-				GameChatter.__boxscroller3.active = false;
+				GameChatter.__scrollable_area3.active = false;
 			}
 			
 			__scene_waiting_room.visible = false;					
@@ -1068,10 +1089,10 @@ class PlayState extends FlxState
 			__scene_lobby.active = true;
 			__scene_lobby.visible = true;
 			
-			__scene_lobby.__boxscroller.active = true;			
-			__scene_lobby.__boxscroller.visible = true;
+			__scene_lobby.__scrollable_area.active = true;			
+			__scene_lobby.__scrollable_area.visible = true;
 			
-			__scene_lobby.setActiveForButtons();			
+			__scene_lobby.set_active_for_buttons();			
 			__scene_lobby.initialize();
 			
 			if (SceneLobby.__game_chatter != null)
@@ -1080,10 +1101,10 @@ class PlayState extends FlxState
 				SceneLobby.__game_chatter.visible = true;
 			}
 			
-			if (GameChatter.__boxscroller2 != null)
+			if (GameChatter.__scrollable_area2 != null)
 			{
-				GameChatter.__boxscroller2.active = true;
-				GameChatter.__boxscroller2.visible = true;
+				GameChatter.__scrollable_area2.active = true;
+				GameChatter.__scrollable_area2.visible = true;
 			}
 			
 			RegTriggers._recreate_chatter_input_chat = true;
@@ -1102,23 +1123,23 @@ class PlayState extends FlxState
 			Reg2._lobby_button_alpha = 0.3;
 			RegTriggers._buttons_set_not_active = false;
 			
-			if (GameChatter.__boxscroller2 != null)
+			if (GameChatter.__scrollable_area2 != null)
 			{
-				GameChatter.__boxscroller2.visible = false;
-				__scene_lobby.__boxscroller.visible = false;
+				GameChatter.__scrollable_area2.visible = false;
+				__scene_lobby.__scrollable_area.visible = false;
 				
-				GameChatter.__boxscroller2.active = false;
-				__scene_lobby.__boxscroller.active = false;
+				GameChatter.__scrollable_area2.active = false;
+				__scene_lobby.__scrollable_area.active = false;
 			}
 			
-			if (GameChatter.__boxscroller3 != null)
+			if (GameChatter.__scrollable_area3 != null)
 			{
-				GameChatter.__boxscroller3.visible = false;
-				GameChatter.__boxscroller3.active = false;
+				GameChatter.__scrollable_area3.visible = false;
+				GameChatter.__scrollable_area3.active = false;
 			}
 									
-			__scene_lobby.__boxscroller.visible = false;
-			__scene_lobby.__boxscroller.active = false;
+			__scene_lobby.__scrollable_area.visible = false;
+			__scene_lobby.__scrollable_area.active = false;
 			
 			__scene_lobby.visible = false;
 			__scene_lobby.active = false;			
@@ -1146,17 +1167,17 @@ class PlayState extends FlxState
 			__scene_create_room.visible = false;
 			__scene_create_room.active = false;			
 			
-			if (GameChatter.__boxscroller2 != null)
+			if (GameChatter.__scrollable_area2 != null)
 			{
-				GameChatter.__boxscroller2.visible = false;
-				__scene_lobby.__boxscroller.visible = false;
+				GameChatter.__scrollable_area2.visible = false;
+				__scene_lobby.__scrollable_area.visible = false;
 							
-				GameChatter.__boxscroller2.active = false;
-				__scene_lobby.__boxscroller.active = false;
+				GameChatter.__scrollable_area2.active = false;
+				__scene_lobby.__scrollable_area.active = false;
 			}
 			
-			__scene_lobby.__boxscroller.visible = false;
-			__scene_lobby.__boxscroller.active = false;
+			__scene_lobby.__scrollable_area.visible = false;
+			__scene_lobby.__scrollable_area.active = false;
 			
 			__scene_lobby.visible = false;	
 			__scene_lobby.active = false;
@@ -1184,10 +1205,10 @@ class PlayState extends FlxState
 				SceneWaitingRoom.__game_chatter.visible = true;
 			}
 			
-			if (GameChatter.__boxscroller3 != null)
+			if (GameChatter.__scrollable_area3 != null)
 			{
-				GameChatter.__boxscroller3.active = true;
-				GameChatter.__boxscroller3.visible = true;
+				GameChatter.__scrollable_area3.active = true;
+				GameChatter.__scrollable_area3.visible = true;
 			}
 			
 			Reg._updateScrollbarBringUp = true; 
@@ -1210,12 +1231,12 @@ class PlayState extends FlxState
 			Reg._buttonCodeValues = "";
 						
 			__scene_lobby.active = true;
-			__scene_lobby.group.active = true;
-			__scene_lobby.__boxscroller.active = true;
+			__scene_lobby._group_scrollable_area.active = true;
+			__scene_lobby.__scrollable_area.active = true;
 			
-			if (GameChatter.__boxscroller2 != null)
+			if (GameChatter.__scrollable_area2 != null)
 			{
-				GameChatter.__boxscroller2.active = true;
+				GameChatter.__scrollable_area2.active = true;
 			}			
 			
 			FlxG.mouse.reset();

@@ -103,8 +103,8 @@ class FlxScrollbarHorizontal extends FlxSpriteGroup
 	private var _vertical_bar_bring_down:Bool = false;
 	
 	/*************************************************************************
-	 * if true then when the boxscroller has new content and the boxscroller acts like a chat window where new content is added to the end of the boxscroller and the content moves up one line. the vertical bar should be sent to the bottom of the boxscroller.
-	 * this stops a bug when used at lobby or other boxscroller where the content scrolls normally. scrolling vertically hides the horizontal bar but leaves an artifit behind and visa versa.
+	 * if true then when the scrollable area has new content and the scrollable area acts like a chat window where new content is added to the end of the scrollable area and the content moves up one line. the vertical bar should be sent to the bottom of the scrollable area.
+	 * this stops a bug when used at lobby or other scrollable area where the content scrolls normally. scrolling vertically hides the horizontal bar but leaves an artifit behind and visa versa.
 	 */
 	private var _auto_update_track:Bool = false;
 	
@@ -134,7 +134,7 @@ class FlxScrollbarHorizontal extends FlxSpriteGroup
 		
 		_track_color = 0xff111111; // dark gray;
 		
-		// MouseWheelMultiplier disabled because sometimes client uses two boxscroller and a wheel would scroll both at the same time.
+		// MouseWheelMultiplier disabled because sometimes client uses two scrollable area and a wheel would scroll both at the same time.
 		_id = ID = id;
 		_viewPort = viewPort;
 		_content_height_extra = content_height_extra;
@@ -228,7 +228,7 @@ class FlxScrollbarHorizontal extends FlxSpriteGroup
 		
 		var mousePosition = FlxG.mouse.getScreenPosition();
 		
-		// if clicking on the boxscroller area. _dragStartedWhenBarWasAt is where the click first started.
+		// if clicking on the scrollable area area. _dragStartedWhenBarWasAt is where the click first started.
 		if (!_bar.overlapsPoint( mousePosition ) 
 		&&  !_track.overlapsPoint( mousePosition ) 
 		&&  FlxG.mouse.x - HouseScrollMap._map_offset_x > Math.abs(_viewPort.x) 
@@ -237,11 +237,11 @@ class FlxScrollbarHorizontal extends FlxSpriteGroup
 		{
 			// remember the scroll location of the scrollbox when returning to the scene at this second condition.
 			if (FlxG.mouse.justPressed
-			&&	Reg2._boxScroller_is_scrolling == false
+			&&	Reg2._scrollable_area_is_scrolling == false
 			&&	Reg._messageId == 0
 			&&	Reg2._lobby_button_alpha == 0.3
 			|| _doOnce == 0
-			&&	Reg2._boxScroller_is_scrolling == false
+			&&	Reg2._scrollable_area_is_scrolling == false
 			&&	Reg._messageId == 0
 			&&	Reg2._lobby_button_alpha == 0.3
 			&& _id == 0
@@ -359,7 +359,7 @@ class FlxScrollbarHorizontal extends FlxSpriteGroup
 		// FlxG.mouse.pressed code above does not work for this var.
 		if (FlxG.mouse.enabled == true
 		&&	FlxG.mouse.pressed == false)
-			Reg2._boxScroller_is_scrolling = false;
+			Reg2._scrollable_area_is_scrolling = false;
 				
 		tryToScrollPage = false;
 		_doOnce = 1;

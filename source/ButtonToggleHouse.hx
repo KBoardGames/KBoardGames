@@ -67,7 +67,11 @@ class ButtonToggleHouse extends FlxUIButton
 		button_height += 10;
 				
 		resize(button_width, button_height);
+		
+		// sets the label color and centers the text. the label color is the color of the button.
 		setLabelFormat(Reg._fontDefault, (Reg._font_size-1), RegCustom._button_text_color[Reg._tn], FlxTextAlign.CENTER);
+		
+		// this is the shadow underneath the text.
 		label.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 4);
 		autoCenterLabel();
 		
@@ -88,10 +92,11 @@ class ButtonToggleHouse extends FlxUIButton
 			if (ActionInput.overlaps(this, null)
 			&&  FlxG.mouse.justPressed == true)
 			{
+				// this button has been pressed. remove focus from the chatter input box.
 				if (GameChatter._input_chat != null) GameChatter._input_chat.hasFocus = false;
 				
 				if (RegCustom._sound_enabled[Reg._tn] == true
-				&&  Reg2._boxScroller_is_scrolling == false)
+				&&  Reg2._scrollable_area_is_scrolling == false)
 					FlxG.sound.play("click", 1, false);
 			}
 			

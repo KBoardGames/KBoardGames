@@ -331,8 +331,8 @@ class RegCustom
 	/******************************
 	 * offline username for player 1.
 	 */
-	public static var _profile_username_p1:String = "";
-	public static var _profile_username_p2:String = "";
+	public static var _profile_username_p1:Array<String> = [];
+	public static var _profile_username_p2:Array<String> = [];
 		 
 	/******************************
 	 * this is the maximum time permitted when assigning time for a game at the configuration scene. this var is used only at MenuConfigurationsGames.hx to change the timer values.
@@ -347,7 +347,7 @@ class RegCustom
 	/******************************
 	 * this is the current selected time permitted while playing a game. game is over when time reaches zero. this var is used at MenuConfigurationsGames.hx and at SceneGameRoom.hx as the current time remaining.
 	 */
-	public static var _time_remaining_for_game:Array<Int> = []; 
+	public static var _time_remaining_for_game:Array<Array<Int>> = [[]]; 
 	
 	/******************************
 	 * choose your chess skill level of either intermediate or advanced.
@@ -362,6 +362,13 @@ class RegCustom
 	 */
 	public static var _chess_skill_level_offline:Int = 0;
 	
+	
+	/******************************
+	 * colored background displayed behind both the title and menu at most scenes.
+	 */
+	public static var _background_header_title_number:Array<Int> = [];
+	public static var _background_footer_menu_number:Array<Int> = [];
+	
 	// these vars are reset at the start of each game.
 	public static function resetRegVars():Void
 	{
@@ -370,13 +377,25 @@ class RegCustom
 		
 		_timer_maximum_permitted_for_game = [55, 55, 55, 55, 55];
 		_timer_minimum_permitted_for_game = [5, 5, 5, 5, 5];
-		_time_remaining_for_game = [15, 15, 15, 15, 30];	
 	}
 	
 	/******************************
 	 * these vars are reset here when returning to the mainMenu. These vars are not reset at menuState.
 	 */
 	public static function resetConfigurationVars():Void
+	{
+		_profile_username_p1.splice(0, _profile_username_p1.length);
+		_profile_username_p1.push("Guest 1");
+		_profile_username_p2.splice(0, _profile_username_p2.length);
+		_profile_username_p2.push("Guest 2");
+
+		resetConfigurationVars2();
+	}
+	
+	/******************************
+	 * these vars are reset here when returning to the mainMenu. These vars are not reset at menuState.
+	 */
+	public static function resetConfigurationVars2():Void
 	{
 		_theme_name.splice(0, _theme_name.length);
 		
@@ -552,19 +571,34 @@ class RegCustom
 		_sound_enabled.splice(0, _sound_enabled.length);
 		_sound_enabled.push(true);		
 		
-		var _directory = StringTools.replace(Path.directory(Sys.programPath()), "\\", "/") + "/themes/";
+		_time_remaining_for_game.splice(0, _time_remaining_for_game.length);
+		_time_remaining_for_game.push([0]);
+		_time_remaining_for_game[0] = [15, 15, 15, 15, 30];
 		
-		// create the default theme in because there might be another theme already in the themes folder and without a default theme the client will crash because the Reg._tn of the default theme will not be zero.
-		if (RegCustom._theme_name[0] == null)
-		{
-			if (sys.FileSystem.exists(_directory) == false) 
-				sys.FileSystem.createDirectory(_directory);
-							
-			RegCustom._theme_name.push("default.yaml");
+		_background_header_title_number.splice(0, _background_header_title_number.length);
+		_background_header_title_number.push(1);
+		
+		_background_footer_menu_number.splice(0, _background_footer_menu_number.length);
+		_background_footer_menu_number.push(1);
+
+		#if html5
+			return;
 			
-		}
-		
-		
+		#else
+			var _directory = StringTools.replace(Path.directory(Sys.programPath()), "\\", "/") + "/themes/";
+			
+			// create the default theme in because there might be another theme already in the themes folder and without a default theme the client will crash because the Reg._tn of the default theme will not be zero.
+			if (RegCustom._theme_name[0] == null)
+			{
+				if (sys.FileSystem.exists(_directory) == false) 
+					sys.FileSystem.createDirectory(_directory);
+								
+				RegCustom._theme_name.push("default.yaml");
+				
+			}
+			
+			
+		#end
 		
 	}
 	

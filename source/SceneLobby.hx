@@ -18,32 +18,53 @@
 
 package;
 import flixel.math.FlxPoint;
+import flixel.ui.FlxVirtualPad.FlxActionMode;
 
 /**
  * ...
  * @author kboardgames.com
  */
 class SceneLobby extends FlxState
-{
+{	
+	/******************************
+	* host of the room directly at right side of room buttons.
+	*/
+	private var __scene_lobby_room_host_username_text:Array<SceneLobbyRoomHostUsernameText> = [for (i in 0...24) new SceneLobbyRoomHostUsernameText(0, 0, 0, "", 0)]; 
+	
+	/******************************
+	* room game title directly at right side of host text.
+	*/
+	private var __scene_lobby_game_title_text:Array<SceneLobbyGameTitleText> = [for (i in 0...24) new SceneLobbyGameTitleText(0, 0, 0, "", 0)]; 
+	
+	/******************************
+	* the total player limit permitted for that room.
+	*/
+	private var __scene_lobby_room_player_limit_text:Array<SceneLobbyRoomPlayerLimitText> = [for (i in 0...24) new SceneLobbyRoomPlayerLimitText(0, 0, 0, "", 0)];
+	
+	/******************************
+	* the total player limit permitted for that room.
+	*/
+	private var __scene_lobby_game_against_text:Array<SceneLobbyGameAgainstText> = [for (i in 0...24) new SceneLobbyGameAgainstText(0, 0, 0, "", 0)];
+	
+	/******************************
+	* outputs true or false if spectators are allowed for that room.
+	*/
+	private var __scene_lobby_game_spectators_text:Array<SceneLobbyGameSpectatorsText> = [for (i in 0...24) new SceneLobbyGameSpectatorsText(0, 0, 0, "", 0)];
+	
+	public static var __game_chatter:GameChatter;
+	private var __miscellaneous_menu_output:MiscellaneousMenuOutput;
+	public var __menu_bar:MenuBar;
+	public var __scrollable_area:FlxScrollableArea;	
+	
 	/******************************
 	 * moves all row data to the left side.
 	 */
 	private var _offset_x:Int = 50;
-	
-	public var __menu_bar:MenuBar;
-	
+			
 	/******************************
-	 * button total displayed. also change this value at server.
-	 */
-	private var _button_total:Int = 24;
-		
-	public var group2:FlxSpriteGroup;		
-	
-	/******************************
-	* anything added to this group will be placed inside of the boxScroller field. 
+	* anything added to this group will be placed inside of the scrollable area field. 
 	*/
-	public var group:FlxSpriteGroup;	
-	public var __boxscroller:FlxScrollableArea;	
+	public var _group_scrollable_area:FlxSpriteGroup;	
 	
 	/******************************
 	* The current state of the room. a value of 0 and the room text will be empty, 1 and someone is waiting in a room to play the game and 2 means that a game is in progress.
@@ -66,33 +87,21 @@ class SceneLobby extends FlxState
 	private var _title:FlxText;	
 	private var _title_background:FlxSprite; // background for title.
 	
-	private var _group_button:Array<ButtonGeneralNetworkYes> = []; // access members here.
-	
 	/******************************
-	* host of the room directly at right side of room buttons.
-	*/
-	private var __scene_lobby_room_host_username_text:SceneLobbyRoomHostUsernameText;
-	
-	/******************************
-	* room game title directly at right side of host text.
-	*/
-	private var __scene_lobby_game_title_text:SceneLobbyGameTitleText;
-	
-	/******************************
-	* the total player limit permitted for that room.
-	*/
-	private var __scene_lobby_room_player_limit_text:SceneLobbyRoomPlayerLimitText;
+	 * scene background
+	 */
+	private var _background:FlxSprite;
 		
 	/******************************
-	* the total player limit permitted for that room.
-	*/
-	private var __scene_lobby_game_against_text:SceneLobbyGameAgainstText;
+	 * button total displayed. also change this value at server.
+	 */
+	private var _room_total:Int = 24;
 	
 	/******************************
-	* outputs true or false if spectators are allowed for that room.
-	*/
-	private var __scene_lobby_game_spectators_text:SceneLobbyGameSpectatorsText;
-	
+	 * access members here.
+	 */
+	private var _group_button_for_room:Array<ButtonGeneralNetworkYes> = [for (i in 0...24) new ButtonGeneralNetworkYes(0,0,"",0,0,0,0xfffffff,0,null)]; 
+		
 	/******************************
 	* the number of the room that was selected.
 	*/
@@ -101,7 +110,7 @@ class SceneLobby extends FlxState
 	/******************************
 	* do not new FlxText or button the second time. only one field at a coordinate permitted.
 	*/
-	public static var _didPopulateList:Bool = false;
+	public static var _populate_table_body:Bool = false;
 	
 	private var _button_lobby_refresh:ButtonGeneralNetworkYes;
 		
@@ -118,38 +127,50 @@ class SceneLobby extends FlxState
 	/******************************
 	 * white bar with text such as host, game title, spectators, overtop of it.
 	 */
-	private var _title_sub_background:FlxSprite;
-	
-	/******************************
-	 * Header columns text for the data rows.	
-	*/
-	public var _t1:FlxText;
-	public var _t2:FlxText;
-	public var _t3:FlxText;
-	public var _t4:FlxText;
-	public var _t5:FlxText;
-	public var _t6:FlxText;
-	
+	private var _table_header_background:FlxSprite;
+		
 	/******************************
 	 * to center the button's text at menuBar to button's height, those buttons need more than one update() call. when this var is not 0 then these buttons will be visible to scene, since the buttons text is now centered. without this var, the buttons text will be displayed at top of buttons for a brief second, showing what appears to be a display bug.
 	 */
 	private var _ticks_buttons_menuBar:Int = 0;
 		
-	public static var __game_chatter:GameChatter;
+	/******************************
+	 * message number used to display message box about cannot enter room message.
+	 */
+	public static var _message:Int = 0; 
 	
-	public static var _message:Int = 0; // message number used to display message box about cannot enter room message.
+	/******************************
+	 *  // room number variable used in a message saying that the room is full.
+	 */
+	public static var _number_room_full:Int = 0;
+		
+	/******************************
+	 * solid table rows.
+	 */
+	private var _table_rows:Array<FlxSprite> = [for (i in 0...26) new FlxSprite(0, 0)]; 
 	
-	public static var _number_room_full:Int = 0; // room number.
+	private var _table_rows_color:FlxColor;
+	
+	/******************************
+	 * we need different column separators for memory cleanup. this is a black bar between table rows.
+	 */
+	private var _column_separator:Array<FlxSprite> = [for (i in 0...5) new FlxSprite(0,0)]; 
+	
+	/******************************
+	 * table column text.
+	*/
+	public var _table_column_text:Array<FlxText> = [for (i in 0...6) new FlxText(0,0,0,"",0)]; 
 	
 	override public function new():Void
 	{
 		super();
 		
+		Reg._at_game_room = false;
 		Reg._at_lobby = true;
 		_lobby_data_received = false;
 		_lobby_data_received_do_once = true;
 		_number = 0;
-		_didPopulateList = false;
+		_populate_table_body = false;
 		_ticks_buttons_menuBar = 1;
 		
 		FlxG.autoPause = false;	// this application will pause when not in focus.
@@ -165,7 +186,7 @@ class SceneLobby extends FlxState
 		PlayState._text_logging_in.text = "";
 		Reg._at_lobby = true;
 		
-		_didPopulateList = false;
+		_populate_table_body = false;
 		
 		__menu_bar.initialize();
 	}
@@ -176,18 +197,42 @@ class SceneLobby extends FlxState
 				
 		RegTypedef._dataMisc._gid[RegTypedef._dataMisc._room] = RegTypedef._dataMovement._gid = RegTypedef._dataMisc.id;
 		
-		var background = new FlxSprite();
-		background.makeGraphic(FlxG.width,FlxG.height-50,FlxColor.WHITE);
-		background.color = FlxColor.BLACK;
-		background.scrollFactor.set(0, 0);
-		add(background);
+		// scene background
+		if (_background != null)
+		{
+			remove(_background);
+			_background.destroy();
+		}
 		
-		group = cast add(new FlxSpriteGroup());
+		_background = new FlxSprite();
+		_background.makeGraphic(FlxG.width, FlxG.height-50,FlxColor.WHITE);
+		_background.color = FlxColor.BLACK;
+		_background.scrollFactor.set(0, 0);
+		add(_background);
 		
-		_title_background = new FlxSprite(0, 5);
-		_title_background.makeGraphic(FlxG.width - 40, 50, 0xFF440000); 
+		if (_group_scrollable_area != null)
+		{
+			remove(_group_scrollable_area);
+			_group_scrollable_area.destroy();			
+		}
+		_group_scrollable_area = cast add(new FlxSpriteGroup());
+		
+		if (_title_background != null)
+		{
+			remove(_title_background);
+			_title_background.destroy();			
+		}
+		
+		_title_background = new FlxSprite(0, 0);
+		_title_background.makeGraphic(FlxG.width, 55, Reg._background_header_title_color); 
 		_title_background.scrollFactor.set(1,0);
 		add(_title_background);
+		
+		if (_title != null)
+		{
+			remove(_title);
+			_title.destroy();			
+		}
 		
 		_title = new FlxText(15, 4, 0, "Lobby");
 		_title.setFormat(Reg._fontDefault, 50, FlxColor.YELLOW);
@@ -196,14 +241,19 @@ class SceneLobby extends FlxState
 		_title.visible = true;
 		add(_title);
 		
-		// 360 is the chat width. 215 is this button with. 15 is the default space from the edge. 20 is the width of the scrollbar. 10 is the extra space needed to make it look nice,
-		_button_lobby_refresh = new ButtonGeneralNetworkYes(FlxG.width + -360 + -215 + -15 - 20 - 10, 14, "Lobby Refresh", 215, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, button_refresh, RegCustom._button_color[Reg._tn], false);		
+		if (_button_lobby_refresh != null)
+		{
+			remove(_button_lobby_refresh);
+			_button_lobby_refresh.destroy();			
+		}
+		
+		// 360 is the chat width. 215 is this button with. 15 is the default space from the edge. 20 is the width of the scrollbar. 10 is the extra space needed to make it look nice,		
+		_button_lobby_refresh = new ButtonGeneralNetworkYes(FlxG.width + -360 + -215 + -15 - 20 - 10, 12, "Lobby Refresh", 215, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, button_refresh, RegCustom._button_color[Reg._tn], false);		
 		_button_lobby_refresh.label.font = Reg._fontDefault;
 		_button_lobby_refresh.scrollFactor.set(0, 0);
+		button_refresh();
 		add(_button_lobby_refresh);
 				
-		// see populateRoomList() for table rows
-		//---------------------------------------------- End of header columns text
 		_buttonState[0] = "Empty";
 		_buttonState[1] = "Computer";
 		_buttonState[2] = "Creating";
@@ -214,144 +264,24 @@ class SceneLobby extends FlxState
 		_buttonState[7] = "Full";
 		_buttonState[8] = "Watch";
 		
-		var _color_table_rows = FlxColor.fromHSB(FlxG.random.int(1, 360), 0.8, (RegCustom._background_brightness[Reg._tn]-0.10));
-		
-		if (RegCustom._client_background_enabled[Reg._tn] == true)
-		{
-			_color_table_rows = MenuConfigurationsGeneral.color_client_background();
-			_color_table_rows.alphaFloat = 0.15;
-		}
-		
-		// Create the text boxes underneath the buttons. Note that the last count ends before another loop, so only 26 loops will be made. 
-		for (i in 1...27)
-		{
-			var slotBox = new FlxSprite(0, 0);
-			slotBox.makeGraphic(FlxG.width - 60, 55, _color_table_rows);		
-			slotBox.setPosition(20, 120 - _offset_y + (i * 70)); 
-			slotBox.scrollFactor.set(0, 0);
-			group.add(slotBox);
-		}		
-		
-		//.....................................
-		// a black bar between table rows.
-		// first column border. columns are minus 30 from Header column text.
-		var slotBox = new FlxSprite(0, 0);
-		slotBox.makeGraphic(10, 120 + (26 * 70), 0xFF000000);		
-		slotBox.setPosition(370 - _offset_x - _offset2_x, 120 - _offset_y + (1 * 70)); 
-		slotBox.scrollFactor.set(0, 0);
-		group.add(slotBox);
-		
-		var slotBox = new FlxSprite(0, 0);
-		slotBox.makeGraphic(10, 120 + (26 * 70), 0xFF000000);		
-		slotBox.setPosition(600 - _offset_x - _offset2_x, 120 - _offset_y + (1 * 70)); 
-		slotBox.scrollFactor.set(0, 0);
-		group.add(slotBox);
-		
-		var slotBox = new FlxSprite(0, 0);
-		slotBox.makeGraphic(10, 120 + (26 * 70), 0xFF000000);		
-		slotBox.setPosition(855 - _offset_x - _offset2_x, 120 - _offset_y + (1 * 70));
-		slotBox.scrollFactor.set(0, 0);
-		group.add(slotBox);
-		
-		var slotBox = new FlxSprite(0, 0);
-		slotBox.makeGraphic(10, 120 + (26 * 70), 0xFF000000);		
-		slotBox.setPosition(1025 - _offset_x - _offset2_x, 120 - _offset_y + (1 * 70));
-		slotBox.scrollFactor.set(0, 0);
-		group.add(slotBox);
-		
-		var slotBox = new FlxSprite(0, 0); // before the spectators text.
-		slotBox.makeGraphic(10, 120 + (26 * 70), 0xFF000000);		
-		slotBox.setPosition(1195 - _offset_x - _offset2_x, 120 - _offset_y + (1 * 70));
-		slotBox.scrollFactor.set(0, 0);
-		group.add(slotBox);
-		
-		//--------------------------
-		
-		var _id:Int = 2;
-	
-		_group_button.splice(0, _group_button.length);
-		
-		for (i in 0... _button_total) // change this value if increasing the button number.
-		{
-			// buttons displayed overtop of a text box. Positioned at the right side of the screen.
-			var _button = new ButtonGeneralNetworkYes(100 - _offset_x, 125 - _offset_y + ((i + 1) * 70), Std.string(i) + ": " + _buttonState[RegTypedef._dataMisc._roomState[(i + 1)]], 215, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, null, RegCustom._button_color[Reg._tn], false, _id);
-									
-			_group_button.push(_button);				
-			//_group_button[i].visible = true;
-			
-			#if html5
-				if (i >= 2)
-				{
-					_group_button[i].label.color = FlxColor.WHITE;
-				}
-			#end
-						
-			_group_button[i].setPosition(100 - _offset_x, 125 - _offset_y + ((i+1) * 70));
-			
-			_group_button[i].ID = _id;
-			group.add(_group_button[i]);
-
-		}
-				
-		//populateRoomList(); // table data such as playing game text beside room buttons.
-				
-		//---------------------------------------------- Header title and columns text for the data rows.		
-		var _count = group.members.length-1;
-		
-		_title_sub_background = new FlxSprite(0, 110);
-		_title_sub_background.makeGraphic(FlxG.width - 40, 50, FlxColor.WHITE); 
-		_title_sub_background.scrollFactor.set(1, 0);
-		group.add(_title_sub_background);
-		group.members[(_count+1)].scrollFactor.set(1, 0);
-		
-		_t1 = new FlxText(100 - _offset_x, 120, 0, "Room State");
-		_t1.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.BLACK);
-		group.add(_t1);
-		group.members[(_count+2)].scrollFactor.set(1, 0);
-		
-		_t2 = new FlxText(390 - _offset_x - _offset2_x, 120, 0, "Room Host");
-		_t2.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.BLACK);
-		_t2.scrollFactor.set(0, 0);
-		group.add(_t2);
-		group.members[(_count+3)].scrollFactor.set(1, 0);
-		
-		_t3 = new FlxText(620 - _offset_x - _offset2_x, 120, 0, "Game");
-		_t3.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.BLACK);
-		_t3.scrollFactor.set(0, 0);
-		group.add(_t3);
-		group.members[(_count+4)].scrollFactor.set(1, 0);
-		
-		_t4 = new FlxText(876 - _offset_x - _offset2_x, 120, 0, "Players");
-		_t4.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.BLACK);
-		_t4.scrollFactor.set(0, 0);
-		group.add(_t4);
-		group.members[(_count+5)].scrollFactor.set(1, 0);
-		
-		_t5 = new FlxText(1045 - _offset_x - _offset2_x, 120, 0, "Against");
-		_t5.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.BLACK);
-		_t5.scrollFactor.set(0, 0);
-		group.add(_t5);
-		group.members[(_count+6)].scrollFactor.set(1, 0);
-		
-		_t6 = new FlxText(1225 - _offset_x - _offset2_x, 120, 0, "Spectators");
-		_t6.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.BLACK);
-		_t6.scrollFactor.set(0, 0);
-		group.add(_t6);
-		group.members[(_count+7)].scrollFactor.set(1, 0);
+		// see draw_table_all_body_text() for table row text data
+		draw_table_empty();
+		draw_table_all_body_buttons();
+		draw_table_column();
 		
 		if (RegCustom._chat_when_at_lobby_enabled[Reg._tn] == true)
 		{
 			// make a scrollbar-enabled camera for it (a FlxScrollableArea)
-			if (__boxscroller != null)
+			if (__scrollable_area != null)
 			{
-				FlxG.cameras.remove(__boxscroller);
-				__boxscroller.destroy();
+				FlxG.cameras.remove(__scrollable_area);
+				__scrollable_area.destroy();
 			}
-			__boxscroller = new FlxScrollableArea( new FlxRect(0, 0, 1390-360, FlxG.height - 50), new FlxRect(0, 0, 1390, 1950), ResizeMode.NONE, 0, 100, -1, FlxColor.LIME, null, 0, true);
+			__scrollable_area = new FlxScrollableArea( new FlxRect(0, 0, 1390-360, FlxG.height - 50), new FlxRect(0, 0, 1390, 1950), ResizeMode.NONE, 0, 100, -1, FlxColor.LIME, null, 0, true);
 			
-			FlxG.cameras.add( __boxscroller );
-			__boxscroller.antialiasing = true;
-			__boxscroller.pixelPerfectRender = true;
+			FlxG.cameras.add( __scrollable_area );
+			__scrollable_area.antialiasing = true;
+			__scrollable_area.pixelPerfectRender = true;
 			
 			if (__game_chatter != null) 
 			{
@@ -361,10 +291,10 @@ class SceneLobby extends FlxState
 			__game_chatter = new GameChatter(2);
 			__game_chatter.visible = true;
 			
-			if (GameChatter.__boxscroller2 != null)	
+			if (GameChatter.__scrollable_area2 != null)	
 			{
-				GameChatter.__boxscroller2.active = true;
-				GameChatter.__boxscroller2.visible = true;
+				GameChatter.__scrollable_area2.active = true;
+				GameChatter.__scrollable_area2.visible = true;
 			}
 			
 			GameChatter._groupChatterScroller.x = 0; // value of 375 work with below var to hide,
@@ -375,21 +305,21 @@ class SceneLobby extends FlxState
 		else
 		{
 			// make a scrollbar-enabled camera for it (a FlxScrollableArea)
-			if (__boxscroller != null)
+			if (__scrollable_area != null)
 			{
-				FlxG.cameras.remove(__boxscroller);
-				__boxscroller.destroy();
+				FlxG.cameras.remove(__scrollable_area);
+				__scrollable_area.destroy();
 			}
 			
-			__boxscroller = new FlxScrollableArea( new FlxRect(0, 0, 1400, FlxG.height - 50), new FlxRect(0, 0, 1400, 1950), ResizeMode.FIT_WIDTH, 0, 100, -1, FlxColor.LIME, null, 0, true);
+			__scrollable_area = new FlxScrollableArea( new FlxRect(0, 0, 1400, FlxG.height - 50), new FlxRect(0, 0, 1400, 1950), ResizeMode.FIT_WIDTH, 0, 100, -1, FlxColor.LIME, null, 0, true);
 			
-			FlxG.cameras.add( __boxscroller );
-			__boxscroller.antialiasing = true;
-			__boxscroller.pixelPerfectRender = true;
+			FlxG.cameras.add( __scrollable_area );
+			__scrollable_area.antialiasing = true;
+			__scrollable_area.pixelPerfectRender = true;
 			
 		}
 		
-		__boxscroller.content.y = 500;
+		__scrollable_area.content.y = 500;
 		
 		if (__menu_bar != null)
 		{
@@ -400,64 +330,191 @@ class SceneLobby extends FlxState
 		__menu_bar = new MenuBar();
 		add(__menu_bar);
 				
-		setNotActiveForButtons();
+		set_not_active_for_buttons();
 		initialize();
 				
-	}
-		
-	public function requestLobbyData():Void
+	}	
+	
+	private function draw_table_empty():Void
 	{
-		RegTypedef._dataMisc._room = 0;
+		_table_rows_color = FlxColor.fromHSB(FlxG.random.int(1, 360), 0.8, (RegCustom._background_brightness[Reg._tn]-0.10));
 		
-		// player is at lobby, so a check for room lock is not needed to be sent to this event.
-		RegTypedef._dataMisc._roomCheckForLock[0] = 0;
+		if (RegCustom._client_background_enabled[Reg._tn] == true)
+		{
+			_table_rows_color = MenuConfigurationsGeneral.color_client_background();
+			_table_rows_color.alphaFloat = 0.15;
+		}
 		
-		// used for bug tracking. see function receive() at TcpClient.
-		RegTypedef._dataMisc._triggerEvent = "foo"; // anything can be used here.
-		PlayState.clientSocket.send("Get Room Data", RegTypedef._dataMisc);
-		haxe.Timer.delay(function (){}, Reg2._event_sleep);
+		// Note that the last count ends before another loop, so only 26 loops will be made. 
+		for (i in 1...26)
+		{
+			if (_table_rows[i] != null)
+			{
+				_group_scrollable_area.remove(_table_rows[i]);
+				_table_rows[i].destroy();
+			}
+			
+			// soild table rows
+			_table_rows[i] = new FlxSprite(0, 0);
+			_table_rows[i].makeGraphic(FlxG.width - 60, 55, _table_rows_color);		
+			_table_rows[i].setPosition(20, 120 - _offset_y + (i * 70)); 
+			_table_rows[i].scrollFactor.set(0, 0);
+			_group_scrollable_area.add(_table_rows[i]);
+		}		
+		
+		//.....................................
+		var _arr = [370, 600, 855, 1025, 1195];
+		
+		for (i in 0...5)
+		{
+			if (_column_separator[i] != null)
+			{			
+				_group_scrollable_area.remove(_column_separator[i]);
+				_column_separator[i].destroy();
+			}
+			
+			// we need different column separators for memory cleanup. this is a black bar between table rows.
+			// first column separator.
+			_column_separator[i] = new FlxSprite(0, 0);
+			_column_separator[i].makeGraphic(10, 120 + (26 * 70), 0xFF000000);	
+			_column_separator[i].setPosition(_arr[i] - _offset_x - _offset2_x, 120 - _offset_y + (1 * 70)); 
+			_column_separator[i].scrollFactor.set(0, 0);
+			_group_scrollable_area.add(_column_separator[i]);
+		
+		}
 				
-		RegTypedef._dataMisc._triggerEvent = "";
 	}
 	
-	public function populateRoomList():Void
-	{		
-		//....................... host Title data at lobby boxScroller.
-		if (_didPopulateList == false)
+	/******************************
+	 * Header title and columns text for the data rows.
+	 */
+	private function draw_table_column():Void
+	{	
+		var _count = _group_scrollable_area.members.length;
+		var _column_name = ["Room State", "Room Host", "Game", "Players", "Against", "Spectators"];
+		var _column_x = [143, 390, 620, 876, 1045, 1225];
+		
+		if (_table_header_background != null)
 		{
-			for (i in 0...27)
+			_group_scrollable_area.remove(_table_header_background);
+			_table_header_background.destroy();
+		}
+		
+		_table_header_background = new FlxSprite(0, 110);
+		_table_header_background.makeGraphic(FlxG.width, 50, FlxColor.WHITE); 
+		_table_header_background.scrollFactor.set(1, 0);
+		_group_scrollable_area.add(_table_header_background);
+		_group_scrollable_area.members[(_count)].scrollFactor.set(1, 0);
+	
+		
+		for (i in 0...6)
+		{
+			if (_table_column_text[i] != null)
+			{ 
+				_group_scrollable_area.remove(_table_column_text[i]);
+				_table_column_text[i].destroy();
+			}		
+			
+			// table calumn text.
+			_table_column_text[i] = new FlxText(_column_x[i] - _offset_x - _offset2_x, 120, 0, _column_name[i]);
+			_table_column_text[i].setFormat(Reg._fontDefault, Reg._font_size, FlxColor.BLACK);
+			_table_column_text[i].scrollFactor.set(0, 0);
+			_group_scrollable_area.add(_table_column_text[i]);
+			_group_scrollable_area.members[(_count+(i+1))].scrollFactor.set(1, 0);
+		}
+		
+	}
+	
+	private function draw_table_all_body_buttons():Void
+	{
+		var _id:Int = 2;
+	
+		//_group_button_for_room.splice(0, _group_button_for_room.length);
+		
+		for (i in 0... _room_total) // change this value if increasing the button number.
+		{
+			// Positioned at the right side of the screen.
+			if (_group_button_for_room[i] != null)
+			{
+				_group_scrollable_area.remove(_group_button_for_room[i]);
+				_group_button_for_room[i].destroy();
+			}
+			
+			_group_button_for_room[i] = new ButtonGeneralNetworkYes(100 - _offset_x, 125 - _offset_y + ((i + 1) * 70), Std.string(i) + ": " + _buttonState[RegTypedef._dataMisc._roomState[(i + 1)]], 215, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, null, RegCustom._button_color[Reg._tn], false, _id);
+			
+			#if html5
+				if (i >= 2)
+				{
+					_group_button_for_room[i].label.color = FlxColor.WHITE;
+				}
+			#end
+						
+			_group_button_for_room[i].setPosition(100 - _offset_x, 125 - _offset_y + ((i+1) * 70));
+			
+			_group_button_for_room[i].ID = _id;
+			_group_scrollable_area.add(_group_button_for_room[i]);
+
+		}
+	}
+	
+	private function draw_table_all_body_text():Void
+	{		
+		//....................... host Title data at lobby scrollable area.
+		if (_populate_table_body == false)
+		{
+			for (i in 0... _room_total)
 			{
 			
 				var _gameName = Std.string(RegTypedef._dataMisc._roomHostUsername[i]);
 				
-				__scene_lobby_room_host_username_text = new SceneLobbyRoomHostUsernameText(390 - _offset_x - _offset2_x, 130 - _offset_y + i * 70, 0, "", Reg._font_size, i);
+				if (__scene_lobby_room_host_username_text[i] != null)
+				{
+					_group_scrollable_area.remove(__scene_lobby_room_host_username_text[i]);
+					__scene_lobby_room_host_username_text[i].destroy();
+					
+				}
+				
+				__scene_lobby_room_host_username_text[i] = new SceneLobbyRoomHostUsernameText(390 - _offset_x - _offset2_x, 130 - _offset_y + i * 70, 0, "", Reg._font_size, i);
 								
-				__scene_lobby_room_host_username_text.text = Std.string(_gameName);	
-				__scene_lobby_room_host_username_text.font = Reg._fontDefault;
-				group.add(__scene_lobby_room_host_username_text);
+				__scene_lobby_room_host_username_text[i].text = Std.string(_gameName);	
+				__scene_lobby_room_host_username_text[i].font = Reg._fontDefault;
+				_group_scrollable_area.add(__scene_lobby_room_host_username_text[i]);
 		
 						
 				var _host = RegFunctions.gameName(RegTypedef._dataMisc._roomGameIds[i]);
-					
-				__scene_lobby_game_title_text = new SceneLobbyGameTitleText(620 - _offset_x - _offset2_x, 130 - _offset_y + i * 70, 0, " ", Reg._font_size, i);
-				__scene_lobby_game_title_text.fieldWidth = 220;
-				__scene_lobby_game_title_text.wordWrap = false;
-				__scene_lobby_game_title_text.text = " ";
-				__scene_lobby_game_title_text.font = Reg._fontDefault;
-				group.add(__scene_lobby_game_title_text);
+				
+				if (__scene_lobby_game_title_text[i] != null)
+				{
+					remove(__scene_lobby_game_title_text[i]);
+					__scene_lobby_game_title_text[i].destroy();
+				}
+				
+				__scene_lobby_game_title_text[i] = new SceneLobbyGameTitleText(620 - _offset_x - _offset2_x, 130 - _offset_y + i * 70, 0, " ", Reg._font_size, i);
+				__scene_lobby_game_title_text[i].fieldWidth = 220;
+				__scene_lobby_game_title_text[i].wordWrap = false;
+				__scene_lobby_game_title_text[i].text = " ";
+				__scene_lobby_game_title_text[i].font = Reg._fontDefault;
+				_group_scrollable_area.add(__scene_lobby_game_title_text[i]);
 		
 		
-				//....................... Room player limit data at lobby boxScroller.
+				//....................... Room player limit data at lobby scrollable area.
 				var _total = RegTypedef._dataMisc._roomPlayerCurrentTotal[i] + "/" + RegTypedef._dataMisc._roomPlayerLimit[i];
 				
-				__scene_lobby_room_player_limit_text = new SceneLobbyRoomPlayerLimitText(875 - _offset_x - _offset2_x, 130 - _offset_y + i * 70, 0, "", Reg._font_size, i);
+				if (__scene_lobby_room_player_limit_text[i] != null)
+				{
+					remove(__scene_lobby_game_title_text[i]);
+					remove(__scene_lobby_room_player_limit_text[i]);
+					__scene_lobby_room_player_limit_text[i].destroy();
+				}
+				
+				__scene_lobby_room_player_limit_text[i] = new SceneLobbyRoomPlayerLimitText(875 - _offset_x - _offset2_x, 130 - _offset_y + i * 70, 0, "", Reg._font_size, i);
 					
-				__scene_lobby_room_player_limit_text.text = Std.string(_total);
-				__scene_lobby_room_player_limit_text.font = Reg._fontDefault;
+				__scene_lobby_room_player_limit_text[i].text = Std.string(_total);
+				__scene_lobby_room_player_limit_text[i].font = Reg._fontDefault;
 				
-				if (RegTypedef._dataMisc._roomPlayerCurrentTotal[i] == 0) __scene_lobby_room_player_limit_text.text = "";
+				if (RegTypedef._dataMisc._roomPlayerCurrentTotal[i] == 0) __scene_lobby_room_player_limit_text[i].text = "";
 				
-				group.add(__scene_lobby_room_player_limit_text);
+				_group_scrollable_area.add(__scene_lobby_room_player_limit_text[i]);
 				
 				//----------------------- Is the player playing against humans or computers...
 				var _vsComputer = RegTypedef._dataMisc._vsComputer[i];
@@ -466,39 +523,53 @@ class SceneLobby extends FlxState
 				if (_vsComputer == 1) _title = "Computer";
 				
 				if (RegTypedef._dataMisc._roomPlayerCurrentTotal[i] == 0) _title = "";
-					
-				__scene_lobby_game_against_text = new SceneLobbyGameAgainstText(1045 - _offset_x - _offset2_x, 130 - _offset_y + i * 70, 0, "", Reg._font_size, i);
 				
-				__scene_lobby_game_against_text.text = _title;
-				__scene_lobby_game_against_text.font = Reg._fontDefault;
-				group.add(__scene_lobby_game_against_text);
+				if (__scene_lobby_game_against_text[i] != null)
+				{
+					remove(__scene_lobby_game_title_text[i]);
+					remove(__scene_lobby_game_against_text[i]);
+					__scene_lobby_game_against_text[i].destroy();
+				}
+				
+				__scene_lobby_game_against_text[i] = new SceneLobbyGameAgainstText(1045 - _offset_x - _offset2_x, 130 - _offset_y + i * 70, 0, "", Reg._font_size, i);
+				
+				__scene_lobby_game_against_text[i].text = _title;
+				__scene_lobby_game_against_text[i].font = Reg._fontDefault;
+				_group_scrollable_area.add(__scene_lobby_game_against_text[i]);
 				
 				//----------------------- spectators.
-				__scene_lobby_game_spectators_text = new SceneLobbyGameSpectatorsText(1225 - _offset_x - _offset2_x, 130 - _offset_y + i * 70, 0, "", Reg._font_size, i);
+				if (__scene_lobby_game_spectators_text[i] != null)
+				{
+					remove(__scene_lobby_game_title_text[i]);
+					remove(__scene_lobby_game_spectators_text[i]);
+					__scene_lobby_game_spectators_text[i].destroy();
+				}
 				
-				__scene_lobby_game_spectators_text.font = Reg._fontDefault;
-				group.add(__scene_lobby_game_spectators_text);
+				__scene_lobby_game_spectators_text[i] = new SceneLobbyGameSpectatorsText(1225 - _offset_x - _offset2_x, 130 - _offset_y + i * 70, 0, "", Reg._font_size, i);
+				
+				__scene_lobby_game_spectators_text[i].font = Reg._fontDefault;
+				_group_scrollable_area.add(__scene_lobby_game_spectators_text[i]);
 				
 			}
 		}
 				
-		_didPopulateList = true; // if column text is still showing for a room then text = "" was not used at the class that display the row for that column. see GameLobbyGameSpectatorsText.hx for an example.
+		_populate_table_body = true; // if column text is still showing for a room then text = "" was not used at the class that display the row for that column. see GameLobbyGameSpectatorsText.hx for an example.
 		
 	}
 	
-	private function buttonClicked(_num):Void
+	private function button_clicked(_num):Void
 	{
 		#if html5
-			if (_num < 3) gotoRoom(_num);
+			if (_num < 3) goto_room(_num);
 		#else			
-			gotoRoom(_num);
+			goto_room(_num);
 		#end
 	}
 		
 	/******************************
 	 * go to the room where the player waits for another player to play a game. else go to create room, Reg._getRoomData
 	 */
-	private function gotoRoom(_num:Int):Void
+	private function goto_room(_num:Int):Void
 	{		
 		_number = _num;
 		
@@ -510,13 +581,12 @@ class SceneLobby extends FlxState
 		Reg._getRoomData = true;		
 	}
 	
-	private function roomFull(message:Int, number_room_full:Int):Void
+	private function room_full(message:Int, number_room_full:Int):Void
 	{
 		_message = message;
 		_number_room_full = number_room_full;
 		
-		//group.visible = false;
-		group.active = false;		
+		_group_scrollable_area.active = false;		
 
 		Reg._messageId = 2000;
 		Reg._buttonCodeValues = "l1010";
@@ -524,12 +594,11 @@ class SceneLobby extends FlxState
 	
 	}
 	
-	private function dataNotYetReadyForWaitingRoom(_number:Int):Void
+	private function data_not_ready_for_waitingRoom(_number:Int):Void
 	{
 		_number_room_full = _number;
 		
-		//group.visible = false;
-		group.active = false;		
+		_group_scrollable_area.active = false;		
 
 		Reg._messageId = 2010;
 		Reg._buttonCodeValues = "l1030";
@@ -537,9 +606,9 @@ class SceneLobby extends FlxState
 		
 	}
 	
-	private function watchGame(_number:Int):Void
+	private function watch_game(_number:Int):Void
 	{		
-		setNotActiveForButtons();
+		set_not_active_for_buttons();
 		
 		RegTypedef._dataMisc._spectatorWatching = true;
 		RegTypedef._dataPlayers._spectatorPlaying = false;
@@ -568,43 +637,43 @@ class SceneLobby extends FlxState
 	/******************************
 	 * this function is called when going to MiscellaneousMenu.hx, Leaderboards.hx or house.hx class.
 	 */
-	public function setNotActiveForButtons():Void
+	public function set_not_active_for_buttons():Void
 	{
 		Reg._at_lobby = false;
 		HouseScrollMap._map_offset_x = 0;
 		HouseScrollMap._map_offset_y = 0;
 		
-		if (group != null)
+		if (_group_scrollable_area != null)
 		{
 			// put this group off screen so that elements such as lobby buttons cannot be clicked.
-			group.setPosition(5000, 0);
-			group.active = false;
+			_group_scrollable_area.setPosition(5000, 0);
+			_group_scrollable_area.active = false;
 		}
 		
-		if (_group_button != null)
+		if (_group_button_for_room != null)
 		{
-			for (i in 0... _group_button.length)
+			for (i in 0... _group_button_for_room.length)
 			{
-				_group_button[i].active = false;
+				_group_button_for_room[i].active = false;
 			}
 		}
 		
-		if (__boxscroller != null)
+		if (__scrollable_area != null)
 		{
-			__boxscroller.visible = false;
-			__boxscroller.active = false;
+			__scrollable_area.visible = false;
+			__scrollable_area.active = false;
 		}
 		
-		if (GameChatter.__boxscroller2 != null)
+		if (GameChatter.__scrollable_area2 != null)
 		{
-			GameChatter.__boxscroller2.visible = false;
-			GameChatter.__boxscroller2.active = false;
+			GameChatter.__scrollable_area2.visible = false;
+			GameChatter.__scrollable_area2.active = false;
 		}
 		
-		if (GameChatter.__boxscroller3 != null)
+		if (GameChatter.__scrollable_area3 != null)
 		{
-			GameChatter.__boxscroller3.visible = false;
-			GameChatter.__boxscroller3.active = false;
+			GameChatter.__scrollable_area3.visible = false;
+			GameChatter.__scrollable_area3.active = false;
 		}
 		
 		if (RegCustom._chat_when_at_lobby_enabled[Reg._tn] == true)
@@ -636,55 +705,53 @@ class SceneLobby extends FlxState
 		_title_background.visible = false;
 		_title.visible = false;
 		
-		_t1.visible = false;
-		_t2.visible = false;
-		_t3.visible = false;
-		_t4.visible = false;
-		_t5.visible = false;
-		_t6.visible = false;
+		for (i in 0... _table_column_text.length)
+		{
+			_table_column_text[i].visible = false;
+		}
 	}
 	
 	/******************************
 	 * this function is called when returning from MiscellaneousMenu.hx or house.hx class.
 	 */
-	public function setActiveForButtons():Void
+	public function set_active_for_buttons():Void
 	{
 		Reg._at_lobby = true;
 		HouseScrollMap._map_offset_x = 0;
 		HouseScrollMap._map_offset_y = 0;
 		
-		if (group != null)
+		if (_group_scrollable_area != null)
 		{
-			group.active = true;
-			group.setPosition(0, 0);
+			_group_scrollable_area.active = true;
+			_group_scrollable_area.setPosition(0, 0);
 		}
 		
-		if (_group_button != null)
+		if (_group_button_for_room != null)
 		{
-			for (i in 0... _group_button.length)
+			for (i in 0... _group_button_for_room.length)
 			{
-				_group_button[i].active = true;
+				_group_button_for_room[i].active = true;
 			}
 		}
 		
-		if (__boxscroller != null) 
+		if (__scrollable_area != null) 
 		{
-			__boxscroller.active = true;
-			__boxscroller.visible = true;
+			__scrollable_area.active = true;
+			__scrollable_area.visible = true;
 			
 		}
 		
-		if (GameChatter.__boxscroller2 != null
+		if (GameChatter.__scrollable_area2 != null
 		&& GameChatter._groupChatterScroller.x == 0)
 		{
-			GameChatter.__boxscroller2.active = true;
-			GameChatter.__boxscroller2.visible = true;
+			GameChatter.__scrollable_area2.active = true;
+			GameChatter.__scrollable_area2.visible = true;
 		}
 		
-		if (GameChatter.__boxscroller3 != null
+		if (GameChatter.__scrollable_area3 != null
 		&& GameChatter._groupChatterScroller.x == 0)
 		{
-			GameChatter.__boxscroller3.active = true;
+			GameChatter.__scrollable_area3.active = true;
 		}
 		
 		if (RegCustom._chat_when_at_lobby_enabled[Reg._tn] == true)
@@ -704,12 +771,10 @@ class SceneLobby extends FlxState
 		_title_background.visible = true;
 		_title.visible = true;
 		
-		_t1.visible = true;
-		_t2.visible = true;
-		_t3.visible = true;
-		_t4.visible = true;
-		_t5.visible = true;
-		_t6.visible = true;
+		for (i in 0... _table_column_text.length)
+		{
+			_table_column_text[i].visible = true;
+		}
 	}
 	
 	// this shows the menuBar buttons after a brief second.
@@ -761,29 +826,35 @@ class SceneLobby extends FlxState
 	{
 		if (_title != null) 
 		{	
-			_title.destroy();
-			_title_background.destroy();			
+			_title_background.destroy();
+			_title.destroy();			
 		}	
 		
-		if (__boxscroller != null && RegTypedef._dataMisc._userLocation == 0)
+		if (__scrollable_area != null && RegTypedef._dataMisc._userLocation == 0)
 		{
-			cameras.remove( __boxscroller );
-			__boxscroller.destroy();
-			__boxscroller = null;
+			cameras.remove( __scrollable_area );
+			__scrollable_area.destroy();
 		}
 		
 				
-		if (group != null) group.destroy();
-		
-		if (__menu_bar.__miscellaneous_menu != null)
+		if (_group_scrollable_area != null)
 		{
-			__menu_bar.__miscellaneous_menu.visible = false;
-			remove(__menu_bar.__miscellaneous_menu);
-			__menu_bar.__miscellaneous_menu.destroy();
+			remove(_group_scrollable_area);
+			_group_scrollable_area.destroy();
+		}
+		
+		if (__menu_bar != null)
+		{
+			if (__menu_bar.__miscellaneous_menu != null)
+			{
+				__menu_bar.__miscellaneous_menu.visible = false;
+				remove(__menu_bar.__miscellaneous_menu);
+				__menu_bar.__miscellaneous_menu.destroy();
+			}
 		}
 		
 		_number = 0;
-		_didPopulateList = false;
+		_populate_table_body = false;
 	
 		super.destroy();
 	}
@@ -816,11 +887,11 @@ class SceneLobby extends FlxState
 				RegTriggers._ticks_buttons_menuBar = false;
 				_ticks_buttons_menuBar = 1;
 				
-				group.active = true;
-				__boxscroller.active = true;
+				_group_scrollable_area.active = true;
+				__scrollable_area.active = true;
 			}
 			
-			// fix a camera display bug where the _button_daily_quests can also be clicked from the right side of the screen because of the chatter boxScroller scrolling part of the scene.
+			// fix a camera display bug where the _button_daily_quests can also be clicked from the right side of the screen because of the chatter scrollable area scrolling part of the scene.
 			if (__menu_bar._buttonMiscMenu.visible == true
 			&&	_ticks_buttons_menuBar == 3)
 			{
@@ -837,34 +908,34 @@ class SceneLobby extends FlxState
 				}
 			}
 			
-			for (i in 0... _button_total)
+			for (i in 0... _room_total)
 			{
 				// if mouse is on the button plus any offset made by the box scroller and mouse is pressed...
-				if (FlxG.mouse.y + ButtonGeneralNetworkYes._scrollarea_offset_y >= _group_button[i]._startY &&  FlxG.mouse.y + ButtonGeneralNetworkYes._scrollarea_offset_y <= _group_button[i]._startY + _group_button[i]._button_height + 7 && FlxG.mouse.y < FlxG.height - 50
-				&& FlxG.mouse.x + ButtonGeneralNetworkYes._scrollarea_offset_x >= _group_button[i]._startX &&  FlxG.mouse.x + ButtonGeneralNetworkYes._scrollarea_offset_x <= _group_button[i]._startX + _group_button[i]._button_width && FlxG.mouse.justPressed == true )
+				if (FlxG.mouse.y + ButtonGeneralNetworkYes._scrollarea_offset_y >= _group_button_for_room[i]._startY &&  FlxG.mouse.y + ButtonGeneralNetworkYes._scrollarea_offset_y <= _group_button_for_room[i]._startY + _group_button_for_room[i]._button_height + 7 && FlxG.mouse.y < FlxG.height - 50
+				&& FlxG.mouse.x + ButtonGeneralNetworkYes._scrollarea_offset_x >= _group_button_for_room[i]._startX &&  FlxG.mouse.x + ButtonGeneralNetworkYes._scrollarea_offset_x <= _group_button_for_room[i]._startX + _group_button_for_room[i]._button_width && FlxG.mouse.justPressed == true )
 				{
-					if (_group_button[i].alpha == 1)
+					if (_group_button_for_room[i].alpha == 1)
 					{
 						if (RegCustom._sound_enabled[Reg._tn] == true
-						&&  Reg2._boxScroller_is_scrolling == false)
+						&&  Reg2._scrollable_area_is_scrolling == false)
 							FlxG.sound.play("click", 1, false);
 					
-						_group_button[i].alpha = 0.3;
+						_group_button_for_room[i].alpha = 0.3;
 						Reg2._lobby_button_alpha = 0.3;
-						buttonClicked((i + 1));					
+						button_clicked((i + 1));					
 						break;
 					}
 				}
 				
 				// is same as above but mouse is not pressed.
-				else if (FlxG.mouse.y + ButtonGeneralNetworkYes._scrollarea_offset_y >= _group_button[i]._startY && FlxG.mouse.y + ButtonGeneralNetworkYes._scrollarea_offset_y <= _group_button[i]._startY + _group_button[i]._button_height + 7 
-				&& FlxG.mouse.x + ButtonGeneralNetworkYes._scrollarea_offset_x >= _group_button[i]._startX && FlxG.mouse.x + ButtonGeneralNetworkYes._scrollarea_offset_x <= _group_button[i]._startX + _group_button[i]._button_width
+				else if (FlxG.mouse.y + ButtonGeneralNetworkYes._scrollarea_offset_y >= _group_button_for_room[i]._startY && FlxG.mouse.y + ButtonGeneralNetworkYes._scrollarea_offset_y <= _group_button_for_room[i]._startY + _group_button_for_room[i]._button_height + 7 
+				&& FlxG.mouse.x + ButtonGeneralNetworkYes._scrollarea_offset_x >= _group_button_for_room[i]._startX && FlxG.mouse.x + ButtonGeneralNetworkYes._scrollarea_offset_x <= _group_button_for_room[i]._startX + _group_button_for_room[i]._button_width
 				&& FlxG.mouse.enabled == true)
 				{
 					#if html5
 						if (i < 2) 
 						{
-							_group_button[i].active = true; 
+							_group_button_for_room[i].active = true; 
 						}
 					#end
 					
@@ -874,57 +945,55 @@ class SceneLobby extends FlxState
 			
 			}
 	
-			// send the offset of the boxScroller to the button class so that when scrolling the boxScroller, the buttons will not be fired at an incorrect scene location. for example, without this offset, when scrolling to the right about 100 pixels worth, the button could fire at 100 pixels to the right of the button's far right location.
-			ButtonGeneralNetworkYes._scrollarea_offset_x = __boxscroller.scroll.x;
-			ButtonGeneralNetworkYes._scrollarea_offset_y = __boxscroller.scroll.y;
+			// send the offset of the scrollable area to the button class so that when scrolling the scrollable area, the buttons will not be fired at an incorrect scene location. for example, without this offset, when scrolling to the right about 100 pixels worth, the button could fire at 100 pixels to the right of the button's far right location.
+			ButtonGeneralNetworkYes._scrollarea_offset_x = __scrollable_area.scroll.x;
+			ButtonGeneralNetworkYes._scrollarea_offset_y = __scrollable_area.scroll.y;
 									
 			//############################# BUTTON TEXT
-			if (_didPopulateList == false)
+			if (_populate_table_body == false)
 			{
-				populateRoomList();
+				draw_table_all_body_text();
 			}
 			
-			if (_group_button[0] != null && RegTypedef._dataMisc._roomCheckForLock[RegTypedef._dataMisc._room] == 0) 
+			if (_group_button_for_room[0] != null && RegTypedef._dataMisc._roomCheckForLock[RegTypedef._dataMisc._room] == 0) 
 			{	
 				// display room full text for lobby room button if max players are in that room.
 				if (RegTypedef._dataMisc._roomPlayerCurrentTotal[1] >= RegTypedef._dataMisc._roomPlayerLimit[1] && RegTypedef._dataMisc._roomPlayerLimit[1] > 0 && RegTypedef._dataMisc._roomState[1] < 8
 				|| Reg._gameId >= 2 
 				&& RegTypedef._dataMisc._roomState[1] == 8)
-				_group_button[0].label.text = "1: " + _buttonState[7];
+				_group_button_for_room[0].label.text = "1: " + _buttonState[7];
 				
 				if (RegTypedef._dataMisc._roomPlayerCurrentTotal[2] >= RegTypedef._dataMisc._roomPlayerLimit[2] && RegTypedef._dataMisc._roomPlayerLimit[2] > 0 && RegTypedef._dataMisc._roomState[2] < 8
 				|| Reg._gameId >= 2 
 				&& RegTypedef._dataMisc._roomState[2] == 8)
-				_group_button[1].label.text = "2: " + _buttonState[7];
+				_group_button_for_room[1].label.text = "2: " + _buttonState[7];
 
 				// display the player vs player room.
-				for (i in 1... _button_total+1)	
+				for (i in 1... _room_total+1)	
 				{
 					// this is a room that is not full.
-					_group_button[(i-1)].label.text = Std.string(i) + ": " + _buttonState[RegTypedef._dataMisc._roomState[i]];
+					_group_button_for_room[(i-1)].label.text = Std.string(i) + ": " + _buttonState[RegTypedef._dataMisc._roomState[i]];
 				
 					// output either a room full or watch game button label.
 					if (RegTypedef._dataMisc._roomPlayerCurrentTotal[i] >= RegTypedef._dataMisc._roomPlayerLimit[i] && RegTypedef._dataMisc._roomPlayerLimit[i] > 0 && RegTypedef._dataMisc._roomState[i] > 1)
 					{						
 						if (RegTypedef._dataMisc._roomState[i] <= 7
 						||  RegTypedef._dataMisc._allowSpectators[i] == 0)
-							_group_button[(i-1)].label.text = Std.string(i)+ ": " + _buttonState[7];
+							_group_button_for_room[(i-1)].label.text = Std.string(i)+ ": " + _buttonState[7];
 						else if (RegTypedef._dataMisc._roomState[i] == 8
 						||  RegTypedef._dataMisc._allowSpectators[i] == 1)
-							_group_button[(i-1)].label.text = Std.string(i)+ ": " + _buttonState[8];
+							_group_button_for_room[(i-1)].label.text = Std.string(i)+ ": " + _buttonState[8];
 					}
 				}
 					
-				populateRoomList();
-				
-					
+				draw_table_all_body_text();
 				
 			}
 		}
 		
 		if (RegTriggers._makeMiscellaneousMenuClassActive == true)
 		{			
-			setNotActiveForButtons();
+			set_not_active_for_buttons();
 			
 			RegTriggers._makeMiscellaneousMenuClassActive = false;
 			
@@ -952,8 +1021,15 @@ class SceneLobby extends FlxState
 		{
 			RegTriggers._miscellaneousMenuOutputClassActive = false;
 			
-			setNotActiveForButtons();		
-			var __miscellaneous_menu_output = new MiscellaneousMenuOutput(Reg2._miscMenuIparameter);
+			set_not_active_for_buttons();	
+			
+			if (__miscellaneous_menu_output != null)
+			{
+				remove(__miscellaneous_menu_output);
+				__miscellaneous_menu_output.destroy();
+			}
+			
+			__miscellaneous_menu_output = new MiscellaneousMenuOutput(Reg2._miscMenuIparameter);
 			add(__miscellaneous_menu_output);					
 		}
 		
@@ -961,8 +1037,8 @@ class SceneLobby extends FlxState
 		{
 			RegTriggers._make_daily_quests_not_active = false;
 			
-			__menu_bar.__daily_quests.__boxscroller.visible = false;
-			__menu_bar.__daily_quests.__boxscroller.active = false;
+			__menu_bar.__daily_quests.__scrollable_area.visible = false;
+			__menu_bar.__daily_quests.__scrollable_area.active = false;
 			__menu_bar.__daily_quests.visible = false;
 			__menu_bar.__daily_quests.active = false;				
 		}
@@ -979,8 +1055,8 @@ class SceneLobby extends FlxState
 		{
 			RegTriggers._make_leaderboards_not_active = false;
 			
-			__menu_bar.__leaderboards.__boxscroller.visible = false;
-			__menu_bar.__leaderboards.__boxscroller.active = false;
+			__menu_bar.__leaderboards.__scrollable_area.visible = false;
+			__menu_bar.__leaderboards.__scrollable_area.active = false;
 			__menu_bar.__leaderboards.visible = false;
 			__menu_bar.__leaderboards.active = false;				
 		}
@@ -988,7 +1064,7 @@ class SceneLobby extends FlxState
 		if (RegTriggers._returnToLobbyMakeButtonsActive == true)
 		{
 			RegTriggers._returnToLobbyMakeButtonsActive = false;
-			setActiveForButtons();
+			set_active_for_buttons();
 			
 			Reg._at_lobby = true;					
 		}
@@ -997,12 +1073,12 @@ class SceneLobby extends FlxState
 		// "Online Player Offer Invite" event.
 		if (Reg._yesNoKeyPressValueAtMessage == 1 && Reg._buttonCodeValues == "l1000")
 		{
-			group.active = true;
+			_group_scrollable_area.active = true;
 			
 			//Reg._buttonCodeValues = ""; this var is cleared at ButtonGeneralNetworkYes class
 			Reg._yesNoKeyPressValueAtMessage = 0;
 			
-			gotoRoom(Reg._inviteRoomNumberToJoin);
+			goto_room(Reg._inviteRoomNumberToJoin);
 			
 			FlxG.mouse.reset();
 			FlxG.mouse.enabled = true;
@@ -1012,7 +1088,7 @@ class SceneLobby extends FlxState
 		// "Online Player Offer Invite" event.
 		if (Reg._yesNoKeyPressValueAtMessage >= 2 && Reg._buttonCodeValues == "l1000")
 		{			
-			group.active = true;
+			_group_scrollable_area.active = true;
 			
 			//Reg._buttonCodeValues = ""; this var is cleared at ButtonGeneralNetworkYes class
 			Reg._yesNoKeyPressValueAtMessage = 0;
@@ -1048,7 +1124,7 @@ class SceneLobby extends FlxState
 				else if (RegTypedef._dataMisc._roomHostUsername[_number] == "" || RegTypedef._dataMisc._roomGameIds[_number] == -1 ||
 		RegTypedef._dataMisc._roomPlayerCurrentTotal[_number] == 0)
 				{
-					dataNotYetReadyForWaitingRoom(_number);
+					data_not_ready_for_waitingRoom(_number);
 					return;
 				}
 				
@@ -1061,7 +1137,7 @@ class SceneLobby extends FlxState
 					RegTypedef._dataMisc._room = _number;
 					
 					Reg._getRoomData = true;
-					setNotActiveForButtons();		
+					set_not_active_for_buttons();		
 					
 					Reg._game_online_vs_cpu = true;
 					RegTypedef._dataPlayers._spectatorPlaying = true;
@@ -1088,19 +1164,19 @@ class SceneLobby extends FlxState
 								
 				else if (RegTypedef._dataMisc._roomState[_number] == 1)
 				{
-					roomFull(0, _number); // message about a user already creating room.			
+					room_full(0, _number); // message about a user already creating room.			
 				}
 				
 				else if (RegTypedef._dataMisc._roomState[_number] == 8
 				&& RegTypedef._dataMisc._allowSpectators[_number] == 1 ) // Reg._gameId <= 1 && 
 				{
-					watchGame(_number);
+					watch_game(_number);
 				}
 				
 				// cannot enter room.
 				else if (RegTypedef._dataMisc._roomPlayerCurrentTotal[_number] >= RegTypedef._dataMisc._roomPlayerLimit[_number] && RegTypedef._dataMisc._roomPlayerLimit[_number] > 0) 
 				{
-					roomFull(1, _number); // a message about room full.
+					room_full(1, _number); // a message about room full.
 				}
 				
 				else
@@ -1140,9 +1216,9 @@ class SceneLobby extends FlxState
 		// room full, or room creating message.
 		if (Reg._yesNoKeyPressValueAtMessage > 0 && Reg._buttonCodeValues == "l1010")
 		{
-			group.active = true;
+			_group_scrollable_area.active = true;
 			active = true;
-			group.visible = true;
+			_group_scrollable_area.visible = true;
 			visible = true;				
 			
 			Reg._yesNoKeyPressValueAtMessage = 0;
@@ -1155,9 +1231,9 @@ class SceneLobby extends FlxState
 		// room not ready. someone is in that room.
 		if (Reg._yesNoKeyPressValueAtMessage > 0 && Reg._buttonCodeValues == "l1030")
 		{
-			group.active = true;
+			_group_scrollable_area.active = true;
 			active = true;
-			group.visible = true;
+			_group_scrollable_area.visible = true;
 			visible = true;				
 			
 			Reg._yesNoKeyPressValueAtMessage = 0;
@@ -1174,18 +1250,18 @@ class SceneLobby extends FlxState
 			Reg._server_message = "";
 		}
 		
-		// if at SceneMenu then set __boxScroller active to false so that a mouse click at SceneMenu cannot trigger a button click at __boxScroller.
+		// if at SceneMenu then set __scrollable_area active to false so that a mouse click at SceneMenu cannot trigger a button click at __scrollable_area.
 		if (FlxG.mouse.y >= FlxG.height - 50
 		&&	_ticks_buttons_menuBar >= 3)
 		{
-			group.active = false;
-			__boxscroller.active = false;
+			_group_scrollable_area.active = false;
+			__scrollable_area.active = false;
 		}
 		
 		else
 		{
-			group.active = true;
-			__boxscroller.active = true;
+			_group_scrollable_area.active = true;
+			__scrollable_area.active = true;
 		}
 		
 		super.update(elapsed);

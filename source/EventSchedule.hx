@@ -296,15 +296,18 @@ class EventSchedule extends FlxState
 		_intMonth = Std.parseInt(DateTools.format(Date.now(), "%m")) -1;	
 		_intMonthCurrent = _intMonth;
 		_intYear = 	Std.parseInt(DateTools.format(Date.now(), "%Y"));
-						
-		_textCalendarTitle = new FlxText(0, 0, 0, "");
-		_textCalendarTitle.scrollFactor.set();
+		
+		// the title of the game.
+		var _title_background = new FlxSprite(0, 0);
+		_title_background.makeGraphic(FlxG.width, 55, Reg._background_header_title_color); 
+		_title_background.scrollFactor.set(1,0);
+		add(_title_background);
+		
+		_textCalendarTitle = new FlxText(15, 4, 0, "");
+		_textCalendarTitle.scrollFactor.set(0, 0);
 		_textCalendarTitle.text = "Event Schedule. " + Std.string(_intYear) + "-" + _textMonth + "-" + Std.string(_intDay);
-		_textCalendarTitle.setFormat(Reg._fontTitle, 44, FlxColor.YELLOW);
+		_textCalendarTitle.setFormat(Reg._fontDefault, 50, FlxColor.YELLOW);
 		_textCalendarTitle.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 3);
-		_textCalendarTitle.screenCenter(X);
-		_textCalendarTitle.x += 40;
-		_textCalendarTitle.y = 20;
 		add(_textCalendarTitle);		
 		
 		daysNewItToScene();
@@ -314,26 +317,24 @@ class EventSchedule extends FlxState
 		eventRow3NewItToScene();
 		
 		calendarOutput();		
-		calendarDayImageOutput();		
-			
-		_backwards = new ButtonGeneralNetworkNo(117, 0, "<", 80, 35, 22, RegCustom._button_text_color[Reg._tn], 0, calendarBackward, RegCustom._button_color[Reg._tn]);
+		calendarDayImageOutput();
+		
+		_title = new ButtonGeneralNetworkNo(FlxG.width - 300, 12, "To Title", 170 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, backToTitle, RegCustom._button_color[Reg._tn]);
+		_title.label.font = Reg._fontDefault;
+		add(_title);
+				
+		_forwards = new ButtonGeneralNetworkNo(_title.x - 15 - 80, 12, ">", 80, 35, 22, RegCustom._button_text_color[Reg._tn], 0, calendarForward, RegCustom._button_color[Reg._tn]);
+		_forwards.label.font = Reg._fontDefault;
+		_forwards.label.size = 22;
+		add(_forwards);
+		
+		_backwards = new ButtonGeneralNetworkNo(_forwards.x - 15 - 80, 12, "<", 80, 35, 22, RegCustom._button_text_color[Reg._tn], 0, calendarBackward, RegCustom._button_color[Reg._tn]);
 		_backwards.label.font = Reg._fontDefault;
 		_backwards.label.size = 22;
-		_backwards.y = 20;
 		_backwards.visible = false;
 		_backwards.active = false;
 		add(_backwards);
 		
-		_forwards = new ButtonGeneralNetworkNo(222, 0, ">", 80, 35, 22, RegCustom._button_text_color[Reg._tn], 0, calendarForward, RegCustom._button_color[Reg._tn]);
-		_forwards.label.font = Reg._fontDefault;
-		_forwards.label.size = 22;
-		_forwards.y = 20;
-		add(_forwards);
-		
-		_title = new ButtonGeneralNetworkNo(FlxG.width - 300, 0, "To Title", 170 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, backToTitle, RegCustom._button_color[Reg._tn]);
-		_title.label.font = Reg._fontDefault;
-		_title.y = 20;
-		add(_title);
 	}
 		
 	/******************************
@@ -703,6 +704,10 @@ class EventSchedule extends FlxState
 
 	private function backToTitle():Void
 	{
+		if (RegCustom._sound_enabled[Reg._tn] == true
+		&&  Reg2._scrollable_area_is_scrolling == false)
+			FlxG.sound.play("click", 1, false);
+
 		RegTriggers._mainStateMakeActiveElements = true;
 		
 		//close();
@@ -952,7 +957,7 @@ class EventSchedule extends FlxState
 				&&  _textEventRow1Number[i].text != "")
 				{
 					if (RegCustom._sound_enabled[Reg._tn] == true
-					&&  Reg2._boxScroller_is_scrolling == false)
+					&&  Reg2._scrollable_area_is_scrolling == false)
 						FlxG.sound.play("click", 1, false);
 					openSubState(new GameMessageEvent(_textEventRow1Number[i].text));
 				}
@@ -961,7 +966,7 @@ class EventSchedule extends FlxState
 				&&  _textEventRow2Number[i].text != "")
 				{
 					if (RegCustom._sound_enabled[Reg._tn] == true
-					&&  Reg2._boxScroller_is_scrolling == false)
+					&&  Reg2._scrollable_area_is_scrolling == false)
 						FlxG.sound.play("click", 1, false);
 					openSubState(new GameMessageEvent(_textEventRow2Number[i].text));
 				}
@@ -970,7 +975,7 @@ class EventSchedule extends FlxState
 				&&  _textEventRow3Number[i].text != "")
 				{
 					if (RegCustom._sound_enabled[Reg._tn] == true
-					&&  Reg2._boxScroller_is_scrolling == false)
+					&&  Reg2._scrollable_area_is_scrolling == false)
 						FlxG.sound.play("click", 1, false);
 					openSubState(new GameMessageEvent(_textEventRow3Number[i].text));
 				}

@@ -1,3 +1,29 @@
+Version 1.17.1. 2021-10-3.
+
+New Features.
+
+	Added sound at profile scene to the buttons used to toggle between player1 and player2 preferences.
+
+	lobby will refresh table list after player first logs in to the lobby from title scene.
+
+Feature changed.
+
+	Changed the title scene appearance.
+
+	At configuration games, the image representing the future path to king can now be toggled in visibility. 
+
+	At configuration games, the image representing the future capturing units can now be toggled in visibility.
+	
+	Reorganized content in the SceneLobby file.
+	
+	Renamed some functions and variables.
+	
+	Improved the appearance of title scene.
+
+Bugs fixed.
+
+	logging in to the lobby would crash the client.
+
 Version 1.16.10. 2021-09-26.
 
 New Features.

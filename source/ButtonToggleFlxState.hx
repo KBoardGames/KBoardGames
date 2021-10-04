@@ -17,7 +17,6 @@
 */
 
 package;
-import flixel.FlxObject;
 
 /**
  * use these toggle buttons when changed to a new FlxState. if using more than one FlxGroup in the FlxState then use a different class. the reason is that the buttons in this class are created with a different id and if using two FlxGroup that call the same class then there could be two id with the same value. The problem would be that at the second FlxGroup could not use the id of 1 because the first FlxGroup used it and that button could not be set as toggled by default.
@@ -56,14 +55,14 @@ class ButtonToggleFlxState extends FlxUIButton
 	private var _use_down_click:Bool = true;
 	
 	/******************************
-	 * used at __boxScroller to offset the mouse x/y coordinates when the __boxScroller is scrolled. without these vars when the __boxScroller is scrolled stage buttons underneath the __boxscroller will fire.
-	 * remember, a group is added to the stage and the group is added to the __boxScroller. So the two buttons, one not seen because it is behind the __boxscroller camera, will fire unless these vars are used.
+	 * used at __scrollable_area to offset the mouse x/y coordinates when the __scrollable_area is scrolled. without these vars when the __scrollable_area is scrolled stage buttons underneath the __scrollable_area will fire.
+	 * remember, a group is added to the stage and the group is added to the __scrollable_area. So the two buttons, one not seen because it is behind the __scrollable_area camera, will fire unless these vars are used.
 	 */
 	public static var _scrollarea_offset_x:Float;
 	
 	/******************************
-	 * used at __boxScroller to offset the mouse x/y coordinates when the __boxScroller is scrolled. without these vars when the __boxScroller is scrolled stage buttons underneath the __boxscroller will fire.
-	 * remember, a group is added to the stage and the group is added to the __boxScroller. So the two buttons, one not seen because it is behind the __boxscroller camera, will fire unless these vars are used.
+	 * used at __scrollable_area to offset the mouse x/y coordinates when the __scrollable_area is scrolled. without these vars when the __scrollable_area is scrolled stage buttons underneath the __scrollable_area will fire.
+	 * remember, a group is added to the stage and the group is added to the __scrollable_area. So the two buttons, one not seen because it is behind the __scrollable_area camera, will fire unless these vars are used.
 	 */
 	public static var _scrollarea_offset_y:Float;
 	
@@ -108,7 +107,11 @@ class ButtonToggleFlxState extends FlxUIButton
 		_scrollarea_offset_y = 0;
 		
 		resize(button_width, button_height);
+		
+		// sets the label color and centers the text. the label color is the color of the button.
 		setLabelFormat(Reg._fontDefault, (Reg._font_size-1), RegCustom._button_text_color[Reg._tn], FlxTextAlign.CENTER);
+		
+		// this is the shadow underneath the text.
 		label.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 4);
 		autoCenterLabel();
 		
@@ -129,10 +132,11 @@ class ButtonToggleFlxState extends FlxUIButton
 			if (ActionInput.overlaps(this, null)
 			&&  FlxG.mouse.justPressed == true)
 			{
+				// this button has been pressed. remove focus from the chatter input box.
 				if (GameChatter._input_chat != null) GameChatter._input_chat.hasFocus = false;
 				
 				if (RegCustom._sound_enabled[Reg._tn] == true
-				&&  Reg2._boxScroller_is_scrolling == false)
+				&&  Reg2._scrollable_area_is_scrolling == false)
 					FlxG.sound.play("click", 1, false);
 			}
 			

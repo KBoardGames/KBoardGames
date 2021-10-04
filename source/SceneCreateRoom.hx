@@ -98,18 +98,16 @@ class SceneCreateRoom extends FlxState
 		
 		
 		_title_background = new FlxSprite(0, 0);
-		_title_background.makeGraphic(FlxG.width - 40, 160, 0xFF000000); 
-		_title_background.scrollFactor.set(0, 0);
+		_title_background.makeGraphic(FlxG.width, 55, Reg._background_header_title_color); 
+		_title_background.scrollFactor.set(1,0);
 		add(_title_background);
 		
-		_title = new FlxText(0, 0, 0, "Creating Room " + Std.string(RegTypedef._dataMisc._room));
+		_title = new FlxText(15, 4, 0, "Creating Room " + Std.string(RegTypedef._dataMisc._room));
 		_title.setFormat(Reg._fontDefault, 50, FlxColor.YELLOW);
 		_title.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 3);
-		_title.scrollFactor.set();
-		_title.setPosition(0, 20);
+		_title.scrollFactor.set(1,0);
 		_title.visible = true;
-		_title.screenCenter(X);
-		add(_title);	
+		add(_title);
 		
 		_group_sprite.splice(0, _group_sprite.length);
 		
@@ -175,7 +173,7 @@ class SceneCreateRoom extends FlxState
 		for (i in 1...2)
 		{
 			var slotBox = new FlxSprite(0, 0);
-			slotBox.makeGraphic(FlxG.width - 40, 55, 0xFF001210);		
+			slotBox.makeGraphic(FlxG.width, 55, 0xFF001210);		
 			slotBox.setPosition(20, 120 + (i * 70) + _offset_y); 
 			slotBox.scrollFactor.set(0, 0);
 			add(slotBox);
@@ -286,9 +284,7 @@ class SceneCreateRoom extends FlxState
 		_buttonHumanOrComputerGame.label.text = "Human";
 				
 		_title.text = "Creating Room " + Std.string(RegTypedef._dataMisc._room);
-		_title.setPosition(0, 20);
 		_title.visible = true;
-		_title.screenCenter(X);
 
 		game(); 
 	}
@@ -516,7 +512,7 @@ class SceneCreateRoom extends FlxState
 			&&  ActionInput.justPressed() == true)
 			{
 				if (RegCustom._sound_enabled[Reg._tn] == true
-				&&  Reg2._boxScroller_is_scrolling == false)
+				&&  Reg2._scrollable_area_is_scrolling == false)
 					FlxG.sound.play("click", 1, false);
 			}
 			
