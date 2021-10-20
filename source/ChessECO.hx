@@ -10,9 +10,9 @@
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
+    GNU General Public License for more details.
 
-    You should have received a copy of the GNU Affero General Public License
+    You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
@@ -23,7 +23,8 @@ package;
  * @author kboardgames.com
  */
 class ChessECO
-{	
+{
+	// at ChessECO.listToArray() function, this list is placed in to an array list. therefore, do not change this list with tabs. doing so will display ECO text with lots of padding at the beginning of the text. also, this list must maintain its line breaks. 
 	public static function ECOlists():Void
 	{
 		Reg._ecoOpeningsNamesTemp =	"A00 Polish (Sokolsky) opening

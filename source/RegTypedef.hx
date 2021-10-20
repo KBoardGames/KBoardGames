@@ -10,9 +10,9 @@
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
+    GNU General Public License for more details.
 
-    You should have received a copy of the GNU Affero General Public License
+    You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
@@ -1361,7 +1361,7 @@ typedef DataHouse =
 	var _map_y: String;
 	
 	/******************************
-	 * when the map is moved up, down, left or right, this value increases in size by those pixels. this var is used at House update() so that the map hover can be displayed when outside of its default map boundaries. it is also added or subtracted to the mouse coordinates at other classes so that the map or panel items can correctly be detected by the mouse. for example, the mouse.x cannot be at a value of 2000 when the stage has a width of 1400 and the map changes in width, but it can be there when this offset is added to mouse.x.
+	 * when the map is moved up, down, left or right, this value increases in size by those pixels. this var is used at House update() so that the map hover can be displayed when outside of its default map boundaries. it is also added or subtracted to the mouse coordinates at other classes so that the map or panel items can correctly be detected by the mouse. for example, the mouse.x cannot be at a value of 2000 when the stage has a width of about 1400.
 	 */
 	var _map_offset_x: String;
  	var _map_offset_y: String;
@@ -2108,7 +2108,7 @@ class RegTypedef
 		_items_y: "", // all items y position that is separated by a comma.
 		_map_x: "", // map x coordinates on scene at the time the item was bought or mouse dragged then mouse released.
 		_map_y: "", // map y coordinates on scene at the time the item was bought or mouse dragged then mouse released.
-		_map_offset_x: "", // when the map is moved up, down, left or right, this value increases in size by those pixels. this var is used at House update() so that the map hover can be displayed when outside of its default map boundaries. it is also added or subtracted to the mouse coordinates at other classes so that the map or panel items can correctly be detected by the mouse. for example, the mouse.x cannot be at a value of 2000 when the stage has a width of 1400 and the map changes in width, but it can be there when this offset is added to mouse.x.
+		_map_offset_x: "", // when the map is moved up, down, left or right, this value increases in size by those pixels. this var is used at House update() so that the map hover can be displayed when outside of its default map boundaries. it is also added or subtracted to the mouse coordinates at other classes so that the map or panel items can correctly be detected by the mouse. for example, the mouse.x cannot be at a value of 2000 when the stage has a width of about 1400.
 		_map_offset_y: "",
 		_item_is_hidden: "", // is this item hidden?
 		_is_item_purchased: "", // a list of 1 and 0's separated by a comma. the first value in this list refers to item 1. if that value is 1 then that item was purchased.
@@ -2395,7 +2395,7 @@ class RegTypedef
 		_dataHouse._items_y = ""; // all items y position that is separated by a comma.
 		_dataHouse._map_x = ""; // map x coordinates on scene at the time the item was bought or mouse dragged then mouse released.
 		_dataHouse._map_y = ""; // map y coordinates on scene at the time the item was bought or mouse dragged then mouse released.
-		_dataHouse._map_offset_x = ""; // when the map is moved up, down, left or right, this value increases in size by those pixels. this var is used at House update() so that the map hover can be displayed when outside of its default map boundaries. it is also added or subtracted to the mouse coordinates at other classes so that the map or panel items can correctly be detected by the mouse. for example, the mouse.x cannot be at a value of 2000 when the stage has a width of 1400 and the map changes in width, but it can be there when this offset is added to mouse.x.
+		_dataHouse._map_offset_x = ""; // when the map is moved up, down, left or right, this value increases in size by those pixels. this var is used at House update() so that the map hover can be displayed when outside of its default map boundaries. it is also added or subtracted to the mouse coordinates at other classes so that the map or panel items can correctly be detected by the mouse. for example, the mouse.x cannot be at a value of 2000 when the stage has a width of about 1400.
 		_dataHouse._map_offset_y = "";
 		_dataHouse._item_is_hidden = ""; // is this item hidden?
 		_dataHouse._is_item_purchased = ""; // a list of 1 and 0's separated by a comma. the first value in this list refers to item 1. if that value is 1 then that item was purchased.

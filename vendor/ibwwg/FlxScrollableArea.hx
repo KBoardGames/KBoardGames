@@ -53,7 +53,12 @@ class FlxScrollableArea extends FlxCamera
 	private var _scrollbarColour:FlxColor;
 	private var _resizeModeGoal:ResizeMode;
 	private var _id:Int = 0;
-	
+
+	/******************************
+	* background gradient, texture and plain color for a scene.
+	*/
+	public var _scene_background:SceneBackground;
+			
 	private var _hiddenPixelAllowance:Float = 1.0; // don't bother showing scrollbars if this many pixels would go out of view (float weirdness fix)
 	/**
 	 * Creates a specialized FlxCamera that can be added to FlxG.cameras.
@@ -71,6 +76,8 @@ class FlxScrollableArea extends FlxCamera
 	public function new(ViewPort:FlxRect, Content:FlxRect, Mode:ResizeMode, content_height_extra:Int = 0, ?MouseWheelMultiplier:Int=100, ?ScrollbarThickness:Int=-1, ?ScrollbarColour:FlxColor=0xff666666, ?State:FlxState, id:Int = 0, vertical_bar_bring_up:Bool = false, vertical_bar_bring_down:Bool = false) {
 		super();
 		
+		if (_id == 0) bgColor = Reg._title_bar_background_enabled;
+		
 		_id = ID = id;
 		
 		ScrollbarColour = 0xff666666; // gray
@@ -78,8 +85,26 @@ class FlxScrollableArea extends FlxCamera
 		_state = State;
 		if (_state == null)
 			_state = FlxG.state;
-			
+ 
+		// stops a bug at configuration menu, where the scene background is always the same color as the header.
+		if (_id == 1000) bgColor = 0x00000000;
+		
+		// vertical bar at the left side of the scrollable area.
+		var _color = RegCustomColors.title_bar_background_color();
+		
+		var _spr = new FlxSprite(-2, 0);
+		_spr.makeGraphic(6, FlxG.height, FlxColor.BLUE);
+		_spr.scrollFactor.set(0, 0);
+		_state.add(_spr);
+		
 		content = Content;
+		
+		if (_id == 1000)
+		{
+			_scene_background = new SceneBackground();
+			_state.add(_scene_background);
+			
+		}
 		
 		_resizeModeGoal = Mode; // must be before we set the viewport, because set_viewport uses it; likewise next line
 		if (ScrollbarThickness > -1)
@@ -95,7 +120,7 @@ class FlxScrollableArea extends FlxCamera
 		_horizontalScrollbar = new FlxScrollbarHorizontal( viewPort.x, 0, 1, scrollbarThickness, content_height_extra, ScrollbarColour, this, false, viewPort, MouseWheelMultiplier, content.width, content.height, _id);
 		if (viewPort.x == 0) _state.add( _horizontalScrollbar); // do not at this bar if scrollarea is to the right side. this is the only way to remove it because two scrollareas share the same scene.
 
-		_verticalScrollbar = new FlxScrollbarVertical( 0, 0, scrollbarThickness, 1, content_height_extra, ScrollbarColour, this, false, viewPort, MouseWheelMultiplier, content.width, content.height, _id, vertical_bar_bring_up, vertical_bar_bring_down);
+		_verticalScrollbar = new FlxScrollbarVertical( -1, 0, scrollbarThickness, 1, content_height_extra, ScrollbarColour, this, false, viewPort, MouseWheelMultiplier, content.width, content.height, _id, vertical_bar_bring_up, vertical_bar_bring_down);
 		_state.add( _verticalScrollbar);		
 		
 		_verticalScrollbar.scrollFactor.set(0, 0);
@@ -175,8 +200,8 @@ class FlxScrollableArea extends FlxCamera
 	 * During resizing, this is skipped if .visible is false.
 	 */
 	override public function onResize() {
-		if (!visible)
-			return;
+		if (!visible) return;
+		
 		super.onResize();
 
 		#if !FLX_NO_MOUSE

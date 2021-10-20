@@ -10,9 +10,9 @@
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
+    GNU General Public License for more details.
 
-    You should have received a copy of the GNU Affero General Public License
+    You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
@@ -24,11 +24,7 @@ package;
  */
 class MiscellaneousMenu extends FlxGroup
 {		
-	public var __menu_bar:MenuBar;
 	public var __miscellaneous_menu_output:MiscellaneousMenuOutput;	
-	
-	private var _title:FlxText;
-	private var _title_background:FlxSprite;
 	
 	public function new():Void
 	{
@@ -39,20 +35,13 @@ class MiscellaneousMenu extends FlxGroup
 		
 		FlxG.autoPause = false;	// this application will pause when not in focus.
 		
-		__menu_bar = new MenuBar();
-		add(__menu_bar);
+		if (Reg.__title_bar2 != null) remove(Reg.__title_bar2);
+		Reg.__title_bar2 = new TitleBar("Miscellaneous");
+		add(Reg.__title_bar2);
 		
-		_title_background = new FlxSprite(0, 0);
-		_title_background.makeGraphic(FlxG.width, 55, Reg._background_header_title_color); 
-		_title_background.scrollFactor.set(0, 0);
-		add(_title_background);
-		
-		_title = new FlxText(15, 4, 0, "Miscellaneous");
-		_title.setFormat(Reg._fontDefault, 50, FlxColor.YELLOW);
-		_title.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 3);
-		_title.scrollFactor.set(0,0);
-		_title.visible = true;
-		add(_title);
+		if (Reg.__menu_bar2 != null) remove(Reg.__menu_bar2);
+		Reg.__menu_bar2 = new MenuBar();
+		add(Reg.__menu_bar2);
 	
 		//#############################
 		

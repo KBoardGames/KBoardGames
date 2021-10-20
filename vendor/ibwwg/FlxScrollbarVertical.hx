@@ -280,10 +280,7 @@ class FlxScrollbarVertical extends FlxSpriteGroup
 				// scrolling down
 				if (mousePosition.y > _bar.y + _bar.height) // and far enough down to scroll more
 					whichWayToScroll = 1;
-			} 
-			
-			else if (_bar.y > _dragStartedWhenBarWasAt)
-			{
+				
 				// scrolling up
 				if (mousePosition.y < _bar.y) // and far enough up to scroll more
 					whichWayToScroll = -1;
@@ -294,6 +291,7 @@ class FlxScrollbarVertical extends FlxSpriteGroup
 				// first scroll...which way?
 				if (mousePosition.y < _bar.y) // up of bar
 					whichWayToScroll = -1;
+					
 				else // either down of bar, or on the bar; but if on the bar, execution shouldn't reach here in the first place
 					whichWayToScroll = 1; // start scrolling down
 			}
@@ -318,7 +316,7 @@ class FlxScrollbarVertical extends FlxSpriteGroup
 		&&	_id == ID
 		&& 	_id > 0
 		&&	FlxG.mouse.x >= _viewPort.x 
-		&&	FlxG.mouse.x <= 1400)
+		&&	FlxG.mouse.x <= Reg._client_width)
 		{
 			_bar.y = FlxMath.bound(_bar.y - FlxG.mouse.wheel * _mouseWheelMultiplier, _track.y, _track.y + _track.height - _bar.height);
 						

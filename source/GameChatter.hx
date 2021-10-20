@@ -10,9 +10,9 @@
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
+    GNU General Public License for more details.
 
-    You should have received a copy of the GNU Affero General Public License
+    You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
@@ -158,8 +158,8 @@ class GameChatter extends FlxGroup
 		
 		// background. DO NOT change the x position of this var without also changing its x value at SceneGameRoom.toggleButtonsAsChatterScrolls();
 		_title_background = new FlxSprite(0, 0);
-		_title_background.setPosition(FlxG.width - 375, 0);
-		_title_background.makeGraphic(375, FlxG.height - 50, 0xFF000000);
+		_title_background.setPosition(FlxG.width - 385, 0);
+		_title_background.makeGraphic(385, FlxG.height - 50, 0xFF000000);
 		add(_title_background);		
 		_groupChatterScroller.add(_title_background);
 		
@@ -202,14 +202,14 @@ class GameChatter extends FlxGroup
 						
 			_group_text.push(_text);				
 			_group_text[i].setFormat(Reg._fontDefault, Reg._font_size, FlxColor.WHITE);
-			_group_text[i].fieldWidth = 345;
+			_group_text[i].fieldWidth = 325;
 			_group_text[i].visible = true;
 			
-			if (i == 0) _group_text[i].setPosition(1400, 100);
+			if (i == 0) _group_text[i].setPosition(Reg._client_width, 100);
 			else 
 			{
 				_group_text[i].y = _group_text[i-1].y + _group_text[(i-1)].frameHeight + 40;
-				_group_text[i].setPosition(1400, _group_text[i].y);
+				_group_text[i].setPosition(Reg._client_width, _group_text[i].y);
 			}
 			
 			// give this member an id. this id is used to move members in z-order.
@@ -339,12 +339,11 @@ class GameChatter extends FlxGroup
 			_input_chat.destroy();
 		}
 		
-		_input_chat = new FlxInputText(FlxG.width - 370, FlxG.height - 182 - _chatter_offset_y, 350, "", 12, FlxColor.BLACK);
+		_input_chat = new FlxInputText(FlxG.width - 362, FlxG.height - 192 - _chatter_offset_y, 350, "", Reg._font_size-2, FlxColor.BLACK);
 		_input_chat.hasFocus = false; // address bug when false.
-		_input_chat.setFormat(Reg._fontDefault, 22, FlxColor.BLACK, FlxTextAlign.RIGHT);
+		_input_chat.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.BLACK, FlxTextAlign.RIGHT);
 		_input_chat.fieldBorderColor = FlxColor.BLUE;
 		_input_chat.maxLength = 70;
-		
 		_input_chat.text = "";
 		_input_chat.forceCase = 2;	
 		_input_chat.visible = true;
@@ -399,7 +398,7 @@ class GameChatter extends FlxGroup
 			_group_text[i].y = _group_text[(i - 1)].y + _group_text[(i - 1)].textField.height + 22;
 			// hack to make the height between lines the same size when elements might have a different height.
 			_group_text[i].y -= _group_text[(i - 1)].textField.height / 9;
-			_group_text[i].setPosition(1400, _group_text[i].y);
+			_group_text[i].setPosition(Reg._client_width, _group_text[i].y);
 			_group_text[i].updateHitbox();
 			
 		}

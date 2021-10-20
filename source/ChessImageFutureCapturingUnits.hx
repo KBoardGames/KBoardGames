@@ -10,9 +10,9 @@
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
+    GNU General Public License for more details.
 
-    You should have received a copy of the GNU Affero General Public License
+    You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
@@ -53,7 +53,7 @@ class ChessImageFutureCapturingUnits extends FlxSprite
 		animation.add("path attacking piece", [1], 1, false);
 		animation.add("path empty unit", [2], 1, false);
 		
-		color = RegFunctions.color_future_capturing_units();
+		color = RegCustomColors.color_future_capturing_units();
 		visible = false;
 	}
 

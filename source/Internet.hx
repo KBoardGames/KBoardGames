@@ -10,9 +10,9 @@
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
+    GNU General Public License for more details.
 
-    You should have received a copy of the GNU Affero General Public License
+    You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
@@ -263,6 +263,26 @@ class Internet extends FlxGroup
 			trace(e);
 		}	
 		
+	}
+	
+	public static function getHostname():String
+	{
+		var http = new haxe.Http("https://" + Reg._websiteHomeUrl + "/server/getHostname.php?id=" + RegTypedef._dataAccount._ip);
+		var _data = "";
+		
+		http.onData = function (data:String) 
+		{
+			_data = data;
+		}
+
+		http.onError = function (error) 
+		{
+		  trace('error: $error');
+		}
+
+		http.request();
+	
+		return _data;
 	}
 	
 	// gets ip from a website file. if ip is not found then user cannot login. therefore, user must first login to the website before this works.

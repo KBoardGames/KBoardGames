@@ -10,9 +10,9 @@
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
+    GNU General Public License for more details.
 
-    You should have received a copy of the GNU Affero General Public License
+    You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
@@ -204,6 +204,15 @@ class Reg2 extends FlxGroup
 	 * at lobby after a message box is closed, this var is used to set alpha to 1 to all buttons.
 	 */
 	public static var _message_box_just_closed:Bool = false;
+	
+	/******************************
+	 * after the configuration is saved, jump to either the games, general or profile scene.
+	 * 0: games.
+	 * 1: general.
+	 * 2: profile.
+	 * this var does not reset back to default value.
+	 */
+	public static var _configuration_jump_to_scene:Int = 2;
 	
 	public static function system_reset():Void
 	{
@@ -2262,4 +2271,4 @@ class Reg2 extends FlxGroup
 
 	}
 	
-}//
+}//

@@ -10,9 +10,9 @@
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
+    GNU General Public License for more details.
 
-    You should have received a copy of the GNU Affero General Public License
+    You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
@@ -161,8 +161,8 @@ class FlxPreloader extends FlxBasePreloader
 	 */
 	override public function update(Percent:Float):Void
 	{
-		_bmpBar.scaleX = Percent * (_width - 8) * 2;
-		_text.text = Std.string(FlxG.VERSION) + " " + Std.int(Percent * 2 * 100) + "%";
+		_bmpBar.scaleX = Percent * (_width - 30) * 2;
+		_text.text = Std.string(FlxG.VERSION) + " " + Std.int(Percent * 192) + "%";
 		
 		if (Percent < 0.1)
 		{

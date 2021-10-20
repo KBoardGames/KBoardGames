@@ -4,25 +4,25 @@
 
 The client for KBoardGames. The client is used to play games online against other players.
 
-<p>Play 8x8 board games online with other players using the client software. Main features are <a href="https://kboardgames.com/forum/events">scheduled events</a>, signature game, game statistics, daily quests and a <a href="https://kboardgames.com/forum/viewtopic.php?f=4&t=3">isometric house side game</a>. Currently, the board games that you can play online against other players are <a href="/forum/viewtopic.php?f=10&amp;t=15">chess</a>, <a href="/forum/viewtopic.php?f=10&amp;t=14">checkers</a>, <a href="/forum/viewtopic.php?f=10&amp;t=17">snakes and ladders</a>, <a href="/forum/viewtopic.php?f=10&amp;t=16">reversi</a> and a signature game called <a href="/forum/viewtopic.php?f=10&amp;t=18">wheel estate</a>, game.</p>
+<p>Play 8x8 board games online with other players using the client software. Main features are <a href="https://kboardgames.com/en/events">scheduled events</a>, signature game, game statistics, daily quests and a <a href="https://kboardgames.com/en/viewtopic.php?f=4&t=3">isometric house side game</a>. Currently, the board games that you can play online against other players are <a href="https://kboardgames.com/en/viewtopic.php?f=10&amp;t=15">chess</a>, <a href="https://kboardgames.com/en/viewtopic.php?f=10&amp;t=14">checkers</a>, <a href="https://kboardgames.com/en/viewtopic.php?f=10&amp;t=17">snakes and ladders</a>, <a href="https://kboardgames.com/en/viewtopic.php?f=10&amp;t=16">reversi</a> and a signature game called <a href="https://kboardgames.com/en/viewtopic.php?f=10&amp;t=18">wheel estate</a>, game.</p>
 
 ## Summary
 * Always 100% free client software.
-* Play games <a href="https://kboardgames.com/forum/viewtopic.php?f=4&t=34">online or offline</a>.
+* Play games <a href="https://kboardgames.com/en/viewtopic.php?f=4&t=34">online or offline</a>.
 * MMO board games.
 * 2000+ chess openings moves.
 * Maximum of 2000 XP levels for a player.
-* Zillions of <a href="https://kboardgames.com/forum/viewtopic.php?f=4&t=37">game room color combinations.</a>
-* 17 <a href="https://kboardgames.com/forum/leaderboards">Leaderboards</a> showing top players.
+* Zillions of <a href="https://kboardgames.com/en/viewtopic.php?f=4&t=37">game room color combinations.</a>
+* 17 <a href="https://kboardgames.com/en/leaderboards">Leaderboards</a> showing top players.
 * 8 different chess sets.
 * Option to play chess using 2 different chess sets.
 * Player move history. In game and in database.
 * Client archive under 11MB in size.
-* Free <a href="https://kboardgames.com/forum/viewforum.php?f=7">website advertisement</a> at the forum. No bots allowed.
+* Free <a href="https://kboardgames.com/en/viewforum.php?f=7">website advertisement</a> at the forum. No bots allowed.
 * No advertisements in the client software.
-* <a href="https://kboardgames.com/forum/viewtopic.php?f=4&t=29">Chess features</a> for beginners.
+* <a href="https://kboardgames.com/en/viewtopic.php?f=4&t=29">Chess features</a> for beginners.
 * In game waiting room chatting and game room chatting.
-* <a href="https://kboardgames.com/forum/viewtopic.php?f=8&t=26">Host your own games</a> using the server software.
+* <a href="https://kboardgames.com/en/viewtopic.php?f=8&t=26">Host your own games</a> using the server software.
 
 ## Chess.
 <img src="https://kboardgames.com/images/game2_chess.jpg?" alt="Image 1 of chess" width="500"/>

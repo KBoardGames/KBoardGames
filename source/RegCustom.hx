@@ -10,9 +10,9 @@
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
+    GNU General Public License for more details.
 
-    You should have received a copy of the GNU Affero General Public License
+    You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
@@ -39,27 +39,34 @@ class RegCustom
 	public static var _theme_name_current:String = "default.yaml";	
 	
 	/******************************
-	 * 9 shades. this var refers to part of the spite name in use when changing the look of the game board. At MenuConfigurations when a button is clicked all odd units are changed to a different color. This var is loaded at SceneGameRoom to display the game board.
+	 * 9 shades. this var refers to part of the spite name in use when changing the look of the game board. At Configurations when a button is clicked all odd units are changed to a different color. This var is loaded at SceneGameRoom to display the game board.
 	 */
 	public static var _gameboard_units_odd_shade_number:Array<Array<Int>> = [[]];
 	
 	/******************************
-	 * 9 shades. this var refers to part of the spite name in use when changing the look of the game board. At MenuConfigurations when a button is clicked all even units are changed to a different color. This var is loaded at SceneGameRoom to display the game board.
+	 * 9 shades. this var refers to part of the spite name in use when changing the look of the game board. At Configurations when a button is clicked all even units are changed to a different color. This var is loaded at SceneGameRoom to display the game board.
 	 */
 	public static var _gameboard_units_even_shade_number:Array<Array<Int>> = [[]];
 	
 	/******************************
-	 * 40 colors. this var refers to the color of the game board odd numbered units. At MenuConfigurations every time a button is pressed, this var increases in value to change the odd units to a different color. This var is loaded at SceneGameRoom to display the game board.
+	 * 40 colors. this var refers to the color of the game board odd numbered units. At Configurations every time a button is pressed, this var increases in value to change the odd units to a different color. This var is loaded at SceneGameRoom to display the game board.
 	 */
 	public static var _gameboard_units_odd_color_number:Array<Array<Int>> = [[]];
 	
 	/******************************
-	 * 40 colors. this var refers to the color of the game board even numbered units. At MenuConfigurations every time a button is pressed, this var increases in value to change the even units to a different color. This var is loaded at SceneGameRoom to display the game board.
+	 * 40 colors. this var refers to the color of the game board even numbered units. At Configurations every time a button is pressed, this var increases in value to change the even units to a different color. This var is loaded at SceneGameRoom to display the game board.
 	 */
 	public static var _gameboard_units_even_color_number:Array<Array<Int>> = [[]];
-		
+	
 	/******************************
-	 * at MenuConfigurations this value is used to change the border image of the gameboard.
+	 * when typing in a username at configuration profile, 18 buttons, each display a 1 suggested username from a list at RegUsernameSuggestions.hx
+	 * When entering the profile scene, 18 random usernames will populate 18 buttons. once a button is clicked, the username displayed at that button will populate the username input.
+	 * when typing in a name at username input, up to a total of 18 username suggestions will contain part of the current username at username input. 
+	 */
+	public static var _username_suggestions_enabled:Array<Bool> = [];
+	
+	/******************************
+	 * at Configurations this value is used to change the border image of the gameboard.
 	 */
 	public static var _gameboard_border_number:Array<Int> = [];
 	
@@ -95,14 +102,24 @@ class RegCustom
 	public static var _notation_panel_text_color_number:Array<Int> = [];
 		
 	/******************************
-	 * display gradient background image for game room.
+	 * display a gradient background image for most client scenes.
 	 */
-	public static var _game_room_gradient_background_enabled:Array<Bool> = [];
+	public static var _gradient_background_enabled:Array<Bool> = [];
 	
 	/******************************
-	 * image number used to display the gradient background image for game room.
+	 * image number used to display the gradient background image for most client scenes.
 	 */
-	public static var _game_room_gradient_background_image_number:Array<Int> = [];
+	public static var _gradient_background_image_number:Array<Int> = [];
+	
+	/******************************
+	 * display a texture background image for most client scenes.
+	 */
+	public static var _texture_background_enabled:Array<Bool> = [];
+	
+	/******************************
+	 * image number used to display a texture background image for most client scenes.
+	 */
+	public static var _texture_background_image_number:Array<Int> = [];
 	
 	/******************************
 	 * display static background image for game room.
@@ -117,17 +134,17 @@ class RegCustom
 	/******************************
 	 * display an alpha to the gameboard gradient background if the background is enabled.
 	 */
-	public static var _game_room_gradient_background_alpha_enabled:Array<Bool> = [];
+	public static var _background_alpha_enabled:Array<Bool> = [];
 	
 	/******************************
 	 * show legal chess moves. display capturing units.
 	 */
-	public static var _show_capturing_units:Array<Bool> = [];
+	public static var _capturing_units:Array<Bool> = [];
 	
 	/******************************
 	 * used to change colors.
 	 */
-	public static var _show_capturing_units_number:Array<Int> = [];
+	public static var _capturing_units_number:Array<Int> = [];
 	
 	/******************************
 	 * highlights the to and from units of the piece that was last moved.
@@ -182,7 +199,12 @@ class RegCustom
 	/******************************
 	 * the brightness of the random background color of a scene when random background colors are used.
 	 */
-	public static var _background_brightness:Array<Float> = [];
+	public static var _client_background_brightness:Array<Float> = [];
+	
+	/******************************
+	 * how vibrant the color is.
+	 */
+	public static var _client_background_saturation:Array<Float> = [];
 	
 	/******************************
 	 * this is the color of the button, excluding the button's mouse over color and excluding the button's border.
@@ -335,17 +357,17 @@ class RegCustom
 	public static var _profile_username_p2:Array<String> = [];
 		 
 	/******************************
-	 * this is the maximum time permitted when assigning time for a game at the configuration scene. this var is used only at MenuConfigurationsGames.hx to change the timer values.
+	 * this is the maximum time permitted when assigning time for a game at the configuration scene. this var is used only at ConfigurationGames.hx to change the timer values.
 	 */
 	public static var _timer_maximum_permitted_for_game:Array<Int> = []; 
 	
 	/******************************
-	 * this is the minimum time permitted when assigning time for a game at the configuration scene. this var is used only at MenuConfigurationsGames.hx to change the timer values.
+	 * this is the minimum time permitted when assigning time for a game at the configuration scene. this var is used only at ConfigurationGames.hx to change the timer values.
 	 */
 	public static var _timer_minimum_permitted_for_game:Array<Int> = []; 
 	
 	/******************************
-	 * this is the current selected time permitted while playing a game. game is over when time reaches zero. this var is used at MenuConfigurationsGames.hx and at SceneGameRoom.hx as the current time remaining.
+	 * this is the current selected time permitted while playing a game. game is over when time reaches zero. this var is used at ConfigurationGames.hx and at SceneGameRoom.hx as the current time remaining.
 	 */
 	public static var _time_remaining_for_game:Array<Array<Int>> = [[]]; 
 	
@@ -366,15 +388,15 @@ class RegCustom
 	/******************************
 	 * colored background displayed behind both the title and menu at most scenes.
 	 */
-	public static var _background_header_title_number:Array<Int> = [];
-	public static var _background_footer_menu_number:Array<Int> = [];
+	public static var _title_bar_background_number:Array<Int> = [];
+	public static var _menu_bar_background_number:Array<Int> = [];
+	
+	public static var _title_bar_background_enabled:Array<Bool> = [];
+	public static var _menu_bar_background_enabled:Array<Bool> = [];
 	
 	// these vars are reset at the start of each game.
 	public static function resetRegVars():Void
 	{
-		_timer_enabled.push(true);
-		_send_automatic_start_game_request.push(false);
-		
 		_timer_maximum_permitted_for_game = [55, 55, 55, 55, 55];
 		_timer_minimum_permitted_for_game = [5, 5, 5, 5, 5];
 	}
@@ -415,6 +437,9 @@ class RegCustom
 		_gameboard_units_even_color_number.push([0]);
 		_gameboard_units_even_color_number[0] = [21, 8];		
 		
+		_username_suggestions_enabled.splice(0, _username_suggestions_enabled.length);
+		_username_suggestions_enabled.push(true);
+		
 		_gameboard_border_number.splice(0, _gameboard_border_number.length);
 		_gameboard_border_number.push(5);		
 		
@@ -427,11 +452,17 @@ class RegCustom
 		_gameboard_even_units_show_enabled.splice(0, _gameboard_even_units_show_enabled.length);
 		_gameboard_even_units_show_enabled.push(true);
 		
-		_game_room_gradient_background_enabled.splice(0, _game_room_gradient_background_enabled.length);
-		_game_room_gradient_background_enabled.push(true);
+		_gradient_background_enabled.splice(0, _gradient_background_enabled.length);
+		_gradient_background_enabled.push(true);
 		
-		_game_room_gradient_background_image_number.splice(0, _game_room_gradient_background_image_number.length);
-		_game_room_gradient_background_image_number.push(4);
+		_gradient_background_image_number.splice(0, _gradient_background_image_number.length);
+		_gradient_background_image_number.push(4);
+		
+		_texture_background_enabled.splice(0, _texture_background_enabled.length);
+		_texture_background_enabled.push(false);
+		
+		_texture_background_image_number.splice(0, _texture_background_image_number.length);
+		_texture_background_image_number.push(1);
 		
 		_client_background_enabled.splice(0, _client_background_enabled.length);
 		_client_background_enabled.push(false);
@@ -439,14 +470,20 @@ class RegCustom
 		_client_background_image_number.splice(0, _client_background_image_number.length);
 		_client_background_image_number.push(4);
 		
-		_game_room_gradient_background_alpha_enabled.splice(0, _game_room_gradient_background_alpha_enabled.length);
-		_game_room_gradient_background_alpha_enabled.push(false);
+		_timer_enabled.splice(0, _timer_enabled.length);
+		_timer_enabled.push(true);
 		
-		_show_capturing_units.splice(0, _show_capturing_units.length);
-		_show_capturing_units.push(true);
+		_send_automatic_start_game_request.splice(0, _send_automatic_start_game_request.length);
+		_send_automatic_start_game_request.push(false);		
 		
-		_show_capturing_units_number.splice(0, _show_capturing_units_number.length);
-		_show_capturing_units_number.push(1);
+		_background_alpha_enabled.splice(0, _background_alpha_enabled.length);
+		_background_alpha_enabled.push(false);
+		
+		_capturing_units.splice(0, _capturing_units.length);
+		_capturing_units.push(true);
+		
+		_capturing_units_number.splice(0, _capturing_units_number.length);
+		_capturing_units_number.push(1);
 		
 		_chess_show_last_piece_moved.splice(0, _chess_show_last_piece_moved.length);
 		_chess_show_last_piece_moved.push(true);
@@ -481,8 +518,11 @@ class RegCustom
 		_chess_computer_thinking_enabled.splice(0, _chess_computer_thinking_enabled.length);
 		_chess_computer_thinking_enabled.push(true);
 		
-		_background_brightness.splice(0, _background_brightness.length);
-		_background_brightness.push(0.45);
+		_client_background_brightness.splice(0, _client_background_brightness.length);
+		_client_background_brightness.push(0.45);
+		
+		_client_background_saturation.splice(0, _client_background_brightness.length);
+		_client_background_saturation.push(1);
 		
 		_button_color_number.splice(0, _button_color_number.length);
 		_button_color_number.push(16);
@@ -493,11 +533,11 @@ class RegCustom
 		_button_text_color_number.splice(0, _button_text_color_number.length);
 		_button_text_color_number.push(1);
 		
-		RegCustom._button_color[0] = MenuConfigurationsGeneral.button_colors();
+		RegCustom._button_color[0] = RegCustomColors.button_colors();
 					
-		RegCustom._button_border_color[0] = MenuConfigurationsGeneral.button_border_colors();
+		RegCustom._button_border_color[0] = RegCustomColors.button_border_colors();
 		
-		RegCustom._button_text_color[0] = MenuConfigurationsGeneral.button_text_colors();
+		RegCustom._button_text_color[0] = RegCustomColors.button_text_colors();
 		
 		_leaderboard_enabled.splice(0, _leaderboard_enabled.length);
 		_leaderboard_enabled.push(false);
@@ -575,12 +615,18 @@ class RegCustom
 		_time_remaining_for_game.push([0]);
 		_time_remaining_for_game[0] = [15, 15, 15, 15, 30];
 		
-		_background_header_title_number.splice(0, _background_header_title_number.length);
-		_background_header_title_number.push(1);
+		_title_bar_background_number.splice(0, _title_bar_background_number.length);
+		_title_bar_background_number.push(1);
 		
-		_background_footer_menu_number.splice(0, _background_footer_menu_number.length);
-		_background_footer_menu_number.push(1);
-
+		_menu_bar_background_number.splice(0, _menu_bar_background_number.length);
+		_menu_bar_background_number.push(1);
+		
+		_title_bar_background_enabled.splice(0, _title_bar_background_enabled.length);
+		_title_bar_background_enabled.push(false);
+		
+		_menu_bar_background_enabled.splice(0, _menu_bar_background_enabled.length);
+		_menu_bar_background_enabled.push(true);
+		
 		#if html5
 			return;
 			
@@ -607,10 +653,10 @@ class RegCustom
 	 */
 	public static function assign_colors():Void
 	{
-		RegCustom._button_color[Reg._tn] = MenuConfigurationsGeneral.button_colors();
+		RegCustom._button_color[Reg._tn] = RegCustomColors.button_colors();
 					
-		RegCustom._button_border_color[Reg._tn] = MenuConfigurationsGeneral.button_border_colors();
+		RegCustom._button_border_color[Reg._tn] = RegCustomColors.button_border_colors();
 		
-		RegCustom._button_text_color[Reg._tn] = MenuConfigurationsGeneral.button_text_colors();
+		RegCustom._button_text_color[Reg._tn] = RegCustomColors.button_text_colors();
 	}
 }

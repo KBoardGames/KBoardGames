@@ -10,9 +10,9 @@
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
+    GNU General Public License for more details.
 
-    You should have received a copy of the GNU Affero General Public License
+    You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
@@ -53,7 +53,7 @@ class CheckersImagesCapturingUnits extends FlxSprite {
 		Reg._capturingUnitsForImages[0][_yID][_xID] = 0;
 		Reg._capturingUnitsForImages[1][_yID][_xID] = 0;
 		
-		color = RegFunctions.color_show_capturing_units();
+		color = RegCustomColors.color_capturing_units();
 		visible = false;
 	}
 
@@ -72,7 +72,7 @@ class CheckersImagesCapturingUnits extends FlxSprite {
 				) Reg._capturingUnitsForPieces[Reg._playerMoving][_yID][_xID] = 0;
 				
 				if (Reg._capturingUnitsForPieces[Reg._playerMoving][_yID][_xID] > 0
-				&&  RegCustom._show_capturing_units[Reg._tn] == true) 
+				&&  RegCustom._capturing_units[Reg._tn] == true) 
 					visible = true
 				
 				else if (Reg._game_offline_vs_cpu == false 

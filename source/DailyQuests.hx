@@ -10,9 +10,9 @@
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
+    GNU General Public License for more details.
 
-    You should have received a copy of the GNU Affero General Public License
+    You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
@@ -24,9 +24,6 @@ package;
  */
 class DailyQuests extends FlxGroup
 {
-	private var _title:FlxText;
-	private var _title_background:FlxSprite;
-	
 	/******************************
 	 * the bar displayed behind the quest description and total quest value completed.
 	 */
@@ -128,18 +125,8 @@ class DailyQuests extends FlxGroup
 		_bar_value_current[7] = Std.parseInt(RegTypedef._dataDailyQuests._checkers_get_6_kings);
 		_bar_value_current[8] = Std.parseInt(RegTypedef._dataDailyQuests._play_all_5_board_games); 
 
-		_title = new FlxText(15, 4, 0, "Daily Quests");
-		_title.setFormat(Reg._fontDefault, 50, FlxColor.YELLOW);
-		_title.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 3);
-		_title.scrollFactor.set(0,0);
-		_title.visible = true;
-				
 		_group = cast add(new FlxSpriteGroup());
-
-		if (Reg.__menu_bar != null)	remove(Reg.__menu_bar);
-		Reg.__menu_bar = new MenuBar();
-		add(Reg.__menu_bar);
-		
+				
 		_rewards.splice(3, 0);
 		_rewards = RegTypedef._dataDailyQuests._rewards.split(",");
 				
@@ -160,15 +147,14 @@ class DailyQuests extends FlxGroup
 		FlxG.cameras.add( __scrollable_area );
 		__scrollable_area.antialiasing = true;
 		__scrollable_area.pixelPerfectRender = true;
-		
-		//-----------------------------
-		// none scrollable background behind title.
-		_title_background = new FlxSprite(0, 0);
-		_title_background.makeGraphic(FlxG.width, 55, Reg._background_header_title_color); 
-		_title_background.scrollFactor.set(0, 0);
-		add(_title_background);
 				
-		add(_title);
+		if (Reg.__title_bar != null) remove(Reg.__title_bar);
+		Reg.__title_bar = new TitleBar("Daily Quests");
+		add(Reg.__title_bar);
+
+		if (Reg.__menu_bar != null)	remove(Reg.__menu_bar);
+		Reg.__menu_bar = new MenuBar();
+		add(Reg.__menu_bar);
 		
 		drawRewardIconsAndText();
 		drawGaugeEmpty();

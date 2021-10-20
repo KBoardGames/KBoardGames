@@ -1,3 +1,35 @@
+Version 1.18.2. 2021-10-19.
+
+New Features.
+
+	Client now passes ipV6 and hostname to the server.
+
+	Chocolate and lemon-orange themes were added. Old coco theme was removed.
+	
+	At configuration menu, toggle on/off display of background texture for most scenes. Users can choose any 1 of 8 textures.
+
+	At configuration menu, toggle on/off display of background saturation for most scenes. users can change the saturation of a color.
+
+	Title bar class added. At configuration menu, toggle on/off the title bar background.
+	
+	At configuration menu, toggle on/off the menu bar background.
+
+Feature changed.
+
+	Changed the appearance of the title screen.
+
+	Changed the order of some configuration features at the general section.
+
+	Chatter text field size decreased. Now text wraps before the vertical bar of the scroller area.
+
+	Background transparency value changed from 75% to 50%.  
+
+Bugs fixed.
+
+	Fixed a bug in scroller area where the user could not scroll up or left.
+
+	Fixed numerous null errors and redundant code at the configuration class.
+
 Version 1.17.1. 2021-10-3.
 
 New Features.
@@ -218,7 +250,7 @@ Bugs fixed.
 	
 	At the house, the item get button and item put button would disabled when house map scrolled to far to the right. Buttons needed a map.x offset 
 
-	At house, a panel boxScroller would stop working after scrolling the house map horizontally. Also, an input click on images would be offset at a panel after scrolling the boxScroller vertically. Therefore, images would not fire. 
+	At house, a panel scroller_area would stop working after scrolling the house map horizontally. Also, an input click on images would be offset at a panel after scrolling the scroller_area vertically. Therefore, images would not fire. 
 	
 	Scrolling the house map to offset the tracker then returning to house would stop that map from scrolling.
 	
@@ -335,7 +367,7 @@ Bugs fixed.
 
 	At client the menu icons where still inactive after user closed the server offline dialog.
 
-	Chatter had a display bug in the signature game. ScrollFacter was set to zero for buttons and images. Therefore, buttons and images could not be seen in the boxScroller.
+	Chatter had a display bug in the signature game. ScrollFacter was set to zero for buttons and images. Therefore, buttons and images could not be seen in the scroller_area.
 
 	In a game of chess, check was called instead of checkmate for player 2 in an online game.
 
@@ -347,9 +379,9 @@ Bugs fixed.
 	
 	At the House side game the scale factor needed to be removed because a furniture item's position did not save correctly the first time. Also, changing the scale value would offset the furniture item's rotate icon and drag icon.
 	
-	When a group is added to a boxScroller, that group needs to be added to the stage. The result are two groups sharing the same coordinate. One group that scrolls with the boxScroller and the other that stays static. When scrolling a page, button coordinate offset in that group was needed to address the hidden buttons behind the boxScroller that were firing at the stage.
+	When a group is added to a scroller_area, that group needs to be added to the stage. The result are two groups sharing the same coordinate. One group that scrolls with the scroller_area and the other that stays static. When scrolling a page, button coordinate offset in that group was needed to address the hidden buttons behind the scroller_area that were firing at the stage.
 	
-	Multiple groups shared the same boxScroller at the configuration menu. The result was that one group could trigger elements from another group.
+	Multiple groups shared the same scroller_area at the configuration menu. The result was that one group could trigger elements from another group.
 	
 	Some path-to-king danger units were incorrectly highlighted.	
 	
@@ -375,9 +407,9 @@ Feature changed.
 
 	No longer can a user click something behind a dialog box at the title scene.
 	
-	Redone chatter. Chatter now remembers 100 lines of text. Chatter is now inside a boxScroller.
+	Redone chatter. Chatter now remembers 100 lines of text. Chatter is now inside a scroller_area.
 	
-	Redone boxScoller. Scrollbars can no longer take user input. BoxScroller now scrolls when clicking and holding that user input at a region of the boxScroller area.
+	Redone boxScoller. Scrollbars can no longer take user input. scroller_area now scrolls when clicking and holding that user input at a region of the scroller_area area.
 	
 	Added more of a delay when showing a message box.
 	
@@ -413,11 +445,11 @@ Bugs fixed.
 	
 	The "misc menu" shares the same scene as the lobby. An input click at the misc menu could trigger hidden lobby buttons.
 	
-	Returning to the title screen by clicking the exit button at the "misc menu" boxScroller scene and then re-logging in would automatically send that user to the miscellaneous menu instead of the lobby scene.
+	Returning to the title screen by clicking the exit button at the "misc menu" scroller_area scene and then re-logging in would automatically send that user to the miscellaneous menu instead of the lobby scene.
 	
 	Logging in message seen while offline game was loading.
 	
-	Fixed a vertical boxScroller track bug seen at the notation boxScroller on android phones.
+	Fixed a vertical scroller_area track bug seen at the notation scroller_area on android phones.
 	
 	History buttons did not work when a game ended because when playing a game the variables were set back to default at every game turn.
 	

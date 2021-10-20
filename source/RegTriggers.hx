@@ -10,9 +10,9 @@
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
+    GNU General Public License for more details.
 
-    You should have received a copy of the GNU Affero General Public License
+    You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
@@ -198,7 +198,7 @@ class RegTriggers
 	public static var _leaderboards_show:Bool = false;
 	
 	/******************************
-	 * notice displayed when saving at MenuConfigurations.hx.
+	 * notice displayed when saving at Configurations.hx.
 	 */
 	public static var _config_menu_save_notice:Bool = false;
 	

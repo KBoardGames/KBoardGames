@@ -286,17 +286,14 @@ class FlxScrollbarHorizontal extends FlxSpriteGroup
 			* 
 			* E.g. on a vertical scrollbar, if you click & hold below the bar, it scrolls down, but if, while still holding, you move to above the bar, nothing happens.
 			*/
-			var whichWayToScroll:Int = 0; // 0: don't; 1: positive along axis; 2: negative along axis
+			var whichWayToScroll:Int = 0;
 			
 			if (_bar.x > _dragStartedWhenBarWasAt) 
 			{
 				// scrolling right
 				if (mousePosition.x > _bar.x + _bar.width) // and far enough right to scroll more
 					whichWayToScroll = 1;
-			}
-			
-			else if (_bar.x > _dragStartedWhenBarWasAt) 
-			{
+				
 				// scrolling left
 				if (mousePosition.x < _bar.x) // and far enough left to scroll more
 					whichWayToScroll = -1;
@@ -334,7 +331,7 @@ class FlxScrollbarHorizontal extends FlxSpriteGroup
 		&&	_id == ID
 		&& 	_id > 0
 		&&	FlxG.mouse.x >= _viewPort.x 
-		&&	FlxG.mouse.x <= 1400)
+		&&	FlxG.mouse.x <= Reg._client_width)
 		{
 			_bar.y = FlxMath.bound(_bar.y - FlxG.mouse.wheel * _mouseWheelMultiplier, _track.y, _track.y + _track.height - _bar.height);
 						

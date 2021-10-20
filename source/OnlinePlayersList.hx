@@ -10,9 +10,9 @@
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
+    GNU General Public License for more details.
 
-    You should have received a copy of the GNU Affero General Public License
+    You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
@@ -74,11 +74,11 @@ class OnlinePlayersList extends FlxState
 		__scene_waiting_room = scene_waiting_room;
 		
 
-		var _color_table_rows = FlxColor.fromHSB((__scene_waiting_room._color_ra+25), 0.8, (RegCustom._background_brightness[Reg._tn]-0.10));
+		var _color_table_rows = FlxColor.fromHSB((__scene_waiting_room._color_ra+25), 0.8, (RegCustom._client_background_brightness[Reg._tn]-0.10));
 		
 		if (RegCustom._client_background_enabled[Reg._tn] == true)
 		{
-			_color_table_rows = MenuConfigurationsGeneral.color_client_background();
+			_color_table_rows = RegCustomColors.color_client_background();
 			_color_table_rows.alphaFloat = 0.15;
 		}
 		
@@ -101,7 +101,7 @@ class OnlinePlayersList extends FlxState
 		
 		// scroll area bg.
 		var bg2 = new FlxSprite(0, 0);
-		bg2.makeGraphic(FlxG.width - 80, 7100, 0xCC000000);		
+		bg2.makeGraphic(FlxG.width - 80, 135 - _offset_y + (121 * 70), 0xCC000000);		
 		bg2.scrollFactor.set(0, 0);
 		group.add(bg2);
 			
@@ -349,21 +349,21 @@ class OnlinePlayersList extends FlxState
 			// fix a camera display bug where the return to lobby an invite buttons can also be clicked from the right side of the screen because of the chatter scrollable area scrolling part of the scene.
 			if (FlxG.mouse.x > FlxG.width / 2
 			&&  FlxG.mouse.y >= FlxG.height - 50
-			&&  __scene_waiting_room.__menu_bar._button_return_to_lobby_from_waiting_room.visible == true
-			&&  __scene_waiting_room.__menu_bar._button_refresh_list.visible == true) 
+			&&  Reg.__menu_bar4._button_return_to_lobby_from_waiting_room.visible == true
+			&&  Reg.__menu_bar4._button_refresh_list.visible == true) 
 			{
-				__scene_waiting_room.__menu_bar._button_return_to_lobby_from_waiting_room.label.color = 0xFFFFFFFF;
-				__scene_waiting_room.__menu_bar._button_refresh_list.label.color = 0xFFFFFFFF;
+				Reg.__menu_bar4._button_return_to_lobby_from_waiting_room.label.color = 0xFFFFFFFF;
+				Reg.__menu_bar4._button_refresh_list.label.color = 0xFFFFFFFF;
 				
-				__scene_waiting_room.__menu_bar._button_return_to_lobby_from_waiting_room.active = false;
-				__scene_waiting_room.__menu_bar._button_refresh_list.active = false;
+				Reg.__menu_bar4._button_return_to_lobby_from_waiting_room.active = false;
+				Reg.__menu_bar4._button_refresh_list.active = false;
 			}
 			
 			else
 			
 			{
-				__scene_waiting_room.__menu_bar._button_return_to_lobby_from_waiting_room.active = true;
-				__scene_waiting_room.__menu_bar._button_refresh_list.active = true;
+				Reg.__menu_bar4._button_return_to_lobby_from_waiting_room.active = true;
+				Reg.__menu_bar4._button_refresh_list.active = true;
 			}
 			
 		}

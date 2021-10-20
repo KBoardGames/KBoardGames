@@ -10,9 +10,9 @@
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
+    GNU General Public License for more details.
 
-    You should have received a copy of the GNU Affero General Public License
+    You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
@@ -34,7 +34,7 @@ class MenuStateOfflinePlayers extends MenuState
 		Reg.resetRegVars(); 
 		Reg2.resetRegVars();
 		RegCustom.resetRegVars();
-		
+		Reg._at_menu_state_offline = true;
 		_ticks_startup = 1000;
 
 		RegTriggers.resetTriggers();		
@@ -45,20 +45,11 @@ class MenuStateOfflinePlayers extends MenuState
 		
 		RegFunctions.fontsSharpen();		
 		startupFunctions();
-				
-		// the title of the game.
-		_title_background = new FlxSprite(0, 0);
-		_title_background.makeGraphic(FlxG.width, 55, Reg._background_header_title_color); 
-		_title_background.scrollFactor.set(0,0);
-		add(_title_background);
 		
-		_title = new FlxText(15, 4, 0, "Player 1 vs Player 2");
-		_title.setFormat(Reg._fontDefault, 50, FlxColor.YELLOW);
-		_title.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 3);
-		_title.scrollFactor.set(0,0);
-		_title.visible = true;
-		add(_title);
-
+		if (Reg.__title_bar != null) remove(Reg.__title_bar);
+		Reg.__title_bar = new TitleBar("Player 1 vs Player 2");
+		add(Reg.__title_bar);
+		
 		var _checkers = new ButtonGeneralNetworkNo(0, (FlxG.height - 340) / 2 + 40, "Checkers", 350 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, playCheckers, RegCustom._button_color[Reg._tn], false);
 		_checkers.label.font = Reg._fontDefault;
 		_checkers.screenCenter(X);
@@ -109,6 +100,7 @@ class MenuStateOfflinePlayers extends MenuState
 		Reg._move_number_next = 0;		 
 		Reg._gameJumpTo = 0;		
 		Reg._gameNotationOddEven = 0;
+		Reg._at_menu_state_offline = false;
 		
 		FlxG.switchState(new PlayState());
 	}
@@ -134,6 +126,7 @@ class MenuStateOfflinePlayers extends MenuState
 		Reg._move_number_next = 0;		 
 		Reg._gameJumpTo = 0;		
 		Reg._gameNotationOddEven = 0;
+		Reg._at_menu_state_offline = false;
 		
 		FlxG.switchState(new PlayState());
 	}
@@ -151,6 +144,7 @@ class MenuStateOfflinePlayers extends MenuState
 		Reg._move_number_next = 0;
 		Reg._gameJumpTo = 0; 
 		Reg._gameNotationOddEven = 0;
+		Reg._at_menu_state_offline = false;
 		
 		FlxG.switchState(new PlayState());
 	}
@@ -166,7 +160,8 @@ class MenuStateOfflinePlayers extends MenuState
 		Reg._game_offline_vs_cpu = false;
 		Reg._move_number_current = 0;
 		Reg._move_number_next = 0;
-		Reg._gameJumpTo = 0;
+		Reg._gameJumpTo = 0;		
+		Reg._at_menu_state_offline = false;
 		
 		FlxG.switchState(new PlayState());
 	}
@@ -174,9 +169,15 @@ class MenuStateOfflinePlayers extends MenuState
 	public function backToTitle():Void
 	{
 		Reg._gameJumpTo = 0;
+		Reg._at_menu_state_offline = false;
+		
 		FlxG.switchState(new MenuState());
 	}
-		
 	
+	override public function update(elapsed:Float):Void 
+	{
+		
+		super.update(elapsed);
+	}
 }
 

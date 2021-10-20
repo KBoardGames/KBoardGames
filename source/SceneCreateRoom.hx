@@ -10,9 +10,9 @@
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
+    GNU General Public License for more details.
 
-    You should have received a copy of the GNU Affero General Public License
+    You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
@@ -24,14 +24,6 @@ package;
  */
 class SceneCreateRoom extends FlxState
 {
-	public var __menu_bar:MenuBar;
-	
-	/******************************
-	* the _title of this state.
-	*/
-	private var _title:FlxText;	
-	private var _title_background:FlxSprite;
-	
 	/******************************
 	* when creating a game, this will be the default number of total players permitted for the game.
 	*/
@@ -95,19 +87,6 @@ class SceneCreateRoom extends FlxState
 				
 		RegTypedef._dataPlayers._gameName = RegFunctions.gameName(0);
 		RegTypedef._dataMisc._roomGameIds[RegTypedef._dataMisc._room] = 0;
-		
-		
-		_title_background = new FlxSprite(0, 0);
-		_title_background.makeGraphic(FlxG.width, 55, Reg._background_header_title_color); 
-		_title_background.scrollFactor.set(1,0);
-		add(_title_background);
-		
-		_title = new FlxText(15, 4, 0, "Creating Room " + Std.string(RegTypedef._dataMisc._room));
-		_title.setFormat(Reg._fontDefault, 50, FlxColor.YELLOW);
-		_title.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 3);
-		_title.scrollFactor.set(1,0);
-		_title.visible = true;
-		add(_title);
 		
 		_group_sprite.splice(0, _group_sprite.length);
 		
@@ -270,8 +249,13 @@ class SceneCreateRoom extends FlxState
 		
 		//#############################
 		// this button is not added to the _group, so it will not scroll with the other buttons.
-		__menu_bar = new MenuBar();
-		add(__menu_bar);
+		if (Reg.__title_bar3 != null) remove(Reg.__title_bar3);
+		Reg.__title_bar3 = new TitleBar("Creating Room " + Std.string(RegTypedef._dataMisc._room));
+		add(Reg.__title_bar3);
+		
+		if (Reg.__menu_bar3 != null) remove(Reg.__menu_bar3);
+		Reg.__menu_bar3 = new MenuBar(false, false, null, null, this);
+		add(Reg.__menu_bar3);
 		
 		// might need to recreate the scrollbar to bring it back up.
 
@@ -282,9 +266,6 @@ class SceneCreateRoom extends FlxState
 		_textMaximumPlayersForGame.text = "2";
 		
 		_buttonHumanOrComputerGame.label.text = "Human";
-				
-		_title.text = "Creating Room " + Std.string(RegTypedef._dataMisc._room);
-		_title.visible = true;
 
 		game(); 
 	}

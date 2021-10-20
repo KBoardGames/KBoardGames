@@ -10,9 +10,9 @@
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
+    GNU General Public License for more details.
 
-    You should have received a copy of the GNU Affero General Public License
+    You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
@@ -67,11 +67,6 @@ class PlayState extends FlxState
     private var _closeSocket:Bool = false;
    
 	/******************************
-	 * background image for the login scene.
-	 */
-	private var _game_board_image:FlxSprite;
-	
-	/******************************
 	 * scene title background.
 	 */
 	private var _title_background:FlxSprite;
@@ -80,6 +75,11 @@ class PlayState extends FlxState
 	* the title of this state.
 	*/
 	private var _title:FlxText;
+	
+	/******************************
+	 * delays going to the lobby when first logging in. this is needed to draw the front door data to scene. without this var, sometimes that data is not seen.
+	 */	
+	private var _ticks_logging_in_delay:Int = 0;
 			
 	/******************************
 	 * server data displayed at front door.
@@ -94,7 +94,8 @@ class PlayState extends FlxState
 	 */
 	public static var _text_client_login_data:FlxText;
 	public static var _text_client_login_data2:FlxText;
-	public static var _text_client_login_data3:FlxText;
+	public static var _text_client_login_data3:FlxText;	
+	public static var _text_client_login_data4:FlxText;
 	
 	/******************************
 	 * text the client is trying to login to server.
@@ -128,6 +129,9 @@ class PlayState extends FlxState
 		persistentDraw = true;
 		persistentUpdate = true;
 		
+		FlxG.mouse.enabled = false;
+		
+		_ticks_logging_in_delay = 0;
 		_clientDisconnect = false;
 		_clientDisconnectDo = true;
 		
@@ -155,17 +159,9 @@ class PlayState extends FlxState
 				
 		getPlayersNamesAndAvatars();
 		
-		// gameboard image.
-		_game_board_image = new FlxSprite(0,0);
-		_game_board_image.loadGraphic("assets/images/background.jpg", false);
-		_game_board_image.alpha = 0.14;
-		_game_board_image.scrollFactor.set(0, 0);
-		_game_board_image.updateHitbox();
-		add(_game_board_image);
-		
 		//------------------------------
 		_title_background = new FlxSprite(0, 0);
-		_title_background.makeGraphic(FlxG.width, 55, Reg._background_header_title_color); 
+		_title_background.makeGraphic(FlxG.width, 55, Reg._title_bar_background_enabled); 
 		_title_background.scrollFactor.set(0, 0);
 		add(_title_background);
 				
@@ -196,10 +192,9 @@ class PlayState extends FlxState
 		add(_text_server_login_data);
 		
 		
-		_text_server_login_data2 = new TextGeneral(0, 0, 0, "");
+		_text_server_login_data2 = new TextGeneral(15, FlxG.height / 2 - 200 + 45, 0, "");
 		_text_server_login_data2.scrollFactor.set(0, 0);
 		_text_server_login_data2.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 1);
-		_text_server_login_data2.setPosition(15, FlxG.height / 2 - 200 + 45);
 		if (Reg._gameJumpTo == -1 ) _text_server_login_data2.visible = true;
 		else 
 		{
@@ -286,7 +281,19 @@ class PlayState extends FlxState
 		_text_client_login_data3.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.WHITE);
 		add(_text_client_login_data3);
 		
+		_text_client_login_data4 = new FlxText(0, 0, 0, "");
+		_text_client_login_data4.scrollFactor.set(0, 0);
+		_text_client_login_data4.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
+		_text_client_login_data4.setPosition(FlxG.width / 2, _text_server_login_data4.y);
+		if (Reg._gameJumpTo == -1 ) _text_client_login_data4.visible = true;
+		else 
+		{
+			Reg._gameJumpTo = 0;
+			_text_client_login_data4.visible = false;
+		}
 		
+		_text_client_login_data4.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.WHITE);
+		add(_text_client_login_data4);
 		
 		_text_logging_in = new FlxText(0, 700, 0, "Logging in to server...");
 		_text_logging_in.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.PURPLE);
@@ -499,10 +506,13 @@ class PlayState extends FlxState
 				if (RegTypedef._dataAccount._username == "")
 					RegTypedef._dataAccount._username = RegCustom._profile_username_p1[Reg._tn];
 				
-				RegTypedef._dataAccount._host = Internet.getIP();
-				RegTypedef._dataAccount._ip = Internet.getIP(); 
+				RegTypedef._dataAccount._ip = Internet.getIP();
 				
-				if (Reg._clientReadyForPublicRelease == false) RegTypedef._dataAccount._ip = RegTypedef._dataAccount._host = "127.0.0.1"; 
+				#if html5
+					RegTypedef._dataAccount._host = "html5";
+				#else
+					RegTypedef._dataAccount._host = Internet.getHostname();
+				#end
 				
 				clientSocket.send("Join", RegTypedef._dataAccount); // go to the event "join" at server then at server at event join there could be a broadcast that will send data to a client event.
 				haxe.Timer.delay(function (){}, Reg2._event_sleep);
@@ -971,7 +981,6 @@ class PlayState extends FlxState
 					if (Reg._doUpdate == true)
 					{
 						Reg._doUpdate = false;
-						_game_board_image.visible = false;
 						
 						_title_background.visible = false;
 						_title.visible = false;	
@@ -1012,11 +1021,17 @@ class PlayState extends FlxState
 			}
 			
 		}
-				
+		
+		if (Reg._isLoggingIn == true) _ticks_logging_in_delay += 1;
+		
 		// user is sending logging in data to the server.
-		if (Reg._isLoggingIn == true && Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false)
+		if (Reg._isLoggingIn == true 
+		&&	Reg._game_offline_vs_cpu == false
+		&&	Reg._game_offline_vs_player == false
+		&&	_ticks_logging_in_delay >= 31)
 		{
-			Reg._isLoggingIn = false;
+			Reg._isLoggingIn = false; 
+			_ticks_logging_in_delay = 0;
 			
 			// client at website is only for guest accounts.
 			#if html5

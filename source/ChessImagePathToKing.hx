@@ -10,9 +10,9 @@
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
+    GNU General Public License for more details.
 
-    You should have received a copy of the GNU Affero General Public License
+    You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
@@ -43,7 +43,7 @@ class ChessImagePathToKing extends FlxSprite
 		
 		loadGraphic("assets/images/pathToKing.png", false);
 
-		color = RegFunctions.color_path_to_king();
+		color = RegCustomColors.color_path_to_king();
 		visible = false;
 	}
 

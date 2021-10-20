@@ -10,9 +10,9 @@
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
+    GNU General Public License for more details.
 
-    You should have received a copy of the GNU Affero General Public License
+    You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
@@ -122,7 +122,7 @@ class SceneLobby extends FlxState
 	/******************************
 	 * moves everything up by these many pixels.
 	 */
-	private var _offset_y:Int = -500;
+	private var _offset_y:Int = -770;
 	
 	/******************************
 	 * white bar with text such as host, game title, spectators, overtop of it.
@@ -197,15 +197,17 @@ class SceneLobby extends FlxState
 				
 		RegTypedef._dataMisc._gid[RegTypedef._dataMisc._room] = RegTypedef._dataMovement._gid = RegTypedef._dataMisc.id;
 		
-		// scene background
+		// lobby scene background. 
 		if (_background != null)
 		{
 			remove(_background);
 			_background.destroy();
 		}
 		
-		_background = new FlxSprite();
-		_background.makeGraphic(FlxG.width, FlxG.height-50,FlxColor.WHITE);
+		_background = new FlxSprite(0, 55);
+		_background.makeGraphic(FlxG.width, FlxG.height-50);
+		
+		// changing this color value will also change lobby's chatter background.
 		_background.color = FlxColor.BLACK;
 		_background.scrollFactor.set(0, 0);
 		add(_background);
@@ -224,7 +226,7 @@ class SceneLobby extends FlxState
 		}
 		
 		_title_background = new FlxSprite(0, 0);
-		_title_background.makeGraphic(FlxG.width, 55, Reg._background_header_title_color); 
+		_title_background.makeGraphic(FlxG.width, 55, Reg._title_bar_background_enabled); 
 		_title_background.scrollFactor.set(1,0);
 		add(_title_background);
 		
@@ -277,7 +279,7 @@ class SceneLobby extends FlxState
 				FlxG.cameras.remove(__scrollable_area);
 				__scrollable_area.destroy();
 			}
-			__scrollable_area = new FlxScrollableArea( new FlxRect(0, 0, 1390-360, FlxG.height - 50), new FlxRect(0, 0, 1390, 1950), ResizeMode.NONE, 0, 100, -1, FlxColor.LIME, null, 0, true);
+			__scrollable_area = new FlxScrollableArea( new FlxRect(0, 0, 1400-370, FlxG.height - 50), new FlxRect(0, 0, 1400, 1950), ResizeMode.NONE, 0, 100, -1, FlxColor.LIME, null, 0, true);
 			
 			FlxG.cameras.add( __scrollable_area );
 			__scrollable_area.antialiasing = true;
@@ -311,7 +313,7 @@ class SceneLobby extends FlxState
 				__scrollable_area.destroy();
 			}
 			
-			__scrollable_area = new FlxScrollableArea( new FlxRect(0, 0, 1400, FlxG.height - 50), new FlxRect(0, 0, 1400, 1950), ResizeMode.FIT_WIDTH, 0, 100, -1, FlxColor.LIME, null, 0, true);
+			__scrollable_area = new FlxScrollableArea( new FlxRect(0, 0, Reg._client_width, FlxG.height - 50), new FlxRect(0, 0, Reg._client_width, 1950), ResizeMode.FIT_WIDTH, 0, 100, -1, FlxColor.LIME, null, 0, true);
 			
 			FlxG.cameras.add( __scrollable_area );
 			__scrollable_area.antialiasing = true;
@@ -319,7 +321,7 @@ class SceneLobby extends FlxState
 			
 		}
 		
-		__scrollable_area.content.y = 500;
+		__scrollable_area.content.y = 770;
 		
 		if (__menu_bar != null)
 		{
@@ -327,21 +329,22 @@ class SceneLobby extends FlxState
 			__menu_bar.destroy();
 		}
 		
+		// __menu_bar needs to remain local. do not use Reg.__menu_bar
 		__menu_bar = new MenuBar();
 		add(__menu_bar);
 				
 		set_not_active_for_buttons();
 		initialize();
-				
+	
 	}	
 	
 	private function draw_table_empty():Void
 	{
-		_table_rows_color = FlxColor.fromHSB(FlxG.random.int(1, 360), 0.8, (RegCustom._background_brightness[Reg._tn]-0.10));
+		_table_rows_color = FlxColor.fromHSB(FlxG.random.int(1, 360), RegCustom._client_background_saturation[Reg._tn], (RegCustom._client_background_brightness[Reg._tn]-0.10));
 		
 		if (RegCustom._client_background_enabled[Reg._tn] == true)
 		{
-			_table_rows_color = MenuConfigurationsGeneral.color_client_background();
+			_table_rows_color = RegCustomColors.color_client_background();
 			_table_rows_color.alphaFloat = 0.15;
 		}
 		
@@ -401,7 +404,7 @@ class SceneLobby extends FlxState
 		}
 		
 		_table_header_background = new FlxSprite(0, 110);
-		_table_header_background.makeGraphic(FlxG.width, 50, FlxColor.WHITE); 
+		_table_header_background.makeGraphic(FlxG.width-10, 50, FlxColor.WHITE); 
 		_table_header_background.scrollFactor.set(1, 0);
 		_group_scrollable_area.add(_table_header_background);
 		_group_scrollable_area.members[(_count)].scrollFactor.set(1, 0);

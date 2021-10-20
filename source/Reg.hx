@@ -10,9 +10,9 @@
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
+    GNU General Public License for more details.
 
-    You should have received a copy of the GNU Affero General Public License
+    You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
@@ -111,20 +111,20 @@ class Reg
 	/******************************
 	 * Width of the game in pixels.
 	 */ 
-	public static var gameWidth:Int = 1400;
+	public static var _client_width:Int = 1410;
 	
 	/******************************
 	 * Height of the game in pixels.
 	 */
-	public static var gameHeight:Int = 770;
+	public static var _client_height:Int = 770;
 	
 	/******************************
-	 * use image.scale.set(_scaleWidth, _scaleHeight) to scale the images if the screen res is smaller than the default screen size. the default screen size is gameWidth and gameHeight.
+	 * use image.scale.set(_scaleWidth, _scaleHeight) to scale the images if the screen res is smaller than the default screen size. the default screen size is _client_width and _client_height.
 	 */
 	public static var _scaleWidth:Int = 1;
 	
 	/******************************
-	 * use image.scale.set(_scaleWidth, _scaleHeight) to scale the images if the screen res is smaller than the default screen size. the default screen size is gameWidth and gameHeight.
+	 * use image.scale.set(_scaleWidth, _scaleHeight) to scale the images if the screen res is smaller than the default screen size. the default screen size is _client_width and _client_height.
 	 */
 	public static var _scaleHeight:Int = 1;
 	
@@ -207,6 +207,8 @@ class Reg
 	 * when true, used to stop the creation of Room.hx when room already exists. also used to determine if user is creating a room.
 	 */
 	public static var _at_create_room:Bool = false;
+	public static var _at_menu_state_offline:Bool = false;
+	public static var _at_menu_state:Bool = false;
 	
 	/******************************
 	 * used to determine if user is at the chatroom.
@@ -2005,7 +2007,7 @@ class Reg
 	 */
 	public static var _number_wheel_ticks:Int = 0;
 	
-	public static var _background_header_title_color:FlxColor;
+	public static var _title_bar_background_enabled:FlxColor;
 	public static var _background_footer_menu_color:FlxColor;
 	
 	/*****************************
@@ -2027,13 +2029,67 @@ class Reg
 	 * true if at house.
 	 */
 	public static var _at_house:Bool = false;
+	
+	
+	/******************************
+	 * lobby. Cannot share with another class instance.
+	 */
+	public static var __title_bar:TitleBar;
+	
+	/******************************
+	 * all other class such as leaderboards, credits, misc, new account.
+	 */
+	public static var __title_bar2:TitleBar; 
+	
+	/******************************
+	 * SceneCreateRoom. Cannot share with another class instance.
+	 */
+	public static var __title_bar3:TitleBar;
+	
+	/******************************
+	 * SceneWaitingRoom. Cannot share with another class instance.
+	 */
+	public static var __title_bar4:TitleBar;
+	
+	/******************************
+	 * lobby. Cannot share with another class instance.
+	 */
 	public static var __menu_bar:MenuBar;
+	
+	/******************************
+	 * all other class such as leaderboards, credits, misc, new account.
+	 */
+	public static var __menu_bar2:MenuBar;
+	
+	/******************************
+	 * SceneCreateRoom. Cannot share with another class instance.
+	 */
+	public static var __menu_bar3:MenuBar;
+	
+	/******************************
+	 * SceneWaitingRoom. Cannot share with another class instance.
+	 */
+	public static var __menu_bar4:MenuBar; 
 	
 	/******************************
 	 * theme number var. default theme has this value of 0. all themes are taken from the themes folder. all themes from that folder will do a var push. so, the second theme from the folder will have a value of 2.
 	 */
-	public static var _tn:Int = 0;
-	public static var _tn_total:Int = 0; // total amount of themes available.
+	public static var _tn:Int = -1;
+	
+	/******************************
+	 * total amount of themes available excluding default theme.
+	 */
+	public static var _tn_total:Int = 0; 
+	
+	/******************************
+	 * use this var if the scrollable area y value needs to be remembered. this var is reset at the resetRegVarsOnce function.
+	 */
+	public static var __scrollable_area_scroll_y:Float;
+	
+	/******************************
+	 * this is the instance of the text general class value. this value is used to highlight the background of the text when the mouse is within the region of the background displayed behind the text that is part of the TextGeneral class.
+	 */
+	public static var _text_general_id:Int = -1;
 	
 	public static function resetCPUaiVars():Void
 	{
@@ -2170,7 +2226,7 @@ class Reg
 	 */
 	public static function set_for_public():Void
 	{		
-		var _public = true;
+		var _public = false;
 		
 		if (_public == false)
 		{
@@ -2228,7 +2284,6 @@ class Reg
 		//_alreadyOnlineUser = false;
 		//_isThisServerPaidMember = false;
 		
-		
 		_ecoOpeningsNotationsOutput = "";
 		// notation works when commenting out these two lines.
 		//_ecoOpeningsNamesTemp = "";
@@ -2249,7 +2304,7 @@ class Reg
 		set_for_public();		
 		
 		_avatar_total = 300;
-	
+		__scrollable_area_scroll_y = 0;
 		_websiteHomeUrl = "kboardgames.com";
 		_websiteNameTitle = "K Board Games";
 		_websiteNameTitleCompare = "K Board Games";
@@ -2262,8 +2317,8 @@ class Reg
 		_useThirdPartyIpAddress = true; // set this true to enable paid server feature. paid members can host their own domain and that domain can be selected at MenuState as an option to connect to that server.
 		
 		//############################# END CONFIG
-		_background_header_title_color = MenuConfigurationsGeneral.background_header_title_color();
-		_background_footer_menu_color = MenuConfigurationsGeneral.background_footer_menu_color();
+		_title_bar_background_enabled = RegCustomColors.title_bar_background_color();
+		_background_footer_menu_color = RegCustomColors.menu_bar_background_color();
 		
 		_p_all_static1 = 
 	[ 0,  1,  2,  3,  4,  5,  6,  7,  8,  9
@@ -2625,6 +2680,7 @@ class Reg
 		resetCPUaiVars();
 		ChessECO.listToArray();
 		
+		_text_general_id = -1;
 		_gameIsNowOver = false;
 		_signatureGameUnitNumberTrade = [0, 0];
 		_number_wheel_get_value = false;
@@ -2634,7 +2690,9 @@ class Reg
 		_messageFocusId.splice(0, _messageFocusId.length);
 		_currentRoomState = 0;
 		_clearDoubleMessage = false;
+		_at_menu_state_offline = false;
 		_at_create_room = false;
+		_at_menu_state = false;
 		_at_waiting_room = false;
 		_at_game_room = false; // do not use here.
 		_at_configuration_menu = false;
@@ -2727,8 +2785,8 @@ class Reg
 		_enableGameNotations = true;
 		_framerate = 30;
 		
-		gameWidth = 1400;
-		gameHeight = 770;
+		_client_width = 1410;
+		_client_height = 770;
 		
 		_otherPlayer = false;
 		_pointValue2 = -1;
@@ -3067,4 +3125,4 @@ class Reg
 		_gameJumpTo = 0; 
 		
 	}
-}//
+}//

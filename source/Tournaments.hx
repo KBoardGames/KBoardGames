@@ -10,9 +10,9 @@
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
+    GNU General Public License for more details.
 
-    You should have received a copy of the GNU Affero General Public License
+    You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
@@ -26,19 +26,11 @@ class Tournaments extends FlxGroup
 {	
 	public var __miscellaneous_menu_output:MiscellaneousMenuOutput;
 	
-	public var __menu_bar:MenuBar;
-	
 	/******************************
 	 * true if the player moved a piece on the board in tournament play.
 	 */
 	public static var _piece_move_completed:Bool = false;
 	
-	/******************************
-	 * the title of this scene.
-	 */
-	private var _title:FlxText;
-	private var _title_background:FlxSprite;
-		
 	/******************************
 	 * go to game room
 	 */
@@ -51,26 +43,19 @@ class Tournaments extends FlxGroup
 		FlxG.mouse.enabled = true;
 		FlxG.autoPause = false;	// this application will pause when not in focus.
 		
-		__menu_bar = new MenuBar();
-		add(__menu_bar);
+		if (Reg.__title_bar2 != null) remove(Reg.__title_bar2);
+		Reg.__title_bar2 = new TitleBar("Tournaments");
+		add(Reg.__title_bar2);
 		
-		_title_background = new FlxSprite(0, 0);
-		_title_background.makeGraphic(FlxG.width, 55, Reg._background_header_title_color); 
-		_title_background.scrollFactor.set(0, 0);
-		add(_title_background);
-		
-		_title = new FlxText(15, 4, 0, "Tournaments");
-		_title.setFormat(Reg._fontDefault, 50, FlxColor.YELLOW);
-		_title.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 3);
-		_title.scrollFactor.set(0,0);
-		_title.visible = true;
-		add(_title);
+		if (Reg.__menu_bar2 != null) remove(Reg.__menu_bar2);
+		Reg.__menu_bar2 = new MenuBar();
+		add(Reg.__menu_bar2);
 			
 	}
 	
 	public function _tournament_standard_8():Void
 	{
-		var _title_sub = new FlxText(15, _title.y + 125, FlxG.width - 15, "Tournament Chess Standard (" + Std.string(RegTypedef._dataTournaments._player_current) + "/" + Std.string(RegTypedef._dataTournaments._player_maximum) + ")");
+		var _title_sub = new FlxText(15, 180, FlxG.width - 15, "Tournament Chess Standard (" + Std.string(RegTypedef._dataTournaments._player_current) + "/" + Std.string(RegTypedef._dataTournaments._player_maximum) + ")");
 		_title_sub.setFormat(Reg._fontDefault, Reg._font_size);
 		_title_sub.scrollFactor.set();
 		add(_title_sub);
@@ -144,8 +129,8 @@ class Tournaments extends FlxGroup
 	{
 		_piece_move_completed = false;
 				
-		__menu_bar._scene_tournaments_exit.active = false;
-		__menu_bar.active = false;
+		Reg.__menu_bar2._scene_tournaments_exit.active = false;
+		Reg.__menu_bar2.active = false;
 		
 		_button_move_piece.active = false;
 		
@@ -183,8 +168,8 @@ class Tournaments extends FlxGroup
 	{
 		_piece_move_completed = true;
 				
-		__menu_bar._scene_tournaments_exit.active = false;
-		__menu_bar.active = false;
+		Reg.__menu_bar2._scene_tournaments_exit.active = false;
+		Reg.__menu_bar2.active = false;
 		
 		_button_move_piece.active = false;
 		

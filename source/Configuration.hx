@@ -10,9 +10,9 @@
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
+    GNU General Public License for more details.
 
-    You should have received a copy of the GNU Affero General Public License
+    You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
@@ -22,9 +22,9 @@ package;
  * this class is created when clicking the gear button. It has configuration stuff such as setting up the game board unit colors.
  * @author kboardgames.com
  */
-class MenuConfigurations extends FlxState
+class Configuration extends FlxState
 {
-	public var _output:MenuConfigurationsOutput;
+	public var _output:ConfigurationOutput;
 	
 	override public function create():Void
 	{
@@ -33,9 +33,29 @@ class MenuConfigurations extends FlxState
 		persistentDraw = true;
 		persistentUpdate = true;
 		
+		FlxG.mouse.visible = true;
+		
 		Reg._at_configuration_menu = true;
 		
-		_output = new MenuConfigurationsOutput();
+		#if !html5
+			//------------------------------
+			RegFunctions._gameMenu = new FlxSave(); // initialize		
+			RegFunctions._gameMenu.bind("ConfigurationsMenu"); // bind to the named save slot.
+			
+			// we use true here so that some items are loaded. a value of false is the default for this function so that so items are only loaded when a condition is met.
+			RegCustom.resetConfigurationVars();
+			RegFunctions.loadConfig(true);
+			if (Reg._tn == 0) RegCustom.resetConfigurationVars2();			
+			
+			RegFunctions.themes_recursive_file_loop();
+			
+			RegCustom.assign_colors();
+		
+		#else
+			RegCustom.resetConfigurationVars();		
+		#end
+		
+		_output = new ConfigurationOutput();
 		add(_output);
 	}
 	

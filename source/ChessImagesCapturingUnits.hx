@@ -10,9 +10,9 @@
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
+    GNU General Public License for more details.
 
-    You should have received a copy of the GNU Affero General Public License
+    You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
@@ -53,7 +53,7 @@ class ChessImagesCapturingUnits extends FlxSprite {
 		Reg._capturingUnitsForImages[0][_yID][_xID] = 0;
 		Reg._capturingUnitsForImages[1][_yID][_xID] = 0;
 		
-		color = RegFunctions.color_show_capturing_units();
+		color = RegCustomColors.color_capturing_units();
 		visible = false;
 	}
 
@@ -73,7 +73,7 @@ class ChessImagesCapturingUnits extends FlxSprite {
 			*/
 			
 			if (Reg._chessUnitsInCheckTotal[Reg._playerMoving] == 1 && Reg._chessIsKingMoving == true
-			&&  RegCustom._show_capturing_units[Reg._tn] == true)
+			&&  RegCustom._capturing_units[Reg._tn] == true)
 			{
 				// used to display the highlight units for the king in check correctly.
 				if (Reg._gameDidFirstMove == true && Reg._chessKingCanMoveToThisUnit[Reg._playerMoving][_yID][_xID] == true && Reg._gamePointValueForPiece[_yID][_xID] != 0 && Reg._capturingUnitsForPieces[Reg._playerNotMoving][_yID][_xID] <= 2 && Reg._playerMoving == 0 && Reg._gamePointValueForPiece[_yID][_xID] > 10
@@ -91,7 +91,7 @@ class ChessImagesCapturingUnits extends FlxSprite {
 			{
 				// when selecting a piece, these are the units the piece can move to.
 				if (Reg._gameDidFirstMove == true && Reg._gameMovePiece == false && Reg._capturingUnitsForImages[Reg._playerMoving][_yID][_xID] > 0 && Reg._chessIsKingMoving == false
-				&&  RegCustom._show_capturing_units[Reg._tn] == true
+				&&  RegCustom._capturing_units[Reg._tn] == true
 				) 
 					visible = true;
 				
@@ -111,7 +111,7 @@ class ChessImagesCapturingUnits extends FlxSprite {
 				&&		 Reg._capturingUnitsForImages[Reg._playerMoving][_yID][_xID] > 0 
 				&& 		 Reg._capturingUnitsForPieces[Reg._playerNotMoving][_yID][_xID] <= 2
 				&&		 Reg._chessIsKingMoving == true 
-				&&		 RegCustom._show_capturing_units[Reg._tn] == true)
+				&&		 RegCustom._capturing_units[Reg._tn] == true)
 					visible = true;
 				else 
 					visible = false;

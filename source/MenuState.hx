@@ -10,9 +10,9 @@
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
+    GNU General Public License for more details.
 
-    You should have received a copy of the GNU Affero General Public License
+    You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
@@ -30,10 +30,6 @@ import openfl.media.SoundTransform;
  */
 class MenuState extends FlxState
 {
-	public var _title_background:FlxSprite;
-	public var _title:FlxText;
-	public var _title_sub:FlxText;
-		
 	//public var _music:Sound;
 	//public var _sound_channel:SoundChannel;
 	
@@ -117,17 +113,22 @@ class MenuState extends FlxState
 	
 	private var _icon_offset_x:Int = 0;
 	
+	/******************************
+	 * background gradient, texture and plain color for a scene.
+	 */
+	private var _scene_background:SceneBackground;
+		
 	override public function create():Void
 	{
 		persistentDraw = true;
 		persistentUpdate = false;
-		Reg._at_game_room = false;
-		
+		Reg._at_game_room = false; // needed here since auto return after save options could be enabled.
+				
 		_is_active = true;
 		_ip = Reg._ipAddress;
 		
-		FlxG.mouse.useSystemCursor = true;
-		
+		// when returned to a state after mouse was set to not visible, system mouse will not show at that new state when mouse it set to visible.
+		FlxG.mouse.useSystemCursor = false;		
 		FlxG.mouse.reset();
 		FlxG.mouse.enabled = true;
 		
@@ -156,9 +157,14 @@ class MenuState extends FlxState
 			RegFunctions._gameMenu = new FlxSave(); // initialize		
 			RegFunctions._gameMenu.bind("ConfigurationsMenu"); // bind to the named save slot.
 			
+			Reg._tn = -1; // this value will be loaded from hard drive.
+			
 			// we use true here so that some items are loaded. a value of false is the default for this function so that so items are only loaded when a condition is met.
 			RegCustom.resetConfigurationVars();
 			RegFunctions.loadConfig(true);
+			
+			if (Reg._tn == -1) Reg._tn = 0; // avoid a client crash by setting the selected theme to default.
+			
 			if (Reg._tn == 0) RegCustom.resetConfigurationVars2();			
 			
 			RegFunctions.themes_recursive_file_loop();
@@ -176,7 +182,8 @@ class MenuState extends FlxState
 		RegCustom.resetRegVars();
 		
 		ChessECO.ECOlists();
-			
+		Reg._at_menu_state = true;
+		
 		RegCustom._chess_skill_level_online = RegCustom._chess_skill_level_offline;
 		
 		if (Reg._startFullscreen == true) FlxG.fullscreen = true;
@@ -262,7 +269,7 @@ class MenuState extends FlxState
 		if (_client_online == true)
 		{
 			var _eventScheduler_bg_border = new FlxSprite(0, 0);
-			_eventScheduler_bg_border.makeGraphic(351 + 16, 118 + 16, 0xff333333);
+			_eventScheduler_bg_border.makeGraphic(351 + 16, 118 + 16, 0xffffffff);
 			_eventScheduler_bg_border.scrollFactor.set(0, 0);	
 			_eventScheduler_bg_border.scale.set(1.05, 1.05);
 			_eventScheduler_bg_border.setPosition(200 - 8, 440 - 8 + _offset_icons_and__event_scheduler_y);
@@ -280,7 +287,6 @@ class MenuState extends FlxState
 			_eventScheduler.scrollFactor.set(0, 0);	
 			_eventScheduler.scale.set(1.05, 1.05);
 			_eventScheduler.setPosition(200, 440 + _offset_icons_and__event_scheduler_y);
-			
 			add(_eventScheduler);
 			
 			_eventSchedulerHover = new FlxSprite(0, 0);
@@ -458,18 +464,13 @@ class MenuState extends FlxState
 	
 	private function startupFunctions():Void
 	{
-		// gameboard image.
-		var _game_board_image = new FlxSprite(0,0);
-		_game_board_image.loadGraphic("assets/images/background.jpg", false);
-		_game_board_image.alpha = 0.14;
-		_game_board_image.scrollFactor.set(0, 0);
-		_game_board_image.updateHitbox();
-		add(_game_board_image);
+		_scene_background = new SceneBackground();
+		add(_scene_background);
 		
 		buttonFullScreen();				// toggle window/fullscreen mode
 		
 		#if !html1
-			buttonExitProgram();			// button to exit program
+			buttonExitProgram();		// button to exit program
 		#end
 	}
 	
@@ -611,6 +612,7 @@ class MenuState extends FlxState
 			
 			#if html5
 				RegTypedef._dataAccount._username = "bot ben";
+				Reg._at_menu_state = false;
 				FlxG.switchState(new PlayState());
 					
 			#end
@@ -660,11 +662,15 @@ class MenuState extends FlxState
 						
 						#if !html5
 							if (_server_online == true) 
+							{
+								Reg._at_menu_state = false;
 								FlxG.switchState(new PlayState());
+							}
 							else
 								serverConnectingErrorMessages();
 						
 						#else
+							Reg._at_menu_state = false;
 							FlxG.switchState(new PlayState());
 						
 						#end
@@ -729,6 +735,7 @@ class MenuState extends FlxState
 		RegTriggers.resetTriggers();
 		Reg._gameJumpTo = -1;
 		Reg._game_offline_vs_player = false;
+		Reg._at_menu_state = false;
 		FlxG.switchState(new MenuStateOfflinePlayers());
 	}
 	
@@ -752,6 +759,7 @@ class MenuState extends FlxState
 			Reg._gameId = -1;
 			
 			Reg._gameJumpTo = -1; 
+			Reg._at_menu_state = false;
 			FlxG.switchState(new PlayState());
 		}
 	}
@@ -830,18 +838,19 @@ class MenuState extends FlxState
 		_textEventSchedule.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.YELLOW);
 		_textEventSchedule.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		_textEventSchedule.setPosition(_intCalendarCoordinateX + _offsetBgColumnX + 72, _intCalendarCoordinateY + _offsetEventColumn1Y + _offsetBgColumnY - 87 );
-		_textEventSchedule.scrollFactor.set();
-		_textEventSchedule.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.PURPLE, 1);
+		_textEventSchedule.scrollFactor.set(0, 0);
 		add(_textEventSchedule);
 		
 		var _textCurrent = new FlxText(0, 0, 0, "Current");
 		_textCurrent.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.WHITE);
 		_textCurrent.setPosition(_intCalendarCoordinateX + _offsetBgColumnX + 29, _intCalendarCoordinateY + _offsetEventColumn1Y + _offsetBgColumnY - 36);
+		_textCurrent.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		_textCurrent.scrollFactor.set();
 		add(_textCurrent);
 		
 		var _textUpcoming = new FlxText(0, 0, 0, "");
 		_textUpcoming.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.WHITE);
+		_textUpcoming.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		_textUpcoming.scrollFactor.set();
 		add(_textUpcoming);
 		
@@ -1048,13 +1057,12 @@ class MenuState extends FlxState
 		_text_title_icon_description.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.YELLOW);
 		_text_title_icon_description.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		_text_title_icon_description.scrollFactor.set();
-		_text_title_icon_description.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.PURPLE, 1);
 		add(_text_title_icon_description);
 		
 		_group_sprite.splice(0, _group_sprite.length);
 		
 		var _sprite_bg_border = new FlxSprite(20, 120);
-		_sprite_bg_border.makeGraphic(272 + 47, 144 + 16, 0xff333333);
+		_sprite_bg_border.makeGraphic(272 + 47, 144 + 16, 0xffffffff);
 		_sprite_bg_border.scrollFactor.set(0, 0);
 		_sprite_bg_border.setPosition(_icon_offset_x - 11, 440 + _offset_icons_and__event_scheduler_y - 11);
 		add(_sprite_bg_border);
@@ -1130,10 +1138,18 @@ class MenuState extends FlxState
 		//if (_num == 2) TODO add something here;
 		
 		#if !html5
-			if (_num == 3) FlxG.switchState(new MenuConfigurations());
+			if (_num == 3) 
+			{
+				Reg._at_menu_state = false;
+				FlxG.switchState(new Configuration());
+			}
 		#end
 		if (_num == 4) clientHelp();
-		if (_num == 5) FlxG.switchState(new MenuCredits());
+		if (_num == 5)
+		{
+			Reg._at_menu_state = false;
+			FlxG.switchState(new MenuCredits());
+		}
 	}
 	
 	private function clientHelp():Void
@@ -1203,9 +1219,11 @@ class MenuState extends FlxState
 			&&	RegCustom._profile_username_p1[Reg._tn] != "Bot zak".toLowerCase()
 			)
 			{
-				_profile_username_p1 = new ButtonUnique(750+90, 230, RegCustom._profile_username_p1[Reg._tn], 150, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, profile_username_p1, RegCustom._button_color[Reg._tn], false, 1);
-				_profile_username_p1.label.font = Reg._fontDefault;
-				add(_profile_username_p1);
+				#if !html5
+					_profile_username_p1 = new ButtonUnique(750+90, 230, RegCustom._profile_username_p1[Reg._tn], 200, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, profile_username_p1, RegCustom._button_color[Reg._tn], false, 1);
+					_profile_username_p1.label.font = Reg._fontDefault;
+					add(_profile_username_p1);
+				#end
 			}
 			
 			// this does the button toggle.
@@ -1409,6 +1427,11 @@ class MenuState extends FlxState
 		#end
 	}	
 	
+	override public function destroy():Void
+	{
+		super.destroy();
+	}
+	
 	override public function update(elapsed:Float):Void
 	{
 		if (_ticks_startup < 20) _ticks_startup += 1;
@@ -1431,55 +1454,13 @@ class MenuState extends FlxState
 					if (Reg2._eventName[0] == "") Internet.getAllEvents();
 				}
 			#end
-			//https://stackoverflow.com/questions/36822025/execute-url-path-in-external-program-in-haxe
-			//case "Linux", "BSD", "Android": Sys.command("xdg-open", [url]);
-			//case "Mac": Sys.command("open", [url]);
-			//case "Windows": Sys.command("start", [url]);
-			//Sys.command("start", ["https://localhost"]);
-			//Sys.command("start", ["Games.exe"]);
-			// Example, just use... Sys.command("batch.bat");
-			/*	
-			#if !html5
-				if (Reg._do_play_title_music_once == true)
-				{
-					Reg._do_play_title_music_once = false;
-					
-					var _path = StringTools.replace(Path.directory(Sys.programPath()), "\\", "/");
-					
-					var bytes = File.getBytes(_path + "/intro_1.ogg");
-					_music = new Sound();
-					_music.loadCompressedDataFromByteArray(bytes.getData(), bytes.length);
-					_sound_channel = _music.play();
-					_sound_channel.soundTransform = new SoundTransform(1, 0);
-					
-				}
-			#end
-			*/
+			
 			Reg._hasUserConnectedToServer = false;
 			Reg._notation_output = true;
 			
-			_title_background = new FlxSprite(0, 0);
-			_title_background.makeGraphic(FlxG.width, 55, Reg._background_header_title_color); 
-			_title_background.scrollFactor.set(0, 0);
-			add(_title_background);
-			
-			_title = new FlxText(15, 4, 0, Reg._websiteNameTitle);
-			_title.setFormat(Reg._fontDefault, 50, FlxColor.YELLOW);
-			_title.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 3);
-			_title.scrollFactor.set(0,0);
-			_title.visible = true;
-			add(_title);
-						
-			if (_client_online == false)
-			{
-				_title_sub = new FlxText(0, 0, 0, "Offline mode");
-				_title_sub.setFormat(Reg._fontTitle, Reg._font_size, FlxColor.YELLOW);
-				_title_sub.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.PURPLE, 1);
-				_title_sub.scrollFactor.set();
-				_title_sub.y = 100;
-				_title_sub.screenCenter(X);
-				add(_title_sub);
-			}		
+			if (Reg.__title_bar != null) remove(Reg.__title_bar);
+			Reg.__title_bar = new TitleBar(Reg._websiteNameTitle);
+			add(Reg.__title_bar);
 			
 			_clicked = false; // the sound does not play for the icons the first time. this is the fix.
 			
@@ -1621,6 +1602,7 @@ class MenuState extends FlxState
 							if (_eventSchedulerHover != null) _eventSchedulerHover.active = false;					
 							buttonsIconsNotActive();
 							
+							Reg._at_menu_state = false;
 							FlxG.switchState(new EventSchedule());
 						}
 					}

@@ -10,9 +10,9 @@
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
+    GNU General Public License for more details.
 
-    You should have received a copy of the GNU Affero General Public License
+    You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
@@ -40,7 +40,7 @@ class Main extends Sprite
 
 	private function setupGame():Void
 	{
-		addChild(new FlxGame(Reg.gameWidth, Reg.gameHeight, initialState, zoom, Reg._framerate, Reg._framerate, true, true));
+		addChild(new FlxGame(Reg._client_width, Reg._client_height, initialState, zoom, Reg._framerate, Reg._framerate, true, true));
 	}
 	
 }

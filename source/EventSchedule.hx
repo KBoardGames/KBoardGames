@@ -10,9 +10,9 @@
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
+    GNU General Public License for more details.
 
-    You should have received a copy of the GNU Affero General Public License
+    You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
@@ -243,6 +243,11 @@ class EventSchedule extends FlxState
 	 */
 	private var _ticks:Int = 0;
 	
+	/******************************
+	 * background gradient, texture and plain color for a scene.
+	 */
+	private var _scene_background:SceneBackground;
+	
 	override public function create():Void
 	{
 		persistentDraw = false;
@@ -265,19 +270,12 @@ class EventSchedule extends FlxState
 		FlxG.stage.quality = StageQuality.BEST;		
 		FlxG.camera.antialiasing = true;
 		FlxG.camera.pixelPerfectRender = true;
-				
-		// fill the screen with a random color.
-		var _background_scene_color = new FlxSprite();
-		_background_scene_color.makeGraphic(FlxG.width,FlxG.height,FlxColor.WHITE);
-		_background_scene_color.color = FlxColor.fromHSB(FlxG.random.int(1, 360), 0.8, RegCustom._background_brightness[Reg._tn]);
-		_background_scene_color.scrollFactor.set(0, 0);
-		add(_background_scene_color);
 		
-		if (RegCustom._client_background_enabled[Reg._tn] == true)
-		{
-			_background_scene_color.color = MenuConfigurationsGeneral.color_client_background();
-			_background_scene_color.alpha = RegCustom._background_brightness[Reg._tn];
-		}
+		/******************************
+			* background gradient, texture and plain color for a scene.
+			*/
+		_scene_background = new SceneBackground();
+		add(_scene_background);
 		
 		var _calendarBackground = new FlxSprite(0, 0);
 		_calendarBackground.loadGraphic("assets/images/calendarGrid.png", false);
@@ -299,7 +297,7 @@ class EventSchedule extends FlxState
 		
 		// the title of the game.
 		var _title_background = new FlxSprite(0, 0);
-		_title_background.makeGraphic(FlxG.width, 55, Reg._background_header_title_color); 
+		_title_background.makeGraphic(FlxG.width, 55, Reg._title_bar_background_enabled); 
 		_title_background.scrollFactor.set(1,0);
 		add(_title_background);
 		

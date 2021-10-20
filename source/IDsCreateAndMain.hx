@@ -10,9 +10,9 @@
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
+    GNU General Public License for more details.
 
-    You should have received a copy of the GNU Affero General Public License
+    You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
@@ -85,7 +85,7 @@ class IDsCreateAndMain extends FlxState
 	/******************************
 	 * display an image to full the scene.
 	 */
-	private var _background_scene:FlxSprite;
+	private var _background_gradient_scene:FlxSprite;
 	
 	/******************************
 	 * this class determines if a game has ended naturally, such as no move units to move to, or no more pieces for that player on board, etc.
@@ -112,9 +112,12 @@ class IDsCreateAndMain extends FlxState
 	 */
 	private var _groupCapturingUnit:FlxSpriteGroup;
 	
-	
 	public var __game_house_taxi_cafe:SignatureGameReferenceImages;
 		
+	/******************************
+	 * background gradient, texture and plain color for a scene.
+	 */
+	private var _scene_background:SceneBackground;
 	
 	public function new(ids_win_lose_or_draw:IDsWinLoseOrDraw, chess_check_or_checkmate:ChessCheckOrCheckmate) 
 	{
@@ -1237,28 +1240,9 @@ class IDsCreateAndMain extends FlxState
 		if (Reg._tn == 0) RegCustom.resetConfigurationVars2();
 		
 		PlayState.getPlayersNamesAndAvatars();
-				
-		// fill the screen with a random color.
-		_background_scene_color = new FlxSprite();
-		_background_scene_color.makeGraphic(FlxG.width,FlxG.height - Reg._offsetScreenY + 10,FlxColor.WHITE);
-		_background_scene_color.color = FlxColor.fromHSB(FlxG.random.int(1, 360), 0.8, RegCustom._background_brightness[Reg._tn]);
-		_background_scene_color.scrollFactor.set(0, 0);
-		add(_background_scene_color);
 		
-		if (RegCustom._game_room_gradient_background_enabled[Reg._tn] == true)
-		{
-			_background_scene = new FlxSprite(0, -44, "assets/images/gameboardGradientBackground" + Std.string(RegCustom._game_room_gradient_background_image_number[Reg._tn]) + ".jpg"); // 44 is half of hud height.
-			_background_scene.scrollFactor.set(0, 0);
-			if (RegCustom._game_room_gradient_background_alpha_enabled[Reg._tn] == true)
-				_background_scene.alpha = 0.25;
-			add(_background_scene);
-		}
-		
-		else if (RegCustom._client_background_enabled[Reg._tn] == true)
-		{
-			_background_scene_color.color = MenuConfigurationsGeneral.color_client_background();
-			_background_scene_color.alpha = RegCustom._background_brightness[Reg._tn];
-		}
+		_scene_background = new SceneBackground();
+		add(_scene_background);
 		
 		if (RegCustom._gameboard_border_enabled[Reg._tn] == true)
 		{
@@ -1346,14 +1330,12 @@ class IDsCreateAndMain extends FlxState
 		// display the custom game board from options menu.
 		if (Reg._gameId == 0 || Reg._gameId == 1)
 		{
-			MenuConfigurationsGeneral._id = Reg._gameId;
-
 			if (RegCustom._gameboard_even_units_show_enabled[Reg._tn] == true)
 			{
 				var _sprite_board_game_unit_even = new FlxSprite(0, 0, "assets/images/scenes/tiles/even/"+ Std.string(RegCustom._gameboard_units_even_shade_number[Reg._tn][Reg._gameId]) + ".png");
 				_sprite_board_game_unit_even.scrollFactor.set();
 				_sprite_board_game_unit_even.setPosition(Reg._unitXgameBoardLocation[0], Reg._unitYgameBoardLocation[0]);
-				_sprite_board_game_unit_even.color = MenuConfigurationsGeneral.colorToggleUnitsEven();
+				_sprite_board_game_unit_even.color = RegCustomColors.colorToggleUnitsEven(Reg._gameId);
 				//_sprite_board_game_unit_even.alpha = 0.5;
 				add(_sprite_board_game_unit_even);			
 			}
@@ -1361,7 +1343,7 @@ class IDsCreateAndMain extends FlxState
 			var _sprite_board_game_unit_odd = new FlxSprite(0, 0, "assets/images/scenes/tiles/odd/"+ Std.string(RegCustom._gameboard_units_odd_shade_number[Reg._tn][Reg._gameId]) +".png");
 			_sprite_board_game_unit_odd.scrollFactor.set();
 			_sprite_board_game_unit_odd.setPosition(Reg._unitXgameBoardLocation[0], Reg._unitYgameBoardLocation[0]);
-			_sprite_board_game_unit_odd.color = MenuConfigurationsGeneral.colorToggleUnitsOdd();
+			_sprite_board_game_unit_odd.color = RegCustomColors.colorToggleUnitsOdd(Reg._gameId);
 			//_sprite_board_game_unit_odd.alpha = 0.5;
 			add(_sprite_board_game_unit_odd);			
 		}
@@ -1428,7 +1410,7 @@ class IDsCreateAndMain extends FlxState
 		// set to 10 minutes for a move if playing a tournament game.
 		if (RegTypedef._dataTournaments._move_piece == false)
 		{
-			// time is set at the MenuConfigurationsGames.hx file. we times it by 60 to create the seconds allowed for the game.
+			// time is set at the ConfigurationGames.hx file. we times it by 60 to create the seconds allowed for the game.
 			_t = RegCustom._time_remaining_for_game[Reg._tn][_num] * 60;
 		}
 		

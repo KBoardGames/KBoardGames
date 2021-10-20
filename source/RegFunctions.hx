@@ -10,9 +10,9 @@
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
+    GNU General Public License for more details.
 
-    You should have received a copy of the GNU Affero General Public License
+    You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
@@ -414,12 +414,13 @@ class RegFunctions
 			saveFile.writeString("_profile_username_p2: " + RegCustom._profile_username_p2[Reg._tn] + "\r\n");
 			
 			saveFile.writeString("_gameboard_units_odd_shade_number: " + RegCustom._gameboard_units_odd_shade_number[Reg._tn][0] + ", " + RegCustom._gameboard_units_odd_shade_number[Reg._tn][1] + "\r\n");
-			
 			saveFile.writeString("_gameboard_units_even_shade_number: " + RegCustom._gameboard_units_even_shade_number[Reg._tn][0] + ", " + RegCustom._gameboard_units_even_shade_number[Reg._tn][1] + "\r\n");
 			
 			saveFile.writeString("_gameboard_units_odd_color_number: " + RegCustom._gameboard_units_odd_color_number[Reg._tn][0] + ", " + RegCustom._gameboard_units_odd_color_number[Reg._tn][1] + "\r\n");
 			
 			saveFile.writeString("_gameboard_units_even_color_number: " + RegCustom._gameboard_units_even_color_number[Reg._tn][0] + ", " + RegCustom._gameboard_units_even_color_number[Reg._tn][1] + "\r\n");
+			
+			saveFile.writeString("_username_suggestions_enabled: " + RegCustom._username_suggestions_enabled[Reg._tn] + "\r\n");
 			
 			saveFile.writeString("_gameboard_border_enabled: " + RegCustom._gameboard_border_enabled[Reg._tn] + "\r\n");
 			
@@ -427,19 +428,24 @@ class RegFunctions
 		
 			saveFile.writeString("_gameboard_coordinates_enabled: " + RegCustom._gameboard_coordinates_enabled[Reg._tn] + "\r\n");
 			
-			saveFile.writeString("_gameboard_even_units_show_enabled: " + RegCustom._gameboard_even_units_show_enabled[Reg._tn] + "\r\n");
+			saveFile.writeString("_gameboard_even_units_show_enabled: " + RegCustom._gameboard_even_units_show_enabled[Reg._tn] + "\r\n");			
+		
+			saveFile.writeString("_gradient_background_enabled: " + RegCustom._gradient_background_enabled[Reg._tn] + "\r\n");
 			
-			saveFile.writeString("_game_room_gradient_background_enabled: " + RegCustom._game_room_gradient_background_enabled[Reg._tn] + "\r\n");
+			saveFile.writeString("_gradient_background_image_number: " + RegCustom._gradient_background_image_number[Reg._tn] + "\r\n");
 			
-			saveFile.writeString("_game_room_gradient_background_image_number: " + RegCustom._game_room_gradient_background_image_number[Reg._tn] + "\r\n");
+			saveFile.writeString("_texture_background_enabled: " + RegCustom._texture_background_enabled[Reg._tn] + "\r\n");
+			
+			saveFile.writeString("_texture_background_image_number: " + RegCustom._texture_background_image_number[Reg._tn] + "\r\n");
+			
 			saveFile.writeString("_client_background_enabled: " + RegCustom._client_background_enabled[Reg._tn] + "\r\n");
 			
 			saveFile.writeString("_client_background_image_number: " + RegCustom._client_background_image_number[Reg._tn] + "\r\n");
 			
-			saveFile.writeString("_game_room_gradient_background_alpha_enabled: " + RegCustom._game_room_gradient_background_alpha_enabled[Reg._tn] + "\r\n");
-			saveFile.writeString("_show_capturing_units: " + RegCustom._show_capturing_units[Reg._tn] + "\r\n");
+			saveFile.writeString("_background_alpha_enabled: " + RegCustom._background_alpha_enabled[Reg._tn] + "\r\n");
+			saveFile.writeString("_capturing_units: " + RegCustom._capturing_units[Reg._tn] + "\r\n");
 			
-			saveFile.writeString("_show_capturing_units_number: " + RegCustom._show_capturing_units_number[Reg._tn] + "\r\n");
+			saveFile.writeString("_capturing_units_number: " + RegCustom._capturing_units_number[Reg._tn] + "\r\n");
 			
 			saveFile.writeString("_chess_show_last_piece_moved: " + RegCustom._chess_show_last_piece_moved[Reg._tn] + "\r\n");
 			
@@ -463,7 +469,9 @@ class RegFunctions
 			
 			saveFile.writeString("_chess_computer_thinking_enabled: " + RegCustom._chess_computer_thinking_enabled[Reg._tn] + "\r\n");
 			
-			saveFile.writeString("_background_brightness: " + RegCustom._background_brightness[Reg._tn] + "\r\n");
+			saveFile.writeString("_client_background_brightness: " + RegCustom._client_background_brightness[Reg._tn] + "\r\n");
+			
+			saveFile.writeString("_client_background_saturation: " + RegCustom._client_background_saturation[Reg._tn] + "\r\n");
 			
 			saveFile.writeString("_button_color_number: " + RegCustom._button_color_number[Reg._tn] + "\r\n");
 			
@@ -495,6 +503,8 @@ class RegFunctions
 			
 			saveFile.writeString("_profile_avatar_number4: " + RegCustom._profile_avatar_number4[Reg._tn] + "\r\n");
 			
+			saveFile.writeString("_send_automatic_start_game_request: " + RegCustom._send_automatic_start_game_request[Reg._tn] + "\r\n");
+			
 			saveFile.writeString("_accept_automatic_start_game_request: " + RegCustom._accept_automatic_start_game_request[Reg._tn] + "\r\n");
 			
 			saveFile.writeString("_to_lobby_from_waiting_room_confirmation: " + RegCustom._to_lobby_from_waiting_room_confirmation[Reg._tn] + "\r\n");
@@ -524,9 +534,13 @@ class RegFunctions
 			RegCustom._time_remaining_for_game[Reg._tn][3] + ", " + 
 			RegCustom._time_remaining_for_game[Reg._tn][4] + "\r\n");
 				
-			saveFile.writeString("_background_header_title_number: " + RegCustom._background_header_title_number[Reg._tn] + "\r\n");
+			saveFile.writeString("_title_bar_background_number: " + RegCustom._title_bar_background_number[Reg._tn] + "\r\n");
 			
-			saveFile.writeString("_background_footer_menu_number: " + RegCustom._background_footer_menu_number[Reg._tn] + "\r\n");
+			saveFile.writeString("_menu_bar_background_number: " + RegCustom._menu_bar_background_number[Reg._tn] + "\r\n");
+			
+			saveFile.writeString("_title_bar_background_enabled: " + RegCustom._title_bar_background_enabled[Reg._tn] + "\r\n");
+			
+			saveFile.writeString("_menu_bar_background_enabled: " + RegCustom._menu_bar_background_enabled[Reg._tn] + "\r\n");
 			
 			saveFile.close();
 		#end
@@ -542,6 +556,7 @@ class RegFunctions
 			return;
 			
 		#else
+			var _tn_temp = Reg._tn;
 			Reg._tn = 0;
 			
 			var _directory = StringTools.replace(Path.directory(Sys.programPath()), "\\", "/") + "/themes/";
@@ -624,7 +639,15 @@ class RegFunctions
 							RegCustom._gameboard_units_even_color_number[Reg._tn][1] = Std.parseInt(_array[1]);
 						}
 						catch (e:Dynamic){}
-							
+						
+						try
+						{	
+							var _tmp = Std.string(data.get("_username_suggestions_enabled"));
+							RegCustom._username_suggestions_enabled[Reg._tn] = false;
+							if (_tmp == "true") RegCustom._username_suggestions_enabled[Reg._tn] = true;
+						}
+						catch (e:Dynamic){}		
+						
 						try
 						{	
 							var _tmp = Std.string(data.get("_gameboard_border_enabled"));
@@ -652,17 +675,31 @@ class RegFunctions
 						
 						try
 						{
-							var _tmp = Std.string(data.get("_game_room_gradient_background_enabled"));
-							RegCustom._game_room_gradient_background_enabled[Reg._tn] = false;
-							if (_tmp == "true") RegCustom._game_room_gradient_background_enabled[Reg._tn] = true;
+							var _tmp = Std.string(data.get("_gradient_background_enabled"));
+							RegCustom._gradient_background_enabled[Reg._tn] = false;
+							if (_tmp == "true") RegCustom._gradient_background_enabled[Reg._tn] = true;
 						}
 						catch (e:Dynamic){}	
 						
 						try
 						{
-							RegCustom._game_room_gradient_background_image_number[Reg._tn] = Std.parseInt(data.get("_game_room_gradient_background_image_number"));
+							RegCustom._gradient_background_image_number[Reg._tn] = Std.parseInt(data.get("_gradient_background_image_number"));
 						}
 						catch (e:Dynamic){}	
+						
+						try
+						{
+							var _tmp = Std.string(data.get("_texture_background_enabled"));
+							RegCustom._texture_background_enabled[Reg._tn] = false;
+							if (_tmp == "true") RegCustom._texture_background_enabled[Reg._tn] = true;
+						}
+						catch (e:Dynamic){}	
+						
+						try
+						{
+							RegCustom._texture_background_image_number[Reg._tn] = Std.parseInt(data.get("_texture_background_image_number"));
+						}
+						catch (e:Dynamic){}						
 						
 						try
 						{
@@ -680,23 +717,23 @@ class RegFunctions
 						
 						try
 						{
-							var _tmp = Std.string(data.get("_game_room_gradient_background_alpha_enabled"));
-							RegCustom._game_room_gradient_background_alpha_enabled[Reg._tn] = false;
-							if (_tmp == "true") RegCustom._game_room_gradient_background_alpha_enabled[Reg._tn] = true;
+							var _tmp = Std.string(data.get("_background_alpha_enabled"));
+							RegCustom._background_alpha_enabled[Reg._tn] = false;
+							if (_tmp == "true") RegCustom._background_alpha_enabled[Reg._tn] = true;
 						}
 						catch (e:Dynamic){}	
 						
 						try
 						{
-							var _tmp = Std.string(data.get("_show_capturing_units"));
-							RegCustom._show_capturing_units[Reg._tn] = false;
-							if (_tmp == "true") RegCustom._show_capturing_units[Reg._tn] = true;
+							var _tmp = Std.string(data.get("_capturing_units"));
+							RegCustom._capturing_units[Reg._tn] = false;
+							if (_tmp == "true") RegCustom._capturing_units[Reg._tn] = true;
 						}
 						catch (e:Dynamic){}
 						
 						try
 						{	
-							RegCustom._show_capturing_units_number[Reg._tn] = Std.parseInt(data.get("_show_capturing_units_number"));
+							RegCustom._capturing_units_number[Reg._tn] = Std.parseInt(data.get("_capturing_units_number"));
 						}
 						catch (e:Dynamic){}
 						
@@ -778,9 +815,15 @@ class RegFunctions
 						
 						try
 						{
-							RegCustom._background_brightness[Reg._tn] = Std.parseFloat(Std.string(data.get("_background_brightness")));
+							RegCustom._client_background_brightness[Reg._tn] = Std.parseFloat(Std.string(data.get("_client_background_brightness")));
 						}
 						catch (e:Dynamic){}		
+						
+						try
+						{
+							RegCustom._client_background_saturation[Reg._tn] = Std.parseFloat(Std.string(data.get("_client_background_saturation")));
+						}
+						catch (e:Dynamic){}	
 						
 						try
 						{
@@ -881,6 +924,14 @@ class RegFunctions
 						try
 						{	
 							RegCustom._profile_avatar_number4[Reg._tn] = Std.string(data.get("_profile_avatar_number4"));
+						}
+						catch (e:Dynamic){}
+						
+						try
+						{	
+							var _tmp = Std.string(data.get("_send_automatic_start_game_request"));
+							RegCustom._send_automatic_start_game_request[Reg._tn] = false;
+							if (_tmp == "true") RegCustom._send_automatic_start_game_request[Reg._tn] = true;
 						}
 						catch (e:Dynamic){}
 						
@@ -1003,13 +1054,29 @@ class RegFunctions
 						
 						try
 						{	
-							RegCustom._background_header_title_number[Reg._tn] = Std.parseInt(data.get("_background_header_title_number"));
+							RegCustom._title_bar_background_number[Reg._tn] = Std.parseInt(data.get("_title_bar_background_number"));
 						}
 						catch (e:Dynamic){}
 						
 						try
 						{	
-							RegCustom._background_footer_menu_number[Reg._tn] = Std.parseInt(data.get("_background_footer_menu_number"));
+							RegCustom._menu_bar_background_number[Reg._tn] = Std.parseInt(data.get("_menu_bar_background_number"));
+						}
+						catch (e:Dynamic){}
+						
+						try
+						{
+							var _tmp = Std.string(data.get("_title_bar_background_enabled"));
+							RegCustom._title_bar_background_enabled[Reg._tn] = false;
+							if (_tmp == "true") RegCustom._title_bar_background_enabled[Reg._tn] = true;
+						}
+						catch (e:Dynamic){}
+						
+						try
+						{
+							var _tmp = Std.string(data.get("_menu_bar_background_enabled"));
+							RegCustom._menu_bar_background_enabled[Reg._tn] = false;
+							if (_tmp == "true") RegCustom._menu_bar_background_enabled[Reg._tn] = true;
 						}
 						catch (e:Dynamic){}
 						
@@ -1024,9 +1091,10 @@ class RegFunctions
 				Reg._tn = 0;
 			}
 			
-			Reg._tn_total = Reg._tn;
+			Reg._tn_total = Reg._tn; // gets the total themes in the theme folder.
+			Reg._tn = _tn_temp; // _tn_temp was used at the top of this function to remember that last selected theme.
 			
-			// this sets the theme number that is in use. getting the valie from the theme name seen at the top right corner of the configuration menu.
+			// this sets the theme number that is in use. getting the value from the theme name seen at the top right corner of the configuration menu.
 			for (i in 0... RegCustom._theme_name.length)
 			{
 				if (RegCustom._theme_name[i] == RegCustom._theme_name_current)
@@ -1047,17 +1115,20 @@ class RegFunctions
 		RegCustom._gameboard_units_even_shade_number.push([9, 2]);
 		RegCustom._gameboard_units_odd_color_number.push([3, 13]);
 		RegCustom._gameboard_units_even_color_number.push([21, 8]);
+		RegCustom._username_suggestions_enabled.push(true);
 		RegCustom._gameboard_border_number.push(5);		
 		RegCustom._gameboard_border_enabled.push(true);		
 		RegCustom._gameboard_coordinates_enabled.push(true);		
 		RegCustom._gameboard_even_units_show_enabled.push(true);
-		RegCustom._game_room_gradient_background_enabled.push(true);
-		RegCustom._game_room_gradient_background_image_number.push(4);
+		RegCustom._gradient_background_enabled.push(true);
+		RegCustom._gradient_background_image_number.push(4);
+		RegCustom._texture_background_enabled.push(true);
+		RegCustom._texture_background_image_number.push(1);
 		RegCustom._client_background_enabled.push(false);
 		RegCustom._client_background_image_number.push(4);
-		RegCustom._game_room_gradient_background_alpha_enabled.push(false);
-		RegCustom._show_capturing_units.push(true);
-		RegCustom._show_capturing_units_number.push(1);
+		RegCustom._background_alpha_enabled.push(false);
+		RegCustom._capturing_units.push(true);
+		RegCustom._capturing_units_number.push(1);
 		RegCustom._chess_show_last_piece_moved.push(true);
 		RegCustom._chess_future_capturing_units_enabled.push(true);
 		RegCustom._chess_future_capturing_units_number.push(2);
@@ -1069,7 +1140,8 @@ class RegFunctions
 		RegCustom._chess_set_for_player2_color_number.push(1);
 		RegCustom._chess_opening_moves_enabled.push(true);	
 		RegCustom._chess_computer_thinking_enabled.push(true);
-		RegCustom._background_brightness.push(0.45);
+		RegCustom._client_background_brightness.push(0.45);
+		RegCustom._client_background_saturation.push(1);		
 		RegCustom._button_color_number.push(2);
 		RegCustom._button_border_color_number.push(3);
 		RegCustom._button_text_color_number.push(1);
@@ -1085,6 +1157,7 @@ class RegFunctions
 		RegCustom._profile_avatar_number2.push("0.png");
 		RegCustom._profile_avatar_number3.push("0.png");
 		RegCustom._profile_avatar_number4.push("0.png");
+		RegCustom._send_automatic_start_game_request.push(false);
 		RegCustom._accept_automatic_start_game_request.push(false);	
 		RegCustom._to_lobby_from_waiting_room_confirmation.push(true);
 		RegCustom._to_lobby_from_game_room_confirmation.push(true);
@@ -1098,13 +1171,15 @@ class RegFunctions
 		RegCustom._music_enabled.push(true);
 		RegCustom._sound_enabled.push(true);
 		RegCustom._time_remaining_for_game.push([15, 15, 15, 15, 30]);
-		RegCustom._background_header_title_number.push(1);
-		RegCustom._background_footer_menu_number.push(1);
+		RegCustom._title_bar_background_number.push(1);
+		RegCustom._menu_bar_background_number.push(1);
+		RegCustom._title_bar_background_enabled.push(false);
+		RegCustom._menu_bar_background_enabled.push(true);
 		
 	}
 	
 	/******************************
-	 * at the MenuConfigurations.hx the configurations are loaded from here.
+	 * at the Configurations.hx the configurations are loaded from here.
 	 * see Reg2.resetConfigurationVars().
 	 */
 	public static function loadConfig(_load_item = false):Void
@@ -1112,7 +1187,7 @@ class RegFunctions
 		//RegCustom.resetConfigurationVars();
 		
 		#if !html5
-			if (_gameMenu.data._tn != null)
+			if (_gameMenu.data._tn != null && Reg._tn == -1)
 				Reg._tn = _gameMenu.data._tn;
 				
 				// load configurations up to the current theme selected. this will avoid a client crash. The reason is theme 1 can be the selected theme when entering the configuration menu but theme 0 would not have been loaded. therefore, theme 0 would not have its created array that Reg._tn would make. the result is a crash. Since array element 1 cannot exist without the element of 0.
@@ -1129,7 +1204,10 @@ class RegFunctions
 					
 				if (_gameMenu.data._theme_name_current != null)
 					RegCustom._theme_name_current = _gameMenu.data._theme_name_current;
-							
+				
+				if (_gameMenu.data._username_suggestions_enabled != null)
+					RegCustom._username_suggestions_enabled[Reg._tn] = _gameMenu.data._username_suggestions_enabled;				
+				
 				if (_gameMenu.data._gameboard_border_number != null)
 				{
 					for (i in 0...2)
@@ -1208,11 +1286,11 @@ class RegFunctions
 				if (_gameMenu.data._chess_opening_moves_enabled != null)
 					RegCustom._chess_opening_moves_enabled[Reg._tn] = _gameMenu.data._chess_opening_moves_enabled;
 				
-				if (_gameMenu.data._show_capturing_units != null)
-					RegCustom._show_capturing_units[Reg._tn] = _gameMenu.data._show_capturing_units;	
+				if (_gameMenu.data._capturing_units != null)
+					RegCustom._capturing_units[Reg._tn] = _gameMenu.data._capturing_units;	
 					
-				if (_gameMenu.data._show_capturing_units_number != null)
-					RegCustom._show_capturing_units_number[Reg._tn] = _gameMenu.data._show_capturing_units_number;	
+				if (_gameMenu.data._capturing_units_number != null)
+					RegCustom._capturing_units_number[Reg._tn] = _gameMenu.data._capturing_units_number;	
 				
 				if (_gameMenu.data._chess_show_last_piece_moved != null)
 					RegCustom._chess_show_last_piece_moved[Reg._tn] = _gameMenu.data._chess_show_last_piece_moved;
@@ -1250,11 +1328,17 @@ class RegFunctions
 				if (_gameMenu.data._gameboard_even_units_show_enabled != null)
 					RegCustom._gameboard_even_units_show_enabled[Reg._tn] = _gameMenu.data._gameboard_even_units_show_enabled;
 				
-				if (_gameMenu.data._game_room_gradient_background_image_number != null)
-					RegCustom._game_room_gradient_background_image_number[Reg._tn] = _gameMenu.data._game_room_gradient_background_image_number;
+				if (_gameMenu.data._gradient_background_image_number != null)
+					RegCustom._gradient_background_image_number[Reg._tn] = _gameMenu.data._gradient_background_image_number;
 					
-				if (_gameMenu.data._game_room_gradient_background_enabled != null)
-					RegCustom._game_room_gradient_background_enabled[Reg._tn] = _gameMenu.data._game_room_gradient_background_enabled;
+				if (_gameMenu.data._gradient_background_enabled != null)
+					RegCustom._gradient_background_enabled[Reg._tn] = _gameMenu.data._gradient_background_enabled;
+				
+				if (_gameMenu.data._texture_background_image_number != null)
+					RegCustom._texture_background_image_number[Reg._tn] = _gameMenu.data._texture_background_image_number;
+					
+				if (_gameMenu.data._texture_background_enabled != null)
+					RegCustom._texture_background_enabled[Reg._tn] = _gameMenu.data._texture_background_enabled;
 				
 				if (_gameMenu.data._client_background_image_number != null)
 					RegCustom._client_background_image_number[Reg._tn] = _gameMenu.data._client_background_image_number;
@@ -1262,8 +1346,8 @@ class RegFunctions
 				if (_gameMenu.data._client_background_enabled != null)
 					RegCustom._client_background_enabled[Reg._tn] = _gameMenu.data._client_background_enabled;
 					
-				if (_gameMenu.data._game_room_gradient_background_alpha_enabled != null)
-					RegCustom._game_room_gradient_background_alpha_enabled[Reg._tn] = _gameMenu.data._game_room_gradient_background_alpha_enabled;
+				if (_gameMenu.data._background_alpha_enabled != null)
+					RegCustom._background_alpha_enabled[Reg._tn] = _gameMenu.data._background_alpha_enabled;
 				
 				if (_gameMenu.data._chess_set_for_player1 != null)
 					RegCustom._chess_set_for_player1[Reg._tn] = _gameMenu.data._chess_set_for_player1;
@@ -1277,25 +1361,28 @@ class RegFunctions
 				if (_gameMenu.data._chess_set_for_player2_color_number != null)
 					RegCustom._chess_set_for_player2_color_number[Reg._tn] = _gameMenu.data._chess_set_for_player2_color_number;
 				
-				if (_gameMenu.data._background_brightness != null)
-					RegCustom._background_brightness[Reg._tn] = _gameMenu.data._background_brightness;
+				if (_gameMenu.data._client_background_brightness != null)
+					RegCustom._client_background_brightness[Reg._tn] = _gameMenu.data._client_background_brightness;
+				
+				if (_gameMenu.data._client_background_saturation != null)
+					RegCustom._client_background_saturation[Reg._tn] = _gameMenu.data._client_background_saturation;
 				
 				if (_gameMenu.data._button_color_number != null) 
 				{
 					RegCustom._button_color_number[Reg._tn] = _gameMenu.data._button_color_number;
-					RegCustom._button_color[Reg._tn] = MenuConfigurationsGeneral.button_colors();
+					RegCustom._button_color[Reg._tn] = RegCustomColors.button_colors();
 				}
 							
 				if (_gameMenu.data._button_border_color_number != null)
 				{
 					RegCustom._button_border_color_number[Reg._tn] = _gameMenu.data._button_border_color_number;
-					RegCustom._button_border_color[Reg._tn] = MenuConfigurationsGeneral.button_border_colors();
+					RegCustom._button_border_color[Reg._tn] = RegCustomColors.button_border_colors();
 				}			
 				
 				if (_gameMenu.data._button_text_color_number != null)
 				{
 					RegCustom._button_text_color_number[Reg._tn] = _gameMenu.data._button_text_color_number;
-					RegCustom._button_text_color[Reg._tn] = MenuConfigurationsGeneral.button_text_colors();
+					RegCustom._button_text_color[Reg._tn] = RegCustomColors.button_text_colors();
 				}
 					
 				if (_gameMenu.data._profile_username_p1 != null)
@@ -1331,9 +1418,13 @@ class RegFunctions
 					RegCustom._chess_skill_level_online = _gameMenu.data._chess_skill_level_online;
 				}
 				
-				if (RegCustom._background_header_title_number == null) RegCustom._background_header_title_number[Reg._tn] = _gameMenu.data._background_header_title_number;
+				if (RegCustom._title_bar_background_number == null) RegCustom._title_bar_background_number[Reg._tn] = _gameMenu.data._title_bar_background_number;
 				
-				if (RegCustom._background_footer_menu_number == null) RegCustom._background_footer_menu_number[Reg._tn] = _gameMenu.data._background_footer_menu_number;
+				if (RegCustom._menu_bar_background_number == null) RegCustom._menu_bar_background_number[Reg._tn] = _gameMenu.data._menu_bar_background_number;
+				
+				if (RegCustom._title_bar_background_enabled == null) RegCustom._title_bar_background_enabled[Reg._tn] = _gameMenu.data._title_bar_background_enabled;
+				
+				if (RegCustom._menu_bar_background_enabled == null) RegCustom._menu_bar_background_enabled[Reg._tn] = _gameMenu.data._menu_bar_background_enabled;
 			}
 			
 			_gameMenu.close;			
@@ -1350,7 +1441,7 @@ class RegFunctions
 	}
 	
 	/******************************
-	 * at the MenuConfigurations.hx the save button was pressed.
+	 * at the Configurations.hx the save button was pressed.
 	 * see RegCustom.resetConfigurationVars().
 	 */
 	public static function saveConfig():Void
@@ -1376,6 +1467,8 @@ class RegFunctions
 				
 				_gameMenu.data._gameboard_units_even_color_number[i] = RegCustom._gameboard_units_even_color_number[Reg._tn][i];
 			}
+			
+			_gameMenu.data._username_suggestions_enabled = RegCustom._username_suggestions_enabled[Reg._tn];
 			
 			_gameMenu.data._gameboard_border_number = RegCustom._gameboard_border_number[Reg._tn];
 			
@@ -1419,9 +1512,9 @@ class RegFunctions
 			
 			_gameMenu.data._chess_opening_moves_enabled = RegCustom._chess_opening_moves_enabled[Reg._tn];
 			
-			_gameMenu.data._show_capturing_units = RegCustom._show_capturing_units[Reg._tn];
+			_gameMenu.data._capturing_units = RegCustom._capturing_units[Reg._tn];
 			
-			_gameMenu.data._show_capturing_units_number = RegCustom._show_capturing_units_number[Reg._tn];
+			_gameMenu.data._capturing_units_number = RegCustom._capturing_units_number[Reg._tn];
 			
 			_gameMenu.data._chess_show_last_piece_moved = RegCustom._chess_show_last_piece_moved[Reg._tn];
 			
@@ -1447,15 +1540,19 @@ class RegFunctions
 			
 			_gameMenu.data._gameboard_even_units_show_enabled = RegCustom._gameboard_even_units_show_enabled[Reg._tn];
 			
-			_gameMenu.data._game_room_gradient_background_image_number = RegCustom._game_room_gradient_background_image_number[Reg._tn];
+			_gameMenu.data._gradient_background_image_number = RegCustom._gradient_background_image_number[Reg._tn];
 			
-			_gameMenu.data._game_room_gradient_background_enabled = RegCustom._game_room_gradient_background_enabled[Reg._tn];
+			_gameMenu.data._gradient_background_enabled = RegCustom._gradient_background_enabled[Reg._tn];
+			
+			_gameMenu.data._texture_background_image_number = RegCustom._texture_background_image_number[Reg._tn];
+			
+			_gameMenu.data._texture_background_enabled = RegCustom._texture_background_enabled[Reg._tn];
 			
 			_gameMenu.data._client_background_image_number = RegCustom._client_background_image_number[Reg._tn];
 			
 			_gameMenu.data._client_background_enabled = RegCustom._client_background_enabled[Reg._tn];
 			
-			_gameMenu.data._game_room_gradient_background_alpha_enabled = RegCustom._game_room_gradient_background_alpha_enabled[Reg._tn];
+			_gameMenu.data._background_alpha_enabled = RegCustom._background_alpha_enabled[Reg._tn];
 					
 			_gameMenu.data._chess_set_for_player1 = RegCustom._chess_set_for_player1[Reg._tn];
 			
@@ -1465,7 +1562,9 @@ class RegFunctions
 			
 			_gameMenu.data._chess_set_for_player2_color_number = RegCustom._chess_set_for_player2_color_number[Reg._tn];
 			
-			_gameMenu.data._background_brightness = RegCustom._background_brightness[Reg._tn];
+			_gameMenu.data._client_background_brightness = RegCustom._client_background_brightness[Reg._tn];
+			
+			_gameMenu.data._client_background_saturation = RegCustom._client_background_saturation[Reg._tn];
 			
 			_gameMenu.data._button_color_number = RegCustom._button_color_number[Reg._tn];			
 			
@@ -1498,10 +1597,14 @@ class RegFunctions
 			_gameMenu.data._time_remaining_for_game[4] = RegCustom._time_remaining_for_game[Reg._tn][4];
 			
 			_gameMenu.data._chess_skill_level_online = RegCustom._chess_skill_level_online;
+						
+			_gameMenu.data._title_bar_background_number = RegCustom._title_bar_background_number[Reg._tn];
 			
-			_gameMenu.data._background_header_title_number = RegCustom._background_header_title_number[Reg._tn];
+			_gameMenu.data._menu_bar_background_number = RegCustom._menu_bar_background_number[Reg._tn];
 			
-			_gameMenu.data._background_footer_menu_number = RegCustom._background_footer_menu_number[Reg._tn];
+			_gameMenu.data._title_bar_background_enabled = RegCustom._title_bar_background_enabled[Reg._tn];
+			
+			_gameMenu.data._menu_bar_background_enabled = RegCustom._menu_bar_background_enabled[Reg._tn];
 			
 			_gameMenu.flush();
 			_gameMenu.close;
@@ -1510,7 +1613,7 @@ class RegFunctions
 			
 		#end
 		
-		// notice after save is clicked from MenuConfigurationsOutput.saveConfig().
+		// notice after save is clicked from ConfigurationsOutput.saveConfig().
 		if (RegCustom._go_back_to_title_after_save[Reg._tn] == false)
 			RegTriggers._config_menu_save_notice = true;
 		else
@@ -1629,166 +1732,5 @@ class RegFunctions
 		}
 	}
 	
-	public static function color_future_capturing_units():FlxColor
-	{
-		
-		var _color:FlxColor = 0xFFded943;
-		
-		if (RegCustom._chess_future_capturing_units_number[Reg._tn] == 1) _color = FlxColor.BLUE;
-		if (RegCustom._chess_future_capturing_units_number[Reg._tn] == 2) _color = FlxColor.BROWN;
-		if (RegCustom._chess_future_capturing_units_number[Reg._tn] == 3) _color = FlxColor.CYAN;
-		if (RegCustom._chess_future_capturing_units_number[Reg._tn] == 4) _color = FlxColor.GRAY;
-		if (RegCustom._chess_future_capturing_units_number[Reg._tn] == 5) _color = FlxColor.GREEN;
-		if (RegCustom._chess_future_capturing_units_number[Reg._tn] == 6) _color = FlxColor.LIME;
-		if (RegCustom._chess_future_capturing_units_number[Reg._tn] == 7) _color = FlxColor.MAGENTA;
-		if (RegCustom._chess_future_capturing_units_number[Reg._tn] == 8) _color = FlxColor.ORANGE;
-		if (RegCustom._chess_future_capturing_units_number[Reg._tn] == 9) _color = FlxColor.PINK;	 
-		if (RegCustom._chess_future_capturing_units_number[Reg._tn] == 10) _color = FlxColor.PURPLE;
-		if (RegCustom._chess_future_capturing_units_number[Reg._tn] == 11) _color = FlxColor.RED;
-		if (RegCustom._chess_future_capturing_units_number[Reg._tn] == 12) _color = FlxColor.YELLOW;
-		if (RegCustom._chess_future_capturing_units_number[Reg._tn] == 13) _color = FlxColor.WHITE;
-		return _color;
-	}
 	
-	public static function color_path_to_king():FlxColor
-	{
-		
-		var _color:FlxColor = 0xFFded943;
-		
-		if (RegCustom._chess_path_to_king_number[Reg._tn] == 1) _color = FlxColor.BLUE;
-		if (RegCustom._chess_path_to_king_number[Reg._tn] == 2) _color = FlxColor.BROWN;
-		if (RegCustom._chess_path_to_king_number[Reg._tn] == 3) _color = FlxColor.CYAN;
-		if (RegCustom._chess_path_to_king_number[Reg._tn] == 4) _color = FlxColor.GRAY;
-		if (RegCustom._chess_path_to_king_number[Reg._tn] == 5) _color = FlxColor.GREEN;
-		if (RegCustom._chess_path_to_king_number[Reg._tn] == 6) _color = FlxColor.LIME;
-		if (RegCustom._chess_path_to_king_number[Reg._tn] == 7) _color = FlxColor.MAGENTA;
-		if (RegCustom._chess_path_to_king_number[Reg._tn] == 8) _color = FlxColor.ORANGE;
-		if (RegCustom._chess_path_to_king_number[Reg._tn] == 9) _color = FlxColor.PINK;	 
-		if (RegCustom._chess_path_to_king_number[Reg._tn] == 10) _color = FlxColor.PURPLE;
-		if (RegCustom._chess_path_to_king_number[Reg._tn] == 11) _color = FlxColor.RED;
-		if (RegCustom._chess_path_to_king_number[Reg._tn] == 12) _color = FlxColor.YELLOW;
-		if (RegCustom._chess_path_to_king_number[Reg._tn] == 13) _color = FlxColor.WHITE;
-		return _color;
-	}
-	
-	public static function color_show_capturing_units():FlxColor
-	{
-		
-		var _color:FlxColor = 0xFFded943;
-		
-		if (RegCustom._show_capturing_units_number[Reg._tn] == 1) _color = FlxColor.BLUE;
-		if (RegCustom._show_capturing_units_number[Reg._tn] == 2) _color = FlxColor.BROWN;
-		if (RegCustom._show_capturing_units_number[Reg._tn] == 3) _color = FlxColor.CYAN;
-		if (RegCustom._show_capturing_units_number[Reg._tn] == 4) _color = FlxColor.GRAY;
-		if (RegCustom._show_capturing_units_number[Reg._tn] == 5) _color = FlxColor.GREEN;
-		if (RegCustom._show_capturing_units_number[Reg._tn] == 6) _color = FlxColor.LIME;
-		if (RegCustom._show_capturing_units_number[Reg._tn] == 7) _color = FlxColor.MAGENTA;
-		if (RegCustom._show_capturing_units_number[Reg._tn] == 8) _color = FlxColor.ORANGE;
-		if (RegCustom._show_capturing_units_number[Reg._tn] == 9) _color = FlxColor.PINK;	 
-		if (RegCustom._show_capturing_units_number[Reg._tn] == 10) _color = FlxColor.PURPLE;
-		if (RegCustom._show_capturing_units_number[Reg._tn] == 11) _color = FlxColor.RED;
-		if (RegCustom._show_capturing_units_number[Reg._tn] == 12) _color = FlxColor.YELLOW;
-		if (RegCustom._show_capturing_units_number[Reg._tn] == 13) _color = FlxColor.WHITE;
-		return _color;
-	}
-	
-	public static function background_scene_color():FlxColor
-	{
-		var _color:FlxColor = 0xFF000000;
-		var _num = FlxG.random.int(1, 10);
-		
-		switch(_num)
-		{
-			case 1: _color = 0xFF40160d; // brown.
-			case 2: _color = 0xFF1c400d; // dark green.
-			case 3: _color = 0xFF374008; // greenish yellow. 
-			case 4: _color = 0xFF0c0d42; // dark blue.
-			case 5: _color = 0xFF888820; // yellow.
-			case 6: _color = 0xFF208820; // green.
-			case 7: _color = 0xFF202088; // blue.
-			case 8: _color = 0xFF882020; // red.
-			case 9: _color = 0xFF220022; // purple.
-			case 10: _color = 0xffff00ff; // pink.
-		}
-		
-		return _color;
-	}
-	
-	/******************************
-	 * chess game board piece set color.
-	 */
-	public static function draw_update_board_p1_set_color():FlxColor
-	{
-		var _color:FlxColor = 0xFFded943;
-		
-		switch(RegCustom._chess_set_for_player1_color_number[Reg._tn])
-		{
-			 case 1: _color = 0xFFded943;
-			 case 2: _color = 0xFF5d275d;			 
-			 case 3: _color = 0xFFcb0025;			 
-			 case 4: _color = 0xFFef7d57;			 
-			 case 5: _color = 0xFFa4844d;			 
-			 case 6: _color = 0xFFa7f070;			 
-			 case 7: _color = 0xFF38b764;			 
-			 case 8: _color = 0xFF257179;
-			 case 9: _color = 0xFF29366f;			 
-			case 10: _color = 0xFF3b5dc9;
-			case 11: _color = 0xFF41a6f6;
-			case 12: _color = 0xFF73eff7;
-			case 13: _color = 0xFFcccccc;
-			case 14: _color = 0xFF94b0c2;
-			case 15: _color = 0xFF566c86;
-			case 16: _color = 0xFF333c57;
-			case 17: _color = 0xFF9c5b3e;
-			case 18: _color = 0xFF573139;
-			case 19: _color = 0xFF005711;
-			case 20: _color = 0xFF2a201e;			
-			case 21: _color = 0xFF141623;
-			case 22: _color = 0xFF300a30;
-			case 23: _color = 0xFFb7465b;
-			case 24: _color = 0xFF563226;
-			case 25: _color = 0xFF222222;
-		}
-
-		return _color;
-	}
-	
-	/******************************
-	 * chess game board piece set color.
-	 */
-	public static function draw_update_board_p2_set_color():FlxColor
-	{
-		var _color:FlxColor = 0xFFded943;
-		
-		switch(RegCustom._chess_set_for_player2_color_number[Reg._tn])
-		{
-			 case 1: _color = 0xFFded943;
-			 case 2: _color = 0xFF5d275d;			 
-			 case 3: _color = 0xFFcb0025;			 
-			 case 4: _color = 0xFFef7d57;			 
-			 case 5: _color = 0xFFa4844d;			 
-			 case 6: _color = 0xFFa7f070;			 
-			 case 7: _color = 0xFF38b764;			 
-			 case 8: _color = 0xFF257179;
-			 case 9: _color = 0xFF29366f;			 
-			case 10: _color = 0xFF3b5dc9;
-			case 11: _color = 0xFF41a6f6;
-			case 12: _color = 0xFF73eff7;
-			case 13: _color = 0xFFcccccc;
-			case 14: _color = 0xFF94b0c2;
-			case 15: _color = 0xFF566c86;
-			case 16: _color = 0xFF333c57;
-			case 17: _color = 0xFF9c5b3e;
-			case 18: _color = 0xFF573139;
-			case 19: _color = 0xFF005711;
-			case 20: _color = 0xFF2a201e;			
-			case 21: _color = 0xFF141623;
-			case 22: _color = 0xFF300a30;
-			case 23: _color = 0xFFb7465b;
-			case 24: _color = 0xFF563226;
-			case 25: _color = 0xFF222222;
-		}
-		
-		return _color;
-	}
-}//
+}//

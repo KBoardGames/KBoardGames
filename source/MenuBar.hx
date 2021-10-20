@@ -10,9 +10,9 @@
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
+    GNU General Public License for more details.
 
-    You should have received a copy of the GNU Affero General Public License
+    You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
@@ -25,6 +25,11 @@ package;
 class MenuBar extends FlxGroup
 {
 	/******************************
+	 * menuBar background.
+	 */
+	public var _background:FlxSprite;
+	
+	/******************************
 	 * at house, when map is moved, an scene XY offset is needed to position and move the items on the map correctly. the map is scrolled using a camera but that camera does all other scenes. so when that camera is displaying a different part of the scene then it does so for the other scenes. this is the fix so that the other scenes are not effected by an offset.
 	 */
 	private var _tracker:FlxSprite;
@@ -34,8 +39,9 @@ class MenuBar extends FlxGroup
 	public var __daily_quests:DailyQuests;
 	public var __tournaments:Tournaments;
 	public var __leaderboards:Leaderboards;
-	
+	public var __scene_create_room:SceneCreateRoom;
 	public var __new_account:NewAccount;
+	public var __scene_waiting_room:SceneWaitingRoom;
 	
 	// this button is not visible. it is placed under the house button and is used by other buttons, in case the house feature is disabled, so they can still be horizontally positioned on the menu bar.
 	private	var _buttonHouse_under:ButtonGeneralNetworkYes;
@@ -126,28 +132,34 @@ class MenuBar extends FlxGroup
 	 * @param	_from_menuState		true if somewhere at the menu state. The player has not connected yet and might be at the help scene or credits scene. this is needed because if at playState then the disconnect button will trigger a close but if not connected then this is used to return to menu state.
 	 * @param	_at_chatter			is player at the chatter. This is used to create a small red bar underneath the chatter background. this is needed because at waiting room this red bar will not go in front of the chatter background, so another new to this class is needed at chatter.
 	 */
-	override public function new(_from_menuState:Bool = false, _at_chatter:Bool = false, house:House = null, items:HouseFurnitureItemsFront = null):Void
+	override public function new(_from_menuState:Bool = false, _at_chatter:Bool = false, house:House = null, items:HouseFurnitureItemsFront = null, scene_create_room:SceneCreateRoom = null, scene_waiting_room:SceneWaitingRoom = null):Void
 	{
 		super();
 		
+		if (scene_create_room != null)
+			__scene_create_room = scene_create_room;
+		
+		if (scene_waiting_room != null)
+			__scene_waiting_room = scene_waiting_room;
+			
 		if (house != null)
 		{
 			__house = house;
 			_items = items;
 		}
 		
-		var _background:FlxSprite;
+		var _color = RegCustomColors.menu_bar_background_color();
 		
 		if (_at_chatter == false) 
 		{
 			_background = new FlxSprite(0, FlxG.height - 50);
-			_background.makeGraphic(FlxG.width, 50, Reg._background_footer_menu_color);
+			_background.makeGraphic(FlxG.width, 50, _color);
 			
 		}
 		else 
 		{
 			_background = new FlxSprite(FlxG.width-373, FlxG.height - 50);
-			_background.makeGraphic(FlxG.width-373, 50, Reg._background_footer_menu_color);
+			_background.makeGraphic(FlxG.width-373, 50, _color);
 		}
 		
 		_background.alpha = 1;

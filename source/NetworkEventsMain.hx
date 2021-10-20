@@ -10,9 +10,9 @@
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
+    GNU General Public License for more details.
 
-    You should have received a copy of the GNU Affero General Public License
+    You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
@@ -180,10 +180,12 @@ class NetworkEventsMain extends FlxState
 			
 			
 			PlayState._text_client_login_data.text = "Clients Data.\n\n";
-			PlayState._text_client_login_data2.text = "Welcome: " + RegTypedef._dataAccount._username + ".\n";
+			PlayState._text_client_login_data2.text = "Logging in as: " + RegTypedef._dataAccount._username + ".\n";
 			PlayState._text_client_login_data3.text = ""
 				+ "Last known IP: " + _data._ip + ".\n";
-			
+			PlayState._text_client_login_data4.text = ""
+				+ "Hostname: " + _data._host + ".\n";
+				
 			RegTypedef._dataAccount = _data;
 			RegTypedef._dataAccount._alreadyOnlineHost = _data._alreadyOnlineHost;
 			
@@ -674,11 +676,11 @@ class NetworkEventsMain extends FlxState
 					}
 					
 					
-					__scene_waiting_room.__menu_bar._button_refresh_list.active = true;
-					__scene_waiting_room.__menu_bar._button_refresh_list.visible = true;	
+					Reg.__menu_bar4._button_refresh_list.active = true;
+					Reg.__menu_bar4._button_refresh_list.visible = true;	
 					
-					__scene_waiting_room.__menu_bar._button_return_to_lobby_from_waiting_room.active = true;
-					__scene_waiting_room.__menu_bar._button_return_to_lobby_from_waiting_room.visible = true;
+					Reg.__menu_bar4._button_return_to_lobby_from_waiting_room.active = true;
+					Reg.__menu_bar4._button_return_to_lobby_from_waiting_room.visible = true;
 					
 				}
 				
@@ -771,7 +773,7 @@ class NetworkEventsMain extends FlxState
 					PlayState.clientSocket.send("Set Room Data", _data);
 					haxe.Timer.delay(function (){}, Reg2._event_sleep);
 					
-					if (__scene_create_room.__menu_bar._buttonCreateRoom.visible == true)
+					if (Reg.__menu_bar3._buttonCreateRoom.visible == true)
 						_data._roomState[_data._room] -= 1;
 				}
 				
@@ -842,11 +844,11 @@ class NetworkEventsMain extends FlxState
 				Reg._roomPlayerLimit = 0;
 				Reg._currentRoomState = 0;
 				
-				__scene_create_room.__menu_bar._buttonReturnToLobby.visible = false;
-				__scene_create_room.__menu_bar._buttonReturnToLobby.active = false;
+				Reg.__menu_bar3._buttonReturnToLobby.visible = false;
+				Reg.__menu_bar3._buttonReturnToLobby.active = false;
 				
-				__scene_create_room.__menu_bar._buttonCreateRoom.visible = false;
-				__scene_create_room.__menu_bar._buttonCreateRoom.active = false;
+				Reg.__menu_bar3._buttonCreateRoom.visible = false;
+				Reg.__menu_bar3._buttonCreateRoom.active = false;
 	
 				RegTypedef._dataMisc._room = 0; // returning to the lobby
 				RegTypedef._dataMisc._userLocation = 0;
@@ -932,14 +934,14 @@ class NetworkEventsMain extends FlxState
 						
 					}
 					
-					else if (__scene_create_room.__menu_bar._buttonCreateRoom.visible == false 
+					else if (Reg.__menu_bar3._buttonCreateRoom.visible == false 
 					&&  Reg._currentRoomState == 2)
 					{
-						__scene_create_room.__menu_bar._buttonReturnToLobby.active = true;
-						__scene_create_room.__menu_bar._buttonReturnToLobby.visible = true;
+						Reg.__menu_bar3._buttonReturnToLobby.active = true;
+						Reg.__menu_bar3._buttonReturnToLobby.visible = true;
 						
-						__scene_create_room.__menu_bar._buttonCreateRoom.active = true;
-						__scene_create_room.__menu_bar._buttonCreateRoom.visible = true; 
+						Reg.__menu_bar3._buttonCreateRoom.active = true;
+						Reg.__menu_bar3._buttonCreateRoom.visible = true; 
 						
 						RegTriggers._createRoom = true;
 						
@@ -950,8 +952,8 @@ class NetworkEventsMain extends FlxState
 					&&  Reg._currentRoomState < 7)
 					{
 						//__scene_create_room._buttonCreateRoom.visible = false;
-						__scene_create_room.__menu_bar._buttonReturnToLobby.active = false;
-						__scene_create_room.__menu_bar._buttonCreateRoom.active = false;
+						Reg.__menu_bar3._buttonReturnToLobby.active = false;
+						Reg.__menu_bar3._buttonCreateRoom.active = false;
 						
 						RegTriggers.__scene_waiting_room = true;
 					}
@@ -2537,11 +2539,11 @@ class NetworkEventsMain extends FlxState
 				RegTypedef._dataOnlinePlayers = _data;
 				RegTriggers._onlineList = true;
 				
-				__scene_waiting_room.__menu_bar._button_refresh_list.active = true;
-				__scene_waiting_room.__menu_bar._button_refresh_list.visible = true;	
+				Reg.__menu_bar4._button_refresh_list.active = true;
+				Reg.__menu_bar4._button_refresh_list.visible = true;	
 				
-				__scene_waiting_room.__menu_bar._button_return_to_lobby_from_waiting_room.active = true;
-				__scene_waiting_room.__menu_bar._button_return_to_lobby_from_waiting_room.visible = true;
+				Reg.__menu_bar4._button_return_to_lobby_from_waiting_room.active = true;
+				Reg.__menu_bar4._button_return_to_lobby_from_waiting_room.visible = true;
 
 				// get the stats for the waiting room.
 				if (RegTypedef._dataMisc._userLocation == 2 
@@ -2861,4 +2863,4 @@ class NetworkEventsMain extends FlxState
 		});
 	}
 	
-}//
+}//

@@ -10,9 +10,9 @@
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
+    GNU General Public License for more details.
 
-    You should have received a copy of the GNU Affero General Public License
+    You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
@@ -26,8 +26,6 @@ package;
 // RegTypedef._dataMisc._roomState[RegTypedef._dataMisc._room], // 0 = empty, 1 computer game, 2 creating room, 3 = firth player waiting to play game. 4 = second player in waiting room. 5 third player in waiting room if any. 6 - forth player in waiting room if any. 7 - room full, 8 - playing game / waiting game.
 class SceneWaitingRoom extends FlxState 
 {
-	public var __menu_bar:MenuBar;
-	
 	/******************************
 	 * moves everything up by these many pixels.
 	 */
@@ -84,20 +82,29 @@ class SceneWaitingRoom extends FlxState
 		RegFunctions.fontsSharpen();
 		
 		_color_ra = FlxG.random.int(1, 335);
-		_color = FlxColor.fromHSB(_color_ra, 0.75, RegCustom._background_brightness[Reg._tn]);
+		_color = FlxColor.fromHSB(_color_ra, 0.75, RegCustom._client_background_brightness[Reg._tn]);
 		
 		if (RegCustom._client_background_enabled[Reg._tn] == true)
 		{
-			_color = MenuConfigurationsGeneral.color_client_background();
-			_color.alphaFloat = RegCustom._background_brightness[Reg._tn];
+			_color = RegCustomColors.color_client_background();
+			_color.alphaFloat = RegCustom._client_background_brightness[Reg._tn];
 		}
+		
+		
+		var _background = new FlxSprite(0, 55);
+		_background.makeGraphic(FlxG.width, FlxG.height-50);
+		
+		// changing this color value will also change lobby's chatter background.
+		_background.color = FlxColor.BLACK;
+		_background.scrollFactor.set(0, 0);
+		add(_background);
 		
 		// creates the invite table and also sends the invite request to the server.
 		__online_players_list = new OnlinePlayersList(this);
 		add(__online_players_list);
 		
 		//#############################
-				
+						
 		// background underneath the stats.
 		bodyBg = new FlxSprite(0, FlxG.height / 1.65 + 85);
 		bodyBg.makeGraphic(FlxG.width - 370 - 20, FlxG.height);
@@ -116,10 +123,7 @@ class SceneWaitingRoom extends FlxState
 		Reg._gameHost = true;
 				
 		var _offset:Int = 20;		
-		
-		__menu_bar = new MenuBar();
-			add(__menu_bar);
-		
+				
 		var playerKickOrBanPlayers = new PlayerKickOrBanPlayers();
 		add(playerKickOrBanPlayers);
 		
@@ -173,27 +177,25 @@ class SceneWaitingRoom extends FlxState
 		Reg._gameId = RegTypedef._dataMisc._roomGameIds[RegTypedef._dataMisc._room];
 				
 		var _gameName = RegFunctions.gameName(RegTypedef._dataMisc._roomGameIds[RegTypedef._dataMisc._room]);
-		RegTypedef._dataPlayers._gameName = _gameName;
+		RegTypedef._dataPlayers._gameName = _gameName;	
 		
-		__online_players_list._title_background.makeGraphic(FlxG.width, 55, Reg._background_header_title_color); 
-		__online_players_list._title_background.scrollFactor.set(1,0);
-		__online_players_list._title_background.visible = true;
+		if (Reg.__title_bar4 != null) remove(Reg.__title_bar4);
+		Reg.__title_bar4 = new TitleBar("Room " + Std.string(RegTypedef._dataMisc._room ) + " - " + _gameName);
+		add(Reg.__title_bar4);
 		
-		__online_players_list._title.text = "Room " + Std.string(RegTypedef._dataMisc._room ) + " - " + _gameName + " ";
-		__online_players_list._title.visible = true;
-		__online_players_list._title.setFormat(Reg._fontDefault, 50, FlxColor.YELLOW);
-		__online_players_list._title.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 3);
-		
+		if (Reg.__menu_bar4 != null) remove(Reg.__menu_bar4);
+		Reg.__menu_bar4 = new MenuBar(false, false, null, null, null, this);
+		add(Reg.__menu_bar4);
 		
 		// computer resources are at a maximum when populating the user online list. clicking these buttons at that time would not trigger an event. so hide them until all fields are populated.
-		__menu_bar._button_return_to_lobby_from_waiting_room.visible = false;
-		__menu_bar._button_return_to_lobby_from_waiting_room.active = false;
+		Reg.__menu_bar4._button_return_to_lobby_from_waiting_room.visible = false;
+		Reg.__menu_bar4._button_return_to_lobby_from_waiting_room.active = false;
 		
-		__menu_bar._button_refresh_list.visible = false;	
-		__menu_bar._button_refresh_list.active = false;
+		Reg.__menu_bar4._button_refresh_list.visible = false;	
+		Reg.__menu_bar4._button_refresh_list.active = false;
 		
-		__menu_bar._buttonGameRoom.visible = false;
-		__menu_bar._buttonGameRoom.active = false; 
+		Reg.__menu_bar4._buttonGameRoom.visible = false;
+		Reg.__menu_bar4._buttonGameRoom.active = false; 
 		
 		RegTypedef._dataPlayers._username = RegTypedef._dataAccount._username;
 	
@@ -227,13 +229,13 @@ class SceneWaitingRoom extends FlxState
 		{
 			// make a scrollbar-enabled camera for it (a FlxScrollableArea)	
 			if (__scrollable_area != null) FlxG.cameras.remove(__scrollable_area);
-			__scrollable_area = new FlxScrollableArea( new FlxRect(0, 0, 1390-360, FlxG.height - 50), new FlxRect(0, 0, 1390, 21000), ResizeMode.NONE, 0, 100, -1, FlxColor.LIME, null, 0);	
+			__scrollable_area = new FlxScrollableArea( new FlxRect(0, 0, 1400-370, FlxG.height - 50), new FlxRect(0, 0, 1400, 8800), ResizeMode.NONE, 0, 100, -1, FlxColor.LIME, null, 0);	
 		}
 		
 		else
 		{
 			if (__scrollable_area != null) FlxG.cameras.remove(__scrollable_area);
-			__scrollable_area = new FlxScrollableArea( new FlxRect(0, 0, 1400, FlxG.height - 50), new FlxRect(0, 0, 1400, 21000), ResizeMode.FIT_WIDTH, 0, 100, -1, FlxColor.LIME, null, 0);	
+			__scrollable_area = new FlxScrollableArea( new FlxRect(0, 0, 1400, FlxG.height - 50), new FlxRect(0, 0, 1400, 8800), ResizeMode.FIT_WIDTH, 0, 100, -1, FlxColor.LIME, null, 0);	
 		}
 	
 		FlxG.cameras.add( __scrollable_area );
@@ -387,30 +389,30 @@ class SceneWaitingRoom extends FlxState
 				||  Reg._currentRoomState == 5 && _textPlayer3Stats.text != ""
 				||  Reg._currentRoomState == 6 && _textPlayer4Stats.text != "")
 				{
-					__menu_bar._buttonGameRoom.active = true;
-					__menu_bar._buttonGameRoom.visible = true;
+					Reg.__menu_bar4._buttonGameRoom.active = true;
+					Reg.__menu_bar4._buttonGameRoom.visible = true;
 					
 				}
 			}
 			else if (Reg._buttonCodeValues != "p1000") // player does not exist so delete button.
 			{
-				__menu_bar._buttonGameRoom.visible = false;
-				__menu_bar._buttonGameRoom.active = false;
+				Reg.__menu_bar4._buttonGameRoom.visible = false;
+				Reg.__menu_bar4._buttonGameRoom.active = false;
 			}
 				
 						
 			if (Reg._currentRoomState >= 2 && Std.string(RegTypedef._dataAccount._username) != Std.string(RegTypedef._dataPlayers._usernamesDynamic[0]) && RegTypedef._dataPlayers._actionWho == "")
 			{
-				__menu_bar._buttonGameRoom.visible = false;
-				__menu_bar._buttonGameRoom.active = false;	
+				Reg.__menu_bar4._buttonGameRoom.visible = false;
+				Reg.__menu_bar4._buttonGameRoom.active = false;	
 			}
 			
 		}
 		else
 		{		
 			// only one player is in room.
-			__menu_bar._buttonGameRoom.visible = false;					
-			__menu_bar._buttonGameRoom.active = false;	
+			Reg.__menu_bar4._buttonGameRoom.visible = false;					
+			Reg.__menu_bar4._buttonGameRoom.active = false;	
 		}
 
 	}

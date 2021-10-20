@@ -10,9 +10,9 @@
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
+    GNU General Public License for more details.
 
-    You should have received a copy of the GNU Affero General Public License
+    You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
@@ -41,9 +41,6 @@ class Leaderboards extends FlxGroup
 	*/
 	public var _group:FlxSpriteGroup;	
 	public var __scrollable_area:FlxScrollableArea;	
-	
-	public var _title_background:FlxSprite;
-	public var _title:FlxText;
 	
 	/******************************
 	 * Header columns text for the data rows.	
@@ -154,28 +151,15 @@ class Leaderboards extends FlxGroup
 			FlxG.cameras.add( __scrollable_area );
 			__scrollable_area.antialiasing = true;
 			__scrollable_area.pixelPerfectRender = true;
-					
 			
-			var __menu_bar = new MenuBar();
-			add(__menu_bar);
+			if (Reg.__title_bar2 != null) remove(Reg.__title_bar2);
+			Reg.__title_bar2 = new TitleBar("Leaderboards");
+			add(Reg.__title_bar2);
 			
-			// none scrollable background behind title.
-			_title_background = new FlxSprite(0, 0);
-			_title_background.makeGraphic(FlxG.width-20, 160, 0xFF000000);
-			_title_background.setPosition(0, 0);
-			_title_background.scrollFactor.set();
-			add(_title_background);	
-					
-			_title = new FlxText(0, 0, 0, "Leaderboards");
-			_title.setFormat(Reg._fontDefault, 50, FlxColor.YELLOW);
-			_title.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 3);
-			_title.scrollFactor.set();
-			_title.setPosition(0, 20);
-			_title.visible = true;
-			_title.screenCenter(X);
-			add(_title);
-		
-		
+			if (Reg.__menu_bar2 != null) remove(Reg.__menu_bar2);
+			Reg.__menu_bar2 = new MenuBar();
+			add(Reg.__menu_bar2);
+			
 			//---------------------------------------------- Header columns text for the data rows.		
 			_t1 = new FlxText(110 - _offset, 130, 0, "Username");
 			_t1.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.WHITE);

@@ -10,9 +10,9 @@
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
+    GNU General Public License for more details.
 
-    You should have received a copy of the GNU Affero General Public License
+    You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
@@ -97,7 +97,7 @@ class GameHistoryAndNotations extends FlxGroup
 			
 			if (RegCustom._notation_panel_background_color_enabled[Reg._tn] == true)
 			{
-				_notation.makeGraphic(337, FlxG.height - Reg._offsetScreenY + 13, MenuConfigurationsGeneral.notation_panel_background_color());
+				_notation.makeGraphic(337, FlxG.height - Reg._offsetScreenY + 13, RegCustomColors.notation_panel_background_color());
 			}
 			
 			else
@@ -123,7 +123,7 @@ class GameHistoryAndNotations extends FlxGroup
 		_message_for_scrollable_area.offset.set(0, 10);
 		_message_for_scrollable_area.font = Reg._fontDefault;
 		_message_for_scrollable_area.text = "Notations:\r\r";
-		_message_for_scrollable_area.color = MenuConfigurationsGeneral.notation_panel_text_color();	
+		_message_for_scrollable_area.color = RegCustomColors.notation_panel_text_color();	
 		add(_message_for_scrollable_area);
 		_group_scrollable_area.add(_message_for_scrollable_area);
 		

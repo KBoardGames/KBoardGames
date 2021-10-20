@@ -10,9 +10,9 @@
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
+    GNU General Public License for more details.
 
-    You should have received a copy of the GNU Affero General Public License
+    You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
@@ -29,12 +29,9 @@ class MiscellaneousMenuOutput extends FlxState
 	*/
 	public static var group:FlxSpriteGroup;	
 	public var __scrollable_area:FlxScrollableArea;	
-	private var _title:FlxText;
-	private var _title_background:FlxSprite;
 	
 	private var _height:Float; // used to display the next button or next text data underneath the previous button or text. without this var, the texts, images and buttons would all be displayed at the same line.
 	
-	public var __menu_bar:MenuBar;
 	private var _offset_x:Int = 440;
 	
 	private var _close:ButtonGeneralNetworkYes;
@@ -84,24 +81,15 @@ class MiscellaneousMenuOutput extends FlxState
 		FlxG.cameras.add( __scrollable_area );
 		__scrollable_area.antialiasing = true;
 		__scrollable_area.pixelPerfectRender = true;
-				
-		__menu_bar = new MenuBar();
-		add(__menu_bar);
 		
-		_title_background = new FlxSprite(0, 0);
-		_title_background.makeGraphic(FlxG.width, 55, Reg._background_header_title_color); 
-		_title_background.scrollFactor.set(0,0);
-		add(_title_background);
-					
-		if (_int == 30) _title = new FlxText(15, 4, 0, "Game Statistics");
-		else _title = new FlxText(14, 4, 0, "Game Instructions");
+		if (Reg.__title_bar2 != null)	remove(Reg.__title_bar2);
+		if (_int == 30) Reg.__title_bar2 = new TitleBar("Game Statistics");
+		else Reg.__title_bar2 = new TitleBar("Game Instructions");
+		add(Reg.__title_bar2);
 		
-		_title.setFormat(Reg._fontDefault, 50, FlxColor.YELLOW);
-		_title.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 3);
-		_title.scrollFactor.set(0, 0);
-		_title.visible = true;
-		_title.x -= 20; // minus the width of the scrollable area track.
-		add(_title);
+		if (Reg.__menu_bar2 != null) remove(Reg.__menu_bar2);
+		Reg.__menu_bar2 = new MenuBar();
+		add(Reg.__menu_bar2);
 		
 		_close = new ButtonGeneralNetworkYes(0, FlxG.height-40, "Exit", 150 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, closeState, RegCustom._button_color[Reg._tn], false);
 		_close.active = true;

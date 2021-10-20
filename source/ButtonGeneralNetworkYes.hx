@@ -10,9 +10,9 @@
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
+    GNU General Public License for more details.
 
-    You should have received a copy of the GNU Affero General Public License
+    You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
@@ -250,8 +250,7 @@ class ButtonGeneralNetworkYes extends FlxUIButton
 			if (ActionInput.overlaps(this, null)
 			&&  FlxG.mouse.justPressed == true
 			&&  FlxG.mouse.enabled == true
-			&&	alpha == 1
-			&& _id == ID) 
+			&&	alpha == 1) 
 			{
 				// this button has been pressed. remove focus from the chatter input box.
 				if (GameChatter._input_chat != null) GameChatter._input_chat.hasFocus = false;

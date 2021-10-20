@@ -10,9 +10,9 @@
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
+    GNU General Public License for more details.
 
-    You should have received a copy of the GNU Affero General Public License
+    You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
@@ -248,7 +248,7 @@ class SceneGameRoom extends FlxState
 		
 		if (Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false)
 		{
-			buttonStartRestartGame = new ButtonGeneralNetworkYes(FlxG.width - 363, FlxG.height - 237 - _y_offset , "Start Game", 160 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, messageStartRestartGame, RegCustom._button_color[Reg._tn], false, 1000);
+			buttonStartRestartGame = new ButtonGeneralNetworkYes(FlxG.width - 373, FlxG.height - 237 - _y_offset , "Start Game", 160 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, messageStartRestartGame, RegCustom._button_color[Reg._tn], false, 1000);
 			
 			if (Reg._gameHost == true
 			&&  RegTypedef._dataPlayers._spectatorWatching == false)
@@ -267,7 +267,7 @@ class SceneGameRoom extends FlxState
 		else
 		{
 			// offline
-			buttonStartRestartGame2 = new ButtonGeneralNetworkNo(FlxG.width - 363, FlxG.height - 137 - _y_offset, "Start Game", 175, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, messageStartRestartGame, RegCustom._button_color[Reg._tn], false, 1);
+			buttonStartRestartGame2 = new ButtonGeneralNetworkNo(FlxG.width - 373, FlxG.height - 137 - _y_offset, "Start Game", 175, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, messageStartRestartGame, RegCustom._button_color[Reg._tn], false, 1);
 			buttonStartRestartGame2.label.font = Reg._fontDefault;
 		add(buttonStartRestartGame2); 
 		
@@ -293,7 +293,7 @@ class SceneGameRoom extends FlxState
 		
 		if (Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false)
 		{
-			buttonDrawGame = new ButtonGeneralNetworkYes(FlxG.width - 363, FlxG.height -  187 - _y_offset, "Draw", 160 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, messageDrawOffer, RegCustom._button_color[Reg._tn], false, 1002);
+			buttonDrawGame = new ButtonGeneralNetworkYes(FlxG.width - 373, FlxG.height -  187 - _y_offset, "Draw", 160 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, messageDrawOffer, RegCustom._button_color[Reg._tn], false, 1002);
 			buttonDrawGame.label.font = Reg._fontDefault;
 			buttonDrawGame.visible = false;
 			buttonDrawGame.active = false;
@@ -318,7 +318,7 @@ class SceneGameRoom extends FlxState
 		// Reg._game_online_vs_cpu code is needed to show this button while playing an online game.
 		if (Reg._game_online_vs_cpu == true || Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false)
 		{
-			buttonQuitGame = new ButtonGeneralNetworkYes(FlxG.width - 363, FlxG.height - 137 - _y_offset, "Quit Game", 160 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, messageQuitGame, RegCustom._button_color[Reg._tn], false, 1005);
+			buttonQuitGame = new ButtonGeneralNetworkYes(FlxG.width - 373, FlxG.height - 137 - _y_offset, "Quit Game", 160 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, messageQuitGame, RegCustom._button_color[Reg._tn], false, 1005);
 			buttonQuitGame.label.font = Reg._fontDefault;
 			buttonQuitGame.visible = false;
 			buttonQuitGame.active = false;

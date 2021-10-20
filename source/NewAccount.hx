@@ -10,9 +10,9 @@
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
+    GNU General Public License for more details.
 
-    You should have received a copy of the GNU Affero General Public License
+    You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
@@ -24,7 +24,6 @@ package;
  */
 class NewAccount extends FlxGroup
 {	
-	public var __menu_bar:MenuBar;
 	private var _button_b1:ButtonToggleFlxState;
 	private var _button_b2:ButtonToggleFlxState;
 	private var _button_b3:ButtonToggleFlxState;
@@ -36,17 +35,13 @@ class NewAccount extends FlxGroup
 		FlxG.autoPause = false;	// this application will pause when not in focus.
 		RegTypedef._dataStatistics._chess_elo_rating = 800;
 		
-		var _title = new FlxText(0, 0, 0, "New Account");
-		_title.setFormat(Reg._fontDefault, 50, FlxColor.YELLOW);
-		_title.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 3);
-		_title.scrollFactor.set();
-		_title.setPosition(15, 15);
-		_title.screenCenter(X);
-		add(_title);
+		if (Reg.__title_bar2 != null) remove(Reg.__title_bar2);
+		Reg.__title_bar2 = new TitleBar("New Account");
+		add(Reg.__title_bar2);
 		
-		// menu bar.
-		__menu_bar = new MenuBar();
-		add(__menu_bar);		
+		if (Reg.__menu_bar2 != null) remove(Reg.__menu_bar2);
+		Reg.__menu_bar2 = new MenuBar();
+		add(Reg.__menu_bar2);		
 		
 		//#############################
 		
@@ -133,10 +128,6 @@ class NewAccount extends FlxGroup
 	
 	private function closeState():Void
 	{
-		remove(__menu_bar);
-		__menu_bar.destroy();
-		__menu_bar = null;
-		
 		FlxG.mouse.reset();
 		FlxG.mouse.enabled = true;
 		
