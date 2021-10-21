@@ -1241,6 +1241,12 @@ class IDsCreateAndMain extends FlxState
 		
 		PlayState.getPlayersNamesAndAvatars();
 		
+		if (_scene_background != null)
+		{
+			remove(_scene_background);
+			_scene_background.destroy();
+		}
+		
 		_scene_background = new SceneBackground();
 		add(_scene_background);
 		

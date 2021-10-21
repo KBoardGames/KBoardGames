@@ -188,7 +188,7 @@ class PlayState extends FlxState
 			_text_server_login_data.visible = false;
 		}
 		
-		_text_server_login_data.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.YELLOW);
+		_text_server_login_data.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.ORANGE);
 		add(_text_server_login_data);
 		
 		
@@ -202,7 +202,7 @@ class PlayState extends FlxState
 			_text_server_login_data2.visible = false;
 		}
 		
-		_text_server_login_data2.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.WHITE);
+		_text_server_login_data2.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
 		add(_text_server_login_data2);
 		
 		
@@ -216,7 +216,7 @@ class PlayState extends FlxState
 			_text_server_login_data3.visible = false;
 		}
 		
-		_text_server_login_data3.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.WHITE);
+		_text_server_login_data3.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
 		add(_text_server_login_data3);
 		
 		
@@ -231,7 +231,7 @@ class PlayState extends FlxState
 		}
 		
 		
-		_text_server_login_data4.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.WHITE);
+		_text_server_login_data4.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
 		add(_text_server_login_data4);
 		
 		
@@ -247,7 +247,7 @@ class PlayState extends FlxState
 			_text_client_login_data.visible = false;
 		}
 		
-		_text_client_login_data.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.YELLOW);
+		_text_client_login_data.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.ORANGE);
 		add(_text_client_login_data);
 		
 		
@@ -262,7 +262,7 @@ class PlayState extends FlxState
 			_text_client_login_data2.visible = false;
 		}
 		
-		_text_client_login_data2.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.WHITE);
+		_text_client_login_data2.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
 		add(_text_client_login_data2);
 		
 		
@@ -278,7 +278,7 @@ class PlayState extends FlxState
 			_text_client_login_data3.visible = false;
 		}
 		
-		_text_client_login_data3.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.WHITE);
+		_text_client_login_data3.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
 		add(_text_client_login_data3);
 		
 		_text_client_login_data4 = new FlxText(0, 0, 0, "");
@@ -292,7 +292,7 @@ class PlayState extends FlxState
 			_text_client_login_data4.visible = false;
 		}
 		
-		_text_client_login_data4.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.WHITE);
+		_text_client_login_data4.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
 		add(_text_client_login_data4);
 		
 		_text_logging_in = new FlxText(0, 700, 0, "Logging in to server...");
@@ -993,6 +993,7 @@ class PlayState extends FlxState
 						_text_client_login_data.visible = false;
 						_text_client_login_data2.visible = false;
 						_text_client_login_data3.visible = false;
+						_text_client_login_data4.visible = false;
 						
 						#if !html5
 							saveClientConfig();

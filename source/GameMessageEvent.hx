@@ -23,7 +23,12 @@ package;
  * @author kboardgames.com
  */
 class GameMessageEvent extends FlxSubState
-{	
+{
+	/******************************
+	 * background gradient, texture and plain color for a scene.
+	 */
+	private var _scene_background:SceneBackground;
+	
 	public function new(_str:String):Void
 	{
 		super();	
@@ -31,12 +36,14 @@ class GameMessageEvent extends FlxSubState
 		persistentDraw = false;
 		persistentUpdate = false;
 		
-		var background = new FlxSprite(0, 0);
-		background.makeGraphic(FlxG.width, FlxG.height, 0xFF000066);
-		background.setPosition(0, 0);
-		background.scrollFactor.set();	
-		background.screenCenter(X);
-		add(background);	
+		if (_scene_background != null)
+		{
+			remove(_scene_background);
+			_scene_background.destroy();
+		}
+		
+		_scene_background = new SceneBackground();
+		add(_scene_background);
 		
 		var i:Int = 0;
 		
@@ -50,7 +57,7 @@ class GameMessageEvent extends FlxSubState
 			}
 		}
 		
-		var _title = new FlxText(0, 0, 0, "Event Discription");
+		var _title = new FlxText(0, 0, 0, "Event Description");
 		_title.setFormat(Reg._fontDefault, 30, FlxColor.ORANGE);
 		_title.scrollFactor.set();
 		_title.setPosition(15, 15);
@@ -63,12 +70,12 @@ class GameMessageEvent extends FlxSubState
 		_eventTitle.setPosition(50, 75);
 		add(_eventTitle);
 		
-		var _eventDescription = new FlxText(0, 0, 0, Reg2._eventDescription[i]);
-		_eventDescription.setFormat(Reg._fontDefault, 24);
-		_eventDescription.scrollFactor.set();
-		_eventDescription.fieldWidth = FlxG.width - 100;
-		_eventDescription.setPosition(50, 135);
-		add(_eventDescription);
+		var _text = new FlxText(0, 0, 0, Reg2._eventDescription[i]);
+		_text.setFormat(Reg._fontDefault, 24, RegCustomColors.client_text_color());
+		_text.scrollFactor.set();
+		_text.fieldWidth = FlxG.width - 100;
+		_text.setPosition(50, 135);
+		add(_text);
 		
 		var _close = new ButtonGeneralNetworkNo(FlxG.width - 178, FlxG.height - 85, "Exit", 150 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, closeSubstate, RegCustom._button_color[Reg._tn]);
 		_close.label.font = Reg._fontDefault;

@@ -129,7 +129,7 @@ class HUD extends FlxState
 		
 		_row_username = new FlxText(35, FlxG.height - 91, 0, "Name", 0);
 		_row_username.scrollFactor.set();
-		_row_username.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.YELLOW);
+		_row_username.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
 		_row_username.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		add(_row_username);
 		
@@ -139,14 +139,14 @@ class HUD extends FlxState
 		{
 			_row_win_total = new FlxText(35, FlxG.height - 61, 0, "Wins", 0);
 			_row_win_total.scrollFactor.set();
-			_row_win_total.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.YELLOW);
+			_row_win_total.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
 			_row_win_total.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 			add(_row_win_total);
 		}
 		
 		_row_other = new FlxText(35, FlxG.height - 31, 0, "", 0);
 		_row_other.scrollFactor.set();
-		_row_other.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.YELLOW);
+		_row_other.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
 		_row_other.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		add(_row_other);
 		if (Reg._gameId <= 1) _row_other.text = "Turns";

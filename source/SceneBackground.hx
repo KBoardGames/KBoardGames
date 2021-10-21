@@ -74,7 +74,8 @@ class SceneBackground extends FlxGroup
 		{
 			if (RegCustom._gradient_background_enabled[Reg._tn] == true)
 			{
-				_background_gradient_color = new FlxSprite(0, 0, "assets/images/gameboardGradientBackground" + Std.string(RegCustom._gradient_background_image_number[Reg._tn]) + ".jpg"); // 44 is half of hud height.
+				_background_gradient_color = new FlxSprite(0, 0, "assets/images/gameboardGradientBackground.jpg");
+				_background_gradient_color.color = RegCustomColors.gradient_color();
 				_background_gradient_color.scrollFactor.set(0, 0);
 				if (RegCustom._background_alpha_enabled[Reg._tn] == true)
 					_background_gradient_color.alpha = 0.5;

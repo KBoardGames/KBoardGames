@@ -76,7 +76,7 @@ class PlayerWhosTurnToMove extends FlxState
 		if (Reg._gameId < 3 && RegCustom._move_total_enabled[Reg._tn] == true)
 		{
 			_move_total = new FlxText(FlxG.width - 352, FlxG.height - 357, 0, "Total Move:" + RegTypedef._dataPlayers._moveTotal);
-			_move_total.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.ORANGE);
+			_move_total.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
 			_move_total.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 			_move_total.scrollFactor.set();
 			add(_move_total);

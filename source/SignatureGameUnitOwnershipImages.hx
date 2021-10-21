@@ -23,7 +23,7 @@ import flixel.FlxG;
 
 /**
  * ...
- * @author kal gibson
+ * @author kboardgames.com
  */
 class SignatureGameUnitOwnershipImages extends FlxSprite {
 

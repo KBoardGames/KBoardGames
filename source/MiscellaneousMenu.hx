@@ -26,6 +26,11 @@ class MiscellaneousMenu extends FlxGroup
 {		
 	public var __miscellaneous_menu_output:MiscellaneousMenuOutput;	
 	
+	/******************************
+	 * background gradient, texture and plain color for a scene.
+	 */
+	private var _scene_background:SceneBackground;
+	
 	public function new():Void
 	{
 		super();	
@@ -34,6 +39,15 @@ class MiscellaneousMenu extends FlxGroup
 		FlxG.mouse.enabled = true;
 		
 		FlxG.autoPause = false;	// this application will pause when not in focus.
+		
+		if (_scene_background != null)
+		{
+			remove(_scene_background);
+			_scene_background.destroy();
+		}
+		
+		_scene_background = new SceneBackground();
+		add(_scene_background);
 		
 		if (Reg.__title_bar2 != null) remove(Reg.__title_bar2);
 		Reg.__title_bar2 = new TitleBar("Miscellaneous");
@@ -44,14 +58,7 @@ class MiscellaneousMenu extends FlxGroup
 		add(Reg.__menu_bar2);
 	
 		//#############################
-		
-		var _gameOptions = new FlxText(30, 125, 0, "Game options.");
-		_gameOptions.setFormat(Reg._fontDefault, 24);
-		_gameOptions.scrollFactor.set();
-		_gameOptions.fieldWidth = FlxG.width - 100;
-		add(_gameOptions);
-		
-		var _statisticsAll = new ButtonGeneralNetworkYes(30, 175, "Statistics", 200 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, statisticsAll, RegCustom._button_color[Reg._tn]);
+		var _statisticsAll = new ButtonGeneralNetworkYes(30, 125, "Statistics", 200 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, statisticsAll, RegCustom._button_color[Reg._tn]);
 		_statisticsAll.label.font = Reg._fontDefault;
 		add(_statisticsAll);
 		

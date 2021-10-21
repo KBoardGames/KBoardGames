@@ -274,6 +274,12 @@ class EventSchedule extends FlxState
 		/******************************
 			* background gradient, texture and plain color for a scene.
 			*/
+		if (_scene_background != null)
+		{
+			remove(_scene_background);
+			_scene_background.destroy();
+		}
+		
 		_scene_background = new SceneBackground();
 		add(_scene_background);
 		
@@ -721,7 +727,7 @@ class EventSchedule extends FlxState
 		for (i in 0...7)
 		{
 			_text_title_days[i] = new FlxText(0, 0, 0, _title_days[i]);
-			_text_title_days[i].setFormat(Reg._fontDefault, 26, FlxColor.YELLOW);
+			_text_title_days[i].setFormat(Reg._fontDefault, 26, RegCustomColors.client_text_color());
 			_text_title_days[i].setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 			_text_title_days[i].scrollFactor.set();
 			_text_title_days[i].fieldWidth = 152;

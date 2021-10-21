@@ -495,6 +495,8 @@ class RegFunctions
 			
 			saveFile.writeString("_notation_panel_text_color_number: " + RegCustom._notation_panel_text_color_number[Reg._tn] + "\r\n");
 			
+			saveFile.writeString("_client_text_color_number: " + RegCustom._client_text_color_number[Reg._tn] + "\r\n");
+			
 			saveFile.writeString("_profile_avatar_number1: " + RegCustom._profile_avatar_number1[Reg._tn] + "\r\n");
 			
 			saveFile.writeString("_profile_avatar_number2: " + RegCustom._profile_avatar_number2[Reg._tn] + "\r\n");
@@ -537,6 +539,10 @@ class RegFunctions
 			saveFile.writeString("_title_bar_background_number: " + RegCustom._title_bar_background_number[Reg._tn] + "\r\n");
 			
 			saveFile.writeString("_menu_bar_background_number: " + RegCustom._menu_bar_background_number[Reg._tn] + "\r\n");
+			
+			saveFile.writeString("_title_bar_background_brightness: " + RegCustom._title_bar_background_brightness[Reg._tn] + "\r\n");
+			
+			saveFile.writeString("_menu_bar_background_brightness: " + RegCustom._menu_bar_background_brightness[Reg._tn] + "\r\n");
 			
 			saveFile.writeString("_title_bar_background_enabled: " + RegCustom._title_bar_background_enabled[Reg._tn] + "\r\n");
 			
@@ -905,6 +911,12 @@ class RegFunctions
 						
 						try
 						{	
+							RegCustom._client_text_color_number[Reg._tn] = Std.parseInt(data.get("_client_text_color_number"));
+						}
+						catch (e:Dynamic){}
+						
+						try
+						{	
 							RegCustom._profile_avatar_number1[Reg._tn] = Std.string(data.get("_profile_avatar_number1"));
 						}
 						catch (e:Dynamic){}
@@ -1065,6 +1077,18 @@ class RegFunctions
 						catch (e:Dynamic){}
 						
 						try
+						{	
+							RegCustom._title_bar_background_brightness[Reg._tn] = Std.parseFloat(data.get("_title_bar_background_brightness"));
+						}
+						catch (e:Dynamic){}
+						
+						try
+						{	
+							RegCustom._menu_bar_background_brightness[Reg._tn] = Std.parseFloat(data.get("_menu_bar_background_brightness"));
+						}
+						catch (e:Dynamic){}
+						
+						try
 						{
 							var _tmp = Std.string(data.get("_title_bar_background_enabled"));
 							RegCustom._title_bar_background_enabled[Reg._tn] = false;
@@ -1153,6 +1177,7 @@ class RegFunctions
 		RegCustom._notation_panel_background_color_enabled.push(true);
 		RegCustom._notation_panel_background_color_number.push(10);
 		RegCustom._notation_panel_text_color_number.push(1);
+		RegCustom._client_text_color_number.push(1);
 		RegCustom._profile_avatar_number1.push("0.png");
 		RegCustom._profile_avatar_number2.push("0.png");
 		RegCustom._profile_avatar_number3.push("0.png");
@@ -1173,6 +1198,8 @@ class RegFunctions
 		RegCustom._time_remaining_for_game.push([15, 15, 15, 15, 30]);
 		RegCustom._title_bar_background_number.push(1);
 		RegCustom._menu_bar_background_number.push(1);
+		RegCustom._title_bar_background_brightness.push(0.6);
+		RegCustom._menu_bar_background_brightness.push(0.6);
 		RegCustom._title_bar_background_enabled.push(false);
 		RegCustom._menu_bar_background_enabled.push(true);
 		
@@ -1325,6 +1352,9 @@ class RegFunctions
 				if (_gameMenu.data._notation_panel_text_color_number != null)
 					RegCustom._notation_panel_text_color_number[Reg._tn] = _gameMenu.data._notation_panel_text_color_number;
 					
+				if (_gameMenu.data._client_text_color_number != null)
+					RegCustom._client_text_color_number[Reg._tn] = _gameMenu.data._client_text_color_number;
+					
 				if (_gameMenu.data._gameboard_even_units_show_enabled != null)
 					RegCustom._gameboard_even_units_show_enabled[Reg._tn] = _gameMenu.data._gameboard_even_units_show_enabled;
 				
@@ -1418,13 +1448,17 @@ class RegFunctions
 					RegCustom._chess_skill_level_online = _gameMenu.data._chess_skill_level_online;
 				}
 				
-				if (RegCustom._title_bar_background_number == null) RegCustom._title_bar_background_number[Reg._tn] = _gameMenu.data._title_bar_background_number;
+				if (_gameMenu.data._title_bar_background_number != null) RegCustom._title_bar_background_number[Reg._tn] = _gameMenu.data._title_bar_background_number;
 				
-				if (RegCustom._menu_bar_background_number == null) RegCustom._menu_bar_background_number[Reg._tn] = _gameMenu.data._menu_bar_background_number;
+				if (_gameMenu.data._menu_bar_background_number != null) RegCustom._menu_bar_background_number[Reg._tn] = _gameMenu.data._menu_bar_background_number;
 				
-				if (RegCustom._title_bar_background_enabled == null) RegCustom._title_bar_background_enabled[Reg._tn] = _gameMenu.data._title_bar_background_enabled;
+				if (_gameMenu.data._title_bar_background_brightness != null) RegCustom._title_bar_background_brightness[Reg._tn] = _gameMenu.data._title_bar_background_brightness;
 				
-				if (RegCustom._menu_bar_background_enabled == null) RegCustom._menu_bar_background_enabled[Reg._tn] = _gameMenu.data._menu_bar_background_enabled;
+				if (_gameMenu.data._menu_bar_background_brightness != null) RegCustom._menu_bar_background_brightness[Reg._tn] = _gameMenu.data._menu_bar_background_brightness;				
+				
+				if (_gameMenu.data._title_bar_background_enabled != null) RegCustom._title_bar_background_enabled[Reg._tn] = _gameMenu.data._title_bar_background_enabled;
+				
+				if (_gameMenu.data._menu_bar_background_enabled != null) RegCustom._menu_bar_background_enabled[Reg._tn] = _gameMenu.data._menu_bar_background_enabled;
 			}
 			
 			_gameMenu.close;			
@@ -1538,6 +1572,8 @@ class RegFunctions
 			
 			_gameMenu.data._notation_panel_text_color_number = RegCustom._notation_panel_text_color_number[Reg._tn];
 			
+			_gameMenu.data._client_text_color_number = RegCustom._client_text_color_number[Reg._tn];
+			
 			_gameMenu.data._gameboard_even_units_show_enabled = RegCustom._gameboard_even_units_show_enabled[Reg._tn];
 			
 			_gameMenu.data._gradient_background_image_number = RegCustom._gradient_background_image_number[Reg._tn];
@@ -1601,6 +1637,10 @@ class RegFunctions
 			_gameMenu.data._title_bar_background_number = RegCustom._title_bar_background_number[Reg._tn];
 			
 			_gameMenu.data._menu_bar_background_number = RegCustom._menu_bar_background_number[Reg._tn];
+			
+			_gameMenu.data._title_bar_background_brightness = RegCustom._title_bar_background_brightness[Reg._tn];
+			
+			_gameMenu.data._menu_bar_background_brightness = RegCustom._menu_bar_background_brightness[Reg._tn];
 			
 			_gameMenu.data._title_bar_background_enabled = RegCustom._title_bar_background_enabled[Reg._tn];
 			

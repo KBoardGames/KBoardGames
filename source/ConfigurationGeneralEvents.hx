@@ -183,6 +183,16 @@ class ConfigurationGeneralEvents extends CID2
 		CID2._button_gameboard_coordinates_enabled.label.text = Std.string(RegCustom._gameboard_coordinates_enabled[Reg._tn]);
 	}
 		
+	public function notation_panel_enabled():Void
+	{
+		if (RegCustom._notation_panel_enabled[Reg._tn] == false)
+			RegCustom._notation_panel_enabled[Reg._tn] = true;
+		else
+			RegCustom._notation_panel_enabled[Reg._tn] = false;
+			
+		CID2._button_notation_panel_enabled.label.text = Std.string(RegCustom._notation_panel_enabled[Reg._tn]);
+	}
+			
 	public function client_gradient_background_enabled():Void
 	{
 		if (RegCustom._gradient_background_enabled[Reg._tn] == false)
@@ -202,17 +212,17 @@ class ConfigurationGeneralEvents extends CID2
 	public function client_gradient_background_number_minus():Void
 	{
 		RegCustom._gradient_background_image_number[Reg._tn] -= 1;
-		if (RegCustom._gradient_background_image_number[Reg._tn] <= 0) RegCustom._gradient_background_image_number[Reg._tn] = 6;
+		if (RegCustom._gradient_background_image_number[Reg._tn] <= 0) RegCustom._gradient_background_image_number[Reg._tn] = 25;
 		
-		CID2._sprite_gradient_background_image.loadGraphic("assets/images/gameboardGradientBackground" + Std.string(RegCustom._gradient_background_image_number[Reg._tn]) + "b.jpg");
+		CID2._sprite_gradient_background_image.color = RegCustomColors.gradient_color();
 	}
 	
 	public function client_gradient_background_number_plus():Void
 	{
 		RegCustom._gradient_background_image_number[Reg._tn] += 1;
-		if (RegCustom._gradient_background_image_number[Reg._tn] >= 7) RegCustom._gradient_background_image_number[Reg._tn] = 1;
+		if (RegCustom._gradient_background_image_number[Reg._tn] >= 26) RegCustom._gradient_background_image_number[Reg._tn] = 1;
 		
-		CID2._sprite_gradient_background_image.loadGraphic("assets/images/gameboardGradientBackground" + Std.string(RegCustom._gradient_background_image_number[Reg._tn]) + "b.jpg");
+		CID2._sprite_gradient_background_image.color = RegCustomColors.gradient_color();
 	}
 	
 	public function client_texture_background_enabled():Void
@@ -234,7 +244,7 @@ class ConfigurationGeneralEvents extends CID2
 	public function client_texture_background_number_minus():Void
 	{
 		RegCustom._texture_background_image_number[Reg._tn] -= 1;
-		if (RegCustom._texture_background_image_number[Reg._tn] <= 0) RegCustom._texture_background_image_number[Reg._tn] = 6;
+		if (RegCustom._texture_background_image_number[Reg._tn] <= 0) RegCustom._texture_background_image_number[Reg._tn] = 8;
 		
 		CID2._sprite_texture_background_image.loadGraphic("assets/images/scenes/textures/" + Std.string(RegCustom._texture_background_image_number[Reg._tn]) + "b.jpg");
 	}
@@ -480,16 +490,6 @@ class ConfigurationGeneralEvents extends CID2
 		CID2._button_move_total_enabled.label.text = Std.string(RegCustom._move_total_enabled[Reg._tn]);
 	}
 	
-	public function notation_panel_enabled():Void
-	{
-		if (RegCustom._notation_panel_enabled[Reg._tn] == false)
-			RegCustom._notation_panel_enabled[Reg._tn] = true;
-		else
-			RegCustom._notation_panel_enabled[Reg._tn] = false;
-			
-		CID2._button_notation_panel_enabled.label.text = Std.string(RegCustom._notation_panel_enabled[Reg._tn]);
-	}
-	
 	public function notation_panel_alpha():Void
 	{
 		if (RegCustom._notation_panel_10_percent_alpha_enabled[Reg._tn] == false)
@@ -558,6 +558,24 @@ class ConfigurationGeneralEvents extends CID2
 		if (RegCustom._notation_panel_text_color_number[Reg._tn] == 26) RegCustom._notation_panel_text_color_number[Reg._tn] = 1;
 		
 		CID2._sprite_notation_panel_text_color.color = RegCustomColors.notation_panel_text_color();
+	}	
+	
+	// change the text color at the main client text.
+	public function client_text_color_minus()
+	{
+		RegCustom._client_text_color_number[Reg._tn] -= 1;
+		if (RegCustom._client_text_color_number[Reg._tn] == 0) RegCustom._client_text_color_number[Reg._tn] = 25;
+		
+		CID2._sprite_client_text_color.color = RegCustomColors.client_text_color();
+	}
+	
+	// change the text color at the main client text.
+	public function client_text_color_plus()
+	{
+		RegCustom._client_text_color_number[Reg._tn] += 1;
+		if (RegCustom._client_text_color_number[Reg._tn] == 26) RegCustom._client_text_color_number[Reg._tn] = 1;
+		
+		CID2._sprite_client_text_color.color = RegCustomColors.client_text_color();
 	}	
 	
 	public function capturing_units_enabled():Void
@@ -788,6 +806,27 @@ class ConfigurationGeneralEvents extends CID2
 		CID2._sprite_title_bar_background_color.color = RegCustomColors.title_bar_background_color();
 	}
 	
+	public function title_bar_background_brightness_minus():Void
+	{
+		if (CID2._text_title_bar_background_brightness.text == "0.15")
+			RegCustom._title_bar_background_brightness[Reg._tn] = 1;
+			
+		else if (RegCustom._title_bar_background_brightness[Reg._tn] > 0.15)
+			RegCustom._title_bar_background_brightness[Reg._tn] -= 0.05;
+		
+		CID2._text_title_bar_background_brightness.text = Std.string(RegCustom._title_bar_background_brightness[Reg._tn]);	
+	}
+
+	public function title_bar_background_brightness_plus():Void
+	{		
+		if (CID2._text_title_bar_background_brightness.text == "1")
+			RegCustom._title_bar_background_brightness[Reg._tn] = 0.15;
+		
+		else if (RegCustom._title_bar_background_brightness[Reg._tn] < 1) RegCustom._title_bar_background_brightness[Reg._tn] += 0.05;
+
+		CID2._text_title_bar_background_brightness.text = Std.string(RegCustom._title_bar_background_brightness[Reg._tn]);
+	}
+	
 	/******************************
 	 * changes the menu bar background.
 	 */
@@ -805,6 +844,26 @@ class ConfigurationGeneralEvents extends CID2
 		}
 			
 		CID2._button_menu_bar_background_enabled.label.text = Std.string(RegCustom._menu_bar_background_enabled[Reg._tn]);
+	}
+	public function menu_bar_background_brightness_minus():Void
+	{
+		if (CID2._text_menu_bar_background_brightness.text == "0.15")
+			RegCustom._menu_bar_background_brightness[Reg._tn] = 1;
+			
+		else if (RegCustom._menu_bar_background_brightness[Reg._tn] > 0.15)
+			RegCustom._menu_bar_background_brightness[Reg._tn] -= 0.05;
+		
+		CID2._text_menu_bar_background_brightness.text = Std.string(RegCustom._menu_bar_background_brightness[Reg._tn]);	
+	}
+
+	public function menu_bar_background_brightness_plus():Void
+	{		
+		if (CID2._text_menu_bar_background_brightness.text == "1")
+			RegCustom._menu_bar_background_brightness[Reg._tn] = 0.15;
+		
+		else if (RegCustom._menu_bar_background_brightness[Reg._tn] < 1) RegCustom._menu_bar_background_brightness[Reg._tn] += 0.05;
+
+		CID2._text_menu_bar_background_brightness.text = Std.string(RegCustom._menu_bar_background_brightness[Reg._tn]);
 	}
 	
 	public function menu_bar_background_number_minus()

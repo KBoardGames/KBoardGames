@@ -1908,9 +1908,9 @@ class NetworkEventsMain extends FlxState
 				Reg._playerNotMoving = 0;
 			}
 			
-			RegTypedef._dataPlayers._moveTimeRemaining[1] = RegCustom._time_remaining_for_game[Reg._tn][1] = Std.parseInt(_data._time_remaining_player2);
-			RegTypedef._dataPlayers._moveTimeRemaining[0] = RegCustom._time_remaining_for_game[Reg._tn][0] = Std.parseInt(_data._time_remaining_player1);
-			
+			RegTypedef._dataPlayers._moveTimeRemaining[1] = Std.parseInt(_data._time_remaining_player2);
+			RegTypedef._dataPlayers._moveTimeRemaining[0] = Std.parseInt(_data._time_remaining_player1);
+	trace(Std.parseInt(_data._time_remaining_player1));		
 			Reg._textTimeRemainingToMove1 = PlayerTimeRemainingMove.formatTime(RegTypedef._dataPlayers._moveTimeRemaining[0]);
 			Reg._textTimeRemainingToMove2 = PlayerTimeRemainingMove.formatTime(RegTypedef._dataPlayers._moveTimeRemaining[1]);
 			

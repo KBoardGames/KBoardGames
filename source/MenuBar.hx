@@ -148,24 +148,22 @@ class MenuBar extends FlxGroup
 			_items = items;
 		}
 		
-		var _color = RegCustomColors.menu_bar_background_color();
+		var _color = FlxColor.fromHSB(RegCustomColors.menu_bar_background_color().hue, 1, RegCustom._menu_bar_background_brightness[Reg._tn]);
 		
-		if (_at_chatter == false) 
+		if(_at_chatter == false) 
 		{
 			_background = new FlxSprite(0, FlxG.height - 50);
 			_background.makeGraphic(FlxG.width, 50, _color);
-			
 		}
 		else 
 		{
 			_background = new FlxSprite(FlxG.width-373, FlxG.height - 50);
-			_background.makeGraphic(FlxG.width-373, 50, _color);
+			_background.makeGraphic(FlxG.width - 373, 50, _color);
 		}
-		
-		_background.alpha = 1;
+				
 		_background.scrollFactor.set(0, 0);	
 		add(_background);
-			
+		
 		// width is 35 + 15 extra pixels for the space between the button at the edge of screen.
 		var _button_disconnect = new ButtonGeneralNetworkYes(FlxG.width - 60, FlxG.height - 40, "X", 45, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, disconnect.bind(_from_menuState), 0xFFCC0000, false, 9999);
 		_button_disconnect.scrollFactor.set(0, 0);

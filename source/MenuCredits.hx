@@ -25,7 +25,12 @@ package;
 class MenuCredits extends FlxState
 {	
 	public var _text:FlxText;
-		
+	
+	/******************************
+	 * background gradient, texture and plain color for a scene.
+	 */
+	private var _scene_background:SceneBackground;
+	
 	public function new():Void
 	{
 		super();	
@@ -33,13 +38,15 @@ class MenuCredits extends FlxState
 		persistentDraw = true;
 		persistentUpdate = false;
 		
-		var background = new FlxSprite(0, 0);
-		background.makeGraphic(FlxG.width, FlxG.height, 0xFF000066);
-		background.setPosition(0, 0);
-		background.scrollFactor.set();	
-		background.screenCenter(X);
-		add(background);	
+		if (_scene_background != null)
+		{
+			remove(_scene_background);
+			_scene_background.destroy();
+		}
 		
+		_scene_background = new SceneBackground();
+		add(_scene_background);
+				
 		var _title_sub = new FlxText(0, 0, 0, "Giving Credit");
 		_title_sub.setFormat(Reg._fontDefault, 30, FlxColor.ORANGE);
 		_title_sub.scrollFactor.set();
@@ -47,7 +54,7 @@ class MenuCredits extends FlxState
 		add(_title_sub);
 		
 		var _text = new FlxText(0, 0, 0, "Thankyou to the following websites and authors that contributed in someway to help make this game possible.\n\nHouse items make by https://www.kenney.nl. This kenny furniture package was released under the CC0 1.0 Universal (CC0 1.0) public domain license.\n\nAvatars from multiavatar. https://multiavatar.com/\n\nTextures from https://opengameart.org/content/huge-texture-resource-pack-part-1\n\nAll images can be used freely for commercial and non-commercial purposes.");
-		_text.setFormat(Reg._fontDefault, Reg._font_size);
+		_text.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
 		_text.scrollFactor.set();
 		_text.fieldWidth = FlxG.width - 100;
 		_text.setPosition(50, 135);

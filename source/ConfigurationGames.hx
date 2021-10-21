@@ -46,13 +46,13 @@ class ConfigurationGames extends FlxGroup
 		CID1._group.add(CID1._game_minutes);
 		
 		CID1._description_game_minutes = new FlxText(15, 150, 0, "Select the total allowed minutes for a game.");
-		CID1._description_game_minutes.setFormat(Reg._fontDefault, Reg._font_size);
+		CID1._description_game_minutes.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
 		CID1._description_game_minutes.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		CID1._group.add(CID1._description_game_minutes);
 		
 		//############################# checkers time remaining,
 		CID1._title_checkers_game_minutes = new TextGeneral(15, CID1._description_game_minutes.y + 75, 400, "Checkers");
-		CID1._title_checkers_game_minutes.setFormat(Reg._fontDefault, Reg._font_size);
+		CID1._title_checkers_game_minutes.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
 		CID1._title_checkers_game_minutes.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		CID1._group.add(CID1._title_checkers_game_minutes);
 		
@@ -64,7 +64,7 @@ class ConfigurationGames extends FlxGroup
 		CID1._group.add(CID1._group_button[0]);
 		
 		CID1._checkers_game_minutes = new FlxText(CID1._checkers_minus_minutes.x + 48, CID1._title_checkers_game_minutes.y, 0, Std.string(RegCustom._time_remaining_for_game[Reg._tn][0]));
-		CID1._checkers_game_minutes.setFormat(Reg._fontDefault, Reg._font_size);
+		CID1._checkers_game_minutes.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
 		CID1._checkers_game_minutes.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		CID1._group.add(CID1._checkers_game_minutes);
 		
@@ -77,7 +77,7 @@ class ConfigurationGames extends FlxGroup
 		
 		//############################# chess time remaining,
 		CID1._title_chess_game_minutes = new TextGeneral(15, CID1._checkers_plus_minutes.y + 75, 450, "chess");
-		CID1._title_chess_game_minutes.setFormat(Reg._fontDefault, Reg._font_size);
+		CID1._title_chess_game_minutes.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
 		CID1._title_chess_game_minutes.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		CID1._group.add(CID1._title_chess_game_minutes);
 		
@@ -89,7 +89,7 @@ class ConfigurationGames extends FlxGroup
 		CID1._group.add(CID1._group_button[2]);
 				
 		CID1._chess_game_minutes = new FlxText(CID1._chess_minus_minutes.x + 48, CID1._title_chess_game_minutes.y, 0, Std.string(RegCustom._time_remaining_for_game[Reg._tn][1]));
-		CID1._chess_game_minutes.setFormat(Reg._fontDefault, Reg._font_size);
+		CID1._chess_game_minutes.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
 		CID1._chess_game_minutes.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		CID1._group.add(CID1._chess_game_minutes);
 		
@@ -102,7 +102,7 @@ class ConfigurationGames extends FlxGroup
 		
 		//############################# Reversi time remaining,
 		CID1._title_reversi_game_minutes = new TextGeneral(15, CID1._chess_plus_minutes.y + 75, 450, "reversi");
-		CID1._title_reversi_game_minutes.setFormat(Reg._fontDefault, Reg._font_size);
+		CID1._title_reversi_game_minutes.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
 		CID1._title_reversi_game_minutes.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		CID1._group.add(CID1._title_reversi_game_minutes);
 		
@@ -114,7 +114,7 @@ class ConfigurationGames extends FlxGroup
 		CID1._group.add(CID1._group_button[4]);
 				
 		CID1._reversi_game_minutes = new FlxText(CID1._reversi_minus_minutes.x + 48, CID1._title_reversi_game_minutes.y, 0, Std.string(RegCustom._time_remaining_for_game[Reg._tn][2]));
-		CID1._reversi_game_minutes.setFormat(Reg._fontDefault, Reg._font_size);
+		CID1._reversi_game_minutes.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
 		CID1._reversi_game_minutes.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		CID1._group.add(CID1._reversi_game_minutes);
 		
@@ -127,7 +127,7 @@ class ConfigurationGames extends FlxGroup
 		
 		//############################# snakes and ladders time remaining,
 		CID1._title_snakes_ladders_game_minutes = new TextGeneral(15, CID1._reversi_plus_minutes.y + 75, 450, "snakes and ladders");
-		CID1._title_snakes_ladders_game_minutes.setFormat(Reg._fontDefault, Reg._font_size);
+		CID1._title_snakes_ladders_game_minutes.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
 		CID1._title_snakes_ladders_game_minutes.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		CID1._group.add(CID1._title_snakes_ladders_game_minutes);
 		
@@ -139,7 +139,7 @@ class ConfigurationGames extends FlxGroup
 		CID1._group.add(CID1._group_button[6]);
 				
 		CID1._snakes_ladders_game_minutes = new FlxText(CID1._snakes_ladders_minus_minutes.x + 48, CID1._title_snakes_ladders_game_minutes.y, 0, Std.string(RegCustom._time_remaining_for_game[Reg._tn][3]));
-		CID1._snakes_ladders_game_minutes.setFormat(Reg._fontDefault, Reg._font_size);
+		CID1._snakes_ladders_game_minutes.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
 		CID1._snakes_ladders_game_minutes.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		CID1._group.add(CID1._snakes_ladders_game_minutes);
 		
@@ -152,7 +152,7 @@ class ConfigurationGames extends FlxGroup
 		
 		//############################# signature time remaining,
 		CID1._title_signature_game_minutes = new TextGeneral(15, CID1._snakes_ladders_plus_minutes.y + 75, 0, "wheel estate");
-		CID1._title_signature_game_minutes.setFormat(Reg._fontDefault, Reg._font_size);
+		CID1._title_signature_game_minutes.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
 		CID1._title_signature_game_minutes.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		CID1._group.add(CID1._title_signature_game_minutes);
 		
@@ -164,7 +164,7 @@ class ConfigurationGames extends FlxGroup
 		CID1._group.add(CID1._group_button[8]);
 		
 		CID1._signature_game_minutes = new FlxText(CID1._signature_minus_minutes.x + 48, CID1._title_signature_game_minutes.y, 0, Std.string(RegCustom._time_remaining_for_game[Reg._tn][4]));
-		CID1._signature_game_minutes.setFormat(Reg._fontDefault, Reg._font_size);
+		CID1._signature_game_minutes.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
 		CID1._signature_game_minutes.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		CID1._group.add(CID1._signature_game_minutes);
 		
@@ -183,7 +183,7 @@ class ConfigurationGames extends FlxGroup
 		CID1._group.add(CID1._chess);
 	
 		CID1._question_chess_opening_moves_enabled = new TextGeneral(15, CID1._chess.y + 90, 800, "Display the chess opening move text?");
-		CID1._question_chess_opening_moves_enabled.setFormat(Reg._fontDefault, Reg._font_size);
+		CID1._question_chess_opening_moves_enabled.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
 		CID1._question_chess_opening_moves_enabled.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		CID1._group.add(CID1._question_chess_opening_moves_enabled);
 		
@@ -195,7 +195,7 @@ class ConfigurationGames extends FlxGroup
 		CID1._group.add(CID1._group_button[10]);
 		
 		CID1._question_chess_show_last_piece_moved = new TextGeneral(15, CID1._button_chess_opening_moves_enabled.height + CID1._button_chess_opening_moves_enabled.y + CID1._offset_rows_y, 800, "Show last piece moved?");
-		CID1._question_chess_show_last_piece_moved.setFormat(Reg._fontDefault, Reg._font_size);
+		CID1._question_chess_show_last_piece_moved.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
 		CID1._question_chess_show_last_piece_moved.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		CID1._group.add(CID1._question_chess_show_last_piece_moved);
 		
@@ -207,7 +207,7 @@ class ConfigurationGames extends FlxGroup
 		CID1._group.add(CID1._group_button[11]);
 		
 		CID1._question_chess_computer_thinking_enabled = new TextGeneral(15, CID1._button_chess_show_last_piece_moved.height + CID1._button_chess_show_last_piece_moved.y + CID1._offset_rows_y, 800, "Show computer spinner image when thinking?");
-		CID1._question_chess_computer_thinking_enabled.setFormat(Reg._fontDefault, Reg._font_size);
+		CID1._question_chess_computer_thinking_enabled.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
 		CID1._question_chess_computer_thinking_enabled.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		CID1._group.add(CID1._question_chess_computer_thinking_enabled);
 		
@@ -219,7 +219,7 @@ class ConfigurationGames extends FlxGroup
 		CID1._group.add(CID1._group_button[12]);
 		
 		CID1._question_chess_future_capturing_units_enabled = new TextGeneral(15, CID1._button_chess_computer_thinking_enabled.height +  CID1._button_chess_computer_thinking_enabled.y + CID1._offset_rows_y, 800, "The future capturing units feature show upcoming attacks to the king and is only available while playing against the computer with a chess skill level of beginner. Enabled the futute capturing units feature?", 8, true, true);
-		CID1._question_chess_future_capturing_units_enabled.setFormat(Reg._fontDefault, Reg._font_size);
+		CID1._question_chess_future_capturing_units_enabled.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
 		CID1._question_chess_future_capturing_units_enabled.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		CID1._group.add(CID1._question_chess_future_capturing_units_enabled);
 		
@@ -256,7 +256,7 @@ class ConfigurationGames extends FlxGroup
 		//##############################
 		
 		CID1._question_chess_path_to_king_enabled = new TextGeneral(15, CID1._question_chess_future_capturing_units_enabled.height + CID1._question_chess_future_capturing_units_enabled.y + (CID1._offset_rows_y * 4) + 5, 800, "the path to king are units in a straight line showing where an attack on the king is coming from. Enable the path to king feature?", 8, true, true);
-		CID1._question_chess_path_to_king_enabled.setFormat(Reg._fontDefault, Reg._font_size);
+		CID1._question_chess_path_to_king_enabled.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
 		CID1._question_chess_path_to_king_enabled.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		CID1._group.add(CID1._question_chess_path_to_king_enabled);
 		
@@ -291,7 +291,7 @@ class ConfigurationGames extends FlxGroup
 		//##############################
 		
 		CID1._question_chess_set_for_player1 = new TextGeneral(15, CID1._question_chess_path_to_king_enabled.height + CID1._question_chess_path_to_king_enabled.y + (CID1._offset_rows_y * 3) + 5, 600, "Player 1 chess piece set.");
-		CID1._question_chess_set_for_player1.setFormat(Reg._fontDefault, Reg._font_size);
+		CID1._question_chess_set_for_player1.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
 		CID1._question_chess_set_for_player1.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		CID1._group.add(CID1._question_chess_set_for_player1);
 		
@@ -340,7 +340,7 @@ class ConfigurationGames extends FlxGroup
 		CID1._group.add(CID1._sprite_display_king_from_p1_chess_set);
 		
 		CID1._question_chess_set_for_player1_color = new TextGeneral(15, CID1._question_chess_set_for_player1.height + CID1._question_chess_set_for_player1.y + 65, 0, "chess piece set color 1.");
-		CID1._question_chess_set_for_player1_color.setFormat(Reg._fontDefault, Reg._font_size);
+		CID1._question_chess_set_for_player1_color.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
 		CID1._question_chess_set_for_player1_color.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		CID1._group.add(CID1._question_chess_set_for_player1_color);
 		
@@ -361,7 +361,7 @@ class ConfigurationGames extends FlxGroup
 		//#############################
 		
 		CID1._question_chess_set_for_player2 = new TextGeneral(15, CID1._button_chess_set_for_player1_color_plus.height + CID1._button_chess_set_for_player1_color_plus.y + CID1._offset_rows_y, 0, "Player 2 chess piece set.");
-		CID1._question_chess_set_for_player2.setFormat(Reg._fontDefault, Reg._font_size);
+		CID1._question_chess_set_for_player2.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
 		CID1._question_chess_set_for_player2.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		CID1._group.add(CID1._question_chess_set_for_player2);
 		
@@ -411,7 +411,7 @@ class ConfigurationGames extends FlxGroup
 		
 		
 		CID1._question_chess_set_for_player2_color = new TextGeneral(15, CID1._question_chess_set_for_player2.height + CID1._question_chess_set_for_player2.y + 65, 0, "chess piece set color 2.");
-		CID1._question_chess_set_for_player2_color.setFormat(Reg._fontDefault, Reg._font_size);
+		CID1._question_chess_set_for_player2_color.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
 		CID1._question_chess_set_for_player2_color.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		CID1._group.add(CID1._question_chess_set_for_player2_color);
 		

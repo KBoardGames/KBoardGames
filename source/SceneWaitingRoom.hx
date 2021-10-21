@@ -86,8 +86,9 @@ class SceneWaitingRoom extends FlxState
 		
 		if (RegCustom._client_background_enabled[Reg._tn] == true)
 		{
-			_color = RegCustomColors.color_client_background();
-			_color.alphaFloat = RegCustom._client_background_brightness[Reg._tn];
+			_color = FlxColor.fromHSB(RegCustomColors.color_client_background().hue, RegCustom._client_background_saturation[Reg._tn], RegCustom._client_background_brightness[Reg._tn]);
+			//_color = RegCustomColors.color_client_background();
+			//_color.alphaFloat = RegCustom._client_background_brightness[Reg._tn];
 		}
 		
 		
@@ -113,7 +114,7 @@ class SceneWaitingRoom extends FlxState
 		
 		bodyBg.scrollFactor.set(0, 0);
 		bodyBg.color = _color;
-		bodyBg.alpha = 0.8;
+		bodyBg.alpha = 0.9;
 		add(bodyBg);
 		
 		Reg._buttonCodeValues = "";
@@ -129,7 +130,7 @@ class SceneWaitingRoom extends FlxState
 		
 		// the user that created the chat. displayed at the bottom of the user list.
 		_textPlayer1Stats = new FlxText(60, 603, 0, "", 24);
-		_textPlayer1Stats.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.WHITE);
+		_textPlayer1Stats.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
 		if (RegCustom._chat_when_at_room_enabled[Reg._tn] == false)
 			_textPlayer1Stats.x += 180; // half of 360 is the width of chatter. half is used to center it to scene.
 		_textPlayer1Stats.scrollFactor.set(0, 0);
@@ -137,21 +138,21 @@ class SceneWaitingRoom extends FlxState
 		
 		// the user that joined the chatroom.
 		_textPlayer2Stats = new FlxText(280, 603, 0, "", 24);
-		_textPlayer2Stats.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.WHITE);
+		_textPlayer2Stats.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
 		if (RegCustom._chat_when_at_room_enabled[Reg._tn] == false)
 			_textPlayer2Stats.x += 180; // half of 360 is the width of chatter. half is used to center it to scene.
 		_textPlayer2Stats.scrollFactor.set(0, 0);		
 		add(_textPlayer2Stats);
 		
 		_textPlayer3Stats = new FlxText(500, 603, 0, "", 24);
-		_textPlayer3Stats.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.WHITE);
+		_textPlayer3Stats.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
 		if (RegCustom._chat_when_at_room_enabled[Reg._tn] == false)
 			_textPlayer3Stats.x += 180; // half of 360 is the width of chatter. half is used to center it to scene.
 		_textPlayer3Stats.scrollFactor.set(0, 0);		
 		add(_textPlayer3Stats);
 		
 		_textPlayer4Stats = new FlxText(720, 603, 0, "", 24);
-		_textPlayer4Stats.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.WHITE);
+		_textPlayer4Stats.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
 		if (RegCustom._chat_when_at_room_enabled[Reg._tn] == false)
 			_textPlayer4Stats.x += 180; // half of 360 is the width of chatter. half is used to center it to scene.
 		_textPlayer4Stats.scrollFactor.set(0, 0);		

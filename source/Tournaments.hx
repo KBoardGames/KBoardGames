@@ -50,38 +50,35 @@ class Tournaments extends FlxGroup
 		if (Reg.__menu_bar2 != null) remove(Reg.__menu_bar2);
 		Reg.__menu_bar2 = new MenuBar();
 		add(Reg.__menu_bar2);
-			
+		
 	}
 	
 	public function _tournament_standard_8():Void
 	{
 		var _title_sub = new FlxText(15, 180, FlxG.width - 15, "Tournament Chess Standard (" + Std.string(RegTypedef._dataTournaments._player_current) + "/" + Std.string(RegTypedef._dataTournaments._player_maximum) + ")");
-		_title_sub.setFormat(Reg._fontDefault, Reg._font_size);
+		_title_sub.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.ORANGE);
 		_title_sub.scrollFactor.set();
 		add(_title_sub);
 		
 		var _tourny1 = new FlxText(15, _title_sub.y + 50, FlxG.width - 15, "");
-		_tourny1.setFormat(Reg._fontDefault, Reg._font_size);
+		_tourny1.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
 		_tourny1.scrollFactor.set();
 		add(_tourny1);
 		
 		if (RegTypedef._dataTournaments._player1 == "")
 		{
-			_tourny1.color = FlxColor.RED;
 			_tourny1.text = "You are not participating in this tournament.";
 		}
 		
 		else if (RegTypedef._dataTournaments._move_piece == false
 		&& 		 RegTypedef._dataTournaments._game_over == 0)
 		{
-			_tourny1.color = FlxColor.YELLOW;
 			_tourny1.text = "Waiting for " + RegTypedef._dataTournaments._player2 + " to move gameboard piece. Come back later.";
 		}
 		
 		else if (RegTypedef._dataTournaments._game_over == 0)
 		
 		{
-			_tourny1.color = FlxColor.GREEN;
 			_tourny1.text = "Please move your gameboard piece.";
 			
 			_button_move_piece = new ButtonGeneralNetworkYes(_tourny1.x + _tourny1.textField.textWidth + 15, _tourny1.y, "Move Piece", 215, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, move_piece.bind(1), RegCustom._button_color[Reg._tn], false);		
@@ -96,14 +93,12 @@ class Tournaments extends FlxGroup
 		{
 			RegTypedef._dataTournaments._move_piece = false;
 			
-			_tourny1.color = FlxColor.YELLOW;
 			_tourny1.text = "You have advanced to the next tournament round. However, users are still playing in the current tournament round. Therefore, You are waiting for an opponent. Come back later.";
 			
 		}
 		
 		else if (RegTypedef._dataTournaments._tournament_started == false)
 		{
-			_tourny1.color = FlxColor.YELLOW;
 			_tourny1.text = "Tournament has not started yet because we still need more players to join. Come back later.";
 		}
 		
@@ -111,7 +106,6 @@ class Tournaments extends FlxGroup
 		{
 			RegTypedef._dataTournaments._move_piece = false;
 			
-			_tourny1.color = FlxColor.RED;
 			_tourny1.text = "You have been eliminated from this tournament.";
 			
 			_button_move_piece = new ButtonGeneralNetworkYes(_tourny1.x + _tourny1.textField.textWidth + 15, _tourny1.y, "Preview", 215, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, preview.bind(1), RegCustom._button_color[Reg._tn], false);		

@@ -71,7 +71,7 @@ class ConfigurationProfile extends FlxGroup
 		CID3._group.add(_text_title_player);
 		
 		CID3._profile_general_instructions = new FlxText(15, 0, 0, "1: Select either player 1 or player 2 button below.\n2: Type in a username. If you want to play online then use the username you signed up with at the website forum.\n3: Select an avatar you would like to use while playing a game.");
-		CID3._profile_general_instructions.setFormat(Reg._fontDefault, Reg._font_size);
+		CID3._profile_general_instructions.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
 		CID3._profile_general_instructions.fieldWidth = FlxG.width - 90;
 		CID3._profile_general_instructions.y = _text_title_player.y + 50;
 		CID3._profile_general_instructions.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
@@ -100,7 +100,7 @@ class ConfigurationProfile extends FlxGroup
 	private function username_input():Void
 	{
 		CID3._text_username = new FlxText(15, 0, 0, "Username");
-		CID3._text_username.setFormat(Reg._fontDefault, Reg._font_size);
+		CID3._text_username.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
 		CID3._text_username.y = CID3._button_p1.y + 65;
 		CID3._text_username.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		CID3._group.add(CID3._text_username);	
@@ -124,7 +124,7 @@ class ConfigurationProfile extends FlxGroup
 	private function username_suggestions():Void
 	{
 		CID3._text_username_suggestions = new FlxText(15, CID3._text_username.y + CID3._offset_y + 30, 0, "Suggested Usernames");
-		CID3._text_username_suggestions.setFormat(Reg._fontDefault, Reg._font_size);
+		CID3._text_username_suggestions.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
 		CID3._text_username_suggestions.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		CID3._group.add(CID3._text_username_suggestions);
 	}
@@ -182,7 +182,7 @@ class ConfigurationProfile extends FlxGroup
 		else
 			CID3._question_username_suggestions_enabled = new TextGeneral(15, CID3._usernameInput.y + 75, 800, "Show username suggestions?\r\n", 8, true, true);
 		
-		CID3._question_username_suggestions_enabled.setFormat(Reg._fontDefault, Reg._font_size);
+		CID3._question_username_suggestions_enabled.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
 		CID3._question_username_suggestions_enabled.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		CID3._group.add(CID3._question_username_suggestions_enabled);
 		
@@ -207,7 +207,7 @@ class ConfigurationProfile extends FlxGroup
 		CID3._group.add(CID3._text_title_avatar);
 		
 		CID3._profile_avatar_notice = new FlxText(15, 250, 0, CID3._text_current_avatar_for_player + "1");
-		CID3._profile_avatar_notice.setFormat(Reg._fontDefault, Reg._font_size);
+		CID3._profile_avatar_notice.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
 		CID3._profile_avatar_notice.fieldWidth = FlxG.width - 90;
 		CID3._profile_avatar_notice.y = CID3._text_title_avatar.y + 55;
 		CID3._profile_avatar_notice.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
@@ -219,7 +219,7 @@ class ConfigurationProfile extends FlxGroup
 		CID3._group.add(CID3._image_profile_avatar);		
 		
 		CID3._avatar_notice = new FlxText(15, 0, 0, "Select an avatar that you would like to use while playing games in offline mode. That means you are not playing a game with players around the world. Select the avatar then click the save button to save that avatar to your offline profile. Selecting the first avatar will not hide that avatar when playing a game.");
-		CID3._avatar_notice.setFormat(Reg._fontDefault, Reg._font_size);
+		CID3._avatar_notice.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
 		CID3._avatar_notice.fieldWidth = FlxG.width - 90;
 		CID3._avatar_notice.y = CID3._image_profile_avatar.y + 100;
 		CID3._avatar_notice.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);

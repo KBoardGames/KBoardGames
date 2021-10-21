@@ -275,7 +275,7 @@ class DailyQuests extends FlxGroup
 			else
 				_bar_text = new FlxText(_bar.x + 10, _id * _height_between_bars, 0, _str + "\nTrue", 0);
 		}
-		_bar_text.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.YELLOW);
+		_bar_text.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
 		_bar_text.y = _bar.y + 5;
 		_group.add(_bar_text);
 

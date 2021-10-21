@@ -38,10 +38,11 @@ class TitleBar extends FlxGroup
 	{
 		super();
 		
-		var _color = RegCustomColors.title_bar_background_color();
+		var _color = FlxColor.fromHSB(RegCustomColors.title_bar_background_color().hue, 1, RegCustom._title_bar_background_brightness[Reg._tn]);
 		
 		_background = new FlxSprite(0, 0);
-		_background.makeGraphic(FlxG.width, 55, _color);		
+		_background.makeGraphic(FlxG.width, 55, _color);
+		_background.color.brightness = RegCustom._title_bar_background_brightness[Reg._tn];
 		_background.scrollFactor.set(0,0);
 		add(_background);
 		

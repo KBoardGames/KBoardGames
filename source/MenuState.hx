@@ -199,7 +199,7 @@ class MenuState extends FlxState
 	private function chess_skill_level_setup():Void
 	{
 		var _gameOptions = new FlxText(30, 620, 0, "What is your chess skill level for offline play?");
-		_gameOptions.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.YELLOW);
+		_gameOptions.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
 		_gameOptions.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		_gameOptions.scrollFactor.set();
 		add(_gameOptions);
@@ -835,7 +835,7 @@ class MenuState extends FlxState
 		var _eventNoMoreThanThree:Int = 0; 
 
 		var _textEventSchedule = new FlxText(0, 0, 0, "Event Schedule");
-		_textEventSchedule.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.YELLOW);
+		_textEventSchedule.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
 		_textEventSchedule.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		_textEventSchedule.setPosition(_intCalendarCoordinateX + _offsetBgColumnX + 72, _intCalendarCoordinateY + _offsetEventColumn1Y + _offsetBgColumnY - 87 );
 		_textEventSchedule.scrollFactor.set(0, 0);
@@ -1054,7 +1054,7 @@ class MenuState extends FlxState
 			_text_title_icon_description.text = "Offline (Player vs Player)";
 		#end
 		
-		_text_title_icon_description.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.YELLOW);
+		_text_title_icon_description.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
 		_text_title_icon_description.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		_text_title_icon_description.scrollFactor.set();
 		add(_text_title_icon_description);
@@ -1170,7 +1170,7 @@ class MenuState extends FlxState
 		{
 			var _bot_text = new FlxText(15, 180, 0, "Click bot player button then click multiplayer online icon.");
 			_bot_text.scrollFactor.set();
-			_bot_text.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.YELLOW);
+			_bot_text.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
 			_bot_text.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 			add(_bot_text);	
 			

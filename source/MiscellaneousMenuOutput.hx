@@ -106,13 +106,13 @@ class MiscellaneousMenuOutput extends FlxState
 		// total wins --------------------------------------------------------
 		var _text = new FlxText(0, 0, 0, "Total Wins.");
 		_text.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.WHITE, 1);
-		_text.setFormat(Reg._fontDefault, 24);
+		_text.setFormat(Reg._fontDefault, 24, RegCustomColors.client_text_color());
 		_text.setPosition(20, _height);
 		group.add(_text);
 		
 		var _text = new FlxText(0, 0, 0, Std.string(RegTypedef._dataStatistics._gamesAllTotalWins));
 		_text.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.WHITE, 1);
-		_text.setFormat(Reg._fontDefault, 24);
+		_text.setFormat(Reg._fontDefault, 24, RegCustomColors.client_text_color());
 		_text.setPosition(_offset_x, _height);
 		group.add(_text);
 		
@@ -121,13 +121,13 @@ class MiscellaneousMenuOutput extends FlxState
 		// total losses  ----------------------------------------------------
 		var _text = new FlxText(0, 0, 0, "Total Losses.");
 		_text.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.WHITE, 1);
-		_text.setFormat(Reg._fontDefault, 24);
+		_text.setFormat(Reg._fontDefault, 24, RegCustomColors.client_text_color());
 		_text.setPosition(20, _height);
 		group.add(_text);
 		
 		var _text = new FlxText(0, 0, 0, Std.string(RegTypedef._dataStatistics._gamesAllTotalLosses));
 		_text.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.WHITE, 1);
-		_text.setFormat(Reg._fontDefault, 24);
+		_text.setFormat(Reg._fontDefault, 24, RegCustomColors.client_text_color());
 		_text.setPosition(_offset_x, _height);
 		group.add(_text);
 		
@@ -136,13 +136,13 @@ class MiscellaneousMenuOutput extends FlxState
 		// total draws  ----------------------------------------------------
 		var _text = new FlxText(0, 0, 0, "Total Draws.");
 		_text.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.WHITE, 1);
-		_text.setFormat(Reg._fontDefault, 24);
+		_text.setFormat(Reg._fontDefault, 24, RegCustomColors.client_text_color());
 		_text.setPosition(20, _height);
 		group.add(_text);
 		
 		var _text = new FlxText(0, 0, 0, Std.string(RegTypedef._dataStatistics._gamesAllTotalDraws));
 		_text.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.WHITE, 1);
-		_text.setFormat(Reg._fontDefault, 24);
+		_text.setFormat(Reg._fontDefault, 24, RegCustomColors.client_text_color());
 		_text.setPosition(_offset_x, _height);
 		group.add(_text);
 		
@@ -151,13 +151,13 @@ class MiscellaneousMenuOutput extends FlxState
 		// checkers wins  ----------------------------------------------------
 		var _text = new FlxText(0, 0, 0, "Checkers Wins.");
 		_text.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.WHITE, 1);
-		_text.setFormat(Reg._fontDefault, 24);
+		_text.setFormat(Reg._fontDefault, 24, RegCustomColors.client_text_color());
 		_text.setPosition(20, _height);
 		group.add(_text);
 		
 		var _text = new FlxText(0, 0, 0, Std.string(RegTypedef._dataStatistics._checkersWins));
 		_text.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.WHITE, 1);
-		_text.setFormat(Reg._fontDefault, 24);
+		_text.setFormat(Reg._fontDefault, 24, RegCustomColors.client_text_color());
 		_text.setPosition(_offset_x, _height);
 		group.add(_text);
 		
@@ -166,13 +166,13 @@ class MiscellaneousMenuOutput extends FlxState
 		// checkers losses  ----------------------------------------------------
 		var _text = new FlxText(0, 0, 0, "Checkers Losses.");
 		_text.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.WHITE, 1);
-		_text.setFormat(Reg._fontDefault, 24);
+		_text.setFormat(Reg._fontDefault, 24, RegCustomColors.client_text_color());
 		_text.setPosition(20, _height);
 		group.add(_text);
 		
 		var _text = new FlxText(0, 0, 0, Std.string(RegTypedef._dataStatistics._checkersLosses));
 		_text.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.WHITE, 1);
-		_text.setFormat(Reg._fontDefault, 24);
+		_text.setFormat(Reg._fontDefault, 24, RegCustomColors.client_text_color());
 		_text.setPosition(_offset_x, _height);
 		group.add(_text);
 		
@@ -181,13 +181,13 @@ class MiscellaneousMenuOutput extends FlxState
 		// checkers Draws  ----------------------------------------------------
 		var _text = new FlxText(0, 0, 0, "Checkers Draws.");
 		_text.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.WHITE, 1);
-		_text.setFormat(Reg._fontDefault, 24);
+		_text.setFormat(Reg._fontDefault, 24, RegCustomColors.client_text_color());
 		_text.setPosition(20, _height);
 		group.add(_text);
 		
 		var _text = new FlxText(0, 0, 0, Std.string(RegTypedef._dataStatistics._checkersDraws));
 		_text.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.WHITE, 1);
-		_text.setFormat(Reg._fontDefault, 24);
+		_text.setFormat(Reg._fontDefault, 24, RegCustomColors.client_text_color());
 		_text.setPosition(_offset_x, _height);
 		group.add(_text);
 		
@@ -196,13 +196,13 @@ class MiscellaneousMenuOutput extends FlxState
 		// chess wins  ----------------------------------------------------
 		var _text = new FlxText(0, 0, 0, "Chess Wins.");
 		_text.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.WHITE, 1);
-		_text.setFormat(Reg._fontDefault, 24);
+		_text.setFormat(Reg._fontDefault, 24, RegCustomColors.client_text_color());
 		_text.setPosition(20, _height);
 		group.add(_text);
 		
 		var _text = new FlxText(0, 0, 0, Std.string(RegTypedef._dataStatistics._chessWins));
 		_text.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.WHITE, 1);
-		_text.setFormat(Reg._fontDefault, 24);
+		_text.setFormat(Reg._fontDefault, 24, RegCustomColors.client_text_color());
 		_text.setPosition(_offset_x, _height);
 		group.add(_text);
 		
@@ -211,13 +211,13 @@ class MiscellaneousMenuOutput extends FlxState
 		// chess losses  ----------------------------------------------------
 		var _text = new FlxText(0, 0, 0, "Chess Losses.");
 		_text.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.WHITE, 1);
-		_text.setFormat(Reg._fontDefault, 24);
+		_text.setFormat(Reg._fontDefault, 24, RegCustomColors.client_text_color());
 		_text.setPosition(20, _height);
 		group.add(_text);
 		
 		var _text = new FlxText(0, 0, 0, Std.string(RegTypedef._dataStatistics._chessLosses));
 		_text.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.WHITE, 1);
-		_text.setFormat(Reg._fontDefault, 24);
+		_text.setFormat(Reg._fontDefault, 24, RegCustomColors.client_text_color());
 		_text.setPosition(_offset_x, _height);
 		group.add(_text);
 		
@@ -226,13 +226,13 @@ class MiscellaneousMenuOutput extends FlxState
 		// chess Draws  ----------------------------------------------------
 		var _text = new FlxText(0, 0, 0, "Chess Draws.");
 		_text.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.WHITE, 1);
-		_text.setFormat(Reg._fontDefault, 24);
+		_text.setFormat(Reg._fontDefault, 24, RegCustomColors.client_text_color());
 		_text.setPosition(20, _height);
 		group.add(_text);
 		
 		var _text = new FlxText(0, 0, 0, Std.string(RegTypedef._dataStatistics._chessDraws));
 		_text.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.WHITE, 1);
-		_text.setFormat(Reg._fontDefault, 24);
+		_text.setFormat(Reg._fontDefault, 24, RegCustomColors.client_text_color());
 		_text.setPosition(_offset_x, _height);
 		group.add(_text);
 		
@@ -242,13 +242,13 @@ class MiscellaneousMenuOutput extends FlxState
 		// Reversi wins  ----------------------------------------------------
 		var _text = new FlxText(0, 0, 0, "Reversi Wins.");
 		_text.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.WHITE, 1);
-		_text.setFormat(Reg._fontDefault, 24);
+		_text.setFormat(Reg._fontDefault, 24, RegCustomColors.client_text_color());
 		_text.setPosition(20, _height);
 		group.add(_text);
 		
 		var _text = new FlxText(0, 0, 0, Std.string(RegTypedef._dataStatistics._reversiWins));
 		_text.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.WHITE, 1);
-		_text.setFormat(Reg._fontDefault, 24);
+		_text.setFormat(Reg._fontDefault, 24, RegCustomColors.client_text_color());
 		_text.setPosition(_offset_x, _height);
 		group.add(_text);
 		
@@ -257,13 +257,13 @@ class MiscellaneousMenuOutput extends FlxState
 		// Reversi losses  ----------------------------------------------------
 		var _text = new FlxText(0, 0, 0, "Reversi Losses.");
 		_text.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.WHITE, 1);
-		_text.setFormat(Reg._fontDefault, 24);
+		_text.setFormat(Reg._fontDefault, 24, RegCustomColors.client_text_color());
 		_text.setPosition(20, _height);
 		group.add(_text);
 		
 		var _text = new FlxText(0, 0, 0, Std.string(RegTypedef._dataStatistics._reversiLosses));
 		_text.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.WHITE, 1);
-		_text.setFormat(Reg._fontDefault, 24);
+		_text.setFormat(Reg._fontDefault, 24, RegCustomColors.client_text_color());
 		_text.setPosition(_offset_x, _height);
 		group.add(_text);
 		
@@ -272,13 +272,13 @@ class MiscellaneousMenuOutput extends FlxState
 		// Reversi Draws  ----------------------------------------------------
 		var _text = new FlxText(0, 0, 0, "Reversi Draws.");
 		_text.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.WHITE, 1);
-		_text.setFormat(Reg._fontDefault, 24);
+		_text.setFormat(Reg._fontDefault, 24, RegCustomColors.client_text_color());
 		_text.setPosition(20, _height);
 		group.add(_text);
 		
 		var _text = new FlxText(0, 0, 0, Std.string(RegTypedef._dataStatistics._reversiDraws));
 		_text.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.WHITE, 1);
-		_text.setFormat(Reg._fontDefault, 24);
+		_text.setFormat(Reg._fontDefault, 24, RegCustomColors.client_text_color());
 		_text.setPosition(_offset_x, _height);
 		group.add(_text);
 		
@@ -288,13 +288,13 @@ class MiscellaneousMenuOutput extends FlxState
 		// snakes and ladders wins  -------------------------------------------
 		var _text = new FlxText(0, 0, 0, "Snakes and Ladders Wins.");
 		_text.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.WHITE, 1);
-		_text.setFormat(Reg._fontDefault, 24);
+		_text.setFormat(Reg._fontDefault, 24, RegCustomColors.client_text_color());
 		_text.setPosition(20, _height);
 		group.add(_text);
 		
 		var _text = new FlxText(0, 0, 0, Std.string(RegTypedef._dataStatistics._snakesAndLaddersWins));
 		_text.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.WHITE, 1);
-		_text.setFormat(Reg._fontDefault, 24);
+		_text.setFormat(Reg._fontDefault, 24, RegCustomColors.client_text_color());
 		_text.setPosition(_offset_x, _height);
 		group.add(_text);
 		
@@ -303,13 +303,13 @@ class MiscellaneousMenuOutput extends FlxState
 		// Snakes and ladders losses -----------------------------------------
 		var _text = new FlxText(0, 0, 0, "Snakes and Ladders Losses.");
 		_text.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.WHITE, 1);
-		_text.setFormat(Reg._fontDefault, 24);
+		_text.setFormat(Reg._fontDefault, 24, RegCustomColors.client_text_color());
 		_text.setPosition(20, _height);
 		group.add(_text);
 		
 		var _text = new FlxText(0, 0, 0, Std.string(RegTypedef._dataStatistics._snakesAndLaddersLosses));
 		_text.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.WHITE, 1);
-		_text.setFormat(Reg._fontDefault, 24);
+		_text.setFormat(Reg._fontDefault, 24, RegCustomColors.client_text_color());
 		_text.setPosition(_offset_x, _height);
 		group.add(_text);
 		
@@ -318,13 +318,13 @@ class MiscellaneousMenuOutput extends FlxState
 		// Snakes and ladders Draws -------------------------------------------
 		var _text = new FlxText(0, 0, 0, "Snakes and Ladders Draws.");
 		_text.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.WHITE, 1);
-		_text.setFormat(Reg._fontDefault, 24);
+		_text.setFormat(Reg._fontDefault, 24, RegCustomColors.client_text_color());
 		_text.setPosition(20, _height);
 		group.add(_text);
 		
 		var _text = new FlxText(0, 0, 0, Std.string(RegTypedef._dataStatistics._snakesAndLaddersDraws));
 		_text.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.WHITE, 1);
-		_text.setFormat(Reg._fontDefault, 24);
+		_text.setFormat(Reg._fontDefault, 24, RegCustomColors.client_text_color());
 		_text.setPosition(_offset_x, _height);
 		group.add(_text);
 		
@@ -333,13 +333,13 @@ class MiscellaneousMenuOutput extends FlxState
 		// Signature Game wins ------------------------------------------------
 		var _text = new FlxText(0, 0, 0, "Signature Game Wins.");
 		_text.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.WHITE, 1);
-		_text.setFormat(Reg._fontDefault, 24);
+		_text.setFormat(Reg._fontDefault, 24, RegCustomColors.client_text_color());
 		_text.setPosition(20, _height);
 		group.add(_text);
 		
 		var _text = new FlxText(0, 0, 0, Std.string(RegTypedef._dataStatistics._signatureGameWins));
 		_text.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.WHITE, 1);
-		_text.setFormat(Reg._fontDefault, 24);
+		_text.setFormat(Reg._fontDefault, 24, RegCustomColors.client_text_color());
 		_text.setPosition(_offset_x, _height);
 		group.add(_text);
 		
@@ -348,13 +348,13 @@ class MiscellaneousMenuOutput extends FlxState
 		// Signature Game losses  --------------------------------------------
 		var _text = new FlxText(0, 0, 0, "Signature Game Losses.");
 		_text.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.WHITE, 1);
-		_text.setFormat(Reg._fontDefault, 24);
+		_text.setFormat(Reg._fontDefault, 24, RegCustomColors.client_text_color());
 		_text.setPosition(20, _height);
 		group.add(_text);
 		
 		var _text = new FlxText(0, 0, 0, Std.string(RegTypedef._dataStatistics._signatureGameLosses));
 		_text.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.WHITE, 1);
-		_text.setFormat(Reg._fontDefault, 24);
+		_text.setFormat(Reg._fontDefault, 24, RegCustomColors.client_text_color());
 		_text.setPosition(_offset_x, _height);
 		group.add(_text);
 		
@@ -363,13 +363,13 @@ class MiscellaneousMenuOutput extends FlxState
 		// Signature Game Draws ----------------------------------------------
 		var _text = new FlxText(0, 0, 0, "Signature Game Draws.");
 		_text.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.WHITE, 1);
-		_text.setFormat(Reg._fontDefault, 24);
+		_text.setFormat(Reg._fontDefault, 24, RegCustomColors.client_text_color());
 		_text.setPosition(20, _height);
 		group.add(_text);
 		
 		var _text = new FlxText(0, 0, 0, Std.string(RegTypedef._dataStatistics._signatureGameDraws));
 		_text.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.WHITE, 1);
-		_text.setFormat(Reg._fontDefault, 24);
+		_text.setFormat(Reg._fontDefault, 24, RegCustomColors.client_text_color());
 		_text.setPosition(_offset_x, _height);
 		group.add(_text);
 		
@@ -389,13 +389,13 @@ class MiscellaneousMenuOutput extends FlxState
 		// total credits  --------------------------------------------------
 		var _text = new FlxText(0, 0, 0, "Total Credits.");
 		_text.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.WHITE, 1);
-		_text.setFormat(Reg._fontDefault, 24);
+		_text.setFormat(Reg._fontDefault, 24, RegCustomColors.client_text_color());
 		_text.setPosition(700, _height);
 		group.add(_text);
 		
 		var _text = new FlxText(0, 0, 0, Std.string(RegTypedef._dataStatistics._creditsTotal));
 		_text.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.WHITE, 1);
-		_text.setFormat(Reg._fontDefault, 24);
+		_text.setFormat(Reg._fontDefault, 24, RegCustomColors.client_text_color());
 		_text.setPosition(1040, _height);
 		group.add(_text);
 		
@@ -404,13 +404,13 @@ class MiscellaneousMenuOutput extends FlxState
 		// Experience points --------------------------------------------------
 		var _text = new FlxText(0, 0, 0, "Experence Points.");
 		_text.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.WHITE, 1);
-		_text.setFormat(Reg._fontDefault, 24);
+		_text.setFormat(Reg._fontDefault, 24, RegCustomColors.client_text_color());
 		_text.setPosition(700, _height);
 		group.add(_text);
 		
 		var _text = new FlxText(0, 0, 0, Std.string(RegTypedef._dataStatistics._experiencePoints));
 		_text.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.WHITE, 1);
-		_text.setFormat(Reg._fontDefault, 24);
+		_text.setFormat(Reg._fontDefault, 24, RegCustomColors.client_text_color());
 		_text.setPosition(1040, _height);
 		group.add(_text);
 		
@@ -419,13 +419,13 @@ class MiscellaneousMenuOutput extends FlxState
 		// House coins --------------------------------------------------
 		var _text = new FlxText(0, 0, 0, "House Coins.");
 		_text.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.WHITE, 1);
-		_text.setFormat(Reg._fontDefault, 24);
+		_text.setFormat(Reg._fontDefault, 24, RegCustomColors.client_text_color());
 		_text.setPosition(700, _height);
 		group.add(_text);
 		
 		var _text = new FlxText(0, 0, 0, Std.string(RegTypedef._dataStatistics._houseCoins));
 		_text.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.WHITE, 1);
-		_text.setFormat(Reg._fontDefault, 24);
+		_text.setFormat(Reg._fontDefault, 24, RegCustomColors.client_text_color());
 		_text.setPosition(1040, _height);
 		group.add(_text);
 		

@@ -100,7 +100,8 @@ class RegCustom
 	 * gameboard notation text color.
 	 */
 	public static var _notation_panel_text_color_number:Array<Int> = [];
-		
+	public static var _client_text_color_number:Array<Int> = [];
+	
 	/******************************
 	 * display a gradient background image for most client scenes.
 	 */
@@ -391,6 +392,9 @@ class RegCustom
 	public static var _title_bar_background_number:Array<Int> = [];
 	public static var _menu_bar_background_number:Array<Int> = [];
 	
+	public static var _title_bar_background_brightness:Array<Float> = [];
+	public static var _menu_bar_background_brightness:Array<Float> = [];
+	
 	public static var _title_bar_background_enabled:Array<Bool> = [];
 	public static var _menu_bar_background_enabled:Array<Bool> = [];
 	
@@ -562,6 +566,9 @@ class RegCustom
 		
 		_notation_panel_text_color_number.splice(0, _notation_panel_text_color_number.length);
 		_notation_panel_text_color_number.push(1);
+		
+		_client_text_color_number.splice(0, _client_text_color_number.length);
+		_client_text_color_number.push(1);
 				
 		_profile_avatar_number1.splice(0, _profile_avatar_number1.length);
 		_profile_avatar_number1.push("0.png");
@@ -620,6 +627,12 @@ class RegCustom
 		
 		_menu_bar_background_number.splice(0, _menu_bar_background_number.length);
 		_menu_bar_background_number.push(1);
+		
+		_title_bar_background_brightness.splice(0, _title_bar_background_brightness.length);
+		_title_bar_background_brightness.push(0.6);
+		
+		_menu_bar_background_brightness.splice(0, _menu_bar_background_brightness.length);
+		_menu_bar_background_brightness.push(0.6);
 		
 		_title_bar_background_enabled.splice(0, _title_bar_background_enabled.length);
 		_title_bar_background_enabled.push(false);
