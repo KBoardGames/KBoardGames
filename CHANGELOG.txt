@@ -1,3 +1,28 @@
+
+Version 1.19.1. 2021-11-03.
+
+New Features.
+
+	Eight libraries added to the myLibs folder at client software root. When a library is commented out at project.xml that library will be excluded from the client software after finishing a build.
+	
+	254 world flags added to the configuration profile.
+
+	Title bar and menu bar background brightness option added to the configuration general scene.
+	
+	Can now set a different title bar text color and client text color at the configuration menu.
+	
+	Over 56800 username suggestions for a username at the configuration profile scene.	
+	
+Feature changed.
+
+	Lemon-orange.yaml theme was renamed to lime.yaml.
+
+	A user's avatar is now used for both offline and online play. Website forum avatar is not used in client.
+
+Bugs fixed.
+	
+	At leaderboard the data was not cleared before repopulated. Therefore, the 50 row data would be 100 when the next leaderboards scene was displayed.
+
 Version 1.18.2. 2021-10-19.
 
 New Features.
@@ -22,8 +47,10 @@ Feature changed.
 
 	Chatter text field size decreased. Now text wraps before the vertical bar of the scroller area.
 
-	Background transparency value changed from 75% to 50%.  
-
+	Background transparency value changed from 75% to 50%.
+	
+	Buttons at SceneGameRoom.hx class needed extra spacing between them. Application width changed from 1400 to 1410.
+	
 Bugs fixed.
 
 	Fixed a bug in scroller area where the user could not scroll up or left.

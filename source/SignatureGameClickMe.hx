@@ -18,6 +18,10 @@
 
 package;
 
+/**
+ * ...
+ * @author kboardgames.com
+ */
 class SignatureGameClickMe extends FlxSprite
 {
 	public var __number_wheel:NumberWheel;
@@ -115,7 +119,7 @@ class SignatureGameClickMe extends FlxSprite
 				Reg._backdoorMoveValue = Reg._gameDiceMaximumIndex[Reg._move_number_next];
 				
 				// send to other clients so that all client move piece at the same time.
-				IDsCreateAndMain.setMovement();
+				GameCreate.gameId_set_movement();
 				RegTriggers._signatureGame = true;
 				
 			}

@@ -186,7 +186,9 @@ class CID2 extends FlxGroup
 	 * sprite color representing the gameboard notation text color.
 	 */
 	public static var _sprite_notation_panel_text_color:FlxSprite;
+	public static var _sprite_client_topic_title_text_color:FlxSprite;
 	public static var _sprite_client_text_color:FlxSprite;
+	public static var _sprite_title_bar_text_color:FlxSprite;
 	
 	/******************************
 	 * this shows the selected background color of the scene header title and footer menu if saved.
@@ -244,7 +246,9 @@ class CID2 extends FlxGroup
 	public static var _question_notation_panel_same_background_color:TextGeneral;
 	public static var _question_notation_panel_background_color:TextGeneral;
 	public static var _question_notation_panel_text_color_number:TextGeneral;
+	public static var _question_client_topic_title_text_color_number:TextGeneral;
 	public static var _question_client_text_color_number:TextGeneral;
+	public static var _question_title_bar_text_color_number:TextGeneral;
 	public static var _question_gradient_background_enabled:TextGeneral;
 	public static var _question_client_background_brightness:TextGeneral;
 	public static var _question_client_background_saturation:TextGeneral;
@@ -312,8 +316,12 @@ class CID2 extends FlxGroup
 	public static var _button_notation_panel_background_color_number_plus:ButtonGeneralNetworkNo;	
 	public static var _button_notation_panel_text_color_number_minus:ButtonGeneralNetworkNo;
 	public static var _button_notation_panel_text_color_number_plus:ButtonGeneralNetworkNo;
+	public static var _button_client_topic_title_text_color_number_minus:ButtonGeneralNetworkNo;
+	public static var _button_client_topic_title_text_color_number_plus:ButtonGeneralNetworkNo;
 	public static var _button_client_text_color_number_minus:ButtonGeneralNetworkNo;
 	public static var _button_client_text_color_number_plus:ButtonGeneralNetworkNo;
+	public static var _button_title_bar_text_color_number_minus:ButtonGeneralNetworkNo;
+	public static var _button_title_bar_text_color_number_plus:ButtonGeneralNetworkNo;
 	public static var _button_gameboard_even_units_show_enabled:ButtonGeneralNetworkNo;
 	public static var _button_gradient_texture_background_enabled:ButtonGeneralNetworkNo;
 	public static var _button_client_background_enabled:ButtonGeneralNetworkNo;	
@@ -332,8 +340,6 @@ class CID2 extends FlxGroup
 	public static var _button_color_output:ButtonGeneralNetworkNo;
 	public static var _button_music_enabled:ButtonGeneralNetworkNo;
 	public static var _button_sound_enabled:ButtonGeneralNetworkNo;
-	public static var _button_title_bar_background_enabled:ButtonGeneralNetworkNo;
-	public static var _button_menu_bar_background_enabled:ButtonGeneralNetworkNo;
 	public static var _button_title_bar_background_number_minus:ButtonGeneralNetworkNo;
 	public static var _button_title_bar_background_number_plus:ButtonGeneralNetworkNo;
 	public static var _button_title_bar_background_brightness_minus:ButtonGeneralNetworkNo;

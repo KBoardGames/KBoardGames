@@ -48,12 +48,12 @@ class MenuCredits extends FlxState
 		add(_scene_background);
 				
 		var _title_sub = new FlxText(0, 0, 0, "Giving Credit");
-		_title_sub.setFormat(Reg._fontDefault, 30, FlxColor.ORANGE);
+		_title_sub.setFormat(Reg._fontDefault, 30, RegCustomColors.client_topic_title_text_color());
 		_title_sub.scrollFactor.set();
 		_title_sub.setPosition(50, 75);
 		add(_title_sub);
 		
-		var _text = new FlxText(0, 0, 0, "Thankyou to the following websites and authors that contributed in someway to help make this game possible.\n\nHouse items make by https://www.kenney.nl. This kenny furniture package was released under the CC0 1.0 Universal (CC0 1.0) public domain license.\n\nAvatars from multiavatar. https://multiavatar.com/\n\nTextures from https://opengameart.org/content/huge-texture-resource-pack-part-1\n\nAll images can be used freely for commercial and non-commercial purposes.");
+		var _text = new FlxText(0, 0, 0, "Thankyou to the following websites and authors that contributed in someway to help make this game possible.\r\nHouse items make by https://www.kenney.nl. This kenny furniture package was released under the CC0 1.0 Universal (CC0 1.0) public domain license.\r\nAvatars from multiavatar. https://multiavatar.com/\r\nTextures from https://opengameart.org/content/huge-texture-resource-pack-part-1\r\nWorld flags are released public domain by https://flagpedia.net\r\nAll images can be used freely for commercial and non-commercial purposes.");
 		_text.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
 		_text.scrollFactor.set();
 		_text.fieldWidth = FlxG.width - 100;

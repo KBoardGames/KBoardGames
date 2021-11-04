@@ -24,6 +24,14 @@ import openfl.media.Sound;
 import openfl.media.SoundChannel;
 import openfl.media.SoundTransform;
 
+#if flags
+	import myLibs.worldFlags.WorldFlags;
+#end 
+
+#if house
+	import myLibs.house.*;
+#end
+
 /**
  * ...
  * @author kboardgames.com
@@ -133,7 +141,10 @@ class MenuState extends FlxState
 		FlxG.mouse.enabled = true;
 		
 		RegTypedef.resetTypedefData(); 
-		RegHouse.resetHouseAtLobby();
+		
+		#if house
+			RegHouse.resetHouseAtLobby();
+		#end
 		
 		// turn of chat for guests. we don't want guests swearing at everyone.
 		#if html5
@@ -181,6 +192,10 @@ class MenuState extends FlxState
 		Reg2.resetRegVars();
 		RegCustom.resetRegVars();
 		
+		#if flags
+			WorldFlags.main();
+		#end
+			
 		ChessECO.ECOlists();
 		Reg._at_menu_state = true;
 		

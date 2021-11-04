@@ -47,7 +47,7 @@ class PlayerKickOrBanPlayers extends FlxState
 
 		// name of each player in front of each player's stats of win, lose or draw.
 		textKickOrBan1 = new FlxText(60, 572, 0, "", 20);
-		textKickOrBan1.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.ORANGE);
+		textKickOrBan1.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_topic_title_text_color());
 		if (RegCustom._chat_when_at_room_enabled[Reg._tn] == false)
 			textKickOrBan1.x += 180; // half of 360 is the width of chatter. half is used to center it to scene.
 		textKickOrBan1.scrollFactor.set(0, 0);

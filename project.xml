@@ -37,7 +37,6 @@
 	<classpath name="source" />
 	
 	<assets path="assets" embed="true"/>
-	<assets path="vendor/multiavatar" embed="true"/>
 	
 	<haxedef name="no-inline" if="flash"/>
 	<haxedef name="no-inline" if="neko"/>
@@ -72,17 +71,42 @@
 	<!--When using the old libs, sometimes when a music or sound is being played (random event), that code will crash the program.-->
 	
 
-	<!-- _______________________________ Libraries ______________________________ -->
+	<!-- Haxelib libraries _____________________________ -->
 
 	<haxelib name="flixel" />
 	<haxelib name="flixel-addons" />
 	<!--<haxelib name="msgpack-haxe"/>-->
 	<haxelib name="yaml" />
 	
-	<!--<haxedef name="openfl-legacy" />-->
+	<!-- Client libraries _____________________________ -->
+	<!-- These libs will not build when commenting them.
 	
+	<!-- comment these two lines to disable client world flags. Comment these lines will disable leaderboards.-->
+	<define name="flags" />
+	<assets path="myLibs/worldFlags/assets/images" embed="true" />
+	
+	<!-- comment these lines to disable client avatars. -->
+	<define name="avatars" />
+	<assets path="vendor/multiavatar" embed="true"/>
+	
+	<!-- comment this line to disable username suggestions at the configuration scene.-->
+	<define name="username_suggestions" />
+	
+	<define name="house" />
+	<assets path="myLibs/house/assets/images"  embed="true" />
+	
+	<define name="tournaments" />
+	<define name="miscellaneous" />
+	<define name="leaderboards" />
+	
+	<define name="dailyQuests" />
+	<assets path="myLibs/dailyQuests/assets/images"  embed="true" />
+	
+	<!-- End of client libraries ______________________ -->
+		
+	<!--<haxedef name="openfl-legacy" />-->	
 	<!-- 
-	#######################################   IMPORTANT: MUST READ   #######################################
+	#################   IMPORTANT: MUST READ   #################
 		neko build always has a console window and because of that, the program will do strange things to the server when the user closes the client console window and not the application window. therefore, for the final build you must build for windows not neko. -->
 	<haxeflag name="-D no_console" />
 	<haxedef name="no_console" />
@@ -98,7 +122,7 @@
 	<!--In case you want to use nape with flixel-->
 	<!--<haxelib name="nape" />-->
 	
-	<!-- ______________________________ Haxedefines _____________________________ -->
+	<!--  Haxedefines ____________________________ -->
 
 	<!--Enable the Flixel core recording system-->
 	<haxedef name="FLX_RECORD" />
@@ -135,8 +159,5 @@
 	<!-- HXCPP_DEBUGGER will drag performance, use it only when you are debugging-->
 	<haxedef name="HXCPP_DEBUGGER" if="debug" />
 	
-	<!-- _________________________________ Custom _______________________________ -->
-
-	<!--Place custom nodes like icons here (higher priority to override the HaxeFlixel icon)-->
 	<icon path="assets/logo/icon.png" />
 </project>

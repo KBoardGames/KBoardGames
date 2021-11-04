@@ -310,7 +310,7 @@ class EventSchedule extends FlxState
 		_textCalendarTitle = new FlxText(15, 4, 0, "");
 		_textCalendarTitle.scrollFactor.set(0, 0);
 		_textCalendarTitle.text = "Event Schedule. " + Std.string(_intYear) + "-" + _textMonth + "-" + Std.string(_intDay);
-		_textCalendarTitle.setFormat(Reg._fontDefault, 50, FlxColor.YELLOW);
+		_textCalendarTitle.setFormat(Reg._fontDefault, 50, RegCustomColors.title_bar_text_color());
 		_textCalendarTitle.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 3);
 		add(_textCalendarTitle);		
 		

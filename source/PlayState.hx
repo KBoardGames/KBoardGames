@@ -166,7 +166,7 @@ class PlayState extends FlxState
 		add(_title_background);
 				
 		_title = new FlxText(15, 4, 0, "Front Door");
-		_title.setFormat(Reg._fontDefault, 50, FlxColor.YELLOW);
+		_title.setFormat(Reg._fontDefault, 50, RegCustomColors.title_bar_text_color());
 		_title.scrollFactor.set(0, 0);
 		_title.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 3);
 		if (Reg._gameJumpTo == -1 ) _title.visible = true;
@@ -188,7 +188,7 @@ class PlayState extends FlxState
 			_text_server_login_data.visible = false;
 		}
 		
-		_text_server_login_data.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.ORANGE);
+		_text_server_login_data.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_topic_title_text_color());
 		add(_text_server_login_data);
 		
 		
@@ -247,7 +247,7 @@ class PlayState extends FlxState
 			_text_client_login_data.visible = false;
 		}
 		
-		_text_client_login_data.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.ORANGE);
+		_text_client_login_data.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_topic_title_text_color());
 		add(_text_client_login_data);
 		
 		
@@ -719,7 +719,7 @@ class PlayState extends FlxState
 					}
 					
 					// send gameboard data to server.
-					__scene_game_room._iDsCreateAndMain.gameIdSendDataToServer(); 
+					__scene_game_room.__game_create.gameId_send_data_to_server(); 
 					
 					if (RegTypedef._dataTournaments._move_piece == true)
 					{
@@ -1040,7 +1040,10 @@ class PlayState extends FlxState
 			#else
 				RegTypedef._dataAccount._guest_account = false;
 			#end
-						
+			
+			// TODO add a RegCustom here if bypass this code so that the user's avatar at website is used. see near bottom of server, is logging in event. that code also needs to be bypassed.
+			RegTypedef._dataAccount._avatarNumber = RegCustom._profile_avatar_number1[Reg._tn];
+			
 			clientSocket.send("Is Logging In", RegTypedef._dataAccount); //events	
 			haxe.Timer.delay(function (){}, Reg2._event_sleep);
 		}

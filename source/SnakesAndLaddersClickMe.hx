@@ -18,6 +18,10 @@
 
 package;
 
+/**
+ * ...
+ * @author kboardgames.com
+ */
 class SnakesAndLaddersClickMe extends FlxSprite
 {
 	public var __number_wheel:NumberWheel;

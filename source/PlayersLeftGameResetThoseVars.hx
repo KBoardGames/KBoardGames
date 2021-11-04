@@ -30,7 +30,7 @@ class PlayersLeftGameResetThoseVars extends FlxText
 	{	
 		super();
 		
-		// get any class file from this instance. for example, __scene_game_room._iDsCreateAndMain.__game_house_taxi_cafe...
+		// get any class file from this instance. for example, __scene_game_room.__game_create.__game_house_taxi_cafe...
 		__scene_game_room = scene_game_room;
 	}
 	

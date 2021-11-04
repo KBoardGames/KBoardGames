@@ -18,6 +18,10 @@
 
 package;
 
+#if house
+	import myLibs.house.*;
+#end
+
 /**
  * ...
  * @author kboardgames.com
@@ -93,24 +97,26 @@ class IdsMessageBox extends FlxGroup
 				
 				case 5003: _msg = new MessageBox(5003, "Yes", "No", true, true, false, false, "", 'Your reward is 50 credits. Your total credits is now ' + Std.string(RegTypedef._dataStatistics._creditsTotal));
 				
-				// house furniture get. 6000-6999.
-				case 6001:
-				{
-					if (HouseFurnitureGet._haveEnoughHouseCoins == true)
+				#if house
+					// house furniture get. 6000-6999.
+					case 6001:
 					{
-						_msg = new MessageBox(6001, "Yes", "No", true, true, true, false, "Notice!", "Would you like to buy " + Std.string(RegHouse._namesCanPurchase[HouseFurnitureGet._idCurrentItemPurchased]) + " for " + RegHouse._coins[HouseFurnitureGet._idCurrentItemPurchased] + " coins?");
+						if (HouseFurnitureGet._haveEnoughHouseCoins == true)
+						{
+							_msg = new MessageBox(6001, "Yes", "No", true, true, true, false, "Notice!", "Would you like to buy " + Std.string(RegHouse._namesCanPurchase[HouseFurnitureGet._idCurrentItemPurchased]) + " for " + RegHouse._coins[HouseFurnitureGet._idCurrentItemPurchased] + " coins?");
+						}
+						
+						else
+						{
+							_msg = new MessageBox(6001, "Yes", "No", true, true, false, false, "Notice!", "You do not have enough house coins to buy " + Std.string(RegHouse._namesCanPurchase[HouseFurnitureGet._idCurrentItemPurchased]) + ".");
+						}
 					}
 					
-					else
-					{
-						_msg = new MessageBox(6001, "Yes", "No", true, true, false, false, "Notice!", "You do not have enough house coins to buy " + Std.string(RegHouse._namesCanPurchase[HouseFurnitureGet._idCurrentItemPurchased]) + ".");
-					}
-				}
-				
-				// house menu main 7000-7999.
-				case 7001: _msg = new MessageBox(7001, "Yes", "No", true, true, true, false, "Save House.", "Would you like to save all furniture items and their positions in this house?");
-				
-				case 7002: _msg = new MessageBox(7002, "Yes", "No", true, true, false, false, "Notice!", "House saved.");
+					// house menu main 7000-7999.
+					case 7001: _msg = new MessageBox(7001, "Yes", "No", true, true, true, false, "Save House.", "Would you like to save all furniture items and their positions in this house?");
+					
+					case 7002: _msg = new MessageBox(7002, "Yes", "No", true, true, false, false, "Notice!", "House saved.");
+				#end
 				
 				// leaderboard 8000-8999.
 				// messages when trying to connect to the server, either a message about software needs updating or server is offline.

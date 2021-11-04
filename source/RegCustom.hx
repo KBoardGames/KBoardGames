@@ -59,7 +59,7 @@ class RegCustom
 	public static var _gameboard_units_even_color_number:Array<Array<Int>> = [[]];
 	
 	/******************************
-	 * when typing in a username at configuration profile, 18 buttons, each display a 1 suggested username from a list at RegUsernameSuggestions.hx
+	 * when typing in a username at configuration profile, 18 buttons, each display a 1 suggested username from a list at UsernameSuggestions.hx
 	 * When entering the profile scene, 18 random usernames will populate 18 buttons. once a button is clicked, the username displayed at that button will populate the username input.
 	 * when typing in a name at username input, up to a total of 18 username suggestions will contain part of the current username at username input. 
 	 */
@@ -100,7 +100,21 @@ class RegCustom
 	 * gameboard notation text color.
 	 */
 	public static var _notation_panel_text_color_number:Array<Int> = [];
+	
+	/******************************
+	 * topic title of a paragraph or section.
+	 */
+	public static var _client_topic_title_text_color_number:Array<Int> = [];
+	
+	/******************************
+	 * regular text of a scene. not a title text, not a sub title text and not a button text.
+	 */
 	public static var _client_text_color_number:Array<Int> = [];
+	
+	/******************************
+	 * title of a scene. this is the text color at the title bar.
+	 */
+	public static var _title_bar_text_color_number:Array<Int> = [];
 	
 	/******************************
 	 * display a gradient background image for most client scenes.
@@ -253,12 +267,12 @@ class RegCustom
 	public static var _go_back_to_title_after_save:Array<Bool> = [];
 	
 	/******************************
-	 * this is the offline mode profile avatar number that refers to an avatar image. player 1.
+	 * this is profile avatar that refers to an avatar image. player 1.
 	 */
 	public static var _profile_avatar_number1:Array<String> = [];
 	
 	/******************************
-	 * this is the offline mode profile avatar number that refers to an avatar image. player 2 or BOT 1.
+	 * this is profile avatar that refers to an avatar image. player 2 or BOT 1.
 	 */
 	public static var _profile_avatar_number2:Array<String> = [];
 	
@@ -395,15 +409,17 @@ class RegCustom
 	public static var _title_bar_background_brightness:Array<Float> = [];
 	public static var _menu_bar_background_brightness:Array<Float> = [];
 	
-	public static var _title_bar_background_enabled:Array<Bool> = [];
-	public static var _menu_bar_background_enabled:Array<Bool> = [];
-	
 	// these vars are reset at the start of each game.
 	public static function resetRegVars():Void
 	{
 		_timer_maximum_permitted_for_game = [55, 55, 55, 55, 55];
 		_timer_minimum_permitted_for_game = [5, 5, 5, 5, 5];
 	}
+	
+	/******************************
+	 * flags of all countries in the world.
+	 */
+	public static var _world_flags_number:Array<Int> = [];
 	
 	/******************************
 	 * these vars are reset here when returning to the mainMenu. These vars are not reset at menuState.
@@ -439,7 +455,7 @@ class RegCustom
 		
 		_gameboard_units_even_color_number.splice(0, _gameboard_units_even_color_number.length);
 		_gameboard_units_even_color_number.push([0]);
-		_gameboard_units_even_color_number[0] = [21, 8];		
+		_gameboard_units_even_color_number[0] = [1, 8];		
 		
 		_username_suggestions_enabled.splice(0, _username_suggestions_enabled.length);
 		_username_suggestions_enabled.push(true);
@@ -514,7 +530,7 @@ class RegCustom
 		_chess_set_for_player1_color_number.push(1);
 		
 		_chess_set_for_player2_color_number.splice(0, _chess_set_for_player2_color_number.length);
-		_chess_set_for_player2_color_number.push(25);
+		_chess_set_for_player2_color_number.push(1);
 		
 		_chess_opening_moves_enabled.splice(0, _chess_opening_moves_enabled.length);
 		_chess_opening_moves_enabled.push(true);	
@@ -523,13 +539,13 @@ class RegCustom
 		_chess_computer_thinking_enabled.push(true);
 		
 		_client_background_brightness.splice(0, _client_background_brightness.length);
-		_client_background_brightness.push(0.45);
+		_client_background_brightness.push(0.5);
 		
-		_client_background_saturation.splice(0, _client_background_brightness.length);
+		_client_background_saturation.splice(0, _client_background_saturation.length);
 		_client_background_saturation.push(1);
 		
 		_button_color_number.splice(0, _button_color_number.length);
-		_button_color_number.push(16);
+		_button_color_number.push(2);
 		
 		_button_border_color_number.splice(0, _button_border_color_number.length);
 		_button_border_color_number.push(1);
@@ -567,9 +583,18 @@ class RegCustom
 		_notation_panel_text_color_number.splice(0, _notation_panel_text_color_number.length);
 		_notation_panel_text_color_number.push(1);
 		
+		_client_topic_title_text_color_number.splice(0, _client_topic_title_text_color_number.length);
+		_client_topic_title_text_color_number.push(1);		
+		
 		_client_text_color_number.splice(0, _client_text_color_number.length);
 		_client_text_color_number.push(1);
-				
+		
+		_client_topic_title_text_color_number.splice(0, _client_topic_title_text_color_number.length);
+		_client_topic_title_text_color_number.push(1);
+		
+		_title_bar_text_color_number.splice(0, _title_bar_text_color_number.length);
+		_title_bar_text_color_number.push(1);
+		
 		_profile_avatar_number1.splice(0, _profile_avatar_number1.length);
 		_profile_avatar_number1.push("0.png");
 		
@@ -629,16 +654,13 @@ class RegCustom
 		_menu_bar_background_number.push(1);
 		
 		_title_bar_background_brightness.splice(0, _title_bar_background_brightness.length);
-		_title_bar_background_brightness.push(0.6);
+		_title_bar_background_brightness.push(0.5);
 		
 		_menu_bar_background_brightness.splice(0, _menu_bar_background_brightness.length);
-		_menu_bar_background_brightness.push(0.6);
+		_menu_bar_background_brightness.push(0.5);
 		
-		_title_bar_background_enabled.splice(0, _title_bar_background_enabled.length);
-		_title_bar_background_enabled.push(false);
-		
-		_menu_bar_background_enabled.splice(0, _menu_bar_background_enabled.length);
-		_menu_bar_background_enabled.push(true);
+		_world_flags_number.splice(0, _world_flags_number.length);
+		_world_flags_number.push(0);
 		
 		#if html5
 			return;

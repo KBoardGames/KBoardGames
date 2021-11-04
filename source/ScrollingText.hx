@@ -18,6 +18,10 @@
 
 package;
 
+/**
+ * ...
+ * @author kboardgames.com
+ */
 class ScrollingText extends FlxSpriteGroup
 {
 	private var _scroller:FlxSprite;	// black coloured image. seen as a background.

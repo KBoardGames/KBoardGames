@@ -124,27 +124,27 @@ class SceneCreateRoom extends FlxState
 		
 		//--------------------------------- Header columns for the data rows.		
 		var _t1 = new FlxText(100 - _offsetX - _offsetX2, 130 + _offset_y, 0, "Game");
-		_t1.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.ORANGE);
+		_t1.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_topic_title_text_color());
 		_t1.scrollFactor.set();
 		add(_t1);
 		
 		var _t2 = new FlxText(420 - _offsetX - _offsetX2, 130 + _offset_y, 0, "Players");
-		_t2.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.ORANGE);
+		_t2.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_topic_title_text_color());
 		_t2.scrollFactor.set();
 		add(_t2);
 		
 		var _t3 = new FlxText(600 - _offsetX - _offsetX2, 130 + _offset_y, 0, "Against");
-		_t3.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.ORANGE);
+		_t3.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_topic_title_text_color());
 		_t3.scrollFactor.set();
 		add(_t3);
 		
 		var _t4 = new FlxText(828 - _offsetX - _offsetX2, 130 + _offset_y, 0, "Spectators");
-		_t4.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.ORANGE);
+		_t4.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_topic_title_text_color());
 		_t4.scrollFactor.set();
 		add(_t4);
 		
 		var _t5 = new FlxText(1040 - _offsetX - _offsetX2, 130 + _offset_y, 0, "Minutes");
-		_t5.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.ORANGE);
+		_t5.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_topic_title_text_color());
 		_t5.scrollFactor.set();
 		add(_t5);
 		
@@ -353,7 +353,7 @@ class SceneCreateRoom extends FlxState
 		_buttonAllowSpectatorsGame.active = true;
 		_buttonAllowSpectatorsGame.visible = true;
 		
-		IDsCreateAndMain.timeGivenForEachGame(_num);
+		GameCreate.timeGivenForEachGame(_num);
 		var _time = PlayerTimeRemainingMove.formatTime(RegTypedef._dataPlayers._timeTotal);
 		_text_allow_minutes.text = "0:" + _time;
 	}

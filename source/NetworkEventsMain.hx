@@ -18,6 +18,10 @@
 
 package;
 
+#if house
+	import myLibs.house.*;
+#end
+
 /**
  * network events main.
  * @author kboardgames.com
@@ -309,134 +313,135 @@ class NetworkEventsMain extends FlxState
 	private function houseLoad():Void
 	{
 		PlayState.clientSocket.events.on("House Load", function (_data)
-		{			
-			RegTypedef._dataHouse._sprite_number = Std.string(_data._sprite_number);
-			RegTypedef._dataHouse._sprite_name = Std.string(_data._sprite_name);
-			RegTypedef._dataHouse._items_x = Std.string(_data._items_x);
-			RegTypedef._dataHouse._items_y = Std.string(_data._items_y);
-			RegTypedef._dataHouse._map_x = Std.string(_data._map_x);
-			RegTypedef._dataHouse._map_y = Std.string(_data._map_y);
-			RegTypedef._dataHouse._is_item_purchased = Std.string(_data._is_item_purchased);
-			RegTypedef._dataHouse._item_direction_facing = Std.string(_data._item_direction_facing);
-			RegTypedef._dataHouse._map_offset_x = Std.string(_data._map_offset_x);
-			RegTypedef._dataHouse._map_offset_y = Std.string(_data._map_offset_y);
-			RegTypedef._dataHouse._item_is_hidden = Std.string(_data._item_is_hidden);
-			RegTypedef._dataHouse._item_order = Std.string(_data._item_order);
-			RegTypedef._dataHouse._item_behind_walls = Std.string(_data._item_behind_walls);
-			RegTypedef._dataHouse._floor = Std.string(_data._floor);
-			RegTypedef._dataHouse._wall_left = Std.string(_data._wall_left);
-			RegTypedef._dataHouse._wall_up_behind = Std.string(_data._wall_up_behind);
-			RegTypedef._dataHouse._wall_up_in_front = Std.string(_data._wall_up_in_front);
-			RegTypedef._dataHouse._floor = Std.string(_data._floor);
-			RegTypedef._dataHouse._wall_left_is_hidden = Std.string(_data._wall_left_is_hidden);
-			RegTypedef._dataHouse._wall_up_behind_is_hidden = Std.string(_data._wall_up_behind_is_hidden);
-			RegTypedef._dataHouse._wall_up_in_front_is_hidden = Std.string(_data._wall_up_in_front_is_hidden);
-			
-			if (RegTypedef._dataHouse._sprite_number != "")
-			{
+		{
+			#if house
+				RegTypedef._dataHouse._sprite_number = Std.string(_data._sprite_number);
+				RegTypedef._dataHouse._sprite_name = Std.string(_data._sprite_name);
+				RegTypedef._dataHouse._items_x = Std.string(_data._items_x);
+				RegTypedef._dataHouse._items_y = Std.string(_data._items_y);
+				RegTypedef._dataHouse._map_x = Std.string(_data._map_x);
+				RegTypedef._dataHouse._map_y = Std.string(_data._map_y);
+				RegTypedef._dataHouse._is_item_purchased = Std.string(_data._is_item_purchased);
+				RegTypedef._dataHouse._item_direction_facing = Std.string(_data._item_direction_facing);
+				RegTypedef._dataHouse._map_offset_x = Std.string(_data._map_offset_x);
+				RegTypedef._dataHouse._map_offset_y = Std.string(_data._map_offset_y);
+				RegTypedef._dataHouse._item_is_hidden = Std.string(_data._item_is_hidden);
+				RegTypedef._dataHouse._item_order = Std.string(_data._item_order);
+				RegTypedef._dataHouse._item_behind_walls = Std.string(_data._item_behind_walls);
+				RegTypedef._dataHouse._floor = Std.string(_data._floor);
+				RegTypedef._dataHouse._wall_left = Std.string(_data._wall_left);
+				RegTypedef._dataHouse._wall_up_behind = Std.string(_data._wall_up_behind);
+				RegTypedef._dataHouse._wall_up_in_front = Std.string(_data._wall_up_in_front);
+				RegTypedef._dataHouse._floor = Std.string(_data._floor);
+				RegTypedef._dataHouse._wall_left_is_hidden = Std.string(_data._wall_left_is_hidden);
+				RegTypedef._dataHouse._wall_up_behind_is_hidden = Std.string(_data._wall_up_behind_is_hidden);
+				RegTypedef._dataHouse._wall_up_in_front_is_hidden = Std.string(_data._wall_up_in_front_is_hidden);
 				
-				var _str = RegTypedef._dataHouse._sprite_number.split(",");
-				_str.pop();
-				var _str2 = RegTypedef._dataHouse._sprite_name.split(",");
-				_str2.pop();
-				
-				RegHouse._namesPurchased.pop();
-				
-				for (i in 0..._str.length)
+				if (RegTypedef._dataHouse._sprite_number != "")
 				{
-					RegHouse._sprite_number.push(Std.parseInt(_str[i]));
-					RegHouse._namesPurchased.push(_str2[i]);
-				}
-				
-				RegHouse._namesPurchased.unshift("No item selected.");
-				
-				var _str = RegTypedef._dataHouse._items_x.split(",");
-				_str.pop();
-				var _str2 = RegTypedef._dataHouse._items_y.split(",");
-				_str2.pop();
-				var _str3 = RegTypedef._dataHouse._map_x.split(",");
-				_str3.pop();
-				var _str4 = RegTypedef._dataHouse._map_y.split(",");
-				_str4.pop();
-				var _str5 = RegTypedef._dataHouse._is_item_purchased.split(",");
-				_str5.pop();
-				var _str6 = RegTypedef._dataHouse._item_direction_facing.split(",");
-				_str6.pop();
-				var _str7 = RegTypedef._dataHouse._map_offset_x.split(",");
-				_str7.pop();
-				var _str8 = RegTypedef._dataHouse._map_offset_y.split(",");
-				_str8.pop();
-				var _str9 = RegTypedef._dataHouse._item_is_hidden.split(",");
-				_str9.pop();
-				var _str10 = RegTypedef._dataHouse._item_order.split(",");
-				_str10.pop();
-				var _str11 = RegTypedef._dataHouse._item_behind_walls.split(",");
-				_str11.pop();
-				
-				for (i in 0..._str.length)
-				{
-					RegHouse._items_x[i] = Std.parseFloat(_str[i]);
-					RegHouse._items_y[i] = Std.parseFloat(_str2[i]);
-					RegHouse._map_x[i] = Std.parseFloat(_str3[i]);
-					RegHouse._map_y[i] = Std.parseFloat(_str4[i]);
-					RegHouse._is_item_purchased[i] = Std.parseInt(_str5[i]);
-					RegHouse._item_direction_facing[i] = Std.parseInt(_str6[i]);
-					RegHouse._map_offset_x[i] = Std.parseInt(_str7[i]);
-					RegHouse._map_offset_y[i] = Std.parseInt(_str8[i]);
-					RegHouse._item_is_hidden[i] = Std.parseInt(_str9[i]);
-					RegHouse._item_order[i] = Std.parseInt(_str10[i]);
-					RegHouse._item_behind_walls[i] = Std.parseInt(_str11[i]);
-				}
-				
-			}
-			
-			if (RegTypedef._dataHouse._floor != "")
-			{
-				var _str = RegTypedef._dataHouse._floor.split(",");
-				_str.pop();
-				var _str2 = RegTypedef._dataHouse._wall_left.split(",");
-				_str2.pop();
-				var _str3 = RegTypedef._dataHouse._wall_left_is_hidden.split(",");
-				_str3.pop();
-				var _str4 = RegTypedef._dataHouse._wall_up_behind.split(",");
-				_str4.pop();
-				var _str5 = RegTypedef._dataHouse._wall_up_behind_is_hidden.split(",");
-				_str5.pop();
-				var _str6 = RegTypedef._dataHouse._wall_up_in_front.split(",");
-				_str6.pop();
-				var _str7 = RegTypedef._dataHouse._wall_up_in_front_is_hidden.split(",");
-				_str7.pop();
-				
-				var i:Int = -1;
-				
-				for (x in 0...11)
-				{
-					for (y in 0...22)
+					
+					var _str = RegTypedef._dataHouse._sprite_number.split(",");
+					_str.pop();
+					var _str2 = RegTypedef._dataHouse._sprite_name.split(",");
+					_str2.pop();
+					
+					RegHouse._namesPurchased.pop();
+					
+					for (i in 0..._str.length)
 					{
-						i += 1;
-						
-						RegHouse._floor[x][y] = Std.parseInt(_str[i]);
-						RegHouse._wall_left[x][y] = Std.parseInt(_str2[i]);
-						RegHouse._wall_left_is_hidden[x][y] = Std.parseInt(_str3[i]);
-						RegHouse._wall_up_behind[x][y] = Std.parseInt(_str4[i]);
-						RegHouse._wall_up_is_hidden[1][x][y] = Std.parseInt(_str5[i]);
-						RegHouse._wall_up_in_front[x][y] = Std.parseInt(_str6[i]);
-						RegHouse._wall_up_is_hidden[0][x][y] = Std.parseInt(_str7[i]);
+						RegHouse._sprite_number.push(Std.parseInt(_str[i]));
+						RegHouse._namesPurchased.push(_str2[i]);
+					}
+					
+					RegHouse._namesPurchased.unshift("No item selected.");
+					
+					var _str = RegTypedef._dataHouse._items_x.split(",");
+					_str.pop();
+					var _str2 = RegTypedef._dataHouse._items_y.split(",");
+					_str2.pop();
+					var _str3 = RegTypedef._dataHouse._map_x.split(",");
+					_str3.pop();
+					var _str4 = RegTypedef._dataHouse._map_y.split(",");
+					_str4.pop();
+					var _str5 = RegTypedef._dataHouse._is_item_purchased.split(",");
+					_str5.pop();
+					var _str6 = RegTypedef._dataHouse._item_direction_facing.split(",");
+					_str6.pop();
+					var _str7 = RegTypedef._dataHouse._map_offset_x.split(",");
+					_str7.pop();
+					var _str8 = RegTypedef._dataHouse._map_offset_y.split(",");
+					_str8.pop();
+					var _str9 = RegTypedef._dataHouse._item_is_hidden.split(",");
+					_str9.pop();
+					var _str10 = RegTypedef._dataHouse._item_order.split(",");
+					_str10.pop();
+					var _str11 = RegTypedef._dataHouse._item_behind_walls.split(",");
+					_str11.pop();
+					
+					for (i in 0..._str.length)
+					{
+						RegHouse._items_x[i] = Std.parseFloat(_str[i]);
+						RegHouse._items_y[i] = Std.parseFloat(_str2[i]);
+						RegHouse._map_x[i] = Std.parseFloat(_str3[i]);
+						RegHouse._map_y[i] = Std.parseFloat(_str4[i]);
+						RegHouse._is_item_purchased[i] = Std.parseInt(_str5[i]);
+						RegHouse._item_direction_facing[i] = Std.parseInt(_str6[i]);
+						RegHouse._map_offset_x[i] = Std.parseInt(_str7[i]);
+						RegHouse._map_offset_y[i] = Std.parseInt(_str8[i]);
+						RegHouse._item_is_hidden[i] = Std.parseInt(_str9[i]);
+						RegHouse._item_order[i] = Std.parseInt(_str10[i]);
+						RegHouse._item_behind_walls[i] = Std.parseInt(_str11[i]);
+					}
+					
+				}
+				
+				if (RegTypedef._dataHouse._floor != "")
+				{
+					var _str = RegTypedef._dataHouse._floor.split(",");
+					_str.pop();
+					var _str2 = RegTypedef._dataHouse._wall_left.split(",");
+					_str2.pop();
+					var _str3 = RegTypedef._dataHouse._wall_left_is_hidden.split(",");
+					_str3.pop();
+					var _str4 = RegTypedef._dataHouse._wall_up_behind.split(",");
+					_str4.pop();
+					var _str5 = RegTypedef._dataHouse._wall_up_behind_is_hidden.split(",");
+					_str5.pop();
+					var _str6 = RegTypedef._dataHouse._wall_up_in_front.split(",");
+					_str6.pop();
+					var _str7 = RegTypedef._dataHouse._wall_up_in_front_is_hidden.split(",");
+					_str7.pop();
+					
+					var i:Int = -1;
+					
+					for (x in 0...11)
+					{
+						for (y in 0...22)
+						{
+							i += 1;
+							
+							RegHouse._floor[x][y] = Std.parseInt(_str[i]);
+							RegHouse._wall_left[x][y] = Std.parseInt(_str2[i]);
+							RegHouse._wall_left_is_hidden[x][y] = Std.parseInt(_str3[i]);
+							RegHouse._wall_up_behind[x][y] = Std.parseInt(_str4[i]);
+							RegHouse._wall_up_is_hidden[1][x][y] = Std.parseInt(_str5[i]);
+							RegHouse._wall_up_in_front[x][y] = Std.parseInt(_str6[i]);
+							RegHouse._wall_up_is_hidden[0][x][y] = Std.parseInt(_str7[i]);
+						}
 					}
 				}
-			}
-			
-			RegTriggers._new_the_house = true;
-			
-			
-			RegTypedef._dataMisc._roomCheckForLock[0] = 0;
-			PlayState.clientSocket.send("Get Room Data", RegTypedef._dataMisc);
-			haxe.Timer.delay(function (){}, Reg2._event_sleep);
-			
-			#if html5
-				RegTypedef._dataStatistics._houseCoins = 1000;
-			#end
 				
+				RegTriggers._new_the_house = true;
+				
+				
+				RegTypedef._dataMisc._roomCheckForLock[0] = 0;
+				PlayState.clientSocket.send("Get Room Data", RegTypedef._dataMisc);
+				haxe.Timer.delay(function (){}, Reg2._event_sleep);
+				
+				#if html5
+					RegTypedef._dataStatistics._houseCoins = 1000;
+				#end
+			#end		
 		});
 	}
 		
@@ -1910,7 +1915,7 @@ class NetworkEventsMain extends FlxState
 			
 			RegTypedef._dataPlayers._moveTimeRemaining[1] = Std.parseInt(_data._time_remaining_player2);
 			RegTypedef._dataPlayers._moveTimeRemaining[0] = Std.parseInt(_data._time_remaining_player1);
-	trace(Std.parseInt(_data._time_remaining_player1));		
+
 			Reg._textTimeRemainingToMove1 = PlayerTimeRemainingMove.formatTime(RegTypedef._dataPlayers._moveTimeRemaining[0]);
 			Reg._textTimeRemainingToMove2 = PlayerTimeRemainingMove.formatTime(RegTypedef._dataPlayers._moveTimeRemaining[1]);
 			
@@ -2834,6 +2839,8 @@ class NetworkEventsMain extends FlxState
 		{
 			RegTypedef._dataLeaderboards._usernames = Std.string(_data._usernames); 
 			RegTypedef._dataLeaderboards._experiencePoints = Std.string(_data._experiencePoints);
+			RegTypedef._dataLeaderboards._houseCoins = Std.string(_data._houseCoins);
+			RegTypedef._dataLeaderboards._worldFlag = Std.string(_data._worldFlag);
 			
 			RegTriggers._leaderboards_show = true;
 		});

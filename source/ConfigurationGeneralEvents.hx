@@ -85,7 +85,7 @@ class ConfigurationGeneralEvents extends CID2
 	public function colorUnitsOddMinus()
 	{
 		RegCustom._gameboard_units_odd_color_number[Reg._tn][Reg._gameId] -= 1;
-		if (RegCustom._gameboard_units_odd_color_number[Reg._tn][Reg._gameId] == 0) RegCustom._gameboard_units_odd_color_number[Reg._tn][Reg._gameId] = 25;
+		if (RegCustom._gameboard_units_odd_color_number[Reg._tn][Reg._gameId] == 0) RegCustom._gameboard_units_odd_color_number[Reg._tn][Reg._gameId] = 13;
 		
 		CID2._sprite_board_game_unit_odd.color = RegCustomColors.colorToggleUnitsOdd(Reg._gameId);
 	}
@@ -94,7 +94,7 @@ class ConfigurationGeneralEvents extends CID2
 	public function colorUnitsOddPlus()
 	{
 		RegCustom._gameboard_units_odd_color_number[Reg._tn][Reg._gameId] += 1;
-		if (RegCustom._gameboard_units_odd_color_number[Reg._tn][Reg._gameId] == 26) RegCustom._gameboard_units_odd_color_number[Reg._tn][Reg._gameId] = 1;
+		if (RegCustom._gameboard_units_odd_color_number[Reg._tn][Reg._gameId] >= 14) RegCustom._gameboard_units_odd_color_number[Reg._tn][Reg._gameId] = 1;
 		
 		CID2._sprite_board_game_unit_odd.color = RegCustomColors.colorToggleUnitsOdd(Reg._gameId);
 	}	
@@ -103,7 +103,7 @@ class ConfigurationGeneralEvents extends CID2
 	public function colorUnitsEvenMinus()
 	{
 		RegCustom._gameboard_units_even_color_number[Reg._tn][Reg._gameId] -= 1;
-		if (RegCustom._gameboard_units_even_color_number[Reg._tn][Reg._gameId] == 0) RegCustom._gameboard_units_even_color_number[Reg._tn][Reg._gameId] = 25;
+		if (RegCustom._gameboard_units_even_color_number[Reg._tn][Reg._gameId] == 0) RegCustom._gameboard_units_even_color_number[Reg._tn][Reg._gameId] = 13;
 		
 		CID2._sprite_board_game_unit_even.color = RegCustomColors.colorToggleUnitsEven(Reg._gameId);
 	}
@@ -112,7 +112,7 @@ class ConfigurationGeneralEvents extends CID2
 	public function colorUnitsEvenPlus()
 	{
 		RegCustom._gameboard_units_even_color_number[Reg._tn][Reg._gameId] += 1;
-		if (RegCustom._gameboard_units_even_color_number[Reg._tn][Reg._gameId] == 26) RegCustom._gameboard_units_even_color_number[Reg._tn][Reg._gameId] = 1;
+		if (RegCustom._gameboard_units_even_color_number[Reg._tn][Reg._gameId] >= 14) RegCustom._gameboard_units_even_color_number[Reg._tn][Reg._gameId] = 1;
 		
 		CID2._sprite_board_game_unit_even.color = RegCustomColors.colorToggleUnitsEven(Reg._gameId);
 	}	
@@ -212,7 +212,7 @@ class ConfigurationGeneralEvents extends CID2
 	public function client_gradient_background_number_minus():Void
 	{
 		RegCustom._gradient_background_image_number[Reg._tn] -= 1;
-		if (RegCustom._gradient_background_image_number[Reg._tn] <= 0) RegCustom._gradient_background_image_number[Reg._tn] = 25;
+		if (RegCustom._gradient_background_image_number[Reg._tn] <= 0) RegCustom._gradient_background_image_number[Reg._tn] = 13;
 		
 		CID2._sprite_gradient_background_image.color = RegCustomColors.gradient_color();
 	}
@@ -220,7 +220,7 @@ class ConfigurationGeneralEvents extends CID2
 	public function client_gradient_background_number_plus():Void
 	{
 		RegCustom._gradient_background_image_number[Reg._tn] += 1;
-		if (RegCustom._gradient_background_image_number[Reg._tn] >= 26) RegCustom._gradient_background_image_number[Reg._tn] = 1;
+		if (RegCustom._gradient_background_image_number[Reg._tn] >= 14) RegCustom._gradient_background_image_number[Reg._tn] = 1;
 		
 		CID2._sprite_gradient_background_image.color = RegCustomColors.gradient_color();
 	}
@@ -276,7 +276,7 @@ class ConfigurationGeneralEvents extends CID2
 	public function client_background_number_minus():Void
 	{
 		RegCustom._client_background_image_number[Reg._tn] -= 1;
-		if (RegCustom._client_background_image_number[Reg._tn] <= 0) RegCustom._client_background_image_number[Reg._tn] = 25;
+		if (RegCustom._client_background_image_number[Reg._tn] <= 0) RegCustom._client_background_image_number[Reg._tn] = 13;
 		
 		CID2._sprite_client_background_image.color = RegCustomColors.color_client_background_defaults();
 	}
@@ -284,7 +284,7 @@ class ConfigurationGeneralEvents extends CID2
 	public function client_background_number_plus():Void
 	{
 		RegCustom._client_background_image_number[Reg._tn] += 1;
-		if (RegCustom._client_background_image_number[Reg._tn] >= 26) RegCustom._client_background_image_number[Reg._tn] = 1;
+		if (RegCustom._client_background_image_number[Reg._tn] >= 14) RegCustom._client_background_image_number[Reg._tn] = 1;
 		
 		CID2._sprite_client_background_image.color = RegCustomColors.color_client_background_defaults();
 	}
@@ -529,7 +529,7 @@ class ConfigurationGeneralEvents extends CID2
 	public function notation_panel_background_color_minus()
 	{
 		RegCustom._notation_panel_background_color_number[Reg._tn] -= 1;
-		if (RegCustom._notation_panel_background_color_number[Reg._tn] == 0) RegCustom._notation_panel_background_color_number[Reg._tn] = 25;
+		if (RegCustom._notation_panel_background_color_number[Reg._tn] == 0) RegCustom._notation_panel_background_color_number[Reg._tn] = 13;
 		
 		CID2._sprite_notation_panel_background_color.color = RegCustomColors.notation_panel_background_color();
 	}
@@ -537,7 +537,7 @@ class ConfigurationGeneralEvents extends CID2
 	public function notation_panel_background_color_plus()
 	{
 		RegCustom._notation_panel_background_color_number[Reg._tn] += 1;
-		if (RegCustom._notation_panel_background_color_number[Reg._tn] == 26) RegCustom._notation_panel_background_color_number[Reg._tn] = 1;
+		if (RegCustom._notation_panel_background_color_number[Reg._tn] >= 14) RegCustom._notation_panel_background_color_number[Reg._tn] = 1;
 		
 		CID2._sprite_notation_panel_background_color.color = RegCustomColors.notation_panel_background_color();
 	}	
@@ -546,7 +546,7 @@ class ConfigurationGeneralEvents extends CID2
 	public function notation_panel_text_color_minus()
 	{
 		RegCustom._notation_panel_text_color_number[Reg._tn] -= 1;
-		if (RegCustom._notation_panel_text_color_number[Reg._tn] == 0) RegCustom._notation_panel_text_color_number[Reg._tn] = 25;
+		if (RegCustom._notation_panel_text_color_number[Reg._tn] == 0) RegCustom._notation_panel_text_color_number[Reg._tn] = 13;
 		
 		CID2._sprite_notation_panel_text_color.color = RegCustomColors.notation_panel_text_color();
 	}
@@ -555,16 +555,34 @@ class ConfigurationGeneralEvents extends CID2
 	public function notation_panel_text_color_plus()
 	{
 		RegCustom._notation_panel_text_color_number[Reg._tn] += 1;
-		if (RegCustom._notation_panel_text_color_number[Reg._tn] == 26) RegCustom._notation_panel_text_color_number[Reg._tn] = 1;
+		if (RegCustom._notation_panel_text_color_number[Reg._tn] >= 14) RegCustom._notation_panel_text_color_number[Reg._tn] = 1;
 		
 		CID2._sprite_notation_panel_text_color.color = RegCustomColors.notation_panel_text_color();
 	}	
 	
+	// change the topic title text color at the main client text.
+	public function client_topic_title_text_color_minus()
+	{
+		RegCustom._client_topic_title_text_color_number[Reg._tn] -= 1;
+		if (RegCustom._client_topic_title_text_color_number[Reg._tn] == 0) RegCustom._client_topic_title_text_color_number[Reg._tn] = 13;
+		
+		CID2._sprite_client_topic_title_text_color.color = RegCustomColors.client_topic_title_text_color();
+	}
+	
+	// change the topic title text color at the main client text.
+	public function client_topic_title_text_color_plus()
+	{
+		RegCustom._client_topic_title_text_color_number[Reg._tn] += 1;
+		if (RegCustom._client_topic_title_text_color_number[Reg._tn] >= 14) RegCustom._client_topic_title_text_color_number[Reg._tn] = 1;
+		
+		CID2._sprite_client_topic_title_text_color.color = RegCustomColors.client_topic_title_text_color();
+	}
+		
 	// change the text color at the main client text.
 	public function client_text_color_minus()
 	{
 		RegCustom._client_text_color_number[Reg._tn] -= 1;
-		if (RegCustom._client_text_color_number[Reg._tn] == 0) RegCustom._client_text_color_number[Reg._tn] = 25;
+		if (RegCustom._client_text_color_number[Reg._tn] == 0) RegCustom._client_text_color_number[Reg._tn] = 13;
 		
 		CID2._sprite_client_text_color.color = RegCustomColors.client_text_color();
 	}
@@ -573,9 +591,27 @@ class ConfigurationGeneralEvents extends CID2
 	public function client_text_color_plus()
 	{
 		RegCustom._client_text_color_number[Reg._tn] += 1;
-		if (RegCustom._client_text_color_number[Reg._tn] == 26) RegCustom._client_text_color_number[Reg._tn] = 1;
+		if (RegCustom._client_text_color_number[Reg._tn] >= 14) RegCustom._client_text_color_number[Reg._tn] = 1;
 		
 		CID2._sprite_client_text_color.color = RegCustomColors.client_text_color();
+	}
+	
+	// change the text color at the title bar.
+	public function title_bar_text_color_minus()
+	{
+		RegCustom._title_bar_text_color_number[Reg._tn] -= 1;
+		if (RegCustom._title_bar_text_color_number[Reg._tn] == 0) RegCustom._title_bar_text_color_number[Reg._tn] = 13;
+		
+		CID2._sprite_title_bar_text_color.color = RegCustomColors.title_bar_text_color();
+	}
+	
+	// change the text color at the title.
+	public function title_bar_text_color_plus()
+	{
+		RegCustom._title_bar_text_color_number[Reg._tn] += 1;
+		if (RegCustom._title_bar_text_color_number[Reg._tn] >= 14) RegCustom._title_bar_text_color_number[Reg._tn] = 1;
+		
+		CID2._sprite_title_bar_text_color.color = RegCustomColors.title_bar_text_color();
 	}	
 	
 	public function capturing_units_enabled():Void
@@ -664,7 +700,7 @@ class ConfigurationGeneralEvents extends CID2
 	public function button_background_color()
 	{
 		RegCustom._button_color_number[Reg._tn] += 1;
-		if (RegCustom._button_color_number[Reg._tn] == 26) RegCustom._button_color_number[Reg._tn] = 1;
+		if (RegCustom._button_color_number[Reg._tn] >= 14) RegCustom._button_color_number[Reg._tn] = 1;
 		
 		// new button color.
 		RegCustom._button_color[Reg._tn] = RegCustomColors.button_colors();
@@ -694,7 +730,7 @@ class ConfigurationGeneralEvents extends CID2
 	public function button_border_color()
 	{
 		RegCustom._button_border_color_number[Reg._tn] += 1;
-		if (RegCustom._button_border_color_number[Reg._tn] == 26) RegCustom._button_border_color_number[Reg._tn] = 1;
+		if (RegCustom._button_border_color_number[Reg._tn] >= 14) RegCustom._button_border_color_number[Reg._tn] = 1;
 		
 		// new button color.
 		RegCustom._button_border_color[Reg._tn] = RegCustomColors.button_border_colors();
@@ -724,7 +760,7 @@ class ConfigurationGeneralEvents extends CID2
 	public function button_text_color()
 	{
 		RegCustom._button_text_color_number[Reg._tn] += 1;
-		if (RegCustom._button_text_color_number[Reg._tn] == 26) RegCustom._button_text_color_number[Reg._tn] = 1;
+		if (RegCustom._button_text_color_number[Reg._tn] >= 14) RegCustom._button_text_color_number[Reg._tn] = 1;
 		
 		// new button color.
 		RegCustom._button_text_color[Reg._tn] = RegCustomColors.button_text_colors();
@@ -771,29 +807,10 @@ class ConfigurationGeneralEvents extends CID2
 		CID2._button_sound_enabled.label.text = Std.string(RegCustom._sound_enabled[Reg._tn]);
 	}
 	
-	/******************************
-	 * changes the background that is behind the title of a scene.
-	 */
-	public function title_bar_background_enabled()
-	{
-		if (RegCustom._title_bar_background_enabled[Reg._tn] == false)
-		{
-			CID2._sprite_title_bar_background_color.visible = true;
-			RegCustom._title_bar_background_enabled[Reg._tn] = true;
-		}
-		else
-		{
-			CID2._sprite_title_bar_background_color.visible = false;
-			RegCustom._title_bar_background_enabled[Reg._tn] = false;
-		}
-			
-		CID2._button_title_bar_background_enabled.label.text = Std.string(RegCustom._title_bar_background_enabled[Reg._tn]);
-	}
-	
 	public function title_bar_background_number_minus()
 	{
 		RegCustom._title_bar_background_number[Reg._tn] -= 1;
-		if (RegCustom._title_bar_background_number[Reg._tn] == 0) RegCustom._title_bar_background_number[Reg._tn] = 25;
+		if (RegCustom._title_bar_background_number[Reg._tn] == 0) RegCustom._title_bar_background_number[Reg._tn] = 13;
 		
 		CID2._sprite_title_bar_background_color.color = RegCustomColors.title_bar_background_color();
 	}
@@ -801,7 +818,7 @@ class ConfigurationGeneralEvents extends CID2
 	public function title_bar_background_number_plus()
 	{
 		RegCustom._title_bar_background_number[Reg._tn] += 1;
-		if (RegCustom._title_bar_background_number[Reg._tn] == 26) RegCustom._title_bar_background_number[Reg._tn] = 1;
+		if (RegCustom._title_bar_background_number[Reg._tn] >= 14) RegCustom._title_bar_background_number[Reg._tn] = 1;
 		
 		CID2._sprite_title_bar_background_color.color = RegCustomColors.title_bar_background_color();
 	}
@@ -827,24 +844,6 @@ class ConfigurationGeneralEvents extends CID2
 		CID2._text_title_bar_background_brightness.text = Std.string(RegCustom._title_bar_background_brightness[Reg._tn]);
 	}
 	
-	/******************************
-	 * changes the menu bar background.
-	 */
-	public function menu_bar_background_enabled()
-	{
-		if (RegCustom._menu_bar_background_enabled[Reg._tn] == false)
-		{
-			CID2._sprite_menu_bar_background_color.visible = true;
-			RegCustom._menu_bar_background_enabled[Reg._tn] = true;
-		}
-		else
-		{
-			CID2._sprite_menu_bar_background_color.visible = false;
-			RegCustom._menu_bar_background_enabled[Reg._tn] = false;
-		}
-			
-		CID2._button_menu_bar_background_enabled.label.text = Std.string(RegCustom._menu_bar_background_enabled[Reg._tn]);
-	}
 	public function menu_bar_background_brightness_minus():Void
 	{
 		if (CID2._text_menu_bar_background_brightness.text == "0.15")
@@ -869,7 +868,7 @@ class ConfigurationGeneralEvents extends CID2
 	public function menu_bar_background_number_minus()
 	{
 		RegCustom._menu_bar_background_number[Reg._tn] -= 1;
-		if (RegCustom._menu_bar_background_number[Reg._tn] == 0) RegCustom._menu_bar_background_number[Reg._tn] = 25;
+		if (RegCustom._menu_bar_background_number[Reg._tn] == 0) RegCustom._menu_bar_background_number[Reg._tn] = 13;
 		
 		CID2._sprite_menu_bar_background_color.color = RegCustomColors.menu_bar_background_color();
 	}
@@ -877,7 +876,7 @@ class ConfigurationGeneralEvents extends CID2
 	public function menu_bar_background_number_plus()
 	{
 		RegCustom._menu_bar_background_number[Reg._tn] += 1;
-		if (RegCustom._menu_bar_background_number[Reg._tn] == 26) RegCustom._menu_bar_background_number[Reg._tn] = 1;
+		if (RegCustom._menu_bar_background_number[Reg._tn] >= 14) RegCustom._menu_bar_background_number[Reg._tn] = 1;
 		
 		CID2._sprite_menu_bar_background_color.color = RegCustomColors.menu_bar_background_color();
 	}	

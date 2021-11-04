@@ -74,14 +74,15 @@ class ConfigurationGeneral extends CID2
 		Reg._gameId = 0;
 		
 		CID2._group = cast add(new FlxSpriteGroup());
+		CID2._group.members.splice(0, CID2._group.members.length);
 		CID2._group_button.splice(0, CID2._group_button.length);
 		CID2._group_button_toggle.splice(0, CID2._group_button_toggle.length);
 		
-		var _title_sub = new FlxText(0, 100, 0, "Gameboard");
-		_title_sub.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.ORANGE);
-		_title_sub.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
-		_title_sub.screenCenter(X);
-		CID2._group.add(_title_sub);
+		var _topic_title = new FlxText(0, 100, 0, "Gameboard");
+		_topic_title.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_topic_title_text_color());
+		_topic_title.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
+		_topic_title.screenCenter(X);
+		CID2._group.add(_topic_title);
 		
 		
 		//############################# checkers and chess default board colors.
@@ -238,7 +239,9 @@ class ConfigurationGeneral extends CID2
 		notation_panel_same_background_color();
 		notation_panel_background_color();
 		notation_panel_text_color();
+		client_topic_title_text_color();
 		client_text_color();
+		title_bar_text_color();
 		gameboard_even_units_show();
 		background_alpha();
 		gradient_background();
@@ -321,7 +324,7 @@ class ConfigurationGeneral extends CID2
 		CID2._button_notation_panel_10_percent_alpha_enabled.label.font = Reg._fontDefault;
 		CID2._button_notation_panel_10_percent_alpha_enabled.label.text = Std.string(RegCustom._notation_panel_10_percent_alpha_enabled[Reg._tn]);
 		
-		CID2._group_button.push(CID2.CID2._button_notation_panel_10_percent_alpha_enabled);
+		CID2._group_button.push(CID2._button_notation_panel_10_percent_alpha_enabled);
 		CID2._group.add(CID2._group_button[_num]);
 	}
 	
@@ -349,7 +352,7 @@ class ConfigurationGeneral extends CID2
 		
 		CID2._question_notation_panel_background_color = new TextGeneral(15, CID2._button_notation_panel_same_background_color_enabled.height + CID2._button_notation_panel_same_background_color_enabled.y + CID2._offset_rows_y, 800, "Notation panel background color. This overrides all notation background preferences.", 8, true, true);
 		CID2._question_notation_panel_background_color.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
-		CID2.CID2._question_notation_panel_background_color.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
+		CID2._question_notation_panel_background_color.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		CID2._group.add(CID2._question_notation_panel_background_color);
 		
 		CID2._button_notation_panel_background_color_enabled = new ButtonGeneralNetworkNo(850, CID2._question_notation_panel_background_color.y + CID2._offset_button_y, "", 100, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, null, RegCustom._button_color[Reg._tn]);
@@ -375,7 +378,7 @@ class ConfigurationGeneral extends CID2
 		CID2._group_button.push(CID2._button_notation_panel_background_color_number_plus);
 		CID2._group.add(CID2._group_button[_num]);		
 		
-		CID2._sprite_notation_panel_background_color = new FlxSprite(CID2.CID2._button_notation_panel_background_color_number_plus.x + CID2._button_notation_panel_background_color_number_plus.width + 45, CID2._button_notation_panel_background_color_number_plus.y - 12);
+		CID2._sprite_notation_panel_background_color = new FlxSprite(CID2._button_notation_panel_background_color_number_plus.x + CID2._button_notation_panel_background_color_number_plus.width + 45, CID2._button_notation_panel_background_color_number_plus.y - 12);
 		CID2._sprite_notation_panel_background_color.loadGraphic("assets/images/capturingUnits.png", false, 75, 75);
 		CID2._sprite_notation_panel_background_color.color = RegCustomColors.notation_panel_background_color();
 		CID2._group.add(CID2._sprite_notation_panel_background_color);		
@@ -414,11 +417,41 @@ class ConfigurationGeneral extends CID2
 		
 	}
 	
+	private function client_topic_title_text_color():Void
+	{
+		_num += 1;
+		
+		 CID2._question_client_topic_title_text_color_number = new TextGeneral(15, CID2._button_notation_panel_text_color_number_minus.height + CID2._button_notation_panel_text_color_number_minus.y + CID2._offset_rows_y, 800, "Client topic title text color?");
+		CID2._question_client_topic_title_text_color_number.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
+		CID2._question_client_topic_title_text_color_number.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
+		CID2._group.add(CID2._question_client_topic_title_text_color_number);
+		
+		CID2._button_client_topic_title_text_color_number_minus = new ButtonGeneralNetworkNo(850, CID2._question_client_topic_title_text_color_number.y + CID2._offset_button_y, "-", 35, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, null, RegCustom._button_color[Reg._tn]);
+		CID2._button_client_topic_title_text_color_number_minus.label.font = Reg._fontDefault;
+	
+		CID2._group_button.push(CID2._button_client_topic_title_text_color_number_minus);
+		CID2._group.add(CID2._group_button[_num]);		
+		
+		_num += 1;
+		
+		CID2._button_client_topic_title_text_color_number_plus = new ButtonGeneralNetworkNo(CID2._button_client_topic_title_text_color_number_minus.x + CID2._button_client_topic_title_text_color_number_minus.label.fieldWidth + 15, CID2._button_client_topic_title_text_color_number_minus.y + 7, "+", 35, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, null, RegCustom._button_color[Reg._tn]);
+		CID2._button_client_topic_title_text_color_number_plus.label.font = Reg._fontDefault;
+		
+		CID2._group_button.push(CID2._button_client_topic_title_text_color_number_plus);
+		CID2._group.add(CID2._group_button[_num]);
+		
+		CID2._sprite_client_topic_title_text_color = new FlxSprite(CID2._button_client_topic_title_text_color_number_plus.x + CID2._button_client_topic_title_text_color_number_plus.width + 45, CID2._button_client_topic_title_text_color_number_plus.y - 12);
+		CID2._sprite_client_topic_title_text_color.loadGraphic("assets/images/capturingUnits.png", false, 75, 75);
+		CID2._sprite_client_topic_title_text_color.color = RegCustomColors.client_topic_title_text_color();
+		CID2._group.add(CID2._sprite_client_topic_title_text_color);
+		
+	}
+	
 	private function client_text_color():Void
 	{
 		_num += 1;
 		
-		 CID2._question_client_text_color_number = new TextGeneral(15, CID2._button_notation_panel_text_color_number_minus.height + CID2._button_notation_panel_text_color_number_minus.y + CID2._offset_rows_y, 800, "Client text color?");
+		 CID2._question_client_text_color_number = new TextGeneral(15, CID2._button_client_topic_title_text_color_number_minus.height + CID2._button_client_topic_title_text_color_number_minus.y + CID2._offset_rows_y, 800, "Client text color?");
 		CID2._question_client_text_color_number.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
 		CID2._question_client_text_color_number.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		CID2._group.add(CID2._question_client_text_color_number);
@@ -444,11 +477,41 @@ class ConfigurationGeneral extends CID2
 		
 	}
 	
+	private function title_bar_text_color():Void
+	{
+		_num += 1;
+		
+		 CID2._question_title_bar_text_color_number = new TextGeneral(15, CID2._button_client_text_color_number_minus.height + CID2._button_client_text_color_number_minus.y + CID2._offset_rows_y, 800, "Title bar text color?");
+		CID2._question_title_bar_text_color_number.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
+		CID2._question_title_bar_text_color_number.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
+		CID2._group.add(CID2._question_title_bar_text_color_number);
+		
+		CID2._button_title_bar_text_color_number_minus = new ButtonGeneralNetworkNo(850, CID2._question_title_bar_text_color_number.y + CID2._offset_button_y, "-", 35, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, null, RegCustom._button_color[Reg._tn]);
+		CID2._button_title_bar_text_color_number_minus.label.font = Reg._fontDefault;
+	
+		CID2._group_button.push(CID2._button_title_bar_text_color_number_minus);
+		CID2._group.add(CID2._group_button[_num]);		
+		
+		_num += 1;
+		
+		CID2._button_title_bar_text_color_number_plus = new ButtonGeneralNetworkNo(CID2._button_title_bar_text_color_number_minus.x + CID2._button_title_bar_text_color_number_minus.label.fieldWidth + 15, CID2._button_title_bar_text_color_number_minus.y + 7, "+", 35, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, null, RegCustom._button_color[Reg._tn]);
+		CID2._button_title_bar_text_color_number_plus.label.font = Reg._fontDefault;
+		
+		CID2._group_button.push(CID2._button_title_bar_text_color_number_plus);
+		CID2._group.add(CID2._group_button[_num]);
+		
+		CID2._sprite_title_bar_text_color = new FlxSprite(CID2._button_title_bar_text_color_number_plus.x + CID2._button_title_bar_text_color_number_plus.width + 45, CID2._button_title_bar_text_color_number_plus.y - 12);
+		CID2._sprite_title_bar_text_color.loadGraphic("assets/images/capturingUnits.png", false, 75, 75);
+		CID2._sprite_title_bar_text_color.color = RegCustomColors.title_bar_text_color();
+		CID2._group.add(CID2._sprite_title_bar_text_color);
+		
+	}
+	
 	private function gameboard_even_units_show():Void
 	{
 		_num += 1;
 		
-		var _question_gameboard_even_units_show_enabled = new TextGeneral(15, CID2._button_client_text_color_number_minus.height + CID2._button_client_text_color_number_minus.y + CID2._offset_rows_y, 800, "Show even gameboard units?");
+		var _question_gameboard_even_units_show_enabled = new TextGeneral(15, CID2._button_title_bar_text_color_number_minus.height + CID2._button_title_bar_text_color_number_minus.y + CID2._offset_rows_y, 800, "Show even gameboard units?");
 		_question_gameboard_even_units_show_enabled.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
 		_question_gameboard_even_units_show_enabled.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		CID2._group.add(_question_gameboard_even_units_show_enabled);
@@ -931,7 +994,7 @@ class ConfigurationGeneral extends CID2
 		CID2._sprite_capturing_units.color = RegCustomColors.color_capturing_units();
 		CID2._group.add(CID2._sprite_capturing_units);
 		
-		CID2._sprite_chess_path_to_king_bg = new FlxSprite(CID2._button_capturing_units_change_color_plus.x + CID2._button_capturing_units_change_color_plus.width + 45, CID2._button_capturing_units_change_color_plus.y - 13, "assets/images/dailyQuestsBorder1.png");
+		CID2._sprite_chess_path_to_king_bg = new FlxSprite(CID2._button_capturing_units_change_color_plus.x + CID2._button_capturing_units_change_color_plus.width + 45, CID2._button_capturing_units_change_color_plus.y - 13, "assets/images/border1.png");
 		CID2._group.add(CID2._sprite_chess_path_to_king_bg);
 	}
 	
@@ -1021,15 +1084,7 @@ class ConfigurationGeneral extends CID2
 		CID2._question_title_bar_background_number.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		CID2._group.add(CID2._question_title_bar_background_number);
 		
-		CID2._button_title_bar_background_enabled = new ButtonGeneralNetworkNo(850, CID2._question_title_bar_background_number.y + CID2._offset_button_y,  "", 100, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, null, RegCustom._button_color[Reg._tn]);
-		CID2._button_title_bar_background_enabled.label.font = Reg._fontDefault;
-		CID2._button_title_bar_background_enabled.label.text = Std.string(RegCustom._title_bar_background_enabled[Reg._tn]);
-		CID2._group_button.push(CID2._button_title_bar_background_enabled);
-		CID2._group.add(CID2._group_button[_num]);	
-		
-		_num += 1;
-		
-		CID2._button_title_bar_background_number_minus = new ButtonGeneralNetworkNo(CID2._button_title_bar_background_enabled.x + CID2._button_title_bar_background_enabled.label.fieldWidth + 15, CID2._button_title_bar_background_enabled.y + 7, "-", 35, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, null, RegCustom._button_color[Reg._tn]);
+		CID2._button_title_bar_background_number_minus = new ButtonGeneralNetworkNo(850, CID2._question_title_bar_background_number.y + 7, "-", 35, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, null, RegCustom._button_color[Reg._tn]);
 		CID2._button_title_bar_background_number_minus.label.font = Reg._fontDefault;
 		
 		CID2._group_button.push(CID2._button_title_bar_background_number_minus);
@@ -1053,7 +1108,7 @@ class ConfigurationGeneral extends CID2
 	{
 		_num += 1;
 		
-		CID2._question_title_bar_background_brightness = new TextGeneral(15, CID2._button_title_bar_background_enabled.height + CID2._button_title_bar_background_enabled.y + CID2._offset_rows_y, 800, "Background brightness of scene header title?");
+		CID2._question_title_bar_background_brightness = new TextGeneral(15, CID2._question_title_bar_background_number.height + CID2._question_title_bar_background_number.y + (CID2._offset_rows_y * 2) + 10, 800, "Background brightness of scene header title?");
 		CID2._question_title_bar_background_brightness.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
 		CID2._question_title_bar_background_brightness.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		CID2._group.add(CID2._question_title_bar_background_brightness);
@@ -1072,8 +1127,6 @@ class ConfigurationGeneral extends CID2
 		CID2._group_button.push(CID2._button_title_bar_background_brightness_plus);
 		CID2._group.add(CID2._group_button[_num]);
 		
-		if (RegCustom._title_bar_background_brightness[Reg._tn] == null) RegCustom._title_bar_background_brightness[Reg._tn] = 1;
-		
 		CID2._text_title_bar_background_brightness = new FlxText(CID2._button_title_bar_background_brightness_plus.x + CID2._button_title_bar_background_brightness_plus.width + 45, CID2._button_title_bar_background_brightness_plus.y - 12, 0, Std.string(RegCustom._title_bar_background_brightness[Reg._tn]), Reg._font_size);
 		CID2._text_title_bar_background_brightness.scrollFactor.set(0, 0);
 		CID2._text_title_bar_background_brightness.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
@@ -1090,15 +1143,7 @@ class ConfigurationGeneral extends CID2
 		CID2._question_menu_bar_background_number.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		CID2._group.add(CID2._question_menu_bar_background_number);
 		
-		CID2._button_menu_bar_background_enabled = new ButtonGeneralNetworkNo(850, CID2._question_menu_bar_background_number.y + CID2._offset_button_y,  "", 100, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, null, RegCustom._button_color[Reg._tn]);
-		CID2._button_menu_bar_background_enabled.label.font = Reg._fontDefault;
-		CID2._button_menu_bar_background_enabled.label.text = Std.string(RegCustom._menu_bar_background_enabled[Reg._tn]);
-		CID2._group_button.push(CID2._button_menu_bar_background_enabled);
-		CID2._group.add(CID2._group_button[_num]);	
-		
-		_num += 1;
-		
-		CID2._button_menu_bar_background_number_minus = new ButtonGeneralNetworkNo(CID2._button_menu_bar_background_enabled.x + CID2._button_menu_bar_background_enabled.label.fieldWidth + 15, CID2._button_menu_bar_background_enabled.y + 7, "-", 35, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, null, RegCustom._button_color[Reg._tn]);
+		CID2._button_menu_bar_background_number_minus = new ButtonGeneralNetworkNo(850, CID2._question_menu_bar_background_number.y + 7, "-", 35, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, null, RegCustom._button_color[Reg._tn]);
 		CID2._button_menu_bar_background_number_minus.label.font = Reg._fontDefault;
 	
 		CID2._group_button.push(CID2._button_menu_bar_background_number_minus);
@@ -1122,7 +1167,7 @@ class ConfigurationGeneral extends CID2
 	{
 		_num += 1;
 		
-		CID2._question_menu_bar_background_brightness = new TextGeneral(15, CID2._button_menu_bar_background_enabled.height + CID2._button_menu_bar_background_enabled.y + CID2._offset_rows_y, 800, "Background brightness of scene footer menu?");
+		CID2._question_menu_bar_background_brightness = new TextGeneral(15, CID2._question_menu_bar_background_number.height + CID2._question_menu_bar_background_number.y + (CID2._offset_rows_y * 2) + 10, 800, "Background brightness of scene footer menu?");
 		CID2._question_menu_bar_background_brightness.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
 		CID2._question_menu_bar_background_brightness.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		CID2._group.add(CID2._question_menu_bar_background_brightness);
@@ -1140,8 +1185,6 @@ class ConfigurationGeneral extends CID2
 		
 		CID2._group_button.push(CID2._button_menu_bar_background_brightness_plus);
 		CID2._group.add(CID2._group_button[_num]);
-		
-		if (RegCustom._menu_bar_background_brightness[Reg._tn] == null) RegCustom._menu_bar_background_brightness[Reg._tn] = 1;
 		
 		CID2._text_menu_bar_background_brightness = new FlxText(CID2._button_menu_bar_background_brightness_plus.x + CID2._button_menu_bar_background_brightness_plus.width + 45, CID2._button_menu_bar_background_brightness_plus.y - 12, 0, Std.string(RegCustom._menu_bar_background_brightness[Reg._tn]), Reg._font_size);
 		CID2._text_menu_bar_background_brightness.scrollFactor.set(0, 0);
@@ -1210,55 +1253,57 @@ class ConfigurationGeneral extends CID2
 			case 17: __e.notation_panel_background_color_plus();
 			case 18: __e.notation_panel_text_color_minus();
 			case 19: __e.notation_panel_text_color_plus();
-			case 20: __e.client_text_color_minus();
-			case 21: __e.client_text_color_plus();
-			case 22: __e.gameboard_even_units_show_enabled();
-			case 23: __e.client_background_alpha();
-			case 24: __e.client_gradient_background_enabled();
-			case 25: __e.client_gradient_background_number_minus();
-			case 26: __e.client_gradient_background_number_plus();
-			case 27: __e.client_texture_background_enabled();
-			case 28: __e.client_texture_background_number_minus();
-			case 29: __e.client_texture_background_number_plus();
-			case 30: __e.client_background_enabled();
-			case 31: __e.client_background_number_minus();
-			case 32: __e.client_background_number_plus();
-			case 33: __e.client_background_brightness_minus();
-			case 34: __e.client_background_brightness_plus();		
-			case 35: __e.client_background_saturation_minus();
-			case 36: __e.client_background_saturation_plus();		
-			case 37: __e.leaderboards_enabled();
-			case 38: __e.house_feature_enabled();
-			case 39: __e.go_back_to_title_after_save();
-			case 40: __e.automatic_game_request();
-			case 41: __e.start_game_offline_confirmation();
-			case 42: __e.accept_automatic_game_request();
-			case 43: __e.to_lobby_waiting_room_confirmation();
-			case 44: __e.to_lobby_game_room_confirmation();
-			case 45: __e.to_game_room_confirmation();
-			case 46: __e.to_title_confirmation();
-			case 47: __e.chat_turn_off_lobby();
-			case 48: __e.chat_turn_off_room();
-			case 49: __e.move_timer_enabled();
-			case 50: __e.move_total_enabled();			
-			case 51: __e.capturing_units_enabled();
-			case 52: __e.capturing_units_minus();
-			case 53: __e.capturing_units_plus();
-			case 54: __e.button_background_color();
-			case 55: __e.button_border_color();
-			case 56: __e.button_text_color();
-			case 57: __e.music_enabled();
-			case 58: __e.sound_enabled();
-			case 59: __e.title_bar_background_enabled();
-			case 60: __e.title_bar_background_number_minus();
-			case 61: __e.title_bar_background_number_plus();
-			case 62: __e.title_bar_background_brightness_minus();
-			case 63: __e.title_bar_background_brightness_plus();
-			case 64: __e.menu_bar_background_enabled();
-			case 65: __e.menu_bar_background_number_minus();
-			case 66: __e.menu_bar_background_number_plus();
-			case 67: __e.menu_bar_background_brightness_minus();
-			case 68: __e.menu_bar_background_brightness_plus();
+			case 20: __e.client_topic_title_text_color_minus();
+			case 21: __e.client_topic_title_text_color_plus();
+			case 22: __e.client_text_color_minus();
+			case 23: __e.client_text_color_plus();
+			case 24: __e.title_bar_text_color_minus();
+			case 25: __e.title_bar_text_color_plus();
+			case 26: __e.gameboard_even_units_show_enabled();
+			case 27: __e.client_background_alpha();
+			case 28: __e.client_gradient_background_enabled();
+			case 29: __e.client_gradient_background_number_minus();
+			case 30: __e.client_gradient_background_number_plus();
+			case 31: __e.client_texture_background_enabled();
+			case 32: __e.client_texture_background_number_minus();
+			case 33: __e.client_texture_background_number_plus();
+			case 34: __e.client_background_enabled();
+			case 35: __e.client_background_number_minus();
+			case 36: __e.client_background_number_plus();
+			case 37: __e.client_background_brightness_minus();
+			case 38: __e.client_background_brightness_plus();		
+			case 39: __e.client_background_saturation_minus();
+			case 40: __e.client_background_saturation_plus();		
+			case 41: __e.leaderboards_enabled();
+			case 42: __e.house_feature_enabled();
+			case 43: __e.go_back_to_title_after_save();
+			case 44: __e.automatic_game_request();
+			case 45: __e.start_game_offline_confirmation();
+			case 46: __e.accept_automatic_game_request();
+			case 47: __e.to_lobby_waiting_room_confirmation();
+			case 48: __e.to_lobby_game_room_confirmation();
+			case 49: __e.to_game_room_confirmation();
+			case 50: __e.to_title_confirmation();
+			case 51: __e.chat_turn_off_lobby();
+			case 52: __e.chat_turn_off_room();
+			case 53: __e.move_timer_enabled();
+			case 54: __e.move_total_enabled();			
+			case 55: __e.capturing_units_enabled();
+			case 56: __e.capturing_units_minus();
+			case 57: __e.capturing_units_plus();
+			case 58: __e.button_background_color();
+			case 59: __e.button_border_color();
+			case 60: __e.button_text_color();
+			case 61: __e.music_enabled();
+			case 62: __e.sound_enabled();
+			case 63: __e.title_bar_background_number_minus();
+			case 64: __e.title_bar_background_number_plus();
+			case 65: __e.title_bar_background_brightness_minus();
+			case 66: __e.title_bar_background_brightness_plus();
+			case 67: __e.menu_bar_background_number_minus();
+			case 68: __e.menu_bar_background_number_plus();
+			case 69: __e.menu_bar_background_brightness_minus();
+			case 70: __e.menu_bar_background_brightness_plus();
 		}
 	}
 		
@@ -1287,12 +1332,6 @@ class ConfigurationGeneral extends CID2
 			CID2._sprite_capturing_units.visible = false;
 			CID2._sprite_chess_path_to_king_bg.visible = false;
 		}
-		
-		if (RegCustom._title_bar_background_enabled[Reg._tn] == false)
-			CID2._sprite_title_bar_background_color.visible = false;
-			
-		if (RegCustom._menu_bar_background_enabled[Reg._tn] == false)
-			CID2._sprite_menu_bar_background_color.visible = false;
 		
 		// configuration menu. options saved.
 		if (Reg._yesNoKeyPressValueAtMessage > 0 && Reg._buttonCodeValues == "v1000")

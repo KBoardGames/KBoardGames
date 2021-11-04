@@ -892,6 +892,11 @@ typedef DataAccount =
 	 * if true then player is using the html5 client.
 	 */
 	var _guest_account: Bool;
+	
+	/******************************
+	 * This is the profile avatar image number used to display the image.
+	 */
+	var _avatarNumber:String;
 }
 
 typedef DataMisc = 
@@ -1447,6 +1452,9 @@ typedef DataLeaderboards =
 	 * total XP for all players. each XP is separated by a comma.
 	 */
 	var _experiencePoints: String;
+	
+	var _houseCoins: String;
+	var _worldFlag: String;
 }
 
 class RegTypedef
@@ -1858,6 +1866,7 @@ class RegTypedef
 		_server_blocking: false,
 		_clients_connected: 0,
 		_guest_account: false,
+		_avatarNumber: "0.png",
 	}
 	
 	/******************************
@@ -2159,6 +2168,8 @@ class RegTypedef
 		_username: "", 				// the username of the player.
 		_usernames: "",				// this holds all players in a top leaderboard list. the usernames in the list is separated with a comma.
 		_experiencePoints: "",		// total XP for all players. each XP is separated by a comma.
+		_houseCoins: "",
+		_worldFlag: "",
 	}
 	
 	public static function resetHouseData():Void

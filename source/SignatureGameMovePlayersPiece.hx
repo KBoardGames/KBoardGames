@@ -105,8 +105,8 @@ class SignatureGameMovePlayersPiece extends FlxSprite {
 					if (Reg._gamePointValueForPiece[yy][xx] - 1 == Reg._gameDiceMaximumIndex[Reg._move_number_next])
 					{
 						// display the player's piece at a different unit.
-						y = IDsCreateAndMain._gameBoard[0].y + yy * 75;
-						x = IDsCreateAndMain._gameBoard[0].x + xx * 75;
+						y = GameCreate._gameBoard[0].y + yy * 75;
+						x = GameCreate._gameBoard[0].x + xx * 75;
 						// this is used so that we can see if a player owns a unit. if the value of Reg._gameUniqueValueForPiece, its x and y, using this var, matches the player currently moving then we can do something such as buy house or pay rent. this is all done at SignatureGame.hx
 						Reg._gameYYnew2 = yy;
 						Reg._gameXXnew2 = xx;
@@ -227,8 +227,8 @@ class SignatureGameMovePlayersPiece extends FlxSprite {
 					if (Reg._gamePointValueForPiece[yy][xx] - 1 == Reg._gameDiceMaximumIndex[Reg._move_number_next])
 					{						
 						// display the player's piece at a different unit.
-						y = IDsCreateAndMain._gameBoard[0].y + yy * 75;
-						x = IDsCreateAndMain._gameBoard[0].x + xx * 75;
+						y = GameCreate._gameBoard[0].y + yy * 75;
+						x = GameCreate._gameBoard[0].x + xx * 75;
 						// this is used so that we can see if a player owns a unit. if the value of Reg._gameUniqueValueForPiece, its x and y, using this var, matches the player currently moving then we can do something such as buy house or pay rent. this is all done at SignatureGame.hx
 						Reg._gameYYnew2 = yy;
 						Reg._gameXXnew2 = xx;

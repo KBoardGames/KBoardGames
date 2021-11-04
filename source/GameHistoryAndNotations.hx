@@ -18,6 +18,10 @@
 
 package;
 
+#if tournaments
+	import myLibs.tournaments.Tournaments;
+#end
+
 /**
  * ...
  * @author kboardgames.com
@@ -286,11 +290,15 @@ class GameHistoryAndNotations extends FlxGroup
 		var _textTemp:String = ""; // used to store pieces of text. when finished the this var will be copied to _message_for_scrollable_area.text.	
 		var _letter:String = "";
 		
-		if (Tournaments._piece_move_completed == false) historyBasic();
+		#if tournaments
+			if (Tournaments._piece_move_completed == false) historyBasic();
 		
-		// not in tournament or have not yet moved game piece in tournament play.
-		if (RegTypedef._dataTournaments._move_piece == true)
-			Tournaments._piece_move_completed = true;
+			// not in tournament or have not yet moved game piece in tournament play.
+			if (RegTypedef._dataTournaments._move_piece == true)
+				Tournaments._piece_move_completed = true;
+		#else
+			historyBasic();
+		#end
 		
 		// current notation print is not a feature for the spectator watching nor for tournament play.
 		if (RegTypedef._dataPlayers._spectatorWatching == true) return;
@@ -642,13 +650,13 @@ class GameHistoryAndNotations extends FlxGroup
 			{				
 				// if scroller text is active then delete it so that another scroll text can be displayed.
 				if (_scrollingTextP1 != null) _scrollingTextP1.destroy();
-				_scrollingTextP1 = add(new ScrollingText(IDsCreateAndMain._gameBoard[0].x + 20, IDsCreateAndMain._gameBoard[0].y - 24, 260, 24, Reg._ecoOpeningsNotationsOutput, 18, 18)); // this is the scroller text.
+				_scrollingTextP1 = add(new ScrollingText(GameCreate._gameBoard[0].x + 20, GameCreate._gameBoard[0].y - 24, 260, 24, Reg._ecoOpeningsNotationsOutput, 18, 18)); // this is the scroller text.
 			}
 			
 			if (Reg._gameNotationOddEven == 1)
 			{
 				if (_scrollingTextP2 != null) _scrollingTextP2.destroy();
-				_scrollingTextP2 = add(new ScrollingText(IDsCreateAndMain._gameBoard[0].x + 300 + 20, IDsCreateAndMain._gameBoard[0].y - 24, 260, 24, Reg._ecoOpeningsNotationsOutput, 18, 18));
+				_scrollingTextP2 = add(new ScrollingText(GameCreate._gameBoard[0].x + 300 + 20, GameCreate._gameBoard[0].y - 24, 260, 24, Reg._ecoOpeningsNotationsOutput, 18, 18));
 			}
 
 

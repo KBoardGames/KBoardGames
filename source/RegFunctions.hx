@@ -494,8 +494,12 @@ class RegFunctions
 			saveFile.writeString("_notation_panel_background_color_number: " + RegCustom._notation_panel_background_color_number[Reg._tn] + "\r\n");
 			
 			saveFile.writeString("_notation_panel_text_color_number: " + RegCustom._notation_panel_text_color_number[Reg._tn] + "\r\n");
-			
+
+			saveFile.writeString("_client_topic_title_text_color_number: " + RegCustom._client_topic_title_text_color_number[Reg._tn] + "\r\n");
+						
 			saveFile.writeString("_client_text_color_number: " + RegCustom._client_text_color_number[Reg._tn] + "\r\n");
+			
+			saveFile.writeString("_title_bar_text_color_number: " + RegCustom._title_bar_text_color_number[Reg._tn] + "\r\n");
 			
 			saveFile.writeString("_profile_avatar_number1: " + RegCustom._profile_avatar_number1[Reg._tn] + "\r\n");
 			
@@ -517,6 +521,8 @@ class RegFunctions
 			saveFile.writeString("_to_title_from_game_room_confirmation: " + RegCustom._to_title_from_game_room_confirmation[Reg._tn] + "\r\n");
 			
 			saveFile.writeString("_chat_when_at_lobby_enabled: " + RegCustom._chat_when_at_lobby_enabled[Reg._tn] + "\r\n");
+			
+			saveFile.writeString("_timer_enabled: " + RegCustom._timer_enabled[Reg._tn] + "\r\n");
 			
 			saveFile.writeString("_chat_when_at_room_enabled: " + RegCustom._chat_when_at_room_enabled[Reg._tn] + "\r\n");
 			
@@ -544,9 +550,7 @@ class RegFunctions
 			
 			saveFile.writeString("_menu_bar_background_brightness: " + RegCustom._menu_bar_background_brightness[Reg._tn] + "\r\n");
 			
-			saveFile.writeString("_title_bar_background_enabled: " + RegCustom._title_bar_background_enabled[Reg._tn] + "\r\n");
-			
-			saveFile.writeString("_menu_bar_background_enabled: " + RegCustom._menu_bar_background_enabled[Reg._tn] + "\r\n");
+			saveFile.writeString("_world_flags_number: " + RegCustom._world_flags_number[Reg._tn] + "\r\n");
 			
 			saveFile.close();
 		#end
@@ -614,8 +618,8 @@ class RegFunctions
 							var _array_tmp = Std.string(data.get("_gameboard_units_odd_shade_number"));
 							var _array = _array_tmp.split(",");
 							
-							RegCustom._gameboard_units_odd_shade_number[Reg._tn][0] = Std.parseInt(_array[0]);
-							RegCustom._gameboard_units_odd_shade_number[Reg._tn][1] = Std.parseInt(_array[1]);
+							if (Std.parseInt(_array[0]) != null) RegCustom._gameboard_units_odd_shade_number[Reg._tn][0] = Std.parseInt(_array[0]);
+							if (Std.parseInt(_array[1]) != null) RegCustom._gameboard_units_odd_shade_number[Reg._tn][1] = Std.parseInt(_array[1]);
 						}
 						catch (e:Dynamic){}
 						
@@ -623,8 +627,8 @@ class RegFunctions
 						{
 							var _array_tmp = Std.string(data.get("_gameboard_units_even_shade_number"));
 							var _array = _array_tmp.split(",");
-							RegCustom._gameboard_units_even_shade_number[Reg._tn][0] = Std.parseInt(_array[0]);
-							RegCustom._gameboard_units_even_shade_number[Reg._tn][1] = Std.parseInt(_array[1]);
+							if (Std.parseInt(_array[0]) != null) RegCustom._gameboard_units_even_shade_number[Reg._tn][0] = Std.parseInt(_array[0]);
+							if (Std.parseInt(_array[1]) != null) RegCustom._gameboard_units_even_shade_number[Reg._tn][1] = Std.parseInt(_array[1]);
 						}
 						catch (e:Dynamic){}	
 						
@@ -632,8 +636,8 @@ class RegFunctions
 						{
 							var _array_tmp = Std.string(data.get("_gameboard_units_odd_color_number"));
 							var _array = _array_tmp.split(",");
-							RegCustom._gameboard_units_odd_color_number[Reg._tn][0] = Std.parseInt(_array[0]);
-							RegCustom._gameboard_units_odd_color_number[Reg._tn][1] = Std.parseInt(_array[1]);
+							if (Std.parseInt(_array[0]) != null) RegCustom._gameboard_units_odd_color_number[Reg._tn][0] = Std.parseInt(_array[0]);
+							if (Std.parseInt(_array[1]) != null) RegCustom._gameboard_units_odd_color_number[Reg._tn][1] = Std.parseInt(_array[1]);
 						}
 						catch (e:Dynamic){}
 						
@@ -641,8 +645,8 @@ class RegFunctions
 						{	
 							var _array_tmp = Std.string(data.get("_gameboard_units_even_color_number"));
 							var _array = _array_tmp.split(",");
-							RegCustom._gameboard_units_even_color_number[Reg._tn][0] = Std.parseInt(_array[0]);
-							RegCustom._gameboard_units_even_color_number[Reg._tn][1] = Std.parseInt(_array[1]);
+							if (Std.parseInt(_array[0]) != null) RegCustom._gameboard_units_even_color_number[Reg._tn][0] = Std.parseInt(_array[0]);
+							if (Std.parseInt(_array[1]) != null) RegCustom._gameboard_units_even_color_number[Reg._tn][1] = Std.parseInt(_array[1]);
 						}
 						catch (e:Dynamic){}
 						
@@ -689,7 +693,9 @@ class RegFunctions
 						
 						try
 						{
-							RegCustom._gradient_background_image_number[Reg._tn] = Std.parseInt(data.get("_gradient_background_image_number"));
+							RegCustom._gradient_background_image_number[Reg._tn] = 1;
+							
+							if (Std.parseInt(data.get("_gradient_background_image_number")) != null) RegCustom._gradient_background_image_number[Reg._tn] = Std.parseInt(data.get("_gradient_background_image_number"));
 						}
 						catch (e:Dynamic){}	
 						
@@ -703,7 +709,9 @@ class RegFunctions
 						
 						try
 						{
-							RegCustom._texture_background_image_number[Reg._tn] = Std.parseInt(data.get("_texture_background_image_number"));
+							RegCustom._texture_background_image_number[Reg._tn] = 1;
+							
+							if (Std.parseInt(data.get("_texture_background_image_number")) != null) RegCustom._texture_background_image_number[Reg._tn] = Std.parseInt(data.get("_texture_background_image_number"));
 						}
 						catch (e:Dynamic){}						
 						
@@ -717,7 +725,9 @@ class RegFunctions
 						
 						try
 						{
-							RegCustom._client_background_image_number[Reg._tn] = Std.parseInt(data.get("_client_background_image_number"));
+							RegCustom._client_background_image_number[Reg._tn] = 1;
+							
+							if (Std.parseInt(data.get("_client_background_image_number")) != null) RegCustom._client_background_image_number[Reg._tn] = Std.parseInt(data.get("_client_background_image_number"));
 						}
 						catch (e:Dynamic){}	
 						
@@ -738,8 +748,10 @@ class RegFunctions
 						catch (e:Dynamic){}
 						
 						try
-						{	
-							RegCustom._capturing_units_number[Reg._tn] = Std.parseInt(data.get("_capturing_units_number"));
+						{
+							RegCustom._capturing_units_number[Reg._tn] = 1;
+							
+							if (Std.parseInt(data.get("_capturing_units_number")) != null) RegCustom._capturing_units_number[Reg._tn] = Std.parseInt(data.get("_capturing_units_number"));
 						}
 						catch (e:Dynamic){}
 						
@@ -760,8 +772,10 @@ class RegFunctions
 						catch (e:Dynamic){}
 						
 						try
-						{	
-							RegCustom._chess_future_capturing_units_number[Reg._tn] = Std.parseInt(data.get("_chess_future_capturing_units_number"));
+						{
+							RegCustom._chess_future_capturing_units_number[Reg._tn] = 1;
+							
+							if (Std.parseInt(data.get("_chess_future_capturing_units_number")) != null) RegCustom._chess_future_capturing_units_number[Reg._tn] = Std.parseInt(data.get("_chess_future_capturing_units_number"));
 						}
 						catch (e:Dynamic){}	
 						
@@ -775,31 +789,41 @@ class RegFunctions
 						
 						try
 						{
-							RegCustom._chess_path_to_king_number[Reg._tn] = Std.parseInt(data.get("_chess_path_to_king_number"));
+							RegCustom._chess_path_to_king_number[Reg._tn] = 1;
+							
+							if (Std.parseInt(data.get("_chess_path_to_king_number")) != null) RegCustom._chess_path_to_king_number[Reg._tn] = Std.parseInt(data.get("_chess_path_to_king_number"));
 						}
 						catch (e:Dynamic){}	
 						
 						try
 						{
-							RegCustom._chess_set_for_player1[Reg._tn] = Std.parseInt(data.get("_chess_set_for_player1"));
+							RegCustom._chess_set_for_player1[Reg._tn] = 1;
+							
+							if (Std.parseInt(data.get("_chess_set_for_player1")) != null) RegCustom._chess_set_for_player1[Reg._tn] = Std.parseInt(data.get("_chess_set_for_player1"));
 						}
 						catch (e:Dynamic){}	
 						
 						try
 						{
-							RegCustom._chess_set_for_player2[Reg._tn] = Std.parseInt(data.get("_chess_set_for_player2"));
+							RegCustom._chess_set_for_player2[Reg._tn] = 1;
+							
+							if (Std.parseInt(data.get("_chess_set_for_player2")) != null) RegCustom._chess_set_for_player2[Reg._tn] = Std.parseInt(data.get("_chess_set_for_player2"));
 						}
 						catch (e:Dynamic){}	
 						
 						try
 						{
-							RegCustom._chess_set_for_player1_color_number[Reg._tn] = Std.parseInt(data.get("_chess_set_for_player1_color_number"));
+							RegCustom._chess_set_for_player1_color_number[Reg._tn] = 1;
+							
+							if (Std.parseInt(data.get("_chess_set_for_player1_color_number")) != null) RegCustom._chess_set_for_player1_color_number[Reg._tn] = Std.parseInt(data.get("_chess_set_for_player1_color_number"));
 						}
 						catch (e:Dynamic){}	
 						
 						try
 						{
-							RegCustom._chess_set_for_player2_color_number[Reg._tn] = Std.parseInt(data.get("_chess_set_for_player2_color_number"));
+							RegCustom._chess_set_for_player2_color_number[Reg._tn] = 1;
+							
+							if (Std.parseInt(data.get("_chess_set_for_player2_color_number")) != null) RegCustom._chess_set_for_player2_color_number[Reg._tn] = Std.parseInt(data.get("_chess_set_for_player2_color_number"));
 						}
 						catch (e:Dynamic){}	
 						
@@ -821,31 +845,38 @@ class RegFunctions
 						
 						try
 						{
-							RegCustom._client_background_brightness[Reg._tn] = Std.parseFloat(Std.string(data.get("_client_background_brightness")));
+							RegCustom._client_background_brightness[Reg._tn] = 1; 
+							if (Std.string(data.get("_client_background_brightness")) != "") RegCustom._client_background_brightness[Reg._tn] = Std.parseFloat(Std.string(data.get("_client_background_brightness")));
 						}
 						catch (e:Dynamic){}		
 						
 						try
 						{
-							RegCustom._client_background_saturation[Reg._tn] = Std.parseFloat(Std.string(data.get("_client_background_saturation")));
+							RegCustom._client_background_saturation[Reg._tn] = 1;
+							if (Std.string(data.get("_client_background_saturation")) != "") RegCustom._client_background_saturation[Reg._tn] = Std.parseFloat(Std.string(data.get("_client_background_saturation")));
 						}
 						catch (e:Dynamic){}	
 						
 						try
 						{
-							RegCustom._button_color_number[Reg._tn] = Std.parseInt(data.get("_button_color_number"));
+							RegCustom._button_color_number[Reg._tn] = 1;
+							
+							if (Std.parseInt(data.get("_button_color_number")) != null) RegCustom._button_color_number[Reg._tn] = Std.parseInt(data.get("_button_color_number"));
 						}
 						catch (e:Dynamic){}
 						
 						try
-						{	
-							RegCustom._button_border_color_number[Reg._tn] = Std.parseInt(data.get("_button_border_color_number"));
+						{
+							RegCustom._button_border_color_number[Reg._tn] = 1;
+							if (Std.parseInt(data.get("_button_border_color_number")) != null) RegCustom._button_border_color_number[Reg._tn] = Std.parseInt(data.get("_button_border_color_number"));
 						}
 						catch (e:Dynamic){}
 						
 						try
-						{	
-							RegCustom._button_text_color_number[Reg._tn] = Std.parseInt(data.get("_button_text_color_number"));
+						{
+							RegCustom._button_text_color_number[Reg._tn] = 1;
+							
+							if (Std.parseInt(data.get("_button_text_color_number")) != null) RegCustom._button_text_color_number[Reg._tn] = Std.parseInt(data.get("_button_text_color_number"));
 						}
 						catch (e:Dynamic){}
 						
@@ -898,44 +929,74 @@ class RegFunctions
 						catch (e:Dynamic){}
 						
 						try
-						{	
-							RegCustom._notation_panel_background_color_number[Reg._tn] = Std.parseInt(data.get("_notation_panel_background_color_number"));
+						{
+							RegCustom._notation_panel_background_color_number[Reg._tn] = 1;
+							
+							if (Std.parseInt(data.get("_notation_panel_background_color_number")) != null) RegCustom._notation_panel_background_color_number[Reg._tn] = Std.parseInt(data.get("_notation_panel_background_color_number"));
+						}
+						catch (e:Dynamic){}
+						
+						try
+						{
+							RegCustom._notation_panel_text_color_number[Reg._tn] = 1;
+							
+							if (Std.parseInt(data.get("_notation_panel_text_color_number")) != null) RegCustom._notation_panel_text_color_number[Reg._tn] = Std.parseInt(data.get("_notation_panel_text_color_number"));
+						}
+						catch (e:Dynamic){}
+						
+						try
+						{
+							RegCustom._client_topic_title_text_color_number[Reg._tn] = 1;
+							
+							if (Std.parseInt(data.get("_client_topic_title_text_color_number")) != null) RegCustom._client_topic_title_text_color_number[Reg._tn] = Std.parseInt(data.get("_client_topic_title_text_color_number"));
+						}
+						catch (e:Dynamic){}						
+						
+						try
+						{
+							RegCustom._client_text_color_number[Reg._tn] = 1;
+							
+							if (Std.parseInt(data.get("_client_text_color_number")) != null) RegCustom._client_text_color_number[Reg._tn] = Std.parseInt(data.get("_client_text_color_number"));
+						}
+						catch (e:Dynamic){}
+						
+						try
+						{
+							RegCustom._title_bar_text_color_number[Reg._tn] = 1;
+							
+							if (Std.parseInt(data.get("_title_bar_text_color_number")) != null) RegCustom._title_bar_text_color_number[Reg._tn] = Std.parseInt(data.get("_title_bar_text_color_number"));
+						}
+						catch (e:Dynamic){}
+						
+						try
+						{
+							RegCustom._profile_avatar_number1[Reg._tn] = "0.png";
+							
+							if (Std.string(data.get("_profile_avatar_number1")) != "") RegCustom._profile_avatar_number1[Reg._tn] = Std.string(data.get("_profile_avatar_number1"));
 						}
 						catch (e:Dynamic){}
 						
 						try
 						{	
-							RegCustom._notation_panel_text_color_number[Reg._tn] = Std.parseInt(data.get("_notation_panel_text_color_number"));
+							RegCustom._profile_avatar_number2[Reg._tn] = "0.png";
+							
+							if (Std.string(data.get("_profile_avatar_number2")) != "") RegCustom._profile_avatar_number2[Reg._tn] = Std.string(data.get("_profile_avatar_number2"));
 						}
 						catch (e:Dynamic){}
 						
 						try
-						{	
-							RegCustom._client_text_color_number[Reg._tn] = Std.parseInt(data.get("_client_text_color_number"));
+						{
+							RegCustom._profile_avatar_number3[Reg._tn] = "0.png";
+							
+							if (Std.string(data.get("_profile_avatar_number3")) != "") RegCustom._profile_avatar_number3[Reg._tn] = Std.string(data.get("_profile_avatar_number3"));
 						}
 						catch (e:Dynamic){}
 						
 						try
-						{	
-							RegCustom._profile_avatar_number1[Reg._tn] = Std.string(data.get("_profile_avatar_number1"));
-						}
-						catch (e:Dynamic){}
-						
-						try
-						{	
-							RegCustom._profile_avatar_number2[Reg._tn] = Std.string(data.get("_profile_avatar_number2"));
-						}
-						catch (e:Dynamic){}
-						
-						try
-						{	
-							RegCustom._profile_avatar_number3[Reg._tn] = Std.string(data.get("_profile_avatar_number3"));
-						}
-						catch (e:Dynamic){}
-						
-						try
-						{	
-							RegCustom._profile_avatar_number4[Reg._tn] = Std.string(data.get("_profile_avatar_number4"));
+						{
+							RegCustom._profile_avatar_number4[Reg._tn] = "0.png";
+							
+							if (Std.string(data.get("_profile_avatar_number4")) != "") RegCustom._profile_avatar_number4[Reg._tn] = Std.string(data.get("_profile_avatar_number4"));
 						}
 						catch (e:Dynamic){}
 						
@@ -1005,6 +1066,14 @@ class RegFunctions
 						
 						try
 						{	
+							var _tmp = Std.string(data.get("_timer_enabled"));
+							RegCustom._timer_enabled[Reg._tn] = false;
+							if (_tmp == "true") RegCustom._timer_enabled[Reg._tn] = true;
+						}
+						catch (e:Dynamic){}
+						
+						try
+						{	
 							var _tmp = Std.string(data.get("_chat_when_at_room_enabled"));
 							RegCustom._chat_when_at_room_enabled[Reg._tn] = false;
 							if (_tmp == "true") RegCustom._chat_when_at_room_enabled[Reg._tn] = true;
@@ -1056,55 +1125,54 @@ class RegFunctions
 							var _array_tmp = Std.string(data.get("_time_remaining_for_game"));
 							var _array = _array_tmp.split(",");
 							
-							RegCustom._time_remaining_for_game[Reg._tn][0] = Std.parseInt(_array[0]);
-							RegCustom._time_remaining_for_game[Reg._tn][1] = Std.parseInt(_array[1]);
-							RegCustom._time_remaining_for_game[Reg._tn][2] = Std.parseInt(_array[2]);
-							RegCustom._time_remaining_for_game[Reg._tn][3] = Std.parseInt(_array[3]);
-							RegCustom._time_remaining_for_game[Reg._tn][4] = Std.parseInt(_array[4]);
-						}
-						catch (e:Dynamic){}
-						
-						try
-						{	
-							RegCustom._title_bar_background_number[Reg._tn] = Std.parseInt(data.get("_title_bar_background_number"));
-						}
-						catch (e:Dynamic){}
-						
-						try
-						{	
-							RegCustom._menu_bar_background_number[Reg._tn] = Std.parseInt(data.get("_menu_bar_background_number"));
-						}
-						catch (e:Dynamic){}
-						
-						try
-						{	
-							RegCustom._title_bar_background_brightness[Reg._tn] = Std.parseFloat(data.get("_title_bar_background_brightness"));
-						}
-						catch (e:Dynamic){}
-						
-						try
-						{	
-							RegCustom._menu_bar_background_brightness[Reg._tn] = Std.parseFloat(data.get("_menu_bar_background_brightness"));
+							if (Std.parseInt(_array[0]) != null) RegCustom._time_remaining_for_game[Reg._tn][0] = Std.parseInt(_array[0]);
+							if (Std.parseInt(_array[1]) != null) RegCustom._time_remaining_for_game[Reg._tn][1] = Std.parseInt(_array[1]);
+							if (Std.parseInt(_array[2]) != null) RegCustom._time_remaining_for_game[Reg._tn][2] = Std.parseInt(_array[2]);
+							if (Std.parseInt(_array[3]) != null) RegCustom._time_remaining_for_game[Reg._tn][3] = Std.parseInt(_array[3]);
+							if (Std.parseInt(_array[4]) != null) RegCustom._time_remaining_for_game[Reg._tn][4] = Std.parseInt(_array[4]);
 						}
 						catch (e:Dynamic){}
 						
 						try
 						{
-							var _tmp = Std.string(data.get("_title_bar_background_enabled"));
-							RegCustom._title_bar_background_enabled[Reg._tn] = false;
-							if (_tmp == "true") RegCustom._title_bar_background_enabled[Reg._tn] = true;
+							RegCustom._title_bar_background_number[Reg._tn] = 1;
+							
+							if (Std.parseInt(data.get("_title_bar_background_number")) != null) RegCustom._title_bar_background_number[Reg._tn] = Std.parseInt(data.get("_title_bar_background_number"));
 						}
 						catch (e:Dynamic){}
 						
 						try
 						{
-							var _tmp = Std.string(data.get("_menu_bar_background_enabled"));
-							RegCustom._menu_bar_background_enabled[Reg._tn] = false;
-							if (_tmp == "true") RegCustom._menu_bar_background_enabled[Reg._tn] = true;
+							RegCustom._menu_bar_background_number[Reg._tn] = 1;
+							
+							if (Std.parseInt(data.get("_menu_bar_background_number")) != null) RegCustom._menu_bar_background_number[Reg._tn] = Std.parseInt(data.get("_menu_bar_background_number"));
 						}
 						catch (e:Dynamic){}
 						
-					} 				
+						try
+						{	
+							RegCustom._title_bar_background_brightness[Reg._tn] = 1;
+							
+							if (Std.string(data.get("_title_bar_background_brightness")) != "") RegCustom._title_bar_background_brightness[Reg._tn] = Std.parseFloat(Std.string(data.get("_title_bar_background_brightness")));
+						}
+						catch (e:Dynamic){}
+						
+						try
+						{	
+							RegCustom._menu_bar_background_brightness[Reg._tn] = 1; 
+							
+							if (Std.string(data.get("_menu_bar_background_brightness")) != "") RegCustom._menu_bar_background_brightness[Reg._tn] = Std.parseFloat(Std.string(data.get("_menu_bar_background_brightness")));
+						}
+						catch (e:Dynamic){}
+						
+						try
+						{
+							RegCustom._world_flags_number[Reg._tn] = 0;
+							
+							if (Std.parseInt(data.get("_world_flags_number")) != null) RegCustom._world_flags_number[Reg._tn] = Std.parseInt(data.get("_world_flags_number"));
+						}
+						catch (e:Dynamic){}
+					}
 					
 				}			
 			} 
@@ -1128,6 +1196,7 @@ class RegFunctions
 			if (Reg._tn + 1 > RegCustom._theme_name.length)
 				Reg._tn = 0;
 		#end
+		
 	}
   	
 	// the values of this function will be changed when after the next theme is read from the themes folder. this function only pushes the array so that the theme can populate these vars.
@@ -1138,7 +1207,7 @@ class RegFunctions
 		RegCustom._gameboard_units_odd_shade_number.push([6, 3]);
 		RegCustom._gameboard_units_even_shade_number.push([9, 2]);
 		RegCustom._gameboard_units_odd_color_number.push([3, 13]);
-		RegCustom._gameboard_units_even_color_number.push([21, 8]);
+		RegCustom._gameboard_units_even_color_number.push([1, 8]);
 		RegCustom._username_suggestions_enabled.push(true);
 		RegCustom._gameboard_border_number.push(5);		
 		RegCustom._gameboard_border_enabled.push(true);		
@@ -1164,7 +1233,7 @@ class RegFunctions
 		RegCustom._chess_set_for_player2_color_number.push(1);
 		RegCustom._chess_opening_moves_enabled.push(true);	
 		RegCustom._chess_computer_thinking_enabled.push(true);
-		RegCustom._client_background_brightness.push(0.45);
+		RegCustom._client_background_brightness.push(0.5);
 		RegCustom._client_background_saturation.push(1);		
 		RegCustom._button_color_number.push(2);
 		RegCustom._button_border_color_number.push(3);
@@ -1177,7 +1246,9 @@ class RegFunctions
 		RegCustom._notation_panel_background_color_enabled.push(true);
 		RegCustom._notation_panel_background_color_number.push(10);
 		RegCustom._notation_panel_text_color_number.push(1);
+		RegCustom._client_topic_title_text_color_number.push(1);		
 		RegCustom._client_text_color_number.push(1);
+		RegCustom._title_bar_text_color_number.push(1);		
 		RegCustom._profile_avatar_number1.push("0.png");
 		RegCustom._profile_avatar_number2.push("0.png");
 		RegCustom._profile_avatar_number3.push("0.png");
@@ -1189,6 +1260,7 @@ class RegFunctions
 		RegCustom._to_game_room_from_waiting_room_confirmation.push(true);
 		RegCustom._to_title_from_game_room_confirmation.push(true);
 		RegCustom._chat_when_at_lobby_enabled.push(true);
+		RegCustom._timer_enabled.push(true);		
 		RegCustom._chat_when_at_room_enabled.push(true);
 		RegCustom._move_total_enabled.push(true);
 		RegCustom._notation_panel_enabled.push(true);
@@ -1198,10 +1270,9 @@ class RegFunctions
 		RegCustom._time_remaining_for_game.push([15, 15, 15, 15, 30]);
 		RegCustom._title_bar_background_number.push(1);
 		RegCustom._menu_bar_background_number.push(1);
-		RegCustom._title_bar_background_brightness.push(0.6);
-		RegCustom._menu_bar_background_brightness.push(0.6);
-		RegCustom._title_bar_background_enabled.push(false);
-		RegCustom._menu_bar_background_enabled.push(true);
+		RegCustom._title_bar_background_brightness.push(0.5);
+		RegCustom._menu_bar_background_brightness.push(0.5);
+		RegCustom._world_flags_number.push(0);
 		
 	}
 	
@@ -1222,223 +1293,10 @@ class RegFunctions
 			for (i in 0... Reg._tn + 1)
 			{
 				gameMenu_arrays();				
-				
-				if (_gameMenu.data._profile_username_p1 != null)
-					RegCustom._profile_username_p1[Reg._tn] = _gameMenu.data._profile_username_p1;
-					
-				if (_gameMenu.data._profile_username_p2 != null)
-					RegCustom._profile_username_p2[Reg._tn] = _gameMenu.data._profile_username_p2;
 					
 				if (_gameMenu.data._theme_name_current != null)
 					RegCustom._theme_name_current = _gameMenu.data._theme_name_current;
-				
-				if (_gameMenu.data._username_suggestions_enabled != null)
-					RegCustom._username_suggestions_enabled[Reg._tn] = _gameMenu.data._username_suggestions_enabled;				
-				
-				if (_gameMenu.data._gameboard_border_number != null)
-				{
-					for (i in 0...2)
-					{
-						if ( _gameMenu.data._gameboard_units_odd_shade_number[i] != null) RegCustom._gameboard_units_odd_shade_number[Reg._tn][i] = _gameMenu.data._gameboard_units_odd_shade_number[i];
-					
-						if ( _gameMenu.data._gameboard_units_even_shade_number[i] != null) RegCustom._gameboard_units_even_shade_number[Reg._tn][i] = _gameMenu.data._gameboard_units_even_shade_number[i];
-						
-						if ( _gameMenu.data._gameboard_units_odd_color_number[i] != null) RegCustom._gameboard_units_odd_color_number[Reg._tn][i] = _gameMenu.data._gameboard_units_odd_color_number[i];
-							
-						if ( _gameMenu.data._gameboard_units_even_color_number[i] != null) RegCustom._gameboard_units_even_color_number[Reg._tn][i] = _gameMenu.data._gameboard_units_even_color_number[i];
-					}
-				}
-				
-				if (_gameMenu.data._gameboard_border_number != null)
-					RegCustom._gameboard_border_number[Reg._tn] = _gameMenu.data._gameboard_border_number;
-				
-				
-				if (_gameMenu.data._gameboard_border_enabled != null)
-					RegCustom._gameboard_border_enabled[Reg._tn] = _gameMenu.data._gameboard_border_enabled;
-			
-				if (_gameMenu.data._gameboard_coordinates_enabled != null)
-					RegCustom._gameboard_coordinates_enabled[Reg._tn] = _gameMenu.data._gameboard_coordinates_enabled;
-					
-				if (_gameMenu.data._leaderboard_enabled != null)
-					RegCustom._leaderboard_enabled[Reg._tn] = _gameMenu.data._leaderboard_enabled;
-					
-				if (_gameMenu.data._profile_avatar_number1 != null)
-					RegCustom._profile_avatar_number1[Reg._tn] = _gameMenu.data._profile_avatar_number1;
-					
-				if (_gameMenu.data._profile_avatar_number2 != null)
-					RegCustom._profile_avatar_number2[Reg._tn] = _gameMenu.data._profile_avatar_number2;
-				
-				if (_gameMenu.data._house_feature_enabled != null)
-					RegCustom._house_feature_enabled[Reg._tn] = _gameMenu.data._house_feature_enabled;
-				
-				if (_gameMenu.data.go_back_to_title_after_save != null)
-					RegCustom._go_back_to_title_after_save[Reg._tn] = _gameMenu.data.go_back_to_title_after_save;
-				
-				if (_gameMenu.data._send_automatic_start_game_request != null)
-					RegCustom._send_automatic_start_game_request[Reg._tn] = _gameMenu.data._send_automatic_start_game_request;
-					
-				if (_gameMenu.data._accept_automatic_start_game_request != null)
-					RegCustom._accept_automatic_start_game_request[Reg._tn] = _gameMenu.data._accept_automatic_start_game_request;
-					
-				if (_gameMenu.data._start_game_offline_confirmation != null)
-					RegCustom._start_game_offline_confirmation[Reg._tn] = _gameMenu.data._start_game_offline_confirmation;
-					
-				// user is at waiting room.
-				if (_gameMenu.data._to_lobby_from_waiting_room_confirmation != null)
-					RegCustom._to_lobby_from_waiting_room_confirmation[Reg._tn] = _gameMenu.data._to_lobby_from_waiting_room_confirmation;
-					
-				if (_gameMenu.data._to_lobby_from_game_room_confirmation != null)
-					RegCustom._to_lobby_from_game_room_confirmation[Reg._tn] = _gameMenu.data._to_lobby_from_game_room_confirmation;	
-				
-				if (_gameMenu.data._to_game_room_from_waiting_room_confirmation != null)
-					RegCustom._to_game_room_from_waiting_room_confirmation[Reg._tn] = _gameMenu.data._to_game_room_from_waiting_room_confirmation;
-				
-				if (_gameMenu.data._to_title_from_game_room_confirmation != null)
-					RegCustom._to_title_from_game_room_confirmation[Reg._tn] = _gameMenu.data._to_title_from_game_room_confirmation;
-					
-				if (_gameMenu.data._chat_when_at_lobby_enabled != null)
-					RegCustom._chat_when_at_lobby_enabled[Reg._tn] = _gameMenu.data._chat_when_at_lobby_enabled;
-				
-				if (_gameMenu.data._chat_when_at_room_enabled != null)
-					RegCustom._chat_when_at_room_enabled[Reg._tn] = _gameMenu.data._chat_when_at_room_enabled;
-				
-				if (_gameMenu.data._timer_enabled != null)
-					RegCustom._timer_enabled[Reg._tn] = _gameMenu.data._timer_enabled;
-				if (_gameMenu.data._move_total_enabled != null)
-					RegCustom._move_total_enabled[Reg._tn] = _gameMenu.data._move_total_enabled;
-				
-				if (_gameMenu.data._notation_panel_enabled != null)
-					RegCustom._notation_panel_enabled[Reg._tn] = _gameMenu.data._notation_panel_enabled;
-				
-				if (_gameMenu.data._chess_opening_moves_enabled != null)
-					RegCustom._chess_opening_moves_enabled[Reg._tn] = _gameMenu.data._chess_opening_moves_enabled;
-				
-				if (_gameMenu.data._capturing_units != null)
-					RegCustom._capturing_units[Reg._tn] = _gameMenu.data._capturing_units;	
-					
-				if (_gameMenu.data._capturing_units_number != null)
-					RegCustom._capturing_units_number[Reg._tn] = _gameMenu.data._capturing_units_number;	
-				
-				if (_gameMenu.data._chess_show_last_piece_moved != null)
-					RegCustom._chess_show_last_piece_moved[Reg._tn] = _gameMenu.data._chess_show_last_piece_moved;
-				
-				if (_gameMenu.data._chess_computer_thinking_enabled != null)
-					RegCustom._chess_computer_thinking_enabled[Reg._tn] = _gameMenu.data._chess_computer_thinking_enabled;
-				
-				if (_gameMenu.data._chess_future_capturing_units_enabled != null)
-					RegCustom._chess_future_capturing_units_enabled[Reg._tn] = _gameMenu.data._chess_future_capturing_units_enabled;
-								
-				if (_gameMenu.data._chess_future_capturing_units_number != null)
-					RegCustom._chess_future_capturing_units_number[Reg._tn] = _gameMenu.data._chess_future_capturing_units_number;
-				
-				if (_gameMenu.data._chess_path_to_king_enabled != null)
-					RegCustom._chess_path_to_king_enabled[Reg._tn] = _gameMenu.data._chess_path_to_king_enabled;			
-					
-				if (_gameMenu.data._chess_path_to_king_number != null)
-					RegCustom._chess_path_to_king_number[Reg._tn] = _gameMenu.data._chess_path_to_king_number;	
-				
-				if (_gameMenu.data._notation_panel_10_percent_alpha_enabled != null)
-					RegCustom._notation_panel_10_percent_alpha_enabled[Reg._tn] = _gameMenu.data._notation_panel_10_percent_alpha_enabled;
-					
-				if (_gameMenu.data._notation_panel_same_background_color_enabled != null)
-					RegCustom._notation_panel_same_background_color_enabled[Reg._tn] = _gameMenu.data._notation_panel_same_background_color_enabled;
-				
-				if (_gameMenu.data._notation_panel_background_color_enabled != null)
-					RegCustom._notation_panel_background_color_enabled[Reg._tn] = _gameMenu.data._notation_panel_background_color_enabled;
-					
-				if (_gameMenu.data._notation_panel_background_color_number != null)
-					RegCustom._notation_panel_background_color_number[Reg._tn] = _gameMenu.data._notation_panel_background_color_number;
-					
-				if (_gameMenu.data._notation_panel_text_color_number != null)
-					RegCustom._notation_panel_text_color_number[Reg._tn] = _gameMenu.data._notation_panel_text_color_number;
-					
-				if (_gameMenu.data._client_text_color_number != null)
-					RegCustom._client_text_color_number[Reg._tn] = _gameMenu.data._client_text_color_number;
-					
-				if (_gameMenu.data._gameboard_even_units_show_enabled != null)
-					RegCustom._gameboard_even_units_show_enabled[Reg._tn] = _gameMenu.data._gameboard_even_units_show_enabled;
-				
-				if (_gameMenu.data._gradient_background_image_number != null)
-					RegCustom._gradient_background_image_number[Reg._tn] = _gameMenu.data._gradient_background_image_number;
-					
-				if (_gameMenu.data._gradient_background_enabled != null)
-					RegCustom._gradient_background_enabled[Reg._tn] = _gameMenu.data._gradient_background_enabled;
-				
-				if (_gameMenu.data._texture_background_image_number != null)
-					RegCustom._texture_background_image_number[Reg._tn] = _gameMenu.data._texture_background_image_number;
-					
-				if (_gameMenu.data._texture_background_enabled != null)
-					RegCustom._texture_background_enabled[Reg._tn] = _gameMenu.data._texture_background_enabled;
-				
-				if (_gameMenu.data._client_background_image_number != null)
-					RegCustom._client_background_image_number[Reg._tn] = _gameMenu.data._client_background_image_number;
-					
-				if (_gameMenu.data._client_background_enabled != null)
-					RegCustom._client_background_enabled[Reg._tn] = _gameMenu.data._client_background_enabled;
-					
-				if (_gameMenu.data._background_alpha_enabled != null)
-					RegCustom._background_alpha_enabled[Reg._tn] = _gameMenu.data._background_alpha_enabled;
-				
-				if (_gameMenu.data._chess_set_for_player1 != null)
-					RegCustom._chess_set_for_player1[Reg._tn] = _gameMenu.data._chess_set_for_player1;
-				
-				if (_gameMenu.data._chess_set_for_player2 != null)
-					RegCustom._chess_set_for_player2[Reg._tn] = _gameMenu.data._chess_set_for_player2;
-				
-				if (_gameMenu.data._chess_set_for_player1_color_number != null)
-					RegCustom._chess_set_for_player1_color_number[Reg._tn] = _gameMenu.data._chess_set_for_player1_color_number;
-					
-				if (_gameMenu.data._chess_set_for_player2_color_number != null)
-					RegCustom._chess_set_for_player2_color_number[Reg._tn] = _gameMenu.data._chess_set_for_player2_color_number;
-				
-				if (_gameMenu.data._client_background_brightness != null)
-					RegCustom._client_background_brightness[Reg._tn] = _gameMenu.data._client_background_brightness;
-				
-				if (_gameMenu.data._client_background_saturation != null)
-					RegCustom._client_background_saturation[Reg._tn] = _gameMenu.data._client_background_saturation;
-				
-				if (_gameMenu.data._button_color_number != null) 
-				{
-					RegCustom._button_color_number[Reg._tn] = _gameMenu.data._button_color_number;
-					RegCustom._button_color[Reg._tn] = RegCustomColors.button_colors();
-				}
-							
-				if (_gameMenu.data._button_border_color_number != null)
-				{
-					RegCustom._button_border_color_number[Reg._tn] = _gameMenu.data._button_border_color_number;
-					RegCustom._button_border_color[Reg._tn] = RegCustomColors.button_border_colors();
-				}			
-				
-				if (_gameMenu.data._button_text_color_number != null)
-				{
-					RegCustom._button_text_color_number[Reg._tn] = _gameMenu.data._button_text_color_number;
-					RegCustom._button_text_color[Reg._tn] = RegCustomColors.button_text_colors();
-				}
-					
-				if (_gameMenu.data._profile_username_p1 != null)
-				{
-					RegCustom._profile_username_p1[Reg._tn] = _gameMenu.data._profile_username_p1;
-					
-					if (RegCustom._profile_username_p1[Reg._tn] == "") RegCustom._profile_username_p1[Reg._tn] = "Guest 1";
-				}
-					
-				if (_gameMenu.data._profile_username_p2 != null)
-				{
-					RegCustom._profile_username_p2[Reg._tn] = _gameMenu.data._profile_username_p2;
-					
-					if (RegCustom._profile_username_p2[Reg._tn] == "") RegCustom._profile_username_p2[Reg._tn] = "Guest 2";
-				}		
-				
-				if (_gameMenu.data._time_remaining_for_game != null)
-				{
-					for (i in 0...5)
-					{
-						if (_gameMenu.data._time_remaining_for_game[i] != null)
-							RegCustom._time_remaining_for_game[Reg._tn][i] = _gameMenu.data._time_remaining_for_game[i];
-					}
-					
-				}
-				
+
 				if (_gameMenu.data._chess_skill_level_online != null
 				&&  Reg._game_offline_vs_player == false
 				&&  Reg._game_offline_vs_cpu == false
@@ -1448,17 +1306,6 @@ class RegFunctions
 					RegCustom._chess_skill_level_online = _gameMenu.data._chess_skill_level_online;
 				}
 				
-				if (_gameMenu.data._title_bar_background_number != null) RegCustom._title_bar_background_number[Reg._tn] = _gameMenu.data._title_bar_background_number;
-				
-				if (_gameMenu.data._menu_bar_background_number != null) RegCustom._menu_bar_background_number[Reg._tn] = _gameMenu.data._menu_bar_background_number;
-				
-				if (_gameMenu.data._title_bar_background_brightness != null) RegCustom._title_bar_background_brightness[Reg._tn] = _gameMenu.data._title_bar_background_brightness;
-				
-				if (_gameMenu.data._menu_bar_background_brightness != null) RegCustom._menu_bar_background_brightness[Reg._tn] = _gameMenu.data._menu_bar_background_brightness;				
-				
-				if (_gameMenu.data._title_bar_background_enabled != null) RegCustom._title_bar_background_enabled[Reg._tn] = _gameMenu.data._title_bar_background_enabled;
-				
-				if (_gameMenu.data._menu_bar_background_enabled != null) RegCustom._menu_bar_background_enabled[Reg._tn] = _gameMenu.data._menu_bar_background_enabled;
 			}
 			
 			_gameMenu.close;			
@@ -1491,164 +1338,14 @@ class RegFunctions
 			
 			_gameMenu.data._theme_name_current = RegCustom._theme_name_current;
 
-			for (i in 0... 2)
-			{
-				_gameMenu.data._gameboard_units_odd_shade_number[i] = RegCustom._gameboard_units_odd_shade_number[Reg._tn][i];
-				
-				_gameMenu.data._gameboard_units_even_shade_number[i] = RegCustom._gameboard_units_even_shade_number[Reg._tn][i];
-				
-				_gameMenu.data._gameboard_units_odd_color_number[i] = RegCustom._gameboard_units_odd_color_number[Reg._tn][i];
-				
-				_gameMenu.data._gameboard_units_even_color_number[i] = RegCustom._gameboard_units_even_color_number[Reg._tn][i];
-			}
-			
-			_gameMenu.data._username_suggestions_enabled = RegCustom._username_suggestions_enabled[Reg._tn];
-			
-			_gameMenu.data._gameboard_border_number = RegCustom._gameboard_border_number[Reg._tn];
-			
-			_gameMenu.data._gameboard_border_enabled = RegCustom._gameboard_border_enabled[Reg._tn];
-			
-			_gameMenu.data._gameboard_coordinates_enabled = RegCustom._gameboard_coordinates_enabled[Reg._tn];
-			
-			_gameMenu.data._leaderboard_enabled = RegCustom._leaderboard_enabled[Reg._tn];
-			
-			_gameMenu.data._profile_avatar_number1 = RegCustom._profile_avatar_number1[Reg._tn];
-			
-			_gameMenu.data._profile_avatar_number2 = RegCustom._profile_avatar_number2[Reg._tn];
-						
-			_gameMenu.data._house_feature_enabled = RegCustom._house_feature_enabled[Reg._tn];
-			
-			_gameMenu.data.go_back_to_title_after_save = RegCustom._go_back_to_title_after_save[Reg._tn];
-						
-			_gameMenu.data._send_automatic_start_game_request = RegCustom._send_automatic_start_game_request[Reg._tn];
-			
-			_gameMenu.data._accept_automatic_start_game_request = RegCustom._accept_automatic_start_game_request[Reg._tn];
-			
-			_gameMenu.data._start_game_offline_confirmation = RegCustom._start_game_offline_confirmation[Reg._tn];
-			
-			// user is at waiting room.
-			_gameMenu.data._to_lobby_from_waiting_room_confirmation = RegCustom._to_lobby_from_waiting_room_confirmation[Reg._tn];
-			
-			_gameMenu.data._to_lobby_from_game_room_confirmation = RegCustom._to_lobby_from_game_room_confirmation[Reg._tn];
-			
-			_gameMenu.data._to_game_room_from_waiting_room_confirmation = RegCustom._to_game_room_from_waiting_room_confirmation[Reg._tn];
-			
-			_gameMenu.data._to_title_from_game_room_confirmation = RegCustom._to_title_from_game_room_confirmation[Reg._tn];
-			
-			_gameMenu.data._chat_when_at_lobby_enabled = RegCustom._chat_when_at_lobby_enabled[Reg._tn];
-			
-			_gameMenu.data._chat_when_at_room_enabled = RegCustom._chat_when_at_room_enabled[Reg._tn];
-			
-			_gameMenu.data._timer_enabled = RegCustom._timer_enabled[Reg._tn];
-			_gameMenu.data._move_total_enabled = RegCustom._move_total_enabled[Reg._tn];
-			
-			_gameMenu.data._notation_panel_enabled = RegCustom._notation_panel_enabled[Reg._tn];
-			
-			_gameMenu.data._chess_opening_moves_enabled = RegCustom._chess_opening_moves_enabled[Reg._tn];
-			
-			_gameMenu.data._capturing_units = RegCustom._capturing_units[Reg._tn];
-			
-			_gameMenu.data._capturing_units_number = RegCustom._capturing_units_number[Reg._tn];
-			
-			_gameMenu.data._chess_show_last_piece_moved = RegCustom._chess_show_last_piece_moved[Reg._tn];
-			
-			_gameMenu.data._chess_computer_thinking_enabled = RegCustom._chess_computer_thinking_enabled[Reg._tn];
-			
-			_gameMenu.data._chess_future_capturing_units_enabled = RegCustom._chess_future_capturing_units_enabled[Reg._tn];
-			
-			_gameMenu.data._chess_future_capturing_units_number = RegCustom._chess_future_capturing_units_number[Reg._tn];
-			
-			_gameMenu.data._chess_path_to_king_enabled = RegCustom._chess_path_to_king_enabled[Reg._tn];
-			
-			_gameMenu.data._chess_path_to_king_number = RegCustom._chess_path_to_king_number[Reg._tn];
-			
-			_gameMenu.data._notation_panel_10_percent_alpha_enabled = RegCustom._notation_panel_10_percent_alpha_enabled[Reg._tn];
-			
-			_gameMenu.data._notation_panel_same_background_color_enabled = RegCustom._notation_panel_same_background_color_enabled[Reg._tn];
-			
-			_gameMenu.data._notation_panel_background_color_enabled = RegCustom._notation_panel_background_color_enabled[Reg._tn];
-			
-			_gameMenu.data._notation_panel_background_color_number = RegCustom._notation_panel_background_color_number[Reg._tn];
-			
-			_gameMenu.data._notation_panel_text_color_number = RegCustom._notation_panel_text_color_number[Reg._tn];
-			
-			_gameMenu.data._client_text_color_number = RegCustom._client_text_color_number[Reg._tn];
-			
-			_gameMenu.data._gameboard_even_units_show_enabled = RegCustom._gameboard_even_units_show_enabled[Reg._tn];
-			
-			_gameMenu.data._gradient_background_image_number = RegCustom._gradient_background_image_number[Reg._tn];
-			
-			_gameMenu.data._gradient_background_enabled = RegCustom._gradient_background_enabled[Reg._tn];
-			
-			_gameMenu.data._texture_background_image_number = RegCustom._texture_background_image_number[Reg._tn];
-			
-			_gameMenu.data._texture_background_enabled = RegCustom._texture_background_enabled[Reg._tn];
-			
-			_gameMenu.data._client_background_image_number = RegCustom._client_background_image_number[Reg._tn];
-			
-			_gameMenu.data._client_background_enabled = RegCustom._client_background_enabled[Reg._tn];
-			
-			_gameMenu.data._background_alpha_enabled = RegCustom._background_alpha_enabled[Reg._tn];
-					
-			_gameMenu.data._chess_set_for_player1 = RegCustom._chess_set_for_player1[Reg._tn];
-			
-			_gameMenu.data._chess_set_for_player2 = RegCustom._chess_set_for_player2[Reg._tn];
-			
-			_gameMenu.data._chess_set_for_player1_color_number = RegCustom._chess_set_for_player1_color_number[Reg._tn];
-			
-			_gameMenu.data._chess_set_for_player2_color_number = RegCustom._chess_set_for_player2_color_number[Reg._tn];
-			
-			_gameMenu.data._client_background_brightness = RegCustom._client_background_brightness[Reg._tn];
-			
-			_gameMenu.data._client_background_saturation = RegCustom._client_background_saturation[Reg._tn];
-			
-			_gameMenu.data._button_color_number = RegCustom._button_color_number[Reg._tn];			
-			
-			_gameMenu.data._button_border_color_number = RegCustom._button_border_color_number[Reg._tn];
-			
-			_gameMenu.data._button_text_color_number = RegCustom._button_text_color_number[Reg._tn];
-			
-			if (RegCustom._profile_username_p1[Reg._tn] == "") RegCustom._profile_username_p1[Reg._tn] = "Guest 1";
-			
-			if (RegCustom._profile_username_p2[Reg._tn] == "") RegCustom._profile_username_p2[Reg._tn] = "Guest 2";
-			
-			_gameMenu.data._profile_username_p1 = RegCustom._profile_username_p1[Reg._tn];
-			
-			_gameMenu.data._profile_username_p2 = RegCustom._profile_username_p2[Reg._tn];
-			
 			// this need to be clear or else the old username will be used at next login.
 			RegTypedef._dataAccount._username = "";
 						
-			// when saving arrays, the array first needs to be created.
-			_gameMenu.data._time_remaining_for_game = new Array<Int>();
-			
-			_gameMenu.data._time_remaining_for_game[0] = RegCustom._time_remaining_for_game[Reg._tn][0];
-			
-			_gameMenu.data._time_remaining_for_game[1] = RegCustom._time_remaining_for_game[Reg._tn][1];
-			
-			_gameMenu.data._time_remaining_for_game[2] = RegCustom._time_remaining_for_game[Reg._tn][2];
-			
-			_gameMenu.data._time_remaining_for_game[3] = RegCustom._time_remaining_for_game[Reg._tn][3];
-			
-			_gameMenu.data._time_remaining_for_game[4] = RegCustom._time_remaining_for_game[Reg._tn][4];
-			
 			_gameMenu.data._chess_skill_level_online = RegCustom._chess_skill_level_online;
-						
-			_gameMenu.data._title_bar_background_number = RegCustom._title_bar_background_number[Reg._tn];
-			
-			_gameMenu.data._menu_bar_background_number = RegCustom._menu_bar_background_number[Reg._tn];
-			
-			_gameMenu.data._title_bar_background_brightness = RegCustom._title_bar_background_brightness[Reg._tn];
-			
-			_gameMenu.data._menu_bar_background_brightness = RegCustom._menu_bar_background_brightness[Reg._tn];
-			
-			_gameMenu.data._title_bar_background_enabled = RegCustom._title_bar_background_enabled[Reg._tn];
-			
-			_gameMenu.data._menu_bar_background_enabled = RegCustom._menu_bar_background_enabled[Reg._tn];
 			
 			_gameMenu.flush();
 			_gameMenu.close;
-			
+
 			if (Reg._tn > 0) save_theme();
 			
 		#end
@@ -1757,6 +1454,7 @@ class RegFunctions
 					Reg2._offline_cpu_host_name3 = Reg2._offline_cpu_host_names[4];
 					RegCustom._profile_avatar_number3[Reg._tn] = Reg2._offline_cpu_avatar_number[4];
 				}
+				
 			}
 
 			// Reg._cpu_host_name1 and Reg._cpu_host_name2 are now with a host name but if they have the same host name then clear these var data so that the loop can continue.

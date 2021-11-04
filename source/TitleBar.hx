@@ -40,6 +40,15 @@ class TitleBar extends FlxGroup
 		
 		var _color = FlxColor.fromHSB(RegCustomColors.title_bar_background_color().hue, 1, RegCustom._title_bar_background_brightness[Reg._tn]);
 		
+		// no saturation for gray color.
+		if (RegCustom._title_bar_background_number[Reg._tn] == 13)
+			_color = FlxColor.fromHSB(_color.hue, 0, RegCustom._client_background_brightness[Reg._tn]);
+		
+		if (RegCustom._title_bar_background_number[Reg._tn] == 1)
+			_color = FlxColor.WHITE;
+		else if (RegCustom._title_bar_background_number[Reg._tn] == 12)
+			_color = FlxColor.BLACK;
+		
 		_background = new FlxSprite(0, 0);
 		_background.makeGraphic(FlxG.width, 55, _color);
 		_background.color.brightness = RegCustom._title_bar_background_brightness[Reg._tn];
@@ -47,7 +56,7 @@ class TitleBar extends FlxGroup
 		add(_background);
 		
 		_title = new FlxText(15, 4, 0, _text);
-		_title.setFormat(Reg._fontDefault, 50, FlxColor.YELLOW);
+		_title.setFormat(Reg._fontDefault, 50, RegCustomColors.title_bar_text_color());
 		_title.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 3);
 		if (Reg._at_lobby == true
 		||	Reg._at_waiting_room == true) _title.scrollFactor.set(1,0);

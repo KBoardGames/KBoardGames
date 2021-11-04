@@ -18,6 +18,11 @@
 
 package;
 
+#if avatars
+	import myLibs.avatars.Avatars;
+#end
+
+
 /**
  * this class is created when clicking the gear button. It is used to display scrollbar configuration content of either games, general or profile category.
  * .
@@ -495,7 +500,9 @@ class ConfigurationOutput extends FlxGroup
 		
 		if (CID3._button_p1.has_toggle == true)
 		{
-			CID3._image_profile_avatar.loadGraphic("vendor/multiavatar/" + RegCustom._profile_avatar_number1[Reg._tn]);
+			#if avatars
+				Avatars._image_profile_avatar.loadGraphic("vendor/multiavatar/" + RegCustom._profile_avatar_number1[Reg._tn]);
+			#end
 		
 			if (RegCustom._profile_username_p1[Reg._tn] == "")
 			{
@@ -505,7 +512,10 @@ class ConfigurationOutput extends FlxGroup
 		}
 		else
 		{
-			CID3._image_profile_avatar.loadGraphic("vendor/multiavatar/" + RegCustom._profile_avatar_number2[Reg._tn]);
+			#if avatars 
+				Avatars._image_profile_avatar.loadGraphic("vendor/multiavatar/" + RegCustom._profile_avatar_number2[Reg._tn]);
+			#end
+				
 		
 			if (RegCustom._profile_username_p2[Reg._tn] == "")
 			{

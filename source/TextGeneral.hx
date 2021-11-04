@@ -24,6 +24,7 @@ import openfl.display.BitmapData;
 /**
  * Extends FlxSprite to support rendering text. Can tint, fade, rotate and scale just like a sprite. Doesn't really animate 
  * though. Also does nice pixel-perfect centering on pixel fonts as long as they are only one-liners.
+ * @author kboardgames.com
  */
 class TextGeneral extends FlxText
 {

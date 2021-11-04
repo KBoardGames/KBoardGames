@@ -36,11 +36,12 @@ class ConfigurationGames extends FlxGroup
 	
 	public function sceneGames():Void
 	{
-		CID1._group = cast add(new FlxSpriteGroup());		
+		CID1._group = cast add(new FlxSpriteGroup());
+		CID1._group.members.splice(0, CID1._group.members.length);
 		CID1._group_button.splice(0, CID1._group_button.length);
 				
 		CID1._game_minutes = new FlxText(0, 100, 0, "Minutes");
-		CID1._game_minutes.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.ORANGE);
+		CID1._game_minutes.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_topic_title_text_color());
 		CID1._game_minutes.screenCenter(X);
 		CID1._game_minutes.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		CID1._group.add(CID1._game_minutes);
@@ -177,7 +178,7 @@ class ConfigurationGames extends FlxGroup
 		
 		// chess title.
 		CID1._chess = new FlxText(15, CID1._signature_plus_minutes.y + 100, 0, "Chess.");
-		CID1._chess.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.ORANGE);
+		CID1._chess.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_topic_title_text_color());
 		CID1._chess.screenCenter(X);
 		CID1._chess.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		CID1._group.add(CID1._chess);
@@ -285,7 +286,7 @@ class ConfigurationGames extends FlxGroup
 		CID1._sprite_chess_path_to_king.color = RegCustomColors.color_path_to_king();
 		CID1._group.add(CID1._sprite_chess_path_to_king);
 		
-		CID1._sprite_chess_path_to_king_bg = new FlxSprite(CID1._button_chess_path_to_king_plus.x + CID1._button_chess_path_to_king_plus.width + 45, CID1._button_chess_path_to_king_plus.y - 10, "assets/images/dailyQuestsBorder1.png");
+		CID1._sprite_chess_path_to_king_bg = new FlxSprite(CID1._button_chess_path_to_king_plus.x + CID1._button_chess_path_to_king_plus.width + 45, CID1._button_chess_path_to_king_plus.y - 10, "assets/images/border1.png");
 		CID1._group.add(CID1._sprite_chess_path_to_king_bg);
 		
 		//##############################
@@ -642,7 +643,7 @@ class ConfigurationGames extends FlxGroup
 	private function save_chess_piece_p1_set_color_current_minus():Void
 	{
 		RegCustom._chess_set_for_player1_color_number[Reg._tn] -= 1;
-		if (RegCustom._chess_set_for_player1_color_number[Reg._tn] == 0) RegCustom._chess_set_for_player1_color_number[Reg._tn] = 25;
+		if (RegCustom._chess_set_for_player1_color_number[Reg._tn] == 0) RegCustom._chess_set_for_player1_color_number[Reg._tn] = 13;
 		
 		var _color = RegCustomColors.draw_update_board_p1_set_color();
 		
@@ -658,7 +659,7 @@ class ConfigurationGames extends FlxGroup
 	private function save_chess_piece_p1_set_color_current_plus():Void
 	{
 		RegCustom._chess_set_for_player1_color_number[Reg._tn] += 1;
-		if (RegCustom._chess_set_for_player1_color_number[Reg._tn] == 26) RegCustom._chess_set_for_player1_color_number[Reg._tn] = 1;
+		if (RegCustom._chess_set_for_player1_color_number[Reg._tn] >= 14) RegCustom._chess_set_for_player1_color_number[Reg._tn] = 1;
 		
 		var _color = RegCustomColors.draw_update_board_p1_set_color();
 		
@@ -699,7 +700,7 @@ class ConfigurationGames extends FlxGroup
 	private function save_chess_piece_p2_set_color_current_minus():Void
 	{
 		RegCustom._chess_set_for_player2_color_number[Reg._tn] -= 1;
-		if (RegCustom._chess_set_for_player2_color_number[Reg._tn] == 0) RegCustom._chess_set_for_player2_color_number[Reg._tn] = 25;
+		if (RegCustom._chess_set_for_player2_color_number[Reg._tn] == 0) RegCustom._chess_set_for_player2_color_number[Reg._tn] = 13;
 		
 		var _color = RegCustomColors.draw_update_board_p2_set_color();
 		
@@ -714,7 +715,7 @@ class ConfigurationGames extends FlxGroup
 	private function save_chess_piece_p2_set_color_current_plus():Void
 	{
 		RegCustom._chess_set_for_player2_color_number[Reg._tn] += 1;
-		if (RegCustom._chess_set_for_player2_color_number[Reg._tn] == 26) RegCustom._chess_set_for_player2_color_number[Reg._tn] = 1;
+		if (RegCustom._chess_set_for_player2_color_number[Reg._tn] >= 14) RegCustom._chess_set_for_player2_color_number[Reg._tn] = 1;
 		
 		var _color = RegCustomColors.draw_update_board_p2_set_color();
 		

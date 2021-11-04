@@ -57,15 +57,15 @@ class GameMessageEvent extends FlxSubState
 			}
 		}
 		
-		var _title = new FlxText(0, 0, 0, "Event Description");
-		_title.setFormat(Reg._fontDefault, 30, FlxColor.ORANGE);
-		_title.scrollFactor.set();
-		_title.setPosition(15, 15);
-		_title.screenCenter(X);
-		add(_title);
+		var _topic_title = new FlxText(0, 0, 0, "Event Description");
+		_topic_title.setFormat(Reg._fontDefault, 30, RegCustomColors.client_topic_title_text_color());
+		_topic_title.scrollFactor.set();
+		_topic_title.setPosition(15, 15);
+		_topic_title.screenCenter(X);
+		add(_topic_title);
 		
 		var _eventTitle = new FlxText(0, 0, 0, Reg2._eventName[i]);
-		_eventTitle.setFormat(Reg._fontDefault, 30, FlxColor.ORANGE);
+		_eventTitle.setFormat(Reg._fontDefault, 30, RegCustomColors.client_topic_title_text_color());
 		_eventTitle.scrollFactor.set();
 		_eventTitle.setPosition(50, 75);
 		add(_eventTitle);

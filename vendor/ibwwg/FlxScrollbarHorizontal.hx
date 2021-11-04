@@ -8,6 +8,9 @@ import flixel.math.FlxPoint;
 import flixel.math.FlxRect;
 import flixel.util.FlxColor;
 
+#if house
+	import myLibs.house.*;
+#end
 
 /**
  * Simple scrollbar.  Draws itself and also handles dragging.  (It's up to you to use the provided data to update whatever you're scrolling.)
@@ -229,11 +232,18 @@ class FlxScrollbarHorizontal extends FlxSpriteGroup
 		var mousePosition = FlxG.mouse.getScreenPosition();
 		
 		// if clicking on the scrollable area area. _dragStartedWhenBarWasAt is where the click first started.
-		if (!_bar.overlapsPoint( mousePosition ) 
+		if (_doOnce == 0 || !_bar.overlapsPoint( mousePosition ) 
 		&&  !_track.overlapsPoint( mousePosition ) 
-		&&  FlxG.mouse.x - HouseScrollMap._map_offset_x > Math.abs(_viewPort.x) 
-		&&  FlxG.mouse.x - HouseScrollMap._map_offset_x < Math.abs(_viewPort.x) + _viewPort.width 
-		&&  FlxG.mouse.y - HouseScrollMap._map_offset_y < _viewPort.height || _doOnce == 0 )
+		#if house 
+			&&  FlxG.mouse.x - HouseScrollMap._map_offset_x > Math.abs(_viewPort.x) 
+			&&  FlxG.mouse.x - HouseScrollMap._map_offset_x < Math.abs(_viewPort.x) + _viewPort.width 
+			&&  FlxG.mouse.y - HouseScrollMap._map_offset_y < _viewPort.height
+		#else
+			&&  FlxG.mouse.x > Math.abs(_viewPort.x) 
+			&&  FlxG.mouse.x < Math.abs(_viewPort.x) + _viewPort.width 
+			&&  FlxG.mouse.y < _viewPort.height
+		#end
+		)
 		{
 			// remember the scroll location of the scrollbox when returning to the scene at this second condition.
 			if (FlxG.mouse.justPressed

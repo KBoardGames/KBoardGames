@@ -20,6 +20,18 @@ package;
 import flixel.math.FlxPoint;
 import flixel.ui.FlxVirtualPad.FlxActionMode;
 
+#if house
+	import myLibs.house.*;
+#end
+
+#if miscellaneous
+	import myLibs.miscellaneous.*;
+#end
+
+#if dailyQuests
+	import myLibs.dailyQuests.DailyQuests;
+#end
+
 /**
  * ...
  * @author kboardgames.com
@@ -52,7 +64,10 @@ class SceneLobby extends FlxState
 	private var __scene_lobby_game_spectators_text:Array<SceneLobbyGameSpectatorsText> = [for (i in 0...24) new SceneLobbyGameSpectatorsText(0, 0, 0, "", 0)];
 	
 	public static var __game_chatter:GameChatter;
-	private var __miscellaneous_menu_output:MiscellaneousMenuOutput;
+	
+	#if miscellaneous
+		private var __miscellaneous_menu_output:MiscellaneousMenuOutput;
+	#end
 	public var __menu_bar:MenuBar;
 	public var __scrollable_area:FlxScrollableArea;	
 	
@@ -237,7 +252,7 @@ class SceneLobby extends FlxState
 		}
 		
 		_title = new FlxText(15, 4, 0, "Lobby");
-		_title.setFormat(Reg._fontDefault, 50, FlxColor.YELLOW);
+		_title.setFormat(Reg._fontDefault, 50, RegCustomColors.title_bar_text_color());
 		_title.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 3);
 		_title.scrollFactor.set(1,0);
 		_title.visible = true;
@@ -643,8 +658,11 @@ class SceneLobby extends FlxState
 	public function set_not_active_for_buttons():Void
 	{
 		Reg._at_lobby = false;
-		HouseScrollMap._map_offset_x = 0;
-		HouseScrollMap._map_offset_y = 0;
+		
+		#if house
+			HouseScrollMap._map_offset_x = 0;
+			HouseScrollMap._map_offset_y = 0;
+		#end
 		
 		if (_group_scrollable_area != null)
 		{
@@ -685,19 +703,32 @@ class SceneLobby extends FlxState
 			__game_chatter.active = false;
 		}
 		
-		if (RegCustom._house_feature_enabled[Reg._tn] == true)
-		{
-			if (__menu_bar._buttonHouse != null) __menu_bar._buttonHouse.active = false;
-		}
+		#if house
+			if (RegCustom._house_feature_enabled[Reg._tn] == true)
+			{
+				if (__menu_bar._buttonHouse != null) __menu_bar._buttonHouse.active = false;
+			}
+		#end
 		
-		if (__menu_bar._buttonMiscMenu != null) 
-			__menu_bar._buttonMiscMenu.active = false;
-		if (__menu_bar._button_daily_quests != null) 
-			__menu_bar._button_daily_quests.active = false;
-		if (__menu_bar._button_leaderboards != null) 
-			__menu_bar._button_leaderboards.active = false;
-		if (__menu_bar._button_tournaments != null) 
-			__menu_bar._button_tournaments.active = false;
+		#if miscellaneous
+			if (__menu_bar._buttonMiscMenu != null) 
+				__menu_bar._buttonMiscMenu.active = false;
+		#end
+		
+		#if dailyQuests
+			if (__menu_bar._button_daily_quests != null) 
+				__menu_bar._button_daily_quests.active = false;
+		#end
+		
+		#if leaderboards
+			if (__menu_bar._button_leaderboards != null) 
+				__menu_bar._button_leaderboards.active = false;
+		#end
+		
+		#if tournaments
+			if (__menu_bar._button_tournaments != null) 
+				__menu_bar._button_tournaments.active = false;
+		#end
 		
 		if (_button_lobby_refresh != null)
 		{
@@ -720,8 +751,11 @@ class SceneLobby extends FlxState
 	public function set_active_for_buttons():Void
 	{
 		Reg._at_lobby = true;
-		HouseScrollMap._map_offset_x = 0;
-		HouseScrollMap._map_offset_y = 0;
+		
+		#if house
+			HouseScrollMap._map_offset_x = 0;
+			HouseScrollMap._map_offset_y = 0;
+		#end
 		
 		if (_group_scrollable_area != null)
 		{
@@ -783,33 +817,48 @@ class SceneLobby extends FlxState
 	// this shows the menuBar buttons after a brief second.
 	private function ticks_buttons_menuBar():Void
 	{
-		if (RegCustom._house_feature_enabled[Reg._tn] == true)
-		{
-			if (__menu_bar._buttonHouse != null) 
+		#if house
+			if (RegCustom._house_feature_enabled[Reg._tn] == true)
 			{
-				__menu_bar._buttonHouse.active = true;
-				__menu_bar._buttonHouse.visible = true;
+				if (__menu_bar._buttonHouse != null) 
+				{
+					__menu_bar._buttonHouse.active = true;
+					__menu_bar._buttonHouse.visible = true;
+				}
 			}
-		}
+		#end
 		
-		if (__menu_bar._buttonMiscMenu != null) 
-			__menu_bar._buttonMiscMenu.active = true;
-		if (__menu_bar._button_daily_quests != null) 
-			__menu_bar._button_daily_quests.active = true;
-		if (__menu_bar._button_leaderboards != null) 
-			__menu_bar._button_leaderboards.active = true;
-		if (__menu_bar._button_tournaments != null) 
-			__menu_bar._button_tournaments.active = true;
+		#if miscellaneous
+			if (__menu_bar._buttonMiscMenu != null) 
+				__menu_bar._buttonMiscMenu.active = true;
+				
+			if (__menu_bar._buttonMiscMenu != null) 
+				__menu_bar._buttonMiscMenu.visible = true;
+		#end
 		
-		if (__menu_bar._buttonMiscMenu != null) 
-			__menu_bar._buttonMiscMenu.visible = true;
-		if (__menu_bar._button_daily_quests != null) 
-			__menu_bar._button_daily_quests.visible = true;
-		if (__menu_bar._button_leaderboards != null) 
-			__menu_bar._button_leaderboards.visible = true;
-		if (__menu_bar._button_tournaments != null) 
-			__menu_bar._button_tournaments.visible = true;
+		#if dailyQuests
+			if (__menu_bar._button_daily_quests != null) 
+				__menu_bar._button_daily_quests.active = true;
+			
+			if (__menu_bar._button_daily_quests != null) 
+				__menu_bar._button_daily_quests.visible = true;
+		#end
 		
+		#if leaderboards
+			if (__menu_bar._button_leaderboards != null) 
+				__menu_bar._button_leaderboards.active = true;
+				
+			if (__menu_bar._button_leaderboards != null) 
+				__menu_bar._button_leaderboards.visible = true;
+		#end
+		
+		#if tournaments
+			if (__menu_bar._button_tournaments != null) 
+				__menu_bar._button_tournaments.active = true;
+			
+			if (__menu_bar._button_tournaments != null) 
+				__menu_bar._button_tournaments.visible = true;
+		#end
 		
 	}
 
@@ -846,15 +895,17 @@ class SceneLobby extends FlxState
 			_group_scrollable_area.destroy();
 		}
 		
-		if (__menu_bar != null)
-		{
-			if (__menu_bar.__miscellaneous_menu != null)
+		#if miscellaneous
+			if (__menu_bar != null)
 			{
-				__menu_bar.__miscellaneous_menu.visible = false;
-				remove(__menu_bar.__miscellaneous_menu);
-				__menu_bar.__miscellaneous_menu.destroy();
+				if (__menu_bar.__miscellaneous_menu != null)
+				{
+					__menu_bar.__miscellaneous_menu.visible = false;
+					remove(__menu_bar.__miscellaneous_menu);
+					__menu_bar.__miscellaneous_menu.destroy();
+				}
 			}
-		}
+		#end
 		
 		_number = 0;
 		_populate_table_body = false;
@@ -874,8 +925,13 @@ class SceneLobby extends FlxState
 		
 				_ticks_buttons_menuBar = 3;
 				
-				__menu_bar._buttonMiscMenu.active = true;
+				#if miscellaneous
+					__menu_bar._buttonMiscMenu.active = true;
+				#end
+				
+				#if house
 					if (__menu_bar._buttonHouse != null) __menu_bar._buttonHouse.active = true;
+				#end
 			}
 			
 			if (_ticks_buttons_menuBar == 1)
@@ -895,19 +951,32 @@ class SceneLobby extends FlxState
 			}
 			
 			// fix a camera display bug where the _button_daily_quests can also be clicked from the right side of the screen because of the chatter scrollable area scrolling part of the scene.
-			if (__menu_bar._buttonMiscMenu.visible == true
-			&&	_ticks_buttons_menuBar == 3)
+			if (_ticks_buttons_menuBar == 3
+			#if miscellaneous
+				&& __menu_bar._buttonMiscMenu.visible == true
+			#end
+			)
 			{
 				if (FlxG.mouse.x > FlxG.width / 2
 				&&  FlxG.mouse.y >= FlxG.height - 50) 
 				{
-					__menu_bar._buttonMiscMenu.active = false;
-					if (__menu_bar._buttonHouse != null) __menu_bar._buttonHouse.active = false;
+					#if miscellaneous
+						__menu_bar._buttonMiscMenu.active = false;
+					#end
+					
+					#if house
+						if (__menu_bar._buttonHouse != null) __menu_bar._buttonHouse.active = false;
+					#end
 				}
 				else
 				{
-					__menu_bar._buttonMiscMenu.active = true;
-					if (__menu_bar._buttonHouse != null) __menu_bar._buttonHouse.active = true;
+					#if miscellaneous
+						__menu_bar._buttonMiscMenu.active = true;
+					#end
+					
+					#if house
+						if (__menu_bar._buttonHouse != null) __menu_bar._buttonHouse.active = true;
+					#end
 				}
 			}
 			
@@ -994,76 +1063,91 @@ class SceneLobby extends FlxState
 			}
 		}
 		
-		if (RegTriggers._makeMiscellaneousMenuClassActive == true)
-		{			
-			set_not_active_for_buttons();
-			
-			RegTriggers._makeMiscellaneousMenuClassActive = false;
-			
-			if (__menu_bar.__miscellaneous_menu != null)
-			{
-				__menu_bar.__miscellaneous_menu.active = true;
-				__menu_bar.__miscellaneous_menu.visible = true;
-			}
-							
-		}
-		
-		if (RegTriggers._makeMiscellaneousMenuClassNotActive == true)
-		{
-			RegTriggers._makeMiscellaneousMenuClassNotActive = false;
-			
-			if (__menu_bar.__miscellaneous_menu != null)
-			{
-				__menu_bar.__miscellaneous_menu.visible = false;
-				__menu_bar.__miscellaneous_menu.active = false;
-			}
+		#if miscellaneous
+			if (RegTriggers._makeMiscellaneousMenuClassActive == true)
+			{			
+				set_not_active_for_buttons();
 				
-		}
-		
-		if (RegTriggers._miscellaneousMenuOutputClassActive == true)
-		{
-			RegTriggers._miscellaneousMenuOutputClassActive = false;
-			
-			set_not_active_for_buttons();	
-			
-			if (__miscellaneous_menu_output != null)
-			{
-				remove(__miscellaneous_menu_output);
-				__miscellaneous_menu_output.destroy();
+				RegTriggers._makeMiscellaneousMenuClassActive = false;
+				
+				if (__menu_bar.__miscellaneous_menu != null)
+				{
+					__menu_bar.__miscellaneous_menu.active = true;
+					__menu_bar.__miscellaneous_menu.visible = true;
+				}
+				
 			}
 			
-			__miscellaneous_menu_output = new MiscellaneousMenuOutput(Reg2._miscMenuIparameter);
-			add(__miscellaneous_menu_output);					
-		}
-		
-		if (RegTriggers._make_daily_quests_not_active == true)
-		{
-			RegTriggers._make_daily_quests_not_active = false;
-			
-			__menu_bar.__daily_quests.__scrollable_area.visible = false;
-			__menu_bar.__daily_quests.__scrollable_area.active = false;
-			__menu_bar.__daily_quests.visible = false;
-			__menu_bar.__daily_quests.active = false;				
-		}
-		
-		if (RegTriggers._make_tournaments_not_active == true)
-		{
-			RegTriggers._make_tournaments_not_active = false;
-			
-			__menu_bar.__tournaments.visible = false;
-			__menu_bar.__tournaments.active = false;				
-		}
-		
-		if (RegTriggers._make_leaderboards_not_active == true)
-		{
-			RegTriggers._make_leaderboards_not_active = false;
-			
-			__menu_bar.__leaderboards.__scrollable_area.visible = false;
-			__menu_bar.__leaderboards.__scrollable_area.active = false;
-			__menu_bar.__leaderboards.visible = false;
-			__menu_bar.__leaderboards.active = false;				
-		}
+			if (RegTriggers._makeMiscellaneousMenuClassNotActive == true)
+			{
+				RegTriggers._makeMiscellaneousMenuClassNotActive = false;
 				
+				if (__menu_bar.__miscellaneous_menu != null)
+				{
+					__menu_bar.__miscellaneous_menu.visible = false;
+					__menu_bar.__miscellaneous_menu.active = false;
+				}
+					
+			}
+			
+			if (RegTriggers._miscellaneousMenuOutputClassActive == true)
+			{
+				RegTriggers._miscellaneousMenuOutputClassActive = false;
+				
+				set_not_active_for_buttons();	
+				
+				if (__miscellaneous_menu_output != null)
+				{
+					remove(__miscellaneous_menu_output);
+					__miscellaneous_menu_output.destroy();
+				}
+				
+				__miscellaneous_menu_output = new MiscellaneousMenuOutput(Reg2._miscMenuIparameter);
+				add(__miscellaneous_menu_output);					
+			}
+		#end
+		
+		#if dailyQuests
+			if (RegTriggers._make_daily_quests_not_active == true)
+			{
+				RegTriggers._make_daily_quests_not_active = false;
+				
+				__menu_bar.__daily_quests.__scrollable_area.visible = false;
+				__menu_bar.__daily_quests.__scrollable_area.active = false;
+				__menu_bar.__daily_quests.visible = false;
+				__menu_bar.__daily_quests.active = false;				
+			}
+		#end
+		
+		#if tournaments
+			if (RegTriggers._make_tournaments_not_active == true)
+			{
+				RegTriggers._make_tournaments_not_active = false;
+				
+				__menu_bar.__tournaments.visible = false;
+				__menu_bar.__tournaments.active = false;				
+			}
+		#end
+		
+		#if leaderboards
+			if (RegTriggers._make_leaderboards_not_active == true)
+			{
+				RegTriggers._make_leaderboards_not_active = false;
+				
+				if (__menu_bar.__leaderboards != null)
+				{
+					if (__menu_bar.__leaderboards.__scrollable_area != null)
+					{
+						__menu_bar.__leaderboards.__scrollable_area.visible = false;
+						__menu_bar.__leaderboards.__scrollable_area.active = false;
+					}
+					
+					__menu_bar.__leaderboards.visible = false;
+					__menu_bar.__leaderboards.active = false;	
+				}			
+			}
+		#end
+		
 		if (RegTriggers._returnToLobbyMakeButtonsActive == true)
 		{
 			RegTriggers._returnToLobbyMakeButtonsActive = false;

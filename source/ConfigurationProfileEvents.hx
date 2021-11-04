@@ -18,6 +18,14 @@
 
 package;
 
+#if avatars
+	import myLibs.avatars.Avatars;
+#end
+
+#if username_suggestions
+	import myLibs.usernameSuggestions.Usernames;
+#end
+
 /**
  * these functions are called after a user clicks a button.
  * @author kboardgames.com
@@ -38,14 +46,18 @@ class ConfigurationProfileEvents extends CID2
 		&&  Reg2._scrollable_area_is_scrolling == false)
 			FlxG.sound.play("click", 1, false);
 		
-		CID3._profile_avatar_notice.text = CID3.CID3._text_current_avatar_for_player + "1";
+		#if avatars
+			Avatars._profile_avatar_notice.text = Avatars._text_current_avatar_for_player + "1";
+		#end
 		
 		if (RegCustom._profile_username_p1[Reg._tn] == "") RegCustom._profile_username_p1[Reg._tn] = "Guest 1";
 		
 		if (CID3._button_p1.has_toggle == false)
 			CID3._usernameInput.text = RegCustom._profile_username_p1[Reg._tn];
 		
-		CID3._image_profile_avatar.loadGraphic("vendor/multiavatar/" + RegCustom._profile_avatar_number1[Reg._tn]);
+		#if avatars
+			Avatars._image_profile_avatar.loadGraphic("vendor/multiavatar/" + RegCustom._profile_avatar_number1[Reg._tn]);
+		#end
 		
 		CID3._button_p1.set_toggled(true);
 		CID3._button_p1.has_toggle = true;
@@ -53,7 +65,10 @@ class ConfigurationProfileEvents extends CID2
 		CID3._button_p2.set_toggled(false);
 		CID3._button_p2.has_toggle = false;
 		
-		ConfigurationProfile.repopulate_username_suggestions();
+		#if username_suggestions 
+			Usernames.repopulate_username_suggestions();
+		#end
+		
 		CID3._usernameInput.caretIndex = CID3._usernameInput.text.length;
 	}
 	
@@ -66,14 +81,18 @@ class ConfigurationProfileEvents extends CID2
 		&&  Reg2._scrollable_area_is_scrolling == false)
 			FlxG.sound.play("click", 1, false);
 	
-		CID3._profile_avatar_notice.text = CID3._text_current_avatar_for_player + "2";
+		#if avatars
+			Avatars._profile_avatar_notice.text = Avatars._text_current_avatar_for_player + "2";
+		#end
 		
 		if (RegCustom._profile_username_p2[Reg._tn] == "") RegCustom._profile_username_p2[Reg._tn] = "Guest 2";
 		
 		if (CID3._button_p2.has_toggle == false)
 			CID3._usernameInput.text = RegCustom._profile_username_p2[Reg._tn];
 				
-		CID3._image_profile_avatar.loadGraphic("vendor/multiavatar/" + RegCustom._profile_avatar_number2[Reg._tn]);
+		#if avatars
+			Avatars._image_profile_avatar.loadGraphic("vendor/multiavatar/" + RegCustom._profile_avatar_number2[Reg._tn]);
+		#end
 		
 		CID3._button_p2.set_toggled(true);
 		CID3._button_p2.has_toggle = true;
@@ -81,21 +100,26 @@ class ConfigurationProfileEvents extends CID2
 		CID3._button_p1.set_toggled(false);
 		CID3._button_p1.has_toggle = false;
 		
-		ConfigurationProfile.repopulate_username_suggestions();
+		#if username_suggestions
+			Usernames.repopulate_username_suggestions();
+		#end
+		
 		CID3._usernameInput.caretIndex = CID3._usernameInput.text.length;
 	}
 	
 	public function username_suggestions_enabled():Void
 	{
-		if (RegCustom._username_suggestions_enabled[Reg._tn] == false)
-		{
-			RegCustom._username_suggestions_enabled[Reg._tn] = true;
-			CID3._button_username_suggestions_enabled.label.text = "true";
-		}
-		else
-		{
-			RegCustom._username_suggestions_enabled[Reg._tn] = false;
-			CID3._button_username_suggestions_enabled.label.text = "false";
-		}
+		#if username_suggestions
+			if (RegCustom._username_suggestions_enabled[Reg._tn] == false)
+			{
+				RegCustom._username_suggestions_enabled[Reg._tn] = true;
+				Usernames._button_username_suggestions_enabled.label.text = "true";
+			}
+			else
+			{
+				RegCustom._username_suggestions_enabled[Reg._tn] = false;
+				Usernames._button_username_suggestions_enabled.label.text = "false";
+			}
+		#end
 	}
 }

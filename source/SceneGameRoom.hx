@@ -61,7 +61,7 @@ class SceneGameRoom extends FlxState
 	 */
 	public var __ids_win_lose_or_draw:IDsWinLoseOrDraw;	
 	
-	public var _iDsCreateAndMain:IDsCreateAndMain;
+	public var __game_create:GameCreate;
 		
 	/******************************
 	* player's stats, displayed at bottom of playing area.
@@ -84,7 +84,7 @@ class SceneGameRoom extends FlxState
 	private var __chess_check_or_checkmate:ChessCheckOrCheckmate;
 	
 	public var _playersLeftGame:PlayersLeftGameResetThoseVars;
-	public var _finalizeWhenGameOver:IDsFinalizeEnding;
+	public var _finalizeWhenGameOver:GameFinalize;
 	
 	/******************************
 	* class that displays the game notations.
@@ -130,13 +130,13 @@ class SceneGameRoom extends FlxState
 		if (Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false) Reg._roomPlayerLimit = RegTypedef._dataMisc._roomPlayerLimit[RegTypedef._dataMisc._room];
 		
 		
-		_iDsCreateAndMain = new IDsCreateAndMain(__ids_win_lose_or_draw, __chess_check_or_checkmate);
-		add(_iDsCreateAndMain);
+		__game_create = new GameCreate(__ids_win_lose_or_draw, __chess_check_or_checkmate);
+		add(__game_create);
 		
-		_finalizeWhenGameOver = new IDsFinalizeEnding(this);
+		_finalizeWhenGameOver = new GameFinalize(this);
 		add(_finalizeWhenGameOver);
 
-		_iDsCreateAndMain.gameIdSetBoardAndPieces();
+		__game_create.gameId_set_board_and_pieces();
 		
 		_playersLeftGame = new PlayersLeftGameResetThoseVars(this);
 		add(_playersLeftGame);
@@ -144,7 +144,7 @@ class SceneGameRoom extends FlxState
 		addChatterAndGameTime();
 		
 		_title = new FlxText(0, 0, 0, "");
-		_title.setFormat(Reg._fontDefault, 50, FlxColor.YELLOW);
+		_title.setFormat(Reg._fontDefault, 50, RegCustomColors.title_bar_text_color());
 		_title.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 3);
 		_title.scrollFactor.set();
 		if (RegTypedef._dataMisc._room <= 9) 
@@ -417,12 +417,12 @@ class SceneGameRoom extends FlxState
 	// player left the game and there is still 2 or more players playing the game, so remove the player's piece and remove player's timer text and anything else that need to be removed from the stage and then new again some other classes so that the other players' pieces for those players still in room playing the game will the correct move order of those other players.
 	public function removePlayersDataFromStage():Void
 	{
-		_iDsCreateAndMain.removeSpriteGroup();
+		__game_create.removeSpriteGroup();
 		
 		if (Reg._gameId == 4)
 		{
 			Reg._triggerNextStuffToDo = 0;			
-			_iDsCreateAndMain.addSpriteGroup();
+			__game_create.addSpriteGroup();
 		}
 		
 		gamePlayerWhosTurnToMove();
@@ -454,7 +454,7 @@ class SceneGameRoom extends FlxState
 	
 	private function addChatterAndGameTime():Void
 	{
-		IDsCreateAndMain.timeGivenForEachGame(); 
+		GameCreate.timeGivenForEachGame(); 
 		
 		gamePlayerWhosTurnToMove();
 		gamePlayerTimeRemainingMove(); 
@@ -1132,7 +1132,7 @@ class SceneGameRoom extends FlxState
 		if (RegCustom._timer_enabled[Reg._tn] == true
 		||  RegTypedef._dataTournaments._move_piece == true) // always enabled for tournament play.
 		{
-			_playerTimeRemainingMove = new PlayerTimeRemainingMove(IDsCreateAndMain._t, this);
+			_playerTimeRemainingMove = new PlayerTimeRemainingMove(GameCreate._t, this);
 			_playerTimeRemainingMove.visible = true;
 			add(_playerTimeRemainingMove);
 		}
@@ -1212,8 +1212,8 @@ class SceneGameRoom extends FlxState
 	
 	override public function destroy()
 	{
-		remove(_iDsCreateAndMain);
-		_iDsCreateAndMain.destroy();
+		remove(__game_create);
+		__game_create.destroy();
 						
 		super.destroy();
 	}
@@ -2033,32 +2033,32 @@ class SceneGameRoom extends FlxState
 		toggleButtonsAsChatterScrolls();
 			
 		//############################# GAMES THAT USE SPRITE GROUP
-		if (_iDsCreateAndMain._spriteGroup != null)
+		if (__game_create._spriteGroup != null)
 		{
 			if (RegTriggers._spriteGroup > 0)
 			{
 				if (RegTriggers._spriteGroup == 1)
 				{
-					_iDsCreateAndMain._spriteGroup.members.remove(_iDsCreateAndMain._playerPieces1);
-					_iDsCreateAndMain._spriteGroup.add(_iDsCreateAndMain._playerPieces1);
+					__game_create._spriteGroup.members.remove(__game_create._playerPieces1);
+					__game_create._spriteGroup.add(__game_create._playerPieces1);
 				}
 				
 				if (RegTriggers._spriteGroup == 2)
 				{
-					_iDsCreateAndMain._spriteGroup.members.remove(_iDsCreateAndMain._playerPieces2);
-					_iDsCreateAndMain._spriteGroup.add(_iDsCreateAndMain._playerPieces2);
+					__game_create._spriteGroup.members.remove(__game_create._playerPieces2);
+					__game_create._spriteGroup.add(__game_create._playerPieces2);
 				}
 				
 				if (RegTriggers._spriteGroup == 3)
 				{
-					_iDsCreateAndMain._spriteGroup.members.remove(_iDsCreateAndMain._playerPieces3);
-					_iDsCreateAndMain._spriteGroup.add(_iDsCreateAndMain._playerPieces3);
+					__game_create._spriteGroup.members.remove(__game_create._playerPieces3);
+					__game_create._spriteGroup.add(__game_create._playerPieces3);
 				}
 				
 				if (RegTriggers._spriteGroup == 4)
 				{
-					_iDsCreateAndMain._spriteGroup.members.remove(_iDsCreateAndMain._playerPieces4);
-					_iDsCreateAndMain._spriteGroup.add(_iDsCreateAndMain._playerPieces4);
+					__game_create._spriteGroup.members.remove(__game_create._playerPieces4);
+					__game_create._spriteGroup.add(__game_create._playerPieces4);
 				}
 				
 				RegTriggers._spriteGroup = 0;
@@ -2073,7 +2073,7 @@ class SceneGameRoom extends FlxState
 		&& Reg._gameDidFirstMove == true)
 		{
 			RegTriggers._signatureGame = false;
-			_iDsCreateAndMain.__signature_game.initialize();
+			__game_create.__signature_game_main.initialize();
 			if (Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false && Reg._game_online_vs_cpu == false) Reg._triggerNextStuffToDo = 3;
 		}
 

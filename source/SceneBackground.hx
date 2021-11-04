@@ -56,12 +56,12 @@ class SceneBackground extends FlxGroup
 			var _color:FlxColor = RegCustomColors.color_client_background();
 			
 			// no saturation for gray color.
-			if (RegCustom._client_background_image_number[Reg._tn] == 14)
+			if (RegCustom._client_background_image_number[Reg._tn] == 13)
 				_background_color.color = FlxColor.fromHSB(_color.hue, 0, RegCustom._client_background_brightness[Reg._tn]);
 			
 			if (RegCustom._client_background_image_number[Reg._tn] == 1)
 				_background_color.color = FlxColor.WHITE;
-			else if (RegCustom._client_background_image_number[Reg._tn] == 15)
+			else if (RegCustom._client_background_image_number[Reg._tn] == 12)
 				_background_color.color = FlxColor.BLACK;
 			else
 				_background_color.color = FlxColor.fromHSB(_color.hue, RegCustom._client_background_saturation[Reg._tn], RegCustom._client_background_brightness[Reg._tn]);
