@@ -18,6 +18,26 @@
 
 package;
 
+#if checkers
+	import modules.games.checkers.*;
+#end
+
+#if chess
+	import modules.games.chess.*;
+#end
+
+#if reversi
+	import modules.games.reversi.*;
+#end
+
+#if snakesAndLadders
+	import modules.games.snakesAndLadders.*;
+#end
+
+#if wheelEstate
+	import modules.games.wheelEstate.*;
+#end
+
 /**
  * ...
  * @author kboardgames.com
@@ -27,7 +47,9 @@ class GameCreate extends FlxState
 	/******************************
 	 * is it a check or checkmate? anything related to a checkmate such as setting capturing units for the king or determining if a pawn can free the king from check, etc.
 	 */
-	private var __chess_check_or_checkmate:ChessCheckOrCheckmate; // instance of a class.
+	#if chess
+		private var __chess_check_or_checkmate:ChessCheckOrCheckmate; // instance of a class.
+	#end
 	
 	/******************************
 	 * player move piece total time.
@@ -37,7 +59,9 @@ class GameCreate extends FlxState
 	/******************************
 	 * buy, sell, trade or pay rent. main game loop.
 	 */
-	public var __signature_game_main:SignatureGameMain;
+	#if wheelEstate
+		public var __signature_game_main:SignatureGameMain;
+	#end
 	
 	/******************************
 	 * the unit is highlighted when the mouse is clicked on it.
@@ -53,18 +77,6 @@ class GameCreate extends FlxState
 	public var _playerPieces2:Dynamic;
 	public var _playerPieces3:Dynamic;
 	public var _playerPieces4:Dynamic;
-	
-	/******************************
-	 * alternating colors of game board squares. this is the light color units.
-	 * see private function SignatureGameUnitOwnership.unitOwnership() to change the signature game background color that is displayed underneath the icons.
-	 */
-	public var _unitgameBoardColorDark:Array<FlxColor> = [0xFFc2d93c, 0xFF9d6253, 0xFF003300, 0xFFf5f151, 0xFFbbbbbb];
-	
-	/******************************
-	 * alternating colors of game board squares. this is the dark color units.
-	 * see private function SignatureGameUnitOwnership.unitOwnership() to change the signature game background color that is displayed underneath the icons.
-	 */
-	public var _unitgameBoardColorLight:Array<FlxColor> = [0xFF114c2e, 0xFF562a20, 0xFF004400, 0xFFf5515a, 0xFFffffff];
 	
 	/******************************
 	 * the numbers 1 to 8 and the letter a to h at the side of the gameboard.
@@ -106,25 +118,47 @@ class GameCreate extends FlxState
 	 */
 	public var _groupCapturingUnit:FlxSpriteGroup;
 	
-	public var __game_house_taxi_cafe:SignatureGameReferenceImages;
-		
+	#if wheelEstate
+		public var __game_house_taxi_cafe:SignatureGameReferenceImages;
+	#end
+	
 	/******************************
 	 * background gradient, texture and plain color for a scene.
 	 */
-	private var _scene_background:SceneBackground;
+	private var __scene_background:SceneBackground;
 	
 	public static var _sprite_board_game_unit_even:FlxSprite;
 	public static var _sprite_board_game_unit_odd:FlxSprite;
-	public static var _currentUnitClicked_gameID0:CheckersCurrentUnitClicked;
-	public static var _currentUnitClicked_gameID1:ChessCurrentUnitClicked;
 	
-	private var __checkers:Checkers;
-	private var __chess:Chess;
-	private var __reversi:Reversi;
-	private var __snakes_and_ladders:SnakesAndLadders;
-	private var __signature_game:SignatureGame;
+	#if checkers
+		public static var _currentUnitClicked_gameID0:CheckersCurrentUnitClicked;
+	#end
 	
-	public function new(ids_win_lose_or_draw:IDsWinLoseOrDraw, chess_check_or_checkmate:ChessCheckOrCheckmate) 
+	#if chess
+		public static var _currentUnitClicked_gameID1:	ChessCurrentUnitClicked;
+	#end
+	
+	#if checkers
+		private var __checkers:Checkers;
+	#end
+	
+	#if chess
+		private var __chess:Chess;
+	#end
+	
+	#if reversi
+		private var __reversi:Reversi;
+	#end
+	
+	#if snakesAndLadders
+		private var __snakes_and_ladders:SnakesAndLadders;
+	#end
+	
+	#if wheelEstate
+		private var __signature_game:SignatureGame;
+	#end
+	
+	public function new(ids_win_lose_or_draw:IDsWinLoseOrDraw, chess_check_or_checkmate:Dynamic) 
 	{
 		super();
 		
@@ -133,7 +167,10 @@ class GameCreate extends FlxState
 		RegFunctions.fontsSharpen();
 		
 		__ids_win_lose_or_draw = ids_win_lose_or_draw;
-		__chess_check_or_checkmate = chess_check_or_checkmate;
+		
+		#if chess
+			__chess_check_or_checkmate = chess_check_or_checkmate;
+		#end
 	}
 	
 	
@@ -157,57 +194,68 @@ class GameCreate extends FlxState
 		switch (Reg._gameId)
 		{
 			// checker game.
-			case 0: // 0 = empty tile. 1 = player one. 11 = plyer two. 7/17:circle, 8/18:X. circle and X are used for teaching checkers. put them on the board here then screenshot the image.	
-			{
-				__checkers = new Checkers(this); // draw the standard gameboard to screen and coordinate image and any other stuff.
-				add(__checkers);
+			#if checkers
+				case 0: // 0 = empty tile. 1 = player one. 11 = plyer two. 7/17:circle, 8/18:X. circle and X are used for teaching checkers. put them on the board here then screenshot the image.	
+				{
+					__checkers = new Checkers(this); // draw the standard gameboard to screen and coordinate image and any other stuff.
+					add(__checkers);
+					
+					// this is the layout of the checkers pieces when the game first starts.
+					__checkers.default_layout_checkers();
+					gameId_draw_pieces(); // this function will draw the game pieces to the screen.
+				}
+			#end
+			
+			#if chess
+				// chess game.
+				case 1: // 0 = empty tile. 1 = player one. 11 = plyer two.		
+				{
+					__chess = new Chess(this);
+					add(__chess);
 				
-				// this is the layout of the checkers pieces when the game first starts.
-				__checkers.default_layout_checkers();
-				gameId_draw_pieces(); // this function will draw the game pieces to the screen.
-			}
+					__chess.default_layout_chess();				
+					gameId_draw_pieces(); // this function will draw the game pieces to the screen.
+				}
+			#end
+				
+			#if reversi
+				// Reversi game.
+				case 2:	
+				{
+					//#############################
+					// uncomment this when testing different piece positions other than beginning of game.
+					//Reg._triggerNextStuffToDo = 4;
+					//#############################
+					__reversi = new Reversi(this);
+					add(__reversi);
+				
+					__reversi.default_layout_reversi();
+					gameId_draw_pieces();
+				}
+			#end
 			
-			// chess game.
-			case 1: // 0 = empty tile. 1 = player one. 11 = plyer two.		
-			{
-				__chess = new Chess(this);
-				add(__chess);
+			#if snakesAndLadders
+				// snakes and ladders game.
+				case 3:	
+				{
+					__snakes_and_ladders = new SnakesAndLadders(this);
+					add(__snakes_and_ladders);
+				
+					__snakes_and_ladders.default_layout_snakes_and_ladders();				
+					gameId_draw_pieces();
+				}
+			#end
 			
-				__chess.default_layout_chess();				
-				gameId_draw_pieces(); // this function will draw the game pieces to the screen.
-			}	
-			// Reversi game.
-			case 2:	
-			{
-				//#############################
-				// uncomment this when testing different piece positions other than beginning of game.
-				//Reg._triggerNextStuffToDo = 4;
-				//#############################
-				__reversi = new Reversi(this);
-				add(__reversi);
-			
-				__reversi.default_layout_reversi();
-				gameId_draw_pieces();
-			}
-			
-			// snakes and ladders game.
-			case 3:	
-			{
-				__snakes_and_ladders = new SnakesAndLadders(this);
-				add(__snakes_and_ladders);
-			
-				__snakes_and_ladders.default_layout_snakes_and_ladders();				
-				gameId_draw_pieces();
-			}
-			
-			// signature game.
-			case 4:	
-			{
-				__signature_game = new SignatureGame(this);
-				add(__signature_game);
-			
-				__signature_game.default_layout_signature_game();			gameId_draw_pieces();
-			}
+			#if wheelEstate
+				// signature game.
+				case 4:	
+				{
+					__signature_game = new SignatureGame(this);
+					add(__signature_game);
+				
+					__signature_game.default_layout_signature_game();			gameId_draw_pieces();
+				}
+			#end
 		}	
 		
 		if (Reg._spectator_watching_entering_game_room_message == false 
@@ -263,11 +311,26 @@ class GameCreate extends FlxState
 		
 		switch (Reg._gameId)
 		{
-			case 0: __checkers.create_checkers_game();
-			case 1: __chess.create_chess_game();
-			case 2: __reversi.create_reversi_game();
-			case 3: __snakes_and_ladders.create_snakes_and_ladders_game();
-			case 4: __signature_game.create_signature_game();
+			#if checkers
+				case 0: __checkers.create_checkers_game();
+			#end
+			
+			#if chess
+				case 1: __chess.create_chess_game();
+			#end
+			
+			#if reversi
+				case 2: __reversi.create_reversi_game();
+			#end
+			
+			#if snakesAndLadders
+				case 3: __snakes_and_ladders.create_snakes_and_ladders_game();
+			#end
+			
+			#if wheelEstate
+				case 4: __signature_game.create_signature_game();
+			#end
+			
 		}
 		
 	}	
@@ -286,11 +349,25 @@ class GameCreate extends FlxState
 			
 			switch (Reg._gameId)
 			{
-				case 0: Checkers.server_data();
-				case 1: Chess.server_data();
-				case 2: Reversi.server_data();
-				case 3: SnakesAndLadders.server_data();
-				case 4: SignatureGame.server_data();
+				#if checkers
+					case 0: Checkers.server_data();
+				#end
+				
+				#if chess
+					case 1: Chess.server_data();
+				#end
+				
+				#if reversi
+					case 2: Reversi.server_data();
+				#end
+				
+				#if snakesAndLadders
+					case 3: SnakesAndLadders.server_data();
+				#end
+				
+				#if wheelEstate
+					case 4: SignatureGame.server_data();
+				#end
 			}
 		}
 		
@@ -315,40 +392,43 @@ class GameCreate extends FlxState
 				// by default all board games use this class.
 				GameClearVars.clearVarsOnMoveUpdate();
 				
-				if (Reg._gameId == 0)
-				{
-					if (Reg._gameNotationOddEven == 0) Reg._gameNotationOddEven = 1;
-					
-					Reg._checkersFoundPieceToJumpOver = false;
+				#if checkers
+					if (Reg._gameId == 0)
+					{
+						if (Reg._gameNotationOddEven == 0) Reg._gameNotationOddEven = 1;
+						
+						Reg._checkersFoundPieceToJumpOver = false;
 
-					if (Reg._gameYYnew != -1 && Reg._gameXXnew != -1)
-					CheckersCapturingUnits.jumpCapturingUnitsForPiece(Reg._gameYYnew, Reg._gameXXnew, Reg._playerMoving);
-					
-					if (Reg._checkersFoundPieceToJumpOver == true)
-						Reg._checkersIsThisFirstMove = false;
-				}
-				
-				if (Reg._gameId == 1)						
-				{
-					GameClearVars.clearCheckAndCheckmateVars();						
-					ChessCapturingUnits.capturingUnits();						
-					
-					if (Reg._chessCheckBypass == false)
-					{							
-						if (Reg._chessCheckmateBypass == false) 
-							__chess_check_or_checkmate.isThisCheckOrCheckmate();
+						if (Reg._gameYYnew != -1 && Reg._gameXXnew != -1)
+						CheckersCapturingUnits.jumpCapturingUnitsForPiece(Reg._gameYYnew, Reg._gameXXnew, Reg._playerMoving);
+						
+						if (Reg._checkersFoundPieceToJumpOver == true)
+							Reg._checkersIsThisFirstMove = false;
 					}
-					
-					GameClearVars.clearVarsOnMoveUpdate();
-					GameClearVars.clearCheckAndCheckmateVars();
-					
-					//ChessMoveCPUsPiece._checkmate_loop = 0;
-					
-					if (Reg._gameNotationOddEven == 0) Reg._gameNotationOddEven = 1;
-					
-					__ids_win_lose_or_draw.canPlayerMove1();
-				}
-					
+				#end
+				
+				#if chess
+					if (Reg._gameId == 1)						
+					{
+						GameClearVars.clearCheckAndCheckmateVars();						
+						ChessCapturingUnits.capturingUnits();						
+						
+						if (Reg._chessCheckBypass == false)
+						{							
+							if (Reg._chessCheckmateBypass == false) 
+								__chess_check_or_checkmate.isThisCheckOrCheckmate();
+						}
+						
+						GameClearVars.clearVarsOnMoveUpdate();
+						GameClearVars.clearCheckAndCheckmateVars();
+						
+						//ChessMoveCPUsPiece._checkmate_loop = 0;
+						
+						if (Reg._gameNotationOddEven == 0) Reg._gameNotationOddEven = 1;
+						
+						__ids_win_lose_or_draw.canPlayerMove1();
+					}
+				#end
 			}
 				
 			
@@ -419,55 +499,57 @@ class GameCreate extends FlxState
 		
 	}
 	
+	// TODO verify that the signature game is the only game using this function.
 	public function addSpriteGroup():Void
 	{
-		// player's piece used to navigate the game board.
-		_spriteGroup = new FlxGroup();		
-		
-		var _y = 0;
-		var _x = 0;
-	
-		// x and y values are in correct positions. These are player's game pieces. they represent the player. player has one piece, different then the other pieces. the piece that is about to move, after a dice rotation mouse click, will be sent to the front of all other pieces.
-		_y = get_piece_location_from_value_y(0);
-		_x = get_piece_location_from_value_x(0);
-		
-		_playerPieces1 = new SignatureGameMovePlayersPiece(_gameBoard[0].x + (_x * 75), _gameBoard[0].y + (_y * 75), 1, __ids_win_lose_or_draw); // pieces are 75x75 pixels wide.
-		_playerPieces1.scrollFactor.set(0, 0);
-		_spriteGroup.add(_playerPieces1);
-		
-		// need + 1 because Reg._totalPlayersInRoom starts with 0 for the first player.
-		if (Reg._totalPlayersInRoom + 1 >= 2)
-		{
-			_y = get_piece_location_from_value_y(1);
-			_x = get_piece_location_from_value_x(1);
+		#if wheelEstate
+			// player's piece used to navigate the game board.
+			_spriteGroup = new FlxGroup();		
 			
-			_playerPieces2 = new SignatureGameMovePlayersPiece(_gameBoard[0].x + (_x * 75), _gameBoard[0].y + (_y * 75), 2, __ids_win_lose_or_draw); // pieces are 75x75 pixels wide.
-			_playerPieces2.scrollFactor.set(0, 0);
-			_spriteGroup.add(_playerPieces2);			
-		}
+			var _y = 0;
+			var _x = 0;
 		
-		if (Reg._totalPlayersInRoom + 1 >= 3)
-		{
-			_y = get_piece_location_from_value_y(2);
-			_x = get_piece_location_from_value_x(2);
+			// x and y values are in correct positions. These are player's game pieces. they represent the player. player has one piece, different then the other pieces. the piece that is about to move, after a dice rotation mouse click, will be sent to the front of all other pieces.
+			_y = get_piece_location_from_value_y(0);
+			_x = get_piece_location_from_value_x(0);
 			
-			_playerPieces3 = new SignatureGameMovePlayersPiece(_gameBoard[0].x + (_x * 75), _gameBoard[0].y + (_y * 75), 3, __ids_win_lose_or_draw); // pieces are 75x75 pixels wide.
-			_playerPieces3.scrollFactor.set(0, 0);
-			_spriteGroup.add(_playerPieces3);
-		}
-		
-		if (Reg._totalPlayersInRoom + 1 >= 4)
-		{
-			_y = get_piece_location_from_value_y(3);
-			_x = get_piece_location_from_value_x(3);
+			_playerPieces1 = new SignatureGameMovePlayersPiece(_gameBoard[0].x + (_x * 75), _gameBoard[0].y + (_y * 75), 1, __ids_win_lose_or_draw); // pieces are 75x75 pixels wide.
+			_playerPieces1.scrollFactor.set(0, 0);
+			_spriteGroup.add(_playerPieces1);
 			
-			_playerPieces4 = new SignatureGameMovePlayersPiece(_gameBoard[0].x + (_x * 75), _gameBoard[0].y + (_y * 75), 4, __ids_win_lose_or_draw); // pieces are 75x75 pixels wide.
-			_playerPieces4.scrollFactor.set(0, 0);
-			_spriteGroup.add(_playerPieces4);
-		}
-		
-		add(_spriteGroup);
-		
+			// need + 1 because Reg._totalPlayersInRoom starts with 0 for the first player.
+			if (Reg._totalPlayersInRoom + 1 >= 2)
+			{
+				_y = get_piece_location_from_value_y(1);
+				_x = get_piece_location_from_value_x(1);
+				
+				_playerPieces2 = new SignatureGameMovePlayersPiece(_gameBoard[0].x + (_x * 75), _gameBoard[0].y + (_y * 75), 2, __ids_win_lose_or_draw); // pieces are 75x75 pixels wide.
+				_playerPieces2.scrollFactor.set(0, 0);
+				_spriteGroup.add(_playerPieces2);			
+			}
+			
+			if (Reg._totalPlayersInRoom + 1 >= 3)
+			{
+				_y = get_piece_location_from_value_y(2);
+				_x = get_piece_location_from_value_x(2);
+				
+				_playerPieces3 = new SignatureGameMovePlayersPiece(_gameBoard[0].x + (_x * 75), _gameBoard[0].y + (_y * 75), 3, __ids_win_lose_or_draw); // pieces are 75x75 pixels wide.
+				_playerPieces3.scrollFactor.set(0, 0);
+				_spriteGroup.add(_playerPieces3);
+			}
+			
+			if (Reg._totalPlayersInRoom + 1 >= 4)
+			{
+				_y = get_piece_location_from_value_y(3);
+				_x = get_piece_location_from_value_x(3);
+				
+				_playerPieces4 = new SignatureGameMovePlayersPiece(_gameBoard[0].x + (_x * 75), _gameBoard[0].y + (_y * 75), 4, __ids_win_lose_or_draw); // pieces are 75x75 pixels wide.
+				_playerPieces4.scrollFactor.set(0, 0);
+				_spriteGroup.add(_playerPieces4);
+			}
+			
+			add(_spriteGroup);
+		#end
 	}
 		
 	// when a player leaves the game and the game continues for the other players, a new piece color is given to each player. this function is used to move the new colored piece for the player back to the location where the last player's color was at. this gets the value of the piece location. y coordinates. 
@@ -522,14 +604,14 @@ class GameCreate extends FlxState
 		
 		PlayState.getPlayersNamesAndAvatars();
 		
-		if (_scene_background != null)
+		if (__scene_background != null)
 		{
-			remove(_scene_background);
-			_scene_background.destroy();
+			remove(__scene_background);
+			__scene_background.destroy();
 		}
 		
-		_scene_background = new SceneBackground();
-		add(_scene_background);
+		__scene_background = new SceneBackground();
+		add(__scene_background);
 		
 		if (RegCustom._gameboard_border_enabled[Reg._tn] == true)
 		{
@@ -556,17 +638,21 @@ class GameCreate extends FlxState
 		__number_wheel = new NumberWheel(X, Y);
 		add(__number_wheel);
 		
-		if (Reg._gameId == 3)
-		{
-			var _clickMe = new SnakesAndLaddersClickMe(X, Y, __number_wheel);
-			add(_clickMe);	
-		}
-		if (Reg._gameId == 4)
-		{
-			var _clickMe = new SignatureGameClickMe(X, Y, __number_wheel, __ids_win_lose_or_draw, _playerPieces1, _playerPieces2, _playerPieces3, _playerPieces4);
-			add(_clickMe);	
-		}
-			
+		#if snakesAndLadders
+			if (Reg._gameId == 3)
+			{
+				var _clickMe = new SnakesAndLaddersClickMe(X, Y, __number_wheel);
+				add(_clickMe);	
+			}
+		#end
+		
+		#if wheelEstate
+			if (Reg._gameId == 4)
+			{
+				var _clickMe = new SignatureGameClickMe(X, Y, __number_wheel, __ids_win_lose_or_draw, _playerPieces1, _playerPieces2, _playerPieces3, _playerPieces4);
+				add(_clickMe);	
+			}
+		#end
 	}
 	
 	

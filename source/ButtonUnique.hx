@@ -68,8 +68,8 @@ class ButtonUnique extends FlxUIButton
 		
 		_startX = x;
 		_startY = y;
-		_use_down_click = use_down_click;
 		
+		_use_down_click = use_down_click;		
 		button_height += 10;
 		
 		resize(button_width, button_height);
@@ -89,6 +89,9 @@ class ButtonUnique extends FlxUIButton
 	// this function must not be removed. also stops double firing of button sound at ActionKeyboard.hx.
 	override public function update(elapsed:Float):Void 
 	{
+		// if false then super.update() will not be executed and the program will then have one less thing to do.
+		var _update_needed:Bool = false;
+		
 		if (RegTriggers._buttons_set_not_active == false) 
 		{
 			if (ActionInput.overlaps(this, null)
@@ -101,11 +104,9 @@ class ButtonUnique extends FlxUIButton
 				if (RegCustom._sound_enabled[Reg._tn] == true
 				&&  Reg2._scrollable_area_is_scrolling == false)
 					FlxG.sound.play("click", 1, false);
-				
 			}
-			
-			super.update(elapsed);
 		}
-
+		
+		super.update(elapsed);
 	}
 }

@@ -19,7 +19,7 @@
 package;
 
 #if tournaments
-	import myLibs.tournaments.Tournaments;
+	import modules.tournaments.Tournaments;
 #end
 
 /**

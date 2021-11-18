@@ -24,7 +24,9 @@ package;
  */
 class GameClearVars extends PlayState 
 {
-	// currently this function is broken. when playing with computer, sometimes the player's piece cannot move and sometimes the computer moves to a unit where it should not.
+	/******************************
+	 * this function is called after a piece is moved.
+	 */
 	public static function clearVarsOnMoveUpdate():Void
 	{
 		for (i in 0...2)
@@ -87,117 +89,6 @@ class GameClearVars extends PlayState
 			}
 		}
 		
-			/*
-		if (Reg._game_offline_vs_cpu == true && Reg._playerMoving == 1
-		||  Reg._game_offline_vs_player == true && Reg._playerMoving == 1)
-		{
-			for (i in 0...10)
-			{
-				for (qy in 0...8)
-				{
-					for (qx in 0...8)
-					{
-						if (i < 8)
-						{
-							if (Reg._chessPawn[0][i][qy][qx] == 17)
-							{
-								Reg._capturingUnitsForImages[0][qy][qx] = 1;
-								Reg._capturingUnitsForPieces[0][qy][qx] += 1;
-							}
-						}
-						
-						if (Reg._chessBishop[0][i][qy][qx] == 17)
-						{
-							Reg._capturingUnitsForImages[0][qy][qx] = 1;
-							Reg._capturingUnitsForPieces[0][qy][qx] += 1;
-						}
-						
-						if (Reg._chessHorse[0][i][qy][qx] == 17)
-						{
-							Reg._capturingUnitsForImages[0][qy][qx] = 1;
-							Reg._capturingUnitsForPieces[0][qy][qx] += 1;
-						}
-						
-						if (Reg._chessRook[0][i][qy][qx] == 17)
-						{
-							Reg._capturingUnitsForImages[0][qy][qx] = 1;
-							Reg._capturingUnitsForPieces[0][qy][qx] += 1;
-						}							
-						
-						if (Reg._chessQueen[0][i][qy][qx] == 17)
-						{
-							Reg._capturingUnitsForImages[0][qy][qx] = 1;
-							Reg._capturingUnitsForPieces[0][qy][qx] += 1;
-						}
-										
-						if (i == 0)
-						{							
-							if (Reg._chessKing[0][qy][qx] == 17)
-							{
-								Reg._capturingUnitsForImages[0][qy][qx] = 1;
-								Reg._capturingUnitsForPieces[0][qy][qx] += 1;
-							}
-						}
-					}
-				}
-			}
-		}
-		
-		if (Reg._game_offline_vs_cpu == true && Reg._playerMoving == 0
-		||  Reg._game_offline_vs_player == true && Reg._playerMoving == 0)
-		{
-			for (i in 0...10)
-			{
-				for (qy in 0...8)
-				{
-					for (qx in 0...8)
-					{
-						if (i < 8)
-						{
-							if (Reg._chessPawn[1][i][qy][qx] == 17)
-							{
-								Reg._capturingUnitsForImages[1][qy][qx] = 1;
-								Reg._capturingUnitsForPieces[1][qy][qx] += 1;
-							}
-						}
-						
-						if (Reg._chessBishop[1][i][qy][qx] == 17)
-						{
-							Reg._capturingUnitsForImages[1][qy][qx] = 1;
-							Reg._capturingUnitsForPieces[1][qy][qx] += 1;
-						}
-						
-						if (Reg._chessHorse[1][i][qy][qx] == 17)
-						{
-							Reg._capturingUnitsForImages[1][qy][qx] = 1;
-							Reg._capturingUnitsForPieces[1][qy][qx] += 1;
-						}
-						
-						if (Reg._chessRook[1][i][qy][qx] == 17)
-						{
-							Reg._capturingUnitsForImages[1][qy][qx] = 1;
-							Reg._capturingUnitsForPieces[1][qy][qx] += 1;
-						}
-						
-						if (Reg._chessQueen[1][i][qy][qx] == 17)
-						{
-							Reg._capturingUnitsForImages[1][qy][qx] = 1;
-							Reg._capturingUnitsForPieces[1][qy][qx] += 1;
-						}	
-							
-						if (i == 0)
-						{							
-							if (Reg._chessKing[1][qy][qx] == 17)
-							{
-								Reg._capturingUnitsForImages[1][qy][qx] = 1;
-								Reg._capturingUnitsForPieces[1][qy][qx] += 1;
-							}
-						}
-					}
-				}
-			}
-		}
-				*/		
 		for (i in 0...10)
 		{
 			for (qy in 0...8)
@@ -233,13 +124,11 @@ class GameClearVars extends PlayState
 						Reg._chessKing[p][qy][qx] = 0;
 						Reg._chessKingCapturingUnitAsQueen[p][qy][qx] = 0;
 						Reg._chessKingAsQueen[p][qy][qx] = 0;
-												
-						//Reg._chessFuturePiece; // do not use here
 					}
 				}
 			}
 		}	
-					
+		
 		// clear check/checkmate vars or else they will be double the value the next time we calculate if there is a check or checkmate.
 		for (i in 0...2)
 		{
@@ -247,8 +136,9 @@ class GameClearVars extends PlayState
 		}
 	}
 
-	
-	
+	/******************************
+	 * 
+	 */
 	public static function clearCheckAndCheckmateVars():Void
 	{		
 		Reg._doneEnPassant = false;

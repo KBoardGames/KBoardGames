@@ -19,23 +19,23 @@
 package;
 
 #if house
-	import myLibs.house.*;
+	import modules.house.*;
 #end
 
 #if tournaments
-	import myLibs.tournaments.Tournaments;
+	import modules.tournaments.Tournaments;
 #end
 
 #if miscellaneous
-	import myLibs.miscellaneous.*;
+	import modules.miscellaneous.*;
 #end
 
 #if dailyQuests
-	import myLibs.dailyQuests.DailyQuests;
+	import modules.dailyQuests.DailyQuests;
 #end
 
 #if leaderboards
-	import myLibs.leaderboards.Leaderboards;
+	import modules.leaderboards.Leaderboards;
 #end
 
 /**
@@ -153,15 +153,20 @@ class MenuBar extends FlxGroup
 	 */
 	public var _scene_tournaments_exit:ButtonGeneralNetworkYes;
 	//##############end tournaments
-		
+	
+	private var _scene_lobby:FlxState;
+	
 	/******************************
 	 * 
 	 * @param	_from_menuState		true if somewhere at the menu state. The player has not connected yet and might be at the help scene or credits scene. this is needed because if at playState then the disconnect button will trigger a close but if not connected then this is used to return to menu state.
 	 * @param	_at_chatter			is player at the chatter. This is used to create a small red bar underneath the chatter background. this is needed because at waiting room this red bar will not go in front of the chatter background, so another new to this class is needed at chatter.
 	 */
-	override public function new(_from_menuState:Bool = false, _at_chatter:Bool = false, house:Dynamic = null, items:Dynamic = null, scene_create_room:SceneCreateRoom = null, scene_waiting_room:SceneWaitingRoom = null):Void
+	override public function new(_from_menuState:Bool = false, _at_chatter:Bool = false, house:Dynamic = null, items:Dynamic = null, scene_create_room:SceneCreateRoom = null, scene_waiting_room:SceneWaitingRoom = null, scene_lobby:FlxState = null):Void
 	{
 		super();
+		
+		if (scene_lobby != null)
+			_scene_lobby = scene_lobby;
 		
 		if (scene_create_room != null)
 			__scene_create_room = scene_create_room;
@@ -328,7 +333,7 @@ class MenuBar extends FlxGroup
 				{
 					if (_button_leaderboards == null)
 					{
-						_button_leaderboards = new ButtonGeneralNetworkYes(_buttonHouse_under.x + 230 + 230 + 230 + 230, FlxG.height - 40, "Leaderboards", 215, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, scene_lobby_leaderboards, RegCustom._button_color[Reg._tn], false, 106);		
+						_button_leaderboards = new ButtonGeneralNetworkYes(_buttonHouse_under.x + 230 + 230 + 230 + 230, FlxG.height - 40, "Leaderboards", 215, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, scene_lobby_leaderboards, RegCustom._button_color[Reg._tn], true, 106);		
 						_button_leaderboards.label.font = Reg._fontDefault;
 						_button_leaderboards.scrollFactor.set(0, 0);
 						_button_leaderboards.visible = false;
@@ -399,7 +404,8 @@ class MenuBar extends FlxGroup
 		{
 			_buttonCreateRoom = new ButtonGeneralNetworkYes(0, FlxG.height - 40, "Enter Room", 160 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, scene_create_room_goto_waiting_room, RegCustom._button_color[Reg._tn], false, 107);		
 			_buttonCreateRoom.label.font = Reg._fontDefault;
-			if (Reg._at_create_room == false)
+			if (Reg._at_create_room == false
+			||	Reg._total_games_in_release == 0)
 			{
 				_buttonCreateRoom.visible = false;
 				_buttonCreateRoom.active = false;
@@ -441,7 +447,7 @@ class MenuBar extends FlxGroup
 		_button_refresh_list.active = false;
 		add(_button_refresh_list);				
 		
-		_buttonGameRoom = new ButtonGeneralNetworkYes(700 + _offset, FlxG.height-40, "Game Room", 205, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, scene_waiting_room_goto_game_room, RegCustom._button_color[Reg._tn], false, 111);
+		_buttonGameRoom = new ButtonGeneralNetworkYes(220 + 260 + _offset, FlxG.height-40, "Game Room", 205, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, scene_waiting_room_goto_game_room, RegCustom._button_color[Reg._tn], false, 111);
 		_buttonGameRoom.label.font = Reg._fontDefault;
 		_buttonGameRoom.visible = false;
 		_buttonGameRoom.active = false;
@@ -512,7 +518,7 @@ class MenuBar extends FlxGroup
 	private function menu_leaderboards():Void
 	{
 		#if leaderboards
-			_scene_leaderboards_exit = new ButtonGeneralNetworkYes(0, FlxG.height - 40, "To Lobby", 160 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, scene_leaderboard_return_to_lobby , RegCustom._button_color[Reg._tn], true, 116);		
+			_scene_leaderboards_exit = new ButtonGeneralNetworkYes(0, FlxG.height - 40, "To Lobby", 160 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, scene_leaderboard_return_to_lobby , RegCustom._button_color[Reg._tn], false, 116);		
 			_scene_leaderboards_exit.label.font = Reg._fontDefault;
 			_scene_leaderboards_exit.screenCenter(X);
 			_scene_leaderboards_exit.x += 400;
@@ -531,8 +537,12 @@ class MenuBar extends FlxGroup
 		if (GameChatter.__scrollable_area3 != null)	GameChatter.__scrollable_area3 = null;
 		if (GameChatter.__scrollable_area4 != null)	GameChatter.__scrollable_area4 = null;
 		
-		if (_from_menuState == false) PlayState.prepareToDisconnect(); //Reg._disconnectNow = true;
-		else FlxG.switchState(new MenuState());
+		if (_from_menuState == false) PlayState.prepareToDisconnect();
+		else 
+		{
+			if (_scene_lobby != null) _scene_lobby.destroy();
+			FlxG.switchState(new MenuState());
+		}
 	}
 	
 	private function set_all_menu_bar_elements_not_active():Void
@@ -784,7 +794,7 @@ class MenuBar extends FlxGroup
 			
 			if (_tracker != null) remove(_tracker);
 			_tracker = new FlxSprite(0, 0);
-			_tracker.loadGraphic("myLibs/house/assets/images/tracker.png", false);
+			_tracker.loadGraphic("modules/house/assets/images/tracker.png", false);
 			_tracker.scrollFactor.set(1, 1);
 			_tracker.screenCenter(XY);
 			add(_tracker);
@@ -1192,7 +1202,8 @@ class MenuBar extends FlxGroup
 				
 		_button_refresh_list.active = false;
 		
-		RegTriggers._waiting_room_refresh_list = true;
+		InviteTable._populated_table_body = false;
+		RegTriggers._waiting_room_refresh_invite_list = true;
 	}
 	
 	/******************************
@@ -1215,10 +1226,6 @@ class MenuBar extends FlxGroup
 		RegTriggers._makeMiscellaneousMenuClassNotActive = true;
 		
 		Reg._at_misc = false;
-		
-		visible = false;
-		destroy();
-		
 	}
 	
 	private function scene_daily_quests_exit():Void
@@ -1232,9 +1239,6 @@ class MenuBar extends FlxGroup
 		RegTriggers._make_daily_quests_not_active = true;
 		
 		Reg._at_daily_quests = false;
-		
-		visible = false;
-		destroy();
 	}
 	
 	private function scene_daily_quests_claim_reward():Void
@@ -1247,21 +1251,21 @@ class MenuBar extends FlxGroup
 			{
 				_rewards[2] = "2";
 				RegTypedef._dataDailyQuests._rewards = _rewards[0] + "," + _rewards[1] + "," + _rewards[2];
-				__daily_quests.messageRewardGiven3();
+				DailyQuests.messageRewardGiven3();
 			}
 					
 			if (_rewards[1] == "1")
 			{
 				_rewards[1] = "2";
 				RegTypedef._dataDailyQuests._rewards = _rewards[0] + "," + _rewards[1] + "," + _rewards[2];
-				__daily_quests.messageRewardGiven2();
+				DailyQuests.messageRewardGiven2();
 			}
 			
 			if (_rewards[0] == "1")
 			{
 				_rewards[0] = "2";
 				RegTypedef._dataDailyQuests._rewards = _rewards[0] + "," + _rewards[1] + "," + _rewards[2];
-				__daily_quests.messageRewardGiven1();
+				DailyQuests.messageRewardGiven1();
 			}
 			
 			_button_claim_reward.visible = false;
@@ -1285,30 +1289,26 @@ class MenuBar extends FlxGroup
 			RegTriggers._make_tournaments_not_active = true;
 			
 			Reg._at_tournaments = false;
-			
-			visible = false;
-			destroy();
 		#end
 	}
 	/******************************
 	 * button was pressed. at leaderboard, returning to lobby.
 	 */	
 	private function scene_leaderboard_return_to_lobby():Void
-	{		
-		set_all_menu_bar_elements_not_active(); // reset buttons to false because just after closing a dialog box, that class will reset state of buttons back to active.
-		
-		Reg._at_leaderboards = false;
-		
-		FlxG.mouse.reset();
-		FlxG.mouse.enabled = true;
-		
-		RegTriggers._returnToLobbyMakeButtonsActive = true;
-		RegTriggers._make_leaderboards_not_active = true;
-		
-		visible = false;
-		destroy();
+	{
+		haxe.Timer.delay(function ()
+		{
+			set_all_menu_bar_elements_not_active(); // reset buttons to false because just after closing a dialog box, that class will reset state of buttons back to active.
+			
+			Reg._at_leaderboards = false;
+			
+			FlxG.mouse.reset();
+			FlxG.mouse.enabled = true;
+			
+			RegTriggers._make_leaderboards_not_active = true;
+		}, 500); // milliseconds
 	}
-		
+	
 	override public function destroy()
 	{
 		#if miscellaneous
@@ -1355,8 +1355,10 @@ class MenuBar extends FlxGroup
 		#if leaderboards
 			if (__leaderboards != null)
 			{
-				remove(__leaderboards);
 				__leaderboards.destroy();
+				
+				__leaderboards.visible = false;
+				__leaderboards.active = false;
 			}
 		#end
 		

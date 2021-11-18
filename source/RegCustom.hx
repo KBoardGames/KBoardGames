@@ -152,6 +152,21 @@ class RegCustom
 	public static var _background_alpha_enabled:Array<Bool> = [];
 	
 	/******************************
+	 * this is the color of the table rows seen at SceneLobby class, InviteUsername class and at the Leaderboards class.
+	 */
+	public static var _table_body_background_image_number:Array<Int> = [];
+	
+	/******************************
+	 * the brightness of the random background color of a scene when random background colors are used.
+	 */
+	public static var _table_body_background_brightness:Array<Float> = [];
+	
+	/******************************
+	 * how vibrant the color is.
+	 */
+	public static var _table_body_background_saturation:Array<Float> = [];
+	
+	/******************************
 	 * show legal chess moves. display capturing units.
 	 */
 	public static var _capturing_units:Array<Bool> = [];
@@ -344,11 +359,6 @@ class RegCustom
 	public static var _chess_opening_moves_enabled:Array<Bool> = [];
 	
 	/******************************
-	 * when playing against the computer and the computer is busy searching for a move, if this is enabled then a "Thinking..." message will display at the top of the screen.
-	 */
-	public static var _chess_computer_thinking_enabled:Array<Bool> = [];
-	
-	/******************************
 	 * if true then all music will be enabled.
 	 */
 	public static var _music_enabled:Array<Bool> = [];
@@ -409,6 +419,11 @@ class RegCustom
 	public static var _title_bar_background_brightness:Array<Float> = [];
 	public static var _menu_bar_background_brightness:Array<Float> = [];
 	
+	/******************************
+	 * notify the host of the wating room that someone has enetered that room.
+	 */
+	public static var _pager_enabled:Array<Bool> = [];
+	
 	// these vars are reset at the start of each game.
 	public static function resetRegVars():Void
 	{
@@ -443,7 +458,7 @@ class RegCustom
 		
 		_gameboard_units_odd_shade_number.splice(0, _gameboard_units_odd_shade_number.length);
 		_gameboard_units_odd_shade_number.push([0]);
-		_gameboard_units_odd_shade_number[0] = [7, 3];		
+		_gameboard_units_odd_shade_number[0] = [1, 3];		
 		
 		_gameboard_units_even_shade_number.splice(0, _gameboard_units_even_shade_number.length);
 		_gameboard_units_even_shade_number.push([0]);
@@ -451,20 +466,20 @@ class RegCustom
 		
 		_gameboard_units_odd_color_number.splice(0, _gameboard_units_odd_color_number.length);
 		_gameboard_units_odd_color_number.push([0]);
-		_gameboard_units_odd_color_number[0] = [3, 13];		
+		_gameboard_units_odd_color_number[0] = [3, 1];		
 		
 		_gameboard_units_even_color_number.splice(0, _gameboard_units_even_color_number.length);
 		_gameboard_units_even_color_number.push([0]);
-		_gameboard_units_even_color_number[0] = [1, 8];		
+		_gameboard_units_even_color_number[0] = [12, 10];		
 		
 		_username_suggestions_enabled.splice(0, _username_suggestions_enabled.length);
 		_username_suggestions_enabled.push(true);
 		
-		_gameboard_border_number.splice(0, _gameboard_border_number.length);
-		_gameboard_border_number.push(5);		
-		
 		_gameboard_border_enabled.splice(0, _gameboard_border_enabled.length);
-		_gameboard_border_enabled.push(true);		
+		_gameboard_border_enabled.push(false);	
+		
+		_gameboard_border_number.splice(0, _gameboard_border_number.length);
+		_gameboard_border_number.push(1);		
 		
 		_gameboard_coordinates_enabled.splice(0, _gameboard_coordinates_enabled.length);
 		_gameboard_coordinates_enabled.push(true);		
@@ -473,10 +488,10 @@ class RegCustom
 		_gameboard_even_units_show_enabled.push(true);
 		
 		_gradient_background_enabled.splice(0, _gradient_background_enabled.length);
-		_gradient_background_enabled.push(true);
+		_gradient_background_enabled.push(false);
 		
 		_gradient_background_image_number.splice(0, _gradient_background_image_number.length);
-		_gradient_background_image_number.push(4);
+		_gradient_background_image_number.push(1);
 		
 		_texture_background_enabled.splice(0, _texture_background_enabled.length);
 		_texture_background_enabled.push(false);
@@ -485,19 +500,28 @@ class RegCustom
 		_texture_background_image_number.push(1);
 		
 		_client_background_enabled.splice(0, _client_background_enabled.length);
-		_client_background_enabled.push(false);
+		_client_background_enabled.push(true);
 		
 		_client_background_image_number.splice(0, _client_background_image_number.length);
-		_client_background_image_number.push(4);
+		_client_background_image_number.push(10);
 		
-		_timer_enabled.splice(0, _timer_enabled.length);
-		_timer_enabled.push(true);
+		_client_background_brightness.splice(0, _client_background_brightness.length);
+		_client_background_brightness.push(0.65);
 		
-		_send_automatic_start_game_request.splice(0, _send_automatic_start_game_request.length);
-		_send_automatic_start_game_request.push(false);		
-		
+		_client_background_saturation.splice(0, _client_background_saturation.length);
+		_client_background_saturation.push(0.7);
+				
 		_background_alpha_enabled.splice(0, _background_alpha_enabled.length);
 		_background_alpha_enabled.push(false);
+		
+		_table_body_background_image_number.splice(0, _table_body_background_image_number.length);
+		_table_body_background_image_number.push(10);
+		
+		_table_body_background_brightness.splice(0, _table_body_background_brightness.length);
+		_table_body_background_brightness.push(0.3);
+		
+		_table_body_background_saturation.splice(0, _table_body_background_saturation.length);
+		_table_body_background_saturation.push(0.7);
 		
 		_capturing_units.splice(0, _capturing_units.length);
 		_capturing_units.push(true);
@@ -512,7 +536,7 @@ class RegCustom
 		_chess_future_capturing_units_enabled.push(true);
 		
 		_chess_future_capturing_units_number.splice(0, _chess_future_capturing_units_number.length);
-		_chess_future_capturing_units_number.push(2);
+		_chess_future_capturing_units_number.push(3);
 		
 		_chess_path_to_king_enabled.splice(0, _chess_path_to_king_enabled.length);
 		_chess_path_to_king_enabled.push(true);
@@ -521,34 +545,25 @@ class RegCustom
 		_chess_path_to_king_number.push(1);
 		
 		_chess_set_for_player1.splice(0, _chess_set_for_player1.length);
-		_chess_set_for_player1.push(2);
+		_chess_set_for_player1.push(6);
 		
 		_chess_set_for_player2.splice(0, _chess_set_for_player2.length);
-		_chess_set_for_player2.push(2);
+		_chess_set_for_player2.push(6);
 		
 		_chess_set_for_player1_color_number.splice(0, _chess_set_for_player1_color_number.length);
 		_chess_set_for_player1_color_number.push(1);
 		
 		_chess_set_for_player2_color_number.splice(0, _chess_set_for_player2_color_number.length);
-		_chess_set_for_player2_color_number.push(1);
+		_chess_set_for_player2_color_number.push(13);
 		
 		_chess_opening_moves_enabled.splice(0, _chess_opening_moves_enabled.length);
-		_chess_opening_moves_enabled.push(true);	
-		
-		_chess_computer_thinking_enabled.splice(0, _chess_computer_thinking_enabled.length);
-		_chess_computer_thinking_enabled.push(true);
-		
-		_client_background_brightness.splice(0, _client_background_brightness.length);
-		_client_background_brightness.push(0.5);
-		
-		_client_background_saturation.splice(0, _client_background_saturation.length);
-		_client_background_saturation.push(1);
+		_chess_opening_moves_enabled.push(true);
 		
 		_button_color_number.splice(0, _button_color_number.length);
-		_button_color_number.push(2);
+		_button_color_number.push(10);
 		
 		_button_border_color_number.splice(0, _button_border_color_number.length);
-		_button_border_color_number.push(1);
+		_button_border_color_number.push(13);
 		
 		_button_text_color_number.splice(0, _button_text_color_number.length);
 		_button_text_color_number.push(1);
@@ -560,7 +575,7 @@ class RegCustom
 		RegCustom._button_text_color[0] = RegCustomColors.button_text_colors();
 		
 		_leaderboard_enabled.splice(0, _leaderboard_enabled.length);
-		_leaderboard_enabled.push(false);
+		_leaderboard_enabled.push(true);
 		
 		_house_feature_enabled.splice(0, _house_feature_enabled.length);
 		_house_feature_enabled.push(false);
@@ -572,13 +587,13 @@ class RegCustom
 		_notation_panel_10_percent_alpha_enabled.push(true);
 		
 		_notation_panel_same_background_color_enabled.splice(0, _notation_panel_same_background_color_enabled.length);
-		_notation_panel_same_background_color_enabled.push(false);
+		_notation_panel_same_background_color_enabled.push(true);
 		
 		_notation_panel_background_color_enabled.splice(0, _notation_panel_background_color_enabled.length);
-		_notation_panel_background_color_enabled.push(false);
+		_notation_panel_background_color_enabled.push(true);
 		
 		_notation_panel_background_color_number.splice(0, _notation_panel_background_color_number.length);
-		_notation_panel_background_color_number.push(1);
+		_notation_panel_background_color_number.push(10);
 		
 		_notation_panel_text_color_number.splice(0, _notation_panel_text_color_number.length);
 		_notation_panel_text_color_number.push(1);
@@ -593,7 +608,7 @@ class RegCustom
 		_client_topic_title_text_color_number.push(1);
 		
 		_title_bar_text_color_number.splice(0, _title_bar_text_color_number.length);
-		_title_bar_text_color_number.push(1);
+		_title_bar_text_color_number.push(11);
 		
 		_profile_avatar_number1.splice(0, _profile_avatar_number1.length);
 		_profile_avatar_number1.push("0.png");
@@ -606,6 +621,9 @@ class RegCustom
 		
 		_profile_avatar_number4.splice(0, _profile_avatar_number4.length);
 		_profile_avatar_number4.push("0.png");
+		
+		_send_automatic_start_game_request.splice(0, _send_automatic_start_game_request.length);
+		_send_automatic_start_game_request.push(false);	
 		
 		_accept_automatic_start_game_request.splice(0, _accept_automatic_start_game_request.length);
 		_accept_automatic_start_game_request.push(false);	
@@ -624,6 +642,9 @@ class RegCustom
 		
 		_chat_when_at_lobby_enabled.splice(0, _chat_when_at_lobby_enabled.length);
 		_chat_when_at_lobby_enabled.push(true);
+				
+		_timer_enabled.splice(0, _timer_enabled.length);
+		_timer_enabled.push(true);
 		
 		_chat_when_at_room_enabled.splice(0, _chat_when_at_room_enabled.length);
 		_chat_when_at_room_enabled.push(true);
@@ -648,10 +669,10 @@ class RegCustom
 		_time_remaining_for_game[0] = [15, 15, 15, 15, 30];
 		
 		_title_bar_background_number.splice(0, _title_bar_background_number.length);
-		_title_bar_background_number.push(1);
+		_title_bar_background_number.push(10);
 		
 		_menu_bar_background_number.splice(0, _menu_bar_background_number.length);
-		_menu_bar_background_number.push(1);
+		_menu_bar_background_number.push(10);
 		
 		_title_bar_background_brightness.splice(0, _title_bar_background_brightness.length);
 		_title_bar_background_brightness.push(0.5);
@@ -661,6 +682,9 @@ class RegCustom
 		
 		_world_flags_number.splice(0, _world_flags_number.length);
 		_world_flags_number.push(0);
+		
+		_pager_enabled.splice(0, _pager_enabled.length);
+		_pager_enabled.push(true);
 		
 		#if html5
 			return;

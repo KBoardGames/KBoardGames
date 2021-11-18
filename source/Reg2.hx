@@ -191,12 +191,13 @@ class Reg2 extends FlxGroup
 	public static var _menu_state_username_p1:Int = -1;
 	
 	/******************************
+	 * TODO Note this var is never set to true. therefore, it is corrently not used. this var might be useful someday so all value of false is left in code.
 	 * while scrolling the page, this stops a sound from firing when mouse goes overtop of a button or image. the reason for a sound is that some buttons or images only need a mouse press not a release and when scrolling the page, a mouse press is used.
 	 */
-	public static var _scrollable_area_is_scrolling = false;
+	public static var _scrollable_area_is_scrolling = true;
 	
 	/******************************
-	 * this is used at scrollable area. each time a button is clicked at the lobby, this value is plus 1. at the ButtonGeneralNetworkYes.hx class when alpha is set to 1 then this is minus 1. the scrollable area will not scroll unless this value is 0.
+	 * this is used at scrollable area. each time a button is clicked at the lobby, this value is plus 1. at the ButtonGeneralNetworkYes.hx class when alpha is set to 1 then this is minus 1. the scrollable area will not scroll unless this value is 0.3.
 	 */
 	public static var _lobby_button_alpha:Float = 0.3;
 	
@@ -213,6 +214,22 @@ class Reg2 extends FlxGroup
 	 * this var does not reset back to default value.
 	 */
 	public static var _configuration_jump_to_scene:Int = 2;
+	
+	/******************************
+	 * at the SceneCreateRoom.hx, this holds the game ids that can be selected. if element 1 has a value of 4 then the second game is the signature game in this list. this var is also used at MenuStateOfflinePlayers.hx game menu. 
+	 */
+	public static var _gameIds_that_can_be_selected:Array<Int> = [];
+	
+	/******************************
+	 * this is the image that represents the game that can be selected. At SceneCreateRoom.hx or MenuStateOfflinePlayers.hx, this is the image. 
+	 */
+	public static var _gameId_sprite:Array<FlxSprite> = [];
+	/******************************
+	 * this image has a border that highlights the _gameId_sprite. at SceneCreateRoom, this will animate the current image mouse clicked. At MenuStateOfflinePlayers.hx this image will highlight the _gameId_sprite image where the mouse is hovering.
+	 */
+	public static var _gameId_sprite_highlight:FlxSprite;
+	
+	
 	
 	public static function system_reset():Void
 	{
@@ -235,7 +252,7 @@ class Reg2 extends FlxGroup
 	{
 		resetMessageBox();
 		
-		_scrollable_area_is_scrolling = false;
+		_scrollable_area_is_scrolling = true;
 		_message_box_just_closed = false;
 		_offline_cpu_host_name2 = "";
 		_offline_cpu_host_name3 = "";

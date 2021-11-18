@@ -693,7 +693,68 @@ class ConfigurationGeneralEvents extends CID2
 
 		CID2._text_client_background_saturation.text = Std.string(RegCustom._client_background_saturation[Reg._tn]);
 	}
+	
+	public function table_body_background_minus():Void
+	{
+		RegCustom._table_body_background_image_number[Reg._tn] -= 1;
+		if (RegCustom._table_body_background_image_number[Reg._tn] <= 0) RegCustom._table_body_background_image_number[Reg._tn] = 13;
 		
+		CID2._sprite_table_body_background_image.color = RegCustomColors.color_table_body_background();
+	}
+	
+	public function table_body_background_plus():Void
+	{
+		RegCustom._table_body_background_image_number[Reg._tn] += 1;
+		if (RegCustom._table_body_background_image_number[Reg._tn] >= 14) RegCustom._table_body_background_image_number[Reg._tn] = 1;
+		
+		CID2._sprite_table_body_background_image.color = RegCustomColors.color_table_body_background();
+	}
+	
+	
+	public function table_body_background_brightness_minus():Void
+	{
+		if (CID2._text_table_body_background_brightness.text == "0.15")
+			RegCustom._table_body_background_brightness[Reg._tn] = 1;
+			
+		else if (RegCustom._table_body_background_brightness[Reg._tn] > 0.15)
+			RegCustom._table_body_background_brightness[Reg._tn] -= 0.05;
+		
+		CID2._text_table_body_background_brightness.text = Std.string(RegCustom._table_body_background_brightness[Reg._tn]);	
+	}
+
+
+	public function table_body_background_brightness_plus():Void
+	{		
+		if (CID2._text_table_body_background_brightness.text == "1")
+			RegCustom._table_body_background_brightness[Reg._tn] = 0.15;
+		
+		else if (RegCustom._table_body_background_brightness[Reg._tn] < 1) RegCustom._table_body_background_brightness[Reg._tn] += 0.05;
+
+		CID2._text_table_body_background_brightness.text = Std.string(RegCustom._table_body_background_brightness[Reg._tn]);
+	}
+	
+	public function table_body_background_saturation_minus():Void
+	{
+		if (CID2._text_table_body_background_saturation.text == "0.15")
+			RegCustom._table_body_background_saturation[Reg._tn] = 1;
+			
+		else if (RegCustom._table_body_background_saturation[Reg._tn] > 0.15)
+			RegCustom._table_body_background_saturation[Reg._tn] -= 0.05;
+		
+		CID2._text_table_body_background_saturation.text = Std.string(RegCustom._table_body_background_saturation[Reg._tn]);	
+	}
+
+
+	public function table_body_background_saturation_plus():Void
+	{		
+		if (CID2._text_table_body_background_saturation.text == "1")
+			RegCustom._table_body_background_saturation[Reg._tn] = 0.15;
+		
+		else if (RegCustom._table_body_background_saturation[Reg._tn] < 1) RegCustom._table_body_background_saturation[Reg._tn] += 0.05;
+
+		CID2._text_table_body_background_saturation.text = Std.string(RegCustom._table_body_background_saturation[Reg._tn]);
+	}
+	
 	/******************************
 	 * apply a fill color to the example buttom. that button is used to show the changes of the fill color, border color and text color.
 	 */
@@ -880,5 +941,15 @@ class ConfigurationGeneralEvents extends CID2
 		
 		CID2._sprite_menu_bar_background_color.color = RegCustomColors.menu_bar_background_color();
 	}	
+	
+	public function pager_enabled():Void
+	{
+		if (RegCustom._pager_enabled[Reg._tn] == false)
+			RegCustom._pager_enabled[Reg._tn] = true;
+		else
+			RegCustom._pager_enabled[Reg._tn] = false;
+			
+		CID2._button_pager_enabled.label.text = Std.string(RegCustom._pager_enabled[Reg._tn]);
+	}
 	
 }//

@@ -47,7 +47,7 @@ class PlayerKickOrBanPlayers extends FlxState
 
 		// name of each player in front of each player's stats of win, lose or draw.
 		textKickOrBan1 = new FlxText(60, 572, 0, "", 20);
-		textKickOrBan1.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_topic_title_text_color());
+		textKickOrBan1.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
 		if (RegCustom._chat_when_at_room_enabled[Reg._tn] == false)
 			textKickOrBan1.x += 180; // half of 360 is the width of chatter. half is used to center it to scene.
 		textKickOrBan1.scrollFactor.set(0, 0);
@@ -55,21 +55,21 @@ class PlayerKickOrBanPlayers extends FlxState
 		
 		// player 2's name.
 		textKickOrBan2 = new FlxText(280, 572, 0, "", 20);
-		textKickOrBan2.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.WHITE);
+		textKickOrBan2.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
 		if (RegCustom._chat_when_at_room_enabled[Reg._tn] == false)
 			textKickOrBan2.x += 180; // half of 360 is the width of chatter. half is used to center it to scene.
 		textKickOrBan2.scrollFactor.set(0, 0);
 		add(textKickOrBan2);
 		
 		textKickOrBan3 = new FlxText(500, 572, 0, "", 20);
-		textKickOrBan3.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.WHITE);
+		textKickOrBan3.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
 		if (RegCustom._chat_when_at_room_enabled[Reg._tn] == false)
 			textKickOrBan3.x += 180; // half of 360 is the width of chatter. half is used to center it to scene.
 		textKickOrBan3.scrollFactor.set(0, 0);
 		add(textKickOrBan3);
 		
 		textKickOrBan4 = new FlxText(720, 572, 0, "", 20);
-		textKickOrBan4.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.WHITE);
+		textKickOrBan4.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
 		if (RegCustom._chat_when_at_room_enabled[Reg._tn] == false)
 			textKickOrBan4.x += 180; // half of 360 is the width of chatter. half is used to center it to scene.
 		textKickOrBan4.scrollFactor.set(0, 0);

@@ -17,8 +17,6 @@
 */
 
 package;
-import lime.graphics.opengl.ext.OES_get_program_binary;
-import yaml.util.ObjectMap.AnyObjectMap;
 
 /**
  * these are common functions that two or more classes share.
@@ -442,7 +440,18 @@ class RegFunctions
 			
 			saveFile.writeString("_client_background_image_number: " + RegCustom._client_background_image_number[Reg._tn] + "\r\n");
 			
+			saveFile.writeString("_client_background_brightness: " + RegCustom._client_background_brightness[Reg._tn] + "\r\n");
+			
+			saveFile.writeString("_client_background_saturation: " + RegCustom._client_background_saturation[Reg._tn] + "\r\n");
+			
 			saveFile.writeString("_background_alpha_enabled: " + RegCustom._background_alpha_enabled[Reg._tn] + "\r\n");
+			
+			saveFile.writeString("_table_body_background_image_number: " + RegCustom._table_body_background_image_number[Reg._tn] + "\r\n");
+			
+			saveFile.writeString("_table_body_background_brightness: " + RegCustom._table_body_background_brightness[Reg._tn] + "\r\n");
+			
+			saveFile.writeString("_table_body_background_saturation: " + RegCustom._table_body_background_saturation[Reg._tn] + "\r\n");
+			
 			saveFile.writeString("_capturing_units: " + RegCustom._capturing_units[Reg._tn] + "\r\n");
 			
 			saveFile.writeString("_capturing_units_number: " + RegCustom._capturing_units_number[Reg._tn] + "\r\n");
@@ -466,12 +475,6 @@ class RegFunctions
 			saveFile.writeString("_chess_set_for_player2_color_number: " + RegCustom._chess_set_for_player2_color_number[Reg._tn] + "\r\n");
 			
 			saveFile.writeString("_chess_opening_moves_enabled: " + RegCustom._chess_opening_moves_enabled[Reg._tn] + "\r\n");
-			
-			saveFile.writeString("_chess_computer_thinking_enabled: " + RegCustom._chess_computer_thinking_enabled[Reg._tn] + "\r\n");
-			
-			saveFile.writeString("_client_background_brightness: " + RegCustom._client_background_brightness[Reg._tn] + "\r\n");
-			
-			saveFile.writeString("_client_background_saturation: " + RegCustom._client_background_saturation[Reg._tn] + "\r\n");
 			
 			saveFile.writeString("_button_color_number: " + RegCustom._button_color_number[Reg._tn] + "\r\n");
 			
@@ -551,6 +554,8 @@ class RegFunctions
 			saveFile.writeString("_menu_bar_background_brightness: " + RegCustom._menu_bar_background_brightness[Reg._tn] + "\r\n");
 			
 			saveFile.writeString("_world_flags_number: " + RegCustom._world_flags_number[Reg._tn] + "\r\n");
+			
+			saveFile.writeString("_pager_enabled: " + RegCustom._pager_enabled[Reg._tn] + "\r\n");
 			
 			saveFile.close();
 		#end
@@ -729,6 +734,22 @@ class RegFunctions
 							
 							if (Std.parseInt(data.get("_client_background_image_number")) != null) RegCustom._client_background_image_number[Reg._tn] = Std.parseInt(data.get("_client_background_image_number"));
 						}
+						catch (e:Dynamic){}							
+						
+						try
+						{
+							RegCustom._client_background_brightness[Reg._tn] = 1; 
+							if (Std.string(data.get("_client_background_brightness")) != ""
+							&&	Std.string(data.get("_client_background_brightness")) != "null") RegCustom._client_background_brightness[Reg._tn] = Std.parseFloat(Std.string(data.get("_client_background_brightness")));
+						}
+						catch (e:Dynamic){}		
+						
+						try
+						{
+							RegCustom._client_background_saturation[Reg._tn] = 1;
+							if (Std.string(data.get("_client_background_saturation")) != ""
+							&&	Std.string(data.get("_client_background_saturation")) != "null") RegCustom._client_background_saturation[Reg._tn] = Std.parseFloat(Std.string(data.get("_client_background_saturation")));
+						}
 						catch (e:Dynamic){}	
 						
 						try
@@ -736,6 +757,30 @@ class RegFunctions
 							var _tmp = Std.string(data.get("_background_alpha_enabled"));
 							RegCustom._background_alpha_enabled[Reg._tn] = false;
 							if (_tmp == "true") RegCustom._background_alpha_enabled[Reg._tn] = true;
+						}
+						catch (e:Dynamic){}	
+						
+						try
+						{
+							RegCustom._table_body_background_image_number[Reg._tn] = 1;
+							
+							if (Std.parseInt(data.get("_table_body_background_image_number")) != null) RegCustom._table_body_background_image_number[Reg._tn] = Std.parseInt(data.get("_table_body_background_image_number"));
+						}
+						catch (e:Dynamic){}
+						
+						try
+						{
+							RegCustom._table_body_background_brightness[Reg._tn] = 1; 
+							if (Std.string(data.get("_table_body_background_brightness")) != ""
+							&&	Std.string(data.get("_table_body_background_brightness")) != "null") RegCustom._table_body_background_brightness[Reg._tn] = Std.parseFloat(Std.string(data.get("_table_body_background_brightness")));
+						}
+						catch (e:Dynamic){}		
+						
+						try
+						{
+							RegCustom._table_body_background_saturation[Reg._tn] = 1;
+							if (Std.string(data.get("_table_body_background_saturation")) != ""
+							&&	Std.string(data.get("_table_body_background_saturation")) != "null") RegCustom._table_body_background_saturation[Reg._tn] = Std.parseFloat(Std.string(data.get("_table_body_background_saturation")));
 						}
 						catch (e:Dynamic){}	
 						
@@ -834,28 +879,6 @@ class RegFunctions
 							if (_tmp == "true") RegCustom._chess_opening_moves_enabled[Reg._tn] = true;
 						}
 						catch (e:Dynamic){}
-						
-						try
-						{
-							var _tmp = Std.string(data.get("_chess_computer_thinking_enabled"));
-							RegCustom._chess_computer_thinking_enabled[Reg._tn] = false;
-							if (_tmp == "true") RegCustom._chess_computer_thinking_enabled[Reg._tn] = true;
-						}
-						catch (e:Dynamic){}	
-						
-						try
-						{
-							RegCustom._client_background_brightness[Reg._tn] = 1; 
-							if (Std.string(data.get("_client_background_brightness")) != "") RegCustom._client_background_brightness[Reg._tn] = Std.parseFloat(Std.string(data.get("_client_background_brightness")));
-						}
-						catch (e:Dynamic){}		
-						
-						try
-						{
-							RegCustom._client_background_saturation[Reg._tn] = 1;
-							if (Std.string(data.get("_client_background_saturation")) != "") RegCustom._client_background_saturation[Reg._tn] = Std.parseFloat(Std.string(data.get("_client_background_saturation")));
-						}
-						catch (e:Dynamic){}	
 						
 						try
 						{
@@ -972,7 +995,8 @@ class RegFunctions
 						{
 							RegCustom._profile_avatar_number1[Reg._tn] = "0.png";
 							
-							if (Std.string(data.get("_profile_avatar_number1")) != "") RegCustom._profile_avatar_number1[Reg._tn] = Std.string(data.get("_profile_avatar_number1"));
+							if (Std.string(data.get("_profile_avatar_number1")) != ""
+							&&	Std.string(data.get("_profile_avatar_number1")) != "null") RegCustom._profile_avatar_number1[Reg._tn] = Std.string(data.get("_profile_avatar_number1"));
 						}
 						catch (e:Dynamic){}
 						
@@ -980,7 +1004,8 @@ class RegFunctions
 						{	
 							RegCustom._profile_avatar_number2[Reg._tn] = "0.png";
 							
-							if (Std.string(data.get("_profile_avatar_number2")) != "") RegCustom._profile_avatar_number2[Reg._tn] = Std.string(data.get("_profile_avatar_number2"));
+							if (Std.string(data.get("_profile_avatar_number2")) != ""
+							&&	Std.string(data.get("_profile_avatar_number2")) != "null") RegCustom._profile_avatar_number2[Reg._tn] = Std.string(data.get("_profile_avatar_number2"));
 						}
 						catch (e:Dynamic){}
 						
@@ -988,7 +1013,8 @@ class RegFunctions
 						{
 							RegCustom._profile_avatar_number3[Reg._tn] = "0.png";
 							
-							if (Std.string(data.get("_profile_avatar_number3")) != "") RegCustom._profile_avatar_number3[Reg._tn] = Std.string(data.get("_profile_avatar_number3"));
+							if (Std.string(data.get("_profile_avatar_number3")) != ""
+							&&	Std.string(data.get("_profile_avatar_number3")) != "null") RegCustom._profile_avatar_number3[Reg._tn] = Std.string(data.get("_profile_avatar_number3"));
 						}
 						catch (e:Dynamic){}
 						
@@ -996,7 +1022,8 @@ class RegFunctions
 						{
 							RegCustom._profile_avatar_number4[Reg._tn] = "0.png";
 							
-							if (Std.string(data.get("_profile_avatar_number4")) != "") RegCustom._profile_avatar_number4[Reg._tn] = Std.string(data.get("_profile_avatar_number4"));
+							if (Std.string(data.get("_profile_avatar_number4")) != ""
+							&&	Std.string(data.get("_profile_avatar_number4")) != "null") RegCustom._profile_avatar_number4[Reg._tn] = Std.string(data.get("_profile_avatar_number4"));
 						}
 						catch (e:Dynamic){}
 						
@@ -1153,7 +1180,8 @@ class RegFunctions
 						{	
 							RegCustom._title_bar_background_brightness[Reg._tn] = 1;
 							
-							if (Std.string(data.get("_title_bar_background_brightness")) != "") RegCustom._title_bar_background_brightness[Reg._tn] = Std.parseFloat(Std.string(data.get("_title_bar_background_brightness")));
+							if (Std.string(data.get("_title_bar_background_brightness")) != ""
+							&&	Std.string(data.get("_title_bar_background_brightness")) != "null") RegCustom._title_bar_background_brightness[Reg._tn] = Std.parseFloat(Std.string(data.get("_title_bar_background_brightness")));
 						}
 						catch (e:Dynamic){}
 						
@@ -1161,7 +1189,8 @@ class RegFunctions
 						{	
 							RegCustom._menu_bar_background_brightness[Reg._tn] = 1; 
 							
-							if (Std.string(data.get("_menu_bar_background_brightness")) != "") RegCustom._menu_bar_background_brightness[Reg._tn] = Std.parseFloat(Std.string(data.get("_menu_bar_background_brightness")));
+							if (Std.string(data.get("_menu_bar_background_brightness")) != ""
+							&&	Std.string(data.get("_menu_bar_background_brightness")) != "null") RegCustom._menu_bar_background_brightness[Reg._tn] = Std.parseFloat(Std.string(data.get("_menu_bar_background_brightness")));
 						}
 						catch (e:Dynamic){}
 						
@@ -1172,6 +1201,16 @@ class RegFunctions
 							if (Std.parseInt(data.get("_world_flags_number")) != null) RegCustom._world_flags_number[Reg._tn] = Std.parseInt(data.get("_world_flags_number"));
 						}
 						catch (e:Dynamic){}
+						
+						try
+						{
+							var _tmp = Std.string(data.get("_pager_enabled"));
+							RegCustom._pager_enabled[Reg._tn] = false;
+							if (_tmp == "true") RegCustom._pager_enabled[Reg._tn] = true;
+						}
+						catch (e:Dynamic){}
+						
+						
 					}
 					
 				}			
@@ -1204,41 +1243,43 @@ class RegFunctions
 	{
 		RegCustom._profile_username_p1.push("Guest 1");
 		RegCustom._profile_username_p2.push("Guest 2");
-		RegCustom._gameboard_units_odd_shade_number.push([6, 3]);
-		RegCustom._gameboard_units_even_shade_number.push([9, 2]);
-		RegCustom._gameboard_units_odd_color_number.push([3, 13]);
-		RegCustom._gameboard_units_even_color_number.push([1, 8]);
+		RegCustom._gameboard_units_odd_shade_number.push([1, 3]);
+		RegCustom._gameboard_units_even_shade_number.push([9, 1]);
+		RegCustom._gameboard_units_odd_color_number.push([3, 1]);
+		RegCustom._gameboard_units_even_color_number.push([12, 10]);
 		RegCustom._username_suggestions_enabled.push(true);
-		RegCustom._gameboard_border_number.push(5);		
-		RegCustom._gameboard_border_enabled.push(true);		
+		RegCustom._gameboard_border_enabled.push(true);
+		RegCustom._gameboard_border_number.push(1);		
 		RegCustom._gameboard_coordinates_enabled.push(true);		
 		RegCustom._gameboard_even_units_show_enabled.push(true);
-		RegCustom._gradient_background_enabled.push(true);
-		RegCustom._gradient_background_image_number.push(4);
-		RegCustom._texture_background_enabled.push(true);
+		RegCustom._gradient_background_enabled.push(false);
+		RegCustom._gradient_background_image_number.push(1);
+		RegCustom._texture_background_enabled.push(false);
 		RegCustom._texture_background_image_number.push(1);
-		RegCustom._client_background_enabled.push(false);
-		RegCustom._client_background_image_number.push(4);
+		RegCustom._client_background_enabled.push(true);
+		RegCustom._client_background_image_number.push(10);
+		RegCustom._client_background_brightness.push(0.65);
+		RegCustom._client_background_saturation.push(0.7);
 		RegCustom._background_alpha_enabled.push(false);
+		RegCustom._table_body_background_image_number.push(10);
+		RegCustom._table_body_background_brightness.push(0.3);
+		RegCustom._table_body_background_saturation.push(0.7);		
 		RegCustom._capturing_units.push(true);
 		RegCustom._capturing_units_number.push(1);
 		RegCustom._chess_show_last_piece_moved.push(true);
 		RegCustom._chess_future_capturing_units_enabled.push(true);
-		RegCustom._chess_future_capturing_units_number.push(2);
+		RegCustom._chess_future_capturing_units_number.push(3);
 		RegCustom._chess_path_to_king_enabled.push(true);
 		RegCustom._chess_path_to_king_number.push(1);
-		RegCustom._chess_set_for_player1.push(2);
-		RegCustom._chess_set_for_player2.push(2);
+		RegCustom._chess_set_for_player1.push(6);
+		RegCustom._chess_set_for_player2.push(6);
 		RegCustom._chess_set_for_player1_color_number.push(1);
-		RegCustom._chess_set_for_player2_color_number.push(1);
-		RegCustom._chess_opening_moves_enabled.push(true);	
-		RegCustom._chess_computer_thinking_enabled.push(true);
-		RegCustom._client_background_brightness.push(0.5);
-		RegCustom._client_background_saturation.push(1);		
-		RegCustom._button_color_number.push(2);
-		RegCustom._button_border_color_number.push(3);
+		RegCustom._chess_set_for_player2_color_number.push(13);
+		RegCustom._chess_opening_moves_enabled.push(true);		
+		RegCustom._button_color_number.push(10);
+		RegCustom._button_border_color_number.push(13);
 		RegCustom._button_text_color_number.push(1);
-		RegCustom._leaderboard_enabled.push(false);
+		RegCustom._leaderboard_enabled.push(true);
 		RegCustom._house_feature_enabled.push(false);
 		RegCustom._go_back_to_title_after_save.push(false);
 		RegCustom._notation_panel_10_percent_alpha_enabled.push(true);
@@ -1248,7 +1289,7 @@ class RegFunctions
 		RegCustom._notation_panel_text_color_number.push(1);
 		RegCustom._client_topic_title_text_color_number.push(1);		
 		RegCustom._client_text_color_number.push(1);
-		RegCustom._title_bar_text_color_number.push(1);		
+		RegCustom._title_bar_text_color_number.push(11);		
 		RegCustom._profile_avatar_number1.push("0.png");
 		RegCustom._profile_avatar_number2.push("0.png");
 		RegCustom._profile_avatar_number3.push("0.png");
@@ -1268,11 +1309,12 @@ class RegFunctions
 		RegCustom._music_enabled.push(true);
 		RegCustom._sound_enabled.push(true);
 		RegCustom._time_remaining_for_game.push([15, 15, 15, 15, 30]);
-		RegCustom._title_bar_background_number.push(1);
-		RegCustom._menu_bar_background_number.push(1);
+		RegCustom._title_bar_background_number.push(10);
+		RegCustom._menu_bar_background_number.push(10);
 		RegCustom._title_bar_background_brightness.push(0.5);
 		RegCustom._menu_bar_background_brightness.push(0.5);
 		RegCustom._world_flags_number.push(0);
+		RegCustom._pager_enabled.push(true);
 		
 	}
 	
@@ -1308,6 +1350,21 @@ class RegFunctions
 				
 			}
 			
+			if (_gameMenu.data._profile_username_p1 != null)
+				RegCustom._profile_username_p1[Reg._tn] = _gameMenu.data._profile_username_p1;
+					
+			if (_gameMenu.data._profile_username_p2 != null)
+				RegCustom._profile_username_p2[Reg._tn] = _gameMenu.data._profile_username_p2;
+			
+			if (_gameMenu.data._profile_avatar_number1 != null)
+				RegCustom._profile_avatar_number1[Reg._tn] = _gameMenu.data._profile_avatar_number1;
+			
+			if (_gameMenu.data._profile_avatar_number2 != null)
+				RegCustom._profile_avatar_number2[Reg._tn] = _gameMenu.data._profile_avatar_number2;
+			
+			if (_gameMenu.data._world_flags_number != null)
+				RegCustom._world_flags_number[Reg._tn] = _gameMenu.data._world_flags_number;
+				
 			_gameMenu.close;			
 			
 			// this codde is needed twice. the second line is two lines down. this code is used to change the appearence of the scene.
@@ -1337,10 +1394,24 @@ class RegFunctions
 			_gameMenu.data._tn = Reg._tn;
 			
 			_gameMenu.data._theme_name_current = RegCustom._theme_name_current;
-
+			
+			if (RegCustom._profile_username_p1[Reg._tn] == "") RegCustom._profile_username_p1[Reg._tn] = "Guest 1";
+			
+			if (RegCustom._profile_username_p2[Reg._tn] == "") RegCustom._profile_username_p2[Reg._tn] = "Guest 2";
+			
+			_gameMenu.data._profile_username_p1 = RegCustom._profile_username_p1[Reg._tn];
+			
+			_gameMenu.data._profile_username_p2 = RegCustom._profile_username_p2[Reg._tn];
+			
 			// this need to be clear or else the old username will be used at next login.
 			RegTypedef._dataAccount._username = "";
-						
+			
+			_gameMenu.data._profile_avatar_number1 = RegCustom._profile_avatar_number1[Reg._tn];
+			
+			_gameMenu.data._profile_avatar_number2 = RegCustom._profile_avatar_number2[Reg._tn];
+
+			_gameMenu.data._world_flags_number = RegCustom._world_flags_number[Reg._tn];
+			
 			_gameMenu.data._chess_skill_level_online = RegCustom._chess_skill_level_online;
 			
 			_gameMenu.flush();
@@ -1470,5 +1541,72 @@ class RegFunctions
 		}
 	}
 	
+	/******************************
+	 * this creates a list of all games that can be selected to play.
+	 */
+	public static function gameIds_create(exclude:Bool = false):Void
+	{
+		if (exclude == false) Reg._total_games_excluded_from_list = 0;
+		
+		Reg2._gameIds_that_can_be_selected.slice(0, Reg2._gameIds_that_can_be_selected.length);
+		
+		#if checkers
+			Reg2._gameIds_that_can_be_selected.push(0);
+		#end
+
+		#if chess
+			Reg2._gameIds_that_can_be_selected.push(1);
+		#end
+
+		#if reversi
+			Reg2._gameIds_that_can_be_selected.push(2);
+		#end
+
+		#if snakesAndLadders
+			Reg2._gameIds_that_can_be_selected.push(3);
+		#end
+
+		#if wheelEstate
+			if (Reg._total_games_excluded_from_list == 0)
+				Reg2._gameIds_that_can_be_selected.push(4);
+		#end
+		
+	}
+	
+	/******************************
+	 * this creates the FlxSprite of each available game that can be selected to play.
+	 */
+	public static function gameIds_draw_sprite(_this:FlxState):Void
+	{	
+		// everytime enetering this function, clear this array because it will now be populated.
+		Reg2._gameId_sprite.splice(0, Reg2._gameId_sprite.length);
+		
+		for (i in 0... Reg._total_games_in_release - Reg._total_games_excluded_from_list)
+		{
+			Reg2._gameId_sprite[i] = new FlxSprite(75 + ( i * 255), 120, "assets/images/gameId" + Reg2._gameIds_that_can_be_selected[i] + ".png");
+			Reg2._gameId_sprite[i].scrollFactor.set(0, 0);
+			_this.add(Reg2._gameId_sprite[i]);
+		}
+		
+		Reg2._gameId_sprite_highlight = new FlxSprite(75, 120);
+		Reg2._gameId_sprite_highlight.loadGraphic("assets/images/gamesBorder.png", true, 240, 240); // height is the same value as width.
+		Reg2._gameId_sprite_highlight.scrollFactor.set(0, 0);
+		Reg2._gameId_sprite_highlight.animation.add("anim", [0, 1], 2);
+		Reg2._gameId_sprite_highlight.animation.play("anim");
+		Reg2._gameId_sprite_highlight.updateHitbox();
+		_this.add(Reg2._gameId_sprite_highlight);
+		
+		if (Reg._total_games_in_release == 0) 
+			Reg2._gameId_sprite_highlight.visible = false;
+		
+	}
+	
+	public static function no_game_modules_installed_notice(_this:FlxState):Void
+	{
+		var _text = new FlxText(15, 100, 0, "No game modules installed.");
+		_text.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_topic_title_text_color());
+		_text.scrollFactor.set(0, 0);
+		_this.add(_text);
+	}
 	
 }//

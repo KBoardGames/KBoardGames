@@ -42,38 +42,21 @@ class MenuStateOfflinePlayers extends MenuState
 		#if desktop
 			FlxG.mouse.useSystemCursor = true;				
 		#end
-		
+				
 		RegFunctions.fontsSharpen();		
 		startupFunctions();
 		
 		if (Reg.__title_bar != null) remove(Reg.__title_bar);
-		Reg.__title_bar = new TitleBar("Player 1 vs Player 2");
+		Reg.__title_bar = new TitleBar("Player 1 vs Player 2", true);
 		add(Reg.__title_bar);
 		
-		var _checkers = new ButtonGeneralNetworkNo(0, (FlxG.height - 340) / 2 + 40, "Checkers", 350 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, playCheckers, RegCustom._button_color[Reg._tn], false);
-		_checkers.label.font = Reg._fontDefault;
-		_checkers.screenCenter(X);
-		add(_checkers);
+		if (Reg._total_games_in_release > 0)
+		{
+			RegFunctions.gameIds_create(true);
+			RegFunctions.gameIds_draw_sprite(this);
+		}
 		
-		var _chess = new ButtonGeneralNetworkNo(0, (FlxG.height - 340) / 2 + 100, "Chess", 350 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, playChess, RegCustom._button_color[Reg._tn], false);
-		_chess.label.font = Reg._fontDefault;
-		_chess.screenCenter(X);
-		add(_chess);
-		
-		var _reversi = new ButtonGeneralNetworkNo(0, (FlxG.height - 340) / 2 + 160, "Reversi", 350 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, playReversi, RegCustom._button_color[Reg._tn], false);
-		_reversi.label.font = Reg._fontDefault;
-		_reversi.screenCenter(X);
-		add(_reversi);
-			
-		var _snakesAndladders = new ButtonGeneralNetworkNo(0, (FlxG.height - 340) / 2 + 220, "Snakes and Ladders", 350 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, playSnakesAndLadders, RegCustom._button_color[Reg._tn], false);
-		_snakesAndladders.label.font = Reg._fontDefault;
-		_snakesAndladders.screenCenter(X);
-		add(_snakesAndladders);
-		
-		var _back = new ButtonGeneralNetworkNo(0, (FlxG.height - 340) / 2 + 280, "To Title", 170 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, backToTitle, RegCustom._button_color[Reg._tn], false);
-		_back.label.font = Reg._fontDefault;
-		_back.screenCenter(X);
-		add(_back);
+		else RegFunctions.no_game_modules_installed_notice(this);
 		
 		Reg._gameJumpTo = 0;
 	}
@@ -166,16 +149,40 @@ class MenuStateOfflinePlayers extends MenuState
 		FlxG.switchState(new PlayState());
 	}
 	
-	public function backToTitle():Void
-	{
-		Reg._gameJumpTo = 0;
-		Reg._at_menu_state_offline = false;
-		
-		FlxG.switchState(new MenuState());
-	}
-	
 	override public function update(elapsed:Float):Void 
 	{
+		for (i in 0... Reg._total_games_in_release - Reg._total_games_excluded_from_list)
+		{
+			if (Reg2._gameId_sprite[i] != null)
+			{
+				if (ActionInput.overlaps(Reg2._gameId_sprite[i]) == true
+				)
+				{
+					Reg2._gameId_sprite_highlight.setPosition(75 + ( i * 255), 120);
+				}
+				
+				if (ActionInput.overlaps(Reg2._gameId_sprite[i]) == true)
+				{
+					if (ActionInput.justPressed() == true)
+					{					
+						if (RegCustom._sound_enabled[Reg._tn] == true
+					&&  Reg2._scrollable_area_is_scrolling == false)
+							FlxG.sound.play("click", 1, false);		
+					}
+					
+					if (ActionInput.justReleased() == true)
+					{
+						switch(Reg2._gameIds_that_can_be_selected[i])
+						{
+							case 0: playCheckers();
+							case 1: playChess();
+							case 2: playReversi();
+							case 3: playSnakesAndLadders();
+						}
+					}
+				}
+			}
+		}
 		
 		super.update(elapsed);
 	}

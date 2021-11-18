@@ -17,7 +17,6 @@
 */
 
 package;
-import openfl.display.BitmapData;
 
 // TODO: think about filters and text
 
@@ -71,6 +70,7 @@ class TextGeneral extends FlxText
 	
 	public var _background_width:Int = 0;
 	public var _background_height:Int = 0;
+	private var _background_visible:Bool = true;
 	
 	private var _id:Int = 0;
 	
@@ -87,7 +87,7 @@ class TextGeneral extends FlxText
 	 * @param	multi_line		this trims the makeGraphic box underneath the text with this is true, so that no makeGraphic padding after the text is seen.
 	 * @param	background_size		the size of the semitransparent table row underneath this FlxText.
 	 */
-	public function new(x:Float = 0, y:Float = 0, FieldWidth:Float = 0, ?Text:String, Size:Int = 8, EmbeddedFont:Bool = true, multi_line:Bool = false, background_width:Int = 0, background_height:Int = 0)
+	public function new(x:Float = 0, y:Float = 0, FieldWidth:Float = 0, ?Text:String, Size:Int = 8, EmbeddedFont:Bool = true, multi_line:Bool = false, background_width:Int = 0, background_height:Int = 0, background_visible:Bool = true)
 	{
 		super(x, y, FieldWidth, Text, Size, EmbeddedFont);
 		
@@ -102,6 +102,7 @@ class TextGeneral extends FlxText
 		_multi_line = multi_line;
 		_background_width = background_width;
 		_background_height = background_height;
+		_background_visible = background_visible;
 		
 		_ticks = 30; // update this instance now.
 		_text_state.push(0);
@@ -116,10 +117,10 @@ class TextGeneral extends FlxText
 		if (_id != ID) return;
 		
 		_ticks = RegFunctions.incrementTicks(_ticks, 60 / Reg._framerate);
-		if (_ticks >= 15)
+		
+		// to highlight a row on mouse over replace this if condition with if (_ticks >= 15) then just above the super.update(elapsed) line remove else _ticks = 35. Warning doing this is CPU intensive.
+		if (_ticks < 35)
 		{
-			_ticks = 0;
-			
 			var oldWidth:Int = 0;
 			var oldHeight:Int = VERTICAL_GUTTER;
 			
@@ -153,7 +154,9 @@ class TextGeneral extends FlxText
 					// if variable is set.
 					if (_background_width > 0)
 					{
+						// uncomment this bloack for highlights.
 						// highlight the background if mouse is overtop.
+						/*
 						if (_text_state[ID] < 2
 						&&	FlxG.mouse.enabled == true
 						&&	FlxG.mouse.x > _startX
@@ -166,7 +169,7 @@ class TextGeneral extends FlxText
 							makeGraphic(_background_width, _background_height, 0x44000088, true, key);
 						}
 						
-						else if (_text_state[ID] != 1
+						else*/ if (_text_state[ID] != 1
 						|| 		 _regen == true)
 						{
 							if (FlxG.mouse.y + _scrollarea_offset_y < _startY
@@ -182,7 +185,9 @@ class TextGeneral extends FlxText
 					
 					else
 					{
+						// uncomment this bloack for highlights.
 						// highlight the background if mouse is overtop.
+						/*
 						if (_text_state[ID] < 2
 						&&	FlxG.mouse.enabled == true
 						&&	FlxG.mouse.x > _startX
@@ -195,7 +200,7 @@ class TextGeneral extends FlxText
 							makeGraphic(FlxG.width - 55, Std.int(newHeight + 27), 0x44000088, true, key);
 						}
 						
-						else if (_text_state[ID] != 1
+						else*/ if (_text_state[ID] != 1
 						|| 		 _regen == true)
 						{
 							if (FlxG.mouse.y + _scrollarea_offset_y < _startY
@@ -203,7 +208,12 @@ class TextGeneral extends FlxText
 							|| 		 _regen == true)
 							{
 								_text_state[ID] = 1;
-								makeGraphic(FlxG.width - 55, Std.int(newHeight + 27), 0x33000044, true, key);
+								
+								// if this var is false then user could be at the front door. at the right side of that screen the client text is displayed. if using the FlxText to draw the client text then the server text we show after a slight delay since this class draws the text after drawing the backgrould.
+								if (_background_visible == true)
+									makeGraphic(FlxG.width - 55, Std.int(newHeight + 27), 0x33000044, true, key);
+								else // a background is needed.
+									makeGraphic(FlxG.width - 55, Std.int(newHeight + 27), 0x00000000, true, key);
 							}
 						}
 					}
@@ -215,7 +225,9 @@ class TextGeneral extends FlxText
 					// if text started at half of screen then offset this graphic so that it ends at the end of the screen.
 					if (_startX > 100)
 					{
+						// uncomment this bloack for highlights.
 						// highlight the background if mouse is overtop.
+						/*
 						if (_text_state[ID] < 2
 						&&	FlxG.mouse.enabled == true
 						&&	FlxG.mouse.x > _startX
@@ -228,7 +240,7 @@ class TextGeneral extends FlxText
 							makeGraphic(Std.int(FlxG.width / 2 - 85), Std.int(newHeight) - 2, 0x44000088, true, key);
 						}
 						
-						else if (_text_state[ID] != 1
+						else*/ if (_text_state[ID] != 1
 						|| 		 _regen == true)
 						{
 							if (FlxG.mouse.y + _scrollarea_offset_y < _startY
@@ -243,7 +255,9 @@ class TextGeneral extends FlxText
 					
 					else
 					{
+						// uncomment this bloack for highlights.
 						// highlight the background if mouse is overtop./*
+						/*
 						if (_text_state[ID] < 2
 						&&	FlxG.mouse.enabled == true
 						&&	FlxG.mouse.x > _startX
@@ -256,7 +270,7 @@ class TextGeneral extends FlxText
 							makeGraphic(FlxG.width - 55, Std.int(newHeight) - 2, 0x44000088, true, key);
 						}
 						
-						else if (_text_state[ID] != 1
+						else*/ if (_text_state[ID] != 1
 						|| 		 _regen == true)
 						{
 							if (FlxG.mouse.y + _scrollarea_offset_y < _startY
@@ -275,18 +289,6 @@ class TextGeneral extends FlxText
 				textField.height = height * 1.2;
 				
 			}
-			/*
-			else // Else just clear the old buffer before redrawing the text
-			{
-				graphic.bitmap.fillRect(_flashRect, FlxColor.TRANSPARENT);
-				if (_hasBorderAlpha)
-				{
-					if (_borderPixels == null)
-						_borderPixels = new BitmapData(frameWidth, frameHeight, true);
-					else
-						_borderPixels.fillRect(_flashRect, FlxColor.TRANSPARENT);
-				}
-			}*/
 			
 			if (textField != null && textField.text != null && textField.text.length > 0)
 			{
@@ -303,7 +305,7 @@ class TextGeneral extends FlxText
 			}
 			
 			_regen = false;
-		}
+		} else _ticks = 35;
 		
 		super.update(elapsed);
 	}

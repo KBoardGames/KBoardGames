@@ -59,7 +59,7 @@ class ConfigurationGeneral extends CID2
 		initiate();
 		
 		// DO NOT FORGET TO UPDATE THE buttonNumber() FUNCTiON.
-		CID2._text_empty = new ButtonGeneralNetworkNo(0, CID2._button_menu_bar_background_number_plus.y + 250, "", 100, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, null, RegCustom._button_color[Reg._tn]);
+		CID2._text_empty = new ButtonGeneralNetworkNo(0, CID2._button_pager_enabled.y + 250, "", 100, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, null, RegCustom._button_color[Reg._tn]);
 		CID2._text_empty.visible = false;
 		CID2._group.add(CID2._text_empty);
 		
@@ -249,6 +249,9 @@ class ConfigurationGeneral extends CID2
 		client_single_color_background();
 		client_background_brightness();
 		client_background_saturation();
+		table_body_background();
+		table_body_background_brightness();
+		table_body_background_saturation();
 		leaderboard_enable();
 		house_feature_enable();
 		return_to_lobby_after_save();
@@ -271,6 +274,7 @@ class ConfigurationGeneral extends CID2
 		title_bar_brightness();
 		menu_bar_color();
 		menu_bar_brightness();
+		pager_enable();
 	}
 	
 	private function gameboard_coordinates():Void
@@ -528,7 +532,7 @@ class ConfigurationGeneral extends CID2
 	{
 		_num += 1;
 		
-		CID2._question_background_alpha_enabled = new TextGeneral(15, CID2._button_gameboard_even_units_show_enabled.height + CID2._button_gameboard_even_units_show_enabled.y + CID2._offset_rows_y, 800, "Apply a 50% transparency to the gradient background?", 8, true);
+		CID2._question_background_alpha_enabled = new TextGeneral(15, CID2._button_gameboard_even_units_show_enabled.height + CID2._button_gameboard_even_units_show_enabled.y + CID2._offset_rows_y, 800, "Apply a 80% transparency to the gradient and texture backgrounds?", 8, true);
 		CID2._question_background_alpha_enabled.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
 		CID2._question_background_alpha_enabled.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		CID2._group.add(CID2._question_background_alpha_enabled);
@@ -545,7 +549,7 @@ class ConfigurationGeneral extends CID2
 	{
 		_num += 1;
 		//----------------------------
-		CID2._question_gradient_background_enabled = new TextGeneral(15, CID2._button_background_alpha_enabled.height + CID2._button_background_alpha_enabled.y + CID2._offset_rows_y, 800, "Display a gradient background?\r\n\r\n");
+		CID2._question_gradient_background_enabled = new TextGeneral(15, CID2._button_background_alpha_enabled.height + CID2._button_background_alpha_enabled.y + (CID2._offset_rows_y * 2), 800, "Display a gradient background?\r\n\r\n");
 		CID2._question_gradient_background_enabled.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
 		CID2._question_gradient_background_enabled.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		CID2._group.add(CID2._question_gradient_background_enabled);
@@ -622,7 +626,7 @@ class ConfigurationGeneral extends CID2
 	{
 		_num += 1;
 		
-		var _question_client_background_enabled = new TextGeneral(15, CID2._button_client_texture_background_enabled.height + CID2._button_client_texture_background_enabled.y + (CID2._offset_rows_y * 4) - 5, 800, "Display a single color background? Select false for a random color background. A gradient or texture background can still be seen if transparency is enabled.", 8, true, true);
+		var _question_client_background_enabled = new TextGeneral(15, CID2._button_client_texture_background_enabled.height + CID2._button_client_texture_background_enabled.y + (CID2._offset_rows_y * 4) - 5, 800, "Display a single colored background to all scenes? A scene may override this feature. Select false for a random color background. A gradient or texture background can still be seen if transparency is enabled.", 8, true, true);
 		_question_client_background_enabled.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
 		_question_client_background_enabled.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		CID2._group.add(_question_client_background_enabled);
@@ -655,7 +659,7 @@ class ConfigurationGeneral extends CID2
 	{
 		_num += 1;
 		
-		CID2._question_client_background_brightness = new TextGeneral(15, CID2._button_client_background_enabled.height + CID2._button_client_background_enabled.y + CID2._offset_rows_y * 2, 800, "Single color background brightness? 0 is black. 1 is full bright.", 8, true, true);
+		CID2._question_client_background_brightness = new TextGeneral(15, CID2._button_client_background_enabled.height + CID2._button_client_background_enabled.y + (CID2._offset_rows_y * 3) - 3, 800, "Single color background brightness? 0 is black. 1 is full bright.", 8, true, true);
 		CID2._question_client_background_brightness.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
 		CID2._question_client_background_brightness.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		CID2._group.add(CID2._question_client_background_brightness);
@@ -679,7 +683,7 @@ class ConfigurationGeneral extends CID2
 		CID2._text_client_background_brightness.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		CID2._group.add(CID2._text_client_background_brightness);
 		
-		// this needs to be placed here to display both this brightness text and the static background image above from the RegCustomColors.color_client_background because that function updates both variables. 
+		// this needs to be placed here to display both this brightness text and the static background image above from the RegCustomColors.color_client_background because the RegCustomColors.color_client_background function updates both variables. 
 		CID2._sprite_client_background_image = new FlxSprite(CID2._button_client_background_minus.x + 100, CID2._button_client_background_minus.y, "assets/images/capturingUnits.png");
 		if (RegCustom._client_background_enabled[Reg._tn] == false)
 			CID2._sprite_client_background_image.alpha = 0;
@@ -693,7 +697,7 @@ class ConfigurationGeneral extends CID2
 	{
 		_num += 1;
 		
-		CID2._question_client_background_saturation = new TextGeneral(15, CID2._button_client_background_brightness_minus.height + CID2._button_client_background_brightness_minus.y + CID2._offset_rows_y, 800, "Single color background saturation? 0 is pure gray. 1 is vibrant.", 8, true, true);
+		CID2._question_client_background_saturation = new TextGeneral(15, CID2._button_client_background_brightness_minus.height + CID2._button_client_background_brightness_minus.y + CID2._offset_rows_y, 800, "Single colored background saturation? 0 is pure gray. 1 is vibrant. Gray color ignores this value.", 8, true, true);
 		CID2._question_client_background_saturation.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
 		CID2._question_client_background_saturation.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		CID2._group.add(CID2._question_client_background_saturation);
@@ -717,12 +721,95 @@ class ConfigurationGeneral extends CID2
 		CID2._group.add(CID2._text_client_background_saturation);
 	}
 	
+	private function table_body_background():Void
+	{
+		_num += 1;
+		
+		CID2._question_table_body_background = new TextGeneral(15, CID2._button_client_background_saturation_minus.height + CID2._button_client_background_saturation_minus.y + CID2._offset_rows_y, 800, "Table background row color seen at the lobby, waiting room and at the leaderboards.", 8, true, true);
+		CID2._question_table_body_background.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
+		CID2._question_table_body_background.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
+		CID2._group.add(CID2._question_table_body_background);
+
+		CID2._button_table_body_background_number_minus = new ButtonGeneralNetworkNo(850, CID2._question_table_body_background.y + CID2._offset_button_y, "-", 35, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, null, RegCustom._button_color[Reg._tn]);
+		CID2._button_table_body_background_number_minus.label.font = Reg._fontDefault;
+		CID2._group_button.push(CID2._button_table_body_background_number_minus);
+		CID2._group.add(CID2._group_button[_num]);
+		
+		_num += 1;
+		
+		CID2._button_table_body_background_number_plus = new ButtonGeneralNetworkNo(CID2._button_table_body_background_number_minus.x + CID2._button_table_body_background_number_minus.width + 15, CID2._button_table_body_background_number_minus.y + 7, "+", 35, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, null, RegCustom._button_color[Reg._tn]);
+		CID2._button_table_body_background_number_plus.label.font = Reg._fontDefault;
+	
+		CID2._group_button.push(CID2._button_table_body_background_number_plus);
+		CID2._group.add(CID2._group_button[_num]);
+		
+		CID2._sprite_table_body_background_image = new FlxSprite(CID2._button_table_body_background_number_minus.x + 100, CID2._button_table_body_background_number_minus.y, "assets/images/capturingUnits.png");
+		CID2._sprite_table_body_background_image.color = RegCustomColors.color_table_body_background();		
+		CID2._group.add(CID2._sprite_table_body_background_image);
+	}
+	
+	private function table_body_background_brightness():Void
+	{
+		_num += 1;
+		
+		CID2._question_table_body_background_brightness = new TextGeneral(15, CID2._button_table_body_background_number_minus.height + CID2._button_table_body_background_number_minus.y + CID2._offset_rows_y, 800, "Table background body brightness.", 8, true, true);
+		CID2._question_table_body_background_brightness.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
+		CID2._question_table_body_background_brightness.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
+		CID2._group.add(CID2._question_table_body_background_brightness);
+
+		CID2._button_table_body_background_brightness_number_minus = new ButtonGeneralNetworkNo(850, CID2._question_table_body_background_brightness.y + CID2._offset_button_y, "-", 35, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, null, RegCustom._button_color[Reg._tn]);
+		CID2._button_table_body_background_brightness_number_minus.label.font = Reg._fontDefault;
+		CID2._group_button.push(CID2._button_table_body_background_brightness_number_minus);
+		CID2._group.add(CID2._group_button[_num]);
+		
+		_num += 1;
+		
+		CID2._button_table_body_background_brightness_number_plus = new ButtonGeneralNetworkNo(CID2._button_table_body_background_brightness_number_minus.x + CID2._button_table_body_background_brightness_number_minus.width + 15, CID2._button_table_body_background_brightness_number_minus.y + 7, "+", 35, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, null, RegCustom._button_color[Reg._tn]);
+		CID2._button_table_body_background_brightness_number_plus.label.font = Reg._fontDefault;
+	
+		CID2._group_button.push(CID2._button_table_body_background_brightness_number_plus);
+		CID2._group.add(CID2._group_button[_num]);
+		
+		CID2._text_table_body_background_brightness = new FlxText(CID2._button_table_body_background_brightness_number_minus.x + 100, CID2._question_table_body_background_brightness.y, 0, Std.string(RegCustom._table_body_background_brightness[Reg._tn]));
+		CID2._text_table_body_background_brightness.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());	
+		CID2._text_table_body_background_brightness.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
+		CID2._group.add(CID2._text_table_body_background_brightness);
+	}
+	
+	private function table_body_background_saturation():Void
+	{
+		_num += 1;
+		
+		CID2._question_table_body_background_saturation = new TextGeneral(15, CID2._button_table_body_background_brightness_number_minus.height + CID2._button_table_body_background_brightness_number_minus.y + CID2._offset_rows_y, 800, "Table background body saturation.", 8, true, true);
+		CID2._question_table_body_background_saturation.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
+		CID2._question_table_body_background_saturation.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
+		CID2._group.add(CID2._question_table_body_background_saturation);
+
+		CID2._button_table_body_background_saturation_number_minus = new ButtonGeneralNetworkNo(850, CID2._question_table_body_background_saturation.y + CID2._offset_button_y, "-", 35, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, null, RegCustom._button_color[Reg._tn]);
+		CID2._button_table_body_background_saturation_number_minus.label.font = Reg._fontDefault;
+		CID2._group_button.push(CID2._button_table_body_background_saturation_number_minus);
+		CID2._group.add(CID2._group_button[_num]);
+		
+		_num += 1;
+		
+		CID2._button_table_body_background_saturation_number_plus = new ButtonGeneralNetworkNo(CID2._button_table_body_background_saturation_number_minus.x + CID2._button_table_body_background_saturation_number_minus.width + 15, CID2._button_table_body_background_saturation_number_minus.y + 7, "+", 35, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, null, RegCustom._button_color[Reg._tn]);
+		CID2._button_table_body_background_saturation_number_plus.label.font = Reg._fontDefault;
+	
+		CID2._group_button.push(CID2._button_table_body_background_saturation_number_plus);
+		CID2._group.add(CID2._group_button[_num]);
+		
+		CID2._text_table_body_background_saturation = new FlxText(CID2._button_table_body_background_saturation_number_minus.x + 100, CID2._question_table_body_background_saturation.y, 0, Std.string(RegCustom._table_body_background_saturation[Reg._tn]));
+		CID2._text_table_body_background_saturation.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());	
+		CID2._text_table_body_background_saturation.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
+		CID2._group.add(CID2._text_table_body_background_saturation);
+	}
+	
 	private function leaderboard_enable():Void
 	{
 		_num += 1;
 		
 		//----------------------------
-		CID2._question_leaderboard_enabled = new TextGeneral(15, CID2._button_client_background_saturation_minus.height + CID2._button_client_background_saturation_minus.y + CID2._offset_rows_y, 800, "Show leading competitors in various game statistics? (leaderboard.)", 8, true, true);
+		CID2._question_leaderboard_enabled = new TextGeneral(15, CID2._button_table_body_background_saturation_number_minus.height + CID2._button_table_body_background_saturation_number_minus.y + CID2._offset_rows_y, 800, "Show leading competitors in various game statistics? (leaderboard.)", 8, true, true);
 		CID2._question_leaderboard_enabled.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
 		CID2._question_leaderboard_enabled.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		CID2._group.add(CID2._question_leaderboard_enabled);
@@ -1193,6 +1280,24 @@ class ConfigurationGeneral extends CID2
 		CID2._group.add(CID2._text_menu_bar_background_brightness);
 	}
 
+	private function pager_enable():Void
+	{
+		_num += 1;
+		
+		CID2._question_pager_enabled = new TextGeneral(15, CID2._button_menu_bar_background_brightness_minus.height + CID2._button_menu_bar_background_brightness_minus.y + CID2._offset_rows_y, 800, "Enable pager?");
+		CID2._question_pager_enabled.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
+		CID2._question_pager_enabled.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
+		CID2._group.add(CID2._question_pager_enabled);
+		
+		CID2._button_pager_enabled = new ButtonGeneralNetworkNo(850, CID2._question_pager_enabled.y + CID2._offset_button_y, "", 100, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, null, RegCustom._button_color[Reg._tn]);
+		CID2._button_pager_enabled.label.font = Reg._fontDefault;
+		CID2._button_pager_enabled.label.text = Std.string(RegCustom._pager_enabled[Reg._tn]);
+		
+		CID2._group_button.push(CID2._button_pager_enabled);
+		CID2._group.add(CID2._group_button[_num]);
+	}
+	
+	// OPTION FUNCTIONS STOP HERE.
 	
 	public function draw_gameboard():Void
 	{
@@ -1273,37 +1378,44 @@ class ConfigurationGeneral extends CID2
 			case 37: __e.client_background_brightness_minus();
 			case 38: __e.client_background_brightness_plus();		
 			case 39: __e.client_background_saturation_minus();
-			case 40: __e.client_background_saturation_plus();		
-			case 41: __e.leaderboards_enabled();
-			case 42: __e.house_feature_enabled();
-			case 43: __e.go_back_to_title_after_save();
-			case 44: __e.automatic_game_request();
-			case 45: __e.start_game_offline_confirmation();
-			case 46: __e.accept_automatic_game_request();
-			case 47: __e.to_lobby_waiting_room_confirmation();
-			case 48: __e.to_lobby_game_room_confirmation();
-			case 49: __e.to_game_room_confirmation();
-			case 50: __e.to_title_confirmation();
-			case 51: __e.chat_turn_off_lobby();
-			case 52: __e.chat_turn_off_room();
-			case 53: __e.move_timer_enabled();
-			case 54: __e.move_total_enabled();			
-			case 55: __e.capturing_units_enabled();
-			case 56: __e.capturing_units_minus();
-			case 57: __e.capturing_units_plus();
-			case 58: __e.button_background_color();
-			case 59: __e.button_border_color();
-			case 60: __e.button_text_color();
-			case 61: __e.music_enabled();
-			case 62: __e.sound_enabled();
-			case 63: __e.title_bar_background_number_minus();
-			case 64: __e.title_bar_background_number_plus();
-			case 65: __e.title_bar_background_brightness_minus();
-			case 66: __e.title_bar_background_brightness_plus();
-			case 67: __e.menu_bar_background_number_minus();
-			case 68: __e.menu_bar_background_number_plus();
-			case 69: __e.menu_bar_background_brightness_minus();
-			case 70: __e.menu_bar_background_brightness_plus();
+			case 40: __e.client_background_saturation_plus();
+			case 41: __e.table_body_background_minus();
+			case 42: __e.table_body_background_plus();
+			case 43: __e.table_body_background_brightness_minus();
+			case 44: __e.table_body_background_brightness_plus();
+			case 45: __e.table_body_background_saturation_minus();
+			case 46: __e.table_body_background_saturation_plus();
+			case 47: __e.leaderboards_enabled();
+			case 48: __e.house_feature_enabled();
+			case 49: __e.go_back_to_title_after_save();
+			case 50: __e.automatic_game_request();
+			case 51: __e.start_game_offline_confirmation();
+			case 52: __e.accept_automatic_game_request();
+			case 53: __e.to_lobby_waiting_room_confirmation();
+			case 54: __e.to_lobby_game_room_confirmation();
+			case 55: __e.to_game_room_confirmation();
+			case 56: __e.to_title_confirmation();
+			case 57: __e.chat_turn_off_lobby();
+			case 58: __e.chat_turn_off_room();
+			case 59: __e.move_timer_enabled();
+			case 60: __e.move_total_enabled();			
+			case 61: __e.capturing_units_enabled();
+			case 62: __e.capturing_units_minus();
+			case 63: __e.capturing_units_plus();
+			case 64: __e.button_background_color();
+			case 65: __e.button_border_color();
+			case 66: __e.button_text_color();
+			case 67: __e.music_enabled();
+			case 68: __e.sound_enabled();
+			case 69: __e.title_bar_background_number_minus();
+			case 70: __e.title_bar_background_number_plus();
+			case 71: __e.title_bar_background_brightness_minus();
+			case 72: __e.title_bar_background_brightness_plus();
+			case 73: __e.menu_bar_background_number_minus();
+			case 74: __e.menu_bar_background_number_plus();
+			case 75: __e.menu_bar_background_brightness_minus();
+			case 76: __e.menu_bar_background_brightness_plus();
+			case 77: __e.pager_enabled();
 		}
 	}
 		
@@ -1322,17 +1434,23 @@ class ConfigurationGeneral extends CID2
 	
 	override public function update(elapsed:Float):Void
 	{
-		if (RegCustom._notation_panel_background_color_enabled[Reg._tn] == false)
+		if (RegCustom._notation_panel_background_color_enabled[Reg._tn] == false &&	CID2._sprite_notation_panel_background_color.visible == true)
 		{
 			CID2._sprite_notation_panel_background_color.visible = false;
 		}
 		
-		if (RegCustom._capturing_units[Reg._tn] == false)
+		if (RegCustom._capturing_units[Reg._tn] == false
+		&&	CID2._sprite_capturing_units.visible == true)
 		{
 			CID2._sprite_capturing_units.visible = false;
-			CID2._sprite_chess_path_to_king_bg.visible = false;
 		}
 		
+		if (RegCustom._capturing_units[Reg._tn] == false
+		&&	CID2._sprite_chess_path_to_king_bg.visible == true)
+		{
+			CID2._sprite_chess_path_to_king_bg.visible = false;
+		}
+				
 		// configuration menu. options saved.
 		if (Reg._yesNoKeyPressValueAtMessage > 0 && Reg._buttonCodeValues == "v1000")
 		{
@@ -1354,7 +1472,7 @@ class ConfigurationGeneral extends CID2
 			{
 				if (Reg._tn > 0)
 				{
-					buttonNumber(i);				
+					buttonNumber(i);
 					break;
 				}
 			}
@@ -1378,9 +1496,7 @@ class ConfigurationGeneral extends CID2
 			
 		}
 		
-		super.update(elapsed);	
-		
-		
+		super.update(elapsed);		
 	}
 	
 }//

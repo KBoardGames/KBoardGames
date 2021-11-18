@@ -109,7 +109,8 @@ class CID2 extends FlxGroup
 	public static var _text_even_units_color:FlxText;
 	public static var _text_client_background_brightness:FlxText;
 	public static var _text_client_background_saturation:FlxText;
-	
+	public static var _text_table_body_background_brightness:FlxText;
+	public static var _text_table_body_background_saturation:FlxText;
 	/******************************
 	 * minus button for shade images of odd units. clicking this button will change the image of all odd units on the gameboard, displaying a different shade of grayscale.
 	 */
@@ -176,6 +177,7 @@ class CID2 extends FlxGroup
 	public static var _sprite_client_background_image:FlxSprite;
 	public static var _sprite_gradient_background_image:FlxSprite;
 	public static var _sprite_texture_background_image:FlxSprite;
+	public static var _sprite_table_body_background_image:FlxSprite;
 	
 	/******************************
 	 * sprite color representing the gameboard notation background color.
@@ -252,6 +254,9 @@ class CID2 extends FlxGroup
 	public static var _question_gradient_background_enabled:TextGeneral;
 	public static var _question_client_background_brightness:TextGeneral;
 	public static var _question_client_background_saturation:TextGeneral;
+	public static var _question_table_body_background:TextGeneral;
+	public static var _question_table_body_background_brightness:TextGeneral;
+	public static var _question_table_body_background_saturation:TextGeneral;
 	public static var _question_goto_title:TextGeneral;
 	public static var _question_start_game_request:TextGeneral;
 	public static var _question_start_game_offline_confirmation:TextGeneral;
@@ -272,8 +277,8 @@ class CID2 extends FlxGroup
 	public static var _question_menu_bar_background_brightness:TextGeneral;
 	public static var _question_sound_enabled:TextGeneral;
 	
-	
 	public static var _text_empty:ButtonGeneralNetworkNo;
+	public static var _question_pager_enabled:TextGeneral;
 	
 	/******************************
 	 * button used to toggle on and off the display of the leaderboard.
@@ -334,6 +339,12 @@ class CID2 extends FlxGroup
 	public static var _button_client_background_saturation_plus:ButtonGeneralNetworkNo;
 	public static var _button_client_background_brightness_minus:ButtonGeneralNetworkNo;
 	public static var _button_client_background_brightness_plus:ButtonGeneralNetworkNo;
+	public static var _button_table_body_background_number_minus:ButtonGeneralNetworkNo;
+	public static var _button_table_body_background_number_plus:ButtonGeneralNetworkNo;
+	public static var _button_table_body_background_brightness_number_minus:ButtonGeneralNetworkNo;
+	public static var _button_table_body_background_brightness_number_plus:ButtonGeneralNetworkNo;
+	public static var _button_table_body_background_saturation_number_minus:ButtonGeneralNetworkNo;
+	public static var _button_table_body_background_saturation_number_plus:ButtonGeneralNetworkNo;
 	public static var _button_color:ButtonGeneralNetworkNo;
 	public static var _button_border_color:ButtonGeneralNetworkNo;
 	public static var _button_text_color:ButtonGeneralNetworkNo;
@@ -348,6 +359,7 @@ class CID2 extends FlxGroup
 	public static var _button_menu_bar_background_number_plus:ButtonGeneralNetworkNo;
 	public static var _button_menu_bar_background_brightness_minus:ButtonGeneralNetworkNo;
 	public static var _button_menu_bar_background_brightness_plus:ButtonGeneralNetworkNo;
+	public static var _button_pager_enabled:ButtonGeneralNetworkNo;
 	
 	/******************************
 	 * moves the button down,

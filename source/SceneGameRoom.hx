@@ -18,6 +18,10 @@
 
 package;
 
+#if chess
+	import modules.games.chess.*;
+#end
+
 /**
  * game room. main loop. calls history, notation, chatter, functions to draw game, return to lobby button, draw button, etc.
  * @author kboardgames.com
@@ -81,7 +85,9 @@ class SceneGameRoom extends FlxState
 	/******************************
 	 * is it a check or checkmate? anything related to a checkmate such as setting capturing units for the king or determining if a pawn can free the king from check, etc.
 	 */
-	private var __chess_check_or_checkmate:ChessCheckOrCheckmate;
+	#if chess
+		private var __chess_check_or_checkmate:ChessCheckOrCheckmate;
+	#end
 	
 	public var _playersLeftGame:PlayersLeftGameResetThoseVars;
 	public var _finalizeWhenGameOver:GameFinalize;
@@ -91,11 +97,12 @@ class SceneGameRoom extends FlxState
 	*/
 	public static var __game_history_and_notations:GameHistoryAndNotations;
 	
-	public function new(ids_win_lose_or_draw:IDsWinLoseOrDraw, chess_check_or_checkmate:ChessCheckOrCheckmate) 
+	public function new(ids_win_lose_or_draw:IDsWinLoseOrDraw, chess_check_or_checkmate:Dynamic) 
 	{
 		super();
 		
 		Reg._at_game_room = true;
+		Reg._at_waiting_room = false;
 		
 		// this is needed because if message box was centered to screen, it would overlap part of the right side scrollbar at lobby. if true then we are at the game room so center the message box since there is no scrollbar to the right of the scene.
 		Reg2._messageBox_x = 380;
@@ -109,7 +116,10 @@ class SceneGameRoom extends FlxState
 		FlxG.mouse.enabled = true;
 		
 		__ids_win_lose_or_draw = ids_win_lose_or_draw;
-		__chess_check_or_checkmate = chess_check_or_checkmate;
+		
+		#if chess
+			__chess_check_or_checkmate = chess_check_or_checkmate;
+		#end
 		
 		RegTypedef._dataMisc._userLocation = 3;
 		
@@ -129,9 +139,13 @@ class SceneGameRoom extends FlxState
 		
 		if (Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false) Reg._roomPlayerLimit = RegTypedef._dataMisc._roomPlayerLimit[RegTypedef._dataMisc._room];
 		
-		
-		__game_create = new GameCreate(__ids_win_lose_or_draw, __chess_check_or_checkmate);
-		add(__game_create);
+		#if chess
+			__game_create = new GameCreate(__ids_win_lose_or_draw, __chess_check_or_checkmate);
+			add(__game_create);
+		#else
+			__game_create = new GameCreate(__ids_win_lose_or_draw, null);
+			add(__game_create);
+		#end
 		
 		_finalizeWhenGameOver = new GameFinalize(this);
 		add(_finalizeWhenGameOver);
@@ -168,13 +182,11 @@ class SceneGameRoom extends FlxState
 		{
 			var _state:Bool = false;
 			gameButtonActive(_state);
-			gameButtonVisible(_state);		
 		}
 		else
 		{
 			var _state:Bool = true;
 			gameButtonActive(_state);
-			gameButtonVisible(_state);
 		}
 		
 		if (Reg._clientReadyForPublicRelease == false)
@@ -206,8 +218,6 @@ class SceneGameRoom extends FlxState
 				__game_chatter.destroy();
 			}
 			
-			Reg._rememberChatterIsOpen = false;
-			
 			__game_chatter = new GameChatter(4, this);
 			__game_chatter.visible = true;
 			
@@ -218,7 +228,7 @@ class SceneGameRoom extends FlxState
 			}
 			
 			GameChatter._groupChatterScroller.x = 375; // 375 work with below var to hide,
-			GameChatter._scrollRight = true; // this is needed if hiding boxScoller.
+			RegTriggers._scrollRight = true; // this is needed if hiding boxScoller.
 			add(__game_chatter);
 		}
 		
@@ -574,14 +584,12 @@ class SceneGameRoom extends FlxState
 			var _state:Bool = true;
 			
 			gameButtonActive(_state);
-			gameButtonVisible(_state);
 		}
 		
 		if (Reg._gameRoom == true && GameChatter._title_background.x <= 1040)
 		{
 			var _state:Bool = false;
 			gameButtonActive(_state);
-			gameButtonVisible(_state);
 		}
 	}
 	
@@ -593,17 +601,6 @@ class SceneGameRoom extends FlxState
 	{
 		if (buttonReturnToTitle != null) buttonReturnToTitle.active = _state;
 		if (buttonReturnToLobby != null) buttonReturnToLobby.active = _state;
-		
-		if (__game_chatter != null) GameChatter.changeButtonLabel();
-	}
-	
-	/******************************
-	 * toggles the visibility state of a button or text underneath chatter.
-	 * @param	_state	not visible if false.
-	 */
-	private function gameButtonVisible(_state:Bool):Void
-	{
-		if (__game_chatter != null) GameChatter.changeButtonLabel();
 	}
 	
 	/******************************
@@ -653,8 +650,6 @@ class SceneGameRoom extends FlxState
 			Reg._game_offline_vs_cpu = false;
 			Reg._game_online_vs_cpu = false;
 			
-			Reg._gameOverForPlayer = true;
-			
 			if (RegTypedef._dataMisc._spectatorWatching == false)
 			{
 				for (i in 0...4)
@@ -664,6 +659,8 @@ class SceneGameRoom extends FlxState
 						if (Reg._gameOverForPlayer == true) RegTypedef._dataPlayers._gamePlayersValues[i] = 3; // stats already saved so set this to 3
 						else RegTypedef._dataPlayers._gamePlayersValues[i] = 2;
 						
+						Reg._gameOverForPlayer = true;
+	
 						PlayState.clientSocket.send("Game Players Values", RegTypedef._dataPlayers);
 						haxe.Timer.delay(function (){}, Reg2._event_sleep);
 					}
@@ -1190,7 +1187,6 @@ class SceneGameRoom extends FlxState
 		Reg._hasUserConnectedToServer = true;
 		Reg._lobbyDisplay = false;			
 		Reg._clearDoubleMessage = true;			
-		Reg._rememberChatterIsOpen = false;
 		//Reg._goBackToLobby = true;
 		
 		SceneWaitingRoom._textPlayer1Stats.text = "";
@@ -2065,18 +2061,21 @@ class SceneGameRoom extends FlxState
 			}
 		}
 		
-		// this is the window that appears after a dice click.	
-		if (RegTriggers._signatureGame == true 
-		&& Reg._gameDiceCurrentIndex[Reg._move_number_next] == Reg._gameDiceMaximumIndex[Reg._move_number_next] 
-		&& Reg._triggerNextStuffToDo == 1
-		&& Reg._isThisPieceAtBackdoor == false
-		&& Reg._gameDidFirstMove == true)
-		{
-			RegTriggers._signatureGame = false;
-			__game_create.__signature_game_main.initialize();
-			if (Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false && Reg._game_online_vs_cpu == false) Reg._triggerNextStuffToDo = 3;
-		}
-
+		#if wheelEstate
+			// this is the window that appears after a dice click.	
+			if (RegTriggers._signatureGame == true 
+			&& Reg._gameDiceCurrentIndex[Reg._move_number_next] == Reg._gameDiceMaximumIndex[Reg._move_number_next] 
+			&& Reg._triggerNextStuffToDo == 1
+			&& Reg._isThisPieceAtBackdoor == false
+			&& Reg._gameDidFirstMove == true)
+			{
+				RegTriggers._signatureGame = false;
+				__game_create.__signature_game_main.initialize();
+				
+				if (Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false && Reg._game_online_vs_cpu == false) Reg._triggerNextStuffToDo = 3;
+			}
+		#end
+		
 		var _count:Int = howManyPlayersAreInGameRoom();
 		
 		// these buttons should be used only when both players are in room and playing a game. since a player has left game, hide these buttons.

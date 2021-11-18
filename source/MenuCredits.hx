@@ -29,7 +29,7 @@ class MenuCredits extends FlxState
 	/******************************
 	 * background gradient, texture and plain color for a scene.
 	 */
-	private var _scene_background:SceneBackground;
+	private var __scene_background:SceneBackground;
 	
 	public function new():Void
 	{
@@ -38,14 +38,14 @@ class MenuCredits extends FlxState
 		persistentDraw = true;
 		persistentUpdate = false;
 		
-		if (_scene_background != null)
+		if (__scene_background != null)
 		{
-			remove(_scene_background);
-			_scene_background.destroy();
+			remove(__scene_background);
+			__scene_background.destroy();
 		}
 		
-		_scene_background = new SceneBackground();
-		add(_scene_background);
+		__scene_background = new SceneBackground();
+		add(__scene_background);
 				
 		var _title_sub = new FlxText(0, 0, 0, "Giving Credit");
 		_title_sub.setFormat(Reg._fontDefault, 30, RegCustomColors.client_topic_title_text_color());
@@ -53,7 +53,7 @@ class MenuCredits extends FlxState
 		_title_sub.setPosition(50, 75);
 		add(_title_sub);
 		
-		var _text = new FlxText(0, 0, 0, "Thankyou to the following websites and authors that contributed in someway to help make this game possible.\r\nHouse items make by https://www.kenney.nl. This kenny furniture package was released under the CC0 1.0 Universal (CC0 1.0) public domain license.\r\nAvatars from multiavatar. https://multiavatar.com/\r\nTextures from https://opengameart.org/content/huge-texture-resource-pack-part-1\r\nWorld flags are released public domain by https://flagpedia.net\r\nAll images can be used freely for commercial and non-commercial purposes.");
+		var _text = new FlxText(0, 0, 0, "Thankyou to the following websites and authors that contributed in someway to help make this game possible.\r\nHouse items make by https://www.kenney.nl. This kenny furniture package was released under the CC0 1.0 Universal (CC0 1.0) public domain license.\r\nAvatars from multiavatar. https://multiavatar.com/\r\nTextures from https://opengameart.org/content/huge-texture-resource-pack-part-1 and https://opengameart.org/content/cc0-texture-resources-3-wood\r\nWorld flags are released public domain by https://flagpedia.net\r\nAll images can be used freely for commercial and non-commercial purposes.");
 		_text.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
 		_text.scrollFactor.set();
 		_text.fieldWidth = FlxG.width - 100;
@@ -86,7 +86,7 @@ class MenuCredits extends FlxState
 			Reg._buttonCodeValues = "";
 			Reg._yesNoKeyPressValueAtMessage = 0;
 
-			FlxG.openURL("http://kboardgames.com/forum/credits","_blank"); 
+			FlxG.openURL("http://kboardgames.com/en/credits","_blank"); 
 		}
 	
 		if (Reg._yesNoKeyPressValueAtMessage >= 2 && Reg._buttonCodeValues == "y1000")

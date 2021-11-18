@@ -41,7 +41,7 @@ class ActionCommands extends FlxGroup
 		_logoff_timer = new FlxTimer();
 	}
 	/***************************************************************************
-	 * output trace data when a display bug displays. helps find where in code the bugs happens.
+	 * output trace data when a display bug displays. helps find where in code when bugs happens.
 	 */
 	public static function commandTraceAll():Void
 	{
@@ -157,11 +157,14 @@ class ActionCommands extends FlxGroup
 		if (Reg._loggedIn == true)
 		{
 			#if desktop
-				if ( FlxG.keys.anyJustReleased(["ESCAPE"]))
+				if ( FlxG.keys.justReleased.ESCAPE )
 					commandESC();
 				
-				if ( FlxG.keys.anyJustReleased(["T"]))
+				if ( FlxG.keys.justReleased.T )
 					commandTraceAll();
+					
+				if ( FlxG.keys.justReleased.F )
+					FlxG.fullscreen = !FlxG.fullscreen;
 			#end
 		}
 		

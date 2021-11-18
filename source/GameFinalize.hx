@@ -18,6 +18,10 @@
 
 package;
 
+#if wheelEstate
+	import modules.games.wheelEstate.*;
+#end
+
 /**
  * this class does things that are needed to be done after the game ends. 
  * @author kboardgames.com
@@ -55,102 +59,104 @@ class GameFinalize extends FlxGroup
 
 	public function id4():Void
 	{
-		var _signatureGame = __scene_game_room.__game_create.__signature_game_main;
-		
-		
-		if (SignatureGameMain.background != null)
-		{
-						
-			if (_signatureGame._buttonGoBack != null)
-			{
-				_signatureGame._buttonGoBack.visible = false;
-				_signatureGame._buttonGoBack.active = false;
-				
-			}
-				
-			SignatureGameMain._buttonEndTurnOrPayNow.visible = false;
-			SignatureGameMain._buttonEndTurnOrPayNow.active = false;
+		#if wheelEstate
+			var _signatureGame = __scene_game_room.__game_create.__signature_game_main;
 			
 			
-			if (SignatureGameMain._textGeneralMessage.visible == true && SignatureGameMain._textGeneralMessage.text == "Main menu.")
+			if (SignatureGameMain.background != null)
 			{
-				SignatureGameMain._buttonEndTurnOrPayNow.screenCenter(X); 			
-				_signatureGame._buttonBuyHouseTaxiCabOrCafeStores.active = true;
-				_signatureGame._buttonBuyHouseTaxiCabOrCafeStores.visible = true;
-				//
 							
-				if (Reg._gameHouseTaxiCabOrCafeStoreForPiece[Reg._gameYYnew2][Reg._gameXXnew2] > 0)
+				if (_signatureGame._buttonGoBack != null)
 				{
-					_signatureGame._buttonSellHouse.active = true;
-					_signatureGame._buttonSellHouse.visible = true;
+					_signatureGame._buttonGoBack.visible = false;
+					_signatureGame._buttonGoBack.active = false;
 					
 				}
+					
+				SignatureGameMain._buttonEndTurnOrPayNow.visible = false;
+				SignatureGameMain._buttonEndTurnOrPayNow.active = false;
 				
-				if (SignatureGameMain._isMortgage[Reg._move_number_next][Reg._gameDiceMaximumIndex[Reg._move_number_next]] <= -1)
-				{			
-					// if no house.
+				
+				if (SignatureGameMain._textGeneralMessage.visible == true && SignatureGameMain._textGeneralMessage.text == "Main menu.")
+				{
+					SignatureGameMain._buttonEndTurnOrPayNow.screenCenter(X); 			
+					_signatureGame._buttonBuyHouseTaxiCabOrCafeStores.active = true;
+					_signatureGame._buttonBuyHouseTaxiCabOrCafeStores.visible = true;
+					//
+								
 					if (Reg._gameHouseTaxiCabOrCafeStoreForPiece[Reg._gameYYnew2][Reg._gameXXnew2] > 0)
 					{
-						_signatureGame._buttonBuyMortgage.active = true;
-						_signatureGame._buttonBuyMortgage.visible = true;
+						_signatureGame._buttonSellHouse.active = true;
+						_signatureGame._buttonSellHouse.visible = true;
 						
 					}
 					
+					if (SignatureGameMain._isMortgage[Reg._move_number_next][Reg._gameDiceMaximumIndex[Reg._move_number_next]] <= -1)
+					{			
+						// if no house.
+						if (Reg._gameHouseTaxiCabOrCafeStoreForPiece[Reg._gameYYnew2][Reg._gameXXnew2] > 0)
+						{
+							_signatureGame._buttonBuyMortgage.active = true;
+							_signatureGame._buttonBuyMortgage.visible = true;
+							
+						}
+						
+					}
+									
+					SignatureGameMain._tradeWith.active = true;
+					SignatureGameMain._tradeWith.visible = true;
+					
 				}
-								
-				SignatureGameMain._tradeWith.active = true;
-				SignatureGameMain._tradeWith.visible = true;
 				
+				
+				else if (_signatureGame._buttonBuyHouseTaxiCabOrCafeStore1 != null && SignatureGameMain._textGeneralMessage.text == "Buy property.")
+				{
+					_signatureGame._buttonBuyHouseTaxiCabOrCafeStore1.active = true;
+					_signatureGame._buttonBuyHouseTaxiCabOrCafeStore2.active = true;
+					_signatureGame._buttonBuyHouseTaxiCabOrCafeStore3.active = true;
+					_signatureGame._buttonBuyHouseTaxiCabOrCafeStore4.active = true;
+					
+					_signatureGame._buttonBuyHouseTaxiCabOrCafeStore1.visible = true;
+					_signatureGame._buttonBuyHouseTaxiCabOrCafeStore2.visible = true;
+					_signatureGame._buttonBuyHouseTaxiCabOrCafeStore3.visible = true;
+					_signatureGame._buttonBuyHouseTaxiCabOrCafeStore4.visible = true;
+				}		
+
+				else 
+				{
+					_signatureGame._buttonTradeProposal.active = true;		
+					_signatureGame._buttonResetTradeProposal.active = true;		
+					_signatureGame._buttonTradeProposal.visible = true;		
+					_signatureGame._buttonResetTradeProposal.visible = true;		
+					
+					SignatureGameMain._unitYoursButton.active = true;		
+					SignatureGameMain._unitOthersButton.active = true;		
+					SignatureGameMain._unitYoursButton.visible = true;		
+					SignatureGameMain._unitOthersButton.visible = true;			
+					
+					_signatureGame._cashMinus500YoursButton.active = true;
+					_signatureGame._cashPlus500YoursButton.active = true;
+					_signatureGame._cashMinus500YoursButton.visible = true;
+					_signatureGame._cashPlus500YoursButton.visible = true;
+					_signatureGame._cashMinus500OthersButton.active = true;
+					_signatureGame._cashPlus500OthersButton.active = true;
+					_signatureGame._cashMinus500OthersButton.visible = true;
+					_signatureGame._cashPlus500OthersButton.visible = true;
+				}	
+			} 
+		
+			if (SignatureGameMain._tradeProposal != null)
+			{
+				SignatureGameMain._tradeProposal.popupMessageHide();
+				SignatureGameMain._tradeProposal.destroy();
 			}
 			
-			
-			else if (_signatureGame._buttonBuyHouseTaxiCabOrCafeStore1 != null && SignatureGameMain._textGeneralMessage.text == "Buy property.")
+			if (SignatureGameMain._replyTradeProposal != null)
 			{
-				_signatureGame._buttonBuyHouseTaxiCabOrCafeStore1.active = true;
-				_signatureGame._buttonBuyHouseTaxiCabOrCafeStore2.active = true;
-				_signatureGame._buttonBuyHouseTaxiCabOrCafeStore3.active = true;
-				_signatureGame._buttonBuyHouseTaxiCabOrCafeStore4.active = true;
-				
-				_signatureGame._buttonBuyHouseTaxiCabOrCafeStore1.visible = true;
-				_signatureGame._buttonBuyHouseTaxiCabOrCafeStore2.visible = true;
-				_signatureGame._buttonBuyHouseTaxiCabOrCafeStore3.visible = true;
-				_signatureGame._buttonBuyHouseTaxiCabOrCafeStore4.visible = true;
-			}		
-
-			else 
-			{
-				_signatureGame._buttonTradeProposal.active = true;		
-				_signatureGame._buttonResetTradeProposal.active = true;		
-				_signatureGame._buttonTradeProposal.visible = true;		
-				_signatureGame._buttonResetTradeProposal.visible = true;		
-				
-				SignatureGameMain._unitYoursButton.active = true;		
-				SignatureGameMain._unitOthersButton.active = true;		
-				SignatureGameMain._unitYoursButton.visible = true;		
-				SignatureGameMain._unitOthersButton.visible = true;			
-				
-				_signatureGame._cashMinus500YoursButton.active = true;
-				_signatureGame._cashPlus500YoursButton.active = true;
-				_signatureGame._cashMinus500YoursButton.visible = true;
-				_signatureGame._cashPlus500YoursButton.visible = true;
-				_signatureGame._cashMinus500OthersButton.active = true;
-				_signatureGame._cashPlus500OthersButton.active = true;
-				_signatureGame._cashMinus500OthersButton.visible = true;
-				_signatureGame._cashPlus500OthersButton.visible = true;
-			}	
-		} 
-	
-		if (SignatureGameMain._tradeProposal != null)
-		{
-			SignatureGameMain._tradeProposal.popupMessageHide();
-			SignatureGameMain._tradeProposal.destroy();
-		}
-		
-		if (SignatureGameMain._replyTradeProposal != null)
-		{
-			SignatureGameMain._replyTradeProposal.popupMessageHide();
-			SignatureGameMain._replyTradeProposal.destroy();
-		}
+				SignatureGameMain._replyTradeProposal.popupMessageHide();
+				SignatureGameMain._replyTradeProposal.destroy();
+			}
+		#end
 	}
 }
 

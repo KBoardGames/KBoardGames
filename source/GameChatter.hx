@@ -80,16 +80,6 @@ class GameChatter extends FlxGroup
 	public static var _chatterOpenCloseButton:ButtonGeneralNetworkNo;
 	
 	/******************************
-	 * should the chatter scroll left?
-	 */
-	public static var _scrollLeft:Bool = false;
-	
-	/******************************
-	 * should the chatter scroll right?
-	 */
-	public static var _scrollRight:Bool = false;
-		
-	/******************************
 	 * used to disable the players online scroll box at __scene_waiting_room when chat window is open.
 	 */
 	public static var _chatterIsOpen:Bool = false; 
@@ -140,8 +130,10 @@ class GameChatter extends FlxGroup
 		
 		__scene_game_room = scene_game_room;
 		_scrollTheGroupChatter = false;
-		_scrollLeft = false;
-		_scrollRight = false;
+		RegTriggers._scrollRight = false;
+		
+		toggle_chatter_open_close();
+		
 		_chatterIsOpen = false; 
 	
 		_id = ID = id;		
@@ -178,7 +170,7 @@ class GameChatter extends FlxGroup
 
 		// this text is needed to fix a bug. it shows a scroll bar by feeding new lines to the FlxScrollableArea. this scrollbar move up until its bottom edge reaches the bottom of the FlxScrollableArea.
 		var _text = new FlxText(1045, FlxG.height - Reg._offsetScreenY, 0, "");
-		_text.setFormat(null, 17, FlxColor.WHITE, LEFT);
+		_text.setFormat(null, 17, RegCustomColors.client_text_color(), LEFT);
 		_text.offset.set(0, 10);
 		_text.font = Reg._fontDefault;
 		_text.text = "this will fix\n a display\n bug. \n by making new lines. \n";
@@ -201,7 +193,7 @@ class GameChatter extends FlxGroup
 			add(_text);
 						
 			_group_text.push(_text);				
-			_group_text[i].setFormat(Reg._fontDefault, Reg._font_size, FlxColor.WHITE);
+			_group_text[i].setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
 			_group_text[i].fieldWidth = 325;
 			_group_text[i].visible = true;
 			
@@ -223,6 +215,12 @@ class GameChatter extends FlxGroup
 		createInputChat(); // deals with typing in text at chatter. there is a bug where this UI needs to be destroyed then recreated after every output of text.
 		
 		// chatter open/close button.
+		if (_chatterOpenCloseButton != null)
+		{
+			remove(_chatterOpenCloseButton);
+			_chatterOpenCloseButton.destroy();
+		}
+		
 		_chatterOpenCloseButton = new ButtonGeneralNetworkNo(FlxG.width - 183, FlxG.height - 137, "", 160 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, openCloseChatter);
 		_chatterOpenCloseButton.label.font = Reg._fontDefault;
 		_chatterOpenCloseButton.scrollFactor.set(0, 0);
@@ -255,18 +253,6 @@ class GameChatter extends FlxGroup
 	public function initialize():Void
 	{
 		if (_id != ID) return;
-		
-		if (Reg._rememberChatterIsOpen == true) 
-		{
-			_groupChatterScroller.x = 0;
-			_chatterOpenCloseButton.label.text = "Close Chat";
-		}
-		else
-		{
-			_groupChatterScroller.x = 375; // if you want chatter open by default change the value to 0;
-			_chatterOpenCloseButton.label.text = "Open Chat";
-		}
-		
 		
 		createInputChat();
 		
@@ -483,8 +469,8 @@ class GameChatter extends FlxGroup
 		if (_groupChatterScroller.x == 0 && _chatterOpenCloseButton.active == true)
 		{
 			_chatterOpenCloseButton.active = false;
-			_scrollRight = true;
-			_scrollLeft = false;
+			RegTriggers._scrollRight = true;
+			
 			_chatterIsOpen = false;
 			
 			_input_chat.visible = false;
@@ -498,15 +484,13 @@ class GameChatter extends FlxGroup
 				GameChatter.__scrollable_area4.visible = false;
 				GameChatter.__scrollable_area4.active = false;
 			}
-					
-		}
+		}		
 		
 		// open it.
 		if (_groupChatterScroller.x > 0 && _chatterOpenCloseButton.active == true)
 		{
 			_chatterOpenCloseButton.active = false;
-			_scrollRight = false;
-			_scrollLeft = true;
+			RegTriggers._scrollRight = true;
 			
 			var _count:Int = 0;
 			
@@ -523,170 +507,83 @@ class GameChatter extends FlxGroup
 			
 			_chatterIsOpen = true;
 		}
-	}
-	
-	/******************************
-	 * change the chatter button label text.
-	 */
-	public static function changeButtonLabel():Void
-	{
-		if (_groupChatterScroller != null && Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false )
-		{
-			if (_chatterOpenCloseButton.label != null)
-			{
-				if (_groupChatterScroller.x == 0) _chatterOpenCloseButton.label.text = "Close Chat";
-				else _chatterOpenCloseButton.label.text = "Open Chat";
-				
-			}
-		}
-	}
-	
-	
-	override public function destroy()
-	{
-		if (_id != ID) return;
 		
-		_scrollLeft = false;
-		_scrollRight = false;
-		_chatterIsOpen = false;
-
-		if (__scrollable_area2 != null
-		&&  RegTypedef._dataMisc._userLocation == 0)
-		{
-			__scrollable_area2.destroy();
-			cameras.remove( __scrollable_area2 );
-			__scrollable_area2 = null;
-		}
-		
-		if (__scrollable_area3 != null
-		&&  RegTypedef._dataMisc._userLocation > 0
-		&&  RegTypedef._dataMisc._userLocation < 3)
-		{
-			__scrollable_area3.destroy();
-			cameras.remove( __scrollable_area3 );
-			__scrollable_area3 = null;
-		}
-		
-		if (__scrollable_area4 != null
-		&&  RegTypedef._dataMisc._userLocation == 3)
-		{
-			__scrollable_area4.destroy();
-			cameras.remove( __scrollable_area4 );
-			__scrollable_area4 = null;
-		}
-		
-		super.destroy();
+		toggle_chatter_open_close();
 	}
 		
-	override public function update(elapsed:Float):Void 
+	private function toggle_chatter_open_close():Void
 	{
-		if (_id != ID) return;
-		
-		// this fixes a bug where the chat input element is not seen when returning to the lobby from the waiting room. Its not really a bug. it is just that two scenes are sharing the same class, no id is used and no id is needed.
-		if (RegTriggers._recreate_chatter_input_chat == true)
-		{
-			RegTriggers._recreate_chatter_input_chat = false;
-			createInputChat();
-		}
-				
-		//----------------------------------------------------------------------
 		// scrolls the chatter to off screen.
-		if (_chatterOpenCloseButton.active == false && _scrollRight == true)
+		if (_chatterOpenCloseButton != null
+		&&	_chatterOpenCloseButton.label.text == "Close Chat"
+		&&	RegTriggers._scrollRight == true)
 		{
-			if (_groupChatterScroller.x < 375) _groupChatterScroller.x += 375;
-			else 
-			{
-				_chatterOpenCloseButton.active = active;
-								
-				_chatterOpenCloseButton.label.text = "Open Chat";
-				Reg._rememberChatterIsOpen = false;
-				_scrollRight = false;	
-				Reg._buttonCodeValues = "c10000";
-				
-				if (__scrollable_area2 != null 
-				&& RegTypedef._dataMisc._userLocation == 0)
-				{
-					__scrollable_area2.visible = false;
-				}
-				
-				else if (__scrollable_area3 != null
-				&& 		 RegTypedef._dataMisc._userLocation > 0
-				&& 		 RegTypedef._dataMisc._userLocation < 3)
-						__scrollable_area3.visible = false;
-				
-				else if (__scrollable_area4 != null)
-				{					
-					__scrollable_area4.visible = false;
-					__scene_game_room.buttonShowAll();
-				}
-				
-				_input_chat.visible = false;
-			}
-		}
-		
-		else if (_chatterOpenCloseButton.active == false && _scrollLeft == true)
-		{
-			if (_groupChatterScroller.x > 0) _groupChatterScroller.x -= 375;
-			else 
-			{
-				_chatterOpenCloseButton.active = active;
-				
-				_chatterOpenCloseButton.label.text = "Close Chat";
-				Reg._rememberChatterIsOpen = true;				
-				_scrollLeft = false;	
-				Reg._buttonCodeValues = "c10000";
-				
-				if (__scrollable_area2 != null 
-				&& RegTypedef._dataMisc._userLocation == 0)
-					__scrollable_area2.visible = true;
-				
-				else if (__scrollable_area3 != null
-				&& 		 RegTypedef._dataMisc._userLocation > 0
-				&& 		 RegTypedef._dataMisc._userLocation < 3)
-					__scrollable_area3.visible = true;
-				
-				else if (__scrollable_area4 != null)
-				{
-					__scrollable_area4.visible = true;
-					__scene_game_room.buttonHideAll();
-				}
-				
-				_input_chat.visible = true;
-			}
-		}
-		
-		// this is needed or else when other player sends a message and our chat is closed, the scrollable area will display.
-		if (__scrollable_area4 != null)
-		{
-			if (_chatterOpenCloseButton.label.text == "Open Chat")
-				__scrollable_area4.visible = false;
-					
-			else
-				__scrollable_area4.visible = true;
-		}
-		
-		//---------------------------------------------------------------------
-		canTypeInChatter();
-		
-		//#############################
-		// chatter input field.
-		if (_input_chat.hasFocus == true) 
-		{
-			if (_input_chat.text == "") _input_chat.caretIndex = 0;
+			RegTriggers._scrollRight = false;
 			
-			// these are needed so that the input field can be set back to focused after a keyboard button press.
-			Reg2._input_field_caret_location = _input_chat.caretIndex;
-			Reg2._input_field_number = 1;
+			if (_groupChatterScroller.x < 375) _groupChatterScroller.x += 375;
+			
+			_chatterOpenCloseButton.active = active;
+			_chatterOpenCloseButton.label.text = "Open Chat";
+			
+			Reg._rememberChatterIsOpen = false;
+			Reg._buttonCodeValues = "c10000";
+			
+			if (__scrollable_area2 != null 
+			&& RegTypedef._dataMisc._userLocation == 0)
+			{
+				__scrollable_area2.visible = false;
+			}
+			
+			else if (__scrollable_area3 != null
+			&& 		 RegTypedef._dataMisc._userLocation > 0
+			&& 		 RegTypedef._dataMisc._userLocation < 3)
+					__scrollable_area3.visible = false;
+			
+			else if (__scrollable_area4 != null)
+			{					
+				__scrollable_area4.visible = false;
+				__scene_game_room.buttonShowAll();
+			}
+			
+			_input_chat.visible = false;
 		}
 		
-		if (ActionInput.justPressed() == true
-		&&  ActionInput.overlaps(_input_chat) == true)
+		else if (_chatterOpenCloseButton != null
+		&&		 _chatterOpenCloseButton.label.text == "Open Chat"
+		&&		 RegTriggers._scrollRight == true)
 		{
-			#if mobile
-				RegTriggers._keyboard_open = true;
-			#end
+			RegTriggers._scrollRight = false;
+			
+			if (_groupChatterScroller.x > 0) _groupChatterScroller.x -= 375;
+			
+			_chatterOpenCloseButton.active = active;
+			
+			_chatterOpenCloseButton.label.text = "Close Chat";
+			Reg._rememberChatterIsOpen = true;				
+			Reg._buttonCodeValues = "c10000";
+			
+			if (__scrollable_area2 != null 
+			&& RegTypedef._dataMisc._userLocation == 0)
+				__scrollable_area2.visible = true;
+			
+			else if (__scrollable_area3 != null
+			&& 		 RegTypedef._dataMisc._userLocation > 0
+			&& 		 RegTypedef._dataMisc._userLocation < 3)
+				__scrollable_area3.visible = true;
+			
+			else if (__scrollable_area4 != null)
+			{
+				__scrollable_area4.visible = true;
+				__scene_game_room.buttonHideAll();
+			}
+			
+			_input_chat.visible = true;
 		}
 		
+	}
+	
+	private function keyboard_pressed():Void 
+	{
 		// if input field was in focus and a keyboard key was pressed...
 		if (Reg2._input_field_number == 1
 		&& Reg2._key_output != "")
@@ -694,9 +591,7 @@ class GameChatter extends FlxGroup
 			_input_chat.hasFocus = true; // set the field back to focus.
 			
 			if (Reg2._key_output == "FORWARDS")
-			{
-				Reg2._key_output = "";
-				
+			{				
 				if (_caretIndex > 0) 
 				{
 					_caretIndex -= 1;
@@ -708,8 +603,6 @@ class GameChatter extends FlxGroup
 			
 			else if (Reg2._key_output == "BACKWARDS")
 			{
-				Reg2._key_output = "";
-				
 				if (_caretIndex < _input_chat.text.length) 
 				{
 					_caretIndex += 1;
@@ -738,8 +631,6 @@ class GameChatter extends FlxGroup
 					_input_chat.caretIndex -= 1;
 					_caretIndex -= 1;
 				}
-				
-				Reg2._key_output = "";
 			}
 			
 			else // add a letter.
@@ -751,8 +642,6 @@ class GameChatter extends FlxGroup
 					
 					if (Reg2._key_output == "SPACE") _input_chat.text += " ";
 					else _input_chat.text += Reg2._key_output;
-					
-					Reg2._key_output = "";
 				}
 				
 				else
@@ -784,12 +673,106 @@ class GameChatter extends FlxGroup
 						_input_chat.caretIndex += 1;
 						_caretIndex += 1;
 					}
-					
-					Reg2._key_output = "";
-				}
+				}				
 			}
 			
+			Reg2._key_output = "";
 		}
+	}
+	
+	override public function destroy()
+	{
+		if (_id != ID) return;
+		
+		RegTriggers._scrollRight = false;
+		_chatterIsOpen = false;
+
+		if (__scrollable_area2 != null
+		&&  RegTypedef._dataMisc._userLocation == 0)
+		{
+			__scrollable_area2.destroy();
+			cameras.remove( __scrollable_area2 );
+			__scrollable_area2 = null;
+		}
+		
+		if (__scrollable_area3 != null
+		&&  RegTypedef._dataMisc._userLocation > 0
+		&&  RegTypedef._dataMisc._userLocation < 3)
+		{
+			__scrollable_area3.destroy();
+			cameras.remove( __scrollable_area3 );
+			__scrollable_area3 = null;
+		}
+		
+		if (__scrollable_area4 != null
+		&&  RegTypedef._dataMisc._userLocation == 3)
+		{
+			__scrollable_area4.destroy();
+			cameras.remove( __scrollable_area4 );
+			__scrollable_area4 = null;
+		}
+		
+		if (_chatterOpenCloseButton != null)
+		{
+			if (_chatterOpenCloseButton.label != null)
+			{
+				remove(_chatterOpenCloseButton.label);
+				_chatterOpenCloseButton.label.destroy();
+				_chatterOpenCloseButton.label = null;
+			}
+			
+			remove(_chatterOpenCloseButton);
+			_chatterOpenCloseButton.destroy();
+			_chatterOpenCloseButton = null;
+		}
+		
+		super.destroy();
+	}
+		
+	override public function update(elapsed:Float):Void 
+	{
+		if (_id != ID) return;
+		
+		// this fixes a bug where the chat input element is not seen when returning to the lobby from the waiting room. Its not really a bug. it is just that two scenes are sharing the same class, no id is used and no id is needed.
+		if (RegTriggers._recreate_chatter_input_chat == true)
+		{
+			RegTriggers._recreate_chatter_input_chat = false;
+			createInputChat();
+		}
+		
+		// this is needed or else when other player sends a message and our chat is closed, the scrollable area will display.
+		if (__scrollable_area4 != null)
+		{
+			if (_chatterOpenCloseButton.label.text == "Open Chat"
+			&&	__scrollable_area4.visible == true)
+				__scrollable_area4.visible = false;
+					
+			else if (_chatterOpenCloseButton.label.text == "Close Chat"
+			&&	__scrollable_area4.visible == false)
+				__scrollable_area4.visible = true;
+		}
+		
+		canTypeInChatter();
+		
+		// chatter input field.
+		if (_input_chat.hasFocus == true) 
+		{
+			if (_input_chat.text == "") _input_chat.caretIndex = 0;
+			
+			// these are needed so that the input field can be set back to focused after a keyboard button press.
+			Reg2._input_field_caret_location = _input_chat.caretIndex;
+			Reg2._input_field_number = 1;
+		}
+		
+		if (ActionInput.justPressed() == true
+		&&  ActionInput.overlaps(_input_chat) == true)
+		{
+			#if mobile
+				RegTriggers._keyboard_open = true;
+			#end
+		}
+		
+		if (Reg2._key_output != "") keyboard_pressed();
 		
 		super.update(elapsed);
 	}

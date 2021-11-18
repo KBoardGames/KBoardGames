@@ -15,7 +15,12 @@ _texture_background_enabled: false
 _texture_background_image_number: 6
 _client_background_enabled: true
 _client_background_image_number: 7
+_client_background_brightness: 0.6
+_client_background_saturation: 0.7
 _background_alpha_enabled: false
+_table_body_background_image_number: 6
+_table_body_background_brightness: 0.45
+_table_body_background_saturation: 1
 _capturing_units: true
 _capturing_units_number: 5
 _chess_show_last_piece_moved: true
@@ -28,9 +33,6 @@ _chess_set_for_player2: 6
 _chess_set_for_player1_color_number: 12
 _chess_set_for_player2_color_number: 8
 _chess_opening_moves_enabled: true
-_chess_computer_thinking_enabled: true
-_client_background_brightness: 0.6
-_client_background_saturation: 0.7
 _button_color_number: 9
 _button_border_color_number: 8
 _button_text_color_number: 1
@@ -42,6 +44,7 @@ _notation_panel_same_background_color_enabled: false
 _notation_panel_background_color_enabled: false
 _notation_panel_background_color_number: 1
 _notation_panel_text_color_number: 14
+_client_topic_title_text_color_number: 1
 _client_text_color_number: 1
 _title_bar_text_color_number: 1
 _profile_avatar_number1: 0.png
@@ -63,7 +66,9 @@ _start_game_offline_confirmation: false
 _music_enabled: true
 _sound_enabled: true
 _time_remaining_for_game: 15, 15, 15, 15, 30
-_title_bar_background_number: 10
-_menu_bar_background_number: 13
+_title_bar_background_number: 7
+_menu_bar_background_number: 7
 _title_bar_background_brightness: 0.65
 _menu_bar_background_brightness: 0.5
+_world_flags_number: 0
+_pager_enabled: false

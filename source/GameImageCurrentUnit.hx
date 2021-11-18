@@ -18,6 +18,10 @@
 
 package;
 
+#if wheelEstate
+	import modules.games.wheelEstate.*;
+#end
+
 /**
  * ...this class displays the current selected unit. a none solid box that parameters a unit where the mouse is located at.
  * @author kboardgames.com
@@ -47,7 +51,7 @@ class GameImageCurrentUnit extends FlxSprite
 		_startY = y; // of gameboard.
 		
 		loadGraphic("assets/images/currentUnit.png", false);
-
+		
 		visible = false;
 	}
 
@@ -152,68 +156,67 @@ class GameImageCurrentUnit extends FlxSprite
 	
 	private function highlightSignatureGame():Void
 	{
-		// signature game.
-		// these yy and xx vars are the vertical and horizonal coordinates of the units that make up the grid of the gameboard. each unit is 75 x 75 pixels. 		
-		for (yy in 0...8)
-		{
-			for (xx in 0...8)
+		#if wheelEstate
+			// signature game.
+			// these yy and xx vars are the vertical and horizonal coordinates of the units that make up the grid of the gameboard. each unit is 75 x 75 pixels. 		
+			for (yy in 0...8)
 			{
-				// highlights any square, with an image, that the player is able to move the piece to.
-				if (RegTriggers._highlightOnlyOuterUnits == false && yy > 1 && yy < 6 && xx > 1 && xx < 6) {} // don't draw centre unit if playing the signature game.
-				else if (RegTriggers._highlightOnlyOuterUnits == true && yy > 0 && yy < 7 && xx > 0 && xx < 7) {}
-				else
-				{	
-					// determine if mouse is within a region of a grid unit.
-					
-					// SignatureGameSelect.background != null is needed to stop a bug where clicking the units directly after the number wheel is clicked will result in a client freeze.
-					if (ActionInput.coordinateX() > _startX + (xx * 75) 
-					&& ActionInput.coordinateX() < _startX + 75 + (xx * 75) 
-					&& ActionInput.coordinateY() > _startY + (yy * 75)
-					&& ActionInput.coordinateY() < _startY + 75 + (yy * 75)
-					)
-					{
-						if (visible == false) visible = true;
+				for (xx in 0...8)
+				{
+					// highlights any square, with an image, that the player is able to move the piece to.
+					if (RegTriggers._highlightOnlyOuterUnits == false && yy > 1 && yy < 6 && xx > 1 && xx < 6) {} // don't draw centre unit if playing the signature game.
+					else if (RegTriggers._highlightOnlyOuterUnits == true && yy > 0 && yy < 7 && xx > 0 && xx < 7) {}
+					else
+					{	
+						// determine if mouse is within a region of a grid unit.
 						
-						// the XY coordinate equals the start of the board plus the unit coordinate times the width/height of this image.
-						 x = _startX + xx * 75;						
-						 y = _startY + yy * 75;
-						
-						Reg._gameYYold = yy;
-						Reg._gameXXold = xx;
-						
-						var _p:Int = 0;
-						
-						if (RegTriggers._highlightOnlyOuterUnits == true && ActionInput.justPressed() == true && Reg._messageId == 0 && RegTriggers._tradeWasAnswered == false && Reg._yesNoKeyPressValueAtTrade == 0
-						|| RegTriggers._highlightOnlyOuterUnits == true && Reg._move_number_current > 0 && Reg._game_offline_vs_cpu == true && Reg._messageId == 0 && RegTriggers._tradeWasAnswered == false && Reg._yesNoKeyPressValueAtTrade == 0) 
+						// SignatureGameSelect.background != null is needed to stop a bug where clicking the units directly after the number wheel is clicked will result in a client freeze.
+						if (ActionInput.coordinateX() > _startX + (xx * 75) 
+						&& ActionInput.coordinateX() < _startX + 75 + (xx * 75) 
+						&& ActionInput.coordinateY() > _startY + (yy * 75)
+						&& ActionInput.coordinateY() < _startY + 75 + (yy * 75)
+						)
 						{
+							if (visible == false) visible = true;
 							
-								
-							// your unit that you would like to trade.
-							if (Reg._move_number_next + 1 == Reg._gameUniqueValueForPiece[yy][xx] && SignatureGameMain._unitYoursButton.toggled == true)
+							// the XY coordinate equals the start of the board plus the unit coordinate times the width/height of this image.
+							 x = _startX + xx * 75;						
+							 y = _startY + yy * 75;
+							
+							Reg._gameYYold = yy;
+							Reg._gameXXold = xx;
+							
+							var _p:Int = 0;
+							
+							if (RegTriggers._highlightOnlyOuterUnits == true && ActionInput.justPressed() == true && Reg._messageId == 0 && RegTriggers._tradeWasAnswered == false && Reg._yesNoKeyPressValueAtTrade == 0
+							|| RegTriggers._highlightOnlyOuterUnits == true && Reg._move_number_current > 0 && Reg._game_offline_vs_cpu == true && Reg._messageId == 0 && RegTriggers._tradeWasAnswered == false && Reg._yesNoKeyPressValueAtTrade == 0) 
 							{
-								// do not set player's data if other player is moving.
-				
-								if (RegTriggers._tradeProposalOffer == false)
+								// your unit that you would like to trade.
+								if (Reg._move_number_next + 1 == Reg._gameUniqueValueForPiece[yy][xx] && SignatureGameMain._unitYoursButton.toggled == true)
 								{
-									SignatureGameMain._unitYoursButton.label.text = ""; // remove "yours" text.
-									_p = Reg._gamePointValueForPiece[yy][xx] - 1;
-									Reg._signatureGameUnitNumberTrade[0] = _p;
-									SignatureGameMain._unitYoursText.text = "Unit #" + _p;
-									// save this in a var so we know which unit was clicked when trading units. this vars are used for the signature game when training. these vars are for the player that selected trade from the options menu.
-									Reg._gameYYnew2 = yy;
-									Reg._gameXXnew2 = xx;
+									// do not set player's data if other player is moving.
+					
+									if (RegTriggers._tradeProposalOffer == false)
+									{
+										SignatureGameMain._unitYoursButton.label.text = ""; // remove "yours" text.
+										_p = Reg._gamePointValueForPiece[yy][xx] - 1;
+										Reg._signatureGameUnitNumberTrade[0] = _p;
+										SignatureGameMain._unitYoursText.text = "Unit #" + _p;
+										// save this in a var so we know which unit was clicked when trading units. this vars are used for the signature game when training. these vars are for the player that selected trade from the options menu.
+										Reg._gameYYnew2 = yy;
+										Reg._gameXXnew2 = xx;
+										
+									}
+									
+									if (_p > 0) SignatureGameMain._unitYoursImage.loadGraphic("modules/games/wheelEstate/assets/images/"+ _p +".png", false);
 									
 								}
-								
-								if (_p > 0) SignatureGameMain._unitYoursImage.loadGraphic("assets/images/signatureGame/"+ _p +".png", false);
-								
 							}
 						}
 					}
 				}
-			}
-		}	
-
+			}	
+		#end
 	}
 		
 	override public function update (elapsed:Float)

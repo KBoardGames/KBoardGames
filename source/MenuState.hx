@@ -19,17 +19,16 @@
 // If the game crashes without an error then copy the music files to the bin folder.
 package;
 
-import flixel.math.FlxPoint;
-import openfl.media.Sound;
-import openfl.media.SoundChannel;
-import openfl.media.SoundTransform;
+#if chess
+	import modules.games.chess.*;
+#end
 
 #if flags
-	import myLibs.worldFlags.WorldFlags;
+	import modules.worldFlags.WorldFlags;
 #end 
 
 #if house
-	import myLibs.house.*;
+	import modules.house.*;
 #end
 
 /**
@@ -40,9 +39,9 @@ class MenuState extends FlxState
 {
 	//public var _music:Sound;
 	//public var _sound_channel:SoundChannel;
-	
-	private var _toggleFullscreen:ButtonGeneralNetworkNo; // Toggles fullscreen mode off or on.
-	private var _exitProgram:ButtonGeneralNetworkNo;
+		
+	// Toggles fullscreen mode off or on.
+	private var _toggleFullscreen:ButtonGeneralNetworkNo; 
 
 	// chess skill level buttons.
 	private var _button_b1:ButtonToggleFlxState;
@@ -63,14 +62,21 @@ class MenuState extends FlxState
 	 * when a dialog box is open, users are still able to click something underneath it. a function is called to set active to false for those elements but some will set back to true at update() without this code.
 	 */
 	private var _is_active:Bool = true;
-
+		
+	private var _offset_current_x:Int = 4;
+	private var _offset_current_y:Int = 1;
+	private var _offset_upcoming_x:Int = -3;
+	private var _offset_upcoming_y:Int = 1;
+	
 	/******************************
-	* button this.y offset.
-	*/
-	private var _offsetX:Int = - 8; // 8
-	private var _offsetY:Int = 0; 
-	private var _offset_icons_and__event_scheduler_y:Int = - 50;
-	private var _eventScheduler:FlxSprite; // see calendar and events classes.
+	 * this moves everything. title and all text and sprite.
+	 */
+	private var _offset_icons_and__event_scheduler_y:Int = - 60;
+	
+	/******************************
+	 * this is the event scheduler box. This shows the current and upcoming events.
+	 */
+	private var _eventSchedulerBackground:FlxSprite; // see calendar and events classes.
 	private var _eventSchedulerHover:FlxSprite;
 	
 	/******************************
@@ -93,7 +99,7 @@ class MenuState extends FlxState
 	 */
 	public var _group_sprite:Array<FlxSprite> = [];
 	
-	public var _text_title_icon_description:FlxText;
+	public var _icon_text_title_description:FlxText;
 	
 	/******************************
 	 * display the version of the client on scene.
@@ -112,24 +118,27 @@ class MenuState extends FlxState
 	 */
 	private var _ticks_startup:Float = 0;
 	
-	private var _bot_ben:ButtonUnique;
-	private var _bot_tina:ButtonUnique;
-	private var _bot_piper:ButtonUnique;
-	private var _bot_amy:ButtonUnique;
-	private var _bot_zak:ButtonUnique;
-	private var _profile_username_p1:ButtonUnique;
+	private var _bot_ben:ButtonToggleFlxState;
+	private var _bot_tina:ButtonToggleFlxState;
+	private var _bot_piper:ButtonToggleFlxState;
+	private var _bot_amy:ButtonToggleFlxState;
+	private var _bot_zak:ButtonToggleFlxState;
+	private var _profile_username_p1:ButtonToggleFlxState;
 	
 	private var _icon_offset_x:Int = 0;
 	
 	/******************************
 	 * background gradient, texture and plain color for a scene.
 	 */
-	private var _scene_background:SceneBackground;
-		
+	private var __scene_background:SceneBackground;
+	
+	private var _textEventSchedule:FlxText;
+	
 	override public function create():Void
 	{
 		persistentDraw = true;
 		persistentUpdate = false;
+		
 		Reg._at_game_room = false; // needed here since auto return after save options could be enabled.
 				
 		_is_active = true;
@@ -195,8 +204,11 @@ class MenuState extends FlxState
 		#if flags
 			WorldFlags.main();
 		#end
-			
-		ChessECO.ECOlists();
+		
+		#if chess
+			ChessECO.ECOlists();
+		#end
+		
 		Reg._at_menu_state = true;
 		
 		RegCustom._chess_skill_level_online = RegCustom._chess_skill_level_offline;
@@ -282,33 +294,29 @@ class MenuState extends FlxState
 	public function draw_event_scheduler():Void
 	{
 		if (_client_online == true)
-		{
-			var _eventScheduler_bg_border = new FlxSprite(0, 0);
-			_eventScheduler_bg_border.makeGraphic(351 + 16, 118 + 16, 0xffffffff);
-			_eventScheduler_bg_border.scrollFactor.set(0, 0);	
-			_eventScheduler_bg_border.scale.set(1.05, 1.05);
-			_eventScheduler_bg_border.setPosition(200 - 8, 440 - 8 + _offset_icons_and__event_scheduler_y);
-			add(_eventScheduler_bg_border);
+		{		
+			_eventSchedulerBackground = new FlxSprite(0, 0);
+			_eventSchedulerBackground.loadGraphic("assets/images/eventSchedulerBackground.png", false);
+			_eventSchedulerBackground.scrollFactor.set(0, 0);	
+			_eventSchedulerBackground.scale.set(1.05, 1.05);
+			_eventSchedulerBackground.setPosition(200 - 8, 440 - 8 + _offset_icons_and__event_scheduler_y);
+			_eventSchedulerBackground.color = RegCustomColors.color_client_background();
+			_eventSchedulerBackground.alpha = 0.50;
+			add(_eventSchedulerBackground);
 			
-			var _eventScheduler_bg = new FlxSprite(0, 0);
-			_eventScheduler_bg.makeGraphic(351 + 12, 118 + 12, 0xff000005);
-			_eventScheduler_bg.scrollFactor.set(0, 0);	
-			_eventScheduler_bg.scale.set(1.05, 1.05);
-			_eventScheduler_bg.setPosition(200 - 6, 440 - 6 + _offset_icons_and__event_scheduler_y);
-			add(_eventScheduler_bg);
-			
-			_eventScheduler = new FlxSprite(0, 0);
-			_eventScheduler.loadGraphic("assets/images/eventScheduler.png", false);
-			_eventScheduler.scrollFactor.set(0, 0);	
-			_eventScheduler.scale.set(1.05, 1.05);
-			_eventScheduler.setPosition(200, 440 + _offset_icons_and__event_scheduler_y);
-			add(_eventScheduler);
+			var _event_scheduler_border = new FlxSprite(0, 0);
+			_event_scheduler_border.loadGraphic("assets/images/eventSchedulerBorder.png", false);
+			_event_scheduler_border.scrollFactor.set(0, 0);	
+			_event_scheduler_border.scale.set(1.05, 1.05);
+			_event_scheduler_border.setPosition(200 - 8, 440 - 8 + _offset_icons_and__event_scheduler_y);
+			//_event_scheduler_border.color = FlxColor.RED;
+			add(_event_scheduler_border);
 			
 			_eventSchedulerHover = new FlxSprite(0, 0);
 			_eventSchedulerHover.loadGraphic("assets/images/eventSchedulerHover.png", false);
 			_eventSchedulerHover.scrollFactor.set(0, 0);
 			_eventSchedulerHover.scale.set(1.05, 1.05);
-			_eventSchedulerHover.setPosition(200, 440 + _offset_icons_and__event_scheduler_y);
+			_eventSchedulerHover.setPosition(200 - 8, 440 - 8 + _offset_icons_and__event_scheduler_y);
 			_eventSchedulerHover.visible = false;
 			add(_eventSchedulerHover);
 			
@@ -400,13 +408,15 @@ class MenuState extends FlxState
 			FlxG.mouse.enabled = true;
 		}
 		
-		if (Reg._yesNoKeyPressValueAtMessage == 1 && Reg._buttonCodeValues == "z1010")
+		// server connection error message.
+		if (Reg._yesNoKeyPressValueAtMessage >= 1 && Reg._buttonCodeValues == "z1010")
 		{
 			Reg._buttonCodeValues = "";
 			Reg._yesNoKeyPressValueAtMessage = 0;
 
 			buttonsIconsActive();
 			
+			Reg._at_menu_state = true;
 			FlxG.mouse.reset();
 			FlxG.mouse.enabled = true;
 		}
@@ -457,7 +467,7 @@ class MenuState extends FlxState
 
 			buttonsIconsActive();
 			
-			Internet.URLgoto("https://" + Reg._websiteHomeUrl + "/forum/ucp.php?mode=register", 2);
+			Internet.URLgoto("https://" + Reg._websiteHomeUrl + "/en/ucp.php?mode=register", 2);
 			
 			FlxG.mouse.reset();
 			FlxG.mouse.enabled = true;
@@ -479,14 +489,24 @@ class MenuState extends FlxState
 	
 	private function startupFunctions():Void
 	{
-		_scene_background = new SceneBackground();
-		add(_scene_background);
+		if (__scene_background != null)
+		{
+			remove(__scene_background);
+			__scene_background.destroy();
+		}
+		
+		if (__scene_background != null) remove(__scene_background);	
+			__scene_background = new SceneBackground();
+		add(__scene_background);
+		
+		if (Reg._at_menu_state_offline == true)
+		{
+			if (Reg.__menu_bar != null) remove(Reg.__menu_bar);
+			Reg.__menu_bar = new MenuBar(true);
+			add(Reg.__menu_bar);
+		}
 		
 		buttonFullScreen();				// toggle window/fullscreen mode
-		
-		#if !html1
-			buttonExitProgram();		// button to exit program
-		#end
 	}
 	
 	private function initializeGameMenu():Void
@@ -507,7 +527,7 @@ class MenuState extends FlxState
 		#if !html5	
 			if (_client_online == true)
 			{
-				_software_new_check = new ButtonGeneralNetworkNo(190, FlxG.height -50, "", 385, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, checkForNewSoftware, RegCustom._button_color[Reg._tn], false, 1);
+				_software_new_check = new ButtonGeneralNetworkNo(15, FlxG.height - 40, "", 385, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, checkForNewSoftware, RegCustom._button_color[Reg._tn], false, 1);
 				_software_new_check.label.text = "Check For New Software";
 				_software_new_check.label.font = Reg._fontDefault;
 				add(_software_new_check);
@@ -516,14 +536,13 @@ class MenuState extends FlxState
 		
 		if (Reg._clientReadyForPublicRelease == false)
 		{
-			_toggleFullscreen = new ButtonGeneralNetworkNo(130, FlxG.height -50, "", 305, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, toggleFullScreenClicked, RegCustom._button_color[Reg._tn], false, 1);
+			_toggleFullscreen = new ButtonGeneralNetworkNo(0, FlxG.height - 40, "", 305, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, toggleFullScreenClicked, RegCustom._button_color[Reg._tn], false, 1);
 			_toggleFullscreen.label.text = "Toggle Fullscreen";
 			_toggleFullscreen.label.font = Reg._fontDefault;
 			#if html5
 				_toggleFullscreen.x = 15;
 			#else			
-				_toggleFullscreen.screenCenter(X);
-				_toggleFullscreen.x += 40;
+				_toggleFullscreen.x = _software_new_check.width + _software_new_check.x + 15;
 			#end
 			add(_toggleFullscreen);
 		}
@@ -546,29 +565,6 @@ class MenuState extends FlxState
 			FlxG.fullscreen = !FlxG.fullscreen;
 			saveMenu();
 		}
-	}
-	
-	private function buttonExitProgram():Void
-	{
-		_exitProgram = 		new ButtonGeneralNetworkNo(15, FlxG.height -50, "Exit", 160, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, exitProgram, RegCustom._button_color[Reg._tn], false);
-		_exitProgram.label.font = Reg._fontDefault;
-		add(_exitProgram);
-		
-		#if html5
-			_exitProgram.visible = false;
-			_exitProgram.active = false;
-		#end
-	}
-	
-	private function exitProgram():Void
-	{
-		if (Reg2._ipAddressLoaded != "") saveMenu();
-		
-		#if cpp
-			Sys.exit(0);
-		#else
-			openfl.system.System.exit(0);
-		#end		
 	}
 	
 	// try to connect to the server.
@@ -798,19 +794,20 @@ class MenuState extends FlxState
 		if (Reg._clientReadyForPublicRelease == false)
 		{
 			#if !html5
-				FlxG.fullscreen = _gameMenu.data.fullscreen;
+				if (Reg._menustate_initiated == false)
+					FlxG.fullscreen = _gameMenu.data.fullscreen;
+				
+				Reg._menustate_initiated = true;
 			#end
 		}
 	}
 
 	private function eventCurrentAndUpcoming():Void
 	{
-		var _offsetEventColumn1Y:Int = 37;
-		var _offsetEventColumn2Y:Int = 62;
-		var _offsetEventColumn3Y:Int = 87;
+		var _offsetEventColumn1Y:Int = 29;
+		var _offsetEventColumn2Y:Int = 54;
+		var _offsetEventColumn3Y:Int = 79;
 		
-		var _offsetY:Int = 2; // column text offset.
-	
 		// the background behind a calendar square. Each square can have three events on it. the location of the event text is called a column.
 	 	var _bgEventColumn1Number:FlxSprite;
 		var _bgEventColumn2Number:FlxSprite;
@@ -822,8 +819,8 @@ class MenuState extends FlxState
 		var _textEventColumn3Number:FlxText;
 		
 		// used to display the day number text and events text on the calendar.
-		var _intCalendarCoordinateY:Float = _text_title_icon_description.y + 50;	 
-		var _intCalendarCoordinateX:Float = _eventScheduler.x + 11;
+		var _intCalendarCoordinateY:Float = _icon_text_title_description.y + 50;	 
+		var _intCalendarCoordinateX:Float = _eventSchedulerBackground.x + 11;
 	
 		// calendar square event column 1 background offset.
 	 	var _offsetBgColumnY:Int = 1;
@@ -848,28 +845,26 @@ class MenuState extends FlxState
 		 * get only three events for the event schedule current position.
 		 */
 		var _eventNoMoreThanThree:Int = 0; 
-
-		var _textEventSchedule = new FlxText(0, 0, 0, "Event Schedule");
+				
+		_textEventSchedule = new FlxText(0, 0, 0, "Event Schedule");
 		_textEventSchedule.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
 		_textEventSchedule.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
-		_textEventSchedule.setPosition(_intCalendarCoordinateX + _offsetBgColumnX + 72, _intCalendarCoordinateY + _offsetEventColumn1Y + _offsetBgColumnY - 87 );
+		_textEventSchedule.setPosition(_intCalendarCoordinateX + _offsetBgColumnX + 72, 390 + _offset_icons_and__event_scheduler_y);
 		_textEventSchedule.scrollFactor.set(0, 0);
 		add(_textEventSchedule);
 		
 		var _textCurrent = new FlxText(0, 0, 0, "Current");
 		_textCurrent.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.WHITE);
-		_textCurrent.setPosition(_intCalendarCoordinateX + _offsetBgColumnX + 29, _intCalendarCoordinateY + _offsetEventColumn1Y + _offsetBgColumnY - 36);
+		_textCurrent.setPosition(225, 374 + 60 + _offset_icons_and__event_scheduler_y);
 		_textCurrent.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		_textCurrent.scrollFactor.set();
 		add(_textCurrent);
 		
-		var _textUpcoming = new FlxText(0, 0, 0, "");
+		var _textUpcoming = new FlxText(414, 374 + 60 + _offset_icons_and__event_scheduler_y, 0, "");
 		_textUpcoming.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.WHITE);
 		_textUpcoming.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		_textUpcoming.scrollFactor.set();
 		add(_textUpcoming);
-		
-		
 		
 		// find current event. 40 events are the max for this board game.
 		for (i in 0...40) 
@@ -878,41 +873,36 @@ class MenuState extends FlxState
 			{
 				if (_eventNoMoreThanThree == 0)
 				{
-					_bgEventColumn1Number = new FlxSprite();
+					_bgEventColumn1Number = new FlxSprite(190 + _offset_current_x, 410 + 60 + _offset_current_y + _offset_icons_and__event_scheduler_y);
 					_bgEventColumn1Number.makeGraphic(166, 25);
 					_bgEventColumn1Number.scrollFactor.set(0, 0);	
-					_bgEventColumn1Number.setPosition(_intCalendarCoordinateX + _offsetBgColumnX, _intCalendarCoordinateY + _offsetEventColumn1Y + _offsetBgColumnY );
 					_bgEventColumn1Number.color = EventSchedule.setBgRowColor(Reg2._eventBackgroundColour[i]);
 					add(_bgEventColumn1Number);
 					
-					_textEventColumn1Number = new FlxText(0, 0, 0, "");
+					_textEventColumn1Number = new FlxText(193 + _offset_current_x, 407 + 60 + _offset_current_y + _offset_icons_and__event_scheduler_y, 0, "");
 					_textEventColumn1Number.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.WHITE);
 					_textEventColumn1Number.scrollFactor.set();
 					_textEventColumn1Number.fieldWidth = 152;
 					_textEventColumn1Number.wordWrap = false;
 					_textEventColumn1Number.text = Reg2._eventName[i];
-					_textEventColumn1Number.setPosition(_intCalendarCoordinateX-10, _intCalendarCoordinateY + _offsetEventColumn1Y + _offsetY - 4 );
 					add(_textEventColumn1Number);
-					
 					_eventNoMoreThanThree += 1;
 				}
 				
 				else if (_eventNoMoreThanThree == 1)
 				{
-					_bgEventColumn2Number = new FlxSprite();
+					_bgEventColumn2Number = new FlxSprite(190 + _offset_current_x, 435 + 60 + _offset_current_y + _offset_icons_and__event_scheduler_y);
 					_bgEventColumn2Number.makeGraphic(166, 25);
 					_bgEventColumn2Number.scrollFactor.set(0, 0);	
-					_bgEventColumn2Number.setPosition(_intCalendarCoordinateX + _offsetBgColumnX, _intCalendarCoordinateY + _offsetEventColumn2Y + _offsetBgColumnY );
 					_bgEventColumn2Number.color = EventSchedule.setBgRowColor(Reg2._eventBackgroundColour[i]);
 					add(_bgEventColumn2Number);
 					
-					_textEventColumn2Number = new FlxText(0, 0, 0, "");
+					_textEventColumn2Number = new FlxText(193 + _offset_current_x, 432 + 60 + _offset_current_y + _offset_icons_and__event_scheduler_y, 0, "");
 					_textEventColumn2Number.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.WHITE);
 					_textEventColumn2Number.scrollFactor.set();
 					_textEventColumn2Number.fieldWidth = 152;
 					_textEventColumn2Number.wordWrap = false;
 					_textEventColumn2Number.text = Reg2._eventName[i];
-					_textEventColumn2Number.setPosition(_intCalendarCoordinateX-10, _intCalendarCoordinateY + _offsetEventColumn2Y + _offsetY - 4 );
 					add(_textEventColumn2Number);
 					
 					_eventNoMoreThanThree += 1;
@@ -920,20 +910,18 @@ class MenuState extends FlxState
 				
 				else if (_eventNoMoreThanThree == 2)
 				{
-					_bgEventColumn3Number = new FlxSprite();
+					_bgEventColumn3Number = new FlxSprite(190 + _offset_current_x, 460 + 60 + _offset_current_y + _offset_icons_and__event_scheduler_y);
 					_bgEventColumn3Number.makeGraphic(166, 25);
 					_bgEventColumn3Number.scrollFactor.set(0, 0);	
-					_bgEventColumn3Number.setPosition(_intCalendarCoordinateX + _offsetBgColumnX, _intCalendarCoordinateY + _offsetEventColumn3Y + _offsetBgColumnY );
 					_bgEventColumn3Number.color = EventSchedule.setBgRowColor(Reg2._eventBackgroundColour[i]);
 					add(_bgEventColumn3Number);
 					
-					_textEventColumn3Number = new FlxText(0, 0, 0, "");
+					_textEventColumn3Number = new FlxText(193 + _offset_current_x, 457 + 60 + _offset_current_y + _offset_icons_and__event_scheduler_y, 0, "");
 					_textEventColumn3Number.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.WHITE);
 					_textEventColumn3Number.scrollFactor.set();
 					_textEventColumn3Number.fieldWidth = 152;
 					_textEventColumn3Number.wordWrap = false;
 					_textEventColumn3Number.text = Reg2._eventName[i];
-					_textEventColumn3Number.setPosition(_intCalendarCoordinateX-10, _intCalendarCoordinateY + _offsetEventColumn3Y + _offsetY - 4 );
 					add(_textEventColumn3Number);
 					
 					_eventNoMoreThanThree += 1;
@@ -959,21 +947,19 @@ class MenuState extends FlxState
 					{
 						if (_eventNoMoreThanThree == 0)
 						{
-							_bgEventColumn1Number = new FlxSprite();
+							_bgEventColumn1Number = new FlxSprite(379 + _offset_upcoming_x, 410 + 60 + _offset_upcoming_y + _offset_icons_and__event_scheduler_y);
 							_bgEventColumn1Number.makeGraphic(166, 25);
 							_bgEventColumn1Number.scrollFactor.set(0, 0);	
-							_bgEventColumn1Number.setPosition(_intCalendarCoordinateX + _offsetBgColumnX + _offsetUpcomingEventX, _intCalendarCoordinateY + _offsetEventColumn1Y + _offsetBgColumnY );
 							_bgEventColumn1Number.color = EventSchedule.setBgRowColor(Reg2._eventBackgroundColour[i]);
 							add(_bgEventColumn1Number);
 							
-							_textEventColumn1Number = new FlxText(0, 0, 0, "");
+							_textEventColumn1Number = new FlxText(383 + _offset_upcoming_x, 407 + 60 + _offset_upcoming_y + _offset_icons_and__event_scheduler_y, 0, "");
 							_textEventColumn1Number.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.WHITE);
 							_textEventColumn1Number.scrollFactor.set();
 							
 							_textEventColumn1Number.text = Reg2._eventName[i];
 							_textEventColumn1Number.fieldWidth = 152;
 							_textEventColumn1Number.wordWrap = false;
-							_textEventColumn1Number.setPosition(_intCalendarCoordinateX + _offsetUpcomingEventX - 10, _intCalendarCoordinateY + _offsetEventColumn1Y + _offsetY - 4 );
 							add(_textEventColumn1Number);
 							
 							_eventNoMoreThanThree += 1;
@@ -982,21 +968,18 @@ class MenuState extends FlxState
 						
 						else if (_eventNoMoreThanThree == 1)
 						{
-							_bgEventColumn2Number = new FlxSprite();
+							_bgEventColumn2Number = new FlxSprite(379 + _offset_upcoming_x, 435 + 60 + _offset_upcoming_y + _offset_icons_and__event_scheduler_y);
 							_bgEventColumn2Number.makeGraphic(166, 25);
 							_bgEventColumn2Number.scrollFactor.set(0, 0);	
-							_bgEventColumn2Number.setPosition(_intCalendarCoordinateX + _offsetBgColumnX + _offsetUpcomingEventX, _intCalendarCoordinateY + _offsetEventColumn2Y + _offsetBgColumnY );
 							_bgEventColumn2Number.color = EventSchedule.setBgRowColor(Reg2._eventBackgroundColour[i]);
 							add(_bgEventColumn2Number);
 							
-							_textEventColumn2Number = new FlxText(0, 0, 0, "");
+							_textEventColumn2Number = new FlxText(383 + _offset_upcoming_x, 432 + 60 + _offset_upcoming_y + _offset_icons_and__event_scheduler_y, 0, "");
 							_textEventColumn2Number.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.WHITE);
 							_textEventColumn2Number.scrollFactor.set();
-							
 							_textEventColumn2Number.text = Reg2._eventName[i];
 							_textEventColumn2Number.fieldWidth = 152;
 							_textEventColumn2Number.wordWrap = false;
-							_textEventColumn2Number.setPosition(_intCalendarCoordinateX + _offsetUpcomingEventX - 10, _intCalendarCoordinateY + _offsetEventColumn2Y + _offsetY - 4 );
 							add(_textEventColumn2Number);
 							
 							_eventNoMoreThanThree += 1;
@@ -1004,22 +987,19 @@ class MenuState extends FlxState
 						
 						else if (_eventNoMoreThanThree == 2)
 						{
-							_bgEventColumn3Number = new FlxSprite();
+							_bgEventColumn3Number = new FlxSprite(379 + _offset_upcoming_x, 460 + 60 + _offset_upcoming_y + _offset_icons_and__event_scheduler_y);
 							_bgEventColumn3Number.makeGraphic(166, 25);
 							_bgEventColumn3Number.scrollFactor.set(0, 0);	
-							_bgEventColumn3Number.setPosition(_intCalendarCoordinateX + _offsetBgColumnX + _offsetUpcomingEventX, _intCalendarCoordinateY + _offsetEventColumn3Y + _offsetBgColumnY );
 							_bgEventColumn3Number.color = EventSchedule.setBgRowColor(Reg2._eventBackgroundColour[i]);
 							add(_bgEventColumn3Number);
 							
-							_textEventColumn3Number = new FlxText(0, 0, 0, "");
+							_textEventColumn3Number = new FlxText(383 + _offset_upcoming_x, 457 + 60 + _offset_upcoming_y + _offset_icons_and__event_scheduler_y, 0, "");
 							_textEventColumn3Number.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.WHITE);
 							_textEventColumn3Number.scrollFactor.set();			
 							_textEventColumn3Number.text = Reg2._eventName[i];
 							_textEventColumn3Number.fieldWidth = 152;
 							_textEventColumn3Number.wordWrap = false;
-							_textEventColumn3Number.setPosition(_intCalendarCoordinateX + _offsetUpcomingEventX - 10, _intCalendarCoordinateY + _offsetEventColumn3Y + _offsetY - 4 );
 							add(_textEventColumn3Number);
-							
 							_eventNoMoreThanThree += 1;
 						}
 						
@@ -1054,50 +1034,43 @@ class MenuState extends FlxState
 		#else
 			_textUpcoming.text = _textMonth + " " + _upcomingDay;
 		#end
-		
-		// move this over a bit to make the text more centered.
-		if (_intDay > 9) _textUpcoming.setPosition(_intCalendarCoordinateX + _offsetBgColumnX + 225, _intCalendarCoordinateY + _offsetEventColumn1Y + _offsetBgColumnY - 36 );
-		else _textUpcoming.setPosition(_intCalendarCoordinateX + _offsetBgColumnX + 228, _intCalendarCoordinateY + _offsetEventColumn1Y + _offsetBgColumnY - 36 );
-		
 	}
 	
 	private function titleIcons():Void
 	{
-		_text_title_icon_description = new FlxText(_icon_offset_x, 390 + _offset_icons_and__event_scheduler_y, 0, "Multiplayer Online. (World)");
-		
-		#if html5
-			_text_title_icon_description.text = "Offline (Player vs Player)";
-		#end
-		
-		_text_title_icon_description.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
-		_text_title_icon_description.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
-		_text_title_icon_description.scrollFactor.set();
-		add(_text_title_icon_description);
+		_icon_text_title_description = new FlxText(0, 390 + _offset_icons_and__event_scheduler_y, 0, "Multiplayer Online. (World)");
+				
+		_icon_text_title_description.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
+		_icon_text_title_description.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
+		_icon_text_title_description.scrollFactor.set();
+		add(_icon_text_title_description);	
+		center_icon_text_to_icon_box();
 		
 		_group_sprite.splice(0, _group_sprite.length);
 		
-		var _sprite_bg_border = new FlxSprite(20, 120);
-		_sprite_bg_border.makeGraphic(272 + 47, 144 + 16, 0xffffffff);
-		_sprite_bg_border.scrollFactor.set(0, 0);
-		_sprite_bg_border.setPosition(_icon_offset_x - 11, 440 + _offset_icons_and__event_scheduler_y - 11);
-		add(_sprite_bg_border);
+		// the icons background.
+		var _icons_background = new FlxSprite(20, 120);
+		_icons_background.loadGraphic("assets/images/iconsBackground.png");
+		_icons_background.color = RegCustomColors.color_client_background();
+		_icons_background.setPosition(_icon_offset_x - 11, 440 + _offset_icons_and__event_scheduler_y - 11);
+		_icons_background.scrollFactor.set(0, 0);
+		_icons_background.alpha = 0.50;
+		add(_icons_background);
 		
-		// 15 is the space between icons. 43 is the total space.
-		var _sprite_bg = new FlxSprite(20, 120);
-		_sprite_bg.makeGraphic(272 + 43, 141 + 15, 0xff000005);
-		_sprite_bg.scrollFactor.set(0, 0);
-		_sprite_bg.setPosition(_icon_offset_x - 9, 440 + _offset_icons_and__event_scheduler_y - 9);
-		add(_sprite_bg);	
+		var _icon_border_between_other_icons = new FlxSprite(_icons_background.x, _icons_background.y);
+		_icon_border_between_other_icons.loadGraphic("assets/images/iconsBorder.png");
+		//_icon_border_between_other_icons.color = FlxColor.RED;
+		_icon_border_between_other_icons.scrollFactor.set(0, 0);
+		add(_icon_border_between_other_icons);
 				
 		for (i in 0...6)
 		{
 			// add title here by increase the max number then go to titleMenu then go to the bottom of update(). 
 			// all gameboards images are stored in frames.
 			_sprite = new FlxSprite(20, 120);
-			_sprite.loadGraphic("assets/images/titleUnit.png", true, 64, 64);
-						
+			_sprite.loadGraphic("assets/images/icons.png", true, 64, 64);
+			_sprite.color = RegCustomColors.client_text_color();
 			_sprite.scrollFactor.set(0, 0);
-			//_sprite.visible = false;
 			_sprite.updateHitbox();
 			add(_sprite);	
 			
@@ -1136,7 +1109,7 @@ class MenuState extends FlxState
 			_game_highlighted.x = _icon_offset_x + 77;
 		#end
 		
-		_game_highlighted.loadGraphic("assets/images/titleUnitBorderHover.png", true, 66, 66); // height is the same value as width.
+		_game_highlighted.loadGraphic("assets/images/iconsHover.png", true, 66, 66); // height is the same value as width.
 		_game_highlighted.scrollFactor.set(0, 0);
 		_game_highlighted.animation.add("play", [0, 1], 10, true);
 		_game_highlighted.animation.play("play");
@@ -1191,35 +1164,35 @@ class MenuState extends FlxState
 			
 			if (_bot_ben == null)
 			{
-				_bot_ben = new ButtonUnique(15, 230, "Bot ben", 150, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, botUseBenOnline, RegCustom._button_color[Reg._tn], false, 1);
+				_bot_ben = new ButtonToggleFlxState(15, 230, 100, "Bot ben", 150, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, botUseBenOnline, RegCustom._button_color[Reg._tn], false);
 				_bot_ben.label.font = Reg._fontDefault;
 				add(_bot_ben);			
 			}
 			
 			if (_bot_tina == null)
 			{
-				_bot_tina = new ButtonUnique(150+30, 230, "Bot tina", 150, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, botUseTinaOnline, RegCustom._button_color[Reg._tn], false, 1);
+				_bot_tina = new ButtonToggleFlxState(150+30, 230, 100, "Bot tina", 150, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, botUseTinaOnline, RegCustom._button_color[Reg._tn], false);
 				_bot_tina.label.font = Reg._fontDefault;
 				add(_bot_tina);		
 			}
 			
 			if (_bot_piper == null)
 			{
-				_bot_piper = new ButtonUnique(300+45, 230, "Bot piper", 150, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, botUsePiperOnline, RegCustom._button_color[Reg._tn], false, 1);
+				_bot_piper = new ButtonToggleFlxState(300+45, 230, 100, "Bot piper", 150, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, botUsePiperOnline, RegCustom._button_color[Reg._tn], false);
 				_bot_piper.label.font = Reg._fontDefault;
 				add(_bot_piper);		
 			}
 			
 			if (_bot_amy == null)
 			{
-				_bot_amy = new ButtonUnique(450+60, 230, "Bot amy", 150, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, botUseAmyOnline, RegCustom._button_color[Reg._tn], false, 1);
+				_bot_amy = new ButtonToggleFlxState(450+60, 230, 100, "Bot amy", 150, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, botUseAmyOnline, RegCustom._button_color[Reg._tn], false);
 				_bot_amy.label.font = Reg._fontDefault;
 				add(_bot_amy);			
 			}
 			
 			if (_bot_zak == null)
 			{
-				_bot_zak = new ButtonUnique(600+75, 230, "Bot zak", 150, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, botUseZakOnline, RegCustom._button_color[Reg._tn], false, 1);
+				_bot_zak = new ButtonToggleFlxState(600+75, 230, 100, "Bot zak", 150, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, botUseZakOnline, RegCustom._button_color[Reg._tn], false);
 				_bot_zak.label.font = Reg._fontDefault;
 				add(_bot_zak);
 			}
@@ -1235,7 +1208,7 @@ class MenuState extends FlxState
 			)
 			{
 				#if !html5
-					_profile_username_p1 = new ButtonUnique(750+90, 230, RegCustom._profile_username_p1[Reg._tn], 200, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, profile_username_p1, RegCustom._button_color[Reg._tn], false, 1);
+					_profile_username_p1 = new ButtonToggleFlxState(750+90, 230, 100, RegCustom._profile_username_p1[Reg._tn], 200, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, profile_username_p1, RegCustom._button_color[Reg._tn], false);
 					_profile_username_p1.label.font = Reg._fontDefault;
 					add(_profile_username_p1);
 				#end
@@ -1388,7 +1361,6 @@ class MenuState extends FlxState
 		#if !html5
 			if (_eventSchedulerHover != null) _eventSchedulerHover.active = true;
 				
-			if (_exitProgram != null) _exitProgram.active = true;
 			if (_software_new_check != null) _software_new_check.active = true;
 			if (_game_highlighted != null) _game_highlighted.active = true;
 		#end
@@ -1407,7 +1379,6 @@ class MenuState extends FlxState
 		#if !html5
 			if (_eventSchedulerHover != null) _eventSchedulerHover.active = false;
 			
-			if (_exitProgram != null) _exitProgram.active = false;
 			if (_software_new_check != null) _software_new_check.active = false;
 			if (_game_highlighted != null) _game_highlighted.active = false;
 		#end
@@ -1426,6 +1397,15 @@ class MenuState extends FlxState
 		SceneGameRoom.messageBoxMessageOrder();
 		
 		buttonsIconsNotActive();
+	}
+	
+	private function center_icon_text_to_icon_box():Void
+	{
+		_icon_text_title_description.screenCenter(X);
+		
+		#if !html5
+			_icon_text_title_description.x += 330;
+		#end
 	}
 	
 	static function setExitHandler(_exit:Void->Void):Void 
@@ -1610,12 +1590,8 @@ class MenuState extends FlxState
 							&&  Reg2._scrollable_area_is_scrolling == false)
 								FlxG.sound.play("click", 1, false);
 						
-							#if !html5
-								if (_exitProgram != null) _exitProgram.active = false;
-							#end
-							
 							if (_eventSchedulerHover != null) _eventSchedulerHover.active = false;					
-							buttonsIconsNotActive();
+								buttonsIconsNotActive();
 							
 							Reg._at_menu_state = false;
 							FlxG.switchState(new EventSchedule());
@@ -1653,18 +1629,19 @@ class MenuState extends FlxState
 						_game_highlighted.visible = true;
 							
 						if (i == 0) 
-							_text_title_icon_description.text = "Multiplayer Online. (World)";
+							_icon_text_title_description.text = "Multiplayer Online. (World)";
 						if (i == 1)
-							_text_title_icon_description.text = "Offline (Player vs Player)";
+							_icon_text_title_description.text = "Offline (Player vs Player)";
 						if (i == 2)
-							_text_title_icon_description.text = "Nothing here yet.";
+							_icon_text_title_description.text = "Nothing here yet.";
 						if (i == 3)
-							_text_title_icon_description.text = "Configuration Menu. (Gear)";
+							_icon_text_title_description.text = "Configuration Menu. (Gear)";
 						if (i == 4)
-							_text_title_icon_description.text = "Client Help. (Question)";
+							_icon_text_title_description.text = "Client Help. (Question)";
 						if (i == 5)
-							_text_title_icon_description.text = "Credits. (Attribution)";
-							
+							_icon_text_title_description.text = "Credits. (Attribution)";
+
+						center_icon_text_to_icon_box();
 						// next go to the next for() code block above this for() code.
 					}
 				}
@@ -1719,7 +1696,7 @@ class MenuState extends FlxState
 			Reg._buttonCodeValues = "";
 			Reg._yesNoKeyPressValueAtMessage = 0;
 
-			FlxG.openURL("http://kboardgames.com/forum/viewtopic.php?f=10&t=13","_blank"); 
+			FlxG.openURL("http://kboardgames.com/en/viewtopic.php?f=10&t=13","_blank"); 
 			
 			buttonsIconsActive();
 		}

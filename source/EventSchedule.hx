@@ -143,7 +143,7 @@ class EventSchedule extends FlxState
 	/******************************
 	 * calendar square event row background x offset.
 	 */
-	private var _offsetBgRowX:Int = -6;
+	private var _offsetBgRowX:Int = -1;
 	
 	/******************************
 	 * event row FlxText y offset.
@@ -246,7 +246,7 @@ class EventSchedule extends FlxState
 	/******************************
 	 * background gradient, texture and plain color for a scene.
 	 */
-	private var _scene_background:SceneBackground;
+	private var __scene_background:SceneBackground;
 	
 	override public function create():Void
 	{
@@ -274,14 +274,14 @@ class EventSchedule extends FlxState
 		/******************************
 			* background gradient, texture and plain color for a scene.
 			*/
-		if (_scene_background != null)
+		if (__scene_background != null)
 		{
-			remove(_scene_background);
-			_scene_background.destroy();
+			remove(__scene_background);
+			__scene_background.destroy();
 		}
 		
-		_scene_background = new SceneBackground();
-		add(_scene_background);
+		__scene_background = new SceneBackground();
+		add(__scene_background);
 		
 		var _calendarBackground = new FlxSprite(0, 0);
 		_calendarBackground.loadGraphic("assets/images/calendarGrid.png", false);
@@ -302,12 +302,12 @@ class EventSchedule extends FlxState
 		_intYear = 	Std.parseInt(DateTools.format(Date.now(), "%Y"));
 		
 		// the title of the game.
-		var _title_background = new FlxSprite(0, 0);
+		var _title_background = new FlxSprite(0, Reg.__title_bar_offset_y);
 		_title_background.makeGraphic(FlxG.width, 55, Reg._title_bar_background_enabled); 
 		_title_background.scrollFactor.set(1,0);
 		add(_title_background);
 		
-		_textCalendarTitle = new FlxText(15, 4, 0, "");
+		_textCalendarTitle = new FlxText(15, 4 + Reg.__title_bar_offset_y, 0, "");
 		_textCalendarTitle.scrollFactor.set(0, 0);
 		_textCalendarTitle.text = "Event Schedule. " + Std.string(_intYear) + "-" + _textMonth + "-" + Std.string(_intDay);
 		_textCalendarTitle.setFormat(Reg._fontDefault, 50, RegCustomColors.title_bar_text_color());
@@ -323,16 +323,16 @@ class EventSchedule extends FlxState
 		calendarOutput();		
 		calendarDayImageOutput();
 		
-		_title = new ButtonGeneralNetworkNo(FlxG.width - 300, 12, "To Title", 170 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, backToTitle, RegCustom._button_color[Reg._tn]);
+		_title = new ButtonGeneralNetworkNo(FlxG.width - 300, 12 + Reg.__title_bar_offset_y, "To Title", 170 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, backToTitle, RegCustom._button_color[Reg._tn]);
 		_title.label.font = Reg._fontDefault;
 		add(_title);
 				
-		_forwards = new ButtonGeneralNetworkNo(_title.x - 15 - 80, 12, ">", 80, 35, 22, RegCustom._button_text_color[Reg._tn], 0, calendarForward, RegCustom._button_color[Reg._tn]);
+		_forwards = new ButtonGeneralNetworkNo(_title.x - 15 - 80, 12 + Reg.__title_bar_offset_y, ">", 80, 35, 22, RegCustom._button_text_color[Reg._tn], 0, calendarForward, RegCustom._button_color[Reg._tn]);
 		_forwards.label.font = Reg._fontDefault;
 		_forwards.label.size = 22;
 		add(_forwards);
 		
-		_backwards = new ButtonGeneralNetworkNo(_forwards.x - 15 - 80, 12, "<", 80, 35, 22, RegCustom._button_text_color[Reg._tn], 0, calendarBackward, RegCustom._button_color[Reg._tn]);
+		_backwards = new ButtonGeneralNetworkNo(_forwards.x - 15 - 80, 12 + Reg.__title_bar_offset_y, "<", 80, 35, 22, RegCustom._button_text_color[Reg._tn], 0, calendarBackward, RegCustom._button_color[Reg._tn]);
 		_backwards.label.font = Reg._fontDefault;
 		_backwards.label.size = 22;
 		_backwards.visible = false;
@@ -364,7 +364,7 @@ class EventSchedule extends FlxState
 			if (_intDateCounter == _intDay && _intMonthCurrent == _intMonth)
 			{
 				_current_day_border.y = _intCalendarCoordinateY[_row]-6;
-				_current_day_border.x = _intCalendarCoordinateX[_intDayOfWeekCounter] - 13;
+				_current_day_border.x = _intCalendarCoordinateX[_intDayOfWeekCounter] - 8;
 				
 				_current_day_border.visible = true;
 			}			
@@ -963,7 +963,7 @@ class EventSchedule extends FlxState
 					if (RegCustom._sound_enabled[Reg._tn] == true
 					&&  Reg2._scrollable_area_is_scrolling == false)
 						FlxG.sound.play("click", 1, false);
-					openSubState(new GameMessageEvent(_textEventRow1Number[i].text));
+					openSubState(new EventDescription(_textEventRow1Number[i].text));
 				}
 				
 				if (ActionInput.overlaps(_bgEventRow2Number[i])
@@ -972,7 +972,7 @@ class EventSchedule extends FlxState
 					if (RegCustom._sound_enabled[Reg._tn] == true
 					&&  Reg2._scrollable_area_is_scrolling == false)
 						FlxG.sound.play("click", 1, false);
-					openSubState(new GameMessageEvent(_textEventRow2Number[i].text));
+					openSubState(new EventDescription(_textEventRow2Number[i].text));
 				}
 				
 				if (ActionInput.overlaps(_bgEventRow3Number[i])
@@ -981,7 +981,7 @@ class EventSchedule extends FlxState
 					if (RegCustom._sound_enabled[Reg._tn] == true
 					&&  Reg2._scrollable_area_is_scrolling == false)
 						FlxG.sound.play("click", 1, false);
-					openSubState(new GameMessageEvent(_textEventRow3Number[i].text));
+					openSubState(new EventDescription(_textEventRow3Number[i].text));
 				}
 				
 			}			

@@ -92,7 +92,7 @@ public static function color_future_capturing_units():FlxColor
 	
 	public static function background_scene_color():FlxColor
 	{
-		var _color:FlxColor = 0xFF777777;
+		var _color:FlxColor = 0xFF555555;
 		var _num = FlxG.random.int(1, 10);
 		
 		switch(_num)
@@ -126,14 +126,14 @@ public static function color_future_capturing_units():FlxColor
 			 case 3: _color = 0xFF800015;			 
 			 case 4: _color = 0xFF801e00;			 
 			 case 5: _color = 0xFF805200;
-			 case 6: _color = 0xFF2a201e;
+			 case 6: _color = 0xFF807c00;
 			 case 7: _color = 0xFF368000;			 
 			 case 8: _color = 0xFF00802a;			 
 			 case 9: _color = 0xFF007b80;			 
 			case 10: _color = 0xFF004880;
 			case 11: _color = 0xFF001580;
 			case 12: _color = 0xFF000000;
-			case 13: _color = 0xFF777777;
+			case 13: _color = 0xFF555555;
 		}
 
 		return _color;
@@ -153,14 +153,14 @@ public static function color_future_capturing_units():FlxColor
 			 case 3: _color = 0xFF800015;			 
 			 case 4: _color = 0xFF801e00;			 
 			 case 5: _color = 0xFF805200;			 
-			 case 6: _color = 0xFF2a201e;
+			 case 6: _color = 0xFF807c00;
 			 case 7: _color = 0xFF368000;			 
 			 case 8: _color = 0xFF00802a;			 
 			 case 9: _color = 0xFF007b80;			 
 			case 10: _color = 0xFF004880;
 			case 11: _color = 0xFF001580;
 			case 12: _color = 0xFF000000;
-			case 13: _color = 0xFF777777;
+			case 13: _color = 0xFF555555;
 		}
 		
 		return _color;
@@ -176,14 +176,14 @@ public static function color_future_capturing_units():FlxColor
 		if (RegCustom._gameboard_units_odd_color_number[Reg._tn][_id] == 3) _color = 0xFF800015;
 		if (RegCustom._gameboard_units_odd_color_number[Reg._tn][_id] == 4) _color = 0xFF801e00;
 		if (RegCustom._gameboard_units_odd_color_number[Reg._tn][_id] == 5) _color = 0xFF805200;
-		if (RegCustom._gameboard_units_odd_color_number[Reg._tn][_id] == 6) _color = 0xFF2a201e;		
+		if (RegCustom._gameboard_units_odd_color_number[Reg._tn][_id] == 6) _color = 0xFF807c00;		
 		if (RegCustom._gameboard_units_odd_color_number[Reg._tn][_id] == 7) _color = 0xFF368000;
 		if (RegCustom._gameboard_units_odd_color_number[Reg._tn][_id] == 8) _color = 0xFF00802a;
 		if (RegCustom._gameboard_units_odd_color_number[Reg._tn][_id] == 9) _color = 0xFF007b80;
 		if (RegCustom._gameboard_units_odd_color_number[Reg._tn][_id] == 10) _color = 0xFF004880;
 		if (RegCustom._gameboard_units_odd_color_number[Reg._tn][_id] == 11) _color = 0xFF001580;
 		if (RegCustom._gameboard_units_odd_color_number[Reg._tn][_id] == 12) _color = 0xFF000000;
-		if (RegCustom._gameboard_units_odd_color_number[Reg._tn][_id] == 13) _color = 0xFF777777;
+		if (RegCustom._gameboard_units_odd_color_number[Reg._tn][_id] == 13) _color = 0xFF555555;
 		
 		return _color;
 	}
@@ -200,14 +200,14 @@ public static function color_future_capturing_units():FlxColor
 		if (RegCustom._gameboard_units_even_color_number[Reg._tn][_id] == 3) _color = 0xFF800015;
 		if (RegCustom._gameboard_units_even_color_number[Reg._tn][_id] == 4) _color = 0xFF801e00;
 		if (RegCustom._gameboard_units_even_color_number[Reg._tn][_id] == 5) _color = 0xFF805200;
-		if (RegCustom._gameboard_units_even_color_number[Reg._tn][_id] == 6) _color = 0xFF2a201e;
+		if (RegCustom._gameboard_units_even_color_number[Reg._tn][_id] == 6) _color = 0xFF807c00;
 		if (RegCustom._gameboard_units_even_color_number[Reg._tn][_id] == 7) _color = 0xFF368000;
 		if (RegCustom._gameboard_units_even_color_number[Reg._tn][_id] == 8) _color = 0xFF00802a;
 		if (RegCustom._gameboard_units_even_color_number[Reg._tn][_id] == 9) _color = 0xFF007b80;
 		if (RegCustom._gameboard_units_even_color_number[Reg._tn][_id] == 10) _color = 0xFF004880;
 		if (RegCustom._gameboard_units_even_color_number[Reg._tn][_id] == 11) _color = 0xFF001580;
 		if (RegCustom._gameboard_units_even_color_number[Reg._tn][_id] == 12) _color = 0xFF000000;
-		if (RegCustom._gameboard_units_even_color_number[Reg._tn][_id] == 13) _color = 0xFF777777;
+		if (RegCustom._gameboard_units_even_color_number[Reg._tn][_id] == 13) _color = 0xFF555555;
 		
 		return _color;
 	}
@@ -235,7 +235,7 @@ public static function color_future_capturing_units():FlxColor
 			_color = 0xFF805200;
 		
 		if (RegCustom._client_background_image_number[Reg._tn] == 6) 
-			_color = 0xFF2a201e;
+			_color = 0xFF807c00;
 			
 		if (RegCustom._client_background_image_number[Reg._tn] == 7) 
 			_color = 0xFF368000;
@@ -256,7 +256,7 @@ public static function color_future_capturing_units():FlxColor
 			_color = 0xFF000000;
 		
 		if (RegCustom._client_background_image_number[Reg._tn] == 13)
-			_color = 0xFF777777;
+			_color = 0xFF555555;
 		
 		return _color;
 	}
@@ -285,7 +285,7 @@ public static function color_future_capturing_units():FlxColor
 			_color = 0xFF805200;
 		
 		if (RegCustom._client_background_image_number[Reg._tn] == 6) 
-			_color = 0xFF2a201e;
+			_color = 0xFF807c00;
 			
 		if (RegCustom._client_background_image_number[Reg._tn] == 7) 
 			_color = 0xFF368000;
@@ -306,12 +306,57 @@ public static function color_future_capturing_units():FlxColor
 			_color = 0xFF000000;
 		
 		if (RegCustom._client_background_image_number[Reg._tn] == 13)
-			_color = 0xFF777777;
+			_color = 0xFF555555;
 		
 		return _color;
 	}
+	
+	public static function color_table_body_background():FlxColor
+	{
+		var _color:FlxColor = 0xFFFFFFFF;
 		
+		if (RegCustom._table_body_background_image_number[Reg._tn] == 1) 
+			_color = 0xFFFFFFFF;			
 		
+		if (RegCustom._table_body_background_image_number[Reg._tn] == 2)
+			_color = 0xFF800080;
+		
+		if (RegCustom._table_body_background_image_number[Reg._tn] == 3)
+			_color = 0xFF800015;
+		
+		if (RegCustom._table_body_background_image_number[Reg._tn] == 4) 
+			_color = 0xFF801e00;
+		
+		if (RegCustom._table_body_background_image_number[Reg._tn] == 5) 
+			_color = 0xFF805200;
+		
+		if (RegCustom._table_body_background_image_number[Reg._tn] == 6) 
+			_color = 0xFF807c00;
+			
+		if (RegCustom._table_body_background_image_number[Reg._tn] == 7) 
+			_color = 0xFF368000;
+		
+		if (RegCustom._table_body_background_image_number[Reg._tn] == 8)
+			_color = 0xFF00802a;
+		
+		if (RegCustom._table_body_background_image_number[Reg._tn] == 9) 
+			_color = 0xFF007b80;
+		
+		if (RegCustom._table_body_background_image_number[Reg._tn] == 10)
+			_color = 0xFF004880;
+		
+		if (RegCustom._table_body_background_image_number[Reg._tn] == 11) 
+			_color = 0xFF001580;
+		
+		if (RegCustom._table_body_background_image_number[Reg._tn] == 12) 
+			_color = 0xFF000000;
+		
+		if (RegCustom._table_body_background_image_number[Reg._tn] == 13)
+			_color = 0xFF555555;
+		
+		return _color;
+	}
+	
 	public static function notation_panel_background_color():FlxColor
 	{
 		
@@ -322,14 +367,14 @@ public static function color_future_capturing_units():FlxColor
 		if (RegCustom._notation_panel_background_color_number[Reg._tn] == 3) _color = 0xFF800015;
 		if (RegCustom._notation_panel_background_color_number[Reg._tn] == 4) _color = 0xFF801e00;
 		if (RegCustom._notation_panel_background_color_number[Reg._tn] == 5) _color = 0xFF805200;
-		if (RegCustom._notation_panel_background_color_number[Reg._tn] == 6) _color = 0xFF2a201e;
+		if (RegCustom._notation_panel_background_color_number[Reg._tn] == 6) _color = 0xFF807c00;
 		if (RegCustom._notation_panel_background_color_number[Reg._tn] == 7) _color = 0xFF368000;
 		if (RegCustom._notation_panel_background_color_number[Reg._tn] == 8) _color = 0xFF00802a;
 		if (RegCustom._notation_panel_background_color_number[Reg._tn] == 9) _color = 0xFF007b80;
 		if (RegCustom._notation_panel_background_color_number[Reg._tn] == 10) _color = 0xFF004880;
 		if (RegCustom._notation_panel_background_color_number[Reg._tn] == 11) _color = 0xFF001580;
 		if (RegCustom._notation_panel_background_color_number[Reg._tn] == 12) _color = 0xFF000000;
-		if (RegCustom._notation_panel_background_color_number[Reg._tn] == 13) _color = 0xFF777777;
+		if (RegCustom._notation_panel_background_color_number[Reg._tn] == 13) _color = 0xFF555555;
 		
 		return _color;
 	}
@@ -343,14 +388,14 @@ public static function color_future_capturing_units():FlxColor
 		if (RegCustom._notation_panel_text_color_number[Reg._tn] == 3) _color = 0xFF800015;
 		if (RegCustom._notation_panel_text_color_number[Reg._tn] == 4) _color = 0xFF801e00;
 		if (RegCustom._notation_panel_text_color_number[Reg._tn] == 5) _color = 0xFF805200;
-		if (RegCustom._notation_panel_text_color_number[Reg._tn] == 6) _color = 0xFF2a201e;
+		if (RegCustom._notation_panel_text_color_number[Reg._tn] == 6) _color = 0xFF807c00;
 		if (RegCustom._notation_panel_text_color_number[Reg._tn] == 7) _color = 0xFF368000;
 		if (RegCustom._notation_panel_text_color_number[Reg._tn] == 8) _color = 0xFF00802a;
 		if (RegCustom._notation_panel_text_color_number[Reg._tn] == 9) _color = 0xFF007b80;
 		if (RegCustom._notation_panel_text_color_number[Reg._tn] == 10) _color = 0xFF004880;
 		if (RegCustom._notation_panel_text_color_number[Reg._tn] == 11) _color = 0xFF001580;
 		if (RegCustom._notation_panel_text_color_number[Reg._tn] == 12) _color = 0xFF000000;
-		if (RegCustom._notation_panel_text_color_number[Reg._tn] == 13) _color = 0xFF777777;
+		if (RegCustom._notation_panel_text_color_number[Reg._tn] == 13) _color = 0xFF555555;
 		
 		return _color;
 	}
@@ -364,14 +409,14 @@ public static function color_future_capturing_units():FlxColor
 		if (RegCustom._gradient_background_image_number[Reg._tn] == 3) _color = 0xFF800015;
 		if (RegCustom._gradient_background_image_number[Reg._tn] == 4) _color = 0xFF801e00;
 		if (RegCustom._gradient_background_image_number[Reg._tn] == 5) _color = 0xFF805200;
-		if (RegCustom._gradient_background_image_number[Reg._tn] == 6) _color = 0xFF2a201e;
+		if (RegCustom._gradient_background_image_number[Reg._tn] == 6) _color = 0xFF807c00;
 		if (RegCustom._gradient_background_image_number[Reg._tn] == 7) _color = 0xFF368000;
 		if (RegCustom._gradient_background_image_number[Reg._tn] == 8) _color = 0xFF00802a;
 		if (RegCustom._gradient_background_image_number[Reg._tn] == 9) _color = 0xFF007b80;
 		if (RegCustom._gradient_background_image_number[Reg._tn] == 10) _color = 0xFF004880;
 		if (RegCustom._gradient_background_image_number[Reg._tn] == 11) _color = 0xFF001580;
 		if (RegCustom._gradient_background_image_number[Reg._tn] == 12) _color = 0xFF000000;
-		if (RegCustom._gradient_background_image_number[Reg._tn] == 13) _color = 0xFF777777;
+		if (RegCustom._gradient_background_image_number[Reg._tn] == 13) _color = 0xFF555555;
 		
 		return _color;
 	}
@@ -385,14 +430,14 @@ public static function color_future_capturing_units():FlxColor
 		if (RegCustom._client_topic_title_text_color_number[Reg._tn] == 3) _color = 0xFF800015;
 		if (RegCustom._client_topic_title_text_color_number[Reg._tn] == 4) _color = 0xFF801e00;
 		if (RegCustom._client_topic_title_text_color_number[Reg._tn] == 5) _color = 0xFF805200;
-		if (RegCustom._client_topic_title_text_color_number[Reg._tn] == 6) _color = 0xFF2a201e;		
+		if (RegCustom._client_topic_title_text_color_number[Reg._tn] == 6) _color = 0xFF807c00;		
 		if (RegCustom._client_topic_title_text_color_number[Reg._tn] == 7) _color = 0xFF368000;
 		if (RegCustom._client_topic_title_text_color_number[Reg._tn] == 8) _color = 0xFF00802a;
 		if (RegCustom._client_topic_title_text_color_number[Reg._tn] == 9) _color = 0xFF007b80;		
 		if (RegCustom._client_topic_title_text_color_number[Reg._tn] == 10) _color = 0xFF004880;
 		if (RegCustom._client_topic_title_text_color_number[Reg._tn] == 11) _color = 0xFF001580;
 		if (RegCustom._client_topic_title_text_color_number[Reg._tn] == 12) _color = 0xFF000000;
-		if (RegCustom._client_topic_title_text_color_number[Reg._tn] == 13) _color = 0xFF777777;
+		if (RegCustom._client_topic_title_text_color_number[Reg._tn] == 13) _color = 0xFF555555;
 		
 		return _color;
 	}
@@ -406,14 +451,14 @@ public static function color_future_capturing_units():FlxColor
 		if (RegCustom._client_text_color_number[Reg._tn] == 3) _color = 0xFF800015;
 		if (RegCustom._client_text_color_number[Reg._tn] == 4) _color = 0xFF801e00;
 		if (RegCustom._client_text_color_number[Reg._tn] == 5) _color = 0xFF805200;
-		if (RegCustom._client_text_color_number[Reg._tn] == 6) _color = 0xFF2a201e;		
+		if (RegCustom._client_text_color_number[Reg._tn] == 6) _color = 0xFF807c00;		
 		if (RegCustom._client_text_color_number[Reg._tn] == 7) _color = 0xFF368000;
 		if (RegCustom._client_text_color_number[Reg._tn] == 8) _color = 0xFF00802a;
 		if (RegCustom._client_text_color_number[Reg._tn] == 9) _color = 0xFF007b80;		
 		if (RegCustom._client_text_color_number[Reg._tn] == 10) _color = 0xFF004880;
 		if (RegCustom._client_text_color_number[Reg._tn] == 11) _color = 0xFF001580;
 		if (RegCustom._client_text_color_number[Reg._tn] == 12) _color = 0xFF000000;
-		if (RegCustom._client_text_color_number[Reg._tn] == 13) _color = 0xFF777777;
+		if (RegCustom._client_text_color_number[Reg._tn] == 13) _color = 0xFF555555;
 		
 		return _color;
 	}
@@ -427,14 +472,14 @@ public static function color_future_capturing_units():FlxColor
 		if (RegCustom._title_bar_text_color_number[Reg._tn] == 3) _color = 0xFF800015;
 		if (RegCustom._title_bar_text_color_number[Reg._tn] == 4) _color = 0xFF801e00;
 		if (RegCustom._title_bar_text_color_number[Reg._tn] == 5) _color = 0xFF805200;
-		if (RegCustom._title_bar_text_color_number[Reg._tn] == 6) _color = 0xFF2a201e;
+		if (RegCustom._title_bar_text_color_number[Reg._tn] == 6) _color = 0xFF807c00;
 		if (RegCustom._title_bar_text_color_number[Reg._tn] == 7) _color = 0xFF368000;
 		if (RegCustom._title_bar_text_color_number[Reg._tn] == 8) _color = 0xFF00802a;
 		if (RegCustom._title_bar_text_color_number[Reg._tn] == 9) _color = 0xFF007b80;		
 		if (RegCustom._title_bar_text_color_number[Reg._tn] == 10) _color = 0xFF004880;
 		if (RegCustom._title_bar_text_color_number[Reg._tn] == 11) _color = 0xFF001580;
 		if (RegCustom._title_bar_text_color_number[Reg._tn] == 12) _color = 0xFF000000;
-		if (RegCustom._title_bar_text_color_number[Reg._tn] == 13) _color = 0xFF777777;
+		if (RegCustom._title_bar_text_color_number[Reg._tn] == 13) _color = 0xFF555555;
 		
 		return _color;
 	}
@@ -451,14 +496,14 @@ public static function color_future_capturing_units():FlxColor
 		if (RegCustom._button_color_number[Reg._tn] == 3) _color = 0xFF800015;
 		if (RegCustom._button_color_number[Reg._tn] == 4) _color = 0xFF801e00;
 		if (RegCustom._button_color_number[Reg._tn] == 5) _color = 0xFF805200;
-		if (RegCustom._button_color_number[Reg._tn] == 6) _color = 0xFF2a201e;
+		if (RegCustom._button_color_number[Reg._tn] == 6) _color = 0xFF807c00;
 		if (RegCustom._button_color_number[Reg._tn] == 7) _color = 0xFF368000;
 		if (RegCustom._button_color_number[Reg._tn] == 8) _color = 0xFF00802a;
 		if (RegCustom._button_color_number[Reg._tn] == 9) _color = 0xFF007b80;		
 		if (RegCustom._button_color_number[Reg._tn] == 10) _color = 0xFF004880;
 		if (RegCustom._button_color_number[Reg._tn] == 11) _color = 0xFF001580;
 		if (RegCustom._button_color_number[Reg._tn] == 12) _color = 0xFF000000;
-		if (RegCustom._button_color_number[Reg._tn] == 13) _color = 0xFF777777;
+		if (RegCustom._button_color_number[Reg._tn] == 13) _color = 0xFF555555;
 		
 		return _color;
 	}
@@ -475,14 +520,14 @@ public static function color_future_capturing_units():FlxColor
 		if (RegCustom._button_border_color_number[Reg._tn] == 3) _color = 0xFF800015;
 		if (RegCustom._button_border_color_number[Reg._tn] == 4) _color = 0xFF801e00;
 		if (RegCustom._button_border_color_number[Reg._tn] == 5) _color = 0xFF805200;
-		if (RegCustom._button_border_color_number[Reg._tn] == 6) _color = 0xFF2a201e;
+		if (RegCustom._button_border_color_number[Reg._tn] == 6) _color = 0xFF807c00;
 		if (RegCustom._button_border_color_number[Reg._tn] == 7) _color = 0xFF368000;
 		if (RegCustom._button_border_color_number[Reg._tn] == 8) _color = 0xFF00802a;
 		if (RegCustom._button_border_color_number[Reg._tn] == 9) _color = 0xFF007b80;		
 		if (RegCustom._button_border_color_number[Reg._tn] == 10) _color = 0xFF004880;
 		if (RegCustom._button_border_color_number[Reg._tn] == 11) _color = 0xFF001580;
 		if (RegCustom._button_border_color_number[Reg._tn] == 12) _color = 0xFF000000;
-		if (RegCustom._button_border_color_number[Reg._tn] == 13) _color = 0xFF777777;
+		if (RegCustom._button_border_color_number[Reg._tn] == 13) _color = 0xFF555555;
 		
 		return _color;
 	}
@@ -499,14 +544,14 @@ public static function color_future_capturing_units():FlxColor
 		if (RegCustom._button_text_color_number[Reg._tn] == 3) _color = 0xFF800015;
 		if (RegCustom._button_text_color_number[Reg._tn] == 4) _color = 0xFF801e00;
 		if (RegCustom._button_text_color_number[Reg._tn] == 5) _color = 0xFF805200;
-		if (RegCustom._button_text_color_number[Reg._tn] == 6) _color = 0xFF2a201e;
+		if (RegCustom._button_text_color_number[Reg._tn] == 6) _color = 0xFF807c00;
 		if (RegCustom._button_text_color_number[Reg._tn] == 7) _color = 0xFF368000;
 		if (RegCustom._button_text_color_number[Reg._tn] == 8) _color = 0xFF00802a;
 		if (RegCustom._button_text_color_number[Reg._tn] == 9) _color = 0xFF007b80;		
 		if (RegCustom._button_text_color_number[Reg._tn] == 10) _color = 0xFF004880;
 		if (RegCustom._button_text_color_number[Reg._tn] == 11) _color = 0xFF001580;
 		if (RegCustom._button_text_color_number[Reg._tn] == 12) _color = 0xFF000000;
-		if (RegCustom._button_text_color_number[Reg._tn] == 13) _color = 0xFF777777;
+		if (RegCustom._button_text_color_number[Reg._tn] == 13) _color = 0xFF555555;
 		
 		return _color;
 	}
@@ -520,14 +565,14 @@ public static function color_future_capturing_units():FlxColor
 		if (RegCustom._title_bar_background_number[Reg._tn] == 3) _color = 0xFF800015;
 		if (RegCustom._title_bar_background_number[Reg._tn] == 4) _color = 0xFF801e00;
 		if (RegCustom._title_bar_background_number[Reg._tn] == 5) _color = 0xFF805200;
-		if (RegCustom._title_bar_background_number[Reg._tn] == 6) _color = 0xFF2a201e;
+		if (RegCustom._title_bar_background_number[Reg._tn] == 6) _color = 0xFF807c00;
 		if (RegCustom._title_bar_background_number[Reg._tn] == 7) _color = 0xFF368000;
 		if (RegCustom._title_bar_background_number[Reg._tn] == 8) _color = 0xFF00802a;
 		if (RegCustom._title_bar_background_number[Reg._tn] == 9) _color = 0xFF007b80;	
 		if (RegCustom._title_bar_background_number[Reg._tn] == 10) _color = 0xFF004880;
 		if (RegCustom._title_bar_background_number[Reg._tn] == 11) _color = 0xFF001580;	
 		if (RegCustom._title_bar_background_number[Reg._tn] == 12) _color = 0xFF000000;
-		if (RegCustom._title_bar_background_number[Reg._tn] == 13) _color = 0xFF777777;
+		if (RegCustom._title_bar_background_number[Reg._tn] == 13) _color = 0xFF555555;
 		
 		return _color;
 	}
@@ -542,14 +587,14 @@ public static function color_future_capturing_units():FlxColor
 		if (RegCustom._menu_bar_background_number[Reg._tn] == 3) _color = 0xFF800015;
 		if (RegCustom._menu_bar_background_number[Reg._tn] == 4) _color = 0xFF801e00;
 		if (RegCustom._menu_bar_background_number[Reg._tn] == 5) _color = 0xFF805200;
-		if (RegCustom._menu_bar_background_number[Reg._tn] == 6) _color = 0xFF2a201e;
+		if (RegCustom._menu_bar_background_number[Reg._tn] == 6) _color = 0xFF807c00;
 		if (RegCustom._menu_bar_background_number[Reg._tn] == 7) _color = 0xFF368000;
 		if (RegCustom._menu_bar_background_number[Reg._tn] == 8) _color = 0xFF00802a;
 		if (RegCustom._menu_bar_background_number[Reg._tn] == 9) _color = 0xFF007b80;	
 		if (RegCustom._menu_bar_background_number[Reg._tn] == 10) _color = 0xFF004880;
 		if (RegCustom._menu_bar_background_number[Reg._tn] == 11) _color = 0xFF001580;	
 		if (RegCustom._menu_bar_background_number[Reg._tn] == 12) _color = 0xFF000000;
-		if (RegCustom._menu_bar_background_number[Reg._tn] == 13) _color = 0xFF777777;
+		if (RegCustom._menu_bar_background_number[Reg._tn] == 13) _color = 0xFF555555;
 		
 		return _color;
 	}

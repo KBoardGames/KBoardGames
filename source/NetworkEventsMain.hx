@@ -19,7 +19,7 @@
 package;
 
 #if house
-	import myLibs.house.*;
+	import modules.house.*;
 #end
 
 /**
@@ -182,14 +182,23 @@ class NetworkEventsMain extends FlxState
 			PlayState._text_server_login_data3.text = "Send data immediately: " + Std.string(_data._server_fast_send) + ".\n";
 			PlayState._text_server_login_data4.text = "Blocking: " + Std.string(_data._server_blocking) + ".\n";
 			
-			
 			PlayState._text_client_login_data.text = "Clients Data.\n\n";
 			PlayState._text_client_login_data2.text = "Logging in as: " + RegTypedef._dataAccount._username + ".\n";
 			PlayState._text_client_login_data3.text = ""
 				+ "Last known IP: " + _data._ip + ".\n";
 			PlayState._text_client_login_data4.text = ""
 				+ "Hostname: " + _data._host + ".\n";
-				
+			
+			PlayState._text_server_login_data.visible = true;
+			PlayState._text_server_login_data2.visible = true;
+			PlayState._text_server_login_data3.visible = true;
+			PlayState._text_server_login_data4.visible = true;
+			
+			PlayState._text_client_login_data.visible = true;
+			PlayState._text_client_login_data2.visible = true;
+			PlayState._text_client_login_data3.visible = true;
+			PlayState._text_client_login_data4.visible = true;
+			
 			RegTypedef._dataAccount = _data;
 			RegTypedef._dataAccount._alreadyOnlineHost = _data._alreadyOnlineHost;
 			
@@ -815,8 +824,8 @@ class NetworkEventsMain extends FlxState
 				RegTypedef._dataMisc._roomState[_data._room] = 0;
 				RegTypedef._dataMisc._roomPlayerLimit = _data._roomPlayerLimit;
 				RegTypedef._dataMisc._roomPlayerLimit[_data._room] = 0;
-				RegTypedef._dataMisc._room = 0;
-				PlayState.allTypedefRoomUpdate(RegTypedef._dataMisc._room);
+				//RegTypedef._dataMisc._room = 0;
+				PlayState.allTypedefRoomUpdate(0);
 				
 				RegTypedef._dataMisc._roomGameIds = _data._roomGameIds;
 				RegTypedef._dataMisc._roomHostUsername = _data._roomHostUsername;
@@ -1023,6 +1032,7 @@ class NetworkEventsMain extends FlxState
 			if (RegTypedef._dataMisc._userLocation == 0)
 			{
 				SceneLobby._lobby_data_received = true;
+				SceneLobby._refresh_table = true;
 			}
 						
 			// admin banned or kicked user events.
@@ -2542,7 +2552,6 @@ class NetworkEventsMain extends FlxState
 			{
 				// no need for a (if (_data._room == ) check because at server this is broadcast based on the room var.
 				RegTypedef._dataOnlinePlayers = _data;
-				RegTriggers._onlineList = true;
 				
 				Reg.__menu_bar4._button_refresh_list.active = true;
 				Reg.__menu_bar4._button_refresh_list.visible = true;	
@@ -2870,4 +2879,4 @@ class NetworkEventsMain extends FlxState
 		});
 	}
 	
-}//
+}//

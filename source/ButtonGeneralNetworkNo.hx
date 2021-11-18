@@ -74,9 +74,6 @@ class ButtonGeneralNetworkNo extends FlxUIButton
 	 */
 	public var _button_height:Int = 0;
 
-	private var _timer:FlxTimer;
-	
-	
 	/**
 	 * @param	x				The x location of the button on the screen.
 	 * @param	y				The y location of the button on the screen.
@@ -92,7 +89,7 @@ class ButtonGeneralNetworkNo extends FlxUIButton
 	public function new(x:Float = 0, y:Float = 0, ?text:String, button_width:Int = 80, button_height:Int = 40, textSize:Int = 20, textColor:FlxColor = 0xFFFFFFFF, textPadding:Int = 0, ?onClick:Void->Void, innerColor:FlxColor = 0xFF000066, use_down_click:Bool = false, id:Int = 0)
 	{
 		super(x, y-7, text, onClick, false, false, RegCustom._button_color[Reg._tn]);
-
+		
 		_startX = x;
 		_startY = y;
 		
@@ -119,54 +116,14 @@ class ButtonGeneralNetworkNo extends FlxUIButton
 		var _lineStyle = { thickness: 8.0, color: RegCustom._button_border_color[Reg._tn]};
 		FlxSpriteUtil.drawRect(this, 0, 0, _button_width, _button_height + 10, innerColor, _lineStyle);
 		
-		_timer = new FlxTimer().start(3, makeActive, 1);
-		_timer.active = false;
-	}
-	
-	/******************************
-	 * function used to set the button back to alpha 1 after time expires.
-	 */
-	private function makeActive(i:FlxTimer):Void
-	{
-		if (_id == 2)
-		{
-			active = true;
-			alpha = 1;
-			
-			Reg2._scrollable_area_is_scrolling = false;
-		}
-	}
-	
-	override public function draw():Void
-	{
-		// if a button has an id greater then 0 then make alpha for only 1 second. message box with an id of 1 will be set to alpha 1 after a message box has closed.
-		if (justReleased == true && _id > 0)
-		{
-			_timer.update(1);
-			
-			alpha = 0.3;
-			active = false;
-			
-			Reg2._scrollable_area_is_scrolling = false;
-		}
-		
-		// continues to check button that has an id of 1 and if no message box is open than set to alpha 1.
-		if (Reg._messageId == 0 && _id == 1
-		)
-		{
-			active = true;
-			alpha = 1;	
-			
-			FlxG.mouse.enabled = true;
-			Reg2._scrollable_area_is_scrolling = false;
-		}
-		
-		super.draw();
 	}
 	
 	// this function must not be removed. also stops double firing of button sound at ActionKeyboard.hx.
 	override public function update(elapsed:Float):Void
-	{				
+	{
+		// if false then super.update() will not be executed and the program will then have one less thing to do.
+		var _update_needed:Bool = false;
+		
 		if (alpha == 1 && _id == ID
 		&&	RegTriggers._buttons_set_not_active == false)
 		{
@@ -190,13 +147,25 @@ class ButtonGeneralNetworkNo extends FlxUIButton
 						FlxG.sound.play("click", 1, false);
 						
 					else if (Reg2._scrollable_area_is_scrolling == false)
-						FlxG.sound.play("buzz", 1, false);
-					
-				}
+						FlxG.sound.play("error", 1, false);
+				}	
 			}
-			
-			super.update(elapsed);
 		}
+		
+		if (Reg._buttonCodeValues == "")
+		{
+			Reg._buttonCodeValues = "";
+			Reg2._lobby_button_alpha = 0.3;
+			alpha = 1;
+		}
+		
+		else if (Reg._buttonCodeValues != ""
+		&&	Reg._disconnectNow == false)
+		{
+			alpha = 0.3;
+		}
+		
+		if (alpha == 1 && _id == ID) super.update(elapsed);		
 	}
-	
+		
 }//

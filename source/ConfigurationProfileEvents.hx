@@ -19,11 +19,11 @@
 package;
 
 #if avatars
-	import myLibs.avatars.Avatars;
+	import modules.avatars.Avatars;
 #end
 
 #if username_suggestions
-	import myLibs.usernameSuggestions.Usernames;
+	import modules.usernameSuggestions.Usernames;
 #end
 
 /**

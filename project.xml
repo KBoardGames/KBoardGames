@@ -57,8 +57,9 @@
 	<assets if="html5" exclude="*.mp3" path="assets" embed="true"/>
 	
 	<assets path="assets/sound" embed="true" rename="sound" unless="flash">
-		<sound path="buzz.ogg"  id="buzz"/>
+		<sound path="error.ogg"  id="error"/>
 		<sound path="click.ogg" id="click"/>
+		<sound path="pager.ogg" id="pager"/>
 	</assets>
 	
 	<!-- comment this for smaller build size and faster program loading.		
@@ -77,13 +78,15 @@
 	<haxelib name="flixel-addons" />
 	<!--<haxelib name="msgpack-haxe"/>-->
 	<haxelib name="yaml" />
+	<haxelib name="hscript" if="debug" />
 	
 	<!-- Client libraries _____________________________ -->
 	<!-- These libs will not build when commenting them.
 	
-	<!-- comment these two lines to disable client world flags. Comment these lines will disable leaderboards.-->
+	<!-- comment these two lines to disable client world flags. Comment these lines will disable leaderboards.-->		
+	
 	<define name="flags" />
-	<assets path="myLibs/worldFlags/assets/images" embed="true" />
+	<assets path="modules/worldFlags/assets/images" embed="true" />
 	
 	<!-- comment these lines to disable client avatars. -->
 	<define name="avatars" />
@@ -92,27 +95,40 @@
 	<!-- comment this line to disable username suggestions at the configuration scene.-->
 	<define name="username_suggestions" />
 	
-	<define name="house" />
-	<assets path="myLibs/house/assets/images"  embed="true" />
-	
 	<define name="tournaments" />
 	<define name="miscellaneous" />
 	<define name="leaderboards" />
 	
 	<define name="dailyQuests" />
-	<assets path="myLibs/dailyQuests/assets/images"  embed="true" />
+	<assets path="modules/dailyQuests/assets/images" embed="true" />
+
+	<define name="house" />
+	<assets path="modules/house/assets/images" embed="true" />
+	
+	<define name="checkers" />
+	<assets path="modules/games/checkers/assets/images" embed="true" />
+	
+	<define name="chess" />
+	<assets path="modules/games/chess/assets/images" embed="true" />
+	
+	<define name="reversi" />
+	<assets path="modules/games/reversi/assets/images" embed="true" />
+	
+	<define name="snakesAndLadders" />
+	<assets path="modules/games/snakesAndLadders/assets/images" embed="true" />
+	
+	<define name="wheelEstate" />
+	<assets path="modules/games/wheelEstate/assets/images" embed="true" />
 	
 	<!-- End of client libraries ______________________ -->
 		
 	<!--<haxedef name="openfl-legacy" />-->	
+	
 	<!-- 
-	#################   IMPORTANT: MUST READ   #################
-		neko build always has a console window and because of that, the program will do strange things to the server when the user closes the client console window and not the application window. therefore, for the final build you must build for windows not neko. -->
-	<haxeflag name="-D no_console" />
-	<haxedef name="no_console" />
-	<setenv name="no_console" value="1" />
-	<setenv name="HIDE_CONSOLE" />
-
+	############   IMPORTANT: MUST READ   ################
+		neko build always has a console window and because of that, the program will do strange things to the server when the user closes the client console window and not the application window. therefore, for the final build you must build for windows not neko.
+	######################################################-->
+	
 	<!--keep this commented for final build-->
 	<!--<haxeflag name="--no-traces" if="release"/>--> 
 		

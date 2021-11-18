@@ -8,9 +8,14 @@ The client for KBoardGames. The client is used to play games online against othe
 
 ## Summary
 * Always 100% free client software.
+* <a href="https://kboardgames.com/en/custom-themes">Custom themes</a>.
 * Play games <a href="https://kboardgames.com/en/viewtopic.php?f=4&t=34">online or offline</a>.
 * MMO board games.
 * 2000+ chess openings moves.
+* 254 world flags.
+* Over 56000 username suggestions.
+* Selectable client libraries to build.
+* Over 70 customizable options.
 * Maximum of 2000 XP levels for a player.
 * Zillions of <a href="https://kboardgames.com/en/viewtopic.php?f=4&t=37">game room color combinations.</a>
 * 17 <a href="https://kboardgames.com/en/leaderboards">Leaderboards</a> showing top players.

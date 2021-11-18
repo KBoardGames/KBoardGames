@@ -74,10 +74,6 @@ class ButtonGeneralNetworkYes extends FlxUIButton
 	 */
 	public var _button_height:Int = 0;
 
-	private var _timer:FlxTimer;
-	private var _timer2:FlxTimer;
-	private var _timer3:FlxTimer;
-	
 	/******************************
 	 * from waiting room.
 	 */
@@ -117,10 +113,6 @@ class ButtonGeneralNetworkYes extends FlxUIButton
 
 		_button_width = button_width;
 		_button_height = button_height;
-				
-		_timer = new FlxTimer();
-		_timer2 = new FlxTimer();
-		_timer3 = new FlxTimer();
 		
 		button_height += 10;
 
@@ -140,105 +132,6 @@ class ButtonGeneralNetworkYes extends FlxUIButton
 		var _lineStyle = { thickness: 8.0, color: RegCustom._button_border_color[Reg._tn]};
 		FlxSpriteUtil.drawRect(this, 0, 0, _button_width, _button_height + 10, _innerColor, _lineStyle);
 		
-		_timer = new FlxTimer().start(2, makeActive, 1); // not lobby button id of 2
-		_timer.active = false;
-		
-		_timer2 = new FlxTimer().start(3, makeActive, 1); // id 2, lobby buttons. used when entering a room.
-		_timer2.active = false;
-		
-		_timer3 = new FlxTimer().start(1.2, makeActive, 1); // lobby buttons after message box closes. boxes such as, room full or someone beat you to the room message.
-		_timer3.active = false;
-		
-		//colorTransform = new ColorTransform(0, 0, 0.3);
-	}
-	
-	private function makeActive(i:FlxTimer):Void
-	{
-		FlxG.mouse.enabled = true;
-		active = true;
-		alpha = 1;			
-		
-		Reg2._scrollable_area_is_scrolling = false;
-		Reg2._lobby_button_alpha = 0.3;
-	}
-	
-	override public function draw():Void
-	{
-		// daily quest, misc, create room, online list, etc buttons.
-		if (FlxG.mouse.justPressed == true
-		&&	justPressed == true && _id <= 200
-		&&	Reg2._message_box_just_closed == false
-		&& _id == ID
-		||	FlxG.mouse.justPressed == true
-		&&	justPressed == true 
-		&&	_id >= 7000
-		&&	_id <= 8000
-		&&	Reg2._message_box_just_closed == false
-		&& _id == ID)
-		{
-			alpha = 0.3;			
-			Reg2._scrollable_area_is_scrolling = false;
-		}
-		
-		if (FlxG.mouse.justPressed == true
-		&&	justPressed == true && _id == 2
-		&&	Reg._buttonCodeValues != "")
-		{
-			alpha = 0.3;
-			_timer2.active = true; // do this code block once.
-			_timer2.reset();
-			_timer2.update(1);
-			
-			Reg2._lobby_button_alpha = 0.3;
-			RegTriggers._buttons_set_not_active = true;
-			Reg2._scrollable_area_is_scrolling = false;
-		}
-		
-		if (justReleased == true && _id >= 1000 && _id <= 2000
-		||	Reg._buttonCodeValues != "" && _id < 1000
-		&&	MessageBox._displayMessage == true
-		&& _id == ID)
-		{
-			alpha = 0.3;
-			
-			_timer.active = true; // do this code block once.
-			_timer.reset();
-			_timer.update(1);
-			
-			Reg2._scrollable_area_is_scrolling = false;
-			
-		}
-		
-		if (Reg._messageId == 0
-		&&	_timer.active == false
-		&&  alpha == 0.3
-		&&	Reg._buttonCodeValues == ""
-		&& _id == ID
-		)
-		{		
-			_timer.active = true; // do this code block once.
-			_timer.reset();
-			_timer.update(1);
-			
-			Reg2._lobby_button_alpha = 0.3;
-			Reg2._scrollable_area_is_scrolling = false;
-		}
-		
-		// make alpha 1 for lobby buttons but after message box closes.
-		if (_timer3.active == false
-		&&  alpha == 0.3
-		&&	Reg._buttonCodeValues != ""
-		)
-		{
-			_timer3.active = true; // do this code block once.
-			_timer3.reset();
-			_timer3.update(1);
-			
-			Reg2._lobby_button_alpha = 0.3;
-			Reg2._scrollable_area_is_scrolling = false;
-		}
-		
-		super.draw();
 	}
 	
 	// this function must not be removed. also stops double firing of button sound at ActionKeyboard.hx.
@@ -257,12 +150,7 @@ class ButtonGeneralNetworkYes extends FlxUIButton
 				
 				if (RegCustom._sound_enabled[Reg._tn] == true
 				&&  Reg2._scrollable_area_is_scrolling == false)
-					FlxG.sound.play("click", 1, false);
-					
-				if (_id == 1
-				||	_id >= 1000
-				&&	_id <= 2000) FlxG.mouse.enabled = false;	
-				
+					FlxG.sound.play("click", 1, false);				
 			}		
 		}
 		
@@ -291,20 +179,32 @@ class ButtonGeneralNetworkYes extends FlxUIButton
 			}
 		}	
 		
-		if (alpha == 1 && _id == ID) super.update(elapsed);
-				
 		if (Reg._at_lobby == true
 		&&	Reg._buttonCodeValues != ""
 		&&	Reg2._message_box_just_closed == true)
 		{
 			Reg2._message_box_just_closed = false;
 			RegTypedef._dataMisc._room = 0;
-			Reg._buttonCodeValues = "";
+			if (RegTypedef._dataMisc._userLocation == 0)
+				Reg._buttonCodeValues = "";
 			alpha = 1;
 			Reg2._lobby_button_alpha = 0.3;
-			Reg2._scrollable_area_is_scrolling = false;
 		}
 		
+		else if (Reg._buttonCodeValues == "")
+		{
+			Reg._buttonCodeValues = "";
+			Reg2._lobby_button_alpha = 0.3;
+			alpha = 1;
+		}
+		
+		else if (Reg._buttonCodeValues != ""
+		&&	Reg._disconnectNow == false)
+		{
+			alpha = 0.3;
+		}
+		
+		if (alpha == 1 && _id == ID) super.update(elapsed);
 	}
 	
 }

@@ -23,6 +23,10 @@ package;
 	import sys.net.Host;
 #end
 
+#if chess
+	import modules.games.chess.*;
+#end
+
 /**
  * ...
  * @author kboardgames.com
@@ -38,6 +42,11 @@ class PlayState extends FlxState
 	* this is part of the client software. it is used mainly to connect, disconnect or access event.
 	*/
 	public static var clientSocket:vendor.mphx.client.Client;
+	
+	/******************************
+	 * background gradient, texture and plain color for a scene.
+	 */
+	private var __scene_background:SceneBackground;
 	
 	/******************************
 	 * this is used to save/load the client data such as username to place into the login username field box. Players data is not saved here. this var should only be used before the user logs in. after the user logs in, config data should be pulled from the server.
@@ -66,16 +75,6 @@ class PlayState extends FlxState
     */
     private var _closeSocket:Bool = false;
    
-	/******************************
-	 * scene title background.
-	 */
-	private var _title_background:FlxSprite;
-	
-	/******************************
-	* the title of this state.
-	*/
-	private var _title:FlxText;
-	
 	/******************************
 	 * delays going to the lobby when first logging in. this is needed to draw the front door data to scene. without this var, sometimes that data is not seen.
 	 */	
@@ -112,7 +111,9 @@ class PlayState extends FlxState
 	/******************************
 	 * is it a check or checkmate? anything related to a checkmate such as setting capturing units for the king or determining if a pawn can free the king from check, etc.
 	 */
-	private var __chess_check_or_checkmate:ChessCheckOrCheckmate;
+	#if chess
+		private var __chess_check_or_checkmate:ChessCheckOrCheckmate;
+   #end
    
 	/******************************
 	 * disconnect if true.
@@ -128,6 +129,15 @@ class PlayState extends FlxState
 		
 		persistentDraw = true;
 		persistentUpdate = true;
+		
+		if (__scene_background != null)
+		{
+			remove(__scene_background);
+			__scene_background.destroy();
+		}
+		
+		__scene_background = new SceneBackground();
+		add(__scene_background);
 		
 		FlxG.mouse.enabled = false;
 		
@@ -159,35 +169,15 @@ class PlayState extends FlxState
 				
 		getPlayersNamesAndAvatars();
 		
-		//------------------------------
-		_title_background = new FlxSprite(0, 0);
-		_title_background.makeGraphic(FlxG.width, 55, Reg._title_bar_background_enabled); 
-		_title_background.scrollFactor.set(0, 0);
-		add(_title_background);
-				
-		_title = new FlxText(15, 4, 0, "Front Door");
-		_title.setFormat(Reg._fontDefault, 50, RegCustomColors.title_bar_text_color());
-		_title.scrollFactor.set(0, 0);
-		_title.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 3);
-		if (Reg._gameJumpTo == -1 ) _title.visible = true;
-		else 
-		{
-			Reg._gameJumpTo = 0;
-			_title.visible = false;
-		}
-		add(_title);
+		if (Reg.__title_bar != null) remove(Reg.__title_bar);
+			Reg.__title_bar = new TitleBar("Front Door");
+			add(Reg.__title_bar);
 		
 		_text_server_login_data = new FlxText(0, 0, 0, "");
 		_text_server_login_data.scrollFactor.set(0, 0);
 		_text_server_login_data.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 1);
 		_text_server_login_data.setPosition(15, FlxG.height / 2 - 200);
-		if (Reg._gameJumpTo == -1 ) _text_server_login_data.visible = true;
-		else 
-		{
-			Reg._gameJumpTo = 0;
-			_text_server_login_data.visible = false;
-		}
-		
+		_text_server_login_data.visible = false;
 		_text_server_login_data.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_topic_title_text_color());
 		add(_text_server_login_data);
 		
@@ -195,13 +185,7 @@ class PlayState extends FlxState
 		_text_server_login_data2 = new TextGeneral(15, FlxG.height / 2 - 200 + 45, 0, "");
 		_text_server_login_data2.scrollFactor.set(0, 0);
 		_text_server_login_data2.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 1);
-		if (Reg._gameJumpTo == -1 ) _text_server_login_data2.visible = true;
-		else 
-		{
-			Reg._gameJumpTo = 0;
-			_text_server_login_data2.visible = false;
-		}
-		
+		_text_server_login_data2.visible = false;
 		_text_server_login_data2.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
 		add(_text_server_login_data2);
 		
@@ -209,89 +193,46 @@ class PlayState extends FlxState
 		_text_server_login_data3 = new TextGeneral(15, _text_server_login_data2.y + 80, 0, "");
 		_text_server_login_data3.scrollFactor.set(0, 0);
 		_text_server_login_data3.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 1);
-		if (Reg._gameJumpTo == -1 ) _text_server_login_data3.visible = true;
-		else 
-		{
-			Reg._gameJumpTo = 0;
-			_text_server_login_data3.visible = false;
-		}
-		
+		_text_server_login_data3.visible = false;
 		_text_server_login_data3.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
-		add(_text_server_login_data3);
-		
+		add(_text_server_login_data3);		
 		
 		_text_server_login_data4 = new TextGeneral(15, _text_server_login_data3.y + 80, 0, "");
 		_text_server_login_data4.scrollFactor.set(0, 0);
 		_text_server_login_data4.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 1);
-		if (Reg._gameJumpTo == -1 ) _text_server_login_data4.visible = true;
-		else 
-		{
-			Reg._gameJumpTo = 0;
-			_text_server_login_data4.visible = false;
-		}
-		
-		
+		_text_server_login_data4.visible = false;
 		_text_server_login_data4.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
 		add(_text_server_login_data4);
-		
-		
 		
 		_text_client_login_data = new FlxText(0, 0, 0, "");
 		_text_client_login_data.scrollFactor.set(0, 0);
 		_text_client_login_data.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		_text_client_login_data.setPosition(FlxG.width / 2, _text_server_login_data.y);
-		if (Reg._gameJumpTo == -1 ) _text_client_login_data.visible = true;
-		else 
-		{
-			Reg._gameJumpTo = 0;
-			_text_client_login_data.visible = false;
-		}
-		
+		_text_client_login_data.visible = false;
 		_text_client_login_data.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_topic_title_text_color());
 		add(_text_client_login_data);
-		
-		
-		_text_client_login_data2 = new FlxText(0, 0, 0, "");
+				
+		_text_client_login_data2 = new TextGeneral(0, 0, 0, "", 8, true, false, 0, 0, false);
 		_text_client_login_data2.scrollFactor.set(0, 0);
 		_text_client_login_data2.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		_text_client_login_data2.setPosition(FlxG.width / 2, _text_server_login_data2.y);
-		if (Reg._gameJumpTo == -1 ) _text_client_login_data2.visible = true;
-		else 
-		{
-			Reg._gameJumpTo = 0;
-			_text_client_login_data2.visible = false;
-		}
-		
+		_text_client_login_data2.visible = false;
 		_text_client_login_data2.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
 		add(_text_client_login_data2);
 		
-		
-		
-		_text_client_login_data3 = new FlxText(0, 0, 0, "");
+		_text_client_login_data3 = new TextGeneral(0, 0, 0, "", 8, true, false, 0, 0, false);
 		_text_client_login_data3.scrollFactor.set(0, 0);
 		_text_client_login_data3.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		_text_client_login_data3.setPosition(FlxG.width / 2, _text_server_login_data3.y);
-		if (Reg._gameJumpTo == -1 ) _text_client_login_data3.visible = true;
-		else 
-		{
-			Reg._gameJumpTo = 0;
-			_text_client_login_data3.visible = false;
-		}
-		
+		_text_client_login_data3.visible = false;
 		_text_client_login_data3.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
 		add(_text_client_login_data3);
 		
-		_text_client_login_data4 = new FlxText(0, 0, 0, "");
+		_text_client_login_data4 = new TextGeneral(0, 0, 0, "", 8, true, false, 0, 0, false);
 		_text_client_login_data4.scrollFactor.set(0, 0);
 		_text_client_login_data4.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		_text_client_login_data4.setPosition(FlxG.width / 2, _text_server_login_data4.y);
-		if (Reg._gameJumpTo == -1 ) _text_client_login_data4.visible = true;
-		else 
-		{
-			Reg._gameJumpTo = 0;
-			_text_client_login_data4.visible = false;
-		}
-		
+		_text_client_login_data4.visible = false;
 		_text_client_login_data4.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
 		add(_text_client_login_data4);
 		
@@ -302,7 +243,9 @@ class PlayState extends FlxState
 		_text_logging_in.screenCenter(X);
 		add(_text_logging_in);			
 		
-		__chess_check_or_checkmate = new ChessCheckOrCheckmate(__ids_win_lose_or_draw);		
+		#if chess
+			__chess_check_or_checkmate = new ChessCheckOrCheckmate(__ids_win_lose_or_draw);
+		#end
 	}
 	
 	public function saveClientConfig():Void
@@ -331,27 +274,32 @@ class PlayState extends FlxState
 	
 	public static function prepareToDisconnect():Void
 	{
-		if (RegTypedef._dataMisc._userLocation > 0
-		&&  RegTypedef._dataMisc._userLocation < 3) 
+		if (Reg._game_offline_vs_player == false
+		&&	Reg._game_offline_vs_player == false
+		&&	Reg._game_online_vs_cpu == false)
 		{
-			PlayState.clientSocket.send("Lesser RoomState Value", RegTypedef._dataMisc);
-			haxe.Timer.delay(function (){}, Reg2._event_sleep);
+			if (RegTypedef._dataMisc._userLocation > 0
+			&&  RegTypedef._dataMisc._userLocation < 3) 
+			{
+				PlayState.clientSocket.send("Lesser RoomState Value", RegTypedef._dataMisc);
+				haxe.Timer.delay(function (){}, Reg2._event_sleep);
+				
+				RegTypedef._dataMisc._roomState[RegTypedef._dataMisc._room] = 0;
+				RegTypedef._dataMisc._roomPlayerLimit[RegTypedef._dataMisc._room] = 0;
+				RegTypedef._dataMisc._roomGameIds[RegTypedef._dataMisc._room] = -1;
+				RegTypedef._dataMisc._roomHostUsername[RegTypedef._dataMisc._room] = "";
+				RegTypedef._dataMisc._gid[RegTypedef._dataMisc._room] = "";
+				RegTypedef._dataMisc._userLocation -= 1;
+				RegTypedef._dataMisc._room = 0;
+				
+				PlayState.clientSocket.send("Get Statistics Win Loss Draw", RegTypedef._dataPlayers); // ping.
+				haxe.Timer.delay(function (){}, Reg2._event_sleep);
+			}
 			
-			RegTypedef._dataMisc._roomState[RegTypedef._dataMisc._room] = 0;
-			RegTypedef._dataMisc._roomPlayerLimit[RegTypedef._dataMisc._room] = 0;
-			RegTypedef._dataMisc._roomGameIds[RegTypedef._dataMisc._room] = -1;
-			RegTypedef._dataMisc._roomHostUsername[RegTypedef._dataMisc._room] = "";
-			RegTypedef._dataMisc._gid[RegTypedef._dataMisc._room] = "";
-			RegTypedef._dataMisc._userLocation -= 1;
-			RegTypedef._dataMisc._room = 0;
-			
-			PlayState.clientSocket.send("Get Statistics Win Loss Draw", RegTypedef._dataPlayers); // ping.
-			haxe.Timer.delay(function (){}, Reg2._event_sleep);
-		}
-		
-		// call the leave room code at SceneGameRoom.hx
-		Reg._yesNoKeyPressValueAtMessage = 1;
-		Reg._buttonCodeValues = "g1000";
+			// call the leave room code at SceneGameRoom.hx
+			Reg._yesNoKeyPressValueAtMessage = 1;
+			Reg._buttonCodeValues = "g1000";
+		}		
 	
 		Reg._disconnectNow = true;
 	}
@@ -508,6 +456,12 @@ class PlayState extends FlxState
 				
 				RegTypedef._dataAccount._ip = Internet.getIP();
 				
+				if (RegTypedef._dataAccount._ip == "")
+				{
+					Reg._cannotConnectToServer = true;
+					FlxG.switchState(new MenuState());
+				}
+				
 				#if html5
 					RegTypedef._dataAccount._host = "html5";
 				#else
@@ -605,14 +559,6 @@ class PlayState extends FlxState
 				
 				__scene_waiting_room.visible = false;
 				__scene_waiting_room.active = false;
-								
-				// stop a debug notice. this is not used in vs computer mode.
-				if (Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false)
-				{
-					//OnlinePlayersList.__game_chatter.visible = false;
-					//OnlinePlayersList.__game_chatter.active = false;
-				}
-				
 				__scene_create_room.visible = false;
 			}
 		}
@@ -657,8 +603,13 @@ class PlayState extends FlxState
 					
 				}
 				
-				__scene_game_room = new SceneGameRoom(__ids_win_lose_or_draw, __chess_check_or_checkmate);
-				add(__scene_game_room);					
+				#if chess
+					__scene_game_room = new SceneGameRoom(__ids_win_lose_or_draw, __chess_check_or_checkmate);
+					add(__scene_game_room);					
+				#else
+					__scene_game_room = new SceneGameRoom(__ids_win_lose_or_draw, null);
+					add(__scene_game_room);
+				#end
 				
 				__scene_game_room.active = true;
 				__scene_game_room.visible = true;
@@ -849,12 +800,13 @@ class PlayState extends FlxState
 	private function gameMessagesAtSubState():Void
 	{
 		//############################# CHESS PROMOTION
-		if (Reg._chessPromote == true)
-		{
-			Reg._chessPromote = false;			
-			openSubState(new ChessPromote());
-		}
-		
+		#if chess
+			if (Reg._chessPromote == true)
+			{
+				Reg._chessPromote = false;			
+				openSubState(new ChessPromote());
+			}
+		#end
 	}	
 	
 	private function gameMessage():Void
@@ -982,8 +934,7 @@ class PlayState extends FlxState
 					{
 						Reg._doUpdate = false;
 						
-						_title_background.visible = false;
-						_title.visible = false;	
+						Reg.__title_bar.visible = false;
 						
 						_text_server_login_data.visible = false;
 						_text_server_login_data2.visible = false;
@@ -1305,18 +1256,21 @@ class PlayState extends FlxState
 				FlxG.switchState(new MenuState());
 			}
 			
-			if (Reg._disconnectNow == true) 
-			{
-				Reg._disconnectNow = false;
-				
-				if (clientSocket.isConnected() == true) clientSocket.close();
-				
-				Reg._serverDisconnected = false;
-				FlxG.switchState(new MenuState());
-				
-			}
 		}
-		
+			
+		if (Reg._disconnectNow == true) 
+		{
+			Reg._disconnectNow = false;
+			
+			if (Reg._game_online_vs_cpu == true || Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false)
+			{
+				if (clientSocket.isConnected() == true) clientSocket.close();
+			}
+			
+			Reg._serverDisconnected = false;
+			FlxG.switchState(new MenuState());
+			
+		}
 	}
 	
 }//

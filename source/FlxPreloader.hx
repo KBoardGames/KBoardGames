@@ -18,17 +18,6 @@
 
 package;
 
-import flash.display.Bitmap;
-import flash.display.BitmapData;
-import flash.display.BlendMode;
-import flash.display.Sprite;
-import flash.Lib;
-import flash.text.TextField;
-import flash.text.TextFormat;
-import flixel.FlxG;
-import flixel.system.FlxAssets;
-import flixel.system.FlxBasePreloader;
-
 @:keep @:bitmap("assets/images/preloader/light.png")
 private class GraphicLogoLight extends BitmapData {}
 

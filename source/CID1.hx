@@ -121,8 +121,13 @@ class CID1 extends FlxGroup
 	public static var _title_reversi_game_minutes:TextGeneral;
 	public static var _title_snakes_ladders_game_minutes:TextGeneral;
 	public static var _title_signature_game_minutes:TextGeneral;
+	
+	/******************************
+	 * total time allowed for each game. when time reaches zero, the game will end in a loss for the player.
+	 */
+	public static var _question_gameIds_time_allowed:Array<Int> = [];
+		
 	public static var _question_chess_show_last_piece_moved:TextGeneral;
-	public static var _question_chess_computer_thinking_enabled:TextGeneral;
 	public static var _question_chess_future_capturing_units_enabled:TextGeneral;
 	public static var _question_chess_path_to_king_enabled:TextGeneral;
 	public static var _question_chess_set_for_player1:TextGeneral;
@@ -133,7 +138,6 @@ class CID1 extends FlxGroup
 	
 	public static var _button_chess_opening_moves_enabled:ButtonGeneralNetworkNo;
 	public static var _button_chess_show_last_piece_moved:ButtonGeneralNetworkNo;
-	public static var _button_chess_computer_thinking_enabled:ButtonGeneralNetworkNo;
 	public static var _button_chess_future_capturing_units_enabled:ButtonGeneralNetworkNo;
 	public static var _button_chess_future_capturing_units_minus:ButtonGeneralNetworkNo;
 	public static var	_button_chess_future_capturing_units_plus:ButtonGeneralNetworkNo;

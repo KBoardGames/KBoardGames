@@ -21,15 +21,19 @@ import flixel.math.FlxPoint;
 import flixel.ui.FlxVirtualPad.FlxActionMode;
 
 #if house
-	import myLibs.house.*;
+	import modules.house.*;
 #end
 
 #if miscellaneous
-	import myLibs.miscellaneous.*;
+	import modules.miscellaneous.*;
 #end
 
 #if dailyQuests
-	import myLibs.dailyQuests.DailyQuests;
+	import modules.dailyQuests.DailyQuests;
+#end
+
+#if leaderboards
+	import modules.leaderboards.Leaderboards;
 #end
 
 /**
@@ -37,7 +41,12 @@ import flixel.ui.FlxVirtualPad.FlxActionMode;
  * @author kboardgames.com
  */
 class SceneLobby extends FlxState
-{	
+{
+	/******************************
+	 * background gradient, texture and plain color for a scene.
+	 */
+	private var __scene_background:SceneBackground;
+	
 	/******************************
 	* host of the room directly at right side of room buttons.
 	*/
@@ -97,17 +106,6 @@ class SceneLobby extends FlxState
 	private var _lobby_data_received_do_once:Bool = true;
 	
 	/******************************
-	* the title of this state.
-	*/
-	private var _title:FlxText;	
-	private var _title_background:FlxSprite; // background for title.
-	
-	/******************************
-	 * scene background
-	 */
-	private var _background:FlxSprite;
-		
-	/******************************
 	 * button total displayed. also change this value at server.
 	 */
 	private var _room_total:Int = 24;
@@ -126,7 +124,7 @@ class SceneLobby extends FlxState
 	* do not new FlxText or button the second time. only one field at a coordinate permitted.
 	*/
 	public static var _populate_table_body:Bool = false;
-	
+	public static var _refresh_table:Bool = true;
 	private var _button_lobby_refresh:ButtonGeneralNetworkYes;
 		
 	/******************************
@@ -160,16 +158,14 @@ class SceneLobby extends FlxState
 	public static var _number_room_full:Int = 0;
 		
 	/******************************
-	 * solid table rows.
+	 * table rows.
 	 */
-	private var _table_rows:Array<FlxSprite> = [for (i in 0...26) new FlxSprite(0, 0)]; 
-	
-	private var _table_rows_color:FlxColor;
-	
+	private var _table_rows:Array<FlxSprite> = [for (i in 0...25) new FlxSprite(0, 0)]; 
+		
 	/******************************
 	 * we need different column separators for memory cleanup. this is a black bar between table rows.
 	 */
-	private var _column_separator:Array<FlxSprite> = [for (i in 0...5) new FlxSprite(0,0)]; 
+	private var _table_vertical_cell_padding:Array<FlxSprite> = [for (i in 0...5) new FlxSprite(0,0)]; 
 	
 	/******************************
 	 * table column text.
@@ -180,24 +176,29 @@ class SceneLobby extends FlxState
 	{
 		super();
 		
+		// for the user kicking or banning message box see "Is Action Needed For Player" event. that event calls RegTriggers._actionMessage which displays the message at platState.hx
+		
 		Reg._at_game_room = false;
 		Reg._at_lobby = true;
+		
 		_lobby_data_received = false;
 		_lobby_data_received_do_once = true;
 		_number = 0;
 		_populate_table_body = false;
 		_ticks_buttons_menuBar = 1;
 		
-		FlxG.autoPause = false;	// this application will pause when not in focus.
+		FlxG.autoPause = false;	// this application will pause when not in focus.		
 		
-		// for the user kicking or banning message box see "Is Action Needed For Player" event. that event calls RegTriggers._actionMessage which displays the message at platState.hx
+		if (__scene_background != null) remove(__scene_background);	
+			__scene_background = new SceneBackground();
+		add(__scene_background);		
 	}
 		
 	public function initialize():Void
 	{
 		_lobby_data_received = false;
 		_lobby_data_received_do_once = true;
-				
+		
 		PlayState._text_logging_in.text = "";
 		Reg._at_lobby = true;
 		
@@ -209,23 +210,8 @@ class SceneLobby extends FlxState
 	public function display():Void
 	{	
 		RegFunctions.fontsSharpen();		
-				
+		
 		RegTypedef._dataMisc._gid[RegTypedef._dataMisc._room] = RegTypedef._dataMovement._gid = RegTypedef._dataMisc.id;
-		
-		// lobby scene background. 
-		if (_background != null)
-		{
-			remove(_background);
-			_background.destroy();
-		}
-		
-		_background = new FlxSprite(0, 55);
-		_background.makeGraphic(FlxG.width, FlxG.height-50);
-		
-		// changing this color value will also change lobby's chatter background.
-		_background.color = FlxColor.BLACK;
-		_background.scrollFactor.set(0, 0);
-		add(_background);
 		
 		if (_group_scrollable_area != null)
 		{
@@ -234,29 +220,9 @@ class SceneLobby extends FlxState
 		}
 		_group_scrollable_area = cast add(new FlxSpriteGroup());
 		
-		if (_title_background != null)
-		{
-			remove(_title_background);
-			_title_background.destroy();			
-		}
-		
-		_title_background = new FlxSprite(0, 0);
-		_title_background.makeGraphic(FlxG.width, 55, Reg._title_bar_background_enabled); 
-		_title_background.scrollFactor.set(1,0);
-		add(_title_background);
-		
-		if (_title != null)
-		{
-			remove(_title);
-			_title.destroy();			
-		}
-		
-		_title = new FlxText(15, 4, 0, "Lobby");
-		_title.setFormat(Reg._fontDefault, 50, RegCustomColors.title_bar_text_color());
-		_title.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 3);
-		_title.scrollFactor.set(1,0);
-		_title.visible = true;
-		add(_title);
+		if (Reg.__title_bar3 != null) remove(Reg.__title_bar3);
+		Reg.__title_bar3 = new TitleBar("Lobby");
+		add(Reg.__title_bar3);
 		
 		if (_button_lobby_refresh != null)
 		{
@@ -265,7 +231,7 @@ class SceneLobby extends FlxState
 		}
 		
 		// 360 is the chat width. 215 is this button with. 15 is the default space from the edge. 20 is the width of the scrollbar. 10 is the extra space needed to make it look nice,		
-		_button_lobby_refresh = new ButtonGeneralNetworkYes(FlxG.width + -360 + -215 + -15 - 20 - 10, 12, "Lobby Refresh", 215, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, button_refresh, RegCustom._button_color[Reg._tn], false);		
+		_button_lobby_refresh = new ButtonGeneralNetworkYes(FlxG.width + -360 + -215 + -15 - 20 - 10, 12 + Reg.__title_bar_offset_y, "Lobby Refresh", 215, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, button_refresh, RegCustom._button_color[Reg._tn], false);		
 		_button_lobby_refresh.label.font = Reg._fontDefault;
 		_button_lobby_refresh.scrollFactor.set(0, 0);
 		button_refresh();
@@ -338,16 +304,8 @@ class SceneLobby extends FlxState
 		
 		__scrollable_area.content.y = 770;
 		
-		if (__menu_bar != null)
-		{
-			remove(__menu_bar);
-			__menu_bar.destroy();
-		}
+		menu_bar();
 		
-		// __menu_bar needs to remain local. do not use Reg.__menu_bar
-		__menu_bar = new MenuBar();
-		add(__menu_bar);
-				
 		set_not_active_for_buttons();
 		initialize();
 	
@@ -355,16 +313,16 @@ class SceneLobby extends FlxState
 	
 	private function draw_table_empty():Void
 	{
-		_table_rows_color = FlxColor.fromHSB(FlxG.random.int(1, 360), RegCustom._client_background_saturation[Reg._tn], (RegCustom._client_background_brightness[Reg._tn]-0.10));
-		
+		/*
 		if (RegCustom._client_background_enabled[Reg._tn] == true)
 		{
 			_table_rows_color = RegCustomColors.color_client_background();
 			_table_rows_color.alphaFloat = 0.15;
 		}
+		*/
 		
-		// Note that the last count ends before another loop, so only 26 loops will be made. 
-		for (i in 1...26)
+		// Note that the last count ends before another loop, so only 25 loops will be made. 
+		for (i in 1... 25)
 		{
 			if (_table_rows[i] != null)
 			{
@@ -374,33 +332,41 @@ class SceneLobby extends FlxState
 			
 			// soild table rows
 			_table_rows[i] = new FlxSprite(0, 0);
-			_table_rows[i].makeGraphic(FlxG.width - 60, 55, _table_rows_color);		
+			_table_rows[i].makeGraphic(FlxG.width - 60, 55, RegCustomColors.color_table_body_background());		
 			_table_rows[i].setPosition(20, 120 - _offset_y + (i * 70)); 
 			_table_rows[i].scrollFactor.set(0, 0);
 			_group_scrollable_area.add(_table_rows[i]);
+			
+			var _table_horizontal_cell_padding = new FlxSprite(0, 0);
+			_table_horizontal_cell_padding.makeGraphic(FlxG.width - 60, 2, 0xff000000);		
+			_table_horizontal_cell_padding.setPosition(20, 120 - _offset_y + (i * 70)); 
+			_table_horizontal_cell_padding.scrollFactor.set(0, 0);
+			_group_scrollable_area.add(_table_horizontal_cell_padding);
+			
+			var _table_horizontal_bottom_cell_padding = new FlxSprite(0, 0);
+			_table_horizontal_bottom_cell_padding.makeGraphic(FlxG.width - 60, 2, 0xff000000);		
+			_table_horizontal_bottom_cell_padding.setPosition(20, 120 - _offset_y + (i * 70) - 15 + 70); 
+			_table_horizontal_bottom_cell_padding.scrollFactor.set(0, 0);
+			_group_scrollable_area.add(_table_horizontal_bottom_cell_padding);
 		}		
 		
-		//.....................................
+		//-----------------------------
 		var _arr = [370, 600, 855, 1025, 1195];
 		
-		for (i in 0...5)
+		for (ii in 1...25)
 		{
-			if (_column_separator[i] != null)
-			{			
-				_group_scrollable_area.remove(_column_separator[i]);
-				_column_separator[i].destroy();
+			for (i in 0...5)
+			{
+				// we need different column separators for memory cleanup. this is a black bar between table rows.
+				// first column separator.
+				_table_vertical_cell_padding[i] = new FlxSprite(0, 0);
+				_table_vertical_cell_padding[i].makeGraphic(2, 55, 0xFF000000);	
+				_table_vertical_cell_padding[i].setPosition(_arr[i] - _offset_x - _offset2_x, 120 - _offset_y + (ii * 70) + 1); 
+				_table_vertical_cell_padding[i].scrollFactor.set(0, 0);
+				_group_scrollable_area.add(_table_vertical_cell_padding[i]);
 			}
-			
-			// we need different column separators for memory cleanup. this is a black bar between table rows.
-			// first column separator.
-			_column_separator[i] = new FlxSprite(0, 0);
-			_column_separator[i].makeGraphic(10, 120 + (26 * 70), 0xFF000000);	
-			_column_separator[i].setPosition(_arr[i] - _offset_x - _offset2_x, 120 - _offset_y + (1 * 70)); 
-			_column_separator[i].scrollFactor.set(0, 0);
-			_group_scrollable_area.add(_column_separator[i]);
-		
 		}
-				
+		
 	}
 	
 	/******************************
@@ -434,7 +400,7 @@ class SceneLobby extends FlxState
 			}		
 			
 			// table calumn text.
-			_table_column_text[i] = new FlxText(_column_x[i] - _offset_x - _offset2_x, 120, 0, _column_name[i]);
+			_table_column_text[i] = new FlxText(_column_x[i] - _offset_x - _offset2_x, 121, 0, _column_name[i]);
 			_table_column_text[i].setFormat(Reg._fontDefault, Reg._font_size, FlxColor.BLACK);
 			_table_column_text[i].scrollFactor.set(0, 0);
 			_group_scrollable_area.add(_table_column_text[i]);
@@ -446,8 +412,6 @@ class SceneLobby extends FlxState
 	private function draw_table_all_body_buttons():Void
 	{
 		var _id:Int = 2;
-	
-		//_group_button_for_room.splice(0, _group_button_for_room.length);
 		
 		for (i in 0... _room_total) // change this value if increasing the button number.
 		{
@@ -458,7 +422,7 @@ class SceneLobby extends FlxState
 				_group_button_for_room[i].destroy();
 			}
 			
-			_group_button_for_room[i] = new ButtonGeneralNetworkYes(100 - _offset_x, 125 - _offset_y + ((i + 1) * 70), Std.string(i) + ": " + _buttonState[RegTypedef._dataMisc._roomState[(i + 1)]], 215, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, null, RegCustom._button_color[Reg._tn], false, _id);
+			_group_button_for_room[i] = new ButtonGeneralNetworkYes(100 - _offset_x, 126 - _offset_y + ((i + 1) * 70), Std.string(i) + ": " + _buttonState[RegTypedef._dataMisc._roomState[(i + 1)]], 215, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, null, RegCustom._button_color[Reg._tn], false, _id);
 			
 			#if html5
 				if (i >= 2)
@@ -467,7 +431,7 @@ class SceneLobby extends FlxState
 				}
 			#end
 						
-			_group_button_for_room[i].setPosition(100 - _offset_x, 125 - _offset_y + ((i+1) * 70));
+			_group_button_for_room[i].setPosition(100 - _offset_x, 126 - _offset_y + ((i+1) * 70));
 			
 			_group_button_for_room[i].ID = _id;
 			_group_scrollable_area.add(_group_button_for_room[i]);
@@ -658,6 +622,7 @@ class SceneLobby extends FlxState
 	public function set_not_active_for_buttons():Void
 	{
 		Reg._at_lobby = false;
+		Reg.__title_bar3._title.visible = false;
 		
 		#if house
 			HouseScrollMap._map_offset_x = 0;
@@ -736,8 +701,7 @@ class SceneLobby extends FlxState
 			_button_lobby_refresh.active = false;
 		}
 		
-		_title_background.visible = false;
-		_title.visible = false;
+		Reg.__title_bar.visible = false;
 		
 		for (i in 0... _table_column_text.length)
 		{
@@ -751,6 +715,7 @@ class SceneLobby extends FlxState
 	public function set_active_for_buttons():Void
 	{
 		Reg._at_lobby = true;
+		Reg.__title_bar3._title.visible = true;
 		
 		#if house
 			HouseScrollMap._map_offset_x = 0;
@@ -805,8 +770,7 @@ class SceneLobby extends FlxState
 			_button_lobby_refresh.visible = true;
 		}
 		
-		_title_background.visible = true;
-		_title.visible = true;
+		Reg.__title_bar.visible = true;
 		
 		for (i in 0... _table_column_text.length)
 		{
@@ -874,18 +838,206 @@ class SceneLobby extends FlxState
 		haxe.Timer.delay(function (){}, Reg2._event_sleep);
 	}
 	
+	private function button_code_values():Void
+	{
+		// invite to room, accept? ok button pressed.
+		// "Online Player Offer Invite" event.
+		if (Reg._yesNoKeyPressValueAtMessage == 1 && Reg._buttonCodeValues == "l1000")
+		{
+			_group_scrollable_area.active = true;
+			
+			//Reg._buttonCodeValues = ""; this var is cleared at ButtonGeneralNetworkYes class
+			Reg._yesNoKeyPressValueAtMessage = 0;
+			
+			goto_room(Reg._inviteRoomNumberToJoin);
+			
+			FlxG.mouse.reset();
+			FlxG.mouse.enabled = true;
+			
+			
+		}
+			
+		// invite to room,  cancel button pressed.
+		// "Online Player Offer Invite" event.
+		if (Reg._yesNoKeyPressValueAtMessage >= 2 && Reg._buttonCodeValues == "l1000")
+		{			
+			_group_scrollable_area.active = true;
+			
+			//Reg._buttonCodeValues = ""; this var is cleared at ButtonGeneralNetworkYes class
+			Reg._yesNoKeyPressValueAtMessage = 0;
+			
+			FlxG.mouse.reset();
+			FlxG.mouse.enabled = true;
+			
+			
+		}
+		
+		// room full, or room creating message.
+		if (Reg._yesNoKeyPressValueAtMessage > 0 && Reg._buttonCodeValues == "l1010")
+		{
+			_group_scrollable_area.active = true;
+			active = true;
+			_group_scrollable_area.visible = true;
+			visible = true;				
+			
+			Reg._yesNoKeyPressValueAtMessage = 0;
+			//Reg._buttonCodeValues = ""; this var is cleared at ButtonGeneralNetworkYes class
+			
+			FlxG.mouse.reset();
+			FlxG.mouse.enabled = true;
+			
+			
+		}
+		
+		// room not ready. someone is in that room.
+		if (Reg._yesNoKeyPressValueAtMessage > 0 && Reg._buttonCodeValues == "l1030")
+		{
+			_group_scrollable_area.active = true;
+			active = true;
+			_group_scrollable_area.visible = true;
+			visible = true;				
+			
+			Reg._yesNoKeyPressValueAtMessage = 0;
+			//Reg._buttonCodeValues = ""; this var is cleared at ButtonGeneralNetworkYes class
+			
+			FlxG.mouse.reset();
+			FlxG.mouse.enabled = true;
+			
+			
+		}
+		
+		if (Reg._yesNoKeyPressValueAtMessage > 0 && Reg._buttonCodeValues == "l2222")
+		{
+			Reg._yesNoKeyPressValueAtMessage = 0;
+			//Reg._buttonCodeValues = ""; this var is cleared at ButtonGeneralNetworkYes class
+			Reg._server_message = "";
+			
+			
+		}
+	}
+	
+	private function menu_bar():Void
+	{
+		if (__menu_bar != null)
+		{
+			remove(__menu_bar);
+			__menu_bar.destroy();
+		}
+		
+		// __menu_bar needs to remain local. do not use Reg.__menu_bar
+		__menu_bar = new MenuBar(false, false, null, null, null, null, this);
+		add(__menu_bar);
+	}
+	
+	private function triggers():Void
+	{		
+		if (RegTriggers._returnToLobbyMakeButtonsActive == true)
+		{
+			RegTriggers._returnToLobbyMakeButtonsActive = false;
+			set_active_for_buttons();
+			
+			Reg._at_lobby = true;			
+		}
+		
+		if (RegTriggers._ticks_buttons_menuBar == true)
+		{
+			RegTriggers._ticks_buttons_menuBar = false;
+			_ticks_buttons_menuBar = 1;
+			
+			_group_scrollable_area.active = true;
+			__scrollable_area.active = true;
+			
+		}
+		
+		#if miscellaneous
+			if (RegTriggers._makeMiscellaneousMenuClassActive == true)
+			{			
+				RegTriggers._makeMiscellaneousMenuClassActive = false;
+				
+				set_not_active_for_buttons();
+				
+				if (__menu_bar.__miscellaneous_menu != null)
+				{
+					__menu_bar.__miscellaneous_menu.active = true;
+					__menu_bar.__miscellaneous_menu.visible = true;
+				}
+			}
+			
+			if (RegTriggers._makeMiscellaneousMenuClassNotActive == true)
+			{
+				RegTriggers._makeMiscellaneousMenuClassNotActive = false;
+				
+				if (__menu_bar.__miscellaneous_menu != null)
+				{
+					__menu_bar.__miscellaneous_menu.visible = false;
+					__menu_bar.__miscellaneous_menu.active = false;
+				}
+			}
+			
+			if (RegTriggers._miscellaneousMenuOutputClassActive == true)
+			{
+				RegTriggers._miscellaneousMenuOutputClassActive = false;
+				
+				set_not_active_for_buttons();	
+				
+				if (__miscellaneous_menu_output != null)
+				{
+					remove(__miscellaneous_menu_output);
+					__miscellaneous_menu_output.destroy();
+				}
+				
+				__miscellaneous_menu_output = new MiscellaneousMenuOutput(Reg2._miscMenuIparameter);
+				add(__miscellaneous_menu_output);
+			}
+		#end
+		
+		#if dailyQuests
+			if (RegTriggers._make_daily_quests_not_active == true)
+			{
+				RegTriggers._make_daily_quests_not_active = false;
+				
+				__menu_bar.__daily_quests.__scrollable_area.visible = false;
+				__menu_bar.__daily_quests.__scrollable_area.active = false;
+				__menu_bar.__daily_quests.visible = false;
+				__menu_bar.__daily_quests.active = false;
+				
+				
+			}
+		#end
+		
+		#if tournaments
+			if (RegTriggers._make_tournaments_not_active == true)
+			{
+				RegTriggers._make_tournaments_not_active = false;
+				
+				__menu_bar.__tournaments.visible = false;
+				__menu_bar.__tournaments.active = false;
+				
+				
+			}
+		#end
+		
+		#if leaderboards
+			if (RegTriggers._make_leaderboards_not_active == true)
+			{
+				RegTriggers._make_leaderboards_not_active = false;
+				_ticks_buttons_menuBar = 1;
+				
+				menu_bar();
+				
+				RegTriggers._returnToLobbyMakeButtonsActive = true;
+			}
+		#end
+		
+	}
+	
 	override public function destroy()
 	{
-		if (_title != null) 
-		{	
-			_title_background.destroy();
-			_title.destroy();			
-		}	
-		
 		if (__scrollable_area != null && RegTypedef._dataMisc._userLocation == 0)
 		{
 			cameras.remove( __scrollable_area );
 			__scrollable_area.destroy();
+			__scrollable_area = null;
 		}
 		
 				
@@ -893,6 +1045,7 @@ class SceneLobby extends FlxState
 		{
 			remove(_group_scrollable_area);
 			_group_scrollable_area.destroy();
+			_group_scrollable_area = null;
 		}
 		
 		#if miscellaneous
@@ -903,6 +1056,7 @@ class SceneLobby extends FlxState
 					__menu_bar.__miscellaneous_menu.visible = false;
 					remove(__menu_bar.__miscellaneous_menu);
 					__menu_bar.__miscellaneous_menu.destroy();
+					__menu_bar = null;
 				}
 			}
 		#end
@@ -910,6 +1064,13 @@ class SceneLobby extends FlxState
 		_number = 0;
 		_populate_table_body = false;
 	
+		if (__game_chatter != null) 
+		{
+			remove(__game_chatter);
+			__game_chatter.destroy();
+			__game_chatter = null;
+		}
+		
 		super.destroy();
 	}
 	
@@ -932,53 +1093,72 @@ class SceneLobby extends FlxState
 				#if house
 					if (__menu_bar._buttonHouse != null) __menu_bar._buttonHouse.active = true;
 				#end
+				
+				
 			}
 			
 			if (_ticks_buttons_menuBar == 1)
 			{
+				menu_bar();
+				
 				_ticks_buttons_menuBar = 2;				
 				
 				ticks_buttons_menuBar();
-			}
-			
-			if (RegTriggers._ticks_buttons_menuBar == true)
-			{
-				RegTriggers._ticks_buttons_menuBar = false;
-				_ticks_buttons_menuBar = 1;
 				
-				_group_scrollable_area.active = true;
-				__scrollable_area.active = true;
 			}
 			
 			// fix a camera display bug where the _button_daily_quests can also be clicked from the right side of the screen because of the chatter scrollable area scrolling part of the scene.
-			if (_ticks_buttons_menuBar == 3
 			#if miscellaneous
+				if (_ticks_buttons_menuBar == 3
 				&& __menu_bar._buttonMiscMenu.visible == true
+				)
+				{
+					if (FlxG.mouse.x > FlxG.width / 2
+					&&  FlxG.mouse.y >= FlxG.height - 50) 
+					{
+						#if miscellaneous
+							if (__menu_bar._buttonMiscMenu.active == true)
+							{
+								__menu_bar._buttonMiscMenu.active = false;
+								
+							}							
+						#end
+						
+						#if house
+							if (__menu_bar._buttonHouse != null)
+							{
+								if (__menu_bar._buttonHouse.active == true) 
+								{
+									__menu_bar._buttonHouse.active = false;
+									
+								}
+							}
+						#end
+					}
+					else
+					{
+						#if miscellaneous
+							if (__menu_bar._buttonMiscMenu.active == false)
+							{
+								__menu_bar._buttonMiscMenu.active = true;
+								
+							}
+						#end
+						
+						#if house
+							if (__menu_bar._buttonHouse != null) 
+							{
+								if (__menu_bar._buttonHouse.active == false)
+								{
+									__menu_bar._buttonHouse.active = true;
+									
+								}							
+							}
+						#end
+					}
+				
+				}
 			#end
-			)
-			{
-				if (FlxG.mouse.x > FlxG.width / 2
-				&&  FlxG.mouse.y >= FlxG.height - 50) 
-				{
-					#if miscellaneous
-						__menu_bar._buttonMiscMenu.active = false;
-					#end
-					
-					#if house
-						if (__menu_bar._buttonHouse != null) __menu_bar._buttonHouse.active = false;
-					#end
-				}
-				else
-				{
-					#if miscellaneous
-						__menu_bar._buttonMiscMenu.active = true;
-					#end
-					
-					#if house
-						if (__menu_bar._buttonHouse != null) __menu_bar._buttonHouse.active = true;
-					#end
-				}
-			}
 			
 			for (i in 0... _room_total)
 			{
@@ -994,195 +1174,61 @@ class SceneLobby extends FlxState
 					
 						_group_button_for_room[i].alpha = 0.3;
 						Reg2._lobby_button_alpha = 0.3;
-						button_clicked((i + 1));					
+						button_clicked((i + 1));
+						
 						break;
 					}
-				}
+				}				
 				
-				// is same as above but mouse is not pressed.
-				else if (FlxG.mouse.y + ButtonGeneralNetworkYes._scrollarea_offset_y >= _group_button_for_room[i]._startY && FlxG.mouse.y + ButtonGeneralNetworkYes._scrollarea_offset_y <= _group_button_for_room[i]._startY + _group_button_for_room[i]._button_height + 7 
-				&& FlxG.mouse.x + ButtonGeneralNetworkYes._scrollarea_offset_x >= _group_button_for_room[i]._startX && FlxG.mouse.x + ButtonGeneralNetworkYes._scrollarea_offset_x <= _group_button_for_room[i]._startX + _group_button_for_room[i]._button_width
-				&& FlxG.mouse.enabled == true)
-				{
-					#if html5
-						if (i < 2) 
-						{
-							_group_button_for_room[i].active = true; 
-						}
-					#end
-					
-					break;
-				}
-				
-			
 			}
 	
 			// send the offset of the scrollable area to the button class so that when scrolling the scrollable area, the buttons will not be fired at an incorrect scene location. for example, without this offset, when scrolling to the right about 100 pixels worth, the button could fire at 100 pixels to the right of the button's far right location.
 			ButtonGeneralNetworkYes._scrollarea_offset_x = __scrollable_area.scroll.x;
 			ButtonGeneralNetworkYes._scrollarea_offset_y = __scrollable_area.scroll.y;
-									
-			//############################# BUTTON TEXT
-			if (_populate_table_body == false)
-			{
-				draw_table_all_body_text();
-			}
 			
-			if (_group_button_for_room[0] != null && RegTypedef._dataMisc._roomCheckForLock[RegTypedef._dataMisc._room] == 0) 
+			//############################# BUTTON TEXT
+			if (_group_button_for_room[0] != null && RegTypedef._dataMisc._roomCheckForLock[RegTypedef._dataMisc._room] == 0 ) 
 			{	
-				// display room full text for lobby room button if max players are in that room.
-				if (RegTypedef._dataMisc._roomPlayerCurrentTotal[1] >= RegTypedef._dataMisc._roomPlayerLimit[1] && RegTypedef._dataMisc._roomPlayerLimit[1] > 0 && RegTypedef._dataMisc._roomState[1] < 8
-				|| Reg._gameId >= 2 
-				&& RegTypedef._dataMisc._roomState[1] == 8)
-				_group_button_for_room[0].label.text = "1: " + _buttonState[7];
-				
-				if (RegTypedef._dataMisc._roomPlayerCurrentTotal[2] >= RegTypedef._dataMisc._roomPlayerLimit[2] && RegTypedef._dataMisc._roomPlayerLimit[2] > 0 && RegTypedef._dataMisc._roomState[2] < 8
-				|| Reg._gameId >= 2 
-				&& RegTypedef._dataMisc._roomState[2] == 8)
-				_group_button_for_room[1].label.text = "2: " + _buttonState[7];
-
 				// display the player vs player room.
-				for (i in 1... _room_total+1)	
+				for (i in 1... _room_total + 1)	
 				{
-					// this is a room that is not full.
-					_group_button_for_room[(i-1)].label.text = Std.string(i) + ": " + _buttonState[RegTypedef._dataMisc._roomState[i]];
-				
 					// output either a room full or watch game button label.
+					// this is a room that is not full. using   will stop button highlight. remember that button needs an update to work correctly.
+						_group_button_for_room[(i - 1)].label.text = Std.string(i) + ": " + _buttonState[RegTypedef._dataMisc._roomState[i]];	
+					
 					if (RegTypedef._dataMisc._roomPlayerCurrentTotal[i] >= RegTypedef._dataMisc._roomPlayerLimit[i] && RegTypedef._dataMisc._roomPlayerLimit[i] > 0 && RegTypedef._dataMisc._roomState[i] > 1)
-					{						
+					{
 						if (RegTypedef._dataMisc._roomState[i] <= 7
 						||  RegTypedef._dataMisc._allowSpectators[i] == 0)
-							_group_button_for_room[(i-1)].label.text = Std.string(i)+ ": " + _buttonState[7];
+						{
+							_group_button_for_room[(i - 1)].label.text = Std.string(i) + ": " + _buttonState[7];
+							
+						}
 						else if (RegTypedef._dataMisc._roomState[i] == 8
 						||  RegTypedef._dataMisc._allowSpectators[i] == 1)
-							_group_button_for_room[(i-1)].label.text = Std.string(i)+ ": " + _buttonState[8];
-					}
-				}
-					
-				draw_table_all_body_text();
-				
-			}
-		}
-		
-		#if miscellaneous
-			if (RegTriggers._makeMiscellaneousMenuClassActive == true)
-			{			
-				set_not_active_for_buttons();
-				
-				RegTriggers._makeMiscellaneousMenuClassActive = false;
-				
-				if (__menu_bar.__miscellaneous_menu != null)
-				{
-					__menu_bar.__miscellaneous_menu.active = true;
-					__menu_bar.__miscellaneous_menu.visible = true;
-				}
-				
-			}
-			
-			if (RegTriggers._makeMiscellaneousMenuClassNotActive == true)
-			{
-				RegTriggers._makeMiscellaneousMenuClassNotActive = false;
-				
-				if (__menu_bar.__miscellaneous_menu != null)
-				{
-					__menu_bar.__miscellaneous_menu.visible = false;
-					__menu_bar.__miscellaneous_menu.active = false;
-				}
-					
-			}
-			
-			if (RegTriggers._miscellaneousMenuOutputClassActive == true)
-			{
-				RegTriggers._miscellaneousMenuOutputClassActive = false;
-				
-				set_not_active_for_buttons();	
-				
-				if (__miscellaneous_menu_output != null)
-				{
-					remove(__miscellaneous_menu_output);
-					__miscellaneous_menu_output.destroy();
-				}
-				
-				__miscellaneous_menu_output = new MiscellaneousMenuOutput(Reg2._miscMenuIparameter);
-				add(__miscellaneous_menu_output);					
-			}
-		#end
-		
-		#if dailyQuests
-			if (RegTriggers._make_daily_quests_not_active == true)
-			{
-				RegTriggers._make_daily_quests_not_active = false;
-				
-				__menu_bar.__daily_quests.__scrollable_area.visible = false;
-				__menu_bar.__daily_quests.__scrollable_area.active = false;
-				__menu_bar.__daily_quests.visible = false;
-				__menu_bar.__daily_quests.active = false;				
-			}
-		#end
-		
-		#if tournaments
-			if (RegTriggers._make_tournaments_not_active == true)
-			{
-				RegTriggers._make_tournaments_not_active = false;
-				
-				__menu_bar.__tournaments.visible = false;
-				__menu_bar.__tournaments.active = false;				
-			}
-		#end
-		
-		#if leaderboards
-			if (RegTriggers._make_leaderboards_not_active == true)
-			{
-				RegTriggers._make_leaderboards_not_active = false;
-				
-				if (__menu_bar.__leaderboards != null)
-				{
-					if (__menu_bar.__leaderboards.__scrollable_area != null)
-					{
-						__menu_bar.__leaderboards.__scrollable_area.visible = false;
-						__menu_bar.__leaderboards.__scrollable_area.active = false;
+						{
+							_group_button_for_room[(i - 1)].label.text = Std.string(i) + ": " + _buttonState[8];
+						}
 					}
 					
-					__menu_bar.__leaderboards.visible = false;
-					__menu_bar.__leaderboards.active = false;	
-				}			
+				}
+				
+			}	
+			
+			if (_group_button_for_room[0] != null && RegTypedef._dataMisc._roomCheckForLock[RegTypedef._dataMisc._room] == 0) 
+			{
+				if (_populate_table_body == false
+				)
+				{
+					draw_table_all_body_text();
+					
+				}
 			}
-		#end
+		}
+
+		_refresh_table = false;
 		
-		if (RegTriggers._returnToLobbyMakeButtonsActive == true)
-		{
-			RegTriggers._returnToLobbyMakeButtonsActive = false;
-			set_active_for_buttons();
-			
-			Reg._at_lobby = true;					
-		}
-		
-		// invite to room, accept? ok button pressed.
-		// "Online Player Offer Invite" event.
-		if (Reg._yesNoKeyPressValueAtMessage == 1 && Reg._buttonCodeValues == "l1000")
-		{
-			_group_scrollable_area.active = true;
-			
-			//Reg._buttonCodeValues = ""; this var is cleared at ButtonGeneralNetworkYes class
-			Reg._yesNoKeyPressValueAtMessage = 0;
-			
-			goto_room(Reg._inviteRoomNumberToJoin);
-			
-			FlxG.mouse.reset();
-			FlxG.mouse.enabled = true;
-		}
-			
-		// invite to room,  cancel button pressed.
-		// "Online Player Offer Invite" event.
-		if (Reg._yesNoKeyPressValueAtMessage >= 2 && Reg._buttonCodeValues == "l1000")
-		{			
-			_group_scrollable_area.active = true;
-			
-			//Reg._buttonCodeValues = ""; this var is cleared at ButtonGeneralNetworkYes class
-			Reg._yesNoKeyPressValueAtMessage = 0;
-			
-			FlxG.mouse.reset();
-			FlxG.mouse.enabled = true;
-		}
+		triggers();
 		
 		if (Reg._getRoomData == true)
 		{
@@ -1297,45 +1343,13 @@ class SceneLobby extends FlxState
 					// set invite var back to 0.
 					Reg._inviteRoomNumberToJoin = 0;
 				}
-			}				
+			}
+			
+			
 		}
 		
-		// room full, or room creating message.
-		if (Reg._yesNoKeyPressValueAtMessage > 0 && Reg._buttonCodeValues == "l1010")
-		{
-			_group_scrollable_area.active = true;
-			active = true;
-			_group_scrollable_area.visible = true;
-			visible = true;				
-			
-			Reg._yesNoKeyPressValueAtMessage = 0;
-			//Reg._buttonCodeValues = ""; this var is cleared at ButtonGeneralNetworkYes class
-			
-			FlxG.mouse.reset();
-			FlxG.mouse.enabled = true;
-		}
-		
-		// room not ready. someone is in that room.
-		if (Reg._yesNoKeyPressValueAtMessage > 0 && Reg._buttonCodeValues == "l1030")
-		{
-			_group_scrollable_area.active = true;
-			active = true;
-			_group_scrollable_area.visible = true;
-			visible = true;				
-			
-			Reg._yesNoKeyPressValueAtMessage = 0;
-			//Reg._buttonCodeValues = ""; this var is cleared at ButtonGeneralNetworkYes class
-			
-			FlxG.mouse.reset();
-			FlxG.mouse.enabled = true;
-		}
-		
-		if (Reg._yesNoKeyPressValueAtMessage > 0 && Reg._buttonCodeValues == "l2222")
-		{
-			Reg._yesNoKeyPressValueAtMessage = 0;
-			//Reg._buttonCodeValues = ""; this var is cleared at ButtonGeneralNetworkYes class
-			Reg._server_message = "";
-		}
+		if (Reg._yesNoKeyPressValueAtMessage > 0) 
+			button_code_values();
 		
 		// if at SceneMenu then set __scrollable_area active to false so that a mouse click at SceneMenu cannot trigger a button click at __scrollable_area.
 		if (FlxG.mouse.y >= FlxG.height - 50
@@ -1343,15 +1357,21 @@ class SceneLobby extends FlxState
 		{
 			_group_scrollable_area.active = false;
 			__scrollable_area.active = false;
+			
+			
 		}
 		
-		else
+		else if (_group_scrollable_area.active == false
+		||		 __scrollable_area.active == false)
 		{
 			_group_scrollable_area.active = true;
 			__scrollable_area.active = true;
+			
+			
 		}
 		
 		super.update(elapsed);
+	
 	}
 	
 }//

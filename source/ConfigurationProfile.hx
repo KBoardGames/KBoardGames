@@ -19,15 +19,15 @@
 package;
 
 #if avatars
-	import myLibs.avatars.Avatars;
+	import modules.avatars.Avatars;
 #end
 
 #if flags
-	import myLibs.worldFlags.WorldFlags;
+	import modules.worldFlags.WorldFlags;
 #end
 
 #if username_suggestions
-	import myLibs.usernameSuggestions.Usernames;
+	import modules.usernameSuggestions.Usernames;
 #end
 
 /**
@@ -54,6 +54,7 @@ class ConfigurationProfile extends FlxGroup
 	override public function new(menu_configurations_output:ConfigurationOutput):Void
 	{
 		super();
+		
 		__configurations_output = menu_configurations_output;
 		__e = new ConfigurationProfileEvents(menu_configurations_output);
 		add(__e);
@@ -227,6 +228,109 @@ class ConfigurationProfile extends FlxGroup
 		#end
 	}
 	
+	private function keyboard_pressed():Void
+	{
+		// if input field was in focus and a keyboard key was pressed...
+		if (Reg2._input_field_number == 1
+		&& Reg2._key_output != "")
+		{
+			CID3._usernameInput.hasFocus = true; // set the field back to focus.
+			
+			if (Reg2._key_output == "FORWARDS")
+			{
+				if (CID3._caretIndex > 0) 
+				{
+					CID3._caretIndex -= 1;
+					CID3._usernameInput.caretIndex = CID3._caretIndex;
+				}
+				
+				else CID3._usernameInput.caretIndex = 0;
+			}
+			
+			else if (Reg2._key_output == "BACKWARDS")
+			{
+				if (CID3._caretIndex < CID3._usernameInput.text.length) 
+				{
+					CID3._caretIndex += 1;
+					CID3._usernameInput.caretIndex = CID3._caretIndex;
+				}
+				
+				else CID3._usernameInput.caretIndex = CID3._usernameInput.text.length;
+			}
+			
+			else if (Reg2._key_output == "DELETE")
+			{
+				CID3._usernameInput.caretIndex = Reg2._input_field_caret_location; // since the field is once again in focus, we need to update the caret.
+				
+				// get from start of text to cursor.
+				var _str_start = CID3._usernameInput.text.substr(0, CID3._usernameInput.caretIndex);
+				
+				// and the end.
+				var _str_end = CID3._usernameInput.text.substr(_str_start.length, CID3._usernameInput.text.length);
+				
+				// then delete one character at the cursor.
+				CID3._usernameInput.text = _str_start.substr(0, _str_start.length - 1) + _str_end;
+				
+				// this is needed because we are removing a character therefore the position of the caret should change.
+				if (CID3._usernameInput.caretIndex > 0) 
+				{
+					CID3._usernameInput.caretIndex -= 1;
+					CID3._caretIndex -= 1;
+				}
+			}
+			
+			else // add a letter.
+			{
+				#if username_suggestions
+					Usernames.repopulate_username_suggestions();
+				#end
+				
+				// if cursor is at the end of the line.
+				if (CID3._usernameInput.text.length-1 == CID3._usernameInput.caretIndex)
+				{
+					CID3._usernameInput.caretIndex = Reg2._input_field_caret_location; // since the field is once again in focus, we need to update the caret.
+					
+					if (Reg2._key_output == "SPACE") CID3._usernameInput.text += " ";
+					else CID3._usernameInput.text += Reg2._key_output;
+				}
+				
+				else
+				{
+					CID3._usernameInput.caretIndex = Reg2._input_field_caret_location; // since the field is once again in focus, we need to update the caret.
+					// get from start of text to cursor.
+					var _str_start = CID3._usernameInput.text.substr(0, CID3._usernameInput.caretIndex);
+					// and the end.
+					var _str_end = CID3._usernameInput.text.substr(CID3._usernameInput.caretIndex, CID3._usernameInput.text.length);
+					
+					// output the text of the input field from the value set with the keyboard.
+					if (Reg2._key_output == "SPACE")
+					{
+						CID3._usernameInput.caretIndex = Reg2._input_field_caret_location; // since the field is once again in focus, we need to update the caret.
+						
+						CID3._usernameInput.text = _str_start + " " + _str_end;
+					
+						// this is needed because we are removing a character therefore the position of the caret should change.
+						CID3._usernameInput.caretIndex += 1;
+					}
+									
+					else 
+					{
+						CID3._usernameInput.caretIndex = Reg2._input_field_caret_location; // since the field is once again in focus, we need to update the caret.
+						
+						// at one character at cursor.
+						CID3._usernameInput.text = _str_start + Reg2._key_output + _str_end;
+						// this is needed because we are removing a character therefore the position of the caret should change.
+						CID3._usernameInput.caretIndex += 1;
+						CID3._caretIndex += 1;
+					}					
+				}				
+				
+			}
+			
+			Reg2._key_output = "";
+		}
+	}
+	
 	override public function destroy():Void
 	{
 		if (CID3._text_empty != null)
@@ -239,10 +343,17 @@ class ConfigurationProfile extends FlxGroup
 	
 	override public function update(elapsed:Float):Void
 	{
-		CID3._usernameInput.hasFocus = true;
+		if (CID3._usernameInput.hasFocus == false)
+		{
+			CID3._usernameInput.hasFocus = true;
+		}
 		
 		// if keyboard is open then set some stuff as not active.
-		if (RegTriggers._keyboard_opened == true)
+		if (RegTriggers._keyboard_opened == true
+		&&	CID3._group.active == true
+		||	RegTriggers._keyboard_opened == true
+		&&	Reg2._input_field_number == 1
+		&&	CID3._usernameInput.active == false)
 		{
 			CID3._group.active = false;
 			
@@ -250,11 +361,10 @@ class ConfigurationProfile extends FlxGroup
 			if (Reg2._input_field_number == 1)
 			{
 				CID3._usernameInput.active = true;
-			}
-			
+			}			
 		}
 		
-		else
+		else if (CID3._group.active == false)
 		{
 			CID3._group.active = true;
 		}
@@ -317,19 +427,17 @@ class ConfigurationProfile extends FlxGroup
 			if (CID3._group.visible == true
 			&&  RegTriggers._keyboard_opened == false)
 			{
-				for (i in 0... WorldFlags._flags_abbv_name.length)
+				for (i in 0... WorldFlags._flags_abbv.length)
 				{
 					WorldFlags._group_flag_highlight_sprite[i].visible = false;
 					
 					if (FlxG.mouse.x > WorldFlags._group_flag_sprites[i].x
-					&&  FlxG.mouse.x < WorldFlags._group_flag_sprites[i].x + WorldFlags._flags_width[i]
+					&&  FlxG.mouse.x < WorldFlags._group_flag_sprites[i].x + WorldFlags._group_flag_sprites[i].width
 					&&  FlxG.mouse.y + __configurations_output.__scrollable_area.scroll.y > WorldFlags._group_flag_sprites[i].y
 					&&  FlxG.mouse.y + __configurations_output.__scrollable_area.scroll.y < WorldFlags._group_flag_sprites[i].y + 40
 					&&  FlxG.mouse.y < FlxG.height - 50)
-					{					
-						// Avatars._image_avatar_highlighted.x = WorldFlags._group_flag_sprites[i].x;
-						// Avatars._image_avatar_highlighted.y = WorldFlags._group_flag_sprites[i].y;
-						
+					{
+						WorldFlags._group_flag_highlight_sprite[i].makeGraphic(Std.int(WorldFlags._group_flag_sprites[i].width) + 6, 40 + 6, FlxColor.WHITE);
 						WorldFlags._group_flag_highlight_sprite[i].visible = true;
 						// when the mouse is over a flag this will change the highlight image from white to a different color.
 						if (_ticks <= 5) WorldFlags._group_flag_highlight_sprite[i].color = FlxColor.WHITE;
@@ -343,20 +451,18 @@ class ConfigurationProfile extends FlxGroup
 							
 							RegCustom._world_flags_number[Reg._tn] = i;
 								
-							WorldFlags._image_selected_world_flag.loadGraphic("myLibs/worldFlags/assets/images/" + WorldFlags._flags_abbv_name[RegCustom._world_flags_number[Reg._tn]].toLowerCase() + ".png");
+							WorldFlags._image_selected_world_flag.loadGraphic("modules/worldFlags/assets/images/" + WorldFlags._flags_abbv[RegCustom._world_flags_number[Reg._tn]].toLowerCase() + ".png");
 						}
 					} 
 				}
 			}
 		
+		#end	
+		
 		_ticks += 1; if (_ticks >= 15) _ticks = 5;
-		#end
-		
-		
-		
+			
 		//#############################
 		// username input field.
-		// if mouse click then the object will have focus.
 		if (CID3._usernameInput.hasFocus == true) 
 		{
 			if (CID3._usernameInput.text == "") CID3._usernameInput.caretIndex = 0;
@@ -364,118 +470,11 @@ class ConfigurationProfile extends FlxGroup
 			// these are needed so that the input field can be set back to focused after a keyboard button press.
 			Reg2._input_field_caret_location = CID3._usernameInput.caretIndex;
 			Reg2._input_field_number = 1;
-		}
-				
-		// if input field was in focus and a keyboard key was pressed...
-		if (Reg2._input_field_number == 1
-		&& Reg2._key_output != "")
-		{
-			CID3._usernameInput.hasFocus = true; // set the field back to focus.
-			
-			if (Reg2._key_output == "FORWARDS")
-			{
-				Reg2._key_output = "";
-				
-				if (CID3._caretIndex > 0) 
-				{
-					CID3._caretIndex -= 1;
-					CID3._usernameInput.caretIndex = CID3._caretIndex;
-				}
-				
-				else CID3._usernameInput.caretIndex = 0;
-			}
-			
-			else if (Reg2._key_output == "BACKWARDS")
-			{
-				Reg2._key_output = "";
-				
-				if (CID3._caretIndex < CID3._usernameInput.text.length) 
-				{
-					CID3._caretIndex += 1;
-					CID3._usernameInput.caretIndex = CID3._caretIndex;
-				}
-				
-				else CID3._usernameInput.caretIndex = CID3._usernameInput.text.length;
-			}
-			
-			else if (Reg2._key_output == "DELETE")
-			{
-				CID3._usernameInput.caretIndex = Reg2._input_field_caret_location; // since the field is once again in focus, we need to update the caret.
-				
-				// get from start of text to cursor.
-				var _str_start = CID3._usernameInput.text.substr(0, CID3._usernameInput.caretIndex);
-				
-				// and the end.
-				var _str_end = CID3._usernameInput.text.substr(_str_start.length, CID3._usernameInput.text.length);
-				
-				// then delete one character at the cursor.
-				CID3._usernameInput.text = _str_start.substr(0, _str_start.length - 1) + _str_end;
-				
-				// this is needed because we are removing a character therefore the position of the caret should change.
-				if (CID3._usernameInput.caretIndex > 0) 
-				{
-					CID3._usernameInput.caretIndex -= 1;
-					CID3._caretIndex -= 1;
-				}
-				
-				Reg2._key_output = "";
-			}
-			
-			else // add a letter.
-			{
-				#if username_suggestions
-					Usernames.repopulate_username_suggestions();
-				#end
-				
-				// if cursor is at the end of the line.
-				if (CID3._usernameInput.text.length-1 == CID3._usernameInput.caretIndex)
-				{
-					CID3._usernameInput.caretIndex = Reg2._input_field_caret_location; // since the field is once again in focus, we need to update the caret.
-					
-					if (Reg2._key_output == "SPACE") CID3._usernameInput.text += " ";
-					else CID3._usernameInput.text += Reg2._key_output;
-					
-					Reg2._key_output = "";
-				}
-				
-				else
-				{
-					CID3._usernameInput.caretIndex = Reg2._input_field_caret_location; // since the field is once again in focus, we need to update the caret.
-					// get from start of text to cursor.
-					var _str_start = CID3._usernameInput.text.substr(0, CID3._usernameInput.caretIndex);
-					// and the end.
-					var _str_end = CID3._usernameInput.text.substr(CID3._usernameInput.caretIndex, CID3._usernameInput.text.length);
-					
-					// output the text of the input field from the value set with the keyboard.
-					if (Reg2._key_output == "SPACE")
-					{
-						CID3._usernameInput.caretIndex = Reg2._input_field_caret_location; // since the field is once again in focus, we need to update the caret.
-						
-						CID3._usernameInput.text = _str_start + " " + _str_end;
-					
-						// this is needed because we are removing a character therefore the position of the caret should change.
-						CID3._usernameInput.caretIndex += 1;
-					}
-									
-					else 
-					{
-						CID3._usernameInput.caretIndex = Reg2._input_field_caret_location; // since the field is once again in focus, we need to update the caret.
-						
-						// at one character at cursor.
-						CID3._usernameInput.text = _str_start + Reg2._key_output + _str_end;
-						// this is needed because we are removing a character therefore the position of the caret should change.
-						CID3._usernameInput.caretIndex += 1;
-						CID3._caretIndex += 1;
-					}
-					
-					Reg2._key_output = "";
-				}				
-				
-			}
-			
+			//var update_needed not needed here.
 		}
 		
-				
+		if (Reg2._key_output != "") keyboard_pressed();
+		
 		if (RegTriggers._keyboard_open == true)
 		{
 			RegTriggers._keyboard_open = false;
@@ -513,26 +512,36 @@ class ConfigurationProfile extends FlxGroup
 			#end
 		}
 		
-		if (CID3._usernameInput.hasFocus == true)
+		if (CID3._usernameInput.hasFocus == true
+		&&	CID3._usernameInput.fieldBorderColor 
+		!=	FlxColor.RED)
 		{
-			CID3._usernameInput.fieldBorderColor = FlxColor.RED;			
+			CID3._usernameInput.fieldBorderColor = FlxColor.RED;	
 			CID3._usernameInput.fieldBorderThickness = 3;
 		}
-		else
+		
+		else if (CID3._usernameInput.hasFocus == false
+		&&		 CID3._usernameInput.fieldBorderColor 
+		!=		 FlxColor.BLACK)
 		{
-			CID3._usernameInput.fieldBorderColor = FlxColor.BLACK;			
+			CID3._usernameInput.fieldBorderColor = FlxColor.BLACK;	
 			CID3._usernameInput.fieldBorderThickness = 1;
-				
 		}
 		
 		//------------------------------
-		if (CID3._button_p1.has_toggle == true) 
-			RegCustom._profile_username_p1[Reg._tn] = CID3._usernameInput.text;
+		if (CID3._button_p1.has_toggle == true
+		&&	RegCustom._profile_username_p1[Reg._tn] 
+		!=	CID3._usernameInput.text) 
+		{
+			RegCustom._profile_username_p1[Reg._tn] = CID3._usernameInput.text;			
+		}
 		
-		if (CID3._button_p2.has_toggle == true) 
+		if (CID3._button_p2.has_toggle == true
+		&&	RegCustom._profile_username_p2[Reg._tn] 
+		!=	CID3._usernameInput.text) 
+		{
 			RegCustom._profile_username_p2[Reg._tn] = CID3._usernameInput.text;
-				
-		//-------------------------------
+		}
 		
 		for (i in 0... CID3._group_button_toggle.length)
 		{
@@ -541,7 +550,6 @@ class ConfigurationProfile extends FlxGroup
 			&& FlxG.mouse.x + ButtonGeneralNetworkNo._scrollarea_offset_x >= CID3._group_button_toggle[i]._startX &&  FlxG.mouse.x + ButtonGeneralNetworkNo._scrollarea_offset_x <= CID3._group_button_toggle[i]._startX + CID3._group_button_toggle[i]._button_width && FlxG.mouse.justPressed == true )
 			{
 				button_toggle_number(i);
-				
 				break;
 			}
 			
@@ -554,13 +562,10 @@ class ConfigurationProfile extends FlxGroup
 			&& FlxG.mouse.x + ButtonGeneralNetworkNo._scrollarea_offset_x >= CID3._group_button[i]._startX &&  FlxG.mouse.x + ButtonGeneralNetworkNo._scrollarea_offset_x <= CID3._group_button[i]._startX + CID3._group_button[i]._button_width && FlxG.mouse.justPressed == true )
 			{
 				button_number(i);
-				
 				break;
 			}
 			
 		}
-		
-		super.update(elapsed);		
 		
 		if (ActionInput.justPressed() == true
 		&&  FlxG.mouse.x > CID3._usernameInput.x
@@ -590,5 +595,8 @@ class ConfigurationProfile extends FlxGroup
 				#end
 			}
 		}
+		
+		super.update(elapsed);		
+		
 	}
 }//

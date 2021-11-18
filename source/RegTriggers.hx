@@ -66,13 +66,7 @@ class RegTriggers
 	public static var _actionMessage = false;
 	
 	public static var _chessCheckmateEvent:Bool = false;
-	
-	
-	/******************************
-	* used to populate the online users list at OnlinePlayersList.hx.
-	*/
-	public static var _onlineList:Bool = false;
-	
+		
 	/******************************
 	 * at GameImageCurrentUnit.hx. this stops the currentUnit image from displaying after the dice is clicked. a value of true = display currentUnit image.	
 	 */
@@ -221,7 +215,7 @@ class RegTriggers
 	 * refresh list button was pressed at waiting room. trigger event.
 	 * this is used to stop the population of the list when first entering the waiting room.
 	 */
-	public static var _waiting_room_refresh_list:Bool = false;
+	public static var _waiting_room_refresh_invite_list:Bool = false;
 	
 	/*****************************
 	 * jump to the 8 player standard chess tournament options.
@@ -238,24 +232,26 @@ class RegTriggers
 	 */
 	public static var _buttons_set_not_active:Bool = false;
 	
+	/******************************
+	 * should the chatter scroll right?
+	 */
+	public static var _scrollRight:Bool = false;
+	
 	public static function resetTriggers():Void
 	{
 		_playerLeftGame = false;
 		_win = false;
 		_loss = false;
 		_draw = false;
-		
+		_scrollRight = false;
 		_messageWin = "";
 		_messageLoss = "";
 		_messageDraw = "";
 		_chessCheckmateEvent = false;
-		_onlineList = false;
-		
 		__scene_waiting_room = false;
 		_createRoom = false;
 		_lobby = false;
 		_actionMessage = false;
-		
 		_signatureGame = false;
 		_signatureGameUnitImage = true;
 		_highlightOnlyOuterUnits = false;
@@ -295,7 +291,7 @@ class RegTriggers
 		_recreate_chatter_input_chat = false;
 		_notationPrint = false;
 		_jump_to_tournament_standard_chess_8 = false;
-		_waiting_room_refresh_list = false;
+		_waiting_room_refresh_invite_list = false;
 		_ticks_buttons_menuBar = false;
 		_buttons_set_not_active = false;
 	}	

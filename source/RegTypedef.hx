@@ -1743,7 +1743,7 @@ class RegTypedef
 	}
 	
 	/******************************
-	 * every player's name. also, win, lose and draw stats of the player.
+	 * get EVERY player's name from any room state. also, win, lose and draw stats for each player.
 	 */ 
 	public static var _dataOnlinePlayers:DataOnlinePlayers =
 	{

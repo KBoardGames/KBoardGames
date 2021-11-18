@@ -19,7 +19,11 @@
 package;
 
 #if house
-	import myLibs.house.*;
+	import modules.house.*;
+#end
+
+#if wheelEstate
+	import modules.games.wheelEstate.*;
 #end
 
 /**
@@ -153,24 +157,26 @@ class IdsMessageBox extends FlxGroup
 				// player kick or ban players. 13000-13999.
 				case 13005: _msg = new MessageBox(13005, "Kick", "Ban", true, true, true, false, "Kick " + RegTypedef._dataPlayers._actionWho + "?", 'Select "kick" to stop this player from entering your room for 15 minutes or select "ban" to reject player from enter this room for this session.');
 				
-				// signature game. 14000-14999.
-				case 14010: _msg = new MessageBox(14010, "Yes", "No", true, true, false, false, "Notice!.", 'You do not have enough cash to end turn. Total debt is $' + SignatureGameMain._totalDebtAmount + '. To pay the debt, select your unit to get cash then select from the buttons that appear.');
-				
-				case 14020: _msg = new MessageBox(14020, "Yes", "No", true, true, false, false, "Notice!.", "For a trade proposal, you need at minimum, the other player's unit selected, and either your unit selected or your cash value greater than zero.");
-				
-				case 14025: _msg = new MessageBox(14025, "Yes", "No", true, true, true, false, "Sell " + SignatureGameMain._string, "You have " + Reg._gameHouseTaxiCabOrCafeStoreForPiece[Reg._gameYYnew2][Reg._gameXXnew2] + " " + SignatureGameMain._string + " worth $" + Std.int(SignatureGameMain._buyPriceForHouseTaxiCafe[Reg._gameHouseTaxiCabOrCafeStoreForPiece[Reg._gameYYnew2][Reg._gameXXnew2] - 1][SignatureGameMain._int]) + ". Sell all " + SignatureGameMain._string + " at $" + SignatureGameMain._sellAllServicesPrice + " which is 50% precent of total value?");
-				
-				case 14125: _msg = new MessageBox(14125, "Yes", "No", true, true, true, false, "Buy Land.", "Are you sure?");
-				
-				case 14200: _msg = new MessageBox(14200, "Yes", "No", true, true, false, false, "Notice!.", "You do not have enough cash to pay for " + SignatureGameMain._string + " Land lost.");
-				
-				case 14300: _msg = new MessageBox(14300, "Pay", "Lose land", true, true, true, false, "Pay Mortgage.", "Mortgage for " + SignatureGameMain._string + " is due. Pay " + Std.int(Math.fround(SignatureGameMain._mortgageLandPrice[Reg._move_number_next][SignatureGameMain._mortgageLandPriceCurrentUnitIndex])) + " or lose land?");
-				
-				case 14470: _msg = new MessageBox(14470, "Yes", "No", true, true, false, false, "Notice!.", 'You cannot mortgage a land without services.');
-				
-				case 14500: _msg = new MessageBox(14500, "Yes", "No", true, true, false, false, SignatureGameMain._unitTitle.text, "This land is already mortgaged.");
-				
-				case 14550: _msg = new MessageBox(14550, "Yes", "No", true, true, true, false, "Get Mortgage?", "You have a land cash worth $" + FlxMath.roundDecimal(SignatureGameMain._unitBuyingLandPrice[SignatureGameMain._int], 0) + " and " + Reg._gameHouseTaxiCabOrCafeStoreForPiece[Reg._gameYYnew2][Reg._gameXXnew2] + " " + SignatureGameMain._string + " worth " + FlxMath.roundDecimal(SignatureGameMain._buyPriceForHouseTaxiCafe[Reg._gameHouseTaxiCabOrCafeStoreForPiece[Reg._gameYYnew2][Reg._gameXXnew2]-1][SignatureGameMain._int], 0) + ". Total cash is " + SignatureGameMain._float+ ". After 90% total Cash ($" + SignatureGameMain._mortgagePrice + " - $" + SignatureGameMain._mortgageProcessingFee + " processing fee), you will receive $" + SignatureGameMain._float2 + ".");
+				#if wheelEstate
+					// signature game. 14000-14999.
+					case 14010: _msg = new MessageBox(14010, "Yes", "No", true, true, false, false, "Notice!.", 'You do not have enough cash to end turn. Total debt is $' + SignatureGameMain._totalDebtAmount + '. To pay the debt, select your unit to get cash then select from the buttons that appear.');
+					
+					case 14020: _msg = new MessageBox(14020, "Yes", "No", true, true, false, false, "Notice!.", "For a trade proposal, you need at minimum, the other player's unit selected, and either your unit selected or your cash value greater than zero.");
+					
+					case 14025: _msg = new MessageBox(14025, "Yes", "No", true, true, true, false, "Sell " + SignatureGameMain._string, "You have " + Reg._gameHouseTaxiCabOrCafeStoreForPiece[Reg._gameYYnew2][Reg._gameXXnew2] + " " + SignatureGameMain._string + " worth $" + Std.int(SignatureGameMain._buyPriceForHouseTaxiCafe[Reg._gameHouseTaxiCabOrCafeStoreForPiece[Reg._gameYYnew2][Reg._gameXXnew2] - 1][SignatureGameMain._int]) + ". Sell all " + SignatureGameMain._string + " at $" + SignatureGameMain._sellAllServicesPrice + " which is 50% precent of total value?");
+					
+					case 14125: _msg = new MessageBox(14125, "Yes", "No", true, true, true, false, "Buy Land.", "Are you sure?");
+					
+					case 14200: _msg = new MessageBox(14200, "Yes", "No", true, true, false, false, "Notice!.", "You do not have enough cash to pay for " + SignatureGameMain._string + " Land lost.");
+					
+					case 14300: _msg = new MessageBox(14300, "Pay", "Lose land", true, true, true, false, "Pay Mortgage.", "Mortgage for " + SignatureGameMain._string + " is due. Pay " + Std.int(Math.fround(SignatureGameMain._mortgageLandPrice[Reg._move_number_next][SignatureGameMain._mortgageLandPriceCurrentUnitIndex])) + " or lose land?");
+					
+					case 14470: _msg = new MessageBox(14470, "Yes", "No", true, true, false, false, "Notice!.", 'You cannot mortgage a land without services.');
+					
+					case 14500: _msg = new MessageBox(14500, "Yes", "No", true, true, false, false, SignatureGameMain._unitTitle.text, "This land is already mortgaged.");
+					
+					case 14550: _msg = new MessageBox(14550, "Yes", "No", true, true, true, false, "Get Mortgage?", "You have a land cash worth $" + FlxMath.roundDecimal(SignatureGameMain._unitBuyingLandPrice[SignatureGameMain._int], 0) + " and " + Reg._gameHouseTaxiCabOrCafeStoreForPiece[Reg._gameYYnew2][Reg._gameXXnew2] + " " + SignatureGameMain._string + " worth " + FlxMath.roundDecimal(SignatureGameMain._buyPriceForHouseTaxiCafe[Reg._gameHouseTaxiCabOrCafeStoreForPiece[Reg._gameYYnew2][Reg._gameXXnew2]-1][SignatureGameMain._int], 0) + ". Total cash is " + SignatureGameMain._float+ ". After 90% total Cash ($" + SignatureGameMain._mortgagePrice + " - $" + SignatureGameMain._mortgageProcessingFee + " processing fee), you will receive $" + SignatureGameMain._float2 + ".");
+				#end
 				
 				// Action commands. sysop menu. 15000-15999.
 				case 15000: _msg = new MessageBox(15000, "Yes", "No", true, true, true, false, "Goodbye.", "Disconnect from server?");

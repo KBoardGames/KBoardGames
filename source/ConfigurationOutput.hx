@@ -19,7 +19,7 @@
 package;
 
 #if avatars
-	import myLibs.avatars.Avatars;
+	import modules.avatars.Avatars;
 #end
 
 
@@ -375,16 +375,18 @@ class ConfigurationOutput extends FlxGroup
 			}
 		}
 				
-		var _text = new FlxText(870, 8, 0, "Theme", Reg._font_size);
+		var _text = new FlxText(870, 15 + Reg.__title_bar_offset_y, 0, "Theme", Reg._font_size);
 		_text.font = Reg._fontDefault;
+		_text.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
+		_text.color = RegCustomColors.client_text_color();
 		_text.scrollFactor.set(0, 0);
 		add(_text);
 		
-		_button_theme = new ButtonGeneralNetworkNo(960, 5, RegCustom._theme_name[ii].substr(0, RegCustom._theme_name[ii].length-5), 275, 35, Reg._font_size, 0xffffffff, 0, null, 0xff111111);
+		_button_theme = new ButtonGeneralNetworkNo(960, 12 + Reg.__title_bar_offset_y, RegCustom._theme_name[ii].substr(0, RegCustom._theme_name[ii].length-5), 275, 35, Reg._font_size, 0xffffffff, 0, null, 0xff111111);
 		_button_theme.label.font = Reg._fontDefault;
 		add(_button_theme);
 		
-		_button_theme_minus = new ButtonGeneralNetworkNo(1250, 5, "-", 35, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, button_theme_minus, RegCustom._button_color[Reg._tn]);
+		_button_theme_minus = new ButtonGeneralNetworkNo(1250, 12 + Reg.__title_bar_offset_y, "-", 35, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, button_theme_minus, RegCustom._button_color[Reg._tn]);
 		_button_theme_minus.label.font = Reg._fontDefault;
 		_button_theme_minus.visible = false;
 		_button_theme_minus.active = false;
@@ -398,7 +400,7 @@ class ConfigurationOutput extends FlxGroup
 			_button_theme_minus.active = true;
 		}		
 		
-		_button_theme_plus = new ButtonGeneralNetworkNo(1300, 5, "+", 35, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, button_theme_plus, RegCustom._button_color[Reg._tn]);
+		_button_theme_plus = new ButtonGeneralNetworkNo(1300, 12 + Reg.__title_bar_offset_y, "+", 35, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, button_theme_plus, RegCustom._button_color[Reg._tn]);
 		_button_theme_plus.label.font = Reg._fontDefault;
 		_button_theme_plus.visible = false;
 		_button_theme_plus.active = false;

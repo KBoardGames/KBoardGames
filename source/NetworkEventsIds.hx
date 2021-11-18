@@ -18,14 +18,31 @@
 
 package;
 
+#if checkers
+	import modules.games.checkers.*;
+#end
+
+#if chess
+	import modules.games.chess.*;
+#end
+
+#if reversi
+	import modules.games.reversi.*;
+#end
+
+#if wheelEstate
+	import modules.games.wheelEstate.*;
+#end
+
 /**
  * highlights which players turn it is to move. 
  * @author kboardgames.com
  */
 class NetworkEventsIds extends FlxState
 {
-
-	private var __chess_check_or_checkmate:ChessCheckOrCheckmate;
+	#if chess
+		private var __chess_check_or_checkmate:ChessCheckOrCheckmate;
+	#end
 	
 	/******************************
 	 * this class determines if a game has ended naturally, such as no move units to move to, or no more pieces for that player on board, etc.
@@ -38,8 +55,10 @@ class NetworkEventsIds extends FlxState
 		
 		__ids_win_lose_or_draw = ids_win_lose_or_draw;
 		
-		__chess_check_or_checkmate = new ChessCheckOrCheckmate(__ids_win_lose_or_draw);
-		add(__chess_check_or_checkmate);
+		#if chess
+			__chess_check_or_checkmate = new ChessCheckOrCheckmate(__ids_win_lose_or_draw);
+			add(__chess_check_or_checkmate);
+		#end
 		
 		ids();
 	}
@@ -111,78 +130,80 @@ class NetworkEventsIds extends FlxState
 	{
 		PlayState.clientSocket.events.on("Player Move Id 0", function (_data)
 		{
-			if (_data._room == RegTypedef._dataGame._room)
-			{
-				defenderOrAttcker();
-				
-				if (_data.id == RegTypedef._dataGame.id) 
+			#if checkers
+				if (_data._room == RegTypedef._dataGame._room)
 				{
-					GameClearVars.clearVarsOnMoveUpdate();
-					CheckersCapturingUnits.capturingUnits();
-									
-					return; // return if this is the client that first moved the _player.
-				}
-				
-				if (Reg._playerLeftGame == true ) return;
-				
-			// true if this instance matches the unit number that the player would like to move to.
-				Reg._gameUnitNumberNew = _data._gameUnitNumberNew;
-				Reg._gameUnitNumberOld = _data._gameUnitNumberOld;
-				
-				if (RegTypedef._dataPlayers._spectatorWatching == false
-				)
-				{
-					Reg._gameXXnew = _data._gameXXnew;
-					Reg._gameYYnew = _data._gameYYnew;
-					Reg._gameXXold = _data._gameXXold;
-					Reg._gameYYold = _data._gameYYold;	
-					Reg._gameXXold2 = _data._gameXXold2;
-					Reg._gameYYold2 = _data._gameYYold2;
-				}
-				
-				else
-				{
-					Reg._gameXXnew = -1;
-					Reg._gameYYnew = -1;
-				}					
-				
-				Reg._triggerNextStuffToDo = _data._triggerNextStuffToDo;
-				Reg._isThisPieceAtBackdoor = _data._isThisPieceAtBackdoor;
-				
-				Reg._checkersFoundPieceToJumpOver = false;
+					defenderOrAttcker();
+					
+					if (_data.id == RegTypedef._dataGame.id) 
+					{
+						GameClearVars.clearVarsOnMoveUpdate();
+						CheckersCapturingUnits.capturingUnits();
+										
+						return; // return if this is the client that first moved the _player.
+					}
+					
+					if (Reg._playerLeftGame == true ) return;
+					
+				// true if this instance matches the unit number that the player would like to move to.
+					Reg._gameUnitNumberNew = _data._gameUnitNumberNew;
+					Reg._gameUnitNumberOld = _data._gameUnitNumberOld;
+					
+					if (RegTypedef._dataPlayers._spectatorWatching == false
+					)
+					{
+						Reg._gameXXnew = _data._gameXXnew;
+						Reg._gameYYnew = _data._gameYYnew;
+						Reg._gameXXold = _data._gameXXold;
+						Reg._gameYYold = _data._gameYYold;	
+						Reg._gameXXold2 = _data._gameXXold2;
+						Reg._gameYYold2 = _data._gameYYold2;
+					}
+					
+					else
+					{
+						Reg._gameXXnew = -1;
+						Reg._gameYYnew = -1;
+					}					
+					
+					Reg._triggerNextStuffToDo = _data._triggerNextStuffToDo;
+					Reg._isThisPieceAtBackdoor = _data._isThisPieceAtBackdoor;
+					
+					Reg._checkersFoundPieceToJumpOver = false;
 
-				if (Reg._gameYYnew != -1 && Reg._gameXXnew != -1)
-				CheckersCapturingUnits.jumpCapturingUnitsForPiece(Reg._gameYYnew, Reg._gameXXnew, Reg._playerMoving);
-				
-				if (Reg._checkersFoundPieceToJumpOver == true)
-					Reg._checkersIsThisFirstMove = false;
-				
-				
-				Reg._move_number_next += 1;
-													
-				// what player moves next. a value of 3 means its the third player. eg, Reg._gameDiceCurrentIndex[2] stores the location of the third player's piece.
-				if (Reg._move_number_next >= 2)
-				Reg._move_number_next = 0;
-				
-				if (Reg._gameUnitNumberNew > -1) 
-				{				
-					Reg._capturingUnitsForImages[Reg._playerMoving][Reg._gameYYnew][Reg._gameXXnew] = 1;
-					Reg._gamePointValueForPiece[Reg._gameYYnew][Reg._gameXXnew] = Reg._gamePointValueForPiece[Reg._gameYYold][Reg._gameXXold];
-					Reg._gameUniqueValueForPiece[Reg._gameYYnew][Reg._gameXXnew] = Reg._gameUniqueValueForPiece[Reg._gameYYold][Reg._gameXXold];
+					if (Reg._gameYYnew != -1 && Reg._gameXXnew != -1)
+					CheckersCapturingUnits.jumpCapturingUnitsForPiece(Reg._gameYYnew, Reg._gameXXnew, Reg._playerMoving);
 					
-					Reg._gamePointValueForPiece[Reg._gameYYold][Reg._gameXXold] = 0;
-					Reg._gameUniqueValueForPiece[Reg._gameYYold][Reg._gameXXold] = 0;
-					Reg._otherPlayer = true;
+					if (Reg._checkersFoundPieceToJumpOver == true)
+						Reg._checkersIsThisFirstMove = false;
 					
-					GameClearVars.clearVarsOnMoveUpdate();				
-					CheckersCapturingUnits.capturingUnits();	
-					HUD.gameTurns(Reg._gameYYnew, Reg._gameXXnew); // each player has 50 turns at start of game. when a player has no more turns then the game is a draw.
 					
-					GameClearVars.clearCheckAndCheckmateVars();
-				}	
-				
-				__ids_win_lose_or_draw.canPlayerMove1();
-			}
+					Reg._move_number_next += 1;
+														
+					// what player moves next. a value of 3 means its the third player. eg, Reg._gameDiceCurrentIndex[2] stores the location of the third player's piece.
+					if (Reg._move_number_next >= 2)
+					Reg._move_number_next = 0;
+					
+					if (Reg._gameUnitNumberNew > -1) 
+					{				
+						Reg._capturingUnitsForImages[Reg._playerMoving][Reg._gameYYnew][Reg._gameXXnew] = 1;
+						Reg._gamePointValueForPiece[Reg._gameYYnew][Reg._gameXXnew] = Reg._gamePointValueForPiece[Reg._gameYYold][Reg._gameXXold];
+						Reg._gameUniqueValueForPiece[Reg._gameYYnew][Reg._gameXXnew] = Reg._gameUniqueValueForPiece[Reg._gameYYold][Reg._gameXXold];
+						
+						Reg._gamePointValueForPiece[Reg._gameYYold][Reg._gameXXold] = 0;
+						Reg._gameUniqueValueForPiece[Reg._gameYYold][Reg._gameXXold] = 0;
+						Reg._otherPlayer = true;
+						
+						GameClearVars.clearVarsOnMoveUpdate();				
+						CheckersCapturingUnits.capturingUnits();	
+						HUD.gameTurns(Reg._gameYYnew, Reg._gameXXnew); // each player has 50 turns at start of game. when a player has no more turns then the game is a draw.
+						
+						//GameClearVars.clearCheckAndCheckmateVars();
+					}	
+					
+					__ids_win_lose_or_draw.canPlayerMove1();
+				}
+			#end
 		});
 	}
 
@@ -194,110 +215,112 @@ class NetworkEventsIds extends FlxState
 	{
 		PlayState.clientSocket.events.on("Player Move Id 1", function (_data)
 		{
-			if (_data._room == RegTypedef._dataGame._room)
-			{
-				defenderOrAttcker();
-				
-				if (_data.id == RegTypedef._dataGame.id) 
+			#if chess
+				if (_data._room == RegTypedef._dataGame._room)
 				{
-					GameClearVars.clearVarsOnMoveUpdate();
-					ChessCapturingUnits.capturingUnits();
-													
-					return; // return if this is the client that first moved the _player.
-				}
-				
-				if (Reg._playerLeftGame == true ) return;
-				
-				Reg._gameUnitNumberNew = _data._gameUnitNumberNew;
-				Reg._gameUnitNumberOld = _data._gameUnitNumberOld;
-				Reg._gameUnitNumberNew2 = _data._gameUnitNumberNew2;
-				Reg._gameUnitNumberOld2 = _data._gameUnitNumberOld2;
-				
-				Reg._imageValueOfUnitOld3 = _data._piece_capturing_image_value;
-				
-				if (RegTypedef._dataPlayers._spectatorWatching == false
-				)
-				{
-					Reg._gameXXnew = _data._gameXXnew;
-					Reg._gameYYnew = _data._gameYYnew;
-					Reg._gameXXold = _data._gameXXold;
-					Reg._gameYYold = _data._gameYYold;	
-					Reg._gameXXnew2 = _data._gameXXnew2;
-					Reg._gameYYnew2 = _data._gameYYnew2;
-					Reg._gameXXold2 = _data._gameXXold2;
-					Reg._gameYYold2 = _data._gameYYold2;
-				}
-				
-				else
-				{
-					Reg._gameXXnew = -1;
-					Reg._gameYYnew = -1;
-					Reg._gameXXnew2 = -1;
-					Reg._gameYYnew2 = -1;
-				}				
-				
-				Reg._isEnPassant = _data._isEnPassant;
-				Reg._chessEnPassantPawnNumber = _data._isEnPassantPawnNumber;
-				Reg._triggerNextStuffToDo = _data._triggerNextStuffToDo;
-				Reg._pointValue2 = _data._pointValue2;
-				Reg._uniqueValue2 = _data._uniqueValue2;
-				Reg._promotePieceLetter = _data._promotePieceLetter;
-				Reg._doneEnPassant = _data._doneEnPassant;
-				
-				Reg._move_number_next += 1;
-													
-				// what player moves next. a value of 3 means its the third player. eg, Reg._gameDiceCurrentIndex[2] stores the location of the third player's piece.
-				if (Reg._move_number_next >= 2)
-				Reg._move_number_next = 0;
-				
-				if (_data._gameMessage == "Check" || _data._gameMessage == "Checkmate")
-				{
-					Reg._chessOriginOfCheckY[Reg._playerMoving] = Reg._gameYYnew;
-					Reg._chessOriginOfCheckX[Reg._playerMoving] = Reg._gameXXnew;
-				}
-			
-				if (Reg._gameUnitNumberNew > -1) 
-				{				
-					GameHistoryAndNotations.notationX();
-
-					Reg._otherPlayer = false;
-					Reg._gameDidFirstMove = false;
-					HUD.gameTurns(Reg._gameYYnew, Reg._gameXXnew); // each player has 50 turns at start of game. when a player has no more turns then the game is a draw.
+					defenderOrAttcker();
 					
-					Reg._capturingUnitsForImages[Reg._playerMoving][Reg._gameYYnew][Reg._gameXXnew] = 1;
-					Reg._gamePointValueForPiece[Reg._gameYYnew][Reg._gameXXnew] = Reg._gamePointValueForPiece[Reg._gameYYold][Reg._gameXXold];
-					Reg._gameUniqueValueForPiece[Reg._gameYYnew][Reg._gameXXnew] = Reg._gameUniqueValueForPiece[Reg._gameYYold][Reg._gameXXold];
-					
-					// is this a chess promoted piece?
-					if (Reg._gamePointValueForPiece[Reg._gameYYnew][Reg._gameXXnew] == 1 || Reg._gamePointValueForPiece[Reg._gameYYnew][Reg._gameXXnew] == 11)
+					if (_data.id == RegTypedef._dataGame.id) 
 					{
-						// is the pawn at the unit where it can be promoted...
-						if (Reg._gameYYnew == 0 || Reg._gameYYnew == 7)
-						{
-							Reg._gamePointValueForPiece[Reg._gameYYnew][Reg._gameXXnew] = _data._pieceValue;
-							Reg._gameUniqueValueForPiece[Reg._gameYYnew][Reg._gameXXnew] = _data._uniqueValue;
-							Reg._chessPawnPromotedMessage = true;
-							
-							openSubState( new ChessPromote());
-						}
+						GameClearVars.clearVarsOnMoveUpdate();
+						ChessCapturingUnits.capturingUnits();
+														
+						return; // return if this is the client that first moved the _player.
 					}
 					
+					if (Reg._playerLeftGame == true ) return;
 					
-					Reg._gamePointValueForPiece[Reg._gameYYold][Reg._gameXXold] = 0;
-					Reg._gameUniqueValueForPiece[Reg._gameYYold][Reg._gameXXold] = 0;
-					Reg._otherPlayer = true;
+					Reg._gameUnitNumberNew = _data._gameUnitNumberNew;
+					Reg._gameUnitNumberOld = _data._gameUnitNumberOld;
+					Reg._gameUnitNumberNew2 = _data._gameUnitNumberNew2;
+					Reg._gameUnitNumberOld2 = _data._gameUnitNumberOld2;
 					
-					GameClearVars.clearVarsOnMoveUpdate();				
-					ChessEnPassant.getVarsFromOtherPlayer();		
-					ChessCapturingUnits.capturingUnits();	
-					__chess_check_or_checkmate.isThisCheckOrCheckmate();
+					Reg._imageValueOfUnitOld3 = _data._piece_capturing_image_value;
 					
+					if (RegTypedef._dataPlayers._spectatorWatching == false
+					)
+					{
+						Reg._gameXXnew = _data._gameXXnew;
+						Reg._gameYYnew = _data._gameYYnew;
+						Reg._gameXXold = _data._gameXXold;
+						Reg._gameYYold = _data._gameYYold;	
+						Reg._gameXXnew2 = _data._gameXXnew2;
+						Reg._gameYYnew2 = _data._gameYYnew2;
+						Reg._gameXXold2 = _data._gameXXold2;
+						Reg._gameYYold2 = _data._gameYYold2;
+					}
 					
-					GameClearVars.clearCheckAndCheckmateVars();
-				}		
+					else
+					{
+						Reg._gameXXnew = -1;
+						Reg._gameYYnew = -1;
+						Reg._gameXXnew2 = -1;
+						Reg._gameYYnew2 = -1;
+					}				
+					
+					Reg._isEnPassant = _data._isEnPassant;
+					Reg._chessEnPassantPawnNumber = _data._isEnPassantPawnNumber;
+					Reg._triggerNextStuffToDo = _data._triggerNextStuffToDo;
+					Reg._pointValue2 = _data._pointValue2;
+					Reg._uniqueValue2 = _data._uniqueValue2;
+					Reg._promotePieceLetter = _data._promotePieceLetter;
+					Reg._doneEnPassant = _data._doneEnPassant;
+					
+					Reg._move_number_next += 1;
+														
+					// what player moves next. a value of 3 means its the third player. eg, Reg._gameDiceCurrentIndex[2] stores the location of the third player's piece.
+					if (Reg._move_number_next >= 2)
+					Reg._move_number_next = 0;
+					
+					if (_data._gameMessage == "Check" || _data._gameMessage == "Checkmate")
+					{
+						Reg._chessOriginOfCheckY[Reg._playerMoving] = Reg._gameYYnew;
+						Reg._chessOriginOfCheckX[Reg._playerMoving] = Reg._gameXXnew;
+					}
 				
-				__ids_win_lose_or_draw.canPlayerMove1();
-			}
+					if (Reg._gameUnitNumberNew > -1) 
+					{				
+						GameHistoryAndNotations.notationX();
+
+						Reg._otherPlayer = false;
+						Reg._gameDidFirstMove = false;
+						HUD.gameTurns(Reg._gameYYnew, Reg._gameXXnew); // each player has 50 turns at start of game. when a player has no more turns then the game is a draw.
+						
+						Reg._capturingUnitsForImages[Reg._playerMoving][Reg._gameYYnew][Reg._gameXXnew] = 1;
+						Reg._gamePointValueForPiece[Reg._gameYYnew][Reg._gameXXnew] = Reg._gamePointValueForPiece[Reg._gameYYold][Reg._gameXXold];
+						Reg._gameUniqueValueForPiece[Reg._gameYYnew][Reg._gameXXnew] = Reg._gameUniqueValueForPiece[Reg._gameYYold][Reg._gameXXold];
+						
+						// is this a chess promoted piece?
+						if (Reg._gamePointValueForPiece[Reg._gameYYnew][Reg._gameXXnew] == 1 || Reg._gamePointValueForPiece[Reg._gameYYnew][Reg._gameXXnew] == 11)
+						{
+							// is the pawn at the unit where it can be promoted...
+							if (Reg._gameYYnew == 0 || Reg._gameYYnew == 7)
+							{
+								Reg._gamePointValueForPiece[Reg._gameYYnew][Reg._gameXXnew] = _data._pieceValue;
+								Reg._gameUniqueValueForPiece[Reg._gameYYnew][Reg._gameXXnew] = _data._uniqueValue;
+								Reg._chessPawnPromotedMessage = true;
+								
+								openSubState( new ChessPromote());
+							}
+						}
+						
+						
+						Reg._gamePointValueForPiece[Reg._gameYYold][Reg._gameXXold] = 0;
+						Reg._gameUniqueValueForPiece[Reg._gameYYold][Reg._gameXXold] = 0;
+						Reg._otherPlayer = true;
+						
+						GameClearVars.clearVarsOnMoveUpdate();				
+						ChessEnPassant.getVarsFromOtherPlayer();		
+						ChessCapturingUnits.capturingUnits();	
+						__chess_check_or_checkmate.isThisCheckOrCheckmate();
+						
+						
+						GameClearVars.clearCheckAndCheckmateVars();
+					}		
+					
+					__ids_win_lose_or_draw.canPlayerMove1();
+				}
+			#end
 		});
 	}
 	
@@ -309,64 +332,65 @@ class NetworkEventsIds extends FlxState
 	{
 		PlayState.clientSocket.events.on("Player Move Id 2", function (_data)
 		{
-			if (_data._room == RegTypedef._dataGame._room)
-			{
-				defenderOrAttcker();
-				
-				if (_data.id == RegTypedef._dataGame.id) 
+			#if reversi
+				if (_data._room == RegTypedef._dataGame._room)
 				{
-					GameClearVars.clearVarsOnMoveUpdate();
+					defenderOrAttcker();
 					
-					Reg._otherPlayer = false;
-					Reg._gameDidFirstMove = false;
-					Reg._playerCanMovePiece = false;
-					ReversiCapturingUnits.capturingUnits();					
+					if (_data.id == RegTypedef._dataGame.id) 
+					{
+						GameClearVars.clearVarsOnMoveUpdate();
+						
+						Reg._otherPlayer = false;
+						Reg._gameDidFirstMove = false;
+						Reg._playerCanMovePiece = false;
+						ReversiCapturingUnits.capturingUnits();					
+						
+						
+						return; // return if this is the client that first moved the _player.
+					}
 					
+					if (Reg._playerLeftGame == true ) return;
 					
-					return; // return if this is the client that first moved the _player.
+					//Reg._gameUnitNumberNew = _data._gameUnitNumberNew;
+					//Reg._gameUnitNumberOld = _data._gameUnitNumberOld;
+					//Reg._gameUnitNumberNew2 = _data._gameUnitNumberNew2;
+					//Reg._gameUnitNumberOld2 = _data._gameUnitNumberOld2;
+					Reg._gameXXold = _data._gameXXold;
+					Reg._gameYYold = _data._gameYYold;
+					Reg._pointValue2 = _data._pointValue2;
+					Reg._triggerNextStuffToDo = _data._triggerNextStuffToDo;
+										
+					Reg._otherPlayer = true;					
+					Reg._playerCanMovePiece = true;
+					Reg._reversiMovePiece = true;
+					Reg._gameDidFirstMove = true;
+					Reg._reversiReverseIt = true;
+					
+					RegFunctions.is_player_attacker(false);
+					
+					GameClearVars.clearVarsOnMoveUpdate();				
+					//GameClearVars.clearCheckAndCheckmateVars();			
+					
+					if (Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false && Reg._gameYYold != -1 && Reg._gameXXold != -1) 
+					{
+						ReversiCapturingUnits.capturingUnits();
+						Reg._gamePointValueForPiece[Reg._gameYYold][Reg._gameXXold] = Reg._pointValue2; // the other player's piece that was moved.
+						ReversiCapturingUnits.findCapturingUnits();			
+						
+					}
+					Reg._reversiReverseIt2 = true;
+					Reg._reversiReverseIt = false;
+					
+					Reg._move_number_next += 1;
+														
+					// what player moves next. a value of 3 means its the third player. eg, Reg._gameDiceCurrentIndex[2] stores the location of the third player's piece.
+					if (Reg._move_number_next >= 2)
+					Reg._move_number_next = 0;
+					
+					__ids_win_lose_or_draw.canPlayerMove1();
 				}
-				
-				if (Reg._playerLeftGame == true ) return;
-				
-				//Reg._gameUnitNumberNew = _data._gameUnitNumberNew;
-				//Reg._gameUnitNumberOld = _data._gameUnitNumberOld;
-				//Reg._gameUnitNumberNew2 = _data._gameUnitNumberNew2;
-				//Reg._gameUnitNumberOld2 = _data._gameUnitNumberOld2;
-				Reg._gameXXold = _data._gameXXold;
-				Reg._gameYYold = _data._gameYYold;
-				Reg._pointValue2 = _data._pointValue2;
-				Reg._triggerNextStuffToDo = _data._triggerNextStuffToDo;
-									
-				Reg._otherPlayer = true;					
-				Reg._playerCanMovePiece = true;
-				Reg._reversiMovePiece = true;
-				Reg._gameDidFirstMove = true;
-				Reg._reversiReverseIt = true;
-				
-				RegFunctions.is_player_attacker(false);
-				
-				GameClearVars.clearVarsOnMoveUpdate();						
-				GameClearVars.clearCheckAndCheckmateVars();				
-				
-				
-				if (Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false && Reg._gameYYold != -1 && Reg._gameXXold != -1) 
-				{
-					ReversiCapturingUnits.capturingUnits();
-					Reg._gamePointValueForPiece[Reg._gameYYold][Reg._gameXXold] = Reg._pointValue2; // the other player's piece that was moved.
-					ReversiCapturingUnits.findCapturingUnits();			
-					
-				}
-				Reg._reversiReverseIt2 = true;
-				Reg._reversiReverseIt = false;
-				
-				Reg._move_number_next += 1;
-													
-				// what player moves next. a value of 3 means its the third player. eg, Reg._gameDiceCurrentIndex[2] stores the location of the third player's piece.
-				if (Reg._move_number_next >= 2)
-				Reg._move_number_next = 0;
-				
-				__ids_win_lose_or_draw.canPlayerMove1();
-			}
+			#end
 		});
 	}
 	
@@ -438,54 +462,55 @@ class NetworkEventsIds extends FlxState
 	{
 		PlayState.clientSocket.events.on("Player Move Id 4", function (_data)
 		{
-			if (_data._room == RegTypedef._dataGame._room)
-			{
-				defenderOrAttcker();
-				
-				if (_data.id == RegTypedef._dataGame.id) 
+			#if wheelEstate
+				if (_data._room == RegTypedef._dataGame._room)
 				{
-					GameClearVars.clearVarsOnMoveUpdate();
-					if (Reg._game_online_vs_cpu == false)
+					defenderOrAttcker();
+					
+					if (_data.id == RegTypedef._dataGame.id) 
 					{
-						Reg._triggerNextStuffToDo = 3;
-						Reg._isThisPieceAtBackdoor = false; 
-						Reg._playerCanMovePiece = false;		
-						Reg._gameDidFirstMove = false;
-					}					
-					return; // return if this is the client that first moved the _player.
+						GameClearVars.clearVarsOnMoveUpdate();
+						if (Reg._game_online_vs_cpu == false)
+						{
+							Reg._triggerNextStuffToDo = 3;
+							Reg._isThisPieceAtBackdoor = false; 
+							Reg._playerCanMovePiece = false;		
+							Reg._gameDidFirstMove = false;
+						}					
+						return; // return if this is the client that first moved the _player.
+					}
+				
+					if (Reg._playerLeftGame == true ) return;
+					
+					Reg._gameXXold = _data._gameXXold; 
+					Reg._gameYYold = _data._gameYYold;
+					Reg._gameXXnew = _data._gameXXnew; // this var is being used.
+					Reg._gameYYnew = _data._gameYYnew;	
+					
+					// used in trade unit. this is the other player's unit. player moving would like to trade other player's unit.
+					Reg._gameXXold2 = _data._gameXXold2; 
+					Reg._gameYYold2 = _data._gameYYold2;
+					
+					// used in trade unit. this is the player that is moving piece. player would like to trade this unit.
+					Reg._gameXXnew2 = _data._gameXXnew2;
+					Reg._gameYYnew2 = _data._gameYYnew2;
+					
+					Reg._gameUniqueValueForPiece = _data._gameUniqueValueForPiece; 
+					Reg._signatureGameUnitNumberTrade = _data._unitNumberTrade;
+					Reg._gameUniqueValueForPiece = _data._gameUniqueValueForPiece;
+					Reg._gameHouseTaxiCabOrCafeStoreForPiece = _data._gameHouseTaxiCabOrCafeStoreForPiece;
+					Reg._gameUndevelopedValueOfUnit = _data._gameUndevelopedValueOfUnit;
+					
+					Reg._triggerNextStuffToDo = 1;
+					Reg._gameDidFirstMove = false;
+					
+					if (Reg._game_online_vs_cpu == false) 
+						SignatureGameMovePlayersPiece.changePlayer();
+					
+					__ids_win_lose_or_draw.canPlayerMove1();
+					
 				}
-			
-				if (Reg._playerLeftGame == true ) return;
-				
-				Reg._gameXXold = _data._gameXXold; 
-				Reg._gameYYold = _data._gameYYold;
-				Reg._gameXXnew = _data._gameXXnew; // this var is being used.
-				Reg._gameYYnew = _data._gameYYnew;	
-				
-				// used in trade unit. this is the other player's unit. player moving would like to trade other player's unit.
-				Reg._gameXXold2 = _data._gameXXold2; 
-				Reg._gameYYold2 = _data._gameYYold2;
-				
-				// used in trade unit. this is the player that is moving piece. player would like to trade this unit.
-				Reg._gameXXnew2 = _data._gameXXnew2;
-				Reg._gameYYnew2 = _data._gameYYnew2;
-				
-				Reg._gameUniqueValueForPiece = _data._gameUniqueValueForPiece; 
-				Reg._signatureGameUnitNumberTrade = _data._unitNumberTrade;
-				Reg._gameUniqueValueForPiece = _data._gameUniqueValueForPiece;
-				Reg._gameHouseTaxiCabOrCafeStoreForPiece = _data._gameHouseTaxiCabOrCafeStoreForPiece;
-				Reg._gameUndevelopedValueOfUnit = _data._gameUndevelopedValueOfUnit;
-				
-				Reg._triggerNextStuffToDo = 1;
-				Reg._gameDidFirstMove = false;
-				
-				if (Reg._game_online_vs_cpu == false) 
-					SignatureGameMovePlayersPiece.changePlayer();
-				
-				__ids_win_lose_or_draw.canPlayerMove1();
-				
-				
-			}
+			#end
 		});
 	}
 			

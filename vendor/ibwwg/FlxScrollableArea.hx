@@ -57,7 +57,7 @@ class FlxScrollableArea extends FlxCamera
 	/******************************
 	* background gradient, texture and plain color for a scene.
 	*/
-	public var _scene_background:SceneBackground;
+	public var __scene_background:SceneBackground;
 			
 	private var _hiddenPixelAllowance:Float = 1.0; // don't bother showing scrollbars if this many pixels would go out of view (float weirdness fix)
 	/**
@@ -76,7 +76,7 @@ class FlxScrollableArea extends FlxCamera
 	public function new(ViewPort:FlxRect, Content:FlxRect, Mode:ResizeMode, content_height_extra:Int = 0, ?MouseWheelMultiplier:Int=100, ?ScrollbarThickness:Int=-1, ?ScrollbarColour:FlxColor=0xff666666, ?State:FlxState, id:Int = 0, vertical_bar_bring_up:Bool = false, vertical_bar_bring_down:Bool = false) {
 		super();
 		
-		if (_id == 0) bgColor = Reg._title_bar_background_enabled;
+		if (_id == 0) bgColor = 0x11000000;// Reg._title_bar_background_enabled;
 		
 		_id = ID = id;
 		
@@ -101,8 +101,14 @@ class FlxScrollableArea extends FlxCamera
 		
 		if (_id == 1000)
 		{
-			_scene_background = new SceneBackground();
-			_state.add(_scene_background);
+			if (__scene_background != null)
+			{
+				_state.remove(__scene_background);
+				__scene_background.destroy();
+			}
+			
+			__scene_background = new SceneBackground();
+			_state.add(__scene_background);
 			
 		}
 		

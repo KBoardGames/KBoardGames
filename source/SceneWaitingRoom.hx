@@ -27,11 +27,16 @@ package;
 class SceneWaitingRoom extends FlxState 
 {
 	/******************************
+	 * background gradient, texture and plain color for a scene.
+	 */
+	private var __scene_background:SceneBackground;
+	
+	/******************************
 	 * moves everything up by these many pixels.
 	 */
-	private var _offset_y:Int = 20;
+	private var _offset_y:Int = -770;
 	
-	public var __online_players_list:OnlinePlayersList;
+	public var _invite_table:InviteTable;
 	private var _ticksOnlineList:Float = 0;
 		
 	/******************************
@@ -87,22 +92,15 @@ class SceneWaitingRoom extends FlxState
 		if (RegCustom._client_background_enabled[Reg._tn] == true)
 		{
 			_color = FlxColor.fromHSB(RegCustomColors.color_client_background().hue, RegCustom._client_background_saturation[Reg._tn], RegCustom._client_background_brightness[Reg._tn]);
-			//_color = RegCustomColors.color_client_background();
-			//_color.alphaFloat = RegCustom._client_background_brightness[Reg._tn];
 		}
 		
-		
-		var _background = new FlxSprite(0, 55);
-		_background.makeGraphic(FlxG.width, FlxG.height-50);
-		
-		// changing this color value will also change lobby's chatter background.
-		_background.color = FlxColor.BLACK;
-		_background.scrollFactor.set(0, 0);
-		add(_background);
+		if (__scene_background != null) remove(__scene_background);	
+			__scene_background = new SceneBackground();
+		add(__scene_background);
 		
 		// creates the invite table and also sends the invite request to the server.
-		__online_players_list = new OnlinePlayersList(this);
-		add(__online_players_list);
+		_invite_table = new InviteTable(this);
+		add(_invite_table);
 		
 		//#############################
 						
@@ -157,10 +155,6 @@ class SceneWaitingRoom extends FlxState
 			_textPlayer4Stats.x += 180; // half of 360 is the width of chatter. half is used to center it to scene.
 		_textPlayer4Stats.scrollFactor.set(0, 0);		
 		add(_textPlayer4Stats);
-		
-		
-	
-		//ActionInput.enable();
 	}
 	
 	public function initialize():Void
@@ -168,7 +162,7 @@ class SceneWaitingRoom extends FlxState
 		Reg._at_waiting_room = true;
 		scrollable_area();
 		
-		__online_players_list._title_background_large.color = _color;
+		_invite_table._title_background_large.color = _color;
 		bodyBg.color = _color;
 		
 		if (RegTypedef._dataTournaments._move_piece == false)
@@ -204,17 +198,18 @@ class SceneWaitingRoom extends FlxState
 		
 		PlayState.allTypedefRoomUpdate(RegTypedef._dataMisc._room);
 		
-		OnlinePlayersList._doOnce = false;
+		InviteTable._doOnce = false;
 		
 		
 		//-------------------------------
-		if (__game_chatter != null) 
-		{			
-			__game_chatter.destroy();
-		}
-		
 		if (RegCustom._chat_when_at_room_enabled[Reg._tn] == true)
 		{
+			if (__game_chatter != null) 
+			{
+				remove(__game_chatter);
+				__game_chatter.destroy();
+			}
+			
 			__game_chatter = new GameChatter(3);
 			__game_chatter.visible = false;
 			GameChatter.__scrollable_area3.visible = false;
@@ -242,6 +237,8 @@ class SceneWaitingRoom extends FlxState
 		FlxG.cameras.add( __scrollable_area );
 		__scrollable_area.antialiasing = true;
 		__scrollable_area.pixelPerfectRender = true;
+		
+		__scrollable_area.content.y = 770;
 	}
 	
 	public function addRemovePlayerCheck():Void
@@ -288,6 +285,16 @@ class SceneWaitingRoom extends FlxState
 			{
 				Reg._move_number_current = i; // a value of 0 means this player moves first where as a value of 1 means this player moves after the first player moves.
 				RegTypedef._dataPlayers._moveNumberDynamic[i] = i;
+				
+				if (Reg._gameHost == true
+				&&	Reg._move_number_current == 0
+				&&	_count.length > 1
+				&&	RegCustom._pager_enabled[Reg._tn] == true)
+				{
+					if (RegCustom._sound_enabled[Reg._tn] == true
+					&&  Reg2._scrollable_area_is_scrolling == false)
+						FlxG.sound.play("pager", 1, true);
+				}
 			}
 		}
 	}
@@ -525,7 +532,13 @@ class SceneWaitingRoom extends FlxState
 	}
 		
 	override public function destroy()
-	{
+	{		
+		if (__game_chatter != null)
+		{
+			remove(__game_chatter);
+			__game_chatter.destroy();
+		}
+		
 		if (__scrollable_area != null)
 		{
 			cameras.remove( __scrollable_area );
@@ -538,6 +551,10 @@ class SceneWaitingRoom extends FlxState
 	
 	override public function update(elapsed:Float):Void 
 	{
+		if (FlxG.keys.justReleased.ANY
+		||	FlxG.mouse.justPressed == true)
+			FlxG.sound.destroy(true);
+		
 		if (FlxG.mouse.enabled == false)
 			_ticks_button_network += 1;
 			
@@ -551,7 +568,7 @@ class SceneWaitingRoom extends FlxState
 
 		// TODO make this code everywhere that's needed, such as at SceneGameRoom.hx.
 		if (Reg._buttonCodeValues != "") buttonCodeValues();
-			
+		
 		super.update(elapsed);
 					
 	}

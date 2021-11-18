@@ -18,6 +18,10 @@
 
 package;
 
+#if chess
+	import modules.games.chess.*;
+#end
+
 /**
  * game 0 to 4 vars plus any vars to get them working. a var cab be just for a game or used for all games.
  * @author kboardgames.com
@@ -50,7 +54,9 @@ class Reg
 	/******************************
 	 * total games available in this release.
 	 */
-	public static var _total_games_in_release:Int = 5;
+	public static var _total_games_in_release:Int = 0; // this value is populated at resetRegVarsOnce();
+	
+	public static var _total_games_excluded_from_list:Int = 0;
 	
 	/******************************
 	 * website domain does not end in "/" nor has http://.
@@ -1082,528 +1088,6 @@ class Reg
 	public static var _chessOpeningMoves:Array<Array<String>>  =
 	[for (o in 0...300) [for (m in 0...10) ""]];
 	
-	
-	//############################# these vars are used for vs computer.
-		
-	/******************************
-	 * p=point Value Of Unit. all attacking pieces that are NOT able to capture a protecting defending piece but able to capture a piece not protected. the defending piece does not have another of its piece defending it.
-	 */
-	public static var _chessAbleToCaptureNotProtectedMyP:Array<Int>  = [-1];
-	
-	/******************************
-	 * y old = current piece y value. all attacking pieces that are NOT able to capture a protecting defending piece but able to capture a piece not protected. the defending piece does not have another of its piece defending it.
-	 */
-	public static var _chessAbleToCaptureNotProtectedYold:Array<Int>  = [-1];
-	
-	/******************************
-	 * x old = current piece x value. all attacking pieces that are NOT able to capture a protecting defending piece but able to capture a piece not protected. the defending piece does not have another of its piece defending it.
-	 */
-	public static var _chessAbleToCaptureNotProtectedXold:Array<Int>  = [-1];
-	
-	/******************************
-	 * y new = y coordinate of unit for piece to move to. all attacking pieces that are NOT able to capture a protecting defending piece but able to capture a piece not protected. the defending piece does not have another of its piece defending it.
-	 */
-	public static var _chessAbleToCaptureNotProtectedYnew:Array<Int>  = [-1];
-	
-	/******************************
-	 * x new = x coordinate of unit for piece to move to. all attacking pieces that are NOT able to capture a protecting defending piece but able to capture a piece not protected. the defending piece does not have another of its piece defending it.
-	 */
-	public static var _chessAbleToCaptureNotProtectedXnew:Array<Int>  = [-1];
-	
-	/******************************
-	 * the piece value of a defending piece is store here. search through the elements to find the highest value. for the beginner level that will be the piece to capture. normal level can apply this var to a function that can calculate, for example, if that piece captured, at the attackers new unit, will check king or if piece capture can block another defender to take even a better piece next move.  the defending piece does not have another of its piece defending it. 
-	 * this var is used with that vars of the same name. Note that this var has the same write-up as other vars used for the same thing.
-	 */
-	public static var _chessAbleToCaptureNotProtectedYourP:Array<Int>  = [-1];	
-	
-	/******************************
-	 * p=point Value Of Unit. all attacking pieces that are able to capture a protecting defending piece. the defending piece has another of its piece defending it.
-	 */
-	public static var _chessAbleToCaptureProtectedMyP:Array<Int>  = [-1];
-	
-	/******************************
-	 * y old = current piece y value. all attacking pieces that are able to capture a protecting defending piece. the defending piece has another of its piece defending it.
-	 */
-	public static var _chessAbleToCaptureProtectedYold:Array<Int>  =	[-1];
-	
-	/******************************
-	 * x old = current piece x value. all attacking pieces that are able to capture a protecting defending piece. the defending piece has another of its piece defending it.
-	 */
-	public static var _chessAbleToCaptureProtectedXold:Array<Int>  = [-1];
-	
-	/******************************
-	 * y new = y coordinate of unit for piece to move to. all attacking pieces that are able to capture a protecting defending piece. the defending piece has another of its piece defending it.
-	 */
-	public static var _chessAbleToCaptureProtectedYnew:Array<Int>  = [-1];
-	
-	/******************************
-	 * x new = x coordinate of unit for piece to move to. all attacking pieces that are able to capture a protecting defending piece. the defending piece has another of its piece defending it.
-	 */
-	public static var _chessAbleToCaptureProtectedXnew:Array<Int>  = [-1];
-	
-	/******************************
-	 * the piece value of a defending piece is store here. search through the elements to find the highest value. for the beginner level that will be the piece to capture. normal level can apply this var to a function that can calculate, for example, if that piece captured, at the attackers new unit, will check king or if piece capture can block another defender to take even a better piece next move.  the defending piece has another of its piece defending it.
-	 * this var is used with that vars of the same name. Note that this var has the same write-up as other vars used for the same thing.
-	 */
-	public static var _chessAbleToCaptureProtectedYourP:Array<Int>  = [-1];		
-	
-	/******************************
-	 * p=point Value Of Unit. all moving pieces that position itself to defend another piece.
-	 */
-	public static var _chessMovePieceToDefendNotProtectedMyP:Array<Int>  = [-1];
-	
-	/******************************
-	 * y old = current piece y value. all moving pieces that position itself to defend another piece.
-	 */
-	public static var _chessMovePieceToDefendNotProtectedYold:Array<Int>  = [-1];
-	
-	/******************************
-	 * x old = current piece x value. all moving pieces that position itself to defend another piece.
-	 */
-	public static var _chessMovePieceToDefendNotProtectedXold:Array<Int>  = [-1];
-	
-	/******************************
-	 * y new = y coordinate of unit for piece to move to. all moving pieces that position itself to defend another piece.
-	 */
-	public static var _chessMovePieceToDefendNotProtectedYnew:Array<Int>  = [-1];
-	
-	/******************************
-	 * x new = x coordinate of unit for piece to move to. all moving pieces that position itself to defend another piece.
-	 */
-	public static var _chessMovePieceToDefendNotProtectedXnew:Array<Int>  = [-1];
-	
-	/******************************
-	 * the piece value of the other player's piece. search through the elements to find the highest value. the moving piece at the new location does not have another of its piece defending it.
-	 * this var is used with that vars of the same name. Note that this var has the same write-up as other vars used for the same thing.
-	 */
-	public static var _chessMovePieceToDefendNotProtectedYourP:Array<Int>  = [-1];
-	
-	/******************************
-	 * p=point Value Of Unit. all moving pieces that position itself offensively where that piece would be able to capture the defender next move.
-	 */
-	public static var _chessMovePieceToCaptureNotProtectedMyP:Array<Int>  = [-1];
-	
-	/******************************
-	 * y old = current piece y value. all moving pieces that position itself offensively where that piece would be able to capture the defender next move.
-	 */
-	public static var _chessMovePieceToCaptureNotProtectedYold:Array<Int>  = [-1];
-	
-	/******************************
-	 * x old = current piece x value. all moving pieces that position itself offensively where that piece would be able to capture the defender next move.
-	 */
-	public static var _chessMovePieceToCaptureNotProtectedXold:Array<Int>  = [-1];
-	
-	/******************************
-	 * y new = y coordinate of unit for piece to move to. all moving pieces that position itself offensively where that piece would be able to capture the defender next move.
-	 */
-	public static var _chessMovePieceToCaptureNotProtectedYnew:Array<Int>  = [-1];
-	
-	/******************************
-	 * x new = x coordinate of unit for piece to move to. all moving pieces that position itself offensively where that piece would be able to capture the defender next move.
-	 */
-	public static var _chessMovePieceToCaptureNotProtectedXnew:Array<Int>  = [-1];
-	
-	/******************************
-	 * the piece value of the other player's piece. search through the elements to find the highest value. the moving piece at the new location that is inline to attack a piece.
-	 * this var is used with that vars of the same name. Note that this var has the same write-up as other vars used for the same thing.
-	 */
-	public static var _chessMovePieceToCaptureNotProtectedYourP:Array<Int>  = [ -1];
-	
-	/******************************
-	 * p=point Value Of Unit. pawn is at least two units from being promoted. try to move this piece. the current pawn's piece value.
-	 */
-	public static var _chessMovePawnToPromoteMyP:Array<Int>  = [-1];
-	
-	/******************************
-	 * y old = current piece y value. pawn is at least two units from being promoted. try to move this piece.
-	 */
-	public static var _chessMovePawnToPromoteYold:Array<Int>  = [-1];
-	
-	/******************************
-	 * x old = current piece x value. pawn is at least two units from being promoted. try to move this piece.
-	 */
-	public static var _chessMovePawnToPromoteXold:Array<Int>  = [-1];
-	
-	/******************************
-	 * y new = y coordinate of unit for piece to move to. pawn is at least two units from being promoted. try to move this piece.
-	 */
-	public static var _chessMovePawnToPromoteYnew:Array<Int>  = [-1];
-	
-	/******************************
-	 * x new = x coordinate of unit for piece to move to. pawn is at least two units from being promoted. try to move this piece.
-	 */
-	public static var _chessMovePawnToPromoteXnew:Array<Int>  = [-1];
-	
-	/******************************
-	 * the piece value of the other player's piece. this var is not used.
-	 */
-	public static var _chessMovePawnToPromoteYourP:Array<Int>  = [ -1];
-	
-	/******************************
-	 * p=point Value Of Unit. pawn is near the promotion unit. therefore, try to protect that pawn.
-	 */
-	public static var _chessMovePieceDefendPawnForPromotionMyP:Array<Int>  = [-1];
-	
-	/******************************
-	 * y old = current piece y value. pawn is at least two units from being promoted. try to move this piece.
-	 */
-	public static var _chessMovePieceDefendPawnForPromotionYold:Array<Int>  = [-1];
-	
-	/******************************
-	 * x old = current piece x value. pawn is at least two units from being promoted. try to move this piece.
-	 */
-	public static var _chessMovePieceDefendPawnForPromotionXold:Array<Int>  = [-1];
-	
-	/******************************
-	 * y new = y coordinate of unit for piece to move to. pawn is at least two units from being promoted. try to move this piece.
-	 */
-	public static var _chessMovePieceDefendPawnForPromotionYnew:Array<Int>  = [-1];
-	
-	/******************************
-	 * x new = x coordinate of unit for piece to move to. pawn is at least two units from being promoted. try to move this piece.
-	 */
-	public static var _chessMovePieceDefendPawnForPromotionXnew:Array<Int>  = [-1];
-	
-	/******************************
-	 * the piece value of the other player's piece. this var is not used.
-	 */
-	public static var _chessMovePieceDefendPawnForPromotionYourP:Array<Int>  = [ -1];
-	
-	/******************************
-	 * p=point Value Of Unit. move the pawn that is at 5 y coordinate or less. does not need to be an attack move.
-	 */
-	public static var _chessMovePawnNormallyNotProtectedMyP:Array<Int>  = [-1];
-	
-	/******************************
-	 * y old = current piece y value. move the pawn that is at 5 y coordinate or less. does not need to be an attack move.
-	 */
-	public static var _chessMovePawnNormallyNotProtectedYold:Array<Int>  = [-1];
-	
-	/******************************
-	 * x old = current piece x value. move the pawn that is at 5 y coordinate or less. does not need to be an attack move.
-	 */
-	public static var _chessMovePawnNormallyNotProtectedXold:Array<Int>  = [-1];
-	
-	/******************************
-	 * y new = y coordinate of unit for piece to move to. move the pawn that is at 5 y coordinate or less. does not need to be an attack move.
-	 */
-	public static var _chessMovePawnNormallyNotProtectedYnew:Array<Int>  = [-1];
-	
-	/******************************
-	 * x new = x coordinate of unit for piece to move to. move the pawn that is at 5 y coordinate or less. does not need to be an attack move.
-	 */
-	public static var _chessMovePawnNormallyNotProtectedXnew:Array<Int>  = [-1];
-	
-	/******************************
-	 * the piece value of the other player's piece. move the pawn that is at 5 y coordinate or less. does not need to be an attack move.
-	 */
-	public static var _chessMovePawnNormallyNotProtectedYourP:Array<Int>  = [ -1];
-		
-	/******************************
-	 * p=point Value Of Unit. capture a unit that is next to king.
-	 */
-	public static var _chessMoveCaptureUnitNextToKingMyP:Array<Int>  = [-1];
-	
-	/******************************
-	 * y old = current piece y value. capture a unit that is next to king.
-	 */
-	public static var _chessMoveCaptureUnitNextToKingYold:Array<Int>  = [-1];
-	
-	/******************************
-	 * x old = current piece x value. capture a unit that is next to king.
-	 */
-	public static var _chessMoveCaptureUnitNextToKingXold:Array<Int>  = [-1];
-	
-	/******************************
-	 * y new = y coordinate of unit for piece to move to. capture a unit that is next to king.
-	 */
-	public static var _chessMoveCaptureUnitNextToKingYnew:Array<Int>  = [-1];
-	
-	/******************************
-	 * x new = x coordinate of unit for piece to move to. capture a unit that is next to king.
-	 */
-	public static var _chessMoveCaptureUnitNextToKingXnew:Array<Int>  = [-1];
-	
-	/******************************
-	 * the piece value of the other player's piece. capture a unit that is next to king.
-	 */
-	public static var _chessMoveCaptureUnitNextToKingYourP:Array<Int>  = [ -1];
-		
-	/******************************
-	 * p=point Value Of Unit. capture the player's king.
-	 */
-	public static var _chessMoveCapturePlayerKingMyP:Array<Int>  = [-1];
-	
-	/******************************
-	 * y old = current piece y value. capture the player's king.
-	 */
-	public static var _chessMoveCapturePlayerKingYold:Array<Int>  = [-1];
-	
-	/******************************
-	 * x old = current piece x value. capture the player's king.
-	 */
-	public static var _chessMoveCapturePlayerKingXold:Array<Int>  = [-1];
-	
-	/******************************
-	 * y new = y coordinate of unit for piece to move to. capture the player's king.
-	 */
-	public static var _chessMoveCapturePlayerKingYnew:Array<Int>  = [-1];
-	
-	/******************************
-	 * x new = x coordinate of unit for piece to move to. capture the player's king.
-	 */
-	public static var _chessMoveCapturePlayerKingXnew:Array<Int>  = [-1];
-	
-	/******************************
-	 * the piece value of the other player's piece. capture the player's king.
-	 */
-	public static var _chessMoveCapturePlayerKingYourP:Array<Int>  = [ -1];
-		
-	/******************************
-	 * p=point Value Of Unit. defend the CPU king when in check.
-	 */
-	public static var _chessMoveAnyPieceDefendKingMyP:Array<Int>  = [-1];
-	
-	/******************************
-	 * y old = current piece y value. defend the CPU king when in check.
-	 */
-	public static var _chessMoveAnyPieceDefendKingYold:Array<Int>  = [-1];
-	
-	/******************************
-	 * x old = current piece x value. defend the CPU king when in check.
-	 */
-	public static var _chessMoveAnyPieceDefendKingXold:Array<Int>  = [-1];
-	
-	/******************************
-	 * y new = y coordinate of unit for piece to move to. defend the CPU king when in check.
-	 */
-	public static var _chessMoveAnyPieceDefendKingYnew:Array<Int>  = [-1];
-	
-	/******************************
-	 * x new = x coordinate of unit for piece to move to. defend the CPU king when in check.
-	 */
-	public static var _chessMoveAnyPieceDefendKingXnew:Array<Int>  = [-1];
-	
-	/******************************
-	 * the piece value of the other player's piece. defend the CPU king when in check.
-	 */
-	public static var _chessMoveAnyPieceDefendKingYourP:Array<Int>  = [ -1];
-		
-	/******************************
-	 * p=point Value Of Unit. defend the CPU king when in check.
-	 */
-	public static var _chessMoveKingOutOfCheckMyP:Array<Int>  = [-1];
-	
-	/******************************
-	 * y old = current piece y value. defend the CPU king when in check.
-	 */
-	public static var _chessMoveKingOutOfCheckYold:Array<Int>  = [-1];
-	
-	/******************************
-	 * x old = current piece x value. defend the CPU king when in check.
-	 */
-	public static var _chessMoveKingOutOfCheckXold:Array<Int>  = [-1];
-	
-	/******************************
-	 * y new = y coordinate of unit for piece to move to. defend the CPU king when in check.
-	 */
-	public static var _chessMoveKingOutOfCheckYnew:Array<Int>  = [-1];
-	
-	/******************************
-	 * x new = x coordinate of unit for piece to move to. defend the CPU king when in check.
-	 */
-	public static var _chessMoveKingOutOfCheckXnew:Array<Int>  = [-1];
-	
-	/******************************
-	 * the piece value of the other player's piece. defend the CPU king when in check.
-	 */
-	public static var _chessMoveKingOutOfCheckYourP:Array<Int>  = [ -1];
-		
-	/******************************
-	 * p=point Value Of Unit. piece should run if piece cannot attack attacker but attacker can attack piece.
-	 */
-	public static var _chessMoveFromAttackerMyP:Array<Int>  = [-1];
-	
-	/******************************
-	 * y old = current piece y value. piece should run if piece cannot attack attacker but attacker can attack piece.
-	 */
-	public static var _chessMoveFromAttackerYold:Array<Int>  = [-1];
-	
-	/******************************
-	 * x old = current piece x value. piece should run if piece cannot attack attacker but attacker can attack piece.
-	 */
-	public static var _chessMoveFromAttackerXold:Array<Int>  = [-1];
-	
-	/******************************
-	 * y new = y coordinate of unit for piece to move to. piece should run if piece cannot attack attacker but attacker can attack piece.
-	 */
-	public static var _chessMoveFromAttackerYnew:Array<Int>  = [-1];
-	
-	/******************************
-	 * x new = x coordinate of unit for piece to move to. piece should run if piece cannot attack attacker but attacker can attack piece.
-	 */
-	public static var _chessMoveFromAttackerXnew:Array<Int>  = [-1];
-	
-	/******************************
-	 * the piece value of the other player's piece. piece should run if piece cannot attack attacker but attacker can attack piece.
-	 */
-	public static var _chessMoveFromAttackerYourP:Array<Int>  = [ -1];
-	
-	/******************************
-	 * p=point Value Of Unit. This is the last move at whereShouldPieceBeMoveTo(). placed near the end of other movement functions. this function tends to keep a piece on a check king path but can capture the piece putting the king in check.
-	 */
-	public static var _chessCaptureAnyPieceMyP:Array<Int>  = [-1];
-	
-	/******************************
-	 * y old = current piece y value. This is the last move at whereShouldPieceBeMoveTo(). this function tends to keep a piece on a check king path but can capture the piece putting the king in check.
-	 */
-	public static var _chessCaptureAnyPieceYold:Array<Int>  = [-1];
-	
-	/******************************
-	 * x old = current piece x value. This is the last move at whereShouldPieceBeMoveTo(). this function tends to keep a piece on a check king path but can capture the piece putting the king in check.
-	 */
-	public static var _chessCaptureAnyPieceXold:Array<Int>  = [-1];
-	
-	/******************************
-	 * y new = y coordinate of unit for piece to move to. This is the last move at whereShouldPieceBeMoveTo(). this function tends to keep a piece on a check king path but can capture the piece putting the king in check.
-	 */
-	public static var _chessCaptureAnyPieceYnew:Array<Int>  = [-1];
-	
-	/******************************
-	 * x new = x coordinate of unit for piece to move to. This is the last move at whereShouldPieceBeMoveTo(). this function tends to keep a piece on a check king path but can capture the piece putting the king in check.
-	 */
-	public static var _chessCaptureAnyPieceXnew:Array<Int>  = [-1];
-	
-	/******************************
-	 * the piece value of the other player's piece. This is the last move at whereShouldPieceBeMoveTo(). this function tends to keep a piece on a check king path but can capture the piece putting the king in check.
-	 */
-	public static var _chessCaptureAnyPieceYourP:Array<Int>  = [ -1];
-	
-	/******************************
-	 * p=point Value Of Unit. This is the last move at whereShouldPieceBeMoveTo(). so there must be a move or there will be a game crash. so make any piece move anywhere.
-	 */
-	public static var _chessMovePieceAnywhereMyP:Array<Int>  = [-1];
-		
-	/******************************
-	 * y old = current piece y value. This is the last move at whereShouldPieceBeMoveTo(). so there must be a move or there will be a game crash. so make any piece move anywhere.
-	 */
-	public static var _chessMovePieceAnywhereYold:Array<Int>  = [-1];
-	
-	/******************************
-	 * x old = current piece x value. This is the last move at whereShouldPieceBeMoveTo(). so there must be a move or there will be a game crash. so make any piece move anywhere.
-	 */
-	public static var _chessMovePieceAnywhereXold:Array<Int>  = [-1];
-	
-	/******************************
-	 * y new = y coordinate of unit for piece to move to. This is the last move at whereShouldPieceBeMoveTo(). so there must be a move or there will be a game crash. so make any piece move anywhere.
-	 */
-	public static var _chessMovePieceAnywhereYnew:Array<Int>  = [-1];
-	
-	/******************************
-	 * x new = x coordinate of unit for piece to move to. This is the last move at whereShouldPieceBeMoveTo(). so there must be a move or there will be a game crash. so make any piece move anywhere.
-	 */
-	public static var _chessMovePieceAnywhereXnew:Array<Int>  = [-1];
-	
-	/******************************
-	 * the piece value of the other player's piece. This is the last move at whereShouldPieceBeMoveTo(). so there must be a move or there will be a game crash. so make any piece move anywhere.
-	 */
-	public static var _chessMovePieceAnywhereYourP:Array<Int>  = [ -1];
-		
-	/******************************
-	 * p=point Value Of Unit. This is the last move at setCheckmateIn3(). search for a checkmate in two move. this is used with other vars to move to checkmate unit.
-	 */
-	public static var _chessCheckmateIn3MyP:Array<Int>  = [-1];
-		
-	/******************************
-	 * y old = current piece y value. This is the last move at setCheckmateIn3(). search for a checkmate in two move. this is used with other vars to move to checkmate unit.
-	 */
-	public static var _chessCheckmateIn3Yold:Array<Int>  = [-1];
-	
-	/******************************
-	 * x old = current piece x value. This is the last move at setCheckmateIn3(). search for a checkmate in two move. this is used with other vars to move to checkmate unit.
-	 */
-	public static var _chessCheckmateIn3Xold:Array<Int>  = [-1];
-	
-	/******************************
-	 * y new = y coordinate of unit for piece to move to. This is the last move at setCheckmateIn3(). search for a checkmate in two move. this is used with other vars to move to checkmate unit.
-	 */
-	public static var _chessCheckmateIn3Ynew:Array<Int>  = [-1];
-	
-	/******************************
-	 * x new = x coordinate of unit for piece to move to. This is the last move at setCheckmateIn3(). search for a checkmate in one move. this is used with other vars to move to checkmate unit.
-	 */
-	public static var _chessCheckmateIn3Xnew:Array<Int>  = [-1];
-	
-	/******************************
-	 * the piece value of the other player's piece. This is the last move at setCheckmateIn3(). search for a checkmate in one move. this is used with other vars to move to checkmate unit.
-	 */
-	public static var _chessCheckmateIn3YourP:Array<Int>  = [ -1];
-		
-	/******************************
-	 * p=point Value Of Unit. This is the last move at setCheckmateIn2(). search for a checkmate in two move. this is used with other vars to move to checkmate unit.
-	 */
-	public static var _chessCheckmateIn2MyP:Array<Int>  = [-1];
-		
-	/******************************
-	 * y old = current piece y value. This is the last move at setCheckmateIn2(). search for a checkmate in two move. this is used with other vars to move to checkmate unit.
-	 */
-	public static var _chessCheckmateIn2Yold:Array<Int>  = [-1];
-	
-	/******************************
-	 * x old = current piece x value. This is the last move at setCheckmateIn2(). search for a checkmate in two move. this is used with other vars to move to checkmate unit.
-	 */
-	public static var _chessCheckmateIn2Xold:Array<Int>  = [-1];
-	
-	/******************************
-	 * y new = y coordinate of unit for piece to move to. This is the last move at setCheckmateIn2(). search for a checkmate in two move. this is used with other vars to move to checkmate unit.
-	 */
-	public static var _chessCheckmateIn2Ynew:Array<Int>  = [-1];
-	
-	/******************************
-	 * x new = x coordinate of unit for piece to move to. This is the last move at setCheckmateIn2(). search for a checkmate in one move. this is used with other vars to move to checkmate unit.
-	 */
-	public static var _chessCheckmateIn2Xnew:Array<Int>  = [-1];
-	
-	/******************************
-	 * the piece value of the other player's piece. This is the last move at setCheckmateIn2(). search for a checkmate in one move. this is used with other vars to move to checkmate unit.
-	 */
-	public static var _chessCheckmateIn2YourP:Array<Int>  = [ -1];
-	
-	/******************************
-	 * p=point Value Of Unit. This is the last move at setCheckmateIn1(). search for a checkmate in one move. this is used with other vars to move to checkmate unit.
-	 */
-	public static var _chessCheckmateIn1MyP:Array<Int>  = [-1];
-		
-	/******************************
-	 * y old = current piece y value. This is the last move at setCheckmateIn1(). search for a checkmate in one move. this is used with other vars to move to checkmate unit.
-	 */
-	public static var _chessCheckmateIn1Yold:Array<Int>  = [-1];
-	
-	/******************************
-	 * x old = current piece x value. This is the last move at setCheckmateIn1(). search for a checkmate in one move. this is used with other vars to move to checkmate unit.
-	 */
-	public static var _chessCheckmateIn1Xold:Array<Int>  = [-1];
-	
-	/******************************
-	 * y new = y coordinate of unit for piece to move to. This is the last move at setCheckmateIn1(). search for a checkmate in one move. this is used with other vars to move to checkmate unit.
-	 */
-	public static var _chessCheckmateIn1Ynew:Array<Int>  = [-1];
-	
-	/******************************
-	 * x new = x coordinate of unit for piece to move to. This is the last move at setCheckmateIn1(). search for a checkmate in one move. this is used with other vars to move to checkmate unit.
-	 */
-	public static var _chessCheckmateIn1Xnew:Array<Int>  = [-1];
-	
-	/******************************
-	 * the piece value of the other player's piece. This is the last move at setCheckmateIn1(). search for a checkmate in one move. this is used with other vars to move to checkmate unit.
-	 */
-	public static var _chessCheckmateIn1YourP:Array<Int>  = [ -1];
-		
-	/******************************
-	 * at ChessCheckOrCheckmate.isThisCheckOrCheckmate, this var is used to break out of ChessFindCheckmate.checkmateSearch() loop because checkmate is found.
-	 */
-	public static var _checkmate_break_loop :Bool = false;	
-	
 	/******************************
 	 *	if true then this var will end the game displaying a checkmate message to the player.
 	 */
@@ -1732,14 +1216,6 @@ class Reg
 	public static var _playerLeftGame:Bool = false;
 		
 	/******************************
-	 * these are the x coordinates on the snake that the player will be positioned at, when the player slides down a snake.
-	 * p: snake number 0 to 3.
-	 * x: x coordinates
-	 */
-	public static var _snakePlayerSlideDownLocationsX:Array<Array<Int>> =
-	[for (p in 0...4) [for (x in 0...40) 0]];
-	
-	/******************************
 	 * these are the Y coordinates on the snake that the player will be positioned at, when the player slides down a snake.
 	 * p: snake number 0 to 3.
 	 * Y: Y coordinates
@@ -1815,11 +1291,6 @@ class Reg
 	public static var _chessCheckBypass:Bool = false;
 	
 	/******************************
-	 * used to stop the game message that says "thinking".
-	 */
-	public static var _gameMessageCPUthinkingEnded:Bool = false;
-	
-	/******************************
 	 * used before game is started at __scene_waiting_room. a value of 0 means this player moves first where as a value of 1 means this player moves after the first player moves.
 	 */
 	public static var _move_number_current:Int = 0; // 
@@ -1841,7 +1312,6 @@ class Reg
 	
 	/******************************
 	* a notation is created after a player moves, so the move number for a player will not be correct. for example, when player 1 moves, the _move_number_next will be incremented before sending to the other player(s). when the notation is created for basic notation, we cannot use that var, so this one is used instead. this value is one less than the value when a move is done, so we have the correct player to that moved.
-	* _gameMessageCPUthinkingEnded is used to change players, while minus one this value is used for basic notations.
 	*/
 	public static var _moveNumberCurrentForNotation:Int = 0;
 	
@@ -2042,6 +1512,11 @@ class Reg
 	public static var __title_bar2:TitleBar; 
 	
 	/******************************
+	 * moves everything down.
+	 */
+	public static var __title_bar_offset_y:Int = 10;
+	
+	/******************************
 	 * SceneCreateRoom. Cannot share with another class instance.
 	 */
 	public static var __title_bar3:TitleBar;
@@ -2091,133 +1566,10 @@ class Reg
 	 */
 	public static var _text_general_id:Int = -1;
 	
-	public static function resetCPUaiVars():Void
-	{
-		for (p in 0...2)
-		{
-			for (i in 0...65)
-			{
-				_chessAbleToCaptureNotProtectedMyP[i] = -1;
-				_chessAbleToCaptureNotProtectedYold[i] = -1;
-				_chessAbleToCaptureNotProtectedXold[i] = -1;
-				_chessAbleToCaptureNotProtectedYnew[i] = -1;
-				_chessAbleToCaptureNotProtectedXnew[i] = -1;
-				_chessAbleToCaptureNotProtectedYourP[i] = -1;
-				
-				_chessAbleToCaptureProtectedMyP[i] = -1;
-				_chessAbleToCaptureProtectedYold[i] = -1;
-				_chessAbleToCaptureProtectedXold[i] = -1;
-				_chessAbleToCaptureProtectedYnew[i] = -1;
-				_chessAbleToCaptureProtectedXnew[i] = -1;
-				_chessAbleToCaptureProtectedYourP[i] = -1;
-				
-				_chessMovePieceToDefendNotProtectedMyP[i] = -1;
-				_chessMovePieceToDefendNotProtectedYold[i] = -1;
-				_chessMovePieceToDefendNotProtectedXold[i] = -1;
-				_chessMovePieceToDefendNotProtectedYnew[i] = -1;
-				_chessMovePieceToDefendNotProtectedXnew[i] = -1;
-				_chessMovePieceToDefendNotProtectedYourP[i] = -1;
-				
-				_chessMovePieceToCaptureNotProtectedMyP[i] = -1;
-				_chessMovePieceToCaptureNotProtectedYold[i] = -1;
-				_chessMovePieceToCaptureNotProtectedXold[i] = -1;
-				_chessMovePieceToCaptureNotProtectedYnew[i] = -1;
-				_chessMovePieceToCaptureNotProtectedXnew[i] = -1;
-				_chessMovePieceToCaptureNotProtectedYourP[i] = -1;
-				
-				_chessMovePawnToPromoteMyP[i] = -1;
-				_chessMovePawnToPromoteYold[i] = -1;
-				_chessMovePawnToPromoteXold[i] = -1;
-				_chessMovePawnToPromoteYnew[i] = -1;
-				_chessMovePawnToPromoteXnew[i] = -1;
-				_chessMovePawnToPromoteYourP[i] = -1;
-				
-				_chessMovePieceDefendPawnForPromotionMyP[i] = -1;
-				_chessMovePieceDefendPawnForPromotionYold[i] = -1;
-				_chessMovePieceDefendPawnForPromotionXold[i] = -1;
-				_chessMovePieceDefendPawnForPromotionYnew[i] = -1;
-				_chessMovePieceDefendPawnForPromotionXnew[i] = -1;
-				_chessMovePieceDefendPawnForPromotionYourP[i] = -1;
-				
-				_chessMovePawnNormallyNotProtectedMyP[i] = -1;
-				_chessMovePawnNormallyNotProtectedYold[i] = -1;
-				_chessMovePawnNormallyNotProtectedXold[i] = -1;
-				_chessMovePawnNormallyNotProtectedYnew[i] = -1;
-				_chessMovePawnNormallyNotProtectedXnew[i] = -1;
-				_chessMovePawnNormallyNotProtectedYourP[i] = -1;
-				
-				_chessMoveCaptureUnitNextToKingMyP[i] = -1;
-				_chessMoveCaptureUnitNextToKingYold[i] = -1;
-				_chessMoveCaptureUnitNextToKingXold[i] = -1;
-				_chessMoveCaptureUnitNextToKingYnew[i] = -1;
-				_chessMoveCaptureUnitNextToKingXnew[i] = -1;
-				_chessMoveCaptureUnitNextToKingYourP[i] = -1;
-				
-				_chessMoveCapturePlayerKingMyP[i] = -1;
-				_chessMoveCapturePlayerKingYold[i] = -1;
-				_chessMoveCapturePlayerKingXold[i] = -1;
-				_chessMoveCapturePlayerKingYnew[i] = -1;
-				_chessMoveCapturePlayerKingXnew[i] = -1;
-				_chessMoveCapturePlayerKingYourP[i] = -1;
-				
-				_chessMoveAnyPieceDefendKingMyP[i] = -1;
-				_chessMoveAnyPieceDefendKingYold[i] = -1;
-				_chessMoveAnyPieceDefendKingXold[i] = -1;
-				_chessMoveAnyPieceDefendKingYnew[i] = -1;
-				_chessMoveAnyPieceDefendKingXnew[i] = -1;
-				_chessMoveAnyPieceDefendKingYourP[i] = -1;
-				
-				_chessMoveKingOutOfCheckMyP[i] = -1;
-				_chessMoveKingOutOfCheckYold[i] = -1;
-				_chessMoveKingOutOfCheckXold[i] = -1;
-				_chessMoveKingOutOfCheckYnew[i] = -1;
-				_chessMoveKingOutOfCheckYnew[i] = -1;
-				_chessMoveKingOutOfCheckYourP[i] = -1;
-				
-				_chessMoveFromAttackerMyP[i] = -1;
-				_chessMoveFromAttackerYold[i] = -1;
-				_chessMoveFromAttackerXold[i] = -1;
-				_chessMoveFromAttackerYnew[i] = -1;
-				_chessMoveFromAttackerYnew[i] = -1;
-				_chessMoveFromAttackerYourP[i] = -1;
-				
-				_chessCaptureAnyPieceMyP[i] = -1;
-				_chessCaptureAnyPieceYold[i] = -1;
-				_chessCaptureAnyPieceXold[i] = -1;
-				_chessCaptureAnyPieceYnew[i] = -1;
-				_chessCaptureAnyPieceYnew[i] = -1;
-				_chessCaptureAnyPieceYourP[i] = -1;
-				
-				_chessMovePieceAnywhereMyP[i] = -1;
-				_chessMovePieceAnywhereYold[i] = -1;
-				_chessMovePieceAnywhereXold[i] = -1;
-				_chessMovePieceAnywhereYnew[i] = -1;
-				_chessMovePieceAnywhereYnew[i] = -1;
-				_chessMovePieceAnywhereYourP[i] = -1;
-				
-				_chessCheckmateIn3MyP[i] = -1;
-				_chessCheckmateIn3Yold[i] = -1;
-				_chessCheckmateIn3Xold[i] = -1;
-				_chessCheckmateIn3Ynew[i] = -1;
-				_chessCheckmateIn3Ynew[i] = -1;
-				_chessCheckmateIn3YourP[i] = -1;
-				
-				_chessCheckmateIn2MyP[i] = -1;
-				_chessCheckmateIn2Yold[i] = -1;
-				_chessCheckmateIn2Xold[i] = -1;
-				_chessCheckmateIn2Ynew[i] = -1;
-				_chessCheckmateIn2Ynew[i] = -1;
-				_chessCheckmateIn2YourP[i] = -1;
-
-				_chessCheckmateIn1MyP[i] = -1;
-				_chessCheckmateIn1Yold[i] = -1;
-				_chessCheckmateIn1Xold[i] = -1;
-				_chessCheckmateIn1Ynew[i] = -1;
-				_chessCheckmateIn1Ynew[i] = -1;
-				_chessCheckmateIn1YourP[i] = -1;
-			}		
-		}
-	}
+	/******************************
+	 * if true then user has already been to MenuState.hx.
+	 */
+	public static var _menustate_initiated:Bool = false;
 	
 	/******************************
 	 * change the _public var to true if release is ready for the public.
@@ -2317,6 +1669,30 @@ class Reg
 		_useThirdPartyIpAddress = true; // set this true to enable paid server feature. paid members can host their own domain and that domain can be selected at MenuState as an option to connect to that server.
 		
 		//############################# END CONFIG
+		_total_games_in_release = 0;
+		_total_games_excluded_from_list = 0;
+		
+		#if checkers
+			_total_games_in_release += 1;
+		#end
+
+		#if chess
+			_total_games_in_release += 1;
+		#end
+
+		#if reversi
+			_total_games_in_release += 1;
+		#end
+
+		#if snakesAndLadders
+			_total_games_in_release += 1;
+		#end
+
+		#if wheelEstate
+			_total_games_in_release += 1;
+			_total_games_excluded_from_list += 1;
+		#end		
+		
 		_title_bar_background_enabled = RegCustomColors.title_bar_background_color();
 		_background_footer_menu_color = RegCustomColors.menu_bar_background_color();
 		
@@ -2343,15 +1719,6 @@ class Reg
 			_program_path = StringTools.replace(Path.directory(Sys.programPath()), "\\", "/");
 		#end
 		
-		for (p in 0...4)
-		{
-			for (i in 0...40)
-			{
-				_snakePlayerSlideDownLocationsX[p][i] = 0;
-				_snakePlayerSlideDownLocationsY[p][i] = 0;
-			}
-		}
-				
 		_textTimeRemainingToMove1 = "";
 		_textTimeRemainingToMove2 = "";
 		_textTimeRemainingToMove3 = "";
@@ -2360,325 +1727,14 @@ class Reg
 		// at website you might need to "" the following for display flash client.
 		_fontDefault 	= "assets/fonts/LiberationMono-Regular.ttf";
 		_fontTitle 		= "assets/fonts/LiberationMono-Regular.ttf";
-
-				
-		// snake 1, bottom left corner.
-		_snakePlayerSlideDownLocationsX[0][1] = 110;
-		_snakePlayerSlideDownLocationsY[0][1] = 470;
-		
-		_snakePlayerSlideDownLocationsX[0][1] = 120;
-		_snakePlayerSlideDownLocationsY[0][1] = 480;		
-		
-		_snakePlayerSlideDownLocationsX[0][2] = 140;
-		_snakePlayerSlideDownLocationsY[0][2] = 482;		
-		
-		_snakePlayerSlideDownLocationsX[0][3] = 158;
-		_snakePlayerSlideDownLocationsY[0][3] = 490;		
-		
-		_snakePlayerSlideDownLocationsX[0][4] = 170;
-		_snakePlayerSlideDownLocationsY[0][4] = 500;
-		
-		_snakePlayerSlideDownLocationsX[0][5] = 168;
-		_snakePlayerSlideDownLocationsY[0][5] = 514;
-		
-		_snakePlayerSlideDownLocationsX[0][6] = 160;
-		_snakePlayerSlideDownLocationsY[0][6] = 530;		
-		
-		_snakePlayerSlideDownLocationsX[0][7] = 152;
-		_snakePlayerSlideDownLocationsY[0][7] = 546;		
-		
-		_snakePlayerSlideDownLocationsX[0][8] = 150;
-		_snakePlayerSlideDownLocationsY[0][8] = 562;
-		
-		_snakePlayerSlideDownLocationsX[0][9] = 156;
-		_snakePlayerSlideDownLocationsY[0][9] = 576;		
-		
-		_snakePlayerSlideDownLocationsX[0][10] = 170;
-		_snakePlayerSlideDownLocationsY[0][10] = 588;
-		
-		_snakePlayerSlideDownLocationsX[0][11] = 184;
-		_snakePlayerSlideDownLocationsY[0][11] = 592;		
-		
-		_snakePlayerSlideDownLocationsX[0][12] = 200;
-		_snakePlayerSlideDownLocationsY[0][12] = 590;		
-		
-		_snakePlayerSlideDownLocationsX[0][13] = 214;
-		_snakePlayerSlideDownLocationsY[0][13] = 582;		
-		
-		_snakePlayerSlideDownLocationsX[0][14] = 224;
-		_snakePlayerSlideDownLocationsY[0][14] = 572;		
-		
-		_snakePlayerSlideDownLocationsX[0][15] = 236;
-		_snakePlayerSlideDownLocationsY[0][15] = 560;		
-		
-		_snakePlayerSlideDownLocationsX[0][16] = 246;
-		_snakePlayerSlideDownLocationsY[0][16] = 548;		
-		
-		_snakePlayerSlideDownLocationsX[0][17] = 260;
-		_snakePlayerSlideDownLocationsY[0][17] = 540;		
-		
-		_snakePlayerSlideDownLocationsX[0][18] = 272;
-		_snakePlayerSlideDownLocationsY[0][18] = 540;		
-		
-		_snakePlayerSlideDownLocationsX[0][19] = 286;
-		_snakePlayerSlideDownLocationsY[0][19] = 546;		
-		
-		_snakePlayerSlideDownLocationsX[0][20] = 296;
-		_snakePlayerSlideDownLocationsY[0][20] = 556;
-		
-		_snakePlayerSlideDownLocationsX[0][21] = 306;
-		_snakePlayerSlideDownLocationsY[0][21] = 560;		
-		
-		_snakePlayerSlideDownLocationsX[0][22] = 318;
-		_snakePlayerSlideDownLocationsY[0][22] = 565;		
-		
-		_snakePlayerSlideDownLocationsX[0][23] = 300;
-		_snakePlayerSlideDownLocationsY[0][23] = 525;
-
-		// snake 2.
-		_snakePlayerSlideDownLocationsX[1][0] = 182;
-		_snakePlayerSlideDownLocationsY[1][0] = 266;
-		
-		_snakePlayerSlideDownLocationsX[1][1] = 170;
-		_snakePlayerSlideDownLocationsY[1][1] = 280;
-		
-		_snakePlayerSlideDownLocationsX[1][2] = 166;
-		_snakePlayerSlideDownLocationsY[1][2] = 296;
-		
-		_snakePlayerSlideDownLocationsX[1][3] = 164;
-		_snakePlayerSlideDownLocationsY[1][3] = 314;
-		
-		_snakePlayerSlideDownLocationsX[1][4] = 170;
-		_snakePlayerSlideDownLocationsY[1][4] = 328;
-		
-		_snakePlayerSlideDownLocationsX[1][5] = 180;
-		_snakePlayerSlideDownLocationsY[1][5] = 340;
-		
-		_snakePlayerSlideDownLocationsX[1][6] = 194;
-		_snakePlayerSlideDownLocationsY[1][6] = 348;
-		
-		_snakePlayerSlideDownLocationsX[1][7] = 212;
-		_snakePlayerSlideDownLocationsY[1][7] = 352;
-		
-		_snakePlayerSlideDownLocationsX[1][8] = 228;
-		_snakePlayerSlideDownLocationsY[1][8] = 356;
-		
-		_snakePlayerSlideDownLocationsX[1][9] = 242;
-		_snakePlayerSlideDownLocationsY[1][9] = 362;
-		
-		_snakePlayerSlideDownLocationsX[1][10] = 254;
-		_snakePlayerSlideDownLocationsY[1][10] = 374;
-		
-		_snakePlayerSlideDownLocationsX[1][11] = 262;
-		_snakePlayerSlideDownLocationsY[1][11] = 390;
-		
-		_snakePlayerSlideDownLocationsX[1][12] = 266;
-		_snakePlayerSlideDownLocationsY[1][12] = 404;
-		
-		_snakePlayerSlideDownLocationsX[1][13] = 270;
-		_snakePlayerSlideDownLocationsY[1][13] = 420;
-		
-		_snakePlayerSlideDownLocationsX[1][14] = 280;
-		_snakePlayerSlideDownLocationsY[1][14] = 436;
-		
-		_snakePlayerSlideDownLocationsX[1][15] = 294;
-		_snakePlayerSlideDownLocationsY[1][15] = 444;
-		
-		_snakePlayerSlideDownLocationsX[1][16] = 312;
-		_snakePlayerSlideDownLocationsY[1][16] = 446;
-		
-		_snakePlayerSlideDownLocationsX[1][17] = 330;
-		_snakePlayerSlideDownLocationsY[1][17] = 446;
-		
-		_snakePlayerSlideDownLocationsX[1][18] = 348;
-		_snakePlayerSlideDownLocationsY[1][18] = 450;
-		
-		_snakePlayerSlideDownLocationsX[1][19] = 360;
-		_snakePlayerSlideDownLocationsY[1][19] = 460;
-		
-		_snakePlayerSlideDownLocationsX[1][20] = 370;
-		_snakePlayerSlideDownLocationsY[1][20] = 474;
-		
-		_snakePlayerSlideDownLocationsX[1][21] = 374;
-		_snakePlayerSlideDownLocationsY[1][21] = 490;
-		
-		_snakePlayerSlideDownLocationsX[1][22] = 378;
-		_snakePlayerSlideDownLocationsY[1][22] = 506;
-		
-		_snakePlayerSlideDownLocationsX[1][23] = 388;
-		_snakePlayerSlideDownLocationsY[1][23] = 520;
-		
-		_snakePlayerSlideDownLocationsX[1][24] = 404;
-		_snakePlayerSlideDownLocationsY[1][24] = 520;
-		
-		_snakePlayerSlideDownLocationsX[1][25] = 420;
-		_snakePlayerSlideDownLocationsY[1][25] = 518;
-		
-		_snakePlayerSlideDownLocationsX[1][26] = 438;
-		_snakePlayerSlideDownLocationsY[1][26] = 520;
-		
-		_snakePlayerSlideDownLocationsX[1][27] = 452;
-		_snakePlayerSlideDownLocationsY[1][27] = 528;
-		
-		_snakePlayerSlideDownLocationsX[1][28] = 464;
-		_snakePlayerSlideDownLocationsY[1][28] = 542;
-		
-		_snakePlayerSlideDownLocationsX[1][29] = 476;
-		_snakePlayerSlideDownLocationsY[1][29] = 556;
-		
-		_snakePlayerSlideDownLocationsX[1][30] = 450;
-		_snakePlayerSlideDownLocationsY[1][30] = 525;		
-		
-		// snake 3.
-		_snakePlayerSlideDownLocationsX[2][0] = 394;
-		_snakePlayerSlideDownLocationsY[2][0] = 12;
-		
-		_snakePlayerSlideDownLocationsX[2][1] = 398;
-		_snakePlayerSlideDownLocationsY[2][1] = 34;
-		
-		_snakePlayerSlideDownLocationsX[2][2] = 374;
-		_snakePlayerSlideDownLocationsY[2][2] = 44;
-		
-		_snakePlayerSlideDownLocationsX[2][3] = 354;
-		_snakePlayerSlideDownLocationsY[2][3] = 58;
-		
-		_snakePlayerSlideDownLocationsX[2][4] = 332;
-		_snakePlayerSlideDownLocationsY[2][4] = 70;
-		
-		_snakePlayerSlideDownLocationsX[2][5] = 308;
-		_snakePlayerSlideDownLocationsY[2][5] = 74;
-		
-		_snakePlayerSlideDownLocationsX[2][6] = 284;
-		_snakePlayerSlideDownLocationsY[2][6] = 70;
-		
-		_snakePlayerSlideDownLocationsX[2][7] = 260;
-		_snakePlayerSlideDownLocationsY[2][7] = 62;
-		
-		_snakePlayerSlideDownLocationsX[2][8] = 240;
-		_snakePlayerSlideDownLocationsY[2][8] = 58;
-		
-		_snakePlayerSlideDownLocationsX[2][9] = 220;
-		_snakePlayerSlideDownLocationsY[2][9] = 60;
-		
-		_snakePlayerSlideDownLocationsX[2][10] = 202;
-		_snakePlayerSlideDownLocationsY[2][10] = 70;
-		
-		_snakePlayerSlideDownLocationsX[2][11] = 186;
-		_snakePlayerSlideDownLocationsY[2][11] = 84;
-		
-		_snakePlayerSlideDownLocationsX[2][12] = 178;
-		_snakePlayerSlideDownLocationsY[2][12] = 102;
-		
-		_snakePlayerSlideDownLocationsX[2][13] = 174;
-		_snakePlayerSlideDownLocationsY[2][13] = 122;
-		
-		_snakePlayerSlideDownLocationsX[2][14] = 174;
-		_snakePlayerSlideDownLocationsY[2][14] = 142;
-		
-		_snakePlayerSlideDownLocationsX[2][15] = 174;
-		_snakePlayerSlideDownLocationsY[2][15] = 160;
-		
-		_snakePlayerSlideDownLocationsX[2][16] = 172;
-		_snakePlayerSlideDownLocationsY[2][16] = 180;
-		
-		_snakePlayerSlideDownLocationsX[2][17] = 158;
-		_snakePlayerSlideDownLocationsY[2][17] = 194;
-		
-		_snakePlayerSlideDownLocationsX[2][18] = 138;
-		_snakePlayerSlideDownLocationsY[2][18] = 200;
-		
-		_snakePlayerSlideDownLocationsX[2][19] = 118;
-		_snakePlayerSlideDownLocationsY[2][19] = 200;
-		
-		_snakePlayerSlideDownLocationsX[2][20] = 96;
-		_snakePlayerSlideDownLocationsY[2][20] = 200;
-		
-		_snakePlayerSlideDownLocationsX[2][21] = 78;
-		_snakePlayerSlideDownLocationsY[2][21] = 204;
-		
-		_snakePlayerSlideDownLocationsX[2][22] = 66;
-		_snakePlayerSlideDownLocationsY[2][22] = 218;
-		
-		_snakePlayerSlideDownLocationsX[2][23] = 66;
-		_snakePlayerSlideDownLocationsY[2][23] = 234;
-		
-		_snakePlayerSlideDownLocationsX[2][24] = 74;
-		_snakePlayerSlideDownLocationsY[2][24] = 250;
-		
-		_snakePlayerSlideDownLocationsX[2][25] = 84;
-		_snakePlayerSlideDownLocationsY[2][25] = 266;
-		
-		_snakePlayerSlideDownLocationsX[2][26] = 94;
-		_snakePlayerSlideDownLocationsY[2][26] = 280;
-		
-		_snakePlayerSlideDownLocationsX[2][27] = 104;
-		_snakePlayerSlideDownLocationsY[2][27] = 298;
-		
-		_snakePlayerSlideDownLocationsX[2][28] = 106;
-		_snakePlayerSlideDownLocationsY[2][28] = 314;
-		
-		_snakePlayerSlideDownLocationsX[2][29] = 75;
-		_snakePlayerSlideDownLocationsY[2][29] = 300;
-		
-		// snake 4.
-		_snakePlayerSlideDownLocationsX[3][0] = 486;
-		_snakePlayerSlideDownLocationsY[3][0] = 176;
-		
-		_snakePlayerSlideDownLocationsX[3][1] = 496;
-		_snakePlayerSlideDownLocationsY[3][1] = 196;
-		
-		_snakePlayerSlideDownLocationsX[3][2] = 486;
-		_snakePlayerSlideDownLocationsY[3][2] = 214;
-		
-		_snakePlayerSlideDownLocationsX[3][3] = 476;
-		_snakePlayerSlideDownLocationsY[3][3] = 236;
-		
-		_snakePlayerSlideDownLocationsX[3][4] = 470;
-		_snakePlayerSlideDownLocationsY[3][4] = 256;
-		
-		_snakePlayerSlideDownLocationsX[3][5] = 478;
-		_snakePlayerSlideDownLocationsY[3][5] = 268;
-		
-		_snakePlayerSlideDownLocationsX[3][6] = 492;
-		_snakePlayerSlideDownLocationsY[3][6] = 278;
-		
-		_snakePlayerSlideDownLocationsX[3][7] = 506;
-		_snakePlayerSlideDownLocationsY[3][7] = 290;
-		
-		_snakePlayerSlideDownLocationsX[3][8] = 494;
-		_snakePlayerSlideDownLocationsY[3][8] = 304;
-		
-		_snakePlayerSlideDownLocationsX[3][9] = 480;
-		_snakePlayerSlideDownLocationsY[3][9] = 312;
-		
-		_snakePlayerSlideDownLocationsX[3][10] = 468;
-		_snakePlayerSlideDownLocationsY[3][10] = 324;
-		
-		_snakePlayerSlideDownLocationsX[3][11] = 462;
-		_snakePlayerSlideDownLocationsY[3][11] = 342;
-		
-		_snakePlayerSlideDownLocationsX[3][12] = 472;
-		_snakePlayerSlideDownLocationsY[3][12] = 358;
-		
-		_snakePlayerSlideDownLocationsX[3][13] = 486;
-		_snakePlayerSlideDownLocationsY[3][13] = 368;
-		
-		_snakePlayerSlideDownLocationsX[3][14] = 500;
-		_snakePlayerSlideDownLocationsY[3][14] = 380;
-		
-		_snakePlayerSlideDownLocationsX[3][15] = 498;
-		_snakePlayerSlideDownLocationsY[3][15] = 396;
-		
-		_snakePlayerSlideDownLocationsX[3][16] = 450;
-		_snakePlayerSlideDownLocationsY[3][16] = 375;
-			
 	}
 	
 	// these vars are reset at the start of each game.
 	public static function resetRegVars():Void
 	{
-		resetCPUaiVars();
-		ChessECO.listToArray();
+		#if chess
+			ChessECO.listToArray();
+		#end
 		
 		_text_general_id = -1;
 		_gameIsNowOver = false;
@@ -2844,7 +1900,6 @@ class Reg
 		_chessStalemateBypassCheck = false;
 		_chessCheckmateBypass = false;
 		_chessCheckBypass = false;
-		_gameMessageCPUthinkingEnded = false;
 		
 		_inviteRoomNumberToJoin = 0;
 		
@@ -2950,7 +2005,6 @@ class Reg
 		_gameYYnewB = 0;
 		
 		_hasPieceMovedFinished = 0;		
-		_checkmate_break_loop = false;
 		_checkmate = false;		
 		_updateScrollbarBringUp = false; // currently this var seems to be not used.
 		_chessCPUdontMoveBackXXold = -2;

@@ -1,4 +1,55 @@
+Version 1.20.9. 2021-11-18.
 
+New Features.
+
+	Added games to modules folder.
+	
+	Menu bar added to EventDescription.hx class.
+	
+	Organized a fair amount of data in 6 class files.
+
+Feature changed.
+	
+	Client myLibs folder renamed to modules.
+
+	Changed the menu for offline play. Images are displayed instead of buttons.
+
+	At the waiting room the usernames of the second player, third player and forth player are now in the same color as the client text.
+
+	Transparency setting of gradient and texture at the configuration scene changed to 20 percent.
+	
+	Replaced two scene textures.
+
+	Added "X" button at title bar. Removed "exit" button from title scene.
+
+	GameMessageEvent.hx class renamed to EventDescription.hx.
+
+	Renamed "forum/" links to "en/"
+	
+	Table row color at lobby, waiting room and leaderboards can be changed from the configuration scene.
+	
+	Changed title scene icon colors and repositioned icon description text.
+
+Bugs fixed.
+
+	Color gray for client background was shown as red because it was using a hue value.
+	
+	Relogging in would crash the server. Invalid chatter variable.
+	
+	The table populated at waiting room after the "Update List" was mouse clicked would only show first 20 rows of data.
+	
+	Daily quests checkmark image was commented out.
+	
+	Fixed a bug where returning to lobby while still playing a game would not register a game lost for that player. This bug would display wrong exit message to other player(s).
+	
+	Fixed wrong color for yellow.
+
+	Fixed an issue at the front door where the server text was displayed shortly after the client text was displayed.
+	
+	The king did not show capturing units in an offline game of chess.	
+	
+	Player could enter a locked room by the rapid clicking of the mouse.
+	
 Version 1.19.1. 2021-11-03.
 
 New Features.

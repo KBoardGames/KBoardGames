@@ -18,29 +18,6 @@
 
 package;
 
-import flash.Lib;
-import flash.display.Bitmap;
-import flash.display.BitmapData;
-import flash.display.GradientType;
-import flash.display.GraphicsPathWinding;
-import flash.display.Shape;
-import flash.display.Sprite;
-import flash.display.StageAlign;
-import flash.display.StageScaleMode;
-import flash.events.Event;
-import flash.events.ProgressEvent;
-import flash.events.MouseEvent;
-import flash.geom.Matrix;
-import flash.geom.Rectangle;
-import flash.net.URLRequest;
-import flash.text.TextField;
-import flash.text.TextFormat;
-import flash.text.TextFormatAlign;
-import flixel.system.FlxBasePreloader;
-import flixel.util.FlxColor;
-import flixel.util.FlxStringUtil;
-import openfl.Vector;
-
 class Preloader extends DefaultPreloader
 {
 	/**

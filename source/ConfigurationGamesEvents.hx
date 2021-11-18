@@ -22,7 +22,7 @@ package;
  * these functions are called after a user clicks a button.
  * @author kboardgames.com
  */
-class ConfigurationGamesEvents extends CID2
+class ConfigurationGamesEvents extends CID1
 {
 
 	public function new() 

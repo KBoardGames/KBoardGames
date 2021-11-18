@@ -9,7 +9,7 @@ import flixel.math.FlxRect;
 import flixel.util.FlxColor;
 
 #if house
-	import myLibs.house.*;
+	import modules.house.*;
 #end
 
 /**
@@ -206,6 +206,12 @@ class FlxScrollbarVertical extends FlxSpriteGroup
 	
 	override public function update(elapsed:Float)
 	{
+		if (Reg._messageId > 0) 
+		{
+			_dragStartedAt = null;	
+			return;	
+		}
+		
 		// update the class if MessageBox is not displayed.
 		if (_id != ID) return;
 		
@@ -217,7 +223,7 @@ class FlxScrollbarVertical extends FlxSpriteGroup
 		
 		var mousePosition = FlxG.mouse.getScreenPosition();
 		
-		// if clicking on the scrollable area area. _dragStartedWhenBarWasAt is where the click first started.
+		// if clicking on the scrollable area. _dragStartedWhenBarWasAt is where the click first started.
 		if (_doOnce == 0 || !_bar.overlapsPoint( mousePosition ) 
 		&&  !_track.overlapsPoint( mousePosition ) 
 		#if house

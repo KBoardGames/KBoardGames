@@ -127,6 +127,9 @@ class ButtonToggleFlxState extends FlxUIButton
 	// this function must not be removed. also stops double firing of button sound at ActionKeyboard.hx.
 	override public function update(elapsed:Float):Void 
 	{
+		// if false then super.update() will not be executed and the program will then have one less thing to do.
+		var _update_needed:Bool = false;
+		
 		if (RegTriggers._buttons_set_not_active == false) 
 		{
 			if (ActionInput.overlaps(this, null)
@@ -139,8 +142,22 @@ class ButtonToggleFlxState extends FlxUIButton
 				&&  Reg2._scrollable_area_is_scrolling == false)
 					FlxG.sound.play("click", 1, false);
 			}
-			
-			super.update(elapsed);
 		}
+		
+		if (Reg._buttonCodeValues == "")
+		{
+			Reg._buttonCodeValues = "";
+			Reg2._lobby_button_alpha = 0.3;
+			alpha = 1;
+		}
+		
+		else if (Reg._buttonCodeValues != ""
+		&&	Reg._disconnectNow == false)
+		{
+			alpha = 0.3;
+		}
+		
+		if (alpha == 1 && _id == ID) super.update(elapsed);
+		
 	}
 }
