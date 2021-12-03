@@ -1573,7 +1573,7 @@ class Reg
 	 */
 	public static function set_for_public():Void
 	{		
-		var _public = true;
+		var _public = false;
 		
 		if (_public == false)
 		{
