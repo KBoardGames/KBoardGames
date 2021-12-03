@@ -1,3 +1,33 @@
+Version 1.21.4 2021-12-3.
+
+New Features.
+	
+	Now you can play an online game using a guest account. A user account is not needed to play a game online. To stop playing a game with a guest account, create a normal account at the configuration menu. The guest account assigned to that users account will be renamed to the selected username.
+
+Feature changed.
+
+	Repositioned the send button at waiting room.
+
+	Fixed invite notice at lobby. For example, "invites you to play Checkers. at room" now reads, "invites you to play checkers at room".
+
+	Using only numbers for a username would change the number value when saving at the configuration scene. Usernames characters can no longer have number.
+
+	Username characters can now be in uppercase.
+
+	Username character limit changed from 11 to 12.
+
+Bugs fixed.
+
+	Client crashed after player had clicked the house button from lobby.
+
+	When a button to cancel the invite request message box was pressed, alpha wound not be set to 1 for other button.
+
+	Sound not playing for some objects at title scene and at event Schedule scene.
+
+	When public release was set to false, the "has_toggle" command for the guest account button was not set to true after client first loaded.
+
+Optimized a few hx files.
+
 Version 1.20.9. 2021-11-18.
 
 New Features.

@@ -81,7 +81,7 @@ class Usernames
 		for (i in 0... _arr.length-1)
 		{
 			// search every array in the username suggestion list and output the first 18 that match the currect text in the username input object.
-			if (CID3._usernameInput.text.toLowerCase() 
+			if (CID3._usernameInput.text 
 			==	_arr[i].substr(0, CID3._usernameInput.text.length)
 			&&	CID3._usernameInput.text
 			!=	_arr[i])

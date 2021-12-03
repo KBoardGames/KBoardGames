@@ -43,13 +43,13 @@ class Reg
 	
 	/* far below this code, at the resetRegVarsOnce() function, change this var to true when you are ready to release this version of the client to the public. this var will hide the fullscreen button and disable the windows key which will stop the user from making the client shown in windows mode.
 	 */
-	public static var _clientReadyForPublicRelease:Bool = true;
+	public static var _clientReadyForPublicRelease:Bool = false;
 	
 	/******************************
 	 * only change the version number here. this value must be changed every time this complete program with dll's are copied to the localhost/files/windows folder.
 	 * no need to copy this var then paste to the bottom of this class because this value does not change while client is running.
 	 */
-	public static var _version:String = "1.17.1";
+	public static var _version:String = "1.21.4";
 	
 	/******************************
 	 * total games available in this release.
@@ -256,11 +256,6 @@ class Reg
 	 * this calls the Player's Move event once so that the game can be played at this time.
 	 */
 	public static var _doStartGameOnce = true;
-	
-	/******************************
-	 * play the title music but only once when the game first loads up.
-	 */
-	public static var _do_play_title_music_once = true;
 	
 	/******************************
 	 * display a message if true that server disconnected.
@@ -1578,7 +1573,7 @@ class Reg
 	 */
 	public static function set_for_public():Void
 	{		
-		var _public = false;
+		var _public = true;
 		
 		if (_public == false)
 		{

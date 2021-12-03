@@ -368,6 +368,12 @@ class InviteTable extends FlxState
 			PlayState.clientSocket.send("Online Player Offer Invite", RegTypedef._dataPlayers);
 			haxe.Timer.delay(function (){}, Reg2._event_sleep);
 		}
+		
+		if (Reg._yesNoKeyPressValueAtMessage > 1 && Reg._buttonCodeValues == "o1000")
+		{			
+			Reg._buttonCodeValues = "";
+			Reg._yesNoKeyPressValueAtMessage = 0;
+		}
 
 		if (RegTriggers._waiting_room_refresh_invite_list == true
 		&&  _ticks_invite_list <= Reg._maximum_server_connections + 1) 

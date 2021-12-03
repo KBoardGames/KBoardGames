@@ -78,6 +78,7 @@ class ConfigurationProfile extends FlxGroup
 		
 		player1_or_player2();
 		username_input();
+		password_input();
 		
 		#if username_suggestions	
 			if (RegCustom._username_suggestions_enabled[Reg._tn] == true)
@@ -161,23 +162,59 @@ class ConfigurationProfile extends FlxGroup
 	
 	private function username_input():Void
 	{
-		CID3._text_username = new FlxText(15, 0, 0, "Username");
+		CID3._text_username = new FlxText(15, 0, 0, "Username", Reg._font_size);
 		CID3._text_username.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
-		CID3._text_username.y = CID3._button_p1.y + 65;
+		CID3._text_username.y = CID3._button_p1.y + 100;
 		CID3._text_username.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		CID3._group.add(CID3._text_username);	
-		
+			
 		// type username here.
-		CID3._usernameInput = new FlxInputText(15, 0, 152, "", 22);
+		CID3._usernameInput = new FlxInputText(15, 0, 200, "", 22);
 		CID3._usernameInput.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.BLACK, FlxTextAlign.RIGHT);
-		CID3._usernameInput.x += CID3._text_username.textField.width + 15;
-		CID3._usernameInput.y = CID3._button_p1.y + 65;
+		CID3._usernameInput.x = CID3._text_username.x + CID3._text_username.textField.width + 15;
+		CID3._usernameInput.filterMode = FlxInputText.ONLY_ALPHA;
+		CID3._usernameInput.y = CID3._text_username.y;
 		CID3._usernameInput.text = RegCustom._profile_username_p1[Reg._tn];
 		CID3._usernameInput.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		CID3._group.add(CID3._usernameInput);
 		
 		// fix a bug where typing in the username input field puts the second character before the first character.
-		CID3._usernameInput.caretIndex = CID3._usernameInput.text.length;
+		CID3._usernameInput.caretIndex = CID3._usernameInput.text.length; 
+		CID3._usernameInput.hasFocus = true;
+		CID3._usernameInput.fieldBorderColor = FlxColor.RED;	
+		CID3._usernameInput.fieldBorderThickness = 3;
+		
+		CID3._usernameInput.maxLength = 13;	
+	}
+	
+	private function password_input():Void
+	{
+		CID3._text_password = new FlxText(15, 0, 0, "Password");
+		CID3._text_password.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
+		CID3._text_password.x = CID3._usernameInput.x + CID3._usernameInput.textField.width + 50;
+		CID3._text_password.y = CID3._button_p1.y + 100;
+		CID3._text_password.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
+		CID3._group.add(CID3._text_password);	
+		
+		// type username here.
+		CID3._password_input = new FlxInputText(15, 0, 200, "", Reg._font_size);
+		CID3._password_input.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.BLACK, FlxTextAlign.RIGHT);
+		CID3._password_input.x = CID3._text_password.x + CID3._text_password.textField.width + 15;
+		CID3._password_input.y = CID3._button_p1.y + 100;
+		
+		if (RegCustom._profile_password_p1 != "")
+		{
+			// hide password if there is one.
+			CID3._password_input.passwordMode = true;
+		}
+				
+		CID3._password_input.text = RegCustom._profile_password_p1;
+		
+		CID3._password_input.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
+		CID3._group.add(CID3._password_input);
+		
+		// fix a bug where typing in the username input field puts the second character before the first character.
+		CID3._password_input.caretIndex = CID3._password_input.text.length;
 	}
 	
 	// next feature placed here should check if username suggestions, avatar or world flags lib is set. if exists then new feature y value must use CID3._text_username.y, CID3._text_username.y_question_username_suggestions_enabled.y or _group_sprite[299].y
@@ -343,11 +380,11 @@ class ConfigurationProfile extends FlxGroup
 	
 	override public function update(elapsed:Float):Void
 	{
-		if (CID3._usernameInput.hasFocus == false)
-		{
+		if (CID3._usernameInput.fieldBorderColor == FlxColor.RED)
 			CID3._usernameInput.hasFocus = true;
-		}
-		
+		else
+			CID3._password_input.hasFocus = true;
+			
 		// if keyboard is open then set some stuff as not active.
 		if (RegTriggers._keyboard_opened == true
 		&&	CID3._group.active == true
@@ -384,79 +421,84 @@ class ConfigurationProfile extends FlxGroup
 		
 		//----------------------------
 		#if avatars
-			if (CID3._group.visible == true
-			&&  RegTriggers._keyboard_opened == false)
+			if (Reg._buttonCodeValues == "")
 			{
-				Avatars._image_avatar_highlighted.visible = false;
-				
-				for (i in 0... Reg._avatar_total)
+				if (CID3._group.visible == true
+				&&  RegTriggers._keyboard_opened == false)
 				{
-					// __scrollable_area.scroll.y is needed so that when the scrollable area has been scrolled that var is used to offset the mouse.y value. it is needed to highlight avatars that are outside of the normal scene y coordinates
-					if (FlxG.mouse.x > Avatars._group_sprite[i].x
-					&&  FlxG.mouse.x < Avatars._group_sprite[i].x + 75
-					&&  FlxG.mouse.y + __configurations_output.__scrollable_area.scroll.y > Avatars._group_sprite[i].y
-					&&  FlxG.mouse.y + __configurations_output.__scrollable_area.scroll.y < Avatars._group_sprite[i].y + 75
-					&&  FlxG.mouse.y < FlxG.height - 50)
-					{					
-						Avatars._image_avatar_highlighted.x = 
-							Avatars._group_sprite[i].x;
-						Avatars._image_avatar_highlighted.y = 
-							Avatars._group_sprite[i].y;
-						
-						Avatars._image_avatar_highlighted.visible = true;
-						
-						if (ActionInput.justPressed() == true)
-						{
-							if (RegCustom._sound_enabled[Reg._tn] == true
-							&&  Reg2._scrollable_area_is_scrolling == false)
-								FlxG.sound.play("click", 1, false);
+					Avatars._image_avatar_highlighted.visible = false;
+					
+					for (i in 0... Reg._avatar_total)
+					{
+						// __scrollable_area.scroll.y is needed so that when the scrollable area has been scrolled that var is used to offset the mouse.y value. it is needed to highlight avatars that are outside of the normal scene y coordinates
+						if (FlxG.mouse.x > Avatars._group_sprite[i].x
+						&&  FlxG.mouse.x < Avatars._group_sprite[i].x + 75
+						&&  FlxG.mouse.y + __configurations_output.__scrollable_area.scroll.y > Avatars._group_sprite[i].y
+						&&  FlxG.mouse.y + __configurations_output.__scrollable_area.scroll.y < Avatars._group_sprite[i].y + 75
+						&&  FlxG.mouse.y < FlxG.height - 50)
+						{					
+							Avatars._image_avatar_highlighted.x = 
+								Avatars._group_sprite[i].x;
+							Avatars._image_avatar_highlighted.y = 
+								Avatars._group_sprite[i].y;
 							
-							if (CID3._button_p1.has_toggle == true)
-								RegCustom._profile_avatar_number1[Reg._tn] = Std.string(i) + ".png";
-							else 
-								RegCustom._profile_avatar_number2[Reg._tn] = Std.string(i) + ".png";
+							Avatars._image_avatar_highlighted.visible = true;
+							
+							if (ActionInput.justPressed() == true)
+							{
+								if (RegCustom._sound_enabled[Reg._tn] == true
+								&&  Reg2._scrollable_area_is_scrolling == false)
+									FlxG.sound.play("click", 1, false);
 								
-							Avatars._image_profile_avatar.loadGraphic("vendor/multiavatar/" + i +".png");
-						}
-					} 
+								if (CID3._button_p1.has_toggle == true)
+									RegCustom._profile_avatar_number1[Reg._tn] = Std.string(i) + ".png";
+								else 
+									RegCustom._profile_avatar_number2[Reg._tn] = Std.string(i) + ".png";
+									
+								Avatars._image_profile_avatar.loadGraphic("vendor/multiavatar/" + i +".png");
+							}
+						} 
+					}
 				}
 			}
 		#end
 		
 		#if flags
-			if (CID3._group.visible == true
-			&&  RegTriggers._keyboard_opened == false)
+			if (Reg._buttonCodeValues == "")
 			{
-				for (i in 0... WorldFlags._flags_abbv.length)
+				if (CID3._group.visible == true
+				&&  RegTriggers._keyboard_opened == false)
 				{
-					WorldFlags._group_flag_highlight_sprite[i].visible = false;
-					
-					if (FlxG.mouse.x > WorldFlags._group_flag_sprites[i].x
-					&&  FlxG.mouse.x < WorldFlags._group_flag_sprites[i].x + WorldFlags._group_flag_sprites[i].width
-					&&  FlxG.mouse.y + __configurations_output.__scrollable_area.scroll.y > WorldFlags._group_flag_sprites[i].y
-					&&  FlxG.mouse.y + __configurations_output.__scrollable_area.scroll.y < WorldFlags._group_flag_sprites[i].y + 40
-					&&  FlxG.mouse.y < FlxG.height - 50)
+					for (i in 0... WorldFlags._flags_abbv.length)
 					{
-						WorldFlags._group_flag_highlight_sprite[i].makeGraphic(Std.int(WorldFlags._group_flag_sprites[i].width) + 6, 40 + 6, FlxColor.WHITE);
-						WorldFlags._group_flag_highlight_sprite[i].visible = true;
-						// when the mouse is over a flag this will change the highlight image from white to a different color.
-						if (_ticks <= 5) WorldFlags._group_flag_highlight_sprite[i].color = FlxColor.WHITE;
-						if (_ticks >= 10)  WorldFlags._group_flag_highlight_sprite[i].color = FlxColor.PURPLE;
+						WorldFlags._group_flag_highlight_sprite[i].visible = false;
 						
-						if (ActionInput.justPressed() == true)
+						if (FlxG.mouse.x > WorldFlags._group_flag_sprites[i].x
+						&&  FlxG.mouse.x < WorldFlags._group_flag_sprites[i].x + WorldFlags._group_flag_sprites[i].width
+						&&  FlxG.mouse.y + __configurations_output.__scrollable_area.scroll.y > WorldFlags._group_flag_sprites[i].y
+						&&  FlxG.mouse.y + __configurations_output.__scrollable_area.scroll.y < WorldFlags._group_flag_sprites[i].y + 40
+						&&  FlxG.mouse.y < FlxG.height - 50)
 						{
-							if (RegCustom._sound_enabled[Reg._tn] == true
-							&&  Reg2._scrollable_area_is_scrolling == false)
-								FlxG.sound.play("click", 1, false);
+							WorldFlags._group_flag_highlight_sprite[i].makeGraphic(Std.int(WorldFlags._group_flag_sprites[i].width) + 6, 40 + 6, FlxColor.WHITE);
+							WorldFlags._group_flag_highlight_sprite[i].visible = true;
+							// when the mouse is over a flag this will change the highlight image from white to a different color.
+							if (_ticks <= 5) WorldFlags._group_flag_highlight_sprite[i].color = FlxColor.WHITE;
+							if (_ticks >= 10)  WorldFlags._group_flag_highlight_sprite[i].color = FlxColor.PURPLE;
 							
-							RegCustom._world_flags_number[Reg._tn] = i;
+							if (ActionInput.justPressed() == true)
+							{
+								if (RegCustom._sound_enabled[Reg._tn] == true
+								&&  Reg2._scrollable_area_is_scrolling == false)
+									FlxG.sound.play("click", 1, false);
 								
-							WorldFlags._image_selected_world_flag.loadGraphic("modules/worldFlags/assets/images/" + WorldFlags._flags_abbv[RegCustom._world_flags_number[Reg._tn]].toLowerCase() + ".png");
-						}
-					} 
+								RegCustom._world_flags_number[Reg._tn] = i;
+									
+								WorldFlags._image_selected_world_flag.loadGraphic("modules/worldFlags/assets/images/" + WorldFlags._flags_abbv[RegCustom._world_flags_number[Reg._tn]].toLowerCase() + ".png");
+							}
+						} 
+					}
 				}
 			}
-		
 		#end	
 		
 		_ticks += 1; if (_ticks >= 15) _ticks = 5;
@@ -512,22 +554,6 @@ class ConfigurationProfile extends FlxGroup
 			#end
 		}
 		
-		if (CID3._usernameInput.hasFocus == true
-		&&	CID3._usernameInput.fieldBorderColor 
-		!=	FlxColor.RED)
-		{
-			CID3._usernameInput.fieldBorderColor = FlxColor.RED;	
-			CID3._usernameInput.fieldBorderThickness = 3;
-		}
-		
-		else if (CID3._usernameInput.hasFocus == false
-		&&		 CID3._usernameInput.fieldBorderColor 
-		!=		 FlxColor.BLACK)
-		{
-			CID3._usernameInput.fieldBorderColor = FlxColor.BLACK;	
-			CID3._usernameInput.fieldBorderThickness = 1;
-		}
-		
 		//------------------------------
 		if (CID3._button_p1.has_toggle == true
 		&&	RegCustom._profile_username_p1[Reg._tn] 
@@ -543,28 +569,31 @@ class ConfigurationProfile extends FlxGroup
 			RegCustom._profile_username_p2[Reg._tn] = CID3._usernameInput.text;
 		}
 		
-		for (i in 0... CID3._group_button_toggle.length)
+		if (Reg._buttonCodeValues == "")
 		{
-			// if mouse is on the text plus any offset made by the box scroller and mouse is pressed...
-			if (FlxG.mouse.y + ButtonGeneralNetworkNo._scrollarea_offset_y >= CID3._group_button_toggle[i]._startY &&  FlxG.mouse.y + ButtonGeneralNetworkNo._scrollarea_offset_y <= CID3._group_button_toggle[i]._startY + CID3._group_button_toggle[i]._button_height 
-			&& FlxG.mouse.x + ButtonGeneralNetworkNo._scrollarea_offset_x >= CID3._group_button_toggle[i]._startX &&  FlxG.mouse.x + ButtonGeneralNetworkNo._scrollarea_offset_x <= CID3._group_button_toggle[i]._startX + CID3._group_button_toggle[i]._button_width && FlxG.mouse.justPressed == true )
+			for (i in 0... CID3._group_button_toggle.length)
 			{
-				button_toggle_number(i);
-				break;
+				// if mouse is on the text plus any offset made by the box scroller and mouse is pressed...
+				if (FlxG.mouse.y + ButtonGeneralNetworkNo._scrollarea_offset_y >= CID3._group_button_toggle[i]._startY &&  FlxG.mouse.y + ButtonGeneralNetworkNo._scrollarea_offset_y <= CID3._group_button_toggle[i]._startY + CID3._group_button_toggle[i]._button_height 
+				&& FlxG.mouse.x + ButtonGeneralNetworkNo._scrollarea_offset_x >= CID3._group_button_toggle[i]._startX &&  FlxG.mouse.x + ButtonGeneralNetworkNo._scrollarea_offset_x <= CID3._group_button_toggle[i]._startX + CID3._group_button_toggle[i]._button_width && FlxG.mouse.justPressed == true )
+				{
+					button_toggle_number(i);
+					break;
+				}
+				
 			}
 			
-		}
-		
-		for (i in 0... CID3._group_button.length)
-		{
-			// if mouse is on the text plus any offset made by the box scroller and mouse is pressed...
-			if (FlxG.mouse.y + ButtonGeneralNetworkNo._scrollarea_offset_y >= CID3._group_button[i]._startY &&  FlxG.mouse.y + ButtonGeneralNetworkNo._scrollarea_offset_y <= CID3._group_button[i]._startY + CID3._group_button[i]._button_height 
-			&& FlxG.mouse.x + ButtonGeneralNetworkNo._scrollarea_offset_x >= CID3._group_button[i]._startX &&  FlxG.mouse.x + ButtonGeneralNetworkNo._scrollarea_offset_x <= CID3._group_button[i]._startX + CID3._group_button[i]._button_width && FlxG.mouse.justPressed == true )
+			for (i in 0... CID3._group_button.length)
 			{
-				button_number(i);
-				break;
+				// if mouse is on the text plus any offset made by the box scroller and mouse is pressed...
+				if (FlxG.mouse.y + ButtonGeneralNetworkNo._scrollarea_offset_y >= CID3._group_button[i]._startY &&  FlxG.mouse.y + ButtonGeneralNetworkNo._scrollarea_offset_y <= CID3._group_button[i]._startY + CID3._group_button[i]._button_height 
+				&& FlxG.mouse.x + ButtonGeneralNetworkNo._scrollarea_offset_x >= CID3._group_button[i]._startX &&  FlxG.mouse.x + ButtonGeneralNetworkNo._scrollarea_offset_x <= CID3._group_button[i]._startX + CID3._group_button[i]._button_width && FlxG.mouse.justPressed == true )
+				{
+					button_number(i);
+					break;
+				}
+				
 			}
-			
 		}
 		
 		if (ActionInput.justPressed() == true
@@ -575,6 +604,11 @@ class ConfigurationProfile extends FlxGroup
 		&&  FlxG.mouse.y < FlxG.height - 50)
 		{
 			CID3._usernameInput.hasFocus = true;
+			CID3._usernameInput.fieldBorderColor = FlxColor.RED;	
+			CID3._usernameInput.fieldBorderThickness = 3;
+			
+			CID3._password_input.fieldBorderColor = FlxColor.BLACK;	
+			CID3._password_input.fieldBorderThickness = 1;
 			
 			if (RegCustom._sound_enabled[Reg._tn] == true
 			&&  Reg2._scrollable_area_is_scrolling == false)
@@ -582,7 +616,30 @@ class ConfigurationProfile extends FlxGroup
 							
 			#if mobile
 				RegTriggers._keyboard_open = true;
-			#end
+			#end		
+		}
+		
+		if (ActionInput.justPressed() == true
+		&&  FlxG.mouse.x > CID3._password_input.x
+		&&  FlxG.mouse.x < CID3._password_input.x + CID3._password_input.width
+		&&  FlxG.mouse.y + __configurations_output.__scrollable_area.scroll.y > CID3._password_input.y
+		&&  FlxG.mouse.y + __configurations_output.__scrollable_area.scroll.y < CID3._password_input.y + CID3._password_input.height
+		&&  FlxG.mouse.y < FlxG.height - 50)
+		{
+			CID3._usernameInput.fieldBorderColor = FlxColor.BLACK;	
+			CID3._usernameInput.fieldBorderThickness = 1;
+			
+			CID3._password_input.hasFocus = true;
+			CID3._password_input.fieldBorderColor = FlxColor.RED;	
+			CID3._password_input.fieldBorderThickness = 3;
+			
+			if (RegCustom._sound_enabled[Reg._tn] == true
+			&&  Reg2._scrollable_area_is_scrolling == false)
+				FlxG.sound.play("click", 1, false);
+							
+			#if mobile
+				RegTriggers._keyboard_open = true;
+			#end		
 		}
 	
 		// update get 18 more username suggestions everytime a key at username input object is pressed.

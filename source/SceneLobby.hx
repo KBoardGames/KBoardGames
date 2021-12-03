@@ -1021,11 +1021,13 @@ class SceneLobby extends FlxState
 			if (RegTriggers._make_leaderboards_not_active == true)
 			{
 				RegTriggers._make_leaderboards_not_active = false;
-				_ticks_buttons_menuBar = 1;
+				//RegTriggers._returnToLobbyMakeButtonsActive = true;
 				
-				menu_bar();
+				__menu_bar.__leaderboards.__scrollable_area.visible = false;
+				__menu_bar.__leaderboards.__scrollable_area.active = false;
 				
-				RegTriggers._returnToLobbyMakeButtonsActive = true;
+				__menu_bar.__leaderboards.visible = false;
+				__menu_bar.__leaderboards.active = false;
 			}
 		#end
 		
@@ -1099,8 +1101,6 @@ class SceneLobby extends FlxState
 			
 			if (_ticks_buttons_menuBar == 1)
 			{
-				menu_bar();
-				
 				_ticks_buttons_menuBar = 2;				
 				
 				ticks_buttons_menuBar();

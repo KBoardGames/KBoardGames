@@ -29,8 +29,7 @@ import flash.events.MouseEvent;
 import flash.geom.Matrix;
 import flash.geom.Rectangle;
 import flash.net.URLRequest;
-
-
+import haxe.crypto.Md5;
 import flash.text.TextFormatAlign;
 import flixel.util.FlxStringUtil;
 import openfl.Vector;

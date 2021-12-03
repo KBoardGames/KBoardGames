@@ -112,7 +112,7 @@ class GameHistoryAndNotations extends FlxGroup
 					_notation.makeGraphic(337, FlxG.height - Reg._offsetScreenY + 13, FlxColor.TRANSPARENT);
 			}
 			
-			if (RegCustom._notation_panel_10_percent_alpha_enabled[Reg._tn] == true)
+			if (RegCustom._notation_panel_40_percent_alpha_enabled[Reg._tn] == true)
 				if (RegCustom._notation_panel_same_background_color_enabled[Reg._tn] == false)
 					_notation.alpha = 0.60;
 					

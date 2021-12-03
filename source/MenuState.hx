@@ -39,7 +39,9 @@ class MenuState extends FlxState
 {
 	//public var _music:Sound;
 	//public var _sound_channel:SoundChannel;
-		
+	
+	public var __action_commands:ActionCommands;
+	
 	// Toggles fullscreen mode off or on.
 	private var _toggleFullscreen:ButtonGeneralNetworkNo; 
 
@@ -169,7 +171,8 @@ class MenuState extends FlxState
 		
 		RegTriggers.resetTriggers(); 		
 		RegFunctions.fontsSharpen();
-	
+		
+		Reg.resetRegVarsOnce();
 		getIPaddressFromServerOrMain();
 		
 		#if !html5
@@ -195,7 +198,6 @@ class MenuState extends FlxState
 			RegCustom.resetConfigurationVars();		
 		#end
 		
-		Reg.resetRegVarsOnce(); 
 		Reg.resetRegVars(); 
 		Reg2.resetRegVarsOnce();
 		Reg2.resetRegVars();
@@ -215,12 +217,19 @@ class MenuState extends FlxState
 		
 		if (Reg._startFullscreen == true) FlxG.fullscreen = true;
 		
+		if (Reg._clientReadyForPublicRelease == false)
+		{
+			__action_commands = new ActionCommands(); 
+			add(__action_commands);
+		}
+		
 		setExitHandler(function() 
 		{
 			// put any code here. it will be ran before client exits.
 			
 		});
 		
+		Reg2._scrollable_area_is_scrolling = false;
 	}
 	
 	private function chess_skill_level_setup():Void
@@ -348,6 +357,7 @@ class MenuState extends FlxState
 
 			FlxG.mouse.reset();
 			FlxG.mouse.enabled = true;
+			Reg._at_menu_state = true;
 		}
 		
 		if (Reg._yesNoKeyPressValueAtMessage >= 2 && Reg._buttonCodeValues == "z1000")
@@ -359,6 +369,7 @@ class MenuState extends FlxState
 		
 			FlxG.mouse.reset();
 			FlxG.mouse.enabled = true;
+			Reg._at_menu_state = true;
 		}
 		
 		// answered yes when asked if should check for a newer version of a client software.
@@ -395,6 +406,7 @@ class MenuState extends FlxState
 			
 			FlxG.mouse.reset();
 			FlxG.mouse.enabled = true;
+			Reg._at_menu_state = true;
 		}
 		
 		if (Reg._yesNoKeyPressValueAtMessage >= 2 && Reg._buttonCodeValues == "z1020")
@@ -406,6 +418,7 @@ class MenuState extends FlxState
 			
 			FlxG.mouse.reset();
 			FlxG.mouse.enabled = true;
+			Reg._at_menu_state = true;
 		}
 		
 		// server connection error message.
@@ -419,6 +432,7 @@ class MenuState extends FlxState
 			Reg._at_menu_state = true;
 			FlxG.mouse.reset();
 			FlxG.mouse.enabled = true;
+			Reg._at_menu_state = true;
 		}
 		
 		// no recent version available when after clicking a button to check for an newer version of the software.
@@ -431,6 +445,7 @@ class MenuState extends FlxState
 			
 			FlxG.mouse.reset();
 			FlxG.mouse.enabled = true;
+			Reg._at_menu_state = true;
 		}
 		
 		// cannot message to the website. user closed this message box.
@@ -443,6 +458,7 @@ class MenuState extends FlxState
 			
 			FlxG.mouse.reset();
 			FlxG.mouse.enabled = true;
+			Reg._at_menu_state = true;
 		}
 		
 		// question about give your username at the config scene. pressed ok.
@@ -457,6 +473,7 @@ class MenuState extends FlxState
 			
 			FlxG.mouse.reset();
 			FlxG.mouse.enabled = true;
+			Reg._at_menu_state = true;
 		}
 		
 		// question about give your username at the config scene. pressed register button.
@@ -471,6 +488,7 @@ class MenuState extends FlxState
 			
 			FlxG.mouse.reset();
 			FlxG.mouse.enabled = true;
+			Reg._at_menu_state = true;
 		}
 		
 		//  question about give your username at the config scene. pressed "x".
@@ -483,6 +501,7 @@ class MenuState extends FlxState
 			
 			FlxG.mouse.reset();
 			FlxG.mouse.enabled = true;
+			Reg._at_menu_state = true;
 		}
 			
 	}
@@ -556,12 +575,13 @@ class MenuState extends FlxState
 
 		FlxG.mouse.reset();
 		FlxG.mouse.enabled = true;
-	}	
+	}
 	
 	private function toggleFullScreenClicked():Void
 	{
 		if (Reg._clientReadyForPublicRelease == false)
 		{
+			// there is a bug where once client is maximized in window mode, two mouse clicks on the button "toggle fullscreen" are needed to return back to window mode. the problem seems to be that a windowed fullscreen is considered the same as a borderless fullscreen this is why the maximized button is disabled when Reg._clientReadyForPublicRelease is false. to take a screenshot of a fullscreen in window mode, press the M key then press it again to return to normal window mode.
 			FlxG.fullscreen = !FlxG.fullscreen;
 			saveMenu();
 		}
@@ -575,12 +595,13 @@ class MenuState extends FlxState
 		
 		#end
 		
-		if (RegCustom._profile_username_p1[Reg._tn] == "" 
-		||  RegCustom._profile_username_p1[Reg._tn] == "Guest 1") 
+		// TODO
+		/*if (RegCustom._profile_username_p1[Reg._tn] == "" 
+		||  RegCustom._profile_username_p1[Reg._tn] == "Guest1") 
 		{
 			goingOnlineIsUsernameSet();
 		}
-		else
+		else*/
 		{			
 			Reg._alreadyOnlineHost = false;
 			Reg._alreadyOnlineUser = false;
@@ -633,7 +654,7 @@ class MenuState extends FlxState
 	private function getIPaddressFromServerOrMain():Void
 	{
 		Reg._ipAddress = Reg._ipAddressServerMain;
-		
+			
 		#if html5
 			Reg._useThirdPartyIpAddress = false;
 		#elseif desktop
@@ -1199,7 +1220,7 @@ class MenuState extends FlxState
 			
 			// add the none bot name as the last button displayed at this scene. the name is from the configuration menu. this list of names is only seen when application build is set to debug.
 			if (RegCustom._profile_username_p1[Reg._tn] != ""
-			&&	RegCustom._profile_username_p1[Reg._tn] != "Guest 2"
+			&&	RegCustom._profile_username_p1[Reg._tn] != "Guest2"
 			&&	RegCustom._profile_username_p1[Reg._tn] != "Bot ben".toLowerCase()
 			&&	RegCustom._profile_username_p1[Reg._tn] != "Bot tina".toLowerCase()
 			&&	RegCustom._profile_username_p1[Reg._tn] != "Bot piper".toLowerCase()
@@ -1246,8 +1267,7 @@ class MenuState extends FlxState
 					botUseZakOnline();				
 				
 				else if (RegCustom._profile_username_p1[Reg._tn] != ""
-				&&	RegCustom._profile_username_p1[Reg._tn] != "Guest 1"
-				&&	RegCustom._profile_username_p1[Reg._tn] != "Guest 2"
+				&&	RegCustom._profile_username_p1[Reg._tn] != "Guest2"
 				&&	RegCustom._profile_username_p1[Reg._tn] != "Bot ben".toLowerCase()
 				&&	RegCustom._profile_username_p1[Reg._tn] != "Bot tina".toLowerCase()
 				&&	RegCustom._profile_username_p1[Reg._tn] != "Bot piper".toLowerCase()
@@ -1345,6 +1365,7 @@ class MenuState extends FlxState
 		if (_profile_username_p1 != null)
 		{
 			RegTypedef._dataAccount._username = RegCustom._profile_username_p1[Reg._tn];
+			
 			Reg2._menu_state_username_p1 = 5;
 			
 			bot_no_toggle();
@@ -1536,7 +1557,7 @@ class MenuState extends FlxState
 					_str = "Failed to get the ip from the website address. Is the website online?";
 					
 				else if (Reg._login_failed == true) 
-					_str = "Login failed. Is your username at " + Reg._websiteNameTitle + " website identical to the username at the configuration menu?";
+					_str = "Login failed. Verify your username and password at the configuration menu.";
 					
 				Reg._messageId = 10;
 				Reg._buttonCodeValues = "m1000";
@@ -1587,7 +1608,7 @@ class MenuState extends FlxState
 						)
 						{
 							if (RegCustom._sound_enabled[Reg._tn] == true
-							&&  Reg2._scrollable_area_is_scrolling == false)
+							&&	Reg2._scrollable_area_is_scrolling == false)
 								FlxG.sound.play("click", 1, false);
 						
 							if (_eventSchedulerHover != null) _eventSchedulerHover.active = false;					
@@ -1669,7 +1690,7 @@ class MenuState extends FlxState
 					&&	RegTriggers._buttons_set_not_active == false)
 					{
 						if (RegCustom._sound_enabled[Reg._tn] == true
-						&&  Reg2._scrollable_area_is_scrolling == false)
+						&&	Reg2._scrollable_area_is_scrolling == false)
 							FlxG.sound.play("click", 1, false);
 					
 						_clicked = true;

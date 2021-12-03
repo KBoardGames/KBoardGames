@@ -83,7 +83,7 @@ class RegCustom
 	/******************************
 	 * apply a 10% alpha to the notation panel.
 	 */
-	public static var _notation_panel_10_percent_alpha_enabled:Array<Bool> = [];
+	public static var _notation_panel_40_percent_alpha_enabled:Array<Bool> = [];
 	
 	/******************************
 	 * same background color as the game room?
@@ -376,10 +376,15 @@ class RegCustom
 	public static var _profile_avatar_number4:Array<String> = [];
 	
 	/******************************
-	 * offline username for player 1.
+	 * username for player 1.
 	 */
 	public static var _profile_username_p1:Array<String> = [];
 	public static var _profile_username_p2:Array<String> = [];
+	
+	/******************************
+	 * password for player 1. needed to login to lobby. player 2 does not use a password field.
+	 */
+	public static var _profile_password_p1:String = "";
 		 
 	/******************************
 	 * this is the maximum time permitted when assigning time for a game at the configuration scene. this var is used only at ConfigurationGames.hx to change the timer values.
@@ -442,10 +447,11 @@ class RegCustom
 	public static function resetConfigurationVars():Void
 	{
 		_profile_username_p1.splice(0, _profile_username_p1.length);
-		_profile_username_p1.push("Guest 1");
+		_profile_username_p1.push("Guest1");
+		
 		_profile_username_p2.splice(0, _profile_username_p2.length);
-		_profile_username_p2.push("Guest 2");
-
+		_profile_username_p2.push("Guest2");
+		
 		resetConfigurationVars2();
 	}
 	
@@ -527,7 +533,7 @@ class RegCustom
 		_capturing_units.push(true);
 		
 		_capturing_units_number.splice(0, _capturing_units_number.length);
-		_capturing_units_number.push(1);
+		_capturing_units_number.push(11);
 		
 		_chess_show_last_piece_moved.splice(0, _chess_show_last_piece_moved.length);
 		_chess_show_last_piece_moved.push(true);
@@ -536,13 +542,13 @@ class RegCustom
 		_chess_future_capturing_units_enabled.push(true);
 		
 		_chess_future_capturing_units_number.splice(0, _chess_future_capturing_units_number.length);
-		_chess_future_capturing_units_number.push(3);
+		_chess_future_capturing_units_number.push(10);
 		
 		_chess_path_to_king_enabled.splice(0, _chess_path_to_king_enabled.length);
 		_chess_path_to_king_enabled.push(true);
 		
 		_chess_path_to_king_number.splice(0, _chess_path_to_king_number.length);
-		_chess_path_to_king_number.push(1);
+		_chess_path_to_king_number.push(9);
 		
 		_chess_set_for_player1.splice(0, _chess_set_for_player1.length);
 		_chess_set_for_player1.push(6);
@@ -583,8 +589,8 @@ class RegCustom
 		_go_back_to_title_after_save.splice(0, _go_back_to_title_after_save.length);
 		_go_back_to_title_after_save.push(false);
 		
-		_notation_panel_10_percent_alpha_enabled.splice(0, _notation_panel_10_percent_alpha_enabled.length);
-		_notation_panel_10_percent_alpha_enabled.push(true);
+		_notation_panel_40_percent_alpha_enabled.splice(0, _notation_panel_40_percent_alpha_enabled.length);
+		_notation_panel_40_percent_alpha_enabled.push(true);
 		
 		_notation_panel_same_background_color_enabled.splice(0, _notation_panel_same_background_color_enabled.length);
 		_notation_panel_same_background_color_enabled.push(true);

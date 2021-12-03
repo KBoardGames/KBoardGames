@@ -62,12 +62,18 @@ class CID3 extends FlxGroup
 	 */
 	public static var _profile_general_instructions:FlxText;
 	
+	public static var _text_username:FlxText;
 	/******************************
 	 * type in the login username.
 	 */
 	public static var _usernameInput:FlxInputText;
 	
-	public static var _text_username:FlxText;
+	public static var _text_password:FlxText;
+	/******************************
+	 * type in the login username.
+	 */
+	public static var _password_input:FlxInputText;
+	
 	public static var _text_empty:ButtonGeneralNetworkNo;
 	public static var __configurations_output:ConfigurationOutput;
 	

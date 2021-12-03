@@ -83,7 +83,7 @@ class IdsMessageBox extends FlxGroup
 					if (SceneLobby._message == 1) _msg = new MessageBox(2000, "Yes", "No", true, true, false, false, "Notice!", "You cannot enter room " + Std.string(SceneLobby._number_room_full) + " because the amount of players needed to play a game has been reached.");
 				}
 				
-				case 2003: _msg = new MessageBox(2003, "Yes", "No", true, true, true, false, "Invitation to join room.", RegTypedef._dataPlayers._usernameInvite + " invites you to play " + RegTypedef._dataPlayers._gameName + " at room " + Std.string(Reg._inviteRoomNumberToJoin) + ". Do you want to enter that room?");
+				case 2003: _msg = new MessageBox(2003, "Yes", "No", true, true, true, false, "Invitation to join room.", RegTypedef._dataPlayers._usernameInvite + " invites you to play " + RegTypedef._dataPlayers._gameName.substr(0, RegTypedef._dataPlayers._gameName.length - 1).toLowerCase() + " at room " + Std.string(Reg._inviteRoomNumberToJoin) + ". Do you want to enter that room?");
 				
 				case 2010: _msg = new MessageBox(2010, "Yes", "No", true, true, false, false, "Notice!", "You cannot enter room " + Std.string(SceneLobby._number) + " because some of its data is not yet available.");
 				
@@ -137,7 +137,9 @@ class IdsMessageBox extends FlxGroup
 				}
 				
 				case 9010: _msg = new MessageBox(9010, "Yes", "No", true, true, false, false, "", "Theme saved.");
-								
+				
+				case 9012: _msg = new MessageBox(9012, "Yes", "No", true, true, false, false, "", 'Cannot save theme. Password must be greater than 3 characters because you are not using a guest account.');
+				
 				// menu credits 10000-10999
 				case 10001: _msg = new MessageBox(10001, "Yes", "No", true, true, true, false, "Website Credits.", "Display the full credits page at " + Reg._websiteNameTitle + " website?");
 				

@@ -849,6 +849,11 @@ typedef DataAccount =
 	var _username: String;
 	
 	/******************************
+	 * password hash encrypted with md5.
+	 */
+	var _password_hash: String;
+	
+	/******************************
 	 * the current message to be displayed as message box.
 	 */
 	var _popupMessage: String;
@@ -856,7 +861,7 @@ typedef DataAccount =
 	/******************************
 	 * used to return the this local hosts name.
 	 */
-	var _host: String;
+	var _hostname: String;
 	
 	/******************************
 	 * IP of player.
@@ -1857,8 +1862,9 @@ class RegTypedef
 	{
 		id: Std.string(FlxG.random.int(100000000, 999999999)) + Std.string(FlxG.random.int(100000000, 999999999)),
 		_username: "", 					// the username of the player.	
+		_password_hash: "",
 		_popupMessage: "",				// the current message to be displayed as a message box.
-		_host: "",						// used to return the this local hosts name.
+		_hostname: "",						// used to return the this local hosts name.
 		_ip: "",						// IP of player.
 		_alreadyOnlineHost: false,			// is there two computers with the same host name connected to server?
 		_alreadyOnlineUser: false,			// is there already a user with that username online?
@@ -2321,7 +2327,8 @@ class RegTypedef
 		_dataAccount.id = _dataGame.id;
 		//_dataAccount._username = ""; 	// the username of the player.	
 		_dataAccount._popupMessage = "";				// the current message to be displayed as a message box.
-		_dataAccount._host = "";						// used to return the this local hosts name.
+		_dataAccount._hostname = "";						// used to return the this local hosts name.
+		_dataAccount._password_hash = "";
 		_dataAccount._ip = "";							// IP of player.
 		_dataAccount._alreadyOnlineHost = false;		// is there two computers with the same host name connected to server?
 		_dataAccount._alreadyOnlineUser = false;		// is there already a user with that username online?

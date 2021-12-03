@@ -165,8 +165,19 @@ class ActionCommands extends FlxGroup
 					
 				if ( FlxG.keys.justReleased.F )
 					FlxG.fullscreen = !FlxG.fullscreen;
+					
 			#end
 		}
+		
+		#if !html5
+			if (FlxG.keys.justReleased.M 
+			&&	Reg.__title_bar._title.text != "Configurations: Profile")
+			{
+				Lib.application.window.borderless = false;
+				Lib.application.window.maximized = !Lib.application.window.maximized;
+			}
+		#end
+		
 		
 		super.update(elapsed);
 	}

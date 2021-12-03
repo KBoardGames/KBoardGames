@@ -806,7 +806,7 @@ class MenuBar extends FlxGroup
 			if (Reg2._checked_for_new_account == false
 			&&  RegTypedef._dataStatistics._chess_elo_rating == 0
 			||  Reg2._checked_for_new_account == false
-			&&	RegTypedef._dataAccount._username.substr(0, 5) == "guest")
+			&&	RegTypedef._dataAccount._username.substr(0, 5) == "Guest")
 			{
 				Reg2._checked_for_new_account = true;
 				
@@ -1299,13 +1299,14 @@ class MenuBar extends FlxGroup
 		haxe.Timer.delay(function ()
 		{
 			set_all_menu_bar_elements_not_active(); // reset buttons to false because just after closing a dialog box, that class will reset state of buttons back to active.
-			
-			Reg._at_leaderboards = false;
-			
+		
 			FlxG.mouse.reset();
 			FlxG.mouse.enabled = true;
-			
+					
+			RegTriggers._returnToLobbyMakeButtonsActive = true;
 			RegTriggers._make_leaderboards_not_active = true;
+			
+			Reg._at_leaderboards = false;
 		}, 500); // milliseconds
 	}
 	

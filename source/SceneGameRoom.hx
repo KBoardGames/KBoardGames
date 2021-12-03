@@ -1253,12 +1253,7 @@ class SceneGameRoom extends FlxState
 		}
 			
 		var _count:Int = howManyPlayersAreInGameRoom();
-	/*
-	trace(GameChatter._chatterIsOpen + " GameChatter._chatterIsOpen");
-	trace(_count + " _count");
-	trace (Reg._gameOverForPlayer + " Reg._gameOverForPlayer");
-	trace(Reg._gameOverForAllPlayers + " Reg._gameOverForAllPlayers");
-	*/
+		
 		if (Reg._game_online_vs_cpu == true 
 		&& PlayState._clientDisconnect == false
 		|| Reg._game_offline_vs_cpu == false 

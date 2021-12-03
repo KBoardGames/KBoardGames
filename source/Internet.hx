@@ -241,13 +241,7 @@ class Internet extends FlxGroup
 						
 						Reg2._eventBackgroundColour[i] = Std.parseInt(_eventData[46]);
 					}
-					/*
-					trace(Reg2._eventName[0] + " _name");
-					trace(Reg2._eventDescription[0] + " _description");
-					trace(Reg2._eventMonths[0] + " _months");
-					trace(Reg2._eventDays[0] + " _days");
-					trace(Reg2._eventBackgroundColour[0] + " _background_colour");
-					*/
+					
 				}
 			}		
 

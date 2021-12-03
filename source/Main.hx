@@ -25,22 +25,17 @@ package;
  */
 class Main extends Sprite
 {
-	var initialState:Class<FlxState> = MenuState; // The FlxState the game starts with.
 
 	var zoom:Float = -1; // If -1, zoom is automatically calculated to fit the window dimensions.
-
-	// You can pretty much ignore everything from here on - your code should go in your states.
 
 	public function new()
 	{
 		super();
-
-		setupGame();
-	}
-
-	private function setupGame():Void
-	{
-		addChild(new FlxGame(Reg._client_width, Reg._client_height, initialState, zoom, Reg._framerate, Reg._framerate, true, true));
+		
+		// there is a bug where once client is maximized in window mode, two mouse clicks on the button "toggle fullscreen" are needed to return back to window mode. the problem seems to be that a windowed fullscreen is considered the same as a borderless fullscreen this is why the maximized button is disabled when Reg._clientReadyForPublicRelease is false. to take a screenshot of a fullscreen in window mode, press the M key then press it again to return to normal window mode.
+		Lib.application.window.resizable = false;
+		
+		addChild(new FlxGame(Reg._client_width, Reg._client_height, MenuState, zoom, Reg._framerate, Reg._framerate, true, true));
 	}
 	
 }

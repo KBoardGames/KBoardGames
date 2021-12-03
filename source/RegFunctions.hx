@@ -488,7 +488,7 @@ class RegFunctions
 			
 			saveFile.writeString("_go_back_to_title_after_save: " + RegCustom._go_back_to_title_after_save[Reg._tn] + "\r\n");
 			
-			saveFile.writeString("_notation_panel_10_percent_alpha_enabled: " + RegCustom._notation_panel_10_percent_alpha_enabled[Reg._tn] + "\r\n");
+			saveFile.writeString("_notation_panel_40_percent_alpha_enabled: " + RegCustom._notation_panel_40_percent_alpha_enabled[Reg._tn] + "\r\n");
 			
 			saveFile.writeString("_notation_panel_same_background_color_enabled: " + RegCustom._notation_panel_same_background_color_enabled[Reg._tn] + "\r\n");
 			
@@ -929,9 +929,9 @@ class RegFunctions
 						
 						try
 						{	
-							var _tmp = Std.string(data.get("_notation_panel_10_percent_alpha_enabled"));
-							RegCustom._notation_panel_10_percent_alpha_enabled[Reg._tn] = false;
-							if (_tmp == "true") RegCustom._notation_panel_10_percent_alpha_enabled[Reg._tn] = true;
+							var _tmp = Std.string(data.get("_notation_panel_40_percent_alpha_enabled"));
+							RegCustom._notation_panel_40_percent_alpha_enabled[Reg._tn] = false;
+							if (_tmp == "true") RegCustom._notation_panel_40_percent_alpha_enabled[Reg._tn] = true;
 						}
 						catch (e:Dynamic){}
 						
@@ -1241,8 +1241,8 @@ class RegFunctions
 	// the values of this function will be changed when after the next theme is read from the themes folder. this function only pushes the array so that the theme can populate these vars.
 	static public function push_next_theme():Void
 	{
-		RegCustom._profile_username_p1.push("Guest 1");
-		RegCustom._profile_username_p2.push("Guest 2");
+		RegCustom._profile_username_p1.push("Guest1");
+		RegCustom._profile_username_p2.push("Guest2");
 		RegCustom._gameboard_units_odd_shade_number.push([1, 3]);
 		RegCustom._gameboard_units_even_shade_number.push([9, 1]);
 		RegCustom._gameboard_units_odd_color_number.push([3, 1]);
@@ -1265,12 +1265,12 @@ class RegFunctions
 		RegCustom._table_body_background_brightness.push(0.3);
 		RegCustom._table_body_background_saturation.push(0.7);		
 		RegCustom._capturing_units.push(true);
-		RegCustom._capturing_units_number.push(1);
+		RegCustom._capturing_units_number.push(11);
 		RegCustom._chess_show_last_piece_moved.push(true);
 		RegCustom._chess_future_capturing_units_enabled.push(true);
-		RegCustom._chess_future_capturing_units_number.push(3);
+		RegCustom._chess_future_capturing_units_number.push(10);
 		RegCustom._chess_path_to_king_enabled.push(true);
-		RegCustom._chess_path_to_king_number.push(1);
+		RegCustom._chess_path_to_king_number.push(9);
 		RegCustom._chess_set_for_player1.push(6);
 		RegCustom._chess_set_for_player2.push(6);
 		RegCustom._chess_set_for_player1_color_number.push(1);
@@ -1282,7 +1282,7 @@ class RegFunctions
 		RegCustom._leaderboard_enabled.push(true);
 		RegCustom._house_feature_enabled.push(false);
 		RegCustom._go_back_to_title_after_save.push(false);
-		RegCustom._notation_panel_10_percent_alpha_enabled.push(true);
+		RegCustom._notation_panel_40_percent_alpha_enabled.push(true);
 		RegCustom._notation_panel_same_background_color_enabled.push(true);
 		RegCustom._notation_panel_background_color_enabled.push(true);
 		RegCustom._notation_panel_background_color_number.push(10);
@@ -1355,6 +1355,9 @@ class RegFunctions
 					
 			if (_gameMenu.data._profile_username_p2 != null)
 				RegCustom._profile_username_p2[Reg._tn] = _gameMenu.data._profile_username_p2;
+				
+			if (_gameMenu.data._profile_password_p1 != null)
+				RegCustom._profile_password_p1 = _gameMenu.data._profile_password_p1;
 			
 			if (_gameMenu.data._profile_avatar_number1 != null)
 				RegCustom._profile_avatar_number1[Reg._tn] = _gameMenu.data._profile_avatar_number1;
@@ -1395,13 +1398,15 @@ class RegFunctions
 			
 			_gameMenu.data._theme_name_current = RegCustom._theme_name_current;
 			
-			if (RegCustom._profile_username_p1[Reg._tn] == "") RegCustom._profile_username_p1[Reg._tn] = "Guest 1";
+			if (RegCustom._profile_username_p1[Reg._tn] == "") RegCustom._profile_username_p1[Reg._tn] = "Guest1";
 			
-			if (RegCustom._profile_username_p2[Reg._tn] == "") RegCustom._profile_username_p2[Reg._tn] = "Guest 2";
+			if (RegCustom._profile_username_p2[Reg._tn] == "") RegCustom._profile_username_p2[Reg._tn] = "Guest2";
 			
 			_gameMenu.data._profile_username_p1 = RegCustom._profile_username_p1[Reg._tn];
 			
 			_gameMenu.data._profile_username_p2 = RegCustom._profile_username_p2[Reg._tn];
+			
+			_gameMenu.data._profile_password_p1 = RegCustom._profile_password_p1;
 			
 			// this need to be clear or else the old username will be used at next login.
 			RegTypedef._dataAccount._username = "";

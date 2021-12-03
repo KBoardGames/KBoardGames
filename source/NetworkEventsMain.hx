@@ -187,7 +187,7 @@ class NetworkEventsMain extends FlxState
 			PlayState._text_client_login_data3.text = ""
 				+ "Last known IP: " + _data._ip + ".\n";
 			PlayState._text_client_login_data4.text = ""
-				+ "Hostname: " + _data._host + ".\n";
+				+ "Hostname: " + _data._hostname + ".\n";
 			
 			PlayState._text_server_login_data.visible = true;
 			PlayState._text_server_login_data2.visible = true;
@@ -215,7 +215,9 @@ class NetworkEventsMain extends FlxState
 			else 
 			{
 				Reg._isLoggingIn = true;
+				PlayState.allTypedefUsernameUpdate(RegTypedef._dataAccount._username);
 			}
+			
 		});	
 	}	
 		
@@ -2080,13 +2082,6 @@ class NetworkEventsMain extends FlxState
 				}
 			}
 			
-	/*trace(RegTypedef._dataPlayers._gamePlayersValues + "_gamePlayersValues");
-	trace(RegTypedef._dataPlayers._usernamesStatic + "_usernamesStatic");
-	trace(RegTypedef._dataPlayers._usernamesDynamic + "_usernamesDynamic");
-	trace(_data._username + "_username");
-	trace(Reg._playerWaitingAtGameRoom+"Reg._playerWaitingAtGameRoom");
-	trace("--------------------");
-	*/					
 			if (_found == false && RegTypedef._dataPlayers._spectatorPlaying == false) {return;} // username not found at room.
 			
 			Reg._atTimerZeroFunction = false;
@@ -2157,11 +2152,6 @@ class NetworkEventsMain extends FlxState
 					Reg._gameOverForPlayer = true;
 				}
 				
-				/*// user is disconnecting by pressing the esc key
-				if (_data.id == RegTypedef._dataPlayers.id 
-				&&   PlayState._clientDisconnect == true
-				&&   PlayState._clientDisconnectDo == true)
-					PlayState.disconnectByESC();*/
 			}
 			
 			// the other player.
@@ -2219,15 +2209,6 @@ class NetworkEventsMain extends FlxState
 								
 			}
 			
-	/*
-	trace(Reg._gameOverForAllPlayers + "Reg._gameOverForAllPlayers");
-	trace(Reg._playerLeftGameUsername + "Reg._playerLeftGameUsername");
-	trace(_totalPlayers + "_totalPlayers");	
-	trace(Reg._roomPlayerLimit + "Reg._roomPlayerLimit");
-	trace(RegTypedef._dataPlayers._usernamesDynamic);
-	trace(RegTypedef._dataPlayers._usernamesStatic + " static");
-	trace(_data._gamePlayersValues+"_gamePlayersValues");
-	*/
 		});
 	}
 	

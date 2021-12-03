@@ -24,8 +24,10 @@ package;
  */
 class Configuration extends FlxState
 {
-	public var _output:ConfigurationOutput;
+	public var __action_commands:ActionCommands;
 	
+	public var _output:ConfigurationOutput;
+		
 	override public function create():Void
 	{
 		super.create();
@@ -57,6 +59,12 @@ class Configuration extends FlxState
 		
 		_output = new ConfigurationOutput();
 		add(_output);
+		
+		if (Reg._clientReadyForPublicRelease == false)
+		{
+			__action_commands = new ActionCommands(); 
+			add(__action_commands);
+		}
 	}
 	
 	override public function update(elapsed:Float):Void 

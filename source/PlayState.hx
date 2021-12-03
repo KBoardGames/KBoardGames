@@ -463,11 +463,13 @@ class PlayState extends FlxState
 				}
 				
 				#if html5
-					RegTypedef._dataAccount._host = "html5";
+					RegTypedef._dataAccount._hostname = "html5";
 				#else
-					RegTypedef._dataAccount._host = Internet.getHostname();
+					RegTypedef._dataAccount._hostname = Internet.getHostname();
 				#end
 				
+				RegTypedef._dataAccount._password_hash = Md5.encode(RegCustom._profile_password_p1);
+					
 				clientSocket.send("Join", RegTypedef._dataAccount); // go to the event "join" at server then at server at event join there could be a broadcast that will send data to a client event.
 				haxe.Timer.delay(function (){}, Reg2._event_sleep);
 				

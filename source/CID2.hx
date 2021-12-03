@@ -244,7 +244,7 @@ class CID2 extends FlxGroup
 	public static var _question_notation_panel_enabled:TextGeneral;
 	public static var _question_background_alpha_enabled:TextGeneral;
 	public static var _question_gameboard_border_enabled:TextGeneral;
-	public static var _question_notation_panel_10_percent_alpha_enabled:TextGeneral;
+	public static var _question_notation_panel_40_percent_alpha_enabled:TextGeneral;
 	public static var _question_notation_panel_same_background_color:TextGeneral;
 	public static var _question_notation_panel_background_color:TextGeneral;
 	public static var _question_notation_panel_text_color_number:TextGeneral;
@@ -313,7 +313,7 @@ class CID2 extends FlxGroup
 	public static var _button_move_timer_enabled:ButtonGeneralNetworkNo;
 	public static var _button_move_total_enabled:ButtonGeneralNetworkNo;
 	public static var _button_notation_panel_enabled:ButtonGeneralNetworkNo;
-	public static var _button_notation_panel_10_percent_alpha_enabled:ButtonGeneralNetworkNo;
+	public static var _button_notation_panel_40_percent_alpha_enabled:ButtonGeneralNetworkNo;
 	public static var _button_notation_panel_same_background_color_enabled:ButtonGeneralNetworkNo;
 	
 	public static var _button_notation_panel_background_color_enabled:ButtonGeneralNetworkNo;

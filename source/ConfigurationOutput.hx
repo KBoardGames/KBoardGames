@@ -506,11 +506,21 @@ class ConfigurationOutput extends FlxGroup
 				Avatars._image_profile_avatar.loadGraphic("vendor/multiavatar/" + RegCustom._profile_avatar_number1[Reg._tn]);
 			#end
 		
-			if (RegCustom._profile_username_p1[Reg._tn] == "")
+			if (RegCustom._profile_username_p1[Reg._tn] == ""
+			||	CID3._usernameInput.text.toLowerCase() == "guest")
 			{
-				RegCustom._profile_username_p1[Reg._tn] = "Guest 1";
-				CID3._usernameInput.text = "Guest 1";
+				RegCustom._profile_username_p1[Reg._tn] = "Guest1";
+				CID3._usernameInput.text = "Guest1";
 			}
+			
+			else if (CID3._password_input.text.length <= 3)
+			{
+				RegTriggers._config_menu_save_notice = true;
+				return;
+			}
+			
+			RegCustom._profile_password_p1 = CID3._password_input.text;
+			
 		}
 		else
 		{
@@ -521,8 +531,8 @@ class ConfigurationOutput extends FlxGroup
 		
 			if (RegCustom._profile_username_p2[Reg._tn] == "")
 			{
-				RegCustom._profile_username_p2[Reg._tn] = "Guest 2";
-				CID3._usernameInput.text = "Guest 2";
+				RegCustom._profile_username_p2[Reg._tn] = "Guest2";
+				CID3._usernameInput.text = "Guest2";
 			}
 		}
 		
@@ -548,18 +558,18 @@ class ConfigurationOutput extends FlxGroup
 		{
 			RegTriggers._config_menu_save_notice = false;
 			
-			CID2._button_shade_even_units_minus.active = false;
-			CID2._button_shade_even_units_plus.active = false;		
-			CID2._button_shade_odd_units_minus.active = false;
-			CID2._button_shade_odd_units_plus.active = false;
+			if (CID3._usernameInput.text.substr(0, 5).toLowerCase() != "guest"
+			&&	CID3._password_input.text.length <= 3)
+			{
+				Reg._messageId = 9012;
+				Reg._buttonCodeValues = "v1012";
+			}
 			
-			CID2._button_color_even_units_minus.active = false;
-			CID2._button_color_even_units_plus.active = false;		
-			CID2._button_color_odd_units_minus.active = false;
-			CID2._button_color_odd_units_plus.active = false;
-			
-			Reg._messageId = 9001;
-			Reg._buttonCodeValues = "v1000";			
+			else
+			{
+				Reg._messageId = 9001;
+				Reg._buttonCodeValues = "v1000";
+			}
 			SceneGameRoom.messageBoxMessageOrder();			
 		}
 				
@@ -600,6 +610,14 @@ class ConfigurationOutput extends FlxGroup
 				
 			_button_games.has_toggle = true;
 			add(_button_games);
+		}
+		
+		// profile password message about cannot save theme because password field has to few characters.
+		if (Reg._yesNoKeyPressValueAtMessage > 0 && Reg._buttonCodeValues == "v1012")
+		{
+			Reg._yesNoKeyPressValueAtMessage = 0;
+			Reg._buttonCodeValues = "";
+			
 		}
 		
 		super.update(elapsed);

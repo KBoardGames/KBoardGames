@@ -172,7 +172,7 @@ class ButtonGeneralNetworkYes extends FlxUIButton
 					else //if (Reg._move_number_current == 0 && GameChatter._chatterIsOpen == false)
 					{
 						label.text = "Send";
-						y = _startY;
+						y = _startY - 14;
 						visible = true;
 					}
 				}			
@@ -193,7 +193,6 @@ class ButtonGeneralNetworkYes extends FlxUIButton
 		
 		else if (Reg._buttonCodeValues == "")
 		{
-			Reg._buttonCodeValues = "";
 			Reg2._lobby_button_alpha = 0.3;
 			alpha = 1;
 		}

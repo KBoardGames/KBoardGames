@@ -235,7 +235,7 @@ class ConfigurationGeneral extends CID2
 	{
 		gameboard_coordinates();
 		display_the_notation_panel();
-		notation_panel_10_percent_alpha();
+		notation_panel_40_percent_alpha();
 		notation_panel_same_background_color();
 		notation_panel_background_color();
 		notation_panel_text_color();
@@ -315,20 +315,20 @@ class ConfigurationGeneral extends CID2
 	}
 	
 	
-	private function notation_panel_10_percent_alpha():Void
+	private function notation_panel_40_percent_alpha():Void
 	{
 		_num += 1;
 		
-		CID2._question_notation_panel_10_percent_alpha_enabled = new TextGeneral(15, CID2._button_notation_panel_enabled.height + CID2._button_notation_panel_enabled.y + CID2._offset_rows_y, 800, "Apply 40% transparency to the notation panel?");
-		CID2._question_notation_panel_10_percent_alpha_enabled.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
-		CID2._question_notation_panel_10_percent_alpha_enabled.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
-		CID2._group.add(CID2._question_notation_panel_10_percent_alpha_enabled);
+		CID2._question_notation_panel_40_percent_alpha_enabled = new TextGeneral(15, CID2._button_notation_panel_enabled.height + CID2._button_notation_panel_enabled.y + CID2._offset_rows_y, 800, "Apply 40% transparency to the notation panel?");
+		CID2._question_notation_panel_40_percent_alpha_enabled.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
+		CID2._question_notation_panel_40_percent_alpha_enabled.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
+		CID2._group.add(CID2._question_notation_panel_40_percent_alpha_enabled);
 		
-		CID2._button_notation_panel_10_percent_alpha_enabled = new ButtonGeneralNetworkNo(850, CID2._question_notation_panel_10_percent_alpha_enabled.y + CID2._offset_button_y, "", 100, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, null, RegCustom._button_color[Reg._tn]);
-		CID2._button_notation_panel_10_percent_alpha_enabled.label.font = Reg._fontDefault;
-		CID2._button_notation_panel_10_percent_alpha_enabled.label.text = Std.string(RegCustom._notation_panel_10_percent_alpha_enabled[Reg._tn]);
+		CID2._button_notation_panel_40_percent_alpha_enabled = new ButtonGeneralNetworkNo(850, CID2._question_notation_panel_40_percent_alpha_enabled.y + CID2._offset_button_y, "", 100, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, null, RegCustom._button_color[Reg._tn]);
+		CID2._button_notation_panel_40_percent_alpha_enabled.label.font = Reg._fontDefault;
+		CID2._button_notation_panel_40_percent_alpha_enabled.label.text = Std.string(RegCustom._notation_panel_40_percent_alpha_enabled[Reg._tn]);
 		
-		CID2._group_button.push(CID2._button_notation_panel_10_percent_alpha_enabled);
+		CID2._group_button.push(CID2._button_notation_panel_40_percent_alpha_enabled);
 		CID2._group.add(CID2._group_button[_num]);
 	}
 	
@@ -336,7 +336,7 @@ class ConfigurationGeneral extends CID2
 	{
 		_num += 1;
 		
-		CID2._question_notation_panel_same_background_color = new TextGeneral(15, CID2._button_notation_panel_10_percent_alpha_enabled.height + CID2._button_notation_panel_10_percent_alpha_enabled.y + CID2._offset_rows_y, 800, "Is notation panel same background color as game room?");
+		CID2._question_notation_panel_same_background_color = new TextGeneral(15, CID2._button_notation_panel_40_percent_alpha_enabled.height + CID2._button_notation_panel_40_percent_alpha_enabled.y + CID2._offset_rows_y, 800, "Is notation panel same background color as game room?");
 		CID2._question_notation_panel_same_background_color .setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
 		CID2._question_notation_panel_same_background_color.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		CID2._group.add(CID2._question_notation_panel_same_background_color);
@@ -809,7 +809,7 @@ class ConfigurationGeneral extends CID2
 		_num += 1;
 		
 		//----------------------------
-		CID2._question_leaderboard_enabled = new TextGeneral(15, CID2._button_table_body_background_saturation_number_minus.height + CID2._button_table_body_background_saturation_number_minus.y + CID2._offset_rows_y, 800, "Show leading competitors in various game statistics? (leaderboard.)", 8, true, true);
+		CID2._question_leaderboard_enabled = new TextGeneral(15, CID2._button_table_body_background_saturation_number_minus.height + CID2._button_table_body_background_saturation_number_minus.y + CID2._offset_rows_y, 800, "Show leaderboards which is all ranking of the leaders in a competitive events?", 8, true, true);
 		CID2._question_leaderboard_enabled.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
 		CID2._question_leaderboard_enabled.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		CID2._group.add(CID2._question_leaderboard_enabled);
@@ -1450,7 +1450,7 @@ class ConfigurationGeneral extends CID2
 		{
 			CID2._sprite_chess_path_to_king_bg.visible = false;
 		}
-				
+		
 		// configuration menu. options saved.
 		if (Reg._yesNoKeyPressValueAtMessage > 0 && Reg._buttonCodeValues == "v1000")
 		{
@@ -1464,36 +1464,39 @@ class ConfigurationGeneral extends CID2
 			FlxG.switchState(new Configuration());
 		}
 		
-		for (i in 0... CID2._group_button.length)
-		{
-			// if mouse is on the button plus any offset made by the box scroller and mouse is pressed...
-			if (FlxG.mouse.y + ButtonGeneralNetworkNo._scrollarea_offset_y >= CID2._group_button[i]._startY &&  FlxG.mouse.y + ButtonGeneralNetworkNo._scrollarea_offset_y <= CID2._group_button[i]._startY + CID2._group_button[i]._button_height 
-			&& FlxG.mouse.x + ButtonGeneralNetworkNo._scrollarea_offset_x >= CID2._group_button[i]._startX &&  FlxG.mouse.x + ButtonGeneralNetworkNo._scrollarea_offset_x <= CID2._group_button[i]._startX + CID2._group_button[i]._button_width && FlxG.mouse.justPressed == true )
+		if (Reg._buttonCodeValues == "")
+		{	
+			for (i in 0... CID2._group_button.length)
 			{
-				if (Reg._tn > 0)
+				// if mouse is on the button plus any offset made by the box scroller and mouse is pressed...
+				if (FlxG.mouse.y + ButtonGeneralNetworkNo._scrollarea_offset_y >= CID2._group_button[i]._startY &&  FlxG.mouse.y + ButtonGeneralNetworkNo._scrollarea_offset_y <= CID2._group_button[i]._startY + CID2._group_button[i]._button_height 
+				&& FlxG.mouse.x + ButtonGeneralNetworkNo._scrollarea_offset_x >= CID2._group_button[i]._startX &&  FlxG.mouse.x + ButtonGeneralNetworkNo._scrollarea_offset_x <= CID2._group_button[i]._startX + CID2._group_button[i]._button_width && FlxG.mouse.justPressed == true )
 				{
-					buttonNumber(i);
-					break;
+					if (Reg._tn > 0)
+					{
+						buttonNumber(i);
+						break;
+					}
 				}
-			}
-			
-		}
-		
-		//############################# code for toggle buttons. used along with __scrollable_area scroll offset.
-		for (i in 0... CID2._group_button_toggle.length)
-		{
-			// if mouse is on the button plus any offset made by the box scroller and mouse is pressed...
-			if (FlxG.mouse.y + ButtonToggleFlxState._scrollarea_offset_y >= CID2._group_button_toggle[i]._startY &&  FlxG.mouse.y + ButtonToggleFlxState._scrollarea_offset_y <= CID2._group_button_toggle[i]._startY + CID2._group_button_toggle[i]._button_height 
-			&& FlxG.mouse.x + ButtonToggleFlxState._scrollarea_offset_x >= CID2._group_button_toggle[i]._startX &&  FlxG.mouse.x + ButtonToggleFlxState._scrollarea_offset_x <= CID2._group_button_toggle[i]._startX + CID2._group_button_toggle[i]._button_width && FlxG.mouse.justPressed == true )
-			{
-				Reg._gameId = i;
-				buttonNumberToggle();
 				
-				if (RegCustom._sound_enabled[Reg._tn] == true
-				&&  Reg2._scrollable_area_is_scrolling == false)
-					FlxG.sound.play("click", 1, false);
 			}
-			
+		
+			//############################# code for toggle buttons. used along with __scrollable_area scroll offset.
+			for (i in 0... CID2._group_button_toggle.length)
+			{
+				// if mouse is on the button plus any offset made by the box scroller and mouse is pressed...
+				if (FlxG.mouse.y + ButtonToggleFlxState._scrollarea_offset_y >= CID2._group_button_toggle[i]._startY &&  FlxG.mouse.y + ButtonToggleFlxState._scrollarea_offset_y <= CID2._group_button_toggle[i]._startY + CID2._group_button_toggle[i]._button_height 
+				&& FlxG.mouse.x + ButtonToggleFlxState._scrollarea_offset_x >= CID2._group_button_toggle[i]._startX &&  FlxG.mouse.x + ButtonToggleFlxState._scrollarea_offset_x <= CID2._group_button_toggle[i]._startX + CID2._group_button_toggle[i]._button_width && FlxG.mouse.justPressed == true )
+				{
+					Reg._gameId = i;
+					buttonNumberToggle();
+					
+					if (RegCustom._sound_enabled[Reg._tn] == true
+					&&  Reg2._scrollable_area_is_scrolling == false)
+						FlxG.sound.play("click", 1, false);
+				}
+				
+			}
 		}
 		
 		super.update(elapsed);		

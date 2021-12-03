@@ -17,6 +17,7 @@
 */
 
 package;
+import flixel.system.scaleModes.RatioScaleMode;
 
 /**
  * Currently the menu bar only has the disconnect button. most class new this class so to get the disconnect button on their scenes.
@@ -43,7 +44,7 @@ class TitleBar extends FlxGroup
 	
 	public function new(_text:String, _from_menuState:Bool = false) 
 	{
-		super();
+		super();		
 		
 		var _color = FlxColor.fromHSB(RegCustomColors.title_bar_background_color().hue, 1, RegCustom._title_bar_background_brightness[Reg._tn]);
 		
@@ -132,31 +133,20 @@ class TitleBar extends FlxGroup
 	{
 		#if !html5
 			if (Reg._at_menu_state == true)
-			{
-				
+			{				
 				// This class has no onResize function. So, use this code here.
 				if (FlxG.fullscreen == true 
 				&&	_button_disconnect.active == false)
 				{
 					_button_disconnect.active = true;
 					_button_disconnect.visible = true;
-					
-					if (Lib.application.window.resizable == false)
-						Lib.application.window.resizable = true;
 				}
 			}
 			
-			if (Reg._at_menu_state == true)
+			else if (_button_disconnect != null)
 			{
-				if (FlxG.fullscreen == false 
-				&&	_button_disconnect.active == true)
-				{
-					_button_disconnect.visible = false;
-					_button_disconnect.active = false;
-					
-					if (Lib.application.window.resizable == true)
-						Lib.application.window.resizable = false;
-				}
+				_button_disconnect.visible = false;
+				_button_disconnect.active = false;
 			}
 			
 		#end

@@ -50,7 +50,7 @@ class ConfigurationProfileEvents extends CID2
 			Avatars._profile_avatar_notice.text = Avatars._text_current_avatar_for_player + "1";
 		#end
 		
-		if (RegCustom._profile_username_p1[Reg._tn] == "") RegCustom._profile_username_p1[Reg._tn] = "Guest 1";
+		if (RegCustom._profile_username_p1[Reg._tn] == "") RegCustom._profile_username_p1[Reg._tn] = "Guest1";
 		
 		if (CID3._button_p1.has_toggle == false)
 			CID3._usernameInput.text = RegCustom._profile_username_p1[Reg._tn];
@@ -85,7 +85,7 @@ class ConfigurationProfileEvents extends CID2
 			Avatars._profile_avatar_notice.text = Avatars._text_current_avatar_for_player + "2";
 		#end
 		
-		if (RegCustom._profile_username_p2[Reg._tn] == "") RegCustom._profile_username_p2[Reg._tn] = "Guest 2";
+		if (RegCustom._profile_username_p2[Reg._tn] == "") RegCustom._profile_username_p2[Reg._tn] = "Guest2";
 		
 		if (CID3._button_p2.has_toggle == false)
 			CID3._usernameInput.text = RegCustom._profile_username_p2[Reg._tn];

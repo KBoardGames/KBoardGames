@@ -1,9 +1,9 @@
-_profile_username_p1: admin
+_profile_username_p1: Guest 1
 _profile_username_p2: Guest 2
 _gameboard_units_odd_shade_number: 1, 1
 _gameboard_units_even_shade_number: 8, 2
-_gameboard_units_odd_color_number: 3, 11
-_gameboard_units_even_color_number: 2, 2
+_gameboard_units_odd_color_number: 4, 11
+_gameboard_units_even_color_number: 3, 2
 _username_suggestions_enabled: true
 _gameboard_border_enabled: false
 _gameboard_border_number: 5
@@ -18,25 +18,28 @@ _client_background_image_number: 5
 _client_background_brightness: 0.85
 _client_background_saturation: 0.95
 _background_alpha_enabled: true
+_table_body_background_image_number: 1
+_table_body_background_brightness: 1
+_table_body_background_saturation: 1
 _capturing_units: true
 _capturing_units_number: 8
 _chess_show_last_piece_moved: true
 _chess_future_capturing_units_enabled: true
-_chess_future_capturing_units_number: 3
+_chess_future_capturing_units_number: 8
 _chess_path_to_king_enabled: true
-_chess_path_to_king_number: 1
+_chess_path_to_king_number: 7
 _chess_set_for_player1: 7
 _chess_set_for_player2: 7
 _chess_set_for_player1_color_number: 1
 _chess_set_for_player2_color_number: 13
 _chess_opening_moves_enabled: true
 _button_color_number: 7
-_button_border_color_number: 10
+_button_border_color_number: 2
 _button_text_color_number: 1
 _leaderboard_enabled: true
 _house_feature_enabled: true
 _go_back_to_title_after_save: false
-_notation_panel_10_percent_alpha_enabled: true
+_notation_panel_40_percent_alpha_enabled: true
 _notation_panel_same_background_color_enabled: false
 _notation_panel_background_color_enabled: false
 _notation_panel_background_color_number: 1

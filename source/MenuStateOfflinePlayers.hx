@@ -59,6 +59,7 @@ class MenuStateOfflinePlayers extends MenuState
 		else RegFunctions.no_game_modules_installed_notice(this);
 		
 		Reg._gameJumpTo = 0;
+		Reg2._scrollable_area_is_scrolling = false;
 	}
 	
 				

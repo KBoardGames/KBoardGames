@@ -89,9 +89,6 @@ class ButtonUnique extends FlxUIButton
 	// this function must not be removed. also stops double firing of button sound at ActionKeyboard.hx.
 	override public function update(elapsed:Float):Void 
 	{
-		// if false then super.update() will not be executed and the program will then have one less thing to do.
-		var _update_needed:Bool = false;
-		
 		if (RegTriggers._buttons_set_not_active == false) 
 		{
 			if (ActionInput.overlaps(this, null)

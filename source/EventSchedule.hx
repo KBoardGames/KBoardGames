@@ -255,6 +255,7 @@ class EventSchedule extends FlxState
 		
 		FlxG.mouse.reset();
 		FlxG.mouse.enabled = true;
+		Reg2._scrollable_area_is_scrolling = false;
 		
 		_ticks = 0;
 		
@@ -708,8 +709,7 @@ class EventSchedule extends FlxState
 
 	private function backToTitle():Void
 	{
-		if (RegCustom._sound_enabled[Reg._tn] == true
-		&&  Reg2._scrollable_area_is_scrolling == false)
+		if (RegCustom._sound_enabled[Reg._tn] == true)
 			FlxG.sound.play("click", 1, false);
 
 		RegTriggers._mainStateMakeActiveElements = true;
@@ -961,7 +961,7 @@ class EventSchedule extends FlxState
 				&&  _textEventRow1Number[i].text != "")
 				{
 					if (RegCustom._sound_enabled[Reg._tn] == true
-					&&  Reg2._scrollable_area_is_scrolling == false)
+					&&	Reg2._scrollable_area_is_scrolling == false)
 						FlxG.sound.play("click", 1, false);
 					openSubState(new EventDescription(_textEventRow1Number[i].text));
 				}
@@ -970,7 +970,7 @@ class EventSchedule extends FlxState
 				&&  _textEventRow2Number[i].text != "")
 				{
 					if (RegCustom._sound_enabled[Reg._tn] == true
-					&&  Reg2._scrollable_area_is_scrolling == false)
+					&&	Reg2._scrollable_area_is_scrolling == false)
 						FlxG.sound.play("click", 1, false);
 					openSubState(new EventDescription(_textEventRow2Number[i].text));
 				}
@@ -979,7 +979,7 @@ class EventSchedule extends FlxState
 				&&  _textEventRow3Number[i].text != "")
 				{
 					if (RegCustom._sound_enabled[Reg._tn] == true
-					&&  Reg2._scrollable_area_is_scrolling == false)
+					&&	Reg2._scrollable_area_is_scrolling == false)
 						FlxG.sound.play("click", 1, false);
 					openSubState(new EventDescription(_textEventRow3Number[i].text));
 				}

@@ -911,139 +911,139 @@ C29 Vienna gambit
 C29 Vienna gambit, Wurzburger trap
 C29 Vienna gambit, Steinitz variation
 C30 King's gambit
-C30 KGD: Keene's defence
-C30 KGD: Mafia defence
-C30 KGD: Norwalde variation
-C30 KGD: Norwalde variation, Buecker gambit
-C30 KGD: classical variation
-C30 KGD: classical, Svenonius variation
-C30 KGD: classical, Hanham variation
-C30 KGD: classical, 4.c3
-C30 KGD: classical, Marshall attack
-C30 KGD: classical counter-gambit
-C30 KGD: classical, Reti variation
-C30 KGD: classical, Soldatenkov variation
-C30 KGD: classical, Heath variation
-C30 KGD: 2...Nf6
-C31 KGD: Falkbeer counter-gambit
-C31 KGD: Falkbeer, Tartakower variation
-C31 KGD: Falkbeer, Milner-Barry variation
-C31 KGD: Falkbeer counter-gambit
-C31 KGD: Nimzovich counter-gambit
-C31 KGD: Falkbeer, 3...e4
-C31 KGD: Falkbeer, Rubinstein variation
-C31 KGD: Falkbeer, Nimzovich variation
-C31 KGD: Falkbeer, 4.d3
-C31 KGD: Falkbeer, Morphy gambit
-C32 KGD: Falkbeer, 5.de
-C32 KGD: Falkbeer, Alapin variation
-C32 KGD: Falkbeer, main line, 7...Bf5
-C32 KGD: Falkbeer, Tarrasch variation
-C32 KGD: Falkbeer, Charousek gambit
-C32 KGD: Falkbeer, Charousek variation
-C32 KGD: Falkbeer, Keres variation
-C32 KGD: Falkbeer, Reti variation
+C30 King's Gambit Declined: Keene's defence
+C30 King's Gambit Declined: Mafia defence
+C30 King's Gambit Declined: Norwalde variation
+C30 King's Gambit Declined: Norwalde variation, Buecker gambit
+C30 King's Gambit Declined: classical variation
+C30 King's Gambit Declined: classical, Svenonius variation
+C30 King's Gambit Declined: classical, Hanham variation
+C30 King's Gambit Declined: classical, 4.c3
+C30 King's Gambit Declined: classical, Marshall attack
+C30 King's Gambit Declined: classical counter-gambit
+C30 King's Gambit Declined: classical, Reti variation
+C30 King's Gambit Declined: classical, Soldatenkov variation
+C30 King's Gambit Declined: classical, Heath variation
+C30 King's Gambit Declined: 2...Nf6
+C31 King's Gambit Declined: Falkbeer counter-gambit
+C31 King's Gambit Declined: Falkbeer, Tartakower variation
+C31 King's Gambit Declined: Falkbeer, Milner-Barry variation
+C31 King's Gambit Declined: Falkbeer counter-gambit
+C31 King's Gambit Declined: Nimzovich counter-gambit
+C31 King's Gambit Declined: Falkbeer, 3...e4
+C31 King's Gambit Declined: Falkbeer, Rubinstein variation
+C31 King's Gambit Declined: Falkbeer, Nimzovich variation
+C31 King's Gambit Declined: Falkbeer, 4.d3
+C31 King's Gambit Declined: Falkbeer, Morphy gambit
+C32 King's Gambit Declined: Falkbeer, 5.de
+C32 King's Gambit Declined: Falkbeer, Alapin variation
+C32 King's Gambit Declined: Falkbeer, main line, 7...Bf5
+C32 King's Gambit Declined: Falkbeer, Tarrasch variation
+C32 King's Gambit Declined: Falkbeer, Charousek gambit
+C32 King's Gambit Declined: Falkbeer, Charousek variation
+C32 King's Gambit Declined: Falkbeer, Keres variation
+C32 King's Gambit Declined: Falkbeer, Reti variation
 C33 King's gambit accepted
-C33 KGA: Tumbleweed gambit
-C33 KGA: Orsini gambit
-C33 KGA: Pawn's gambit (Stamma gambit)
-C33 KGA: Schurig gambit
-C33 KGA: Carrera (Basman) gambit
-C33 KGA: Villemson (Steinitz) gambit
-C33 KGA: Keres (Mason-Steinitz) gambit
-C33 KGA: Breyer gambit
-C33 KGA: Lesser bishop's (Petroff-Jaenisch-Tartakower) gambit
-C33 KGA: bishop's gambit
-C33 KGA: bishop's gambit, Chigorin's attack
-C33 KGA: bishop's gambit, Greco variation
-C33 KGA: bishop's gambit, classical defence
-C33 KGA: bishop's gambit, Grimm attack
-C33 KGA: bishop's gambit, classical defence
-C33 KGA: bishop's gambit, McDonnell attack
-C33 KGA: bishop's gambit, McDonnell attack
-C33 KGA: bishop's gambit, Fraser variation
-C33 KGA: bishop's gambit, classical defence, Cozio attack
-C33 KGA: bishop's gambit, Boden defence
-C33 KGA: bishop's gambit, Bryan counter-gambit
-C33 KGA: bishop's gambit, Bryan counter-gambit
-C33 KGA: bishop's gambit, Steinitz defence
-C33 KGA: bishop's gambit, Maurian defence
-C33 KGA: bishop's gambit, Ruy Lopez defence
-C33 KGA: bishop's gambit, Lopez-Gianutio counter-gambit
-C33 KGA: Lopez-Gianutio counter-gambit, Hein variation
-C33 KGA: bishop's gambit, Bledow variation
-C33 KGA: bishop's gambit, Gifford variation
-C33 KGA: bishop's gambit, Boren-Svenonius variation
-C33 KGA: bishop's gambit, Anderssen variation
-C33 KGA: bishop's gambit, Morphy variation
-C33 KGA: bishop's gambit, Cozio (Morphy) defence
-C33 KGA: bishop's gambit, Bogolyubov variation
-C33 KGA: bishop's gambit, Paulsen attack
-C33 KGA: bishop's gambit, Jaenisch variation
+C33 King's Gambit Accepted: Tumbleweed gambit
+C33 King's Gambit Accepted: Orsini gambit
+C33 King's Gambit Accepted: Pawn's gambit (Stamma gambit)
+C33 King's Gambit Accepted: Schurig gambit
+C33 King's Gambit Accepted: Carrera (Basman) gambit
+C33 King's Gambit Accepted: Villemson (Steinitz) gambit
+C33 King's Gambit Accepted: Keres (Mason-Steinitz) gambit
+C33 King's Gambit Accepted: Breyer gambit
+C33 King's Gambit Accepted: Lesser bishop's (Petroff-Jaenisch-Tartakower) gambit
+C33 King's Gambit Accepted: bishop's gambit
+C33 King's Gambit Accepted: bishop's gambit, Chigorin's attack
+C33 King's Gambit Accepted: bishop's gambit, Greco variation
+C33 King's Gambit Accepted: bishop's gambit, classical defence
+C33 King's Gambit Accepted: bishop's gambit, Grimm attack
+C33 King's Gambit Accepted: bishop's gambit, classical defence
+C33 King's Gambit Accepted: bishop's gambit, McDonnell attack
+C33 King's Gambit Accepted: bishop's gambit, McDonnell attack
+C33 King's Gambit Accepted: bishop's gambit, Fraser variation
+C33 King's Gambit Accepted: bishop's gambit, classical defence, Cozio attack
+C33 King's Gambit Accepted: bishop's gambit, Boden defence
+C33 King's Gambit Accepted: bishop's gambit, Bryan counter-gambit
+C33 King's Gambit Accepted: bishop's gambit, Bryan counter-gambit
+C33 King's Gambit Accepted: bishop's gambit, Steinitz defence
+C33 King's Gambit Accepted: bishop's gambit, Maurian defence
+C33 King's Gambit Accepted: bishop's gambit, Ruy Lopez defence
+C33 King's Gambit Accepted: bishop's gambit, Lopez-Gianutio counter-gambit
+C33 King's Gambit Accepted: Lopez-Gianutio counter-gambit, Hein variation
+C33 King's Gambit Accepted: bishop's gambit, Bledow variation
+C33 King's Gambit Accepted: bishop's gambit, Gifford variation
+C33 King's Gambit Accepted: bishop's gambit, Boren-Svenonius variation
+C33 King's Gambit Accepted: bishop's gambit, Anderssen variation
+C33 King's Gambit Accepted: bishop's gambit, Morphy variation
+C33 King's Gambit Accepted: bishop's gambit, Cozio (Morphy) defence
+C33 King's Gambit Accepted: bishop's gambit, Bogolyubov variation
+C33 King's Gambit Accepted: bishop's gambit, Paulsen attack
+C33 King's Gambit Accepted: bishop's gambit, Jaenisch variation
 C34 King's knight's gambit
-C34 KGA: Bonsch-Osmolovsky variation
-C34 KGA: Gianutio counter-gambit
-C34 KGA: Fischer defence
-C34 KGA: Becker defence
-C34 KGA: Schallop defence
-C35 KGA: Cunningham defence
-C35 KGA: Cunningham, Bertin gambit
-C35 KGA: Cunningham, three pawns gambit
-C35 KGA: Cunningham, Euwe defence
-C36 KGA: Abbazia defence (classical defence, modern defence[!])
-C36 KGA: Abbazia defence, modern variation
-C36 KGA: Abbazia defence, Botvinnik variation
-C37 KGA: Quaade gambit
-C37 KGA: Rosentreter gambit
-C37 KGA: Soerensen gambit
-C37 KGA: King's knight's gambit
-C37 KGA: Blachly gambit
-C37 KGA: Lolli gambit (wild Muzio gambit)
-C37 KGA: Lolli gambit, Young variation
-C37 KGA: Ghulam Kassim gambit
-C37 KGA: MacDonnell gambit
-C37 KGA: Salvio gambit
-C37 KGA: Silberschmidt gambit
-C37 KGA: Salvio gambit, Anderssen counter-attack
-C37 KGA: Cochrane gambit
-C37 KGA: Herzfeld gambit
-C37 KGA: Muzio gambit
-C37 KGA: Muzio gambit, Paulsen variation
-C37 KGA: double Muzio gambit
-C37 KGA: Muzio gambit, From defence
-C37 KGA: Muzio gambit, Holloway defence
-C37 KGA: Muzio gambit, Kling and Horwitz counter-attack
-C37 KGA: Muzio gambit, Brentano defence
+C34 King's Gambit Accepted: Bonsch-Osmolovsky variation
+C34 King's Gambit Accepted: Gianutio counter-gambit
+C34 King's Gambit Accepted: Fischer defence
+C34 King's Gambit Accepted: Becker defence
+C34 King's Gambit Accepted: Schallop defence
+C35 King's Gambit Accepted: Cunningham defence
+C35 King's Gambit Accepted: Cunningham, Bertin gambit
+C35 King's Gambit Accepted: Cunningham, three pawns gambit
+C35 King's Gambit Accepted: Cunningham, Euwe defence
+C36 King's Gambit Accepted: Abbazia defence (classical defence, modern defence[!])
+C36 King's Gambit Accepted: Abbazia defence, modern variation
+C36 King's Gambit Accepted: Abbazia defence, Botvinnik variation
+C37 King's Gambit Accepted: Quaade gambit
+C37 King's Gambit Accepted: Rosentreter gambit
+C37 King's Gambit Accepted: Soerensen gambit
+C37 King's Gambit Accepted: King's knight's gambit
+C37 King's Gambit Accepted: Blachly gambit
+C37 King's Gambit Accepted: Lolli gambit (wild Muzio gambit)
+C37 King's Gambit Accepted: Lolli gambit, Young variation
+C37 King's Gambit Accepted: Ghulam Kassim gambit
+C37 King's Gambit Accepted: MacDonnell gambit
+C37 King's Gambit Accepted: Salvio gambit
+C37 King's Gambit Accepted: Silberschmidt gambit
+C37 King's Gambit Accepted: Salvio gambit, Anderssen counter-attack
+C37 King's Gambit Accepted: Cochrane gambit
+C37 King's Gambit Accepted: Herzfeld gambit
+C37 King's Gambit Accepted: Muzio gambit
+C37 King's Gambit Accepted: Muzio gambit, Paulsen variation
+C37 King's Gambit Accepted: double Muzio gambit
+C37 King's Gambit Accepted: Muzio gambit, From defence
+C37 King's Gambit Accepted: Muzio gambit, Holloway defence
+C37 King's Gambit Accepted: Muzio gambit, Kling and Horwitz counter-attack
+C37 King's Gambit Accepted: Muzio gambit, Brentano defence
 C38 King's knight's gambit
-C38 KGA: Hanstein gambit
-C38 KGA: Philidor gambit
-C38 KGA: Greco gambit
-C38 KGA: Philidor gambit, Schultz variation
+C38 King's Gambit Accepted: Hanstein gambit
+C38 King's Gambit Accepted: Philidor gambit
+C38 King's Gambit Accepted: Greco gambit
+C38 King's Gambit Accepted: Philidor gambit, Schultz variation
 C39 King's knight's gambit
-C39 KGA: Allgaier gambit
-C39 KGA: Allgaier, Horny defence
-C39 KGA: Allgaier, Thorold variation
-C39 KGA: Allgaier, Cook variation
-C39 KGA: Allgaier, Blackburne gambit
-C39 KGA: Allgaier, Walker attack
-C39 KGA: Allgaier, Urusov attack
-C39 KGA: Allgaier, Schlechter defence
-C39 KGA: Kieseritsky, Paulsen defence
-C39 KGA: Kieseritsky, long whip (Stockwhip, classical) defence
-C39 KGA: Kieseritsky, long whip defence, Jaenisch variation
-C39 KGA: Kieseritsky, Brentano (Campbell) defence
-C39 KGA: Kieseritsky, Brentano defence, Kaplanek variation
-C39 KGA: Kieseritsky, Brentano defence
-C39 KGA: Kieseritsky, Brentano defence, Caro variation
-C39 KGA: Kieseritsky, Salvio (Rosenthal) defence
-C39 KGA: Kieseritsky, Salvio defence, Cozio variation
-C39 KGA: Kieseritsky, Polerio defence
-C39 KGA: Kieseritsky, Neumann defence
-C39 KGA: Kieseritsky, Kolisch defence
-C39 KGA: Kieseritsky, Berlin defence
-C39 KGA: Kieseritsky, Berlin defence, Riviere variation
-C39 KGA: Kieseritsky, Berlin defence, 6.Bc4
-C39 KGA: Kieseritsky, Rice gambit
+C39 King's Gambit Accepted: Allgaier gambit
+C39 King's Gambit Accepted: Allgaier, Horny defence
+C39 King's Gambit Accepted: Allgaier, Thorold variation
+C39 King's Gambit Accepted: Allgaier, Cook variation
+C39 King's Gambit Accepted: Allgaier, Blackburne gambit
+C39 King's Gambit Accepted: Allgaier, Walker attack
+C39 King's Gambit Accepted: Allgaier, Urusov attack
+C39 King's Gambit Accepted: Allgaier, Schlechter defence
+C39 King's Gambit Accepted: Kieseritsky, Paulsen defence
+C39 King's Gambit Accepted: Kieseritsky, long whip (Stockwhip, classical) defence
+C39 King's Gambit Accepted: Kieseritsky, long whip defence, Jaenisch variation
+C39 King's Gambit Accepted: Kieseritsky, Brentano (Campbell) defence
+C39 King's Gambit Accepted: Kieseritsky, Brentano defence, Kaplanek variation
+C39 King's Gambit Accepted: Kieseritsky, Brentano defence
+C39 King's Gambit Accepted: Kieseritsky, Brentano defence, Caro variation
+C39 King's Gambit Accepted: Kieseritsky, Salvio (Rosenthal) defence
+C39 King's Gambit Accepted: Kieseritsky, Salvio defence, Cozio variation
+C39 King's Gambit Accepted: Kieseritsky, Polerio defence
+C39 King's Gambit Accepted: Kieseritsky, Neumann defence
+C39 King's Gambit Accepted: Kieseritsky, Kolisch defence
+C39 King's Gambit Accepted: Kieseritsky, Berlin defence
+C39 King's Gambit Accepted: Kieseritsky, Berlin defence, Riviere variation
+C39 King's Gambit Accepted: Kieseritsky, Berlin defence, 6.Bc4
+C39 King's Gambit Accepted: Kieseritsky, Rice gambit
 C40 King's knight opening
 C40 Gunderam defence
 C40 Greco defence
@@ -1546,243 +1546,243 @@ D05 Queen's pawn game
 D05 Queen's pawn game, Rubinstein (Colle-Zukertort) variation
 D05 Colle system
 D06 Queen's Gambit
-D06 QGD: Grau (Sahovic) defence
-D06 QGD: Marshall defence
-D06 QGD: symmetrical (Austrian) defence
-D07 QGD: Chigorin defence
-D07 QGD: Chigorin defence, Janowski variation
-D08 QGD: Albin counter-gambit
-D08 QGD: Albin counter-gambit, Lasker trap
-D08 QGD: Albin counter-gambit
-D08 QGD: Albin counter-gambit, Alapin variation
-D08 QGD: Albin counter-gambit, Krenosz variation
-D08 QGD: Albin counter-gambit, Janowski variation
-D08 QGD: Albin counter-gambit, Balogh variation
-D09 QGD: Albin counter-gambit, 5.g3
-D10 QGD Slav defence
-D10 QGD Slav defence, Alekhine variation
-D10 QGD Slav: Winawer counter-gambit
-D10 QGD Slav defence: exchange variation
-D11 QGD Slav: 3.Nf3
-D11 QGD Slav: Breyer variation
-D11 QGD Slav: 4.e3
-D12 QGD Slav: 4.e3 Bf5
-D12 QGD Slav: Landau variation
-D12 QGD Slav: exchange variation
-D12 QGD Slav: Amsterdam variation
-D13 QGD Slav: exchange variation
-D14 QGD Slav: exchange variation, 6.Bf4 Bf5
-D14 QGD Slav: exchange, Trifunovic variation
-D15 QGD Slav: 4.Nc3
-D15 QGD Slav: Suechting variation
-D15 QGD Slav: Schlechter variation
-D15 QGD Slav accepted
-D15 QGD Slav: 5.e3 (Alekhine variation)
-D15 QGD Slav: Slav gambit
-D15 QGD Slav: Tolush-Geller gambit
-D16 QGD Slav accepted: Alapin variation
-D16 QGD Slav: Smyslov variation
-D16 QGD Slav: Soultanbeieff variation
-D16 QGD Slav: Steiner variation
-D17 QGD Slav: Czech defence
-D17 QGD Slav: Krause attack
-D17 QGD Slav: Carlsbad variation
-D17 QGD Slav: Wiesbaden variation
-D18 QGD Slav: Dutch variation
-D18 QGD Slav: Dutch, Lasker variation
-D19 QGD Slav: Dutch variation
-D19 QGD Slav: Dutch variation, main line
-D19 QGD Slav: Dutch, Saemisch variation
+D06 Queen's Gambit Declined: Grau (Sahovic) defence
+D06 Queen's Gambit Declined: Marshall defence
+D06 Queen's Gambit Declined: symmetrical (Austrian) defence
+D07 Queen's Gambit Declined: Chigorin defence
+D07 Queen's Gambit Declined: Chigorin defence, Janowski variation
+D08 Queen's Gambit Declined: Albin counter-gambit
+D08 Queen's Gambit Declined: Albin counter-gambit, Lasker trap
+D08 Queen's Gambit Declined: Albin counter-gambit
+D08 Queen's Gambit Declined: Albin counter-gambit, Alapin variation
+D08 Queen's Gambit Declined: Albin counter-gambit, Krenosz variation
+D08 Queen's Gambit Declined: Albin counter-gambit, Janowski variation
+D08 Queen's Gambit Declined: Albin counter-gambit, Balogh variation
+D09 Queen's Gambit Declined: Albin counter-gambit, 5.g3
+D10 Queen's Gambit Declined Slav defence
+D10 Queen's Gambit Declined Slav defence, Alekhine variation
+D10 Queen's Gambit Declined Slav: Winawer counter-gambit
+D10 Queen's Gambit Declined Slav defence: exchange variation
+D11 Queen's Gambit Declined Slav: 3.Nf3
+D11 Queen's Gambit Declined Slav: Breyer variation
+D11 Queen's Gambit Declined Slav: 4.e3
+D12 Queen's Gambit Declined Slav: 4.e3 Bf5
+D12 Queen's Gambit Declined Slav: Landau variation
+D12 Queen's Gambit Declined Slav: exchange variation
+D12 Queen's Gambit Declined Slav: Amsterdam variation
+D13 Queen's Gambit Declined Slav: exchange variation
+D14 Queen's Gambit Declined Slav: exchange variation, 6.Bf4 Bf5
+D14 Queen's Gambit Declined Slav: exchange, Trifunovic variation
+D15 Queen's Gambit Declined Slav: 4.Nc3
+D15 Queen's Gambit Declined Slav: Suechting variation
+D15 Queen's Gambit Declined Slav: Schlechter variation
+D15 Queen's Gambit Declined Slav accepted
+D15 Queen's Gambit Declined Slav: 5.e3 (Alekhine variation)
+D15 Queen's Gambit Declined Slav: Slav gambit
+D15 Queen's Gambit Declined Slav: Tolush-Geller gambit
+D16 Queen's Gambit Declined Slav accepted: Alapin variation
+D16 Queen's Gambit Declined Slav: Smyslov variation
+D16 Queen's Gambit Declined Slav: Soultanbeieff variation
+D16 Queen's Gambit Declined Slav: Steiner variation
+D17 Queen's Gambit Declined Slav: Czech defence
+D17 Queen's Gambit Declined Slav: Krause attack
+D17 Queen's Gambit Declined Slav: Carlsbad variation
+D17 Queen's Gambit Declined Slav: Wiesbaden variation
+D18 Queen's Gambit Declined Slav: Dutch variation
+D18 Queen's Gambit Declined Slav: Dutch, Lasker variation
+D19 Queen's Gambit Declined Slav: Dutch variation
+D19 Queen's Gambit Declined Slav: Dutch variation, main line
+D19 Queen's Gambit Declined Slav: Dutch, Saemisch variation
 D20 Queen's gambit accepted
-D20 QGA: 3.e4
-D20 QGA: Linares variation
-D20 QGA: Schwartz defence
-D21 QGA: 3.Nf3
-D21 QGA: Ericson variation
-D21 QGA: Alekhine defense, Borisenko-Furman variation
-D22 QGA: Alekhine defence
-D22 QGA: Alekhine defence, Alatortsev variation
-D22 QGA: Haberditz variation
+D20 Queen's gambit accepted: 3.e4
+D20 Queen's gambit accepted: Linares variation
+D20 Queen's gambit accepted: Schwartz defence
+D21 Queen's gambit accepted: 3.Nf3
+D21 Queen's gambit accepted: Ericson variation
+D21 Queen's gambit accepted: Alekhine defense, Borisenko-Furman variation
+D22 Queen's gambit accepted: Alekhine defence
+D22 Queen's gambit accepted: Alekhine defence, Alatortsev variation
+D22 Queen's gambit accepted: Haberditz variation
 D23 Queen's gambit accepted
-D23 QGA: Mannheim variation
-D24 QGA, 4.Nc3
-D24 QGA, Bogolyubov variation
-D25 QGA, 4.e3
-D25 QGA, Smyslov variation
-D25 QGA, Janowsky-Larsen variation
-D25 QGA, Flohr variation
-D26 QGA: 4...e6
-D26 QGA: classical variation
-D26 QGA: classical, Furman variation
-D26 QGA: classical variation, 6.O-O
-D26 QGA: classical, Steinitz variation
-D27 QGA: classical, 6...a6
-D27 QGA: classical, Rubinstein variation
-D27 QGA: classical, Geller variation
-D28 QGA: classical, 7.Qe2
-D28 QGA: classical, 7...b5
-D28 QGA: classical, Flohr variation
-D29 QGA: classical, 8...Bb7
-D29 QGA: classical, Smyslov variation
+D23 Queen's gambit accepted: Mannheim variation
+D24 Queen's gambit accepted, 4.Nc3
+D24 Queen's gambit accepted, Bogolyubov variation
+D25 Queen's gambit accepted, 4.e3
+D25 Queen's gambit accepted, Smyslov variation
+D25 Queen's gambit accepted, Janowsky-Larsen variation
+D25 Queen's gambit accepted, Flohr variation
+D26 Queen's gambit accepted: 4...e6
+D26 Queen's gambit accepted: classical variation
+D26 Queen's gambit accepted: classical, Furman variation
+D26 Queen's gambit accepted: classical variation, 6.O-O
+D26 Queen's gambit accepted: classical, Steinitz variation
+D27 Queen's gambit accepted: classical, 6...a6
+D27 Queen's gambit accepted: classical, Rubinstein variation
+D27 Queen's gambit accepted: classical, Geller variation
+D28 Queen's gambit accepted: classical, 7.Qe2
+D28 Queen's gambit accepted: classical, 7...b5
+D28 Queen's gambit accepted: classical, Flohr variation
+D29 Queen's gambit accepted: classical, 8...Bb7
+D29 Queen's gambit accepted: classical, Smyslov variation
 D30 Queen's gambit declined
-D30 QGD Slav
-D30 QGD: Stonewall variation
-D30 QGD Slav
-D30 QGD Slav: Semmering variation
-D30 QGD: Spielmann variation
-D30 QGD
-D30 QGD: Capablanca variation
-D30 QGD: Vienna variation
-D30 QGD: Capablanca-Duras variation
-D30 QGD: Hastings variation
-D31 QGD: 3.Nc3
-D31 QGD: Janowski variation
-D31 QGD: Alapin variation
-D31 QGD: Charousek (Petrosian) variation
-D31 QGD: semi-Slav
-D31 QGD: semi-Slav, Noteboom variation
-D31 QGD: semi-Slav, Koomen variation
-D31 QGD: semi-Slav, Junge variation
-D31 QGD: semi-Slav, Abrahams variation
-D31 QGD: semi-Slav, Marshall gambit
-D32 QGD: Tarrasch defence
-D32 QGD: Tarrasch, von Hennig-Schara gambit
-D32 QGD: Tarrasch defence, 4.cd ed
-D32 QGD: Tarrasch defence, Tarrasch gambit
-D32 QGD: Tarrasch defence, Marshall gambit
-D32 QGD: Tarrasch defence
-D33 QGD: Tarrasch, Schlechter-Rubinstein system
-D33 QGD: Tarrasch, Folkestone (Swedish) variation
-D33 QGD: Tarrasch, Schlechter-Rubinstein system, Rey Ardid variation
-D33 QGD: Tarrasch, Prague variation
-D33 QGD: Tarrasch, Wagner variation
-D34 QGD: Tarrasch, Prague variation, 7...Be7
-D34 QGD: Tarrasch, Prague variation, Normal position
-D34 QGD: Tarrasch, Reti variation
-D34 QGD: Tarrasch, Prague variation, 9.Bg5
-D34 QGD: Tarrasch, Bogolyubov variation
-D34 QGD: Tarrasch, Stoltz variation
-D35 QGD: 3...Nf6
-D35 QGD: Harrwitz attack
-D35 QGD: exchange variation
-D35 QGD: exchange, Saemisch variation
-D35 QGD: exchange, positional line
-D35 QGD: exchange, chameleon variation
-D35 QGD: exchange, positional line, 5...c6
-D36 QGD: exchange, positional line, 6.Qc2
-D37 QGD: 4.Nf3
-D37 QGD: classical variation (5.Bf4)
-D38 QGD: Ragozin variation
-D39 QGD: Ragozin, Vienna variation
-D40 QGD: Semi-Tarrasch defence
-D40 QGD: Semi-Tarrasch, symmetrical variation
-D40 QGD: Semi-Tarrasch, Levenfish variation
-D40 QGD: Semi-Tarrasch defence, Pillsbury variation
-D41 QGD: Semi-Tarrasch, 5.cd
-D41 QGD: Semi-Tarrasch, Kmoch variation
-D41 QGD: Semi-Tarrasch, San Sebastian variation
-D41 QGD: Semi-Tarrasch with e3
-D42 QGD: Semi-Tarrasch, 7.Bd3
-D43 QGD semi-Slav
-D43 QGD semi-Slav: Hastings variation
-D44 QGD semi-Slav: 5.Bg5 dc
-D44 QGD semi-Slav: Botvinnik system (anti-Meran)
-D44 QGD semi-Slav: Ekstrom variation
-D44 QGD semi-Slav: anti-Meran gambit
-D44 QGD semi-Slav: anti-Meran, Lilienthal variation
-D44 QGD semi-Slav: anti-Meran, Szabo variation
-D44 QGD semi-Slav: anti-Meran, Alatortsev system
-D45 QGD semi-Slav: 5.e3
-D45 QGD semi-Slav: stonewall defence
-D45 QGD semi-Slav: accelerated Meran (Alekhine variation)
-D45 QGD semi-Slav: 5...Nd7
-D45 QGD semi-Slav: Stoltz variation
-D45 QGD semi-Slav: Rubinstein (anti-Meran) system
-D46 QGD semi-Slav: 6.Bd3
-D46 QGD semi-Slav: Bogolyubov variation
-D46 QGD semi-Slav: Romih variation
-D46 QGD semi-Slav: Chigorin defence
-D47 QGD semi-Slav: 7.Bc4
-D47 QGD semi-Slav: Meran variation
-D47 QGD semi-Slav: neo-Meran (Lundin variation)
-D47 QGD semi-Slav: Meran, Wade variation
-D48 QGD semi-Slav: Meran, 8...a6
-D48 QGD semi-Slav: Meran, Pirc variation
-D48 QGD semi-Slav: Meran
-D48 QGD semi-Slav: Meran, Reynolds' variation
-D48 QGD semi-Slav: Meran, old main line
-D49 QGD semi-Slav: Meran, Blumenfeld variation
-D49 QGD semi-Slav: Meran, Rabinovich variation
-D49 QGD semi-Slav: Meran, Sozin variation
-D49 QGD semi-Slav: Meran, Stahlberg variation
-D49 QGD semi-Slav: Meran, Sozin variation
-D49 QGD semi-Slav: Meran, Rellstab attack
-D50 QGD: 4.Bg5
-D50 QGD: Been-Koomen variation
-D50 QGD: Semi-Tarrasch, Krause variation
-D50 QGD: Semi-Tarrasch, Primitive Pillsbury variation
-D50 QGD: Semi-Tarrasch
-D50 QGD: Canal (Venice) variation
-D51 QGD: 4.Bg5 Nbd7
-D51 QGD: Rochlin variation
-D51 QGD: Alekhine variation
-D51 QGD
-D51 QGD: Manhattan variation
-D51 QGD: 5...c6
-D51 QGD: Capablanca anti-Cambridge Springs variation
-D52 QGD
-D52 QGD: Cambridge Springs defence
-D52 QGD: Cambridge Springs defence, Bogoljubow variation
-D52 QGD: Cambridge Springs defence, Argentine variation
-D52 QGD: Cambridge Springs defence, Rubinstein variation
-D52 QGD: Cambridge Springs defence, Capablanca variation
-D52 QGD: Cambridge Springs defence, 7.cd
-D52 QGD: Cambridge Springs defence, Yugoslav variation
-D53 QGD: 4.Bg5 Be7
-D53 QGD: Lasker variation
-D53 QGD: 4.Bg5 Be7, 5.e3 O-O
-D54 QGD: Anti-neo-orthodox variation
-D55 QGD: 6.Nf3
-D55 QGD: Pillsbury attack
-D55 QGD: Neo-orthodox variation
-D55 QGD: Neo-orthodox variation, 7.Bxf6
-D55 QGD: Petrosian variation
-D55 QGD: Neo-orthodox variation, 7.Bh4
-D56 QGD: Lasker defence
-D56 QGD: Lasker defence, Teichmann variation
-D56 QGD: Lasker defence, Russian variation
-D57 QGD: Lasker defence, main line
-D57 QGD: Lasker defence, Bernstein variation
-D58 QGD: Tartakower (Makagonov-Bondarevsky) system
-D59 QGD: Tartakower (Makagonov-Bondarevsky) system, 8.cd Nxd5
-D59 QGD: Tartakower variation
-D60 QGD: Orthodox defence
-D60 QGD: Orthodox defence, Botvinnik variation
-D60 QGD: Orthodox defence, Rauzer variation
-D61 QGD: Orthodox defence, Rubinstein variation
-D62 QGD: Orthodox defence, 7.Qc2 c5, 8.cd (Rubinstein)
-D63 QGD: Orthodox defence, 7.Rc1
-D63 QGD: Orthodox defence, Pillsbury attack
-D63 QGD: Orthodox defence, Capablanca variation
-D63 QGD: Orthodox defence, Swiss (Henneberger) variation
-D63 QGD: Orthodox defence, Swiss, Karlsbad variation
-D63 QGD: Orthodox defence
-D64 QGD: Orthodox defence, Rubinstein attack (with Rc1)
-D64 QGD: Orthodox defence, Rubinstein attack, Wolf variation
-D64 QGD: Orthodox defence, Rubinstein attack, Karlsbad variation
-D64 QGD: Orthodox defence, Rubinstein attack, Gruenfeld variation
-D65 QGD: Orthodox defence, Rubinstein attack, main line
-D66 QGD: Orthodox defence, Bd3 line
-D66 QGD: Orthodox defence, Bd3 line, fianchetto variation
-D67 QGD: Orthodox defence, Bd3 line, Capablanca freeing manoevre
-D67 QGD: Orthodox defence, Bd3 line, Janowski variation
-D67 QGD: Orthodox defence, Bd3 line
-D67 QGD: Orthodox defence, Bd3 line, Alekhine variation
-D67 QGD: Orthodox defence, Bd3 line, 11.O-O
-D68 QGD: Orthodox defence, classical variation
-D68 QGD: Orthodox defence, classical, 13.d1b1 (Maroczy)
-D68 QGD: Orthodox defence, classical, 13.d1c2 (Vidmar)
-D69 QGD: Orthodox defence, classical, 13.de
+D30 Queen's Gambit Declined Slav
+D30 Queen's Gambit Declined: Stonewall variation
+D30 Queen's Gambit Declined Slav
+D30 Queen's Gambit Declined Slav: Semmering variation
+D30 Queen's Gambit Declined: Spielmann variation
+D30 Queen's Gambit Declined
+D30 Queen's Gambit Declined: Capablanca variation
+D30 Queen's Gambit Declined: Vienna variation
+D30 Queen's Gambit Declined: Capablanca-Duras variation
+D30 Queen's Gambit Declined: Hastings variation
+D31 Queen's Gambit Declined: 3.Nc3
+D31 Queen's Gambit Declined: Janowski variation
+D31 Queen's Gambit Declined: Alapin variation
+D31 Queen's Gambit Declined: Charousek (Petrosian) variation
+D31 Queen's Gambit Declined: semi-Slav
+D31 Queen's Gambit Declined: semi-Slav, Noteboom variation
+D31 Queen's Gambit Declined: semi-Slav, Koomen variation
+D31 Queen's Gambit Declined: semi-Slav, Junge variation
+D31 Queen's Gambit Declined: semi-Slav, Abrahams variation
+D31 Queen's Gambit Declined: semi-Slav, Marshall gambit
+D32 Queen's Gambit Declined: Tarrasch defence
+D32 Queen's Gambit Declined: Tarrasch, von Hennig-Schara gambit
+D32 Queen's Gambit Declined: Tarrasch defence, 4.cd ed
+D32 Queen's Gambit Declined: Tarrasch defence, Tarrasch gambit
+D32 Queen's Gambit Declined: Tarrasch defence, Marshall gambit
+D32 Queen's Gambit Declined: Tarrasch defence
+D33 Queen's Gambit Declined: Tarrasch, Schlechter-Rubinstein system
+D33 Queen's Gambit Declined: Tarrasch, Folkestone (Swedish) variation
+D33 Queen's Gambit Declined: Tarrasch, Schlechter-Rubinstein system, Rey Ardid variation
+D33 Queen's Gambit Declined: Tarrasch, Prague variation
+D33 Queen's Gambit Declined: Tarrasch, Wagner variation
+D34 Queen's Gambit Declined: Tarrasch, Prague variation, 7...Be7
+D34 Queen's Gambit Declined: Tarrasch, Prague variation, Normal position
+D34 Queen's Gambit Declined: Tarrasch, Reti variation
+D34 Queen's Gambit Declined: Tarrasch, Prague variation, 9.Bg5
+D34 Queen's Gambit Declined: Tarrasch, Bogolyubov variation
+D34 Queen's Gambit Declined: Tarrasch, Stoltz variation
+D35 Queen's Gambit Declined: 3...Nf6
+D35 Queen's Gambit Declined: Harrwitz attack
+D35 Queen's Gambit Declined: exchange variation
+D35 Queen's Gambit Declined: exchange, Saemisch variation
+D35 Queen's Gambit Declined: exchange, positional line
+D35 Queen's Gambit Declined: exchange, chameleon variation
+D35 Queen's Gambit Declined: exchange, positional line, 5...c6
+D36 Queen's Gambit Declined: exchange, positional line, 6.Qc2
+D37 Queen's Gambit Declined: 4.Nf3
+D37 Queen's Gambit Declined: classical variation (5.Bf4)
+D38 Queen's Gambit Declined: Ragozin variation
+D39 Queen's Gambit Declined: Ragozin, Vienna variation
+D40 Queen's Gambit Declined: Semi-Tarrasch defence
+D40 Queen's Gambit Declined: Semi-Tarrasch, symmetrical variation
+D40 Queen's Gambit Declined: Semi-Tarrasch, Levenfish variation
+D40 Queen's Gambit Declined: Semi-Tarrasch defence, Pillsbury variation
+D41 Queen's Gambit Declined: Semi-Tarrasch, 5.cd
+D41 Queen's Gambit Declined: Semi-Tarrasch, Kmoch variation
+D41 Queen's Gambit Declined: Semi-Tarrasch, San Sebastian variation
+D41 Queen's Gambit Declined: Semi-Tarrasch with e3
+D42 Queen's Gambit Declined: Semi-Tarrasch, 7.Bd3
+D43 Queen's Gambit Declined semi-Slav
+D43 Queen's Gambit Declined semi-Slav: Hastings variation
+D44 Queen's Gambit Declined semi-Slav: 5.Bg5 dc
+D44 Queen's Gambit Declined semi-Slav: Botvinnik system (anti-Meran)
+D44 Queen's Gambit Declined semi-Slav: Ekstrom variation
+D44 Queen's Gambit Declined semi-Slav: anti-Meran gambit
+D44 Queen's Gambit Declined semi-Slav: anti-Meran, Lilienthal variation
+D44 Queen's Gambit Declined semi-Slav: anti-Meran, Szabo variation
+D44 Queen's Gambit Declined semi-Slav: anti-Meran, Alatortsev system
+D45 Queen's Gambit Declined semi-Slav: 5.e3
+D45 Queen's Gambit Declined semi-Slav: stonewall defence
+D45 Queen's Gambit Declined semi-Slav: accelerated Meran (Alekhine variation)
+D45 Queen's Gambit Declined semi-Slav: 5...Nd7
+D45 Queen's Gambit Declined semi-Slav: Stoltz variation
+D45 Queen's Gambit Declined semi-Slav: Rubinstein (anti-Meran) system
+D46 Queen's Gambit Declined semi-Slav: 6.Bd3
+D46 Queen's Gambit Declined semi-Slav: Bogolyubov variation
+D46 Queen's Gambit Declined semi-Slav: Romih variation
+D46 Queen's Gambit Declined semi-Slav: Chigorin defence
+D47 Queen's Gambit Declined semi-Slav: 7.Bc4
+D47 Queen's Gambit Declined semi-Slav: Meran variation
+D47 Queen's Gambit Declined semi-Slav: neo-Meran (Lundin variation)
+D47 Queen's Gambit Declined semi-Slav: Meran, Wade variation
+D48 Queen's Gambit Declined semi-Slav: Meran, 8...a6
+D48 Queen's Gambit Declined semi-Slav: Meran, Pirc variation
+D48 Queen's Gambit Declined semi-Slav: Meran
+D48 Queen's Gambit Declined semi-Slav: Meran, Reynolds' variation
+D48 Queen's Gambit Declined semi-Slav: Meran, old main line
+D49 Queen's Gambit Declined semi-Slav: Meran, Blumenfeld variation
+D49 Queen's Gambit Declined semi-Slav: Meran, Rabinovich variation
+D49 Queen's Gambit Declined semi-Slav: Meran, Sozin variation
+D49 Queen's Gambit Declined semi-Slav: Meran, Stahlberg variation
+D49 Queen's Gambit Declined semi-Slav: Meran, Sozin variation
+D49 Queen's Gambit Declined semi-Slav: Meran, Rellstab attack
+D50 Queen's Gambit Declined: 4.Bg5
+D50 Queen's Gambit Declined: Been-Koomen variation
+D50 Queen's Gambit Declined: Semi-Tarrasch, Krause variation
+D50 Queen's Gambit Declined: Semi-Tarrasch, Primitive Pillsbury variation
+D50 Queen's Gambit Declined: Semi-Tarrasch
+D50 Queen's Gambit Declined: Canal (Venice) variation
+D51 Queen's Gambit Declined: 4.Bg5 Nbd7
+D51 Queen's Gambit Declined: Rochlin variation
+D51 Queen's Gambit Declined: Alekhine variation
+D51 Queen's Gambit Declined
+D51 Queen's Gambit Declined: Manhattan variation
+D51 Queen's Gambit Declined: 5...c6
+D51 Queen's Gambit Declined: Capablanca anti-Cambridge Springs variation
+D52 Queen's Gambit Declined
+D52 Queen's Gambit Declined: Cambridge Springs defence
+D52 Queen's Gambit Declined: Cambridge Springs defence, Bogoljubow variation
+D52 Queen's Gambit Declined: Cambridge Springs defence, Argentine variation
+D52 Queen's Gambit Declined: Cambridge Springs defence, Rubinstein variation
+D52 Queen's Gambit Declined: Cambridge Springs defence, Capablanca variation
+D52 Queen's Gambit Declined: Cambridge Springs defence, 7.cd
+D52 Queen's Gambit Declined: Cambridge Springs defence, Yugoslav variation
+D53 Queen's Gambit Declined: 4.Bg5 Be7
+D53 Queen's Gambit Declined: Lasker variation
+D53 Queen's Gambit Declined: 4.Bg5 Be7, 5.e3 O-O
+D54 Queen's Gambit Declined: Anti-neo-orthodox variation
+D55 Queen's Gambit Declined: 6.Nf3
+D55 Queen's Gambit Declined: Pillsbury attack
+D55 Queen's Gambit Declined: Neo-orthodox variation
+D55 Queen's Gambit Declined: Neo-orthodox variation, 7.Bxf6
+D55 Queen's Gambit Declined: Petrosian variation
+D55 Queen's Gambit Declined: Neo-orthodox variation, 7.Bh4
+D56 Queen's Gambit Declined: Lasker defence
+D56 Queen's Gambit Declined: Lasker defence, Teichmann variation
+D56 Queen's Gambit Declined: Lasker defence, Russian variation
+D57 Queen's Gambit Declined: Lasker defence, main line
+D57 Queen's Gambit Declined: Lasker defence, Bernstein variation
+D58 Queen's Gambit Declined: Tartakower (Makagonov-Bondarevsky) system
+D59 Queen's Gambit Declined: Tartakower (Makagonov-Bondarevsky) system, 8.cd Nxd5
+D59 Queen's Gambit Declined: Tartakower variation
+D60 Queen's Gambit Declined: Orthodox defence
+D60 Queen's Gambit Declined: Orthodox defence, Botvinnik variation
+D60 Queen's Gambit Declined: Orthodox defence, Rauzer variation
+D61 Queen's Gambit Declined: Orthodox defence, Rubinstein variation
+D62 Queen's Gambit Declined: Orthodox defence, 7.Qc2 c5, 8.cd (Rubinstein)
+D63 Queen's Gambit Declined: Orthodox defence, 7.Rc1
+D63 Queen's Gambit Declined: Orthodox defence, Pillsbury attack
+D63 Queen's Gambit Declined: Orthodox defence, Capablanca variation
+D63 Queen's Gambit Declined: Orthodox defence, Swiss (Henneberger) variation
+D63 Queen's Gambit Declined: Orthodox defence, Swiss, Karlsbad variation
+D63 Queen's Gambit Declined: Orthodox defence
+D64 Queen's Gambit Declined: Orthodox defence, Rubinstein attack (with Rc1)
+D64 Queen's Gambit Declined: Orthodox defence, Rubinstein attack, Wolf variation
+D64 Queen's Gambit Declined: Orthodox defence, Rubinstein attack, Karlsbad variation
+D64 Queen's Gambit Declined: Orthodox defence, Rubinstein attack, Gruenfeld variation
+D65 Queen's Gambit Declined: Orthodox defence, Rubinstein attack, main line
+D66 Queen's Gambit Declined: Orthodox defence, Bd3 line
+D66 Queen's Gambit Declined: Orthodox defence, Bd3 line, fianchetto variation
+D67 Queen's Gambit Declined: Orthodox defence, Bd3 line, Capablanca freeing manoevre
+D67 Queen's Gambit Declined: Orthodox defence, Bd3 line, Janowski variation
+D67 Queen's Gambit Declined: Orthodox defence, Bd3 line
+D67 Queen's Gambit Declined: Orthodox defence, Bd3 line, Alekhine variation
+D67 Queen's Gambit Declined: Orthodox defence, Bd3 line, 11.O-O
+D68 Queen's Gambit Declined: Orthodox defence, classical variation
+D68 Queen's Gambit Declined: Orthodox defence, classical, 13.d1b1 (Maroczy)
+D68 Queen's Gambit Declined: Orthodox defence, classical, 13.d1c2 (Vidmar)
+D69 Queen's Gambit Declined: Orthodox defence, classical, 13.de
 D70 Neo-Gruenfeld defence
 D70 Neo-Gruenfeld (Kemeri) defence
 D71 Neo-Gruenfeld, 5.cd

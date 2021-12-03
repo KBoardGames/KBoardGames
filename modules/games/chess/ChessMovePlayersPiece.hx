@@ -285,16 +285,7 @@ class ChessMovePlayersPiece extends FlxSprite {
 	}	
 	
 	override public function update (elapsed:Float)
-	{
-		
-/*
-trace("~~~~");
-trace(_triggerImageValueOld + " _triggerImageValueOld");
-trace(_triggerImageValueOld2 + " _triggerImageValueOld2");
-trace(_triggerImageValueNew + " _triggerImageValueNew");
-trace(_triggerImageValueNew2 + " _triggerImageValueNew2");
-trace("~~~~");
-*/
+	{		
 		RegFunctions.is_player_attacker(false); // a value of false then the player hosts a game known as the defender. true, if being hosted. eg, array[Reg._playerMoving][value][yy][xx]. playerAttacker is the opposite of the defender. so if Reg._playerMoving = 0 then its the player hosting the game while Reg._playerNotMoving which has a value of 1 had accepted the game at the chatroom.	
 			
 		if (Reg._gameMovePiece == true && Reg._gameId == 1)

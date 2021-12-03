@@ -278,7 +278,7 @@ class ConfigurationGeneralEvents extends CID2
 		RegCustom._client_background_image_number[Reg._tn] -= 1;
 		if (RegCustom._client_background_image_number[Reg._tn] <= 0) RegCustom._client_background_image_number[Reg._tn] = 13;
 		
-		CID2._sprite_client_background_image.color = RegCustomColors.color_client_background_defaults();
+		CID2._sprite_client_background_image.color = RegCustomColors.color_client_background();
 	}
 	
 	public function client_background_number_plus():Void
@@ -286,7 +286,7 @@ class ConfigurationGeneralEvents extends CID2
 		RegCustom._client_background_image_number[Reg._tn] += 1;
 		if (RegCustom._client_background_image_number[Reg._tn] >= 14) RegCustom._client_background_image_number[Reg._tn] = 1;
 		
-		CID2._sprite_client_background_image.color = RegCustomColors.color_client_background_defaults();
+		CID2._sprite_client_background_image.color = RegCustomColors.color_client_background();
 	}
 	
 	/******************************
@@ -492,12 +492,12 @@ class ConfigurationGeneralEvents extends CID2
 	
 	public function notation_panel_alpha():Void
 	{
-		if (RegCustom._notation_panel_10_percent_alpha_enabled[Reg._tn] == false)
-			RegCustom._notation_panel_10_percent_alpha_enabled[Reg._tn] = true;
+		if (RegCustom._notation_panel_40_percent_alpha_enabled[Reg._tn] == false)
+			RegCustom._notation_panel_40_percent_alpha_enabled[Reg._tn] = true;
 		else
-			RegCustom._notation_panel_10_percent_alpha_enabled[Reg._tn] = false;
+			RegCustom._notation_panel_40_percent_alpha_enabled[Reg._tn] = false;
 			
-		CID2._button_notation_panel_10_percent_alpha_enabled.label.text = Std.string(RegCustom._notation_panel_10_percent_alpha_enabled[Reg._tn]);
+		CID2._button_notation_panel_40_percent_alpha_enabled.label.text = Std.string(RegCustom._notation_panel_40_percent_alpha_enabled[Reg._tn]);
 	}
 	
 	public function notation_panel_same_background_color():Void

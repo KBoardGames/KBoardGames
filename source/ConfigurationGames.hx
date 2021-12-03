@@ -854,18 +854,21 @@ class ConfigurationGames extends FlxGroup
 			FlxG.switchState(new Configuration());
 		}
 		
-		for (i in 0... CID1._group_button.length)
+		if (Reg._buttonCodeValues == "")
 		{
-			// if mouse is on the button plus any offset made by the box scroller and mouse is pressed...
-			if (FlxG.mouse.y + ButtonGeneralNetworkNo._scrollarea_offset_y >= CID1._group_button[i]._startY &&  FlxG.mouse.y + ButtonGeneralNetworkNo._scrollarea_offset_y <= CID1._group_button[i]._startY + CID1._group_button[i]._button_height 
-			&& FlxG.mouse.x + ButtonGeneralNetworkNo._scrollarea_offset_x >= CID1._group_button[i]._startX &&  FlxG.mouse.x + ButtonGeneralNetworkNo._scrollarea_offset_x <= CID1._group_button[i]._startX + CID1._group_button[i]._button_width && FlxG.mouse.justPressed == true )
+			for (i in 0... CID1._group_button.length)
 			{
-				if (Reg._tn > 0)
+				// if mouse is on the button plus any offset made by the box scroller and mouse is pressed...
+				if (FlxG.mouse.y + ButtonGeneralNetworkNo._scrollarea_offset_y >= CID1._group_button[i]._startY &&  FlxG.mouse.y + ButtonGeneralNetworkNo._scrollarea_offset_y <= CID1._group_button[i]._startY + CID1._group_button[i]._button_height 
+				&& FlxG.mouse.x + ButtonGeneralNetworkNo._scrollarea_offset_x >= CID1._group_button[i]._startX &&  FlxG.mouse.x + ButtonGeneralNetworkNo._scrollarea_offset_x <= CID1._group_button[i]._startX + CID1._group_button[i]._button_width && FlxG.mouse.justPressed == true )
 				{
-					buttonNumber(i);
+					if (Reg._tn > 0)
+					{
+						buttonNumber(i);
+					}
 				}
+				
 			}
-			
 		}
 		
 		super.update(elapsed);

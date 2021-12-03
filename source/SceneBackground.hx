@@ -131,7 +131,7 @@ class SceneBackground extends FlxGroup
 			_background_gradient_color.color = RegCustomColors.gradient_color();
 			_background_gradient_color.scrollFactor.set(0, 0);
 			if (RegCustom._background_alpha_enabled[Reg._tn] == true)
-			// a value of 0.75 is 75% transparency.
+			// a value of 0.25 is 75% transparency.
 			_background_gradient_color.alpha = 0.20;
 			add(_background_gradient_color);
 		}

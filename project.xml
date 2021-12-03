@@ -80,21 +80,16 @@
 	<haxelib name="yaml" />
 	<haxelib name="hscript" if="debug" />
 	
-	<!-- Client libraries _____________________________ -->
-	<!-- These libs will not build when commenting them.
-	
-	<!-- comment these two lines to disable client world flags. Comment these lines will disable leaderboards.-->		
-	
+	<!-- Client modules _____________________________ -->
+		
+	<!-- comment these two lines to disable client world flags. Commenting these lines will also disable leaderboards.-->		
 	<define name="flags" />
 	<assets path="modules/worldFlags/assets/images" embed="true" />
 	
-	<!-- comment these lines to disable client avatars. -->
 	<define name="avatars" />
 	<assets path="vendor/multiavatar" embed="true"/>
 	
-	<!-- comment this line to disable username suggestions at the configuration scene.-->
 	<define name="username_suggestions" />
-	
 	<define name="tournaments" />
 	<define name="miscellaneous" />
 	<define name="leaderboards" />
