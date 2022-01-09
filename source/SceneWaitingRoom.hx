@@ -2,18 +2,11 @@
     Copyright (c) 2021 KBoardGames.com
     This program is part of KBoardGames client software.
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published
-    by the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+    This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+    This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Affero General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU Affero General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 package;
@@ -51,11 +44,6 @@ class SceneWaitingRoom extends FlxState
 	public static var _textPlayer3Stats:FlxText;
 	public static var _textPlayer4Stats:FlxText;
 
-	/******************************
-	 * when at a set value then mouse will be reset and enabled again. this stops server flooding.
-	 */
-	private var _ticks_button_network:Int = 0; 
-	
 	/******************************
 	 * compare this array with Reg.usernames. it false then usernames has changed. this var is used to get stats when false.
 	 */
@@ -210,11 +198,11 @@ class SceneWaitingRoom extends FlxState
 				__game_chatter.destroy();
 			}
 			
-			__game_chatter = new GameChatter(3);
+			__game_chatter = new GameChatter(5);
 			__game_chatter.visible = false;
 			GameChatter.__scrollable_area3.visible = false;
 			GameChatter.__scrollable_area3.active = false;
-			GameChatter._groupChatterScroller.x = 0; // value of 360 work with below var to hide,
+			GameChatter._groupChatterScroller.x = 0;
 			add(__game_chatter);
 		}
 	}
@@ -250,8 +238,7 @@ class SceneWaitingRoom extends FlxState
 		
 		PlayState.allTypedefRoomUpdate(RegTypedef._dataMisc._room);
 
-		PlayState.clientSocket.send("Get Room Players", RegTypedef._dataMisc);
-		haxe.Timer.delay(function (){}, Reg2._event_sleep);
+		PlayState.send("Get Room Players", RegTypedef._dataMisc);		
 	}
 	
 	/******************************
@@ -343,8 +330,7 @@ class SceneWaitingRoom extends FlxState
 			var _tempUser:String = RegTypedef._dataMisc._username;
 			RegTypedef._dataMisc._username = RegTypedef._dataPlayers._usernamesDynamic[0];
 			
-			PlayState.clientSocket.send("Is Host", RegTypedef._dataMisc);
-			haxe.Timer.delay(function (){}, Reg2._event_sleep);
+			PlayState.send("Is Host", RegTypedef._dataMisc);
 			
 			RegTypedef._dataMisc._username = _tempUser;
 			
@@ -441,17 +427,14 @@ class SceneWaitingRoom extends FlxState
 			
 			RegTypedef._dataMisc._roomCheckForLock[RegTypedef._dataMisc._room] = 0;
 			
-			PlayState.clientSocket.send("Greater RoomState Value", RegTypedef._dataMisc); 
-			haxe.Timer.delay(function (){}, Reg2._event_sleep);
-			
+			PlayState.send("Greater RoomState Value", RegTypedef._dataMisc); 			
 			
 			__scrollable_area.visible = false;
 			__scrollable_area.active = false;
 			
 			Reg._totalPlayersInRoom = RegTypedef._dataMisc._roomPlayerLimit[RegTypedef._dataMisc._room] - 1;
 			
-			PlayState.clientSocket.send("Enter Game Room", RegTypedef._dataMisc); // pass the start game var to this event since this event gives the data to the other user at this chat.
-			haxe.Timer.delay(function (){}, Reg2._event_sleep);
+			PlayState.send("Enter Game Room", RegTypedef._dataMisc); // pass the start game var to this event since this event gives the data to the other user at this chat.			
 			
 			RegTypedef._dataPlayers._gamePlayersValues = [0, 0, 0, 0];
 						
@@ -471,9 +454,6 @@ class SceneWaitingRoom extends FlxState
 		{			
 			Reg._buttonCodeValues = "";
 			Reg._yesNoKeyPressValueAtMessage = 0;
-			
-			FlxG.mouse.reset();
-			FlxG.mouse.enabled = true;
 		}
 		
 		
@@ -487,8 +467,8 @@ class SceneWaitingRoom extends FlxState
 			__scrollable_area.active = false;
 				
 			
-			PlayState.clientSocket.send("Lesser RoomState Value", RegTypedef._dataMisc);
-			haxe.Timer.delay(function (){}, Reg2._event_sleep);
+			PlayState.send("Lesser RoomState Value", RegTypedef._dataMisc);
+			
 			//addRemovePlayerCheck();
 			
 			Reg._at_create_room = false;
@@ -523,9 +503,6 @@ class SceneWaitingRoom extends FlxState
 		{
 			Reg._buttonCodeValues = "";
 			Reg._yesNoKeyPressValueAtMessage = 0;
-			
-			FlxG.mouse.reset();
-			FlxG.mouse.enabled = true;
 		}
 
 		
@@ -551,25 +528,15 @@ class SceneWaitingRoom extends FlxState
 	
 	override public function update(elapsed:Float):Void 
 	{
+		if (Reg._at_waiting_room == false) return; 
+		
 		if (FlxG.keys.justReleased.ANY
 		||	FlxG.mouse.justPressed == true)
 			FlxG.sound.destroy(true);
 		
-		if (FlxG.mouse.enabled == false)
-			_ticks_button_network += 1;
-			
-		if (_ticks_button_network > 200)
-		{
-			_ticks_button_network = 0;
-			
-			FlxG.mouse.reset();
-			FlxG.mouse.enabled = true;
-		}
-
 		// TODO make this code everywhere that's needed, such as at SceneGameRoom.hx.
 		if (Reg._buttonCodeValues != "") buttonCodeValues();
 		
 		super.update(elapsed);
-					
 	}
 }

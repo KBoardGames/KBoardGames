@@ -2,18 +2,11 @@
     Copyright (c) 2021 KBoardGames.com
     This program is part of KBoardGames client software.
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published
-    by the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+    This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+    This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Affero General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU Affero General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 package;
@@ -351,7 +344,9 @@ class InviteTable extends FlxState
 	}
 		
 	override public function update(elapsed:Float):Void 
-	{	
+	{
+		if (Reg._at_waiting_room == false) return;
+		
 		// this block of code is needed to make scrollable area not active when user clicks the chatter button. without this code, the chatter window would not be seen.
 		if (GameChatter._chatterIsOpen == true)
 		{
@@ -365,8 +360,7 @@ class InviteTable extends FlxState
 			Reg._buttonCodeValues = "";
 			Reg._yesNoKeyPressValueAtMessage = 0;
 			
-			PlayState.clientSocket.send("Online Player Offer Invite", RegTypedef._dataPlayers);
-			haxe.Timer.delay(function (){}, Reg2._event_sleep);
+			PlayState.send("Online Player Offer Invite", RegTypedef._dataPlayers);			
 		}
 		
 		if (Reg._yesNoKeyPressValueAtMessage > 1 && Reg._buttonCodeValues == "o1000")
@@ -389,8 +383,6 @@ class InviteTable extends FlxState
 				populate_invite_list(_ticks_invite_list);
 				_ticks_invite_list += 1;
 			}			
-			
-			if (_ticks_invite_list >= Reg._maximum_server_connections + 1) FlxG.mouse.enabled = true;
 			
 			populate_invite_list(_ticks_invite_list);
 			_ticks_invite_list += 1;

@@ -2,18 +2,11 @@
     Copyright (c) 2021 KBoardGames.com
     This program is part of KBoardGames client software.
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published
-    by the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+    This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+    This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Affero General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU Affero General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 package modules.games.chess;
@@ -614,7 +607,6 @@ class ChessMovePlayersPiece extends FlxSprite {
 						Reg._messageId = 0; // this triggers an event to make the restart game and to title buttons active again.
 						
 						//if (Reg._gameMessage == "") GameHistoryAndNotations.notationPrint();
-						FlxG.mouse.reset();
 					}
 								
 					Reg._gameDidFirstMove = false;		

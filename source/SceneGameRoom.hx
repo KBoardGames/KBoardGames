@@ -2,18 +2,11 @@
     Copyright (c) 2021 KBoardGames.com
     This program is part of KBoardGames client software.
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published
-    by the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+    This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+    This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Affero General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU Affero General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 package;
@@ -104,16 +97,15 @@ class SceneGameRoom extends FlxState
 		Reg._at_game_room = true;
 		Reg._at_waiting_room = false;
 		
+		TitleBar._title_for_screenshot = "Game Room";
+		
 		// this is needed because if message box was centered to screen, it would overlap part of the right side scrollbar at lobby. if true then we are at the game room so center the message box since there is no scrollbar to the right of the scene.
 		Reg2._messageBox_x = 380;
 		
-		Reg2._lobby_button_alpha = 1;
+		Reg2._lobby_button_alpha = 0.3;
 		RegTriggers._buttons_set_not_active = false;
 		
 		RegFunctions.fontsSharpen();
-		
-		FlxG.mouse.reset();
-		FlxG.mouse.enabled = true;
 		
 		__ids_win_lose_or_draw = ids_win_lose_or_draw;
 		
@@ -135,7 +127,7 @@ class SceneGameRoom extends FlxState
 		Reg._buttonCodeValues = "";
 		Reg._yesNoKeyPressValueAtMessage = 0;
 		
-		Reg._gameId = RegTypedef._dataMisc._roomGameIds[RegTypedef._dataMisc._room];
+		if (RegTypedef._dataMisc._roomGameIds[RegTypedef._dataMisc._room] != -1) Reg._gameId = RegTypedef._dataMisc._roomGameIds[RegTypedef._dataMisc._room];
 		
 		if (Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false) Reg._roomPlayerLimit = RegTypedef._dataMisc._roomPlayerLimit[RegTypedef._dataMisc._room];
 		
@@ -189,12 +181,6 @@ class SceneGameRoom extends FlxState
 			gameButtonActive(_state);
 		}
 		
-		if (Reg._clientReadyForPublicRelease == false)
-		{
-			__action_commands = new ActionCommands(); 
-			add(__action_commands);
-		}
-		
 		// add the game history for spectator watching for the following games when the game is being played
 		if (Reg._gameId <= 1)
 		{
@@ -208,7 +194,7 @@ class SceneGameRoom extends FlxState
 		
 		// disable chatter for the spectator watching feature but enable it when playing a game online.
 		if (Reg._game_offline_vs_cpu == false 
-		&&  Reg._game_offline_vs_player == false
+		&&	Reg._game_offline_vs_player == false
 		&&  RegTypedef._dataPlayers._spectatorWatching == false
 		&&  RegCustom._chat_when_at_room_enabled[Reg._tn] == true)
 		{
@@ -218,7 +204,7 @@ class SceneGameRoom extends FlxState
 				__game_chatter.destroy();
 			}
 			
-			__game_chatter = new GameChatter(4, this);
+			__game_chatter = new GameChatter(6, this);
 			__game_chatter.visible = true;
 			
 			if (GameChatter.__scrollable_area4 != null)
@@ -227,7 +213,7 @@ class SceneGameRoom extends FlxState
 				GameChatter.__scrollable_area4.active = false;
 			}
 			
-			GameChatter._groupChatterScroller.x = 375; // 375 work with below var to hide,
+			GameChatter._groupChatterScroller.x = 385; // hide,
 			RegTriggers._scrollRight = true; // this is needed if hiding boxScoller.
 			add(__game_chatter);
 		}
@@ -244,12 +230,15 @@ class SceneGameRoom extends FlxState
 			{
 				RegCustom._send_automatic_start_game_request[Reg._tn] = false;
 				
-				PlayState.clientSocket.send("Restart Offer", RegTypedef._dataQuestions);
-				haxe.Timer.delay(function (){}, Reg2._event_sleep);
+				PlayState.send("Restart Offer", RegTypedef._dataQuestions);				
 			}
 		}
 		
-		
+		if (Reg._clientReadyForPublicRelease == false)
+		{
+			__action_commands = new ActionCommands(); 
+			add(__action_commands);
+		}
 	}
 	
 	public function gameIDRightSidePanel():Void
@@ -354,8 +343,7 @@ class SceneGameRoom extends FlxState
 			&&  RegTypedef._dataPlayers._usernamesDynamic[1] != "")
 			{
 				Reg._messageId = 16005;
-				messageBoxMessageOrder();
-				
+				messageBoxMessageOrder();				
 			}
 			
 			if (RegTypedef._dataGameMessage._userFrom == RegTypedef._dataPlayers._usernamesDynamic[2]
@@ -363,7 +351,6 @@ class SceneGameRoom extends FlxState
 			{
 				Reg._messageId = 16010;
 				messageBoxMessageOrder();
-				
 			}
 			
 			if (RegTypedef._dataGameMessage._userFrom == RegTypedef._dataPlayers._usernamesDynamic[3]
@@ -371,10 +358,7 @@ class SceneGameRoom extends FlxState
 			{
 				Reg._messageId = 16015;
 				messageBoxMessageOrder();
-								
 			}
-			
-			RegTypedef._dataGameMessage._gameMessage = "";
 		}
 	}
 	
@@ -398,8 +382,7 @@ class SceneGameRoom extends FlxState
 					Reg._gameHost = true;
 					if (RegTypedef._dataMisc._spectatorWatching == false)
 					{
-						PlayState.clientSocket.send("Is Host", RegTypedef._dataMisc);
-						haxe.Timer.delay(function (){}, Reg2._event_sleep);						
+						PlayState.send("Is Host", RegTypedef._dataMisc);
 					}
 				}
 			}
@@ -442,7 +425,6 @@ class SceneGameRoom extends FlxState
 		Reg._playerWaitingAtGameRoom = false;
 	}
 	
-	// TODO Message boxes can no longer be stacked on each other because a message box that is displayed will stop user from clicking the scene underneath it. therefore, remove messageBoxMessageOrder() code and all references to it.
 	public static function messageBoxMessageOrder():Void
 	{
 		for (i in 0...Reg._messageFocusId.length)
@@ -579,14 +561,14 @@ class SceneGameRoom extends FlxState
 		Reg._buttonCodeValues = "";
 		
 		// this is not perfect. user is able to click button even though it is behind chatter but not when chatter is fully closed. there is no way around this limitation because Haxeflixel buttons cannot tell when there is another object on top of it.
-		if (Reg._gameRoom == true && GameChatter._title_background.x > 1040)
+		if (Reg._gameRoom == true && GameChatter._title_background.x > 1200)
 		{
 			var _state:Bool = true;
 			
 			gameButtonActive(_state);
 		}
 		
-		if (Reg._gameRoom == true && GameChatter._title_background.x <= 1040)
+		if (Reg._gameRoom == true && GameChatter._title_background.x < 1200)
 		{
 			var _state:Bool = false;
 			gameButtonActive(_state);
@@ -661,8 +643,7 @@ class SceneGameRoom extends FlxState
 						
 						Reg._gameOverForPlayer = true;
 	
-						PlayState.clientSocket.send("Game Players Values", RegTypedef._dataPlayers);
-						haxe.Timer.delay(function (){}, Reg2._event_sleep);
+						PlayState.send("Game Players Values", RegTypedef._dataPlayers);					
 					}
 				}	
 			}
@@ -689,14 +670,20 @@ class SceneGameRoom extends FlxState
 		// disconnect then return to title.
 		if (Reg._yesNoKeyPressValueAtMessage == 1 && Reg._buttonCodeValues == "g1002")
 		{
+			if (Reg._game_offline_vs_player == true 
+			||	Reg._game_offline_vs_cpu == true
+			) 
+			{
+				FlxG.switchState(new MenuState());
+			}
+			
+			
 			if (Reg._game_online_vs_cpu == true || RegTypedef._dataMisc._spectatorWatching == false && Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false && RegTypedef._dataPlayers._gamePlayersValues[Reg._move_number_next] == 1) 
 			{
-				PlayState.clientSocket.send("Save Lose Stats", RegTypedef._dataPlayers);
-				haxe.Timer.delay(function (){}, Reg2._event_sleep);
+				PlayState.send("Save Lose Stats", RegTypedef._dataPlayers);				
 				
 				// do NOT use "Player Left Game Room" here. you will get a player left game, a lose was saved to player stats message after a normal game has ended.
-				PlayState.clientSocket.send("Player Left Game", RegTypedef._dataPlayers);		
-				haxe.Timer.delay(function (){}, Reg2._event_sleep);
+				PlayState.send("Player Left Game", RegTypedef._dataPlayers);				
 				
 				Reg._game_offline_vs_cpu = false;
 				Reg._game_online_vs_cpu = false;
@@ -739,8 +726,7 @@ class SceneGameRoom extends FlxState
 			Reg._buttonCodeValues = "";
 			Reg._yesNoKeyPressValueAtMessage = 0;			
 			
-			PlayState.clientSocket.send("Draw Offer", RegTypedef._dataQuestions);
-			haxe.Timer.delay(function (){}, Reg2._event_sleep);
+			PlayState.send("Draw Offer", RegTypedef._dataQuestions);			
 		}
 		
 		// draw button canceled.
@@ -772,11 +758,7 @@ class SceneGameRoom extends FlxState
 				Reg._gameOverForPlayer = false;
 				Reg._createGameRoom = true;
 			}
-			else 
-			{
-				PlayState.clientSocket.send("Restart Offer", RegTypedef._dataQuestions);
-				haxe.Timer.delay(function (){}, Reg2._event_sleep);
-			}
+			else PlayState.send("Restart Offer", RegTypedef._dataQuestions);
 		}
 		
 		// restart canceled.
@@ -794,8 +776,7 @@ class SceneGameRoom extends FlxState
 			Reg._yesNoKeyPressValueAtMessage = 0;
 			
 			RegTypedef._dataQuestions._drawAnsweredAs = true;
-			PlayState.clientSocket.send("Draw Answered As", RegTypedef._dataQuestions);	
-			haxe.Timer.delay(function (){}, Reg2._event_sleep);
+			PlayState.send("Draw Answered As", RegTypedef._dataQuestions);			
 		}
 		
 		// draw button, not accepted.
@@ -805,8 +786,7 @@ class SceneGameRoom extends FlxState
 			Reg._yesNoKeyPressValueAtMessage = 0;
 			
 			RegTypedef._dataQuestions._drawAnsweredAs = false;
-			PlayState.clientSocket.send("Draw Answered As", RegTypedef._dataQuestions);
-			haxe.Timer.delay(function (){}, Reg2._event_sleep);
+			PlayState.send("Draw Answered As", RegTypedef._dataQuestions);			
 		}
 		
 		// restart game accepted.
@@ -816,8 +796,7 @@ class SceneGameRoom extends FlxState
 			Reg._yesNoKeyPressValueAtMessage = 0;
 			
 			RegTypedef._dataQuestions._restartGameAnsweredAs = true;
-			PlayState.clientSocket.send("Restart Answered As", RegTypedef._dataQuestions);
-			haxe.Timer.delay(function (){}, Reg2._event_sleep);
+			PlayState.send("Restart Answered As", RegTypedef._dataQuestions);			
 		}
 		
 		// restart game not accepted.
@@ -827,8 +806,7 @@ class SceneGameRoom extends FlxState
 			Reg._yesNoKeyPressValueAtMessage = 0;
 			
 			RegTypedef._dataQuestions._restartGameAnsweredAs = false;
-			PlayState.clientSocket.send("Restart Answered As", RegTypedef._dataQuestions);
-			haxe.Timer.delay(function (){}, Reg2._event_sleep);	
+			PlayState.send("Restart Answered As", RegTypedef._dataQuestions);				
 		}
 		
 		// this win block code is needed so that the next message that pops up does not automatically close.
@@ -898,8 +876,7 @@ class SceneGameRoom extends FlxState
 					
 					if (Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false) 
 					{
-						PlayState.clientSocket.send("Save Lose Stats", RegTypedef._dataPlayers);	
-						haxe.Timer.delay(function (){}, Reg2._event_sleep);
+						PlayState.send("Save Lose Stats", RegTypedef._dataPlayers);						
 					}
 				}
 								
@@ -910,17 +887,12 @@ class SceneGameRoom extends FlxState
 					// the value of _totalPlayers is a bit misleading. the value refers to a two player game. the player that entered this function still should register a lose and is still playing a game but is not added to this vars total because time remaining is zero.
 					if (_totalPlayers == 1 && Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false) 
 					{
-						PlayState.clientSocket.send("Save Lose Stats For Both", RegTypedef._dataPlayers);	
-						haxe.Timer.delay(function (){}, Reg2._event_sleep);
+						PlayState.send("Save Lose Stats For Both", RegTypedef._dataPlayers);			
 					}
 				}
 				
-								
-				PlayState.clientSocket.send("Game Players Values", RegTypedef._dataPlayers);
-				haxe.Timer.delay(function (){}, Reg2._event_sleep);
-				
-				PlayState.clientSocket.send("Player Left Game", RegTypedef._dataPlayers);
-				haxe.Timer.delay(function (){}, Reg2._event_sleep);
+				PlayState.send("Game Players Values", RegTypedef._dataPlayers);				
+				PlayState.send("Player Left Game", RegTypedef._dataPlayers);				
 				
 				for (i in 0...4)
 				{
@@ -932,8 +904,7 @@ class SceneGameRoom extends FlxState
 					}
 				}
 				
-				PlayState.clientSocket.send("Game Players Values", RegTypedef._dataPlayers);
-				haxe.Timer.delay(function (){}, Reg2._event_sleep);
+				PlayState.send("Game Players Values", RegTypedef._dataPlayers);				
 			}
 			
 		}
@@ -1003,8 +974,6 @@ class SceneGameRoom extends FlxState
 	
 	private function messageStartRestartGame():Void
 	{
-		FlxG.mouse.enabled = false;
-		
 		Reg._messageId = 16210;
 		Reg._buttonCodeValues = "g1030";
 		messageBoxMessageOrder();
@@ -1023,18 +992,19 @@ class SceneGameRoom extends FlxState
 	
 	private function messageReturnToTitle():Void
 	{
-		FlxG.mouse.enabled = false;
 		Reg._buttonCodeValues = "g1002";
-			
-		if (Reg._game_offline_vs_player == true 
-		||	Reg._game_offline_vs_cpu == true
-		) 
-		{
-			FlxG.switchState(new MenuState());
-		}
 		
 		if (RegCustom._to_title_from_game_room_confirmation[Reg._tn] == false)		
+		{
+			if (Reg._game_offline_vs_player == true 
+			||	Reg._game_offline_vs_cpu == true
+			) 
+			{
+				FlxG.switchState(new MenuState());
+			}
+			
 			Reg._yesNoKeyPressValueAtMessage = 1;
+		}
 				
 		else
 		{
@@ -1045,7 +1015,6 @@ class SceneGameRoom extends FlxState
 	
 	private function messageReturnToLobby():Void
 	{
-		FlxG.mouse.enabled = false;
 		Reg._buttonCodeValues = "g1000";
 				
 		if (RegCustom._to_lobby_from_game_room_confirmation[Reg._tn] == false)
@@ -1063,8 +1032,6 @@ class SceneGameRoom extends FlxState
 	
 	private function messageQuitGame():Void
 	{
-		FlxG.mouse.enabled = false;
-		
 		Reg._messageId = 16350;
 		Reg._buttonCodeValues = "g1050";	
 		messageBoxMessageOrder();
@@ -1072,8 +1039,6 @@ class SceneGameRoom extends FlxState
 	
 	private function messageDrawOffer():Void
 	{
-		FlxG.mouse.enabled = false;
-		
 		Reg._messageId = 16400;
 		Reg._buttonCodeValues = "g1004";
 		messageBoxMessageOrder();
@@ -1134,11 +1099,11 @@ class SceneGameRoom extends FlxState
 			add(_playerTimeRemainingMove);
 		}
 		
+		
 		// this is needed.
 		if (Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false)
 		{
-			PlayState.clientSocket.send("Player Move Time Remaining", RegTypedef._dataPlayers);
-			haxe.Timer.delay(function (){}, Reg2._event_sleep);
+			PlayState.send("Player Move Time Remaining", RegTypedef._dataPlayers);
 		}
 		
 	}
@@ -1162,8 +1127,7 @@ class SceneGameRoom extends FlxState
 	public static function go_back_to_lobby():Void
 	{
 		// go back tolooby
-		PlayState.clientSocket.send("Lesser RoomState Value", RegTypedef._dataMisc);
-		haxe.Timer.delay(function (){}, Reg2._event_sleep);
+		PlayState.send("Lesser RoomState Value", RegTypedef._dataMisc);		
 		
 		// display the lobby.
 		PlayersLeftGameResetThoseVars.playerRepopulateTypedefPlayers();
@@ -1216,8 +1180,7 @@ class SceneGameRoom extends FlxState
 	
 	override public function update(elapsed:Float):Void 
 	{
-		// mouse is always enabled for game room.
-		FlxG.mouse.enabled = true;
+		if (Reg._at_game_room == false) return;
 		
 		printNotation();
 		
@@ -1386,7 +1349,7 @@ class SceneGameRoom extends FlxState
 				
 			}
 			
-			// hide room letter when chatter window is open.
+			// show / hide room letter when chatter window is open.
 			if (GameChatter._chatterIsOpen == false)
 			{
 				_title.active = true;
@@ -1433,7 +1396,6 @@ class SceneGameRoom extends FlxState
 					else
 						buttonStartRestartGame2.alpha = 0.3;
 					
-					FlxG.mouse.enabled = false;
 					Reg._messageId = 1000000;			
 				}
 				
@@ -1442,7 +1404,6 @@ class SceneGameRoom extends FlxState
 				&&	Reg._move_number_next == 1)
 				{
 					buttonStartRestartGame2.alpha = 0.3;
-					FlxG.mouse.enabled = false;
 					Reg._messageId = 1000000;
 				}
 				
@@ -1451,7 +1412,6 @@ class SceneGameRoom extends FlxState
 				&&	Reg._move_number_next == 1)
 				{
 					buttonReturnToTitle.alpha = 0.3;
-					FlxG.mouse.enabled = false;
 					Reg._messageId = 1000000;
 				}
 				
@@ -1460,7 +1420,6 @@ class SceneGameRoom extends FlxState
 				&&	Reg._move_number_next == 1)
 				{
 					buttonReturnToTitle2.alpha = 0.3;
-					FlxG.mouse.enabled = false;
 					Reg._messageId = 1000000;
 				}
 				
@@ -1472,8 +1431,6 @@ class SceneGameRoom extends FlxState
 						buttonStartRestartGame.alpha = 1;
 					else
 						buttonStartRestartGame2.alpha = 1;
-						
-					FlxG.mouse.enabled = true;
 				}
 				
 				// show this button when human's turn to move.
@@ -1481,7 +1438,6 @@ class SceneGameRoom extends FlxState
 				&&	Reg._move_number_next == 0)
 				{
 					buttonStartRestartGame2.alpha = 1;
-					FlxG.mouse.enabled = true;
 				}
 				
 				// show this button when human's turn to move.
@@ -1492,8 +1448,6 @@ class SceneGameRoom extends FlxState
 						buttonReturnToTitle.alpha = 1;
 					else 
 						buttonReturnToTitle2.alpha = 1;
-						
-					FlxG.mouse.enabled = true;
 				}
 				
 				// show this button when human's turn to move.
@@ -1501,7 +1455,6 @@ class SceneGameRoom extends FlxState
 				&&	Reg._move_number_next == 0)
 				{
 					buttonReturnToTitle2.alpha = 1;
-					FlxG.mouse.enabled = true;
 				}
 			}
 			
@@ -1520,9 +1473,12 @@ class SceneGameRoom extends FlxState
 			// hide open close chatter button because we have a message popup that needs to be clicked.
 			if (GameChatter != null && RegCustom._chat_when_at_room_enabled[Reg._tn] == true)
 			{
+				GameChatter._sprite_input_chat_border.visible = false;
+				GameChatter._sprite_input_chat_border.active = false;	
+				GameChatter._sprite_input_chat_background.visible = false;
+				GameChatter._sprite_input_chat_background.active = false;
 				GameChatter._input_chat.visible = false;
-				GameChatter._input_chat.active = false;
-				
+				GameChatter._input_chat.active = false;		
 				GameChatter._chatInputButton.visible = false;
 				GameChatter._chatInputButton.active = false;		
 			}
@@ -1591,8 +1547,8 @@ class SceneGameRoom extends FlxState
 						else
 							RegTypedef._dataGameMessage._gameMessage = Reg._playerLeftGameUsername + "'s time expired. A loss was saved to " + Reg._playerLeftGameUsername + "\'s stats.";
 							
-						PlayState.clientSocket.send("Game Message Box For Spectator Watching", RegTypedef._dataGameMessage);
-						haxe.Timer.delay(function (){}, Reg2._event_sleep);
+						PlayState.send("Game Message Box For Spectator Watching", RegTypedef._dataGameMessage);
+						
 					}
 				}
 				
@@ -1617,8 +1573,8 @@ class SceneGameRoom extends FlxState
 						else
 							RegTypedef._dataGameMessage._gameMessage = Reg._playerLeftGameUsername + "'s time expired. A loss was saved to " + Reg._playerLeftGameUsername + "\'s stats.";
 							
-						PlayState.clientSocket.send("Game Message Box For Spectator Watching", RegTypedef._dataGameMessage);
-						haxe.Timer.delay(function (){}, Reg2._event_sleep);
+						PlayState.send("Game Message Box For Spectator Watching", RegTypedef._dataGameMessage);
+						
 					}
 					
 					
@@ -1643,8 +1599,7 @@ class SceneGameRoom extends FlxState
 					RegTypedef._dataGameMessage._userFrom = Reg._playerLeftGameUsername;
 					RegTypedef._dataGameMessage._gameMessage = Reg._playerLeftGameUsername + " left the game room.";
 					
-					PlayState.clientSocket.send("Game Message Box For Spectator Watching", RegTypedef._dataGameMessage);
-					haxe.Timer.delay(function (){}, Reg2._event_sleep);
+					PlayState.send("Game Message Box For Spectator Watching", RegTypedef._dataGameMessage);
 				}
 			}				
 			
@@ -1674,8 +1629,8 @@ class SceneGameRoom extends FlxState
 						else
 							RegTypedef._dataGameMessage._gameMessage = Reg._playerLeftGameUsername + " quit the game. A loss was saved to " + Reg._playerLeftGameUsername + "\'s stats.";
 					
-						PlayState.clientSocket.send("Game Message Box For Spectator Watching", RegTypedef._dataGameMessage);
-						haxe.Timer.delay(function (){}, Reg2._event_sleep);
+						PlayState.send("Game Message Box For Spectator Watching", RegTypedef._dataGameMessage);
+						
 					}
 				}
 				
@@ -1700,8 +1655,7 @@ class SceneGameRoom extends FlxState
 					else
 						RegTypedef._dataGameMessage._gameMessage = "You are now player " + (Reg._move_number_current + 1) + " because " + Reg._playerLeftGameUsername + " quit the game. A loss was saved to " + Reg._playerLeftGameUsername + "\'s stats.";
 						
-						PlayState.clientSocket.send("Game Message Box For Spectator Watching", RegTypedef._dataGameMessage);
-						haxe.Timer.delay(function (){}, Reg2._event_sleep);
+						PlayState.send("Game Message Box For Spectator Watching", RegTypedef._dataGameMessage);
 					}
 				
 				}
@@ -1732,8 +1686,7 @@ class SceneGameRoom extends FlxState
 					else
 						RegTypedef._dataGameMessage._gameMessage = Reg._playerLeftGameUsername + " left the game room. A loss was saved to " + Reg._playerLeftGameUsername + "\'s stats.";
 					
-					PlayState.clientSocket.send("Game Message Box For Spectator Watching", RegTypedef._dataGameMessage);
-					haxe.Timer.delay(function (){}, Reg2._event_sleep);
+					PlayState.send("Game Message Box For Spectator Watching", RegTypedef._dataGameMessage);
 				}
 			}
 			
@@ -1760,8 +1713,7 @@ class SceneGameRoom extends FlxState
 						RegTypedef._dataGameMessage._gameMessage = Reg._playerLeftGameUsername + " left the game room. A loss was saved to " + Reg._playerLeftGameUsername + "\'s stats.";
 					
 						
-					PlayState.clientSocket.send("Game Message Box For Spectator Watching", RegTypedef._dataGameMessage);
-					haxe.Timer.delay(function (){}, Reg2._event_sleep);
+					PlayState.send("Game Message Box For Spectator Watching", RegTypedef._dataGameMessage);				
 				}
 			}
 			
@@ -1826,8 +1778,7 @@ class SceneGameRoom extends FlxState
 					
 					if (Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false)
 					{
-						PlayState.clientSocket.send("Game Players Values", RegTypedef._dataPlayers);
-						haxe.Timer.delay(function (){}, Reg2._event_sleep);
+						PlayState.send("Game Players Values", RegTypedef._dataPlayers);					
 					}
 				}
 			}
@@ -1982,12 +1933,8 @@ class SceneGameRoom extends FlxState
 
 					RegTypedef._dataTournaments._game_over = 1;
 					RegTypedef._dataTournaments._won_game = 0;
-					PlayState.clientSocket.send("Tournament Chess Standard 8 Put", RegTypedef._dataTournaments);
-					haxe.Timer.delay(function (){}, Reg2._event_sleep);
-					
-				}
-				
-				
+					PlayState.send("Tournament Chess Standard 8 Put", RegTypedef._dataTournaments);		
+				}				
 			}
 				
 			buttonHideAll(); // hide the restart, draw and lobby buttons because a restart button, for example, should not be shown when a player leave the game room or time expires.

@@ -23,7 +23,7 @@
 	<!--<window maximized="true" />-->
 
 	<!--HTML5-specific-->
-	<window if="html5"  width="0" height="0" resizable="true" />
+	<window if="html5"  width="0" height="0" resizable="true" background="#004880" />
 
 	<!--Desktop-specific-->
 	<window if="desktop" orientation="landscape" fullscreen="false" resizable="true" />
@@ -37,7 +37,9 @@
 	<classpath name="source" />
 	
 	<assets path="assets" embed="true"/>
-	
+	<assets path="scripts"	embed="false"/>
+	<assets path="themes" 	embed="false"/>
+
 	<haxedef name="no-inline" if="flash"/>
 	<haxedef name="no-inline" if="neko"/>
 	<haxedef name="no-inline" if="windows"/>
@@ -85,6 +87,7 @@
 	<!-- comment these two lines to disable client world flags. Commenting these lines will also disable leaderboards.-->		
 	<define name="flags" />
 	<assets path="modules/worldFlags/assets/images" embed="true" />
+	<define name="leaderboards" />
 	
 	<define name="avatars" />
 	<assets path="vendor/multiavatar" embed="true"/>
@@ -92,8 +95,7 @@
 	<define name="username_suggestions" />
 	<define name="tournaments" />
 	<define name="miscellaneous" />
-	<define name="leaderboards" />
-	
+		
 	<define name="dailyQuests" />
 	<assets path="modules/dailyQuests/assets/images" embed="true" />
 
@@ -116,9 +118,6 @@
 	<assets path="modules/games/wheelEstate/assets/images" embed="true" />
 	
 	<!-- End of client libraries ______________________ -->
-		
-	<!--<haxedef name="openfl-legacy" />-->	
-	
 	<!-- 
 	############   IMPORTANT: MUST READ   ################
 		neko build always has a console window and because of that, the program will do strange things to the server when the user closes the client console window and not the application window. therefore, for the final build you must build for windows not neko.

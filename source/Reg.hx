@@ -2,18 +2,11 @@
     Copyright (c) 2021 KBoardGames.com
     This program is part of KBoardGames client software.
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published
-    by the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+    This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+    This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Affero General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU Affero General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 package;
@@ -41,7 +34,7 @@ class Reg
 	public static var _maximum_server_connections:Int = 119;
 		
 	
-	/* far below this code, at the resetRegVarsOnce() function, change this var to true when you are ready to release this version of the client to the public. this var will hide the fullscreen button and disable the windows key which will stop the user from making the client shown in windows mode.
+	/* far below this code, at the resetRegVarsOnce() function, change this var to true when you are ready to release this version of the client to the public. this var will hide bot username and stop keyboard keys from working at ActionCommands.hx. Also, will stop player from logging in with same username more than once simultaneously.
 	 */
 	public static var _clientReadyForPublicRelease:Bool = false;
 	
@@ -71,11 +64,6 @@ class Reg
 	 */
 	public static var _skipSplash:Bool = false;	
 	
-	/******************************
-	 * Whether to start the game in fullscreen on desktop targets. also change this var at resetRegVarsOnce().
-	 */
-	public static var _startFullscreen:Bool = false; 
-			
 	public static var _ipAddress:String = ""; //value is one of these two below. 
 	public static var _ipAddressServerMain:String = ""; // 8x8 board game site.
 	public static var _ipAddressServerOther:String = "";// your hosted game. someone that would like to download the server and client then install it for others to join that hosted website and board games. 
@@ -163,6 +151,11 @@ class Reg
 	 * every message what is displayed after the ok or cancel is pressed has a different message value. used in a switch statement. 
 	 */
 	public static var _messageId:Int = 0;
+	
+	/******************************
+	 * if _messageId = this var then the message will not be displayed.
+	 */
+	public static var _message_id_temp:Int = 0;
 	
 	/******************************
 	 * when more than one message popup is open, this var will have those message id and read in reverse order. so if message popup 2 and then 3 was open, this var would have values of var[0] = 2 and var[1] = 3. when message 3 is closed, that array is removed and the last array value is assigned to _messageId var, so that it can trigger code at that message popup class that its id matches _messageId value.
@@ -1424,7 +1417,14 @@ class Reg
 	public static var _notation_output:Bool = true;
 	
 	public static var _avatar_total:Int = 0;
-		
+	
+	/******************************
+	 * if this field is not empty then the username has matched one of the names from the bad list. the user cannot login with a bad word.
+	 * this is used to reject the user and then send that user back to MenuState.
+	 */
+	public static var _username_restricted:Bool = false;
+	
+	
 	/******************************
 	* instead of using yy and xx in a for loop, this array is used. This is random instead of a linear for loop.
 	* this array element is static. never changing in elements or value,
@@ -1567,19 +1567,54 @@ class Reg
 	public static var _menustate_initiated:Bool = false;
 	
 	/******************************
+	 * determine if a validation code should be sent to the user's email address. this is the case if user had changed email address.
+	 */
+	public static var _doOnce_email_address_validate:Bool = true;
+	
+	/******************************
+	 * this lobby icon var needs to stay here at reg. it will not work at MenuBar.hx. 
+	 * Consider that house is an allowed feature. if the daily quests feature is not allowed at lobby but the leaderboards feature is allowed then the second feature which should be daily quests will instead be leaderboards by pushing the value of 2 at the second array instead of 1.
+	 */
+	public static var _lobby_icon_number:Array<Int> = [];
+	
+	/******************************
+	 * this lobby icon var needs to stay here at reg. it will not work at MenuBar.hx. 
+	 * how many lobby icons are at the lobby menuBar.
+	 * this holds the number of the allowed features at lobby menuBar to be displayed.
+	 */
+	public static var _lobby_icon_total:Int;
+	
+	/******************************
+	 * this lobby icon var needs to stay here at reg. it will not work at MenuBar.hx. 
+	 * this holds the lobby menuBar icons. value starts at 0. access members here.
+	 */
+	public static var _group_lobby_sprite:Array<FlxSprite> = [];
+	
+	/******************************
+	 * is client connected to server?
+	 */
+	public static var _client_socket_is_connected:Bool = false;
+	
+	/******************************
+	 * two or more players cannot enter server at the same time. this stop that from happening.
+	 * without this var, when two players enter the join() function at the same time, no ip and hostname text displayed from TextGeneral.hx at the front door and no way to enter into the lobby from front door.
+	 * the reason is two or more instances cannot share the same typedef data.
+	 */
+	public static var _can_join_server:Bool = true; 
+	
+	/******************************
 	 * change the _public var to true if release is ready for the public.
 	 * resetRegVarsOnce() calls this function.
 	 * only change the "var _public = false;" line.
 	 */
 	public static function set_for_public():Void
-	{		
+	{
 		var _public = false;
 		
 		if (_public == false)
 		{
 			// just change change these three var values below this line.
 			_clientReadyForPublicRelease = false;		
-			_startFullscreen = false;
 			
 			// set true when testing a feature that needs 2 players or when not ready for the public.
 			_loginMoreThanOnce = true; 
@@ -1587,8 +1622,8 @@ class Reg
 		
 		else
 		{
+			Lib.application.window.maximized = true;
 			_clientReadyForPublicRelease = true;		
-			_startFullscreen = true;
 			_loginMoreThanOnce = false; 
 		}
 	}
@@ -1638,7 +1673,7 @@ class Reg
 		
 		//_unitXgameBoardLocation and _unitYgameBoardLocation; // not needed to be reset.
 		//_actionMessage = ""; // never reset this var.
-		//_cannotConnectToServer = false; // don't use  this is commented because when changing states all reg.hx vars are reset. we cannot reset this because this var is used to go from menuState to playState to try to connect and then back to menuState if the connect fails.
+		//_cannotConnectToServer = false and _username_restricted = false; // don't use these. they are commented because when changing states all reg.hx vars are reset. we cannot reset this because this var is used to go from menuState to playState to try to connect and then back to menuState if the connect fails.
 	}
 	
 	/******************************
@@ -1648,8 +1683,9 @@ class Reg
 	{
 		//############################# START CONFIG
 		
-		set_for_public();		
+		set_for_public();
 		
+		_text_general_id = -1;
 		_avatar_total = 300;
 		__scrollable_area_scroll_y = 0;
 		_websiteHomeUrl = "kboardgames.com";
@@ -1731,13 +1767,13 @@ class Reg
 			ChessECO.listToArray();
 		#end
 		
-		_text_general_id = -1;
 		_gameIsNowOver = false;
 		_signatureGameUnitNumberTrade = [0, 0];
 		_number_wheel_get_value = false;
 		_number_wheel_ticks = 0;
 		_step = 0; // used to step through history array elements.
 		_messageId = 0;
+		_message_id_temp = 0;
 		_messageFocusId.splice(0, _messageFocusId.length);
 		_currentRoomState = 0;
 		_clearDoubleMessage = false;
@@ -2174,4 +2210,4 @@ class Reg
 		_gameJumpTo = 0; 
 		
 	}
-}//
+}//

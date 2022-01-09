@@ -2,18 +2,11 @@
     Copyright (c) 2021 KBoardGames.com
     This program is part of KBoardGames client software.
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published
-    by the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+    This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+    This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Affero General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU Affero General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 package;
@@ -194,7 +187,7 @@ class RegTriggers
 	/******************************
 	 * notice displayed when saving at Configurations.hx.
 	 */
-	public static var _config_menu_save_notice:Bool = false;
+	public static var _saveConfig_notice:Bool = false;
 	
 	/******************************
 	 * used to display the daily quests data once that data is populated from the server.
@@ -202,14 +195,14 @@ class RegTriggers
 	public static var __daily_quests:Bool = false;
 	
 	/******************************
-	 * // this fixes a bug where the chat input element is not seen when returning to the lobby from the waiting room.
-	 */
-	public static var _recreate_chatter_input_chat:Bool  = false;
-	
-	/******************************
 	 * print the notation to screen.
 	 */
 	public static var _notationPrint:Bool = false;
+	
+	/******************************
+	 * // this fixes a bug where the chat input element is not seen when returning to the lobby from the waiting room.
+	 */
+	public static var _recreate_chatter_input_chat:Bool  = false;
 	
 	/******************************
 	 * refresh list button was pressed at waiting room. trigger event.
@@ -218,9 +211,14 @@ class RegTriggers
 	public static var _waiting_room_refresh_invite_list:Bool = false;
 	
 	/*****************************
-	 * jump to the 8 player standard chess tournament options.
+	 * jump to the 8 player standard chess tournament class and display any text or buttons there.
 	 */
-	public static var _jump_to_tournament_standard_chess_8:Bool = false;
+	public static var _tournament_standard_chess_8:Bool = false;
+	
+	/*****************************
+	 * this is set to true after returning from the tournamentChessStandard8Get event. this is needed to display text and or buttons at MenuBar.hx
+	 */
+	public static var _tournament_standard_chess_8_menubar:Bool = false;
 	
 	/*****************************
 	 * to center the button's text at menuBar to button's height, those buttons need more than one update() call. when this var is not 0 then these buttons will be visible to scene, since the buttons text is now centered. without this var, the buttons text will be displayed at top of buttons for a brief second, showing what appears to be a display bug.
@@ -285,15 +283,16 @@ class RegTriggers
 		_keyboard_close = false;
 		_button_show_all_scene_game_room = false;
 		_button_hide_all_scene_game_room = false;
-		_config_menu_save_notice = false;
+		_saveConfig_notice = false;
 		_leaderboards_show = false;	
 		__daily_quests = false;
-		_recreate_chatter_input_chat = false;
 		_notationPrint = false;
-		_jump_to_tournament_standard_chess_8 = false;
+		_tournament_standard_chess_8 = false;
+		_tournament_standard_chess_8_menubar = false;
 		_waiting_room_refresh_invite_list = false;
 		_ticks_buttons_menuBar = false;
 		_buttons_set_not_active = false;
+		_recreate_chatter_input_chat = false;
 	}	
 	
 }//

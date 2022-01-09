@@ -2,18 +2,11 @@
     Copyright (c) 2021 KBoardGames.com
     This program is part of KBoardGames client software.
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published
-    by the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+    This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+    This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Affero General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU Affero General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 package;
@@ -371,8 +364,7 @@ class SceneCreateRoom extends FlxState
 			
 			RegTypedef._dataMisc._gameRoom = true;
 			
-			PlayState.clientSocket.send("Greater RoomState Value", RegTypedef._dataMisc); 
-			haxe.Timer.delay(function (){}, Reg2._event_sleep);
+			PlayState.send("Greater RoomState Value", RegTypedef._dataMisc); 			
 			
 			Reg._alreadyOnlineHost = false;
 			Reg._alreadyOnlineUser = false;
@@ -398,7 +390,9 @@ class SceneCreateRoom extends FlxState
 	}
 	
 	override public function update(elapsed:Float):Void 
-	{		
+	{
+		//if (Reg._at_create_room == false) return;
+		
 		// if player selected "computer" at game 4 of the drop down menu, then hide the buttons that increases the amount of players for the signature game since currently only 1 computer player can play in that game. 
 		if (Reg._gameId == 4)
 		{

@@ -2,18 +2,11 @@
     Copyright (c) 2021 KBoardGames.com
     This program is part of KBoardGames client software.
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published
-    by the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+    This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+    This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Affero General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU Affero General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 package;
@@ -24,6 +17,10 @@ package;
 
 #if wheelEstate
 	import modules.games.wheelEstate.*;
+#end
+
+#if tournaments
+	import modules.tournaments.*;
 #end
 
 /**
@@ -38,6 +35,10 @@ class IdsMessageBox extends FlxGroup
 	{
 		super();
 		
+		RegFunctions._gameMenu = new FlxSave(); // initialize		
+		RegFunctions._gameMenu.bind("ConfigurationsMenu"); // bind to the named save slot.
+			
+			
 		if (Reg._messageId > 0)
 		{
 			switch (Reg._messageId)
@@ -61,12 +62,14 @@ class IdsMessageBox extends FlxGroup
 				case 5: _msg = new MessageBox(5, "Yes", "No", true, true, false, false, "", "Cannot connect to the website. Check your internet connection.");
 			
 				case 6: // messages when trying to connect to the server, either a message about software needs updating or server is offline.
-			_msg = new MessageBox(6, "Yes", "No", true, true, true, false, "", "Go to the " + Reg._websiteNameTitle + " website and view the client help file?");
-			
-				case 7: _msg = new MessageBox(7, "Profile", "Register", true, true, true, false, "", 'You need a username before playing games online. Click "Profile" to enter your username. Click "Register" to get a username at the website forum.');
+					_msg = new MessageBox(6, "Yes", "No", true, true, true, false, "", "Go to the " + Reg._websiteNameTitle + " website and view the client help file?");
 				
 				// messsages that return a player back to MenuState, such as a banned message or a server disconnected notice.	
 				case 10: _msg = new MessageBox(10, "Yes", "No", true, true, false, false, "", MenuState._str);
+				
+				// view the credits page at the K Board Games website.	
+				case 20: _msg = new MessageBox(20, "Yes", "No", true, true, true, false, "", "View the credits page.");
+				
 				
 				// PlayState, from case (1000-1999).
 				// message that the room is locked.
@@ -116,10 +119,20 @@ class IdsMessageBox extends FlxGroup
 						}
 					}
 					
-					// house menu main 7000-7999.
+					// MenuBar 7000-7999.
 					case 7001: _msg = new MessageBox(7001, "Yes", "No", true, true, true, false, "Save House.", "Would you like to save all furniture items and their positions in this house?");
 					
 					case 7002: _msg = new MessageBox(7002, "Yes", "No", true, true, false, false, "Notice!", "House saved.");
+					
+				#end
+				
+				#if tournaments
+					// tournaments.
+					case 7100: _msg = new MessageBox(7100, "Yes", "No", true, true, false, false, "", "Cannot leave tournament game when tournament is still active.");
+					
+					case 7110: _msg = new MessageBox(7110, "Yes", "No", true, true, false, false, "", "You have unsubscribed from all tournament mail.");
+					
+					case 7120: _msg = new MessageBox(7120, "Yes", "No", true, true, false, false, "", "You have subscribed to all tournament mail.");
 				#end
 				
 				// leaderboard 8000-8999.
@@ -133,12 +146,34 @@ class IdsMessageBox extends FlxGroup
 					if (Reg2._messageFileExists != "" ) _msg = new MessageBox(9001, "Yes", "No", true, true, false, false, "Notice.", Reg2._messageFileExists);
 				
 					// else website is offline or player is not online.
-					else _msg = new MessageBox(9001, "Yes", "No", true, true, false, false, "", "Configurations saved.");
+					else 
+					{
+						var _email_changed_message:String = "";
+						
+						if (CID3._group_email_address_input[CID3._CRN].text != RegCustom._profile_email_address_p1[CID3._CRN]
+						||	RegTypedef._dataAccount._send_email_address_validation_code == true)
+						{
+							_email_changed_message = " Your email address has changed. A validation email will be sent to you but only after you go online.";	
+							CID3._button_email_address_validation_code_enabled.label.text = "True";
+							
+							RegFunctions._gameMenu.data._send_email_address_validation_code = RegCustom._send_email_address_validation_code = RegTypedef._dataAccount._send_email_address_validation_code = true;
+							RegFunctions._gameMenu.flush();
+							RegFunctions._gameMenu.close;
+						}
+						
+						_msg = new MessageBox(9001, "Yes", "No", true, true, false, false, "", "Configurations saved." + _email_changed_message);						
+						
+						RegCustom._profile_email_address_p1[CID3._CRN] = CID3._group_email_address_input[CID3._CRN].text;
+					}
 				}
 				
 				case 9010: _msg = new MessageBox(9010, "Yes", "No", true, true, false, false, "", "Theme saved.");
 				
 				case 9012: _msg = new MessageBox(9012, "Yes", "No", true, true, false, false, "", 'Cannot save theme. Password must be greater than 3 characters because you are not using a guest account.');
+				
+				case 9013: _msg = new MessageBox(9013, "Yes", "No", true, true, false, false, "", 'Cannot save theme. Password field and email address field must be empty for guest accounts.');
+				
+				case 9014: _msg = new MessageBox(9014, "Yes", "No", true, true, false, false, "", 'Cannot save theme. Email address is not valid.');
 				
 				// menu credits 10000-10999
 				case 10001: _msg = new MessageBox(10001, "Yes", "No", true, true, true, false, "Website Credits.", "Display the full credits page at " + Reg._websiteNameTitle + " website?");
@@ -184,13 +219,13 @@ class IdsMessageBox extends FlxGroup
 				case 15000: _msg = new MessageBox(15000, "Yes", "No", true, true, true, false, "Goodbye.", "Disconnect from server?");
 				
 				// for spectator watching. Did the player one lose or win or do something else? this is the message box message for player 1 that displays for all spectators that are watching that game.
-				case 16000: _msg = new MessageBox(16000, "Yes", "No", true, true, true, false, "Notice!", RegTypedef._dataGameMessage._gameMessage);
+				case 16000: _msg = new MessageBox(16000, "Yes", "No", true, true, false, false, "Notice!", RegTypedef._dataGameMessage._gameMessage);
 				
-				case 16005: _msg = new MessageBox(16005, "Yes", "No", true, true, true, false, "Notice!", RegTypedef._dataGameMessage._gameMessage);
+				case 16005: _msg = new MessageBox(16005, "Yes", "No", true, true, false, false, "Notice!", RegTypedef._dataGameMessage._gameMessage);
 				
-				case 16010: _msg = new MessageBox(16010, "Yes", "No", true, true, true, false, "Notice!", RegTypedef._dataGameMessage._gameMessage);
+				case 16010: _msg = new MessageBox(16010, "Yes", "No", true, true, false, false, "Notice!", RegTypedef._dataGameMessage._gameMessage);
 				
-				case 16015: _msg = new MessageBox(16015, "Yes", "No", true, true, true, false, "Notice!", RegTypedef._dataGameMessage._gameMessage);
+				case 16015: _msg = new MessageBox(16015, "Yes", "No", true, true, false, false, "Notice!", RegTypedef._dataGameMessage._gameMessage);
 				
 				// game over message
 				case 16050: _msg = new MessageBox(16050, "Yes", "No", true, true, false, false, "", RegTriggers._messageWin);
@@ -348,12 +383,13 @@ class IdsMessageBox extends FlxGroup
 							
 			}	
 			
-			if (_msg != null) add(_msg);
+			if (_msg != null) 
+			{
+				Reg._message_id_temp = Reg._messageId;
+				add(_msg);
+			}
+			
 			RegTriggers._buttons_set_not_active = true;
 		}
-		
-		
-	}
-			
-	
+	}	
 }

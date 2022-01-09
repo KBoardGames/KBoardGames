@@ -2,22 +2,13 @@
     Copyright (c) 2021 KBoardGames.com
     This program is part of KBoardGames client software.
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published
-    by the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+    This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+    This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Affero General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
-	
+    You should have received a copy of the GNU Affero General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*/	
 
-import yaml.util.ObjectMap.AnyObjectMap;
 import flash.display.GradientType;
 import flash.display.GraphicsPathWinding;
 import flash.display.Shape;
@@ -37,6 +28,9 @@ import flixel.math.FlxPoint;
 import openfl.media.Sound;
 import openfl.media.SoundChannel;
 import openfl.media.SoundTransform;
+import flixel.system.scaleModes.FillScaleMode;
+import flixel.system.scaleModes.RatioScaleMode;
+import flixel.system.scaleModes.RelativeScaleMode;
 import flash.display.Bitmap;
 import flash.display.BitmapData;
 import flash.display.BlendMode;
@@ -79,12 +73,9 @@ import openfl.Lib;
 import openfl.errors.Error;
 import openfl.net.URLRequest;
 import openfl.display.Sprite;
-import vendor.mphx.client.Client;
+import haxe.Serializer;
+import haxe.Unserializer;
 import vendor.ibwwg.FlxScrollableArea;
-import yaml.Yaml;
-import yaml.Parser;
-import yaml.Renderer;
-import yaml.util.ObjectMap;
 
 #if !html5
 	import sys.FileSystem;

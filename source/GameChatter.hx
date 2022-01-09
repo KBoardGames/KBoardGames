@@ -2,18 +2,11 @@
     Copyright (c) 2021 KBoardGames.com
     This program is part of KBoardGames client software.
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published
-    by the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+    This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+    This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Affero General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU Affero General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 package;
@@ -35,6 +28,18 @@ class GameChatter extends FlxGroup
 	public static var _chatInputButton:ButtonGeneralNetworkYes;
 	
 	/******************************
+	 * displayed underneath the _input_chat.
+	 * this var is needed because a _input_chat background will create a null error in html5. haxe bug.
+	 */
+	public static var _sprite_input_chat_border:FlxSprite;
+	
+	/******************************
+	 * displayed underneath the _input_chat.
+	 * this var is needed because a _input_chat background will create a null error in html5. haxe bug.
+	 */
+	public static var _sprite_input_chat_background:FlxSprite;
+	
+	/******************************
 	 * widget where user types in chat text.
 	 */
 	public static var _input_chat:FlxInputText;
@@ -52,7 +57,7 @@ class GameChatter extends FlxGroup
 	/******************************
 	 * chatter __scrollable_area text.
 	 */
-	private var _group_text:Array<FlxText> = []; // access members here.
+	private static var _group_text:FlxText; // access members here.
 	
 	/******************************
 	 * currently holds 100 lines of chatter __scrollable_area text.
@@ -62,7 +67,7 @@ class GameChatter extends FlxGroup
 	/******************************
 	 * used to hide or make read only, everything in chatter.
 	 */
-	public var _group:FlxSpriteGroup;
+	public static var _group:FlxSpriteGroup;
 	
 	/******************************
 	 * all chatter elements are added to this group so that everything can scroll off screen at the same time then the close chatter button is clicked.
@@ -158,7 +163,7 @@ class GameChatter extends FlxGroup
 		//if (RegTypedef._dataMisc._userLocation == 0) Reg._rememberChatterIsOpen = true;
 		
 		//if (Reg._rememberChatterIsOpen == true && Reg._gameRoom == false) _groupChatterScroller.x = 0;
-		//else _groupChatterScroller.x = 375; // if you want chatter open by default change the value to 0;
+		//else _groupChatterScroller.x = 385; // if you want chatter open by default change the value to 0;
 		
 			
 		// the scrollable area would not work without at least one sprite added to the scrollable areaGroup.
@@ -178,40 +183,8 @@ class GameChatter extends FlxGroup
 		add(_text);
 		_group.add(_text);
 		
-		//############################# CHAT TEXT
-		// the chat text displayed at the output text box.
-		// the user that joined the chatroom.
 		
-		var _idSprite:Int = 1;
-	
-		_group_text.splice(0, _group_text.length);
-		
-		for (i in 0..._group_text_member_total + 1)
-		{
-			var _text = new FlxText(0, 0, 0, "");
-			_text.visible = false;
-			add(_text);
-						
-			_group_text.push(_text);				
-			_group_text[i].setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
-			_group_text[i].fieldWidth = 325;
-			_group_text[i].visible = true;
-			
-			if (i == 0) _group_text[i].setPosition(Reg._client_width, 100);
-			else 
-			{
-				_group_text[i].y = _group_text[i-1].y + _group_text[(i-1)].frameHeight + 40;
-				_group_text[i].setPosition(Reg._client_width, _group_text[i].y);
-			}
-			
-			// give this member an id. this id is used to move members in z-order.
-			_group_text[i].ID = _idSprite;
-			_group.add(_group_text[i]);
-			
-			_idSprite += 1;
-		}
-		_group.y += _chatter_offset_y;		
-				
+		chat_text();
 		createInputChat(); // deals with typing in text at chatter. there is a bug where this UI needs to be destroyed then recreated after every output of text.
 		
 		// chatter open/close button.
@@ -239,7 +212,7 @@ class GameChatter extends FlxGroup
 		//-----------------------------------
 		
 		// the chatter output button that is beside the _input_chat.
-		_chatInputButton = new ButtonGeneralNetworkYes(FlxG.width - 363, FlxG.height - 137, "Send", 175, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, chatInputFromButton, RegCustom._button_color[Reg._tn], true);
+		_chatInputButton = new ButtonGeneralNetworkYes(FlxG.width - 363, FlxG.height - 137, "Send", 175, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, chat_input_from_button, RegCustom._button_color[Reg._tn], true);
 		_chatInputButton.visible = false;
 		_chatInputButton.active = false;
 		_chatInputButton.label.font = Reg._fontDefault;
@@ -250,13 +223,46 @@ class GameChatter extends FlxGroup
 		
 	}
 	
+	/******************************
+	 * CHAT TEXT
+	 * the chat text displayed at the output text box.
+	 * the user that joined the chatroom.
+	 * clearing a scrollable area is needed or else this text will not be seen when returning to lobby. the reason is waiting room scrollable area creates a new instance of both this text and scrollable area. it is those instances that stop this text from displaying at lobby.
+	 * NOTE: lobby cannot remember chat history unless another var is created to store it.
+	 */		
+	private function chat_text():Void
+	{
+		var _idSprite:Int = 1;
+	
+		if (_group_text != null)
+		{
+			_group_text.visible = false;
+			remove(_group_text);
+			_group_text.destroy();			
+		}
+		
+		_group_text = new FlxText(0, 0, 0, "");
+		_group_text.visible = false;
+		add(_group_text);
+		
+		_group_text.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
+		_group_text.fieldWidth = 325;
+		_group_text.visible = true;
+		
+		_group_text.setPosition(Reg._client_width, 100);
+		_group_text.ID = _idSprite;
+		_group.add(_group_text);
+		
+		_idSprite = 1;
+		_group.y = _chatter_offset_y;		
+		
+	}
+	
 	public function initialize():Void
 	{
 		if (_id != ID) return;
 		
 		createInputChat();
-		
-	
 	}
 	
 	private function canTypeInChatter():Void
@@ -265,6 +271,10 @@ class GameChatter extends FlxGroup
 		
 		if (_groupChatterScroller.x == 0)
 		{
+			_sprite_input_chat_border.active = true;
+			_sprite_input_chat_border.visible = true;
+			_sprite_input_chat_background.active = true;	
+			_sprite_input_chat_background.visible = true;
 			_input_chat.active = true;
 			_input_chat.visible = true;
 			
@@ -278,6 +288,10 @@ class GameChatter extends FlxGroup
 			_input_chat.caretIndex = _input_chat.text.length;
 			_input_chat.hasFocus = false;
 			
+			_sprite_input_chat_border.visible = false;
+			_sprite_input_chat_border.active = false;	
+			_sprite_input_chat_background.visible = false;
+			_sprite_input_chat_background.active = false;				
 			_input_chat.visible = false;
 			_input_chat.active = false;
 			
@@ -287,23 +301,26 @@ class GameChatter extends FlxGroup
 		
 	}
 		
-	private function chatInputFromButton():Void
+	private function chat_input_from_button():Void
 	{
-		if (_id != ID) return;
+		//if (_id != ID) return;
 		
-		if (_input_chat.active == true && _input_chat.text != "")
+		if (_input_chat.text != "")
 		{		
 			RegTypedef._dataMisc._chat = _input_chat.text;
+			
 			if (Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false) 
 			{
-				PlayState.clientSocket.send("Chat Send", RegTypedef._dataMisc);
-				haxe.Timer.delay(function (){}, Reg2._event_sleep);
+				//tid-i (typedef id followed for an i in a for loop). replace them all with **** because tid is used to get/send event name to the server/client.
+				StringTools.replace(RegTypedef._dataMisc._chat, "tidi", "****");
+				
+				RegTypedef._dataMisc._chat = RegTypedef._dataMisc._chat.substr(0, 200);
+				
+				PlayState.send("Chat Send", RegTypedef._dataMisc);				
 			}
 			
 			_input_chat.hasFocus = true;
-			_input_chat.text = "";
-			RegTypedef._dataMisc._chat = "";
-			_input_chat.hasFocus = true;			
+			RegTypedef._dataMisc._chat = _input_chat.text = "";
 			
 			#if mobile
 				RegTriggers._keyboard_close = true;
@@ -317,42 +334,58 @@ class GameChatter extends FlxGroup
 		
 		// widget where user types in chat text.
 		if (_input_chat != null)
-		{
-			remove(_input_chat);
+		{			
 			_group.remove(_input_chat);
 			_groupChatterScroller.remove(_input_chat);
-
+			
+			_input_chat.active = true;
+			_input_chat.visible = false;
+			remove(_input_chat);
 			_input_chat.destroy();
 		}
 		
-		_input_chat = new FlxInputText(FlxG.width - 362, FlxG.height - 192 - _chatter_offset_y, 350, "", Reg._font_size-2, FlxColor.BLACK);
+		_sprite_input_chat_border = new FlxSprite(FlxG.width - 360, FlxG.height - 194 - _chatter_offset_y);
+		_sprite_input_chat_border.makeGraphic(354, 35, FlxColor.WHITE);
+		_sprite_input_chat_border.visible = true;
+		add(_sprite_input_chat_border);	
+		_group.add(_sprite_input_chat_border);
+		_groupChatterScroller.add(_sprite_input_chat_border);
+		
+		_sprite_input_chat_background = new FlxSprite(FlxG.width - 362, FlxG.height - 192 - _chatter_offset_y);
+		_sprite_input_chat_background.makeGraphic(350, 31, FlxColor.WHITE);
+		_sprite_input_chat_background.visible = true;
+		add(_sprite_input_chat_background);	
+		_group.add(_sprite_input_chat_background);
+		_groupChatterScroller.add(_sprite_input_chat_background);
+		
+		_input_chat = new FlxInputText(FlxG.width - 362, FlxG.height - 192 - _chatter_offset_y, 350, "", Reg._font_size-2, FlxColor.BLACK, FlxColor.TRANSPARENT);
 		_input_chat.hasFocus = false; // address bug when false.
 		_input_chat.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.BLACK, FlxTextAlign.RIGHT);
 		_input_chat.fieldBorderColor = FlxColor.BLUE;
 		_input_chat.maxLength = 70;
-		_input_chat.text = "";
 		_input_chat.forceCase = 2;	
 		_input_chat.visible = true;
 		_input_chat.caretIndex = _input_chat.text.length; // this fixes a bug where the caret does not reset back to 0 when the send button is pressed. p1 side is fine. p2 and computer is no longer buggy.
 		
-		/*
+		if (_group_text.text == "") chatSent("", "Chatter.\n\r");
+		
 		_input_chat.callback = function (text, action)
 		{
 			if (text != "" && action == "enter") 
 			{
-				chatInputFromButton();
+				//chatSent(" ", " ");
+				chat_input_from_button();
 				text = "";
 				
-				_input_chat.caretIndex = _input_chat.text.length; // this fixes a bug where the caret does not reset back to 0 when the enter key is pressed. p1 side is fine. p2 and computer is no longer buggy.
+				//_input_chat.caretIndex = _input_chat.text.length; // this fixes a bug where the caret does not reset back to 0 when the enter key is pressed. p1 side is fine. p2 and computer is no longer buggy.
 				
 				#if mobile
 					RegTriggers._keyboard_close = true;
 				#end
 			}			
-		}*/
+		}
 		
 		add(_input_chat);
-		_group.add(_input_chat);
 		_groupChatterScroller.add(_input_chat);
 	
 	}
@@ -362,91 +395,77 @@ class GameChatter extends FlxGroup
 	 * @param	name	the player sending the data.
 	 * @param	txt		the data the player sent.
 	 */
-	public function chatSent(name:String, txt:String):Void
+	public static function chatSent(name:String, txt:String):Void
 	{
-		if (_id != ID) return;
-		
-		// the text of i is now the next text in the list. do this for every member in the list but that the text used for the input text.
-		for (i in 0... _group_text_member_total - 1)
-		{
-			_group_text[i].text = _group_text[(i + 1)].text;
-			_group_text[i].updateHitbox();
-				
-		}
-		
 		// this is the sent text.
-		_group_text[(_group_text_member_total-1)].text = name + txt;
-		_group_text[(_group_text_member_total)].updateHitbox();
+		_group_text.text = name + txt + "\n\r" + _group_text.text;
+		_group_text.text = _group_text.text.substr(0, 20000); // limit how much text can be outputted to the scrollable_area.
 		
 		//  if user typed in a long text then the field height will be greater than normal. the previous text in the list will need to be placed correctly before that text. this recalculates the text field height for every member in the group.
-		for (i in 1... _group_text_member_total)
-		{
-			_group_text[i].y = _group_text[(i - 1)].y + _group_text[(i - 1)].textField.height + 22;
-			// hack to make the height between lines the same size when elements might have a different height.
-			_group_text[i].y -= _group_text[(i - 1)].textField.height / 9;
-			_group_text[i].setPosition(Reg._client_width, _group_text[i].y);
-			_group_text[i].updateHitbox();
-			
-		}
+		_group_text.y = 22;
 		
-		scrollable_area();
+		_group_text.setPosition(Reg._client_width + 10, _group_text.y);
+		
 	}
 	
 	/**
 	 * if adding more __scrollable_areas here, remember to see MenuBar.hx disconnect function and add __scrollable_area code there. See that function for the example.
 	 */
-	private function scrollable_area():Void
+	private static function scrollable_area():Void
 	{
-		if (_id != ID) return;
 		
-		if (Reg._game_offline_vs_player == false 
+		if (Reg._game_offline_vs_player == false
 		&&  Reg._game_offline_vs_cpu == false
-		&&  Reg._game_online_vs_cpu == false)
+		&&  Reg._game_online_vs_cpu == false
+		)
 		{
 			// lobby.		
 			if (RegTypedef._dataMisc._userLocation == 0 
 			&&  RegCustom._chat_when_at_lobby_enabled[Reg._tn] == true
-			&&  _id == 2 && _id == ID)
+			)
 			{
 				// cannot check for camera instance here if not null because it is static and doing so will give an error when you re-enter this scene from title.
-				if (__scrollable_area2 != null) FlxG.cameras.remove(__scrollable_area2);
-				__scrollable_area2 = new FlxScrollableArea( new FlxRect( 1040, 0, 360, FlxG.height - 200), new FlxRect( 1040, 0, 360, _group.height), ResizeMode.NONE, 0, 100, -1, FlxColor.LIME, null, 1, false, true); // _scrollbar_offset_y = 175(height)-50(-50 from y value). eg, 175-50.
 				
-				FlxG.cameras.add( __scrollable_area2 );
-				__scrollable_area2.antialiasing = true;
-				__scrollable_area2.pixelPerfectRender = true;
+				if (__scrollable_area2 == null)
+				{
+					__scrollable_area2 = new FlxScrollableArea( new FlxRect( 1047, 0, 360, FlxG.height - 200), new FlxRect(1047, 0, 360, 4000), ResizeMode.NONE, 0, 100, -1, FlxColor.LIME, null, 4, true, false); // _scrollbar_offset_y = 175(height)-50(-50 from y value). eg, 175-50.
+					
+					FlxG.cameras.add( __scrollable_area2 );
+					__scrollable_area2.antialiasing = true;
+					__scrollable_area2.pixelPerfectRender = true;
+				}
 			}
 			
 			// waiting room.
-			else if (RegTypedef._dataMisc._userLocation > 0
+			else	 if (RegTypedef._dataMisc._userLocation > 0
 			&&  	 RegTypedef._dataMisc._userLocation < 3
-			&&		 _id == 3 && _id == ID)
+			)
 			{
-				if (__scrollable_area3 != null) FlxG.cameras.remove(__scrollable_area3);
-				__scrollable_area3 = new FlxScrollableArea( new FlxRect( 1040, 0, 360, FlxG.height - 200), new FlxRect( 1040, 0, 360, _group.height), ResizeMode.NONE, 0, 100, -1, FlxColor.LIME, null, 2, false, true); // _scrollbar_offset_y = 175(height)-50(-50 from y value). eg, 175-50.
-				
-				FlxG.cameras.add( __scrollable_area3 );
-				__scrollable_area3.antialiasing = true;
-				__scrollable_area3.pixelPerfectRender = true;
+				if (__scrollable_area3 == null)
+				{
+					__scrollable_area3 = new FlxScrollableArea( new FlxRect( 1047, 0, 360, FlxG.height - 200), new FlxRect(1047, 0, 360, 4000), ResizeMode.NONE, 0, 100, -1, FlxColor.LIME, null, 5, true, false); // _scrollbar_offset_y = 175(height)-50(-50 from y value). eg, 175-50.
+					
+					FlxG.cameras.add( __scrollable_area3 );
+					__scrollable_area3.antialiasing = true;
+					__scrollable_area3.pixelPerfectRender = true;
+				}
 			}
 			
 			// game room.
 			else if (RegTypedef._dataMisc._userLocation == 3
-			&& 		_id == 4 && _id == ID)
+			)
 			{	
-				if (__scrollable_area4 != null) FlxG.cameras.remove(__scrollable_area4);
-				__scrollable_area4 = new FlxScrollableArea( new FlxRect( 1040, 0, 360, FlxG.height - 200), new FlxRect( 1040, 0, 360, _group.height), ResizeMode.NONE, 0, 100, -1, FlxColor.LIME, null, 3, false, true); // _scrollbar_offset_y = 175(height)-50(-50 from y value). eg, 175-50.
-				
-				if (_chatterOpenCloseButton.label.text == "Open Chat")
-					__scrollable_area4.visible = false;
-				
-				FlxG.cameras.add( __scrollable_area4 );
-				__scrollable_area4.antialiasing = true;
-				__scrollable_area4.pixelPerfectRender = true; 
-									
-			}
-						
-			
+				if (__scrollable_area4 == null)
+				{					
+					__scrollable_area4 = new FlxScrollableArea( new FlxRect( 1047, 0, 356, FlxG.height - 200), new FlxRect(1047, 0, 356, 4000), ResizeMode.NONE, 0, 100, -1, FlxColor.LIME, null, 6, true, false); // _scrollbar_offset_y = 175(height)-50(-50 from y value). eg, 175-50.
+					//if (_chatterOpenCloseButton.label.text == "Open Chat")
+					//	__scrollable_area4.visible = false;
+					
+					FlxG.cameras.add( __scrollable_area4 );
+					__scrollable_area4.antialiasing = true;
+					__scrollable_area4.pixelPerfectRender = true; 
+				}									
+			}			
 		}	
 	}
 	
@@ -455,10 +474,7 @@ class GameChatter extends FlxGroup
 	 */
 	public function clearText():Void
 	{
-		for (i in 0..._group_text_member_total + 1)
-		{
-			_group_text[i].text = "";
-		}
+		_group_text.text = "";
 	}
 
 	private function openCloseChatter():Void
@@ -473,17 +489,21 @@ class GameChatter extends FlxGroup
 			
 			_chatterIsOpen = false;
 			
+			_sprite_input_chat_border.visible = false;
+			_sprite_input_chat_border.active = false;	
+			_sprite_input_chat_background.visible = false;
+			_sprite_input_chat_background.active = false;
 			_input_chat.visible = false;
 			_input_chat.active = false;
 			
 			_chatInputButton.visible = false;
 			_chatInputButton.active = false;
 			
-			if (RegTypedef._dataMisc._userLocation == 3)
+			/*if (RegTypedef._dataMisc._userLocation == 3)
 			{
 				GameChatter.__scrollable_area4.visible = false;
 				GameChatter.__scrollable_area4.active = false;
-			}
+			}*/
 		}		
 		
 		// open it.
@@ -520,7 +540,7 @@ class GameChatter extends FlxGroup
 		{
 			RegTriggers._scrollRight = false;
 			
-			if (_groupChatterScroller.x < 375) _groupChatterScroller.x += 375;
+			if (_groupChatterScroller.x < 385) _groupChatterScroller.x += 385;
 			
 			_chatterOpenCloseButton.active = active;
 			_chatterOpenCloseButton.label.text = "Open Chat";
@@ -542,10 +562,14 @@ class GameChatter extends FlxGroup
 			else if (__scrollable_area4 != null)
 			{					
 				__scrollable_area4.visible = false;
+				__scrollable_area4.x = 1040;
 				__scene_game_room.buttonShowAll();
 			}
 			
+			_sprite_input_chat_border.visible = false;
+			_sprite_input_chat_background.visible = false;
 			_input_chat.visible = false;
+			
 		}
 		
 		else if (_chatterOpenCloseButton != null
@@ -554,7 +578,7 @@ class GameChatter extends FlxGroup
 		{
 			RegTriggers._scrollRight = false;
 			
-			if (_groupChatterScroller.x > 0) _groupChatterScroller.x -= 375;
+			if (_groupChatterScroller.x > 0) _groupChatterScroller.x -= 385;
 			
 			_chatterOpenCloseButton.active = active;
 			
@@ -574,9 +598,16 @@ class GameChatter extends FlxGroup
 			else if (__scrollable_area4 != null)
 			{
 				__scrollable_area4.visible = true;
+				__scrollable_area4.x = - 1040;
+				_input_chat.active = true;
+				_input_chat.visible = true;
+				_chatInputButton.active = true;
+				_chatInputButton.visible = true;
 				__scene_game_room.buttonHideAll();
 			}
 			
+			_sprite_input_chat_border.visible = true;
+			_sprite_input_chat_background.visible = true;
 			_input_chat.visible = true;
 		}
 		
@@ -737,32 +768,41 @@ class GameChatter extends FlxGroup
 		if (RegTriggers._recreate_chatter_input_chat == true)
 		{
 			RegTriggers._recreate_chatter_input_chat = false;
+			
+			chat_text();
 			createInputChat();
 		}
+		
 		
 		// this is needed or else when other player sends a message and our chat is closed, the scrollable area will display.
 		if (__scrollable_area4 != null)
 		{
 			if (_chatterOpenCloseButton.label.text == "Open Chat"
 			&&	__scrollable_area4.visible == true)
+			{
 				__scrollable_area4.visible = false;
+				__scrollable_area4.active = false;
+			}
 					
 			else if (_chatterOpenCloseButton.label.text == "Close Chat"
 			&&	__scrollable_area4.visible == false)
+			{
+				__scrollable_area4.active = true;
 				__scrollable_area4.visible = true;
+			}
 		}
 		
-		canTypeInChatter();
+		//canTypeInChatter();
 		
 		// chatter input field.
-		if (_input_chat.hasFocus == true) 
+		/*if (_input_chat.hasFocus == true) 
 		{
 			if (_input_chat.text == "") _input_chat.caretIndex = 0;
 			
 			// these are needed so that the input field can be set back to focused after a keyboard button press.
 			Reg2._input_field_caret_location = _input_chat.caretIndex;
 			Reg2._input_field_number = 1;
-		}
+		}*/
 		
 		if (ActionInput.justPressed() == true
 		&&  ActionInput.overlaps(_input_chat) == true)
@@ -772,7 +812,7 @@ class GameChatter extends FlxGroup
 			#end
 		}
 		
-		if (Reg2._key_output != "") keyboard_pressed();
+		//if (Reg2._key_output != "")	keyboard_pressed(); 
 		
 		super.update(elapsed);
 	}

@@ -2,19 +2,14 @@
     Copyright (c) 2021 KBoardGames.com
     This program is part of KBoardGames client software.
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published
-    by the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+    This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+    This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Affero General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU Affero General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
+
+
 
 package modules.avatars;
 
@@ -64,7 +59,7 @@ class Avatars
 			_text_title_avatar = new FlxText(0, Usernames._question_username_suggestions_enabled.y + 100, 0, "Avatar");
 		#else
 			// place this text just underneath the username inputbox.
-			_text_title_avatar = new FlxText(0, CID3._text_username.y + 75, 0, "Avatar");
+			_text_title_avatar = new FlxText(0, CID3._text_username.y + 315, 0, "Avatar");
 		#end
 		
 		_text_title_avatar.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_topic_title_text_color());

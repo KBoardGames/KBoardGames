@@ -2,18 +2,11 @@
     Copyright (c) 2021 KBoardGames.com
     This program is part of KBoardGames client software.
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General public License as published
-    by the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+    This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General public License for more details.
+    This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Affero General Public License for more details.
 
-    You should have received a copy of the GNU General public License
-    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU Affero General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 package;
@@ -63,23 +56,46 @@ class CID3 extends FlxGroup
 	public static var _profile_general_instructions:FlxText;
 	
 	public static var _text_username:FlxText;
-	/******************************
-	 * type in the login username.
-	 */
-	public static var _usernameInput:FlxInputText;
+	public static var _username_input:FlxInputText;
+	public static var _group_username_input:Array<FlxInputText> = [];
 	
 	public static var _text_password:FlxText;
-	/******************************
-	 * type in the login username.
-	 */
 	public static var _password_input:FlxInputText;
+	public static var _group_password_input:Array<FlxInputText> = [];
+	
+	public static var _text_email_address:FlxText;
+	public static var _email_address_input:FlxInputText;
+	public static var _group_email_address_input:Array<FlxInputText> = [];
 	
 	public static var _text_empty:ButtonGeneralNetworkNo;
 	public static var __configurations_output:ConfigurationOutput;
+	
+	public static var _question_email_address_validation_code_enabled:TextGeneral;
+	public static var _button_email_address_validation_code_enabled:ButtonGeneralNetworkNo;
 	
 	/******************************
 	 * needed to move the cursor of the inputText because a var can get the value of a caret but cannot for some reason set the value to the caret index.
 	 */
 	public static var _caretIndex:Int = 0;
 	
+	/******************************
+	 * number of account rows. 5:player1: 1:player2
+	 */
+	public static var _user_account_row:Int = 5;
+		
+	/******************************
+	 * the arror shows the active selected user account.
+	 */
+	public static var _sprite_user_account:FlxSprite;
+		
+	/******************************
+	 * five different accounts can be displayed at profile. when clicking the second username is the list, a row underneath the username, password and email fields are highlighted. this var is used to remember the last row selected
+	 * current row number.
+	 */
+	public static var _CRN:Int = 0;
+	
+	/******************************
+	 * background for the selected flag which could be a solid white color. this is needed because the white flag is not seen at the white theme.
+	 */
+	public static var _default_flag_background:FlxSprite;
 }

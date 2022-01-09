@@ -2,18 +2,11 @@
     Copyright (c) 2021 KBoardGames.com
     This program is part of KBoardGames client software.
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published
-    by the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+    This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+    This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Affero General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU Affero General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 package;
@@ -151,7 +144,7 @@ class Internet extends FlxGroup
 		var result:Bool;
 		
 		// any data could be in this json file. If this file is found then user is connected to the internet. This method is 10 times faster than a php request.
-		var http = new haxe.Http("http://kboardgames.com/server/online.json");
+		var http = new haxe.Http("http://" + Reg._websiteHomeUrl + "/server/online.json");
 
 		http.onData = function (data:String)
 		  result = true;
@@ -170,7 +163,7 @@ class Internet extends FlxGroup
 	{
 		try
 		{
-			var _http = new haxe.Http(Reg._websiteHomeUrl + "/server/" + "getAllEvents.php");
+			var _http = new haxe.Http("http://" + Reg._websiteHomeUrl + "/server/" + "getAllEvents.php");
 		
 			// in getAllEvents.php the getAllEvents parameter will have the value of _str.
 			_http.setParameter("getAllEventNames", "names");
@@ -259,14 +252,13 @@ class Internet extends FlxGroup
 		
 	}
 	
-	public static function getHostname():String
+	public static function getHostname():Void
 	{
-		var http = new haxe.Http("https://" + Reg._websiteHomeUrl + "/server/getHostname.php?id=" + RegTypedef._dataAccount._ip);
-		var _data = "";
+		var http = new haxe.Http("http://" + Reg._websiteHomeUrl + "/server/getHostname.php?id=" + RegTypedef._dataAccount._ip);
 		
 		http.onData = function (data:String) 
 		{
-			_data = data;
+			RegTypedef._dataAccount._hostname = data;
 		}
 
 		http.onError = function (error) 
@@ -275,21 +267,18 @@ class Internet extends FlxGroup
 		}
 
 		http.request();
-	
-		return _data;
 	}
 	
 	// gets ip from a website file. if ip is not found then user cannot login. therefore, user must first login to the website before this works.
 	// alternatively, you can use this website.
 	// http://checkip.dyndns.com
-	public static function getIP():String
+	public static function getIP():Void
 	{
 		var http = new haxe.Http("http://ipecho.net/plain");
-		var _data = "";
 		
 		http.onData = function (data:String) 
 		{
-			_data = data;
+			RegTypedef._dataAccount._ip = data;
 		}
 
 		http.onError = function (error) 
@@ -298,8 +287,6 @@ class Internet extends FlxGroup
 		}
 
 		http.request();
-	
-		return _data;
 	}
 		
 	public static function getAndroidAPKfile():Void

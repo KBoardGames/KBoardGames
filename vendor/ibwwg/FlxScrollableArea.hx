@@ -14,6 +14,8 @@ import flixel.util.FlxColor;
  */
 class FlxScrollableArea extends FlxCamera
 {
+	private var _do_once:Bool = true;
+	
 	/**
 	 * If your viewing area changes (perhaps in your state's onResize function) you need to update this to reflect it.
 	 */
@@ -133,11 +135,9 @@ class FlxScrollableArea extends FlxCamera
 		_horizontalScrollbar.scrollFactor.set(0, 0);
 		
 		onResize();
-		
-		
 	}
 
-	/**
+	/******************************
 	 * Based on the new viewPort, sets bestMode, horizontalScrollbarHeight, and verticalScrollbarWidth.
 	 * 
 	 * @param	value	The new viewPort.
@@ -149,46 +149,79 @@ class FlxScrollableArea extends FlxCamera
 		horizontalScrollbarHeight = 0; // until otherwise calculated
 
 		#if !FLX_NO_MOUSE
-			if (_resizeModeGoal == NONE) { // base it directly on content, since this is only used from onResize
+			if (_resizeModeGoal == NONE)
+			{ // base it directly on content, since this is only used from onResize
 				bestMode = NONE;
-				if (content.width - value.width > _hiddenPixelAllowance) {
+			
+				if (content.width - value.width > _hiddenPixelAllowance) 
+				{
 					horizontalScrollbarHeight = scrollbarThickness;
 				}
-				if (content.height - (value.height - horizontalScrollbarHeight) > _hiddenPixelAllowance) {
+				
+				if (content.height - (value.height - horizontalScrollbarHeight) > _hiddenPixelAllowance) 
+				{
 					verticalScrollbarWidth = scrollbarThickness;
+					
 					// now, with less width available, do we still fit?
-					if (content.width - (value.width - verticalScrollbarWidth) > _hiddenPixelAllowance) {
+					if (content.width - (value.width - verticalScrollbarWidth) > _hiddenPixelAllowance) 
+					{
 						horizontalScrollbarHeight = scrollbarThickness;
 					}
 				}
-			} else {
+			} 
+			
+			else
+			{
 				// base it on the ratio only, because this will be used outside the class to determine new content size
 				var contentRatio = content.width / content.height;
 				var viewPortRatio = value.width / value.height;
-				if (_resizeModeGoal == FIT_HEIGHT) {
-					if (viewPortRatio >= contentRatio) {
+				
+				if (_resizeModeGoal == FIT_HEIGHT)
+				{
+					if (viewPortRatio >= contentRatio)
+					{
 						bestMode = FIT_HEIGHT;
 						horizontalScrollbarHeight = 0;
-					} else {
+					}
+					
+					else 
+					{
 						var scrollbarredContentRatio = content.width / (content.height + scrollbarThickness);
-						if (viewPortRatio <= scrollbarredContentRatio) {
+						
+						if (viewPortRatio <= scrollbarredContentRatio)
+						{
 							bestMode = FIT_HEIGHT;
 							horizontalScrollbarHeight = scrollbarThickness;
-						} else { // in the twilight zone
+						} 
+						
+						else 
+						{ // in the twilight zone
 							bestMode = FIT_WIDTH;
 							horizontalScrollbarHeight = 0;
 						}
 					}
-				} else { // FIT_WIDTH
-					if (viewPortRatio <= contentRatio) {
+				} 
+				
+				else
+				{ // FIT_WIDTH
+					if (viewPortRatio <= contentRatio) 
+					{
 						bestMode = FIT_WIDTH;
 						verticalScrollbarWidth = 0;
-					} else {
+					} 
+					
+					else 
+					{
 						var scrollbarredContentRatio = (content.width + scrollbarThickness) / content.height;
-						if (viewPortRatio >= scrollbarredContentRatio) {
+						
+						if (viewPortRatio >= scrollbarredContentRatio) 
+						{
 							bestMode = FIT_WIDTH;
 							verticalScrollbarWidth = scrollbarThickness;
-						} else { // in the twilight zone
+						} 
+						
+						else 
+						{ // in the twilight zone
 							bestMode = FIT_HEIGHT;
 							verticalScrollbarWidth = 0;
 						}
@@ -196,6 +229,7 @@ class FlxScrollableArea extends FlxCamera
 				}
 			}
 		#end
+		
 		return viewPort = value;
 	}
 	/**
@@ -205,89 +239,131 @@ class FlxScrollableArea extends FlxCamera
 	 * 
 	 * During resizing, this is skipped if .visible is false.
 	 */
-	override public function onResize() {
+	override public function onResize() 
+	{
 		if (!visible) return;
 		
 		super.onResize();
 
 		#if !FLX_NO_MOUSE
-			if (verticalScrollbarWidth > 0) {
+			if (verticalScrollbarWidth > 0)
+			{
 				_verticalScrollbar.visible = true;
-				if (horizontalScrollbarHeight > 0) { // both
+				if (horizontalScrollbarHeight > 0) 
+				{ // both
 					_horizontalScrollbar.visible = true;
 					_horizontalScrollbar.width = viewPort.width - verticalScrollbarWidth;
 					_verticalScrollbar.height = viewPort.height - horizontalScrollbarHeight;
-				} else { // just vert
+				} 
+				
+				else
+				{ // just vert
 					_horizontalScrollbar.visible = false;
 					_verticalScrollbar.height = viewPort.height;
 				}
-			} else {
+			} 
+			
+			else
+			{
 				_verticalScrollbar.visible = false;
-				if (horizontalScrollbarHeight > 0) { // just horiz
+				if (horizontalScrollbarHeight > 0) 
+				{ // just horiz
 					_horizontalScrollbar.visible = true;
 					_horizontalScrollbar.width = viewPort.width;
-				} else { // neither
+				}
+				
+				else
+				{ // neither
 					_horizontalScrollbar.visible = false;
 				}
 			}
-			if (_verticalScrollbar.visible) {
+			
+			if (_verticalScrollbar.visible)
+			{
 				_verticalScrollbar.x = viewPort.right - scrollbarThickness;
 				_verticalScrollbar.y = viewPort.y;
 			}
-			if (_horizontalScrollbar.visible) {
+			
+			if (_horizontalScrollbar.visible) 
+			{
 				_horizontalScrollbar.x = viewPort.x;
 				_horizontalScrollbar.y = viewPort.bottom - scrollbarThickness;
 			}
-			if (_verticalScrollbar.visible || _horizontalScrollbar.visible) {
+			
+			if (_verticalScrollbar.visible || _horizontalScrollbar.visible)
+			{
 				_verticalScrollbar.updateViewScroll();
 				_horizontalScrollbar.updateViewScroll();
 			}
+			
 			if (_verticalScrollbar.visible)
 				_verticalScrollbar.draw();
+			
 			if (_horizontalScrollbar.visible)
 				_horizontalScrollbar.draw();
 		#end
-		x = Std.int( viewPort.x );
-		y = Std.int( viewPort.y );
-		width = Std.int( viewPort.width - verticalScrollbarWidth );
-		height = Std.int( viewPort.height - horizontalScrollbarHeight );
+		
+		if (_id == ID)
+		{
+			x = Std.int( viewPort.x );
+			if (x == 1047) content.x = Reg._client_width - 20; // client width - 10 for padding.
+			
+			y = Std.int( viewPort.y );
+			
+			width = Std.int( viewPort.width - verticalScrollbarWidth );
+			height = Std.int( viewPort.height - horizontalScrollbarHeight );
+		}
 	}
 	function get_bestMode():ResizeMode 
 	{
 		return bestMode;
 	}
+	
 	function get_horizontalScrollbarHeight():Int 
 	{
 		return horizontalScrollbarHeight;
 	}
+	
 	function get_verticalScrollbarWidth():Int 
 	{
 		return verticalScrollbarWidth;
 	}
-	override public function set_visible(value:Bool):Bool {
+	
+	override public function set_visible(value:Bool):Bool
+	{
 		super.set_visible(value); // so onResize doesn't return early
+		
 		if (value) // if visible
 			onResize(); // show only if needed (recalc)
+		
 		else
 			_horizontalScrollbar.visible = _verticalScrollbar.visible = false; // don't show
+		
 		return value;
 	}
-	override public function destroy() {
-		for (bar in [_horizontalScrollbar, _verticalScrollbar]) {
+	
+	override public function destroy() 
+	{
+		for (bar in [_horizontalScrollbar, _verticalScrollbar]) 
+		{
 			_state.remove(bar);
 			bar.destroy();
 		}
+		
 		super.destroy();
 	}
 	
 	function set_content(value:FlxRect):FlxRect 
 	{
 		content = value;
+		
 		if (viewPort != null) // not during the constructor, but normally...
 			set_viewPort( viewPort ); // ...force update
+		
 		return content;
 	}
-	/**
+	
+	/******************************
 	 * Force a redraw of any visible scrollbars.  Call this if you modify the scroll manually, e.g. to force something to be scrolled into view.
 	 */
 	public function redrawBars()
@@ -299,17 +375,25 @@ class FlxScrollableArea extends FlxCamera
 	override public function update(elapsed:Float)
 	{
 		// currently used for chatter. this moves the scrollable area to the right. id with a value of 1 is used for the second scrollable area which is always at the right side of the screen. must not be used in a block of code when using a do_once var because the scrollable area will flicker then not be visable.
-		if (_id == 1 || _id == 2 || _id == 3)
+		if (_id == 4 || _id == 5 || _id == 6)
 		{
-			x = - viewPort.x;
-			scroll.x = viewPort.x + viewPort.width;
-			_verticalScrollbar.x = viewPort.x + viewPort.width - 20;			
+			if (_do_once == true)
+			{
+				x = - viewPort.x;
+				scroll.x = viewPort.x + viewPort.width;
+				_verticalScrollbar.x = viewPort.x + viewPort.width - 20;
+			
+				redrawBars();
+				_do_once = false;
+			}
 		}
 		
 		super.update(elapsed);
 	}
 }
-enum ResizeMode {
+
+enum ResizeMode 
+{
 	FIT_WIDTH;
 	FIT_HEIGHT;
 	NONE;

@@ -2,18 +2,11 @@
     Copyright (c) 2021 KBoardGames.com
     This program is part of KBoardGames client software.
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published
-    by the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+    This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+    This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Affero General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU Affero General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 package;
@@ -376,7 +369,7 @@ class GameCreate extends FlxState
 		&&  Reg._game_offline_vs_player == false
 		&&  RegTypedef._dataTournaments._move_piece == false) 
 		{
-			NetworkEventsIds.gotoMovePlayerEvent();
+			NetworkEventsMain.gotoMovePlayerEvent();
 		}
 		else // if here then this is an offline game.
 		{										
@@ -446,9 +439,8 @@ class GameCreate extends FlxState
 			RegTypedef._dataMovement._gameDiceMaximumIndex = Reg._backdoorMoveValue;
 		}
 		
-		PlayState.clientSocket.send("Movement", RegTypedef._dataMovement);
-		// send event here.
-		haxe.Timer.delay(function (){}, Reg2._event_sleep);
+		PlayState.send("Movement", RegTypedef._dataMovement);
+		// send event here.		
 	}
 	
 	public function removeSpriteGroup():Void
@@ -658,7 +650,7 @@ class GameCreate extends FlxState
 	
 	public static function timeGivenForEachGame(_num:Int = -1):Void
 	{
-		if (_num == -1) _num = Reg._gameId;
+		if (_num == -1 && Reg._gameId != -1) _num = Reg._gameId;
 		
 		// set to 10 minutes for a move if playing a tournament game.
 		if (RegTypedef._dataTournaments._move_piece == false)

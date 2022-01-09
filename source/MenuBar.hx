@@ -2,18 +2,11 @@
     Copyright (c) 2021 KBoardGames.com
     This program is part of KBoardGames client software.
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published
-    by the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+    This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+    This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Affero General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU Affero General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 package;
@@ -45,6 +38,19 @@ package;
 class MenuBar extends FlxGroup
 {
 	/******************************
+	 * the icons that can be selected such as house or leaderboards
+	 */
+	public var _lobby_sprite:FlxSprite;
+	
+	/******************************
+	 * this is the name of the lobby icon that can be selected. each name is outputted at the far right side of the last lobby icon when the mouse cursor is on one of those icons at this MeunBar.hx.
+	 */
+	private var _lobby_icon_name:Array<String> = [];
+	private var _lobby_icon_names:FlxText;
+	
+	private var _group_lobby_sprite_highlighted:FlxSprite;
+	
+	/******************************
 	 * menuBar background.
 	 */
 	public var _background:FlxSprite;
@@ -68,28 +74,25 @@ class MenuBar extends FlxGroup
 		public var _buttonToFurniturePutMenu:ButtonToggleHouse;
 		
 		private var _save:ButtonGeneralNetworkYes;
-		public var _buttonHouse:ButtonGeneralNetworkYes;
 	#end
 	//####################end house
 	#if miscellaneous	
 		public var __miscellaneous_menu:MiscellaneousMenu;
-		public var _buttonMiscMenu:ButtonGeneralNetworkYes;
 	#end
 	
 	#if dailyQuests
 		public var __daily_quests:DailyQuests;
-		public var _button_daily_quests:ButtonGeneralNetworkYes;
 	#end
 	
 	#if tournaments
 		public var __tournaments:Tournaments;
-		public var _button_tournaments:ButtonGeneralNetworkYes;	
+		public var _button_tournaments_reminder_by_mail:ButtonGeneralNetworkYes;
+		public var _button_tournament_participating:ButtonGeneralNetworkYes;
 	#end
 	
 	#if leaderboards
 		public var __leaderboards:Leaderboards;
 		public var _scene_leaderboards_exit:ButtonGeneralNetworkYes;
-		public var _button_leaderboards:ButtonGeneralNetworkYes;
 	#end
 	
 	public var __scene_create_room:SceneCreateRoom;
@@ -100,9 +103,7 @@ class MenuBar extends FlxGroup
 	 */
 	private	var _bgHorizontal:FlxSprite;	
 	private var _to_lobby:ButtonGeneralNetworkYes;
-	// this button is not visible. it is placed under the house button and is used by other buttons, in case the house feature is disabled, so they can still be horizontally positioned on the menu bar.
-	private	var _buttonHouse_under:ButtonGeneralNetworkYes;
-		
+
 	/******************************
 	 * moves all row data to the left side.
 	 */
@@ -251,8 +252,8 @@ class MenuBar extends FlxGroup
 				RegTypedef.resetHouseData(); // this is needed to avoid a crash.	
 				RegHouse.resetHouseAtLobby();
 				
-				PlayState.clientSocket.send("House Load", RegTypedef._dataHouse);
-				haxe.Timer.delay(function (){}, Reg2._event_sleep); 
+				PlayState.send("House Load", RegTypedef._dataHouse);
+				 
 			} else RegTriggers._returnToLobbyMakeButtonsActive = true;
 		#else
 			RegTriggers._returnToLobbyMakeButtonsActive = true;
@@ -261,88 +262,102 @@ class MenuBar extends FlxGroup
 	
 	private function menu_lobby():Void
 	{
-		// this button is not visible. it is placed under the house button and is used by other buttons, in case the house feature is disabled, so they can still be horizontally positioned on the menu bar.
-		if (_buttonHouse_under == null)
-		{
-			_buttonHouse_under = new ButtonGeneralNetworkYes(100 - _offset_x, FlxG.height - 40, "", 215, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, null, RegCustom._button_color[Reg._tn], false, 101);		
-			_buttonHouse_under.label.font = Reg._fontDefault;
-			_buttonHouse_under.visible = false;
-			_buttonHouse_under.active = false;
-			_buttonHouse_under.scrollFactor.set(0, 0);
-			add(_buttonHouse_under);
-		}
+		if (Reg._at_house == true
+		||	Reg._at_daily_quests == true
+		||	Reg._at_leaderboards == true
+		||	Reg._at_tournaments == true
+		||	Reg._at_misc == true
+		||	Reg._at_waiting_room == true
+		||	Reg._at_create_room == true
+		||	Reg._at_game_room == true
+		) return;
+		
+		Reg._group_lobby_sprite.splice(0, Reg._group_lobby_sprite.length);
+		_lobby_icon_name.splice(1, _lobby_icon_name.length);
+		
+		// 0: house. 1:misc. 2: daily quests. 3: leaderboards. 4: tournaments,
+		
+		Reg._lobby_icon_number.splice(0, Reg._lobby_icon_number.length);
+		//Reg._lobby_icon_number = [];
+		
+		Reg._lobby_icon_total = -1;
 		
 		#if house
 			if (RegCustom._house_feature_enabled[Reg._tn] == true)
 			{
-				if (_buttonHouse == null)
-				{
-					_buttonHouse = new ButtonGeneralNetworkYes(100 - _offset_x, FlxG.height - 40, "House", 215, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, scene_house, RegCustom._button_color[Reg._tn], false, 102);		
-					_buttonHouse.label.font = Reg._fontDefault;
-					_buttonHouse.visible = false;
-					_buttonHouse.active = false;
-					_buttonHouse.scrollFactor.set(0, 0);
-					add(_buttonHouse);
-				}
-			}
-		#end
-		
-		#if miscellaneous
-			// game instructions, stats.
-			if (_buttonMiscMenu == null)
-			{
-				_buttonMiscMenu = new ButtonGeneralNetworkYes(_buttonHouse_under.x + 230, FlxG.height - 40, "Misc Menu", 215, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, scene_lobby_miscMenu, RegCustom._button_color[Reg._tn], false, 103);		
-				_buttonMiscMenu.label.font = Reg._fontDefault;
-				_buttonMiscMenu.visible = false;
-				_buttonMiscMenu.active = false;
-				_buttonMiscMenu.scrollFactor.set(0, 0);
-				add(_buttonMiscMenu);
+				Reg._lobby_icon_total += 1;
+				Reg._lobby_icon_number.push(0);
+				_lobby_icon_name.push("House");
 			}
 		#end
 		
 		#if dailyQuests
-			// daily quests
-			if (_button_daily_quests == null)
-			{
-				_button_daily_quests = new ButtonGeneralNetworkYes(_buttonHouse_under.x + 230 + 230, FlxG.height - 40, "Daily Quests", 215, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, scene_lobby_daily_quests, RegCustom._button_color[Reg._tn], false, 104);		
-				_button_daily_quests.label.font = Reg._fontDefault;
-				_button_daily_quests.scrollFactor.set(0, 0);
-				_button_daily_quests.visible = false;
-				_button_daily_quests.active = false;
-				add(_button_daily_quests);
-			}
+			Reg._lobby_icon_total += 1;
+			Reg._lobby_icon_number.push(1);
+			_lobby_icon_name.push("Daily Quests");
 		#end
-		
-		// tournaments
-		#if tournaments
-			if (_button_tournaments == null)
-			{
-				_button_tournaments = new ButtonGeneralNetworkYes(_buttonHouse_under.x + 230 + 230 + 230, FlxG.height - 40, "Tournaments", 215, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, scene_lobby_tournaments, RegCustom._button_color[Reg._tn], false, 105);		
-				_button_tournaments.label.font = Reg._fontDefault;
-				_button_tournaments.scrollFactor.set(0, 0);
-				_button_tournaments.visible = false;
-				_button_tournaments.active = false;
-				add(_button_tournaments);
-			}
-		#end
-		
+				
 		// leaderboards.
 		#if flags
 			#if leaderboards
-				if (RegCustom._leaderboard_enabled[Reg._tn] == true)
+				if (RegCustom._leaderboard_enabled[Reg._tn] == true
+				&&	RegCustom._world_flags_number[Reg._tn] > 0)
 				{
-					if (_button_leaderboards == null)
-					{
-						_button_leaderboards = new ButtonGeneralNetworkYes(_buttonHouse_under.x + 230 + 230 + 230 + 230, FlxG.height - 40, "Leaderboards", 215, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, scene_lobby_leaderboards, RegCustom._button_color[Reg._tn], true, 106);		
-						_button_leaderboards.label.font = Reg._fontDefault;
-						_button_leaderboards.scrollFactor.set(0, 0);
-						_button_leaderboards.visible = false;
-						_button_leaderboards.active = false;
-						add(_button_leaderboards);
-					}
+					Reg._lobby_icon_total += 1;
+					Reg._lobby_icon_number.push(2);
+					_lobby_icon_name.push("Leaderboards");
 				}
 			#end
 		#end
+		
+		#if tournaments
+			Reg._lobby_icon_total += 1;
+			Reg._lobby_icon_number.push(3);
+			_lobby_icon_name.push("Tournaments");
+		#end		
+		
+		#if miscellaneous
+			Reg._lobby_icon_total += 1;
+			Reg._lobby_icon_number.push(4);
+			_lobby_icon_name.push("Miscellaneous");
+		#end
+		
+		for (i in 0...Reg._lobby_icon_total + 1)
+		{
+			// add title here by increase the max number then go to titleMenu then go to the bottom of update(). 
+			// all gameboards images are stored in frames.
+			_lobby_sprite = new FlxSprite(0, 0);
+			_lobby_sprite.loadGraphic("assets/images/iconsLobby.png", true, 70, 44);
+			_lobby_sprite.scrollFactor.set(0, 0);
+			_lobby_sprite.color = RegCustomColors.client_text_color();
+			_lobby_sprite.updateHitbox();
+			_lobby_sprite.visible = false;
+			add(_lobby_sprite);	
+			
+			// add this member to Reg._group_lobby_sprite.			
+			Reg._group_lobby_sprite.push(_lobby_sprite);
+			Reg._group_lobby_sprite[i].setPosition(500 - 14 + (i * 70), FlxG.height - _lobby_sprite.height - 3);
+			Reg._group_lobby_sprite[i].animation.add(Std.string(Reg._lobby_icon_number[i]), [Reg._lobby_icon_number[i]], 30, false);
+			Reg._group_lobby_sprite[i].animation.play(Std.string(Reg._lobby_icon_number[i]));
+			Reg._group_lobby_sprite[i].visible = true;
+			add(Reg._group_lobby_sprite[i]);
+		}
+		
+		if (Reg._lobby_icon_total > -1)
+		{
+			_group_lobby_sprite_highlighted = new FlxSprite(500 - 2, FlxG.height - _lobby_sprite.height - 3 - 2);
+			_group_lobby_sprite_highlighted.loadGraphic("assets/images/iconsHoverLobby.png", true, 70, 48); // height is the same value as width.
+			_group_lobby_sprite_highlighted.scrollFactor.set(0, 0);
+			_group_lobby_sprite_highlighted.animation.add("play", [0, 1], 10, true);
+			_group_lobby_sprite_highlighted.animation.play("play");
+			_group_lobby_sprite_highlighted.updateHitbox();
+			_group_lobby_sprite_highlighted.visible = false;
+			add(_group_lobby_sprite_highlighted);
+		}
+		
+		_lobby_icon_names = new FlxText(500 - 14 + 95 + (Reg._lobby_icon_total * 70), FlxG.height - 35, 0, "");
+		_lobby_icon_names.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
+		add(_lobby_icon_names);
 	}
 	
 	private function menu_house():Void
@@ -475,7 +490,6 @@ class MenuBar extends FlxGroup
 		_scene_daily_quests_exit.label.font = Reg._fontDefault;
 		_scene_daily_quests_exit.screenCenter(X);
 		_scene_daily_quests_exit.x += 400;
-		_scene_daily_quests_exit.alpha = 1;
 		add(_scene_daily_quests_exit);
 		
 		_rewards.splice(3, 0);
@@ -508,8 +522,49 @@ class MenuBar extends FlxGroup
 		_scene_tournaments_exit = new ButtonGeneralNetworkYes(30, FlxG.height - 40, "Exit", 150 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, scene_tournaments_exit, RegCustom._button_color[Reg._tn], true, 115);
 		_scene_tournaments_exit.label.font = Reg._fontDefault;
 		_scene_tournaments_exit.screenCenter(X);
+		_scene_tournaments_exit.visible = false;
+		_scene_tournaments_exit.active = false;
 		_scene_tournaments_exit.x += 400;
 		add(_scene_tournaments_exit);
+		
+		#if tournaments
+			_button_tournaments_reminder_by_mail = new ButtonGeneralNetworkYes(0, FlxG.height - 40, "Unsubcribe Mail", 245, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, tournaments_reminder_by_mail, RegCustom._button_color[Reg._tn], false, 0);
+			_button_tournaments_reminder_by_mail.scrollFactor.set(0, 0);
+			_button_tournaments_reminder_by_mail.label.font = Reg._fontDefault;
+			_button_tournaments_reminder_by_mail.screenCenter(X);
+			_button_tournaments_reminder_by_mail.visible = false;
+			_button_tournaments_reminder_by_mail.active = false;
+			add(_button_tournaments_reminder_by_mail);
+		
+			_button_tournament_participating = new ButtonGeneralNetworkYes(0, FlxG.height - 40, "Leave Tournament", 245, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, tournaments_Participating, RegCustom._button_color[Reg._tn], false, 0);
+			_button_tournament_participating.scrollFactor.set(0, 0);
+			_button_tournament_participating.label.font = Reg._fontDefault;
+			_button_tournament_participating.screenCenter(X);
+			_button_tournament_participating.x -= 245 + 15;
+			_button_tournament_participating.visible = false;
+			_button_tournament_participating.active = false;
+			add(_button_tournament_participating);
+		#end
+	}
+	
+	private function tournaments_reminder_by_mail():Void
+	{		
+		PlayState.send("Tournament Reminder By Mail", RegTypedef._dataTournaments);		
+	}
+	
+	private function tournaments_Participating():Void
+	{
+		if (RegTypedef._dataTournaments._tournament_started == true)
+		{
+			Reg._messageId = 7100;
+			Reg._buttonCodeValues = "h1100";
+			SceneGameRoom.messageBoxMessageOrder();
+		}
+		
+		else
+		{
+			PlayState.send("Tournament Participating", RegTypedef._dataTournaments);			
+		}
 	}
 	
 	/******************************
@@ -547,19 +602,7 @@ class MenuBar extends FlxGroup
 	
 	private function set_all_menu_bar_elements_not_active():Void
 	{
-		if (_buttonHouse_under != null)
-		{
-			_buttonHouse_under.visible = false;
-			_buttonHouse_under.active = false;
-		}
-		
 		#if house
-			if (_buttonHouse != null)
-			{
-				_buttonHouse.visible = false;
-				_buttonHouse.active = false;
-			}
-			
 			if (_buttonToFurnitureGetMenu != null)
 			{
 				_buttonToFurnitureGetMenu.visible = false;
@@ -586,14 +629,6 @@ class MenuBar extends FlxGroup
 			
 		#end
 		
-		#if miscellaneous
-			if (_buttonMiscMenu != null)
-			{
-				_buttonMiscMenu.visible = false;
-				_buttonMiscMenu.active = false;
-			}
-		#end
-		
 		#if dailyQuests
 			if (__daily_quests != null)
 			{
@@ -602,20 +637,6 @@ class MenuBar extends FlxGroup
 					__daily_quests.__scrollable_area.visible = false;
 					__daily_quests.__scrollable_area.active = false;
 				}	
-			}
-			
-			if (_button_daily_quests != null)
-			{
-				_button_daily_quests.visible = false;
-				_button_daily_quests.active = false;
-			}
-		#end
-		
-		#if tournaments
-			if (_button_tournaments != null)
-			{
-				_button_tournaments.visible = false;
-				_button_tournaments.active = false;
 			}
 		#end
 		
@@ -628,12 +649,6 @@ class MenuBar extends FlxGroup
 					__leaderboards.__scrollable_area.active = false;
 					
 				}
-			}
-			
-			if (_button_leaderboards != null)
-			{
-				_button_leaderboards.visible = false;
-				_button_leaderboards.active = false;
 			}
 		#end
 		
@@ -714,9 +729,6 @@ class MenuBar extends FlxGroup
 		#if house
 			set_all_menu_bar_elements_not_active(); // reset buttons to false because just after closing a dialog box, that class will reset state of buttons back to active.
 					
-			FlxG.mouse.reset();
-			FlxG.mouse.enabled = true;
-			
 			// this stop the clicking of this button when not at this buttons scene.
 			if (RegTypedef._dataMisc._room > 0) return; 
 			
@@ -738,9 +750,7 @@ class MenuBar extends FlxGroup
 			__house.activeFurnitureGetElements();
 			__house._houseDataLoaded = true;
 
-			FlxG.mouse.reset();
-			FlxG.mouse.enabled = true;
-			Reg2._lobby_button_alpha = 0.3;
+			Reg2._lobby_button_alpha = 1;
 			//}
 			
 			PlayState.__scene_lobby.set_not_active_for_buttons();
@@ -921,11 +931,8 @@ class MenuBar extends FlxGroup
 				}
 				
 				RegHouse._namesPurchased.unshift("No item selected.");
-				PlayState.clientSocket.send("House Save", RegTypedef._dataHouse);
-				haxe.Timer.delay(function (){}, Reg2._event_sleep);
-				
-				PlayState.clientSocket.send("Daily Reward Save", RegTypedef._dataStatistics);
-				haxe.Timer.delay(function (){}, Reg2._event_sleep);
+				PlayState.send("House Save", RegTypedef._dataHouse);				
+				PlayState.send("Daily Reward Save", RegTypedef._dataStatistics);				
 			}
 			
 			if (Reg._yesNoKeyPressValueAtMessage > 1 && Reg._buttonCodeValues == "h1000")
@@ -940,6 +947,22 @@ class MenuBar extends FlxGroup
 			{
 				Reg._buttonCodeValues = ""; // do not enter this block of code the second time.
 				Reg._yesNoKeyPressValueAtMessage = 0; // no button is clicked.
+			}
+		#end
+		
+		#if tournaments
+			// message that player cannot leave tournament game when tournament is still active.
+			if (Reg._yesNoKeyPressValueAtMessage == 1 && Reg._buttonCodeValues == "h1100")
+			{
+				Reg._yesNoKeyPressValueAtMessage = 0;
+				Reg._buttonCodeValues = "";
+			}
+			
+			// subscribe/unsubscribe from all tournament mail.
+			if (Reg._yesNoKeyPressValueAtMessage == 1 && Reg._buttonCodeValues == "h1110")
+			{
+				Reg._yesNoKeyPressValueAtMessage = 0;
+				Reg._buttonCodeValues = "";
 			}
 		#end
 	}
@@ -957,17 +980,12 @@ class MenuBar extends FlxGroup
 		||	Reg._at_create_room == true
 		||	Reg._at_waiting_room == true) return;
 		
-		FlxG.mouse.reset();
-		FlxG.mouse.enabled = true;
-		
 		Reg._at_leaderboards = true;
 		PlayState.__scene_lobby.set_not_active_for_buttons();
 		
 		#if leaderboards
 			__leaderboards = new Leaderboards();		
 			add(__leaderboards);
-			
-			_button_leaderboards.active = false;
 		#end		
 	}
 		
@@ -977,9 +995,6 @@ class MenuBar extends FlxGroup
 	 */
 	private function scene_lobby_miscMenu():Void
 	{
-		FlxG.mouse.reset();
-		FlxG.mouse.enabled = true;
-		
 		// this stop the clicking of this button when not at this buttons scene.
 		if (RegTypedef._dataMisc._room > 0) return; 
 		
@@ -988,8 +1003,7 @@ class MenuBar extends FlxGroup
 		#if miscellaneous
 			// we call the stats here because when entering the miscellaneous menu, sometimes we need to call an event twice to get the data. 
 			Reg2._miscMenuIparameter = 0;
-			PlayState.clientSocket.send("Get Statistics All", RegTypedef._dataStatistics);
-			haxe.Timer.delay(function (){}, Reg2._event_sleep);
+			PlayState.send("Get Statistics All", RegTypedef._dataStatistics);			
 			
 			if (__miscellaneous_menu != null)
 			{
@@ -1013,9 +1027,6 @@ class MenuBar extends FlxGroup
 	private function scene_lobby_daily_quests():Void
 	{
 		#if dailyQuests
-			FlxG.mouse.reset();
-			FlxG.mouse.enabled = true;
-			
 			PlayState.__scene_lobby.set_not_active_for_buttons();
 			
 			if (__daily_quests != null)
@@ -1040,9 +1051,6 @@ class MenuBar extends FlxGroup
 	private function scene_lobby_tournaments():Void
 	{
 		#if tournaments
-			FlxG.mouse.reset();
-			FlxG.mouse.enabled = true;
-			
 			if (__tournaments != null)
 			{
 				__tournaments.destroy();
@@ -1054,11 +1062,9 @@ class MenuBar extends FlxGroup
 			__tournaments = new Tournaments();		
 			add(__tournaments);
 			
-			PlayState.clientSocket.send("Tournament Chess Standard 8 Get", RegTypedef._dataTournaments);
-			haxe.Timer.delay(function (){}, Reg2._event_sleep);
+			PlayState.send("Tournament Chess Standard 8 Get", RegTypedef._dataTournaments);
 			
 			PlayState.__scene_lobby.set_not_active_for_buttons();
-			_button_tournaments.active = false;
 		#end
 	}
 
@@ -1119,11 +1125,9 @@ class MenuBar extends FlxGroup
 			else
 				RegTypedef._dataMisc._allowSpectators[RegTypedef._dataMisc._room] = 0;
 			
-			PlayState.clientSocket.send("Is Room Locked", RegTypedef._dataMisc);
-			haxe.Timer.delay(function (){}, Reg2._event_sleep);
+			PlayState.send("Is Room Locked", RegTypedef._dataMisc);
+			
 		}
-		
-
 	}
 	
 	/******************************
@@ -1135,12 +1139,11 @@ class MenuBar extends FlxGroup
 		
 		RegTypedef._dataMisc._roomState[RegTypedef._dataMisc._room] = 0;
 					 
-		PlayState.clientSocket.send("Lesser RoomState Value", RegTypedef._dataMisc);
-		haxe.Timer.delay(function (){}, Reg2._event_sleep);
+		PlayState.send("Lesser RoomState Value", RegTypedef._dataMisc);
 		
 		Reg._at_create_room = false;
 		Reg._at_waiting_room = false;
-				
+		
 		visible = false;		
 		Reg._currentRoomState = 0;
 		
@@ -1197,9 +1200,8 @@ class MenuBar extends FlxGroup
 			
 		}
 		
-		PlayState.clientSocket.send("Logged In Users", RegTypedef._dataOnlinePlayers);
-		haxe.Timer.delay(function (){}, Reg2._event_sleep);
-				
+		PlayState.send("Logged In Users", RegTypedef._dataOnlinePlayers);
+			
 		_button_refresh_list.active = false;
 		
 		InviteTable._populated_table_body = false;
@@ -1212,9 +1214,6 @@ class MenuBar extends FlxGroup
 	private function scene_misc_exit():Void
 	{
 		set_all_menu_bar_elements_not_active(); // reset buttons to false because just after closing a dialog box, that class will reset state of buttons back to active.
-		
-		FlxG.mouse.reset();
-		FlxG.mouse.enabled = true;
 		
 		if (Reg._at_misc == false)
 		{
@@ -1232,9 +1231,6 @@ class MenuBar extends FlxGroup
 	{
 		set_all_menu_bar_elements_not_active(); // reset buttons to false because just after closing a dialog box, that class will reset state of buttons back to active.
 		
-		FlxG.mouse.reset();
-		FlxG.mouse.enabled = true;
-				
 		RegTriggers._returnToLobbyMakeButtonsActive = true;
 		RegTriggers._make_daily_quests_not_active = true;
 		
@@ -1278,9 +1274,6 @@ class MenuBar extends FlxGroup
 		#if tournaments
 			set_all_menu_bar_elements_not_active(); // reset buttons to false because just after closing a dialog box, that class will reset state of buttons back to active.
 			
-			FlxG.mouse.reset();
-			FlxG.mouse.enabled = true;
-					
 			_scene_tournaments_exit.active = false;
 			
 			if (__tournaments != null) __tournaments._button_move_piece.active = false;
@@ -1300,9 +1293,6 @@ class MenuBar extends FlxGroup
 		{
 			set_all_menu_bar_elements_not_active(); // reset buttons to false because just after closing a dialog box, that class will reset state of buttons back to active.
 		
-			FlxG.mouse.reset();
-			FlxG.mouse.enabled = true;
-					
 			RegTriggers._returnToLobbyMakeButtonsActive = true;
 			RegTriggers._make_leaderboards_not_active = true;
 			
@@ -1368,6 +1358,69 @@ class MenuBar extends FlxGroup
 	
 	override public function update(elapsed:Float):Void 
 	{
+		if (_group_lobby_sprite_highlighted != null 
+		&&	Reg._at_lobby == true)
+		{			
+			_group_lobby_sprite_highlighted.visible = false;			
+			_lobby_icon_names.text = "";
+			
+			for (i in 0... Reg._lobby_icon_total + 1)
+			{
+				Reg._group_lobby_sprite[i].visible = true;
+					
+				// stop player hammering.
+				if (Reg._buttonDown == true) 
+					Reg._group_lobby_sprite[i].alpha = 0.3;
+				else 
+					Reg._group_lobby_sprite[i].alpha = 1;
+				
+				// is mouse at the lobby icon?
+				if (FlxG.mouse.x >= Reg._group_lobby_sprite[i].x
+				&&	FlxG.mouse.x <= Reg._group_lobby_sprite[i].x + 70
+				&&	FlxG.mouse.y >= FlxG.height - 50
+				)
+				{
+					_group_lobby_sprite_highlighted.visible = true;
+					_group_lobby_sprite_highlighted.x = 502 - 15 + (i * 70); 
+					_lobby_icon_names.text = _lobby_icon_name[i];
+					
+					if (FlxG.mouse.justReleased == true
+					&&	Reg._buttonDown == false)
+					{
+						if (RegCustom._sound_enabled[Reg._tn] == true
+						&&  Reg2._scrollable_area_is_scrolling == false)
+							FlxG.sound.play("click", 1, false);	
+						
+						switch(Reg._lobby_icon_number[i])
+						{
+							case 0: scene_house();				
+							case 1: scene_lobby_daily_quests();
+							case 2: scene_lobby_leaderboards();
+							case 3: scene_lobby_tournaments();
+							case 4: scene_lobby_miscMenu();
+						}
+					}
+				}
+			}
+		}
+		
+		// hide the lobby buttons. no need to set active to false for those icons because if not at lobby then a check for a mouse click will not be made.
+		else if (Reg._at_house == true
+		||	Reg._at_daily_quests == true
+		||	Reg._at_leaderboards == true
+		||	Reg._at_tournaments == true
+		||	Reg._at_misc == true
+		||	Reg._at_waiting_room == true
+		||	Reg._at_create_room == true
+		||	Reg._at_game_room == true)
+		{
+			for (i in 0... Reg._lobby_icon_total + 1)
+			{
+				if (Reg._at_lobby == false) 
+					Reg._group_lobby_sprite[i].visible = false;
+			}
+		}
+		
 		//######################## house
 		#if house
 			if (RegCustom._house_feature_enabled[Reg._tn] == true)
@@ -1388,7 +1441,6 @@ class MenuBar extends FlxGroup
 			
 			if (Reg._at_house == true)
 			{
-				FlxG.mouse.enabled = true;
 				active = true;
 				
 				// fix a camera display bug where the _buttonToFurnitureGetMenu can also be clicked from the right side of the screen because of the map scrolling part of the scene. setting this to active in an else statement is not needed because they are set active elsewhere in the code.
@@ -1400,8 +1452,6 @@ class MenuBar extends FlxGroup
 					if (_buttonToFurniturePutMenu != null)
 						_buttonToFurniturePutMenu.active = false;
 				}
-								
-				if (Reg._buttonCodeValues != "") buttonCodeValues();
 				
 				#if html5
 					_save.active = false;
@@ -1411,7 +1461,61 @@ class MenuBar extends FlxGroup
 		// end house
 		//#############################
 		
+		#if tournaments
+			if (_button_tournaments_reminder_by_mail != null)
+			{
+				// trigger is needed here not at top of block. by moving it, the subscribe button's text wont work.
+				if (RegTypedef._dataTournaments._player1 != ""
+				&&	RegTriggers._tournament_standard_chess_8_menubar == true)
+				{					
+					_button_tournaments_reminder_by_mail.active = true;
+					_button_tournaments_reminder_by_mail.visible = true;
+				}
+				
+				else if (RegTypedef._dataTournaments._player1 == "")
+				{
+					_button_tournaments_reminder_by_mail.visible = false;
+					_button_tournaments_reminder_by_mail.active = false;
+				}
+				
+				// display the exit button. the code is used here so that all buttons are displayed at the same time.
+				if (RegTypedef._dataTournaments._reminder_by_mail == true)
+				{
+					_button_tournaments_reminder_by_mail.label.text = "Unsubscribe mail";
+				}
+				else
+				{
+					_button_tournaments_reminder_by_mail.label.text = "Subscribe mail";
+				}
+			}
+			
+			if (_button_tournament_participating != null)
+			{
+				// trigger is needed here not at top of block. by moving it, the subscribe button's text wont work.
+				if (RegTriggers._tournament_standard_chess_8_menubar == true)
+				{					
+					_button_tournament_participating.active = true;
+					_button_tournament_participating.visible = true;
+				}
+				
+				// display the exit button. the code is used here so that all buttons are displayed at the same time.
+				if (RegTriggers._tournament_standard_chess_8_menubar == true)
+				{
+					RegTriggers._tournament_standard_chess_8_menubar = false;
+					_scene_tournaments_exit.active = true;
+					_scene_tournaments_exit.visible = true;				
+				}
+				
+				if (RegTypedef._dataTournaments._player1 != "")
+					_button_tournament_participating.label.text = "Leave Tournament";
+				else
+					_button_tournament_participating.label.text = "Join Tournament";	
+			}
+		#end
+		
+		if (Reg._buttonCodeValues != "") buttonCodeValues();
+		
 		super.update(elapsed);
 	}
 	
-}//
+}//

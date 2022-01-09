@@ -1,3 +1,45 @@
+Version 1.22.2 2021-1-9
+
+New Features.
+
+	Client now works in html5.
+	
+	Client is now using the hxWebSockets library.
+
+	A user can now join chess tournament from within the client.
+	
+	Validation of an email address is now needed for chess tournament play notices.
+	
+	Available none public commands can be displayed for reference using the ALT + SPACEBAR key.
+	
+	At configuration there are now five username, password and email address fields.
+	
+	Message boxes can now stack on top of each other. Closing a message box will display the next message box in the stack.
+	
+	Chatter is now limited to 20000 characters.
+	
+Feature changed.
+
+	Added back the screen modes to the title screen: relative, ratio_default, ratio_fill_screen and fill.
+	
+	For the spectator watching, "yes" and "no" buttons used instead of an "ok" button.
+
+	Made a black border for white default flag.
+	
+	Changed some text to be the color of the selected theme.
+
+	Limited how far a chatter scrollable area can be scrolled.
+	
+	The configuration setting confirmation before returning to title now works for offline game play.
+	
+	Chatter layout changed.
+	
+Bugs fixed.
+
+	A player could not close a dialog box at game room after opponent left that game room while that game was still in progress.
+		
+	For the spectator watching, message was cleared before displaying it.
+	
 Version 1.21.4 2021-12-3.
 
 New Features.

@@ -2,18 +2,11 @@
     Copyright (c) 2021 KBoardGames.com
     This program is part of KBoardGames client software.
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published
-    by the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+    This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+    This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Affero General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU Affero General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 package modules.usernameSuggestions;
@@ -45,7 +38,7 @@ class Usernames
 	 */
 	public static function username_suggestions():Void
 	{
-		_text_username_suggestions = new FlxText(15, CID3._text_username.y + CID3._offset_y + 30, 0, "Suggested Usernames");
+		_text_username_suggestions = new FlxText(15, CID3._text_username.y + CID3._offset_y + 260, 0, "Suggested Usernames");
 		_text_username_suggestions.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
 		_text_username_suggestions.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		CID3._group.add(_text_username_suggestions);
@@ -81,13 +74,19 @@ class Usernames
 		for (i in 0... _arr.length-1)
 		{
 			// search every array in the username suggestion list and output the first 18 that match the currect text in the username input object.
-			if (CID3._usernameInput.text 
-			==	_arr[i].substr(0, CID3._usernameInput.text.length)
-			&&	CID3._usernameInput.text
-			!=	_arr[i])
+			for (ii in 0...5)
 			{
-				_count += 1;
-				_arr2[_count] = _arr[i]; 
+				if (CID3._CRN == ii)
+				{
+					if (CID3._group_username_input[ii].text.toLowerCase()
+					==	_arr[i].substr(0, CID3._group_username_input[ii].text.length).toLowerCase() 
+					&&	CID3._group_username_input[ii].text.toLowerCase() 
+					!=	_arr[i].toLowerCase())
+					{
+						_count += 1;
+						_arr2[_count] = _arr[i]; 
+					}
+				}
 			}
 		}
 		
@@ -102,7 +101,7 @@ class Usernames
 		if (RegCustom._username_suggestions_enabled[Reg._tn] == true)
 			_question_username_suggestions_enabled = new TextGeneral(15, _button_username_suggestions[15].height + _button_username_suggestions[15].y + CID3._offset_button_y + CID3._offset_button_y / 2, 800, "Show username suggestions?\r\n", 8, true, true);
 		else
-			_question_username_suggestions_enabled = new TextGeneral(15, CID3._usernameInput.y + 75, 800, "Show username suggestions?\r\n", 8, true, true);
+			_question_username_suggestions_enabled = new TextGeneral(15, CID3._username_input.y + 75, 800, "Show username suggestions?\r\n", 8, true, true);
 		
 		_question_username_suggestions_enabled.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
 		_question_username_suggestions_enabled.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
@@ -113,6 +112,6 @@ class Usernames
 		_button_username_suggestions_enabled.label.text = Std.string(RegCustom._username_suggestions_enabled[Reg._tn]);
 		
 		CID3._group_button.push(_button_username_suggestions_enabled);
-		CID3._group.add(CID3._group_button[0]);
+		CID3._group.add(CID3._group_button[1]);
 	}	
 }

@@ -2,18 +2,11 @@
     Copyright (c) 2021 KBoardGames.com
     This program is part of KBoardGames client software.
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published
-    by the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+    This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+    This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Affero General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU Affero General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 package modules.leaderboards;
@@ -70,10 +63,10 @@ class Leaderboards extends FlxGroup
 	{
 		super();	
 
-		FlxG.autoPause = false;	// this application will pause when not in focus.
+		FlxG.autoPause = false;
 
 		RegTypedef._dataLeaderboards._username = RegTypedef._dataAccount._username;
-		PlayState.clientSocket.send("Leaderboards", RegTypedef._dataLeaderboards);		
+		PlayState.send("Leaderboards", RegTypedef._dataLeaderboards);		
 	}
 	
 	private function table_data(i:Int):Void
@@ -212,9 +205,10 @@ class Leaderboards extends FlxGroup
 	
 	override public function update(elapsed:Float):Void
 	{
+		if (Reg._at_leaderboards == false) return;
+		
 		if (RegTriggers._leaderboards_show == true)
 		{
-			FlxG.mouse.enabled = true;
 			RegTriggers._leaderboards_show = false;
 			
 			if (_group != null)

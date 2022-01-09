@@ -2,18 +2,11 @@
     Copyright (c) 2021 KBoardGames.com
     This program is part of KBoardGames client software.
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published
-    by the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+    This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+    This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Affero General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU Affero General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 package;
@@ -327,21 +320,19 @@ class PlayerTimeRemainingMove extends FlxState
 				if (_foundPlayer == true)
 				{
 					// save _gamePlayersValues values to database because this function sets this var for the player that time expired to 0, so that the player is no longer playing game. near the bottom of this class, a lose to game stats will be given to this player.
-					PlayState.clientSocket.send("Game Players Values", RegTypedef._dataPlayers); 
-					haxe.Timer.delay(function (){}, Reg2._event_sleep);
+					PlayState.send("Game Players Values", RegTypedef._dataPlayers); 
+					
 					
 					if (_totalPlayers >= 2 && Reg._move_number_current == Reg._move_number_next)
 					{
-						PlayState.clientSocket.send("Player Left Game", RegTypedef._dataPlayers);
-						haxe.Timer.delay(function (){}, Reg2._event_sleep);
+						PlayState.send("Player Left Game", RegTypedef._dataPlayers);					
 					}
 					
 				}
 				// else, this is now or was a two player game. for each player (time will run out at both clients at the same time), update the gamePlayers var.
 				else if (_totalPlayers <= 1) 
 				{
-					PlayState.clientSocket.send("Game Players Values", RegTypedef._dataPlayers); 
-					haxe.Timer.delay(function (){}, Reg2._event_sleep);
+					PlayState.send("Game Players Values", RegTypedef._dataPlayers);					
 				}					
 								
 				// note that player has left the game but player might still be at the game room.
@@ -452,8 +443,7 @@ class PlayerTimeRemainingMove extends FlxState
 				
 				if (Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false) 
 				{
-					PlayState.clientSocket.send("Save Lose Stats", RegTypedef._dataPlayers);	
-					haxe.Timer.delay(function (){}, Reg2._event_sleep);
+					PlayState.send("Save Lose Stats", RegTypedef._dataPlayers);					
 				}
 			}
 		}
@@ -465,8 +455,7 @@ class PlayerTimeRemainingMove extends FlxState
 			// the value of _totalPlayers is a bit misleading. the value refers to a two player game. the player that entered this function still should register a lose and is still playing a game but is not added to this vars total because time remaining is zero.
 			if (_totalPlayers == 1 && Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false && Reg._move_number_current == _playerNumber) 
 			{
-				PlayState.clientSocket.send("Save Lose Stats For Both", RegTypedef._dataPlayers);
-				haxe.Timer.delay(function (){}, Reg2._event_sleep);
+				PlayState.send("Save Lose Stats For Both", RegTypedef._dataPlayers);				
 			}
 		}
 		
@@ -581,8 +570,7 @@ class PlayerTimeRemainingMove extends FlxState
 				
 				if (Reg._game_online_vs_cpu == false && Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false)
 				{
-					PlayState.clientSocket.send("Save Win Stats", RegTypedef._dataPlayers);
-					haxe.Timer.delay(function (){}, Reg2._event_sleep);
+					PlayState.send("Save Win Stats", RegTypedef._dataPlayers);					
 				}
 				
 				Reg._gameOverForPlayer = true;
@@ -824,6 +812,7 @@ class PlayerTimeRemainingMove extends FlxState
 			if (_textMoveTimer3 != null && Reg._move_number_next == 2) _textMoveTimer3.text = Reg._textTimeRemainingToMove3;
 			if (_textMoveTimer4 != null && Reg._move_number_next == 3) _textMoveTimer4.text = Reg._textTimeRemainingToMove4;
 			
+			// TODO this needs fixing. cannot have an event that is called at a random time with html5 because html5 needs a server around trip to work if this event is called when another event is called then html5 will abort the second event. 1 event can only be called within an event function.
 			// every once in a while, send move value for this player to the other clients. those other client will then have an updated value.
 			if (_ticks == 0 ) 
 			{
@@ -831,17 +820,9 @@ class PlayerTimeRemainingMove extends FlxState
 				{
 					if (Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false)
 					{
-						// used for bug tracking. see function receive() at TcpClient.
-						RegTypedef._dataPlayers._triggerEvent = "foo"; // add this to an event if you do not want to see its output at console.
-						PlayState.clientSocket.send("Player Move Time Remaining", RegTypedef._dataPlayers);
-						haxe.Timer.delay(function (){}, Reg2._event_sleep);
-						
-						RegTypedef._dataPlayers._triggerEvent = "";
+						PlayState.send("Player Move Time Remaining", RegTypedef._dataPlayers);			
 					}
 				}
-				
-				// when it is the other players turn to move, this changes the white box underneath the P1, P2, P3 or P4.
-				__scene_game_room._playerWhosTurnToMove.updateMove();
 			}
 			
 			_ticks = RegFunctions.incrementTicks(_ticks, 60 / Reg._framerate);
@@ -850,11 +831,8 @@ class PlayerTimeRemainingMove extends FlxState
 			
 		}
 		
-		else
-		{
-			// when it is the other players turn to move, this changes the white box underneath the P1, P2, P3 or P4.
-			__scene_game_room._playerWhosTurnToMove.updateMove();
-		}
+		// putting __scene_game_room._playerWhosTurnToMove.updateMove(); here will stop dialog boxes from closing.
+		//else
 		
 		super.update(elapsed);	
 	}

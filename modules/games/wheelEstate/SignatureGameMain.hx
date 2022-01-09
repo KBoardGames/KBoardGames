@@ -2,18 +2,11 @@
     Copyright (c) 2021 KBoardGames.com
     This program is part of KBoardGames client software.
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published
-    by the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+    This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+    This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Affero General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU Affero General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 package modules.games.wheelEstate;
@@ -1519,11 +1512,9 @@ class SignatureGameMain extends FlxState
 			else
 			{			
 				RegTypedef._dataGameMessage._gameMessage = "Trade request accepted.";
-				PlayState.clientSocket.send("Game Message Not Sender", RegTypedef._dataGameMessage);
-				haxe.Timer.delay(function (){}, Reg2._event_sleep);
-			
-				PlayState.clientSocket.send("Trade Proposal Answered As", RegTypedef._dataGameMessage);
-				haxe.Timer.delay(function (){}, Reg2._event_sleep);
+				
+				PlayState.send("Game Message Not Sender", RegTypedef._dataGameMessage);			
+				PlayState.send("Trade Proposal Answered As", RegTypedef._dataGameMessage);				
 			} 
 			
 			Reg._outputMessage = true;
@@ -1587,11 +1578,9 @@ class SignatureGameMain extends FlxState
 			else
 			{			
 				RegTypedef._dataGameMessage._gameMessage = "Trade request rejected.";
-				PlayState.clientSocket.send("Game Message Not Sender", RegTypedef._dataGameMessage);
-				haxe.Timer.delay(function (){}, Reg2._event_sleep);
 				
-				PlayState.clientSocket.send("Trade Proposal Answered As", RegTypedef._dataGameMessage);
-				haxe.Timer.delay(function (){}, Reg2._event_sleep);
+				PlayState.send("Game Message Not Sender", RegTypedef._dataGameMessage);				
+				PlayState.send("Trade Proposal Answered As", RegTypedef._dataGameMessage);				
 			} 
 				
 			Reg._outputMessage = true;
@@ -1638,10 +1627,9 @@ class SignatureGameMain extends FlxState
 				
 			if (Reg._game_offline_vs_cpu == false) 
 			{				
-				PlayState.clientSocket.send("Trade Proposal Offer", RegTypedef._dataGameMessage);
-				haxe.Timer.delay(function (){}, Reg2._event_sleep);
+				PlayState.send("Trade Proposal Offer", RegTypedef._dataGameMessage);				
 			}
-					
+			
 			else RegTriggers._tradeProposalOffer = true;
 			
 			// send general message that a trade request has been sent.
@@ -1650,8 +1638,7 @@ class SignatureGameMain extends FlxState
 			if (Reg._game_offline_vs_cpu == false)
 			{				
 				RegTypedef._dataGameMessage._gameMessage = "Trade request from " + RegTypedef._dataGameMessage._userFrom;
-				PlayState.clientSocket.send("Game Message Not Sender", RegTypedef._dataGameMessage);
-				haxe.Timer.delay(function (){}, Reg2._event_sleep);
+				PlayState.send("Game Message Not Sender", RegTypedef._dataGameMessage);				
 				
 				RegTriggers._signatureGameUnitImage = false;
 				RegTriggers._highlightOnlyOuterUnits = true;
@@ -2965,8 +2952,7 @@ class SignatureGameMain extends FlxState
 			// update data for all other players.
 			if (Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false)
 			{
-				PlayState.clientSocket.send("Get Statistics Win Loss Draw", RegTypedef._dataPlayers);
-				haxe.Timer.delay(function (){}, Reg2._event_sleep);
+				PlayState.send("Get Statistics Win Loss Draw", RegTypedef._dataPlayers);				
 			}
 				
 			/*// outer movement if you are currently at unit 27 and you have exited from the options screen when we need to make the value -1 since that will be the next unit to move to. see SignatureGameMovePlayersPiece.hx. 

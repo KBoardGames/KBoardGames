@@ -2,21 +2,18 @@
     Copyright (c) 2021 KBoardGames.com
     This program is part of KBoardGames client software.
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published
-    by the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+    This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+    This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Affero General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU Affero General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 package;
+
+import RegTypedef;
+import vendor.ws.WebSocket;
+import vendor.ws.Types;
 
 #if !html5
 	import sys.net.Address;
@@ -33,25 +30,32 @@ package;
  */
 class PlayState extends FlxState
 {
+	private var _msg:IdsMessageBox;
+	
+	/******************************
+	 * this gives the user a list of events displayed at front door as they are completed because logging in to the lobby takes a few seconds. 
+	 */
+	public static var _text_client_login_data:FlxText;
+	public static var _text_client_login_data2:FlxText;
+	public static var _text_client_login_data3:FlxText;	
+	public static var _text_client_login_data4:FlxText;
+	
+	/******************************
+	 * when at the front door, this is a message to press a key to login to lobby.
+	 */
+	public static var _press_key_to_login:FlxText;
+	
+	public static var _websocket:WebSocket;
+	
 	/******************************
 	 * keyboard for mobile.
 	 */
 	private var __action_keyboard:ActionKeyboard;
-		
-	/******************************
-	* this is part of the client software. it is used mainly to connect, disconnect or access event.
-	*/
-	public static var clientSocket:vendor.mphx.client.Client;
 	
 	/******************************
 	 * background gradient, texture and plain color for a scene.
 	 */
 	private var __scene_background:SceneBackground;
-	
-	/******************************
-	 * this is used to save/load the client data such as username to place into the login username field box. Players data is not saved here. this var should only be used before the user logs in. after the user logs in, config data should be pulled from the server.
-	 */
-	public static var _gameMenu:FlxSave;
 	
 	public var messageBox:MessageBox;
 	
@@ -76,26 +80,11 @@ class PlayState extends FlxState
     private var _closeSocket:Bool = false;
    
 	/******************************
-	 * delays going to the lobby when first logging in. this is needed to draw the front door data to scene. without this var, sometimes that data is not seen.
-	 */	
-	private var _ticks_logging_in_delay:Int = 0;
-			
-	/******************************
-	 * server data displayed at front door.
+	 * in html5 build the variable at the Internet.hx class function does not get populated before its return command. therefore this variable is used to delay code, which comes after the Internet.hx class function call, until the Internet.hx class function variable does get populated.
 	 */
-	public static var _text_server_login_data:FlxText;
-    public static var _text_server_login_data2:TextGeneral;
-	public static var _text_server_login_data3:TextGeneral;
-	public static var _text_server_login_data4:TextGeneral;
-	
-	/******************************
-	 * this gives the user a list of events displayed at front door as they are completed because logging in to the lobby takes a few seconds. 
-	 */
-	public static var _text_client_login_data:FlxText;
-	public static var _text_client_login_data2:FlxText;
-	public static var _text_client_login_data3:FlxText;	
-	public static var _text_client_login_data4:FlxText;
-	
+	private var _ticks_ip:Int = 0;
+	private var _ticks_hostname:Int = 0;
+
 	/******************************
 	 * text the client is trying to login to server.
 	 */
@@ -121,6 +110,8 @@ class PlayState extends FlxState
 	public static var _clientDisconnect:Bool = false;
 	public static var _clientDisconnectDo:Bool = true;
 	
+	private var _id:Int = 0;
+	
 	override public function create():Void
 	{
 		super.create();
@@ -129,6 +120,8 @@ class PlayState extends FlxState
 		
 		persistentDraw = true;
 		persistentUpdate = true;
+		
+		_id = ID = Std.parseInt(RegTypedef._dataGame.id.substr(0, 7));
 		
 		if (__scene_background != null)
 		{
@@ -139,9 +132,6 @@ class PlayState extends FlxState
 		__scene_background = new SceneBackground();
 		add(__scene_background);
 		
-		FlxG.mouse.enabled = false;
-		
-		_ticks_logging_in_delay = 0;
 		_clientDisconnect = false;
 		_clientDisconnectDo = true;
 		
@@ -149,15 +139,9 @@ class PlayState extends FlxState
 		{
 			prepareToDisconnect();
 		});
-	
 		
 		//------------------------------
 		#if !html5
-			_gameMenu = new FlxSave(); // initialize		
-			_gameMenu.bind("LoginData"); // bind to the named save slot.	
-			loadClientConfig();
-		
-			//------------------------------
 			RegFunctions._gameMenu = new FlxSave(); // initialize		
 			RegFunctions._gameMenu.bind("ConfigurationsMenu"); // bind to the named save slot.
 			RegCustom.resetConfigurationVars();
@@ -171,73 +155,10 @@ class PlayState extends FlxState
 		
 		if (Reg.__title_bar != null) remove(Reg.__title_bar);
 			Reg.__title_bar = new TitleBar("Front Door");
-			add(Reg.__title_bar);
+			add(Reg.__title_bar);		
 		
-		_text_server_login_data = new FlxText(0, 0, 0, "");
-		_text_server_login_data.scrollFactor.set(0, 0);
-		_text_server_login_data.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 1);
-		_text_server_login_data.setPosition(15, FlxG.height / 2 - 200);
-		_text_server_login_data.visible = false;
-		_text_server_login_data.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_topic_title_text_color());
-		add(_text_server_login_data);
-		
-		
-		_text_server_login_data2 = new TextGeneral(15, FlxG.height / 2 - 200 + 45, 0, "");
-		_text_server_login_data2.scrollFactor.set(0, 0);
-		_text_server_login_data2.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 1);
-		_text_server_login_data2.visible = false;
-		_text_server_login_data2.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
-		add(_text_server_login_data2);
-		
-		
-		_text_server_login_data3 = new TextGeneral(15, _text_server_login_data2.y + 80, 0, "");
-		_text_server_login_data3.scrollFactor.set(0, 0);
-		_text_server_login_data3.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 1);
-		_text_server_login_data3.visible = false;
-		_text_server_login_data3.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
-		add(_text_server_login_data3);		
-		
-		_text_server_login_data4 = new TextGeneral(15, _text_server_login_data3.y + 80, 0, "");
-		_text_server_login_data4.scrollFactor.set(0, 0);
-		_text_server_login_data4.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 1);
-		_text_server_login_data4.visible = false;
-		_text_server_login_data4.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
-		add(_text_server_login_data4);
-		
-		_text_client_login_data = new FlxText(0, 0, 0, "");
-		_text_client_login_data.scrollFactor.set(0, 0);
-		_text_client_login_data.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
-		_text_client_login_data.setPosition(FlxG.width / 2, _text_server_login_data.y);
-		_text_client_login_data.visible = false;
-		_text_client_login_data.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_topic_title_text_color());
-		add(_text_client_login_data);
-				
-		_text_client_login_data2 = new TextGeneral(0, 0, 0, "", 8, true, false, 0, 0, false);
-		_text_client_login_data2.scrollFactor.set(0, 0);
-		_text_client_login_data2.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
-		_text_client_login_data2.setPosition(FlxG.width / 2, _text_server_login_data2.y);
-		_text_client_login_data2.visible = false;
-		_text_client_login_data2.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
-		add(_text_client_login_data2);
-		
-		_text_client_login_data3 = new TextGeneral(0, 0, 0, "", 8, true, false, 0, 0, false);
-		_text_client_login_data3.scrollFactor.set(0, 0);
-		_text_client_login_data3.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
-		_text_client_login_data3.setPosition(FlxG.width / 2, _text_server_login_data3.y);
-		_text_client_login_data3.visible = false;
-		_text_client_login_data3.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
-		add(_text_client_login_data3);
-		
-		_text_client_login_data4 = new TextGeneral(0, 0, 0, "", 8, true, false, 0, 0, false);
-		_text_client_login_data4.scrollFactor.set(0, 0);
-		_text_client_login_data4.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
-		_text_client_login_data4.setPosition(FlxG.width / 2, _text_server_login_data4.y);
-		_text_client_login_data4.visible = false;
-		_text_client_login_data4.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
-		add(_text_client_login_data4);
-		
-		_text_logging_in = new FlxText(0, 700, 0, "Logging in to server...");
-		_text_logging_in.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.PURPLE);
+		_text_logging_in = new FlxText(0, 660, 0, "Logging in to server...");
+		_text_logging_in.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
 		_text_logging_in.scrollFactor.set(0, 0);
 		_text_logging_in.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		_text_logging_in.screenCenter(X);
@@ -248,30 +169,6 @@ class PlayState extends FlxState
 		#end
 	}
 	
-	public function saveClientConfig():Void
-	{
-		// save data
-		#if !html5
-			_gameMenu.data._username_last_remembered = Reg2._username_last_remembered;
-
-			_gameMenu.flush();
-			_gameMenu.close;
-			
-		#end
-	}
-	
-	private function loadClientConfig():Void
-	{
-		#if !html5
-			if (_gameMenu.data._username_last_remembered != null)
-				Reg2._username_last_remembered = _gameMenu.data._username_last_remembered;
-			
-			_gameMenu.close;
-		
-		#end
-	}
-
-	
 	public static function prepareToDisconnect():Void
 	{
 		if (Reg._game_offline_vs_player == false
@@ -281,8 +178,7 @@ class PlayState extends FlxState
 			if (RegTypedef._dataMisc._userLocation > 0
 			&&  RegTypedef._dataMisc._userLocation < 3) 
 			{
-				PlayState.clientSocket.send("Lesser RoomState Value", RegTypedef._dataMisc);
-				haxe.Timer.delay(function (){}, Reg2._event_sleep);
+				PlayState.send("Lesser RoomState Value", RegTypedef._dataMisc);				
 				
 				RegTypedef._dataMisc._roomState[RegTypedef._dataMisc._room] = 0;
 				RegTypedef._dataMisc._roomPlayerLimit[RegTypedef._dataMisc._room] = 0;
@@ -292,8 +188,8 @@ class PlayState extends FlxState
 				RegTypedef._dataMisc._userLocation -= 1;
 				RegTypedef._dataMisc._room = 0;
 				
-				PlayState.clientSocket.send("Get Statistics Win Loss Draw", RegTypedef._dataPlayers); // ping.
-				haxe.Timer.delay(function (){}, Reg2._event_sleep);
+				PlayState.send("Get Statistics Win Loss Draw", RegTypedef._dataPlayers); // ping.
+				
 			}
 			
 			// call the leave room code at SceneGameRoom.hx
@@ -312,7 +208,12 @@ class PlayState extends FlxState
 		Reg._buttonCodeValues = "";
 		_clientDisconnect = false;
 			
-		if (PlayState.clientSocket.isConnected() == true) PlayState.clientSocket.close();
+		if (Reg._client_socket_is_connected == true)
+		{
+			Reg._client_socket_is_connected = false;
+			PlayState._websocket.close();
+		}
+		
 		FlxG.switchState(new MenuState());
 	}
 	
@@ -360,10 +261,10 @@ class PlayState extends FlxState
 		if (Reg._loggedIn == false)
 		{
 			if (RegTypedef._dataPlayers._usernamesDynamic[0] == "")
-				RegTypedef._dataPlayers._usernamesDynamic[0] = RegCustom._profile_username_p1[Reg._tn];
+				RegTypedef._dataPlayers._usernamesDynamic[0] = RegCustom._profile_username_p1[CID3._CRN];
 			
 			if (Reg._game_offline_vs_player == true)
-				RegTypedef._dataPlayers._usernamesDynamic[1] = RegCustom._profile_username_p2[Reg._tn];
+				RegTypedef._dataPlayers._usernamesDynamic[1] = RegCustom._profile_username_p2;
 			else
 				RegTypedef._dataPlayers._usernamesDynamic[1] = Reg2._offline_cpu_host_name2;
 				
@@ -381,156 +282,427 @@ class PlayState extends FlxState
 			RegTypedef._dataPlayers._avatarNumber[3] = "0.png";
 		}
 	}
+
+	
+    public static function updateInfo() 
+	{
+        var _message = "Client #";
+		
+        if (_websocket != null) 
+		{
+            _message += " - connected";
+		} 
+		
+		else
+		{
+            _message += " - disconnected";
+        }
+    }
+	
+	public static function send(_event:Dynamic, _data:Dynamic):Void
+	{
+		_data._event_name = _event;
+		
+		var serializer = new Serializer();
+		serializer.serialize(_data);
+		var _send = serializer.toString();
+		sendString(_send); 
+	}
+	
+    public static function sendString(_send:String)
+	{
+        if (_websocket == null) 
+		{
+            trace("error: not connected");
+            return;
+        }
+		
+		_websocket.send(_send);		
+    }
+
+	/*
+    public function sendBinary(b:Bytes) 
+	{
+        trace("sending binary: len = " + b.length);
+        if (_websocket == null) {
+            trace("error: not connected");
+            return;
+        }
+
+        var buffer = new Buffer();
+        buffer.writeBytes(b);
+        _websocket.send(buffer);
+    }
+	*/
+	
+    public function disconnect() 
+	{
+		Reg._client_socket_is_connected = false;
+        _websocket.close();
+        _websocket = null;
+    }
 	
 	private function client():Void
 	{
-		RegTypedef._dataGame0.id = RegTypedef._dataGame.id;
-		RegTypedef._dataGame1.id = RegTypedef._dataGame.id;
-		RegTypedef._dataGame2.id = RegTypedef._dataGame.id;
-		RegTypedef._dataGame3.id = RegTypedef._dataGame.id;
-		RegTypedef._dataGame4.id = RegTypedef._dataGame.id;
-		RegTypedef._dataMisc.id = RegTypedef._dataGame.id;
-		RegTypedef._dataPlayers.id = RegTypedef._dataGame.id;
-		RegTypedef._dataOnlinePlayers.id = RegTypedef._dataGame.id;
-		RegTypedef._dataDailyQuests.id = RegTypedef._dataGame.id;
-		RegTypedef._dataQuestions.id = RegTypedef._dataGame.id;
-		RegTypedef._dataAccount.id = RegTypedef._dataGame.id;		
-		RegTypedef._dataGameMessage.id = RegTypedef._dataGame.id;
-		RegTypedef._dataMovement.id = RegTypedef._dataGame.id;
-		RegTypedef._dataStatistics.id = RegTypedef._dataGame.id;
-		RegTypedef._dataHouse.id = RegTypedef._dataGame.id;
-		RegTypedef._dataLeaderboards.id = RegTypedef._dataGame.id;
-		
-		if (__ids_win_lose_or_draw != null)
+		if (_ticks_ip == 0
+		&&	_id == ID
+		&&	Reg._can_join_server == true)
 		{
-			remove(__ids_win_lose_or_draw);
-			__ids_win_lose_or_draw.destroy();
-		}
-				
-		__ids_win_lose_or_draw = new IDsWinLoseOrDraw();
-		add(__ids_win_lose_or_draw);
-		
-		//############################# CODE BLOCK
-		// delete this block when game is finished. also, at join event, uncomment the block.
-		if (Reg._game_online_vs_cpu == false && Reg._game_offline_vs_cpu == true
-		||  Reg._game_online_vs_cpu == false && Reg._game_offline_vs_player == true)
-		{
-			_lobbyRoomChat = false;
-			Reg._loggedIn = true;
-			Reg._doStartGameOnce = true;
-			Reg._at_create_room = false;
-			Reg._at_waiting_room = false;
-			RegTypedef._dataMisc._room = 26;
-			RegTypedef._dataMisc._roomState[26] = 6; 
-			RegTypedef._dataMisc._gameRoom = true;
-			Reg._gameRoom = true;
-			//TODO make auto start start for offline mode here. //Reg._gameOverForPlayer = false;
-			RegTypedef._dataMisc._roomGameIds[RegTypedef._dataMisc._room] = Reg._gameId;
+			// no simultaneous entry into the server.
+			Reg._can_join_server = false;
 			
-			Reg._move_number_next = 0;
-		}
-		
-		if (Reg._game_online_vs_cpu == true || Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false)		
-		{
-			try
+			RegTypedef._dataGame0.id = RegTypedef._dataGame.id;
+			RegTypedef._dataGame1.id = RegTypedef._dataGame.id;
+			RegTypedef._dataGame2.id = RegTypedef._dataGame.id;
+			RegTypedef._dataGame3.id = RegTypedef._dataGame.id;
+			RegTypedef._dataGame4.id = RegTypedef._dataGame.id;
+			RegTypedef._dataMisc.id = RegTypedef._dataGame.id;
+			RegTypedef._dataPlayers.id = RegTypedef._dataGame.id;
+			RegTypedef._dataOnlinePlayers.id = RegTypedef._dataGame.id;
+			RegTypedef._dataDailyQuests.id = RegTypedef._dataGame.id;
+			RegTypedef._dataQuestions.id = RegTypedef._dataGame.id;
+			RegTypedef._dataAccount.id = RegTypedef._dataGame.id;		
+			RegTypedef._dataGameMessage.id = RegTypedef._dataGame.id;
+			RegTypedef._dataMovement.id = RegTypedef._dataGame.id;
+			RegTypedef._dataStatistics.id = RegTypedef._dataGame.id;
+			RegTypedef._dataHouse.id = RegTypedef._dataGame.id;
+			RegTypedef._dataLeaderboards.id = RegTypedef._dataGame.id;
+			
+			if (__ids_win_lose_or_draw != null)
 			{
-				#if html5				
-					clientSocket = new vendor.mphx.client.impl.WebsocketClient(Reg._ipAddress, Reg._port);
-				#else
-					clientSocket = new vendor.mphx.client.Client(Reg._ipAddress, Reg._port);
-				#end
+				remove(__ids_win_lose_or_draw);
+				__ids_win_lose_or_draw.destroy();
+			}
 					
-				// cannot connect to server.
-				clientSocket.onConnectionError = function (s)
-				{
-					Reg._cannotConnectToServer = true;
-					clientSocket.close();
+			__ids_win_lose_or_draw = new IDsWinLoseOrDraw();
+			add(__ids_win_lose_or_draw);
+			
+			//############################# CODE BLOCK
+			// delete this block when game is finished. also, at join event, uncomment the block.
+			if (Reg._game_online_vs_cpu == false && Reg._game_offline_vs_cpu == true
+			||  Reg._game_online_vs_cpu == false && Reg._game_offline_vs_player == true)
+			{
+				_lobbyRoomChat = false;
+				Reg._loggedIn = true;
+				Reg._doStartGameOnce = true;
+				Reg._at_create_room = false;
+				Reg._at_waiting_room = false;
+				RegTypedef._dataMisc._room = 26;
+				RegTypedef._dataMisc._roomState[26] = 6; 
+				RegTypedef._dataMisc._gameRoom = true;
+				Reg._gameRoom = true;
+				
+				//TODO make auto start start for offline mode here. //Reg._gameOverForPlayer = false;
+				RegTypedef._dataMisc._roomGameIds[RegTypedef._dataMisc._room] = Reg._gameId;
+				
+				Reg._move_number_next = 0;
+			}
+			
+			if (Reg._game_online_vs_cpu == true || Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false)		
+			{
+				trace("connected");
+       
+				try {
+					_websocket = new WebSocket("ws://" + Reg._ipAddress + ":" + Reg._port);
 					
-					FlxG.switchState(new MenuState());
-				}				
+					_websocket.onopen = function() 
+					{
+						Reg._client_socket_is_connected = true;
+						sendString("Client connected.");
+					}
+
+					_websocket.onmessage = function(_message:Dynamic) 
+					{
+						var _data:Dynamic = "";
+						var _str:String = Std.string(_message);
+						
+						_str = _str.substr(11, _str.length - 12);
+						
+						if (_str == "Client connected.") 
+							_data = _str;
+							
+						else if (RegFunctions.contains(_str, "tidi10") == true)
+						{
+							var unserializer = new Unserializer(_str);
+							var _data:DataGame = unserializer.unserialize();
+							go_to_event(_data);
+						}
+						
+						else if (RegFunctions.contains(_str, "tidi11") == true)
+						{
+							var unserializer = new Unserializer(_str);
+							var _data:DataGame0 = unserializer.unserialize();
+							go_to_event(_data);
+						}
+						
+						else if (RegFunctions.contains(_str, "tidi12") == true)
+						{
+							var unserializer = new Unserializer(_str);
+							var _data:DataGame1 = unserializer.unserialize();
+							go_to_event(_data);
+						}
+						
+						else if (RegFunctions.contains(_str, "tidi13") == true)
+						{
+							var unserializer = new Unserializer(_str);
+							var _data:DataGame2 = unserializer.unserialize();
+							go_to_event(_data);
+						}
+						
+						else if (RegFunctions.contains(_str, "tidi14") == true)
+						{
+							var unserializer = new Unserializer(_str);
+							var _data:DataGame3 = unserializer.unserialize();
+							go_to_event(_data);
+						}
+						
+						else if (RegFunctions.contains(_str, "tidi15") == true)
+						{
+							var unserializer = new Unserializer(_str);
+							var _data:DataGame4 = unserializer.unserialize();
+							go_to_event(_data);
+						}
+						
+						else if (RegFunctions.contains(_str, "tidi40") == true)
+						{
+							var unserializer = new Unserializer(_str);
+							var _data:DataMovement = unserializer.unserialize();
+							go_to_event(_data);
+						}						
+						
+						else if (RegFunctions.contains(_str, "tidi41") == true)
+						{
+							var unserializer = new Unserializer(_str);
+							var _data:DataGameMessage = unserializer.unserialize();
+							go_to_event(_data);
+						}
+						
+						else if (RegFunctions.contains(_str, "tidi42") == true)
+						{
+							var unserializer = new Unserializer(_str);
+							var _data:DataDailyQuests = unserializer.unserialize();
+							go_to_event(_data);
+						}
+						
+						else if (RegFunctions.contains(_str, "tidi43") == true)
+						{
+							var unserializer = new Unserializer(_str);
+							var _data:DataQuestions = unserializer.unserialize();
+							go_to_event(_data);
+						}
+						
+						else if (RegFunctions.contains(_str, "tidi44") == true)
+						{
+							var unserializer = new Unserializer(_str);
+							var _data:DataOnlinePlayers = unserializer.unserialize();
+							go_to_event(_data);
+						}
+						
+						else if (RegFunctions.contains(_str, "tidi45") == true)
+						{
+							var unserializer = new Unserializer(_str);
+							var _data:DataTournaments = unserializer.unserialize();
+							go_to_event(_data);
+						}
+						
+						else if (RegFunctions.contains(_str, "tidi46") == true)
+						{
+							var unserializer = new Unserializer(_str);
+							var _data:DataAccount = unserializer.unserialize();
+							go_to_event(_data);
+						}
+						
+						else if (RegFunctions.contains(_str, "tidi47") == true)
+						{
+							var unserializer = new Unserializer(_str);
+							var _data:DataMisc = unserializer.unserialize();
+							go_to_event(_data);
+						}
+						
+						else if (RegFunctions.contains(_str, "tidi48") == true)
+						{
+							var unserializer = new Unserializer(_str);
+							var _data:DataPlayers = unserializer.unserialize();
+							go_to_event(_data);
+						}
+						
+						else if (RegFunctions.contains(_str, "tidi49") == true)
+						{
+							var unserializer = new Unserializer(_str);
+							var _data:DataStatistics = unserializer.unserialize();
+							go_to_event(_data);
+						}						
+						
+						else if (RegFunctions.contains(_str, "tidi50") == true)
+						{
+							var unserializer = new Unserializer(_str);
+							var _data:DataHouse = unserializer.unserialize();
+							go_to_event(_data);
+						}						
+						
+						else if (RegFunctions.contains(_str, "tidi51") == true)
+						{
+							var unserializer = new Unserializer(_str);
+							var _data:DataLeaderboards = unserializer.unserialize();
+							go_to_event(_data);
+						}
+						
+					};
+					
+					_websocket.onerror = function(err) 
+					{
+						trace("error: " + err.toString());
+						Reg._client_socket_is_connected = false;
+						Reg._cannotConnectToServer = true;
+						_websocket.close();
+						
+						FlxG.switchState(new MenuState());
+					}
+					
+					if (RegTypedef._dataAccount._username == "")
+						RegTypedef._dataAccount._username = RegCustom._profile_username_p1[CID3._CRN];
+					
+					Internet.getIP();
+				}
 				
-				clientSocket.connect();	
-				
-				if (RegTypedef._dataAccount._username == "")
-					RegTypedef._dataAccount._username = RegCustom._profile_username_p1[Reg._tn];
-				
-				RegTypedef._dataAccount._ip = Internet.getIP();
-				
-				if (RegTypedef._dataAccount._ip == "")
+				catch (err:Dynamic) 
 				{
+					trace("Exception: " + err);
 					Reg._cannotConnectToServer = true;
 					FlxG.switchState(new MenuState());
 				}
-				
-				#if html5
-					RegTypedef._dataAccount._hostname = "html5";
-				#else
-					RegTypedef._dataAccount._hostname = Internet.getHostname();
-				#end
-				
-				RegTypedef._dataAccount._password_hash = Md5.encode(RegCustom._profile_password_p1);
-					
-				clientSocket.send("Join", RegTypedef._dataAccount); // go to the event "join" at server then at server at event join there could be a broadcast that will send data to a client event.
-				haxe.Timer.delay(function (){}, Reg2._event_sleep);
-				
-			}	
+			}
 			
-			catch (e:Dynamic)
+		}
+			
+		if (_ticks_ip == 1
+		&&	_ticks_hostname == 0
+		&&	RegTypedef._dataAccount._ip != ""
+		&&	_id == ID)
+		{
+			if (Reg._game_online_vs_cpu == true || Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false)	{
+				Internet.getHostname();	
+				_ticks_hostname = 1;
+			}
+		
+		}
+		
+		if (_ticks_hostname == 1
+		&&	RegTypedef._dataAccount._hostname != ""
+		&&	_id == ID)
+		{
+			_ticks_hostname = 2;
+			
+			if (Reg._game_online_vs_cpu == true || Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false)		
 			{
-				#if neko
-					trace(e);
-				#end
-			}		
-		
-		
-			//############################ CODE BLOCK #############################
-			// delete this line  when game is finished.
-			//_data._popupMessage = "Login successful.";
-			
-			
-			// uncomment this commented code block when game is finished.
-			__scene_lobby = new SceneLobby();
-			__scene_lobby.visible = false;
-			__scene_lobby.active = false;
-			add(__scene_lobby);
-			
-			__scene_create_room = new SceneCreateRoom(); // Reg._at_create_room now equals true. if this event is called from room.hx then this block of code will not be read. third var is used to clear screen.
-			__scene_create_room.visible = false;
-			__scene_create_room.active = false;			
-			add(__scene_create_room);
-			
-			__scene_waiting_room = new SceneWaitingRoom();
-			__scene_waiting_room.scrollable_area();
-			__scene_waiting_room.__scrollable_area.visible = false;
-			__scene_waiting_room.__scrollable_area.active = false;
-			__scene_waiting_room.visible = false;
-			__scene_waiting_room.active = false;
-			add(__scene_waiting_room);
+				__scene_lobby = new SceneLobby();
+				__scene_lobby.visible = false;
+				__scene_lobby.active = false;
+				add(__scene_lobby);
+				
+				__scene_create_room = new SceneCreateRoom(); // Reg._at_create_room now equals true. if this event is called from room.hx then this block of code will not be read. third var is used to clear screen.
+				__scene_create_room.visible = false;
+				__scene_create_room.active = false;			
+				add(__scene_create_room);
+				
+				__scene_waiting_room = new SceneWaitingRoom();
+				__scene_waiting_room.scrollable_area();
+				__scene_waiting_room.__scrollable_area.visible = false;
+				__scene_waiting_room.__scrollable_area.active = false;
+				__scene_waiting_room.visible = false;
+				__scene_waiting_room.active = false;
+				add(__scene_waiting_room);
+				
+				// these value could have been set to true when creating the room and chat class. they need to be set back to false for the buttons text at lobby to refresh.
+				Reg._at_create_room = false;
+				Reg._at_waiting_room = false;
+				
+				_text_client_login_data = new FlxText(0, 0, 0, "Clients Data.");
+				_text_client_login_data.scrollFactor.set(0, 0);
+				_text_client_login_data.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
+				_text_client_login_data.setPosition(15, FlxG.height / 2 - 200);
+				_text_client_login_data.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_topic_title_text_color());
+				add(_text_client_login_data);
+						
+				_text_client_login_data2 = new TextGeneral(15, FlxG.height / 2 - 200 + 80, 0, "", 8, true, false, 0, 0, true);
+				_text_client_login_data2.scrollFactor.set(0, 0);
+				_text_client_login_data2.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
+				add(_text_client_login_data2);
+				
+				_text_client_login_data3 = new TextGeneral(15, _text_client_login_data2.y + 80, 0, "", 8, true, false, 0, 0, true);
+				_text_client_login_data3.scrollFactor.set(0, 0);
+				_text_client_login_data3.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
+				add(_text_client_login_data3);
+				
+				_text_client_login_data4 = new TextGeneral(15, _text_client_login_data3.y + 80, 0, "", 8, true, false, 0, 0, true);
+				_text_client_login_data4.scrollFactor.set(0, 0);
+				_text_client_login_data4.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
+				add(_text_client_login_data4);
+				
+				_press_key_to_login = new FlxText(0, 700, 0, "Press any key to continue.");
+				_press_key_to_login.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
+				_press_key_to_login.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
+				_press_key_to_login.scrollFactor.set(0, 0);			
+				_press_key_to_login.screenCenter(X);
+				add(_press_key_to_login);	
+				
+				
+				if (Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false)
+				{
+					 __network_events_main = new NetworkEventsMain(__ids_win_lose_or_draw, _data, __scene_lobby, __scene_create_room, __scene_waiting_room);
+					add(__network_events_main);			
+				}
+				
+				try
+				{
+					RegTypedef._dataAccount._password_hash = Md5.encode(RegCustom._profile_password_p1[CID3._CRN]);
+					RegTypedef._dataAccount._email_address = RegTypedef._dataTournaments._email_address = RegCustom._profile_email_address_p1[CID3._CRN];
 					
+					send("Join", RegTypedef._dataAccount); // go to the event "join" at server then at server at event join there could be a broadcast that will send data to a client event.					
+				}	
+				
+				catch (e:Dynamic)
+				{
+					#if neko
+						trace(e);
+					#end
+				}		
+				
+				if (Reg._gameJumpTo == -1) 
+					Reg._hasUserConnectedToServer = true;	
+				
+			}			
+			
 			if (Reg._clientReadyForPublicRelease == false)
 			{
 				__action_commands = new ActionCommands(); 
 				add(__action_commands);
 			}
-			
-			// these value could have been set to true when creating the room and chat class. they need to be set back to false for the buttons text at lobby to refresh.
-			Reg._at_create_room = false;
-			Reg._at_waiting_room = false;
-			
-					
-			if (Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false)
-			{
-				 __network_events_main = new NetworkEventsMain(__ids_win_lose_or_draw, _data, __scene_lobby, __scene_create_room, __scene_waiting_room);
-				add(__network_events_main);			
-			}
-			
-			
-			//####################### END CODE BLOCK ########################
 		}
-			
-		Reg._hasUserConnectedToServer = true; // this var is misleading. game in offline mode cannot be played unless this var is moved outside of a Reg._game_offline_vs_cpu check.
+		
+		// this is needed to show the SceneGameRoom.hx class in offline mode.
+		if (Reg._gameJumpTo == 0) 
+			Reg._hasUserConnectedToServer = true;	
+				
+		if (_id == ID 
+		&& RegTypedef._dataMisc.id == RegTypedef._dataGame.id)
+			_ticks_ip = 1;
 	}
 
+	private function go_to_event(_data:Dynamic):Void
+	{
+		trace("data received: " + _data._event_name);
+		
+		if (_data != "Client connected."
+		&& 	_data._event_name != "")
+		{
+			if (__network_events_main != null)
+			{
+				__network_events_main.events(_data);
+			}
+		}
+	}
+	
 	/******************************
 	 * player is entering the lobby.
 	 */
@@ -540,9 +712,6 @@ class PlayState extends FlxState
 		{
 			if (Reg._goBackToLobby == true || Reg._loginSuccessfulWasRead == true && Reg._doOnce == true)
 			{
-				FlxG.mouse.reset();
-				FlxG.mouse.enabled = true;
-						
 				Reg._doOnce = false; 
 				Reg._goBackToLobby = false;
 				__scene_lobby.active = true;
@@ -554,7 +723,8 @@ class PlayState extends FlxState
 				__scene_lobby.visible = true;			
 				__scene_lobby.__scrollable_area.visible = true;
 				
-				if (RegCustom._chat_when_at_lobby_enabled[Reg._tn] == true)
+				if (GameChatter.__scrollable_area2 != null
+				&&	RegCustom._chat_when_at_lobby_enabled[Reg._tn] == true)
 				{
 					GameChatter.__scrollable_area2.visible = true;
 				}
@@ -683,8 +853,8 @@ class PlayState extends FlxState
 						RegTypedef._dataTournaments._time_remaining_player2 = Std.string(RegTypedef._dataPlayers._moveTimeRemaining[1]);
 						RegTypedef._dataTournaments._time_remaining_player1 = Std.string(RegTypedef._dataPlayers._moveTimeRemaining[0]);
 												
-						PlayState.clientSocket.send("Tournament Chess Standard 8 Put", RegTypedef._dataTournaments);
-						haxe.Timer.delay(function (){}, Reg2._event_sleep);
+						PlayState.send("Tournament Chess Standard 8 Put", RegTypedef._dataTournaments);
+						
 					}
 				}
 			}
@@ -875,9 +1045,10 @@ class PlayState extends FlxState
 	{
 		// should message box be displayed?
 		if (Reg._messageId > 0 && Reg._messageId != 1000000
-		&&	RegTriggers._buttons_set_not_active == false)
+		&&	Reg._messageId != Reg._message_id_temp
+		&&	Reg._messageFocusId[Reg._messageFocusId.length-1] == Reg._messageId)
 		{
-			var _msg = new IdsMessageBox();
+			_msg = new IdsMessageBox();
 			add(_msg);
 		}
 		
@@ -938,21 +1109,6 @@ class PlayState extends FlxState
 						
 						Reg.__title_bar.visible = false;
 						
-						_text_server_login_data.visible = false;
-						_text_server_login_data2.visible = false;
-						_text_server_login_data3.visible = false;
-						_text_server_login_data4.visible = false;
-						
-						_text_client_login_data.visible = false;
-						_text_client_login_data2.visible = false;
-						_text_client_login_data3.visible = false;
-						_text_client_login_data4.visible = false;
-						
-						#if !html5
-							saveClientConfig();
-						
-						#end
-						
 						//#if mobile
 							if (__action_keyboard != null) 
 							{
@@ -976,29 +1132,36 @@ class PlayState extends FlxState
 			
 		}
 		
-		if (Reg._isLoggingIn == true) _ticks_logging_in_delay += 1;
-		
 		// user is sending logging in data to the server.
-		if (Reg._isLoggingIn == true 
-		&&	Reg._game_offline_vs_cpu == false
-		&&	Reg._game_offline_vs_player == false
-		&&	_ticks_logging_in_delay >= 31)
+		if (FlxG.mouse.justPressed == true
+		||	FlxG.mouse.pressedMiddle == true
+		||	FlxG.mouse.pressedRight == true
+		||	FlxG.keys.justPressed.ANY == true)
 		{
-			Reg._isLoggingIn = false; 
-			_ticks_logging_in_delay = 0;
-			
-			// client at website is only for guest accounts.
-			#if html5
-				RegTypedef._dataAccount._guest_account = true;
-			#else
-				RegTypedef._dataAccount._guest_account = false;
-			#end
-			
-			// TODO add a RegCustom here if bypass this code so that the user's avatar at website is used. see near bottom of server, is logging in event. that code also needs to be bypassed.
-			RegTypedef._dataAccount._avatarNumber = RegCustom._profile_avatar_number1[Reg._tn];
-			
-			clientSocket.send("Is Logging In", RegTypedef._dataAccount); //events	
-			haxe.Timer.delay(function (){}, Reg2._event_sleep);
+			if (Reg._isLoggingIn == true 
+			&&	Reg._game_offline_vs_cpu == false
+			&&	Reg._game_offline_vs_player == false)
+			{
+				Reg2._scrollable_area_is_scrolling = false;
+				
+				if (RegCustom._sound_enabled[Reg._tn] == true)
+					FlxG.sound.play("click", 1, false);
+				
+				Reg._isLoggingIn = false; 
+				
+				// client at website is only for guest accounts.
+				#if html5
+					RegTypedef._dataAccount._guest_account = true;
+				#else
+					RegTypedef._dataAccount._guest_account = false;
+				#end
+				
+				// TODO add a RegCustom here if bypass this code so that the user's avatar at website is used. see near bottom of server, is logging in event. that code also needs to be bypassed.
+				RegTypedef._dataAccount._avatarNumber = RegCustom._profile_avatar_number1[Reg._tn];
+				
+				send("Is Logging In", RegTypedef._dataAccount); //events	
+				
+			}
 		}
 		
 		// player is entering the lobby.
@@ -1013,9 +1176,7 @@ class PlayState extends FlxState
 		{
 			Reg._at_lobby = true;
 			RegTriggers._lobby = false;
-			FlxG.mouse.reset();
-			FlxG.mouse.enabled = true;
-			Reg2._lobby_button_alpha = 0.3;
+			Reg2._lobby_button_alpha = 1;
 			RegTriggers._buttons_set_not_active = false;
 			
 			if (__scene_game_room != null)
@@ -1082,7 +1243,7 @@ class PlayState extends FlxState
 			RegTriggers._recreate_chatter_input_chat = true;
 			
 			Reg._updateScrollbarBringUp = true; 
-			
+			GameChatter._input_chat.active = true;
 		}
 		
 		if (RegTriggers._createRoom == true)
@@ -1090,8 +1251,6 @@ class PlayState extends FlxState
 			Reg._at_create_room = true;
 			RegTriggers._createRoom = false;
 			Reg._clearDoubleMessage = false;
-			FlxG.mouse.reset();
-			FlxG.mouse.enabled = true;
 			Reg2._lobby_button_alpha = 0.3;
 			RegTriggers._buttons_set_not_active = false;
 			
@@ -1128,8 +1287,6 @@ class PlayState extends FlxState
 		if (RegTriggers.__scene_waiting_room == true)
 		{
 			Reg._at_lobby = false;
-			FlxG.mouse.reset();
-			FlxG.mouse.enabled = true;
 			RegTriggers.__scene_waiting_room = false;
 			Reg._clearDoubleMessage = false;
 			Reg2._lobby_button_alpha = 0.3;
@@ -1210,9 +1367,6 @@ class PlayState extends FlxState
 			{
 				GameChatter.__scrollable_area2.active = true;
 			}			
-			
-			FlxG.mouse.reset();
-			FlxG.mouse.enabled = true;
 		}
 		
 		// close room is locked message box
@@ -1226,13 +1380,14 @@ class PlayState extends FlxState
 		
 		super.update(elapsed);
 		
+		/*
 		if (Reg._game_offline_vs_cpu == false
 		&&  Reg._game_offline_vs_player == false 
-		&&  clientSocket != null
+		&&  _websocket != null
 		||  Reg._game_online_vs_cpu == true
-		&&  clientSocket != null)
+		&&  _websocket != null)
 		{
-			if (clientSocket.isConnected() == true)
+			if (Reg._client_socket_is_connected == true)
 			{
 				try
 				{
@@ -1246,6 +1401,17 @@ class PlayState extends FlxState
 				}
 			}
 		}
+		*/
+		
+		// at server the username is set to "nobody" when user logs off. the array element cannot be removed because handle id value always increments and the handle id value is used to get and set the username list.
+		if (RegTypedef._dataAccount._username.toLowerCase() == "nobody")
+		{
+			Reg._username_restricted = true;
+			FlxG.switchState(new MenuState());
+		}
+		
+		if (RegTypedef._dataAccount._ip == ""
+		||	__network_events_main == null) return;
 		
 		// this block of code is also called from the end of the DisconnectFromUser event so that everything in that event is executed.
 		if (Reg._game_online_vs_cpu == true || Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false)
@@ -1254,7 +1420,12 @@ class PlayState extends FlxState
 			{
 				__network_events_main._closeSocket = false;
 				
-				if (clientSocket.isConnected() == true) clientSocket.close();
+				if (Reg._client_socket_is_connected == true) 
+				{
+					Reg._client_socket_is_connected = false;
+					_websocket.close();
+				}
+				
 				FlxG.switchState(new MenuState());
 			}
 			
@@ -1266,7 +1437,11 @@ class PlayState extends FlxState
 			
 			if (Reg._game_online_vs_cpu == true || Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false)
 			{
-				if (clientSocket.isConnected() == true) clientSocket.close();
+				if (Reg._client_socket_is_connected == true) 
+				{
+					Reg._client_socket_is_connected = false;
+					_websocket.close();
+				}
 			}
 			
 			Reg._serverDisconnected = false;
@@ -1275,4 +1450,4 @@ class PlayState extends FlxState
 		}
 	}
 	
-}//
+}//

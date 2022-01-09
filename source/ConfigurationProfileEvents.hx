@@ -2,18 +2,11 @@
     Copyright (c) 2021 KBoardGames.com
     This program is part of KBoardGames client software.
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published
-    by the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+    This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+    This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Affero General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU Affero General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 package;
@@ -46,16 +39,52 @@ class ConfigurationProfileEvents extends CID2
 		&&  Reg2._scrollable_area_is_scrolling == false)
 			FlxG.sound.play("click", 1, false);
 		
+		CID3._user_account_row = 5;
+		CID3._sprite_user_account.visible = true;
+		
+		CID3._text_username.active = true;
+		CID3._text_password.active = true;
+		CID3._text_email_address.active = true;
+		
+		for (i in 0... CID3._user_account_row)
+		{
+			CID3._group_username_input[i].active = true;
+			CID3._group_password_input[i].active = true;
+			CID3._group_email_address_input[i].active = true;
+		}
+		
+		CID3._text_username.visible = true;		
+		CID3._text_password.visible = true;		
+		CID3._text_email_address.visible = true;		
+		
+		for (i in 0... CID3._user_account_row)
+		{
+			CID3._group_username_input[i].visible = true;
+			CID3._group_password_input[i].visible = true;
+			CID3._group_email_address_input[i].visible = true;
+			
+			// remove the red border from any input fields.
+			CID3._group_username_input[i].fieldBorderColor = FlxColor.BLACK;
+			CID3._group_password_input[i].fieldBorderColor = FlxColor.BLACK;
+			CID3._group_email_address_input[i].fieldBorderColor = FlxColor.BLACK;
+			
+			CID3._group_username_input[i].fieldBorderThickness = 1;
+			CID3._group_password_input[i].fieldBorderThickness = 1;
+			CID3._group_email_address_input[i].fieldBorderThickness = 1;
+			
+			CID3._group_username_input[i].hasFocus = false;
+			CID3._group_password_input[i].hasFocus = false;
+			CID3._group_email_address_input[i].hasFocus = false;
+			
+			if (RegCustom._profile_username_p1[i] == "") RegCustom._profile_username_p1[i] = "Guest1";
+			
+			CID3._group_username_input[i].text = RegCustom._profile_username_p1[i];
+			
+		}
+		
 		#if avatars
 			Avatars._profile_avatar_notice.text = Avatars._text_current_avatar_for_player + "1";
-		#end
-		
-		if (RegCustom._profile_username_p1[Reg._tn] == "") RegCustom._profile_username_p1[Reg._tn] = "Guest1";
-		
-		if (CID3._button_p1.has_toggle == false)
-			CID3._usernameInput.text = RegCustom._profile_username_p1[Reg._tn];
-		
-		#if avatars
+
 			Avatars._image_profile_avatar.loadGraphic("vendor/multiavatar/" + RegCustom._profile_avatar_number1[Reg._tn]);
 		#end
 		
@@ -69,7 +98,7 @@ class ConfigurationProfileEvents extends CID2
 			Usernames.repopulate_username_suggestions();
 		#end
 		
-		CID3._usernameInput.caretIndex = CID3._usernameInput.text.length;
+		CID3._username_input.caretIndex = CID3._username_input.text.length;
 	}
 	
 	/*****************************
@@ -80,15 +109,52 @@ class ConfigurationProfileEvents extends CID2
 		if (RegCustom._sound_enabled[Reg._tn] == true
 		&&  Reg2._scrollable_area_is_scrolling == false)
 			FlxG.sound.play("click", 1, false);
-	
+		
+		// remove the red border from any input fields.
+		CID3._group_username_input[0].fieldBorderColor = FlxColor.BLACK;
+		CID3._group_username_input[0].fieldBorderThickness = 1;
+		CID3._group_username_input[0].hasFocus = false;
+		
+		CID3._group_password_input[0].fieldBorderColor = FlxColor.BLACK;
+		CID3._group_email_address_input[0].fieldBorderColor = FlxColor.BLACK;
+		CID3._text_password.visible = false;
+		CID3._text_email_address.visible = false;
+		
+		CID3._group_password_input[0].visible = false;
+		CID3._group_email_address_input[0].visible = false;
+		
+		CID3._group_password_input[0].active = false;
+		CID3._group_email_address_input[0].active = false;		
+		
+		CID3._sprite_user_account.visible = false;		
+		
+		for (i in 1... CID3._user_account_row)
+		{
+			CID3._group_username_input[i].visible = false;
+			CID3._group_password_input[i].visible = false;
+			CID3._group_email_address_input[i].visible = false;
+		}
+		
+		CID3._text_password.active = false;
+		CID3._text_email_address.active = false;
+		
+		for (i in 1... CID3._user_account_row)
+		{
+			CID3._group_username_input[i].active = false;
+			CID3._group_password_input[i].active = false;
+			CID3._group_email_address_input[i].active = false;
+		}
+		
+		CID3._user_account_row = 1; // keep this here.
+		
 		#if avatars
 			Avatars._profile_avatar_notice.text = Avatars._text_current_avatar_for_player + "2";
 		#end
 		
-		if (RegCustom._profile_username_p2[Reg._tn] == "") RegCustom._profile_username_p2[Reg._tn] = "Guest2";
+		if (RegCustom._profile_username_p2 == "") RegCustom._profile_username_p2 = "Guest2";
 		
 		if (CID3._button_p2.has_toggle == false)
-			CID3._usernameInput.text = RegCustom._profile_username_p2[Reg._tn];
+			CID3._group_username_input[0].text = RegCustom._profile_username_p2;
 				
 		#if avatars
 			Avatars._image_profile_avatar.loadGraphic("vendor/multiavatar/" + RegCustom._profile_avatar_number2[Reg._tn]);
@@ -104,7 +170,23 @@ class ConfigurationProfileEvents extends CID2
 			Usernames.repopulate_username_suggestions();
 		#end
 		
-		CID3._usernameInput.caretIndex = CID3._usernameInput.text.length;
+		CID3._username_input.caretIndex = CID3._username_input.text.length;
+	}
+	
+	public function send_email_address_validation_code_enabled():Void
+	{
+		#if username_suggestions
+			if (RegCustom._send_email_address_validation_code == false)
+			{
+				RegCustom._send_email_address_validation_code = true;
+				CID3._button_email_address_validation_code_enabled.label.text = "true";
+			}
+			else
+			{
+				RegCustom._send_email_address_validation_code = false;
+				CID3._button_email_address_validation_code_enabled.label.text = "false";
+			}
+		#end
 	}
 	
 	public function username_suggestions_enabled():Void

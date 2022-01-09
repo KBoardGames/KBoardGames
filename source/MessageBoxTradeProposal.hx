@@ -2,18 +2,11 @@
     Copyright (c) 2021 KBoardGames.com
     This program is part of KBoardGames client software.
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published
-    by the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+    This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+    This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Affero General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU Affero General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 package;
@@ -193,7 +186,6 @@ class MessageBoxTradeProposal extends FlxGroup
 		add(_button6);
 		
 		_timeRemaining = 30;
-		
 	}
 	
 	private function formatTime(_time:Int):String
@@ -312,9 +304,6 @@ class MessageBoxTradeProposal extends FlxGroup
 		// if true then show the message, such as, an error or a login message attempt.
 		if (_displayMessage == true)
 		{
-			FlxG.mouse.reset();
-			FlxG.mouse.enabled = true;
-			
 			_textMessage.visible = true;			
 			
 			if (Reg._popupMessageUseYesNoButtons[Reg._popupMessageUseYesNoButtons.length - 1] == true)
@@ -334,7 +323,6 @@ class MessageBoxTradeProposal extends FlxGroup
 	
 	public function popupMessageHide():Void
 	{
-		FlxG.mouse.enabled = false;
 		Reg._popupMessageUseYesNoButtons.pop();
 
 		_messageBox.visible = false;
@@ -353,7 +341,6 @@ class MessageBoxTradeProposal extends FlxGroup
 	
 	override public function destroy()
 	{
-		FlxG.mouse.enabled = false;
 		_timeDo.stop();
 		
 		if (_buttonMessageOK != null)

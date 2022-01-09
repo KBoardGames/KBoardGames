@@ -1,5 +1,3 @@
-_profile_username_p1: Guest 1
-_profile_username_p2: Guest 2
 _gameboard_units_odd_shade_number: 8, 2
 _gameboard_units_even_shade_number: 8, 7
 _gameboard_units_odd_color_number: 4, 13
@@ -70,5 +68,5 @@ _title_bar_background_number: 3
 _menu_bar_background_number: 3
 _title_bar_background_brightness: 0.5
 _menu_bar_background_brightness: 0.5
-_world_flags_number: 1
+_world_flags_number: 0
 _pager_enabled: false

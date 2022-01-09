@@ -2,18 +2,11 @@
     Copyright (c) 2021 KBoardGames.com
     This program is part of KBoardGames client software.
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published
-    by the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+    This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+    This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Affero General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU Affero General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 package;
@@ -118,19 +111,16 @@ class IDsWinLoseOrDraw extends FlxState
 					&&  Reg._game_offline_vs_player == false 
 					&& RegTypedef._dataTournaments._move_piece == false) 
 					{
-						PlayState.clientSocket.send("Game Message Not Sender", RegTypedef._dataGameMessage);
-						haxe.Timer.delay(function (){}, Reg2._event_sleep);
-											
+						PlayState.send("Game Message Not Sender", RegTypedef._dataGameMessage);
+						
 						if (RegTypedef._dataPlayers._spectatorWatching == false)
 						{
 							RegTypedef._dataPlayers._gameMessage = "You lose.";
-							PlayState.clientSocket.send("Game Lose Then Win For Other", RegTypedef._dataPlayers);
-							haxe.Timer.delay(function (){}, Reg2._event_sleep);
+							PlayState.send("Game Lose Then Win For Other", RegTypedef._dataPlayers);		
 						}
 						
 						RegTypedef._dataPlayers._gamePlayersValues = [0, 0, 0, 0];
-						PlayState.clientSocket.send("Game Players Values", RegTypedef._dataPlayers); 
-						haxe.Timer.delay(function (){}, Reg2._event_sleep);
+						PlayState.send("Game Players Values", RegTypedef._dataPlayers);						
 						
 						RegTypedef._dataGameMessage._gameMessage = "";
 						RegTypedef._dataPlayers._gameMessage = "";
@@ -210,17 +200,14 @@ class IDsWinLoseOrDraw extends FlxState
 					{
 						if (Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false)
 						{
-							PlayState.clientSocket.send("Game Message Not Sender", RegTypedef._dataGameMessage);
-							haxe.Timer.delay(function (){}, Reg2._event_sleep);
+							PlayState.send("Game Message Not Sender", RegTypedef._dataGameMessage);			
 						}
 						
 						RegTypedef._dataPlayers._gameMessage = "Game ended in a draw.";
-						PlayState.clientSocket.send("Game Draw", RegTypedef._dataPlayers);
-						haxe.Timer.delay(function (){}, Reg2._event_sleep);
+						PlayState.send("Game Draw", RegTypedef._dataPlayers);						
 						
 						RegTypedef._dataPlayers._gamePlayersValues = [0, 0, 0, 0];
-						PlayState.clientSocket.send("Game Players Values", RegTypedef._dataPlayers); 
-						haxe.Timer.delay(function (){}, Reg2._event_sleep);
+						PlayState.send("Game Players Values", RegTypedef._dataPlayers); 					
 							
 						RegTypedef._dataGameMessage._gameMessage = "";	
 						RegTypedef._dataPlayers._gameMessage = "";
@@ -456,18 +443,15 @@ class IDsWinLoseOrDraw extends FlxState
 					{
 						if (Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false) 
 						{
-							PlayState.clientSocket.send("Game Message Not Sender", RegTypedef._dataGameMessage);
-							haxe.Timer.delay(function (){}, Reg2._event_sleep);
+							PlayState.send("Game Message Not Sender", RegTypedef._dataGameMessage);			
 						}
 						
 						RegTypedef._dataPlayers._gameMessage = "Draw. Insufficient material";
-						PlayState.clientSocket.send("Game Draw", RegTypedef._dataPlayers);
-						haxe.Timer.delay(function (){}, Reg2._event_sleep);
+						PlayState.send("Game Draw", RegTypedef._dataPlayers);						
 						
 						RegTypedef._dataPlayers._gamePlayersValues = [0, 0, 0, 0];
-						PlayState.clientSocket.send("Game Players Values", RegTypedef._dataPlayers); 
-						haxe.Timer.delay(function (){}, Reg2._event_sleep);
-							
+						PlayState.send("Game Players Values", RegTypedef._dataPlayers); 			
+						
 						RegTypedef._dataGameMessage._gameMessage = "";
 						RegTypedef._dataPlayers._gameMessage = "";
 						
@@ -536,8 +520,7 @@ class IDsWinLoseOrDraw extends FlxState
 				// send message to server then server to other client.
 				if (Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false) 
 				{
-					PlayState.clientSocket.send("Game Message Not Sender", RegTypedef._dataGameMessage);
-					haxe.Timer.delay(function (){}, Reg2._event_sleep);
+					PlayState.send("Game Message Not Sender", RegTypedef._dataGameMessage);					
 					
 					RegTypedef._dataPlayers._gameMessage = "You win.";
 				
@@ -590,13 +573,11 @@ class IDsWinLoseOrDraw extends FlxState
 					if (RegTypedef._dataPlayers._spectatorWatching == false)
 					{
 						RegTypedef._dataPlayers._gameMessage = "You lose.";
-						PlayState.clientSocket.send("Game Lose Then Win For Other", RegTypedef._dataPlayers);
-						haxe.Timer.delay(function (){}, Reg2._event_sleep);
+						PlayState.send("Game Lose Then Win For Other", RegTypedef._dataPlayers);			
 					}
 					
 					RegTypedef._dataPlayers._gamePlayersValues = [0, 0, 0, 0];
-					PlayState.clientSocket.send("Game Players Values", RegTypedef._dataPlayers); 
-					haxe.Timer.delay(function (){}, Reg2._event_sleep);
+					PlayState.send("Game Players Values", RegTypedef._dataPlayers); 					
 					
 					Reg._outputMessage = true;
 				}
@@ -682,8 +663,7 @@ class IDsWinLoseOrDraw extends FlxState
 								
 				if (Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false) 
 				{
-					PlayState.clientSocket.send("Game Message Not Sender", RegTypedef._dataGameMessage);
-					haxe.Timer.delay(function (){}, Reg2._event_sleep);
+					PlayState.send("Game Message Not Sender", RegTypedef._dataGameMessage);					
 					
 					if (_piecesWhite < _piecesBlack)
 					{
@@ -691,8 +671,7 @@ class IDsWinLoseOrDraw extends FlxState
 						if (RegTypedef._dataPlayers._spectatorWatching == false)
 						{
 							RegTypedef._dataPlayers._gameMessage = "You lose.";
-							PlayState.clientSocket.send("Game Lose Then Win For Other", RegTypedef._dataPlayers);
-							haxe.Timer.delay(function (){}, Reg2._event_sleep);
+							PlayState.send("Game Lose Then Win For Other", RegTypedef._dataPlayers);		
 						}
 					}
 					
@@ -700,21 +679,17 @@ class IDsWinLoseOrDraw extends FlxState
 					{
 						RegTypedef._dataPlayers._piece_total_for_winner = _piecesWhite;
 						RegTypedef._dataPlayers._gameMessage = "You win.";
-						PlayState.clientSocket.send("Game Win Then Lose For Other", RegTypedef._dataPlayers);
-						haxe.Timer.delay(function (){}, Reg2._event_sleep);
+						PlayState.send("Game Win Then Lose For Other", RegTypedef._dataPlayers);			
 					}
 					
 					if (_piecesWhite == _piecesBlack) 
 					{
 						RegTypedef._dataPlayers._gameMessage = "Game ended in a draw.";
-						PlayState.clientSocket.send("Game Draw", RegTypedef._dataPlayers);
-						haxe.Timer.delay(function (){}, Reg2._event_sleep);
+						PlayState.send("Game Draw", RegTypedef._dataPlayers);						
 					}
 					
 					RegTypedef._dataPlayers._gamePlayersValues = [0, 0, 0, 0];
-					PlayState.clientSocket.send("Game Players Values", RegTypedef._dataPlayers); 
-					haxe.Timer.delay(function (){}, Reg2._event_sleep);
-				
+					PlayState.send("Game Players Values", RegTypedef._dataPlayers); 				
 				}
 				
 				Reg._playerCanMovePiece = false;
@@ -826,21 +801,18 @@ class IDsWinLoseOrDraw extends FlxState
 						// prepare to send message to server so that the other player can see it.
 						RegTypedef._dataGameMessage._gameMessage = Reg._gameMessage;
 						
-						PlayState.clientSocket.send("Game Message Not Sender", RegTypedef._dataGameMessage);
-						haxe.Timer.delay(function (){}, Reg2._event_sleep);
-							
+						PlayState.send("Game Message Not Sender", RegTypedef._dataGameMessage);		
+						
 						// since we entered a loop from a player that cannot move, the other player will win the game.
 						RegTypedef._dataPlayers._gameMessage = "You lose.";
 						
 						if (RegTypedef._dataPlayers._spectatorWatching == false)
 						{
-							PlayState.clientSocket.send("Game Lose Then Win For Other", RegTypedef._dataPlayers);
-							haxe.Timer.delay(function (){}, Reg2._event_sleep);
+							PlayState.send("Game Lose Then Win For Other", RegTypedef._dataPlayers);		
 						}
 						
 						RegTypedef._dataPlayers._gamePlayersValues = [0, 0, 0, 0];
-						PlayState.clientSocket.send("Game Players Values", RegTypedef._dataPlayers); 
-						haxe.Timer.delay(function (){}, Reg2._event_sleep);
+						PlayState.send("Game Players Values", RegTypedef._dataPlayers);						
 						
 						RegTypedef._dataGameMessage._gameMessage = "";
 						RegTypedef._dataPlayers._gameMessage = "";
@@ -878,16 +850,14 @@ class IDsWinLoseOrDraw extends FlxState
 			if (Reg._game_offline_vs_player == false && Reg._isThisPieceAtBackdoor == false)
 			{				
 				RegTypedef._dataGameMessage._gameMessage = Reg._gameMessage;
-				PlayState.clientSocket.send("Game Message Not Sender", RegTypedef._dataGameMessage);
-				haxe.Timer.delay(function (){}, Reg2._event_sleep);				
+				PlayState.send("Game Message Not Sender", RegTypedef._dataGameMessage);						
 
 				RegTypedef._dataPlayers._gameMessage = "You win.";
-				PlayState.clientSocket.send("Game Win Then Lose For Other", RegTypedef._dataPlayers);
-				haxe.Timer.delay(function (){}, Reg2._event_sleep);
+				PlayState.send("Game Win Then Lose For Other", RegTypedef._dataPlayers);				
 				
 				RegTypedef._dataPlayers._gamePlayersValues = [0, 0, 0, 0];
-				PlayState.clientSocket.send("Game Players Values", RegTypedef._dataPlayers); 
-				haxe.Timer.delay(function (){}, Reg2._event_sleep);
+				PlayState.send("Game Players Values", RegTypedef._dataPlayers); 
+				
 			}		
 			
 				
@@ -962,12 +932,11 @@ class IDsWinLoseOrDraw extends FlxState
 			if (_canMove == false && Reg._game_offline_vs_cpu == false && Reg._isThisPieceAtBackdoor == false)
 			{				
 				RegTypedef._dataGameMessage._gameMessage = Reg._gameMessage;
-				PlayState.clientSocket.send("Game Message Not Sender", RegTypedef._dataGameMessage);
-				haxe.Timer.delay(function (){}, Reg2._event_sleep);
+				PlayState.send("Game Message Not Sender", RegTypedef._dataGameMessage);				
 
 				RegTypedef._dataPlayers._gameMessage = "You lose.";
-				PlayState.clientSocket.send("Game Lose", RegTypedef._dataPlayers);
-				haxe.Timer.delay(function (){}, Reg2._event_sleep);
+				PlayState.send("Game Lose", RegTypedef._dataPlayers);
+				
 			}		
 			
 			if (_canMove == false)
@@ -981,9 +950,9 @@ class IDsWinLoseOrDraw extends FlxState
 					
 					if (Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false)
 					{
-						PlayState.clientSocket.send("Game Players Values", RegTypedef._dataPlayers); 
+						PlayState.send("Game Players Values", RegTypedef._dataPlayers); 
 					}
-					haxe.Timer.delay(function (){}, Reg2._event_sleep);
+					
 					
 					Reg._gameOverForPlayer = true;
 					RegFunctions.playerAllStop();

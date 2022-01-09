@@ -2,18 +2,11 @@
     Copyright (c) 2021 KBoardGames.com
     This program is part of KBoardGames client software.
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published
-    by the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+    This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+    This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Affero General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU Affero General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 package;
@@ -23,6 +16,9 @@ package;
  * @author kboardgames.com
  */
 
+/******************************
+ * these vars afre copy() to other DataGame typedef vars such as DataGame0.
+ */
 typedef DataGame = 
 {
 	/******************************
@@ -31,18 +27,42 @@ typedef DataGame =
 	var id: String;
 	
 	/******************************
+	 * typedef id.
+	 * when server sends a message to client, client needs to know what typedef it is. so when creating a typedef at this class, go to PlayState _websocket.onmessage and add the typedef there. tid starts at 10 and ends at 99. 10 to 40 is reserved for games.
+	 */
+	var tid: Int;
+	
+	/******************************
+	 * the name of the event at server -> Events.hx or client -> NetworkEventsMain.hx that this typedef can be sent to.
+	 */
+	var _event_name: String;
+	
+	/******************************
 	 * current room that the user is in. zero equals no room.	
 	 */
 	var _room: Int;
 }
 
-// checkers typedef.
+/******************************
+ * checkers typedef.
+ */
 typedef DataGame0 = 
 {
 	/******************************
 	 * player instance. this tells one player from another.
 	 */
 	var id: String;	
+	
+	/******************************
+	 * typedef id.
+	 * when server sends a message to client, client needs to know what typedef it is. so when creating a typedef at this class, go to PlayState _websocket.onmessage and add the typedef there. tid starts at 10 and ends at 99. 10 to 40 is reserved for games.
+	 */
+	var tid: Int;
+	
+	/******************************
+	 * the name of the event at server -> Events.hx or client -> NetworkEventsMain.hx that this typedef can be sent to.
+	 */
+	var _event_name: String;
 	
 	/******************************
 	 * the username of the player.
@@ -60,32 +80,32 @@ typedef DataGame0 =
 	var _gameUnitNumberOld: Int;
 	
 	/******************************
-	 * unit x coordinate. you have requested this gameboard piece.
+	 * unit x coordinate. this is the unit that you moved from.
 	 */
 	var _gameXXold:Int;
 	
 	/******************************
-	 * unit y coordinate. you have requested this gameboard piece.
+	 * unit y coordinate. this is the unit that you moved from.
 	 */
 	var _gameYYold:Int;
 	
 	/******************************
-	 * unit x coordinate. you have requested a piece be moved here.
+	 * unit x coordinate. this is the unit that you moved to.
 	 */
 	var _gameXXnew:Int;
 	
 	/******************************
-	 * unit y coordinate. you have requested a piece be moved here.
+	 * unit y coordinate. this is the unit that you moved to.
 	 */
 	var _gameYYnew:Int;
 	
 	/******************************
-	 * unit x coordinate. you have requested this gameboard piece.
+	 * unit x coordinate. this is the unit that you moved from.
 	 */
 	var _gameXXold2:Int;
 	
 	/******************************
-	 * unit y coordinate. you have requested this gameboard piece.
+	 * unit y coordinate. this is the unit that you moved from.
 	 */
 	var _gameYYold2:Int;
 	
@@ -106,13 +126,26 @@ typedef DataGame0 =
 	
 }
 
-// chess typedef.
+/******************************
+ * chess typedef.
+ */
 typedef DataGame1 = 
 {
 	/******************************
 	 * player instance. this tells one player from another.
 	 */
 	var id: String;
+	
+	/******************************
+	 * typedef id.
+	 * when server sends a message to client, client needs to know what typedef it is. so when creating a typedef at this class, go to PlayState _websocket.onmessage and add the typedef there. tid starts at 10 and ends at 99. 10 to 40 is reserved for games.
+	 */
+	var tid: Int;
+	
+	/******************************
+	 * the name of the event at server -> Events.hx or client -> NetworkEventsMain.hx that this typedef can be sent to.
+	 */
+	var _event_name: String;
 	
 	/******************************
 	 * the username of the player.
@@ -150,42 +183,42 @@ typedef DataGame1 =
 	var _gameUnitNumberOld2: Int;
 	
 	/******************************
-	 * unit x coordinate. you have requested this gameboard piece.
+	 * unit x coordinate. this is the unit that you moved from.
 	 */
 	var _gameXXold:Int;
 	
 	/******************************
-	 * unit y coordinate. you have requested this gameboard piece.
+	 * unit y coordinate. this is the unit that you moved from.
 	 */
 	var _gameYYold:Int;
 	
 	/******************************
-	 * unit x coordinate. you have requested a piece be moved here.
+	 * unit x coordinate. this is the unit that you moved to.
 	 */
 	var _gameXXnew:Int;
 	
 	/******************************
-	 * unit y coordinate. you have requested a piece be moved here.
+	 * unit y coordinate. this is the unit that you moved to.
 	 */
 	var _gameYYnew:Int;
 	
 	/******************************
-	 * unit x coordinate. you have requested this gameboard piece.
+	 * unit x coordinate. this is the unit that you moved from.
 	 */
 	var _gameXXold2:Int;
 	
 	/******************************
-	 * unit y coordinate. you have requested this gameboard piece.
+	 * unit y coordinate. this is the unit that you moved from.
 	 */
 	var _gameYYold2:Int;
 	
 	/******************************
-	 * unit x coordinate. you have requested a piece be moved here.
+	 * unit x coordinate. this is the unit that you moved to.
 	 */
 	var _gameXXnew2:Int;
 	
 	/******************************
-	 *  unit y coordinate. you have requested a piece be moved here.
+	 *  unit y coordinate. this is the unit that you moved to.
 	 */
 	var _gameYYnew2:Int;
 	
@@ -236,7 +269,9 @@ typedef DataGame1 =
 	
 }
 
-// Reversi typedef
+/******************************
+ * Reversi typedef
+ */
 typedef DataGame2 = 
 {
 	/******************************
@@ -245,17 +280,28 @@ typedef DataGame2 =
 	var id: String;
 	
 	/******************************
+	 * typedef id.
+	 * when server sends a message to client, client needs to know what typedef it is. so when creating a typedef at this class, go to PlayState _websocket.onmessage and add the typedef there. tid starts at 10 and ends at 99. 10 to 40 is reserved for games.
+	 */
+	var tid: Int;
+	
+	/******************************
+	 * the name of the event at server -> Events.hx or client -> NetworkEventsMain.hx that this typedef can be sent to.
+	 */
+	var _event_name: String;
+	
+	/******************************
 	 * the username of the player.
 	 */
 	var _username: String;
 	
 	/******************************
-	 * unit x coordinate. you have requested this gameboard piece.
+	 * unit x coordinate. this is the unit that you moved from.
 	 */
 	var _gameXXold:Int; 
 	
 	/******************************
-	 * unit y coordinate. you have requested this gameboard piece.
+	 * unit y coordinate. this is the unit that you moved from.
 	 */
 	var _gameYYold:Int;
 	
@@ -276,13 +322,26 @@ typedef DataGame2 =
 	
 }
 
-// snakes and ladders typedef.
+/******************************
+ * snakes and ladders typedef.
+ */
 typedef DataGame3 = 
 {
 	/******************************
 	 * player instance. this tells one player from another.
 	 */
 	var id: String;
+	
+	/******************************
+	 * typedef id.
+	 * when server sends a message to client, client needs to know what typedef it is. so when creating a typedef at this class, go to PlayState _websocket.onmessage and add the typedef there. tid starts at 10 and ends at 99. 10 to 40 is reserved for games.
+	 */
+	var tid: Int;
+	
+	/******************************
+	 * the name of the event at server -> Events.hx or client -> NetworkEventsMain.hx that this typedef can be sent to.
+	 */
+	var _event_name: String;
 	
 	/******************************
 	 * the username of the player.
@@ -300,7 +359,7 @@ typedef DataGame3 =
 	var _triggerEventForAllPlayers:Bool;
 	
 	/******************************
-	 * used to determine if the pawn is En Passant. also in Reversi, if all 4 discs have been placed on the board.
+	 * determines if all 4 discs have been placed on the board.
 	 */
 	var _triggerNextStuffToDo:Int;
 	
@@ -316,7 +375,9 @@ typedef DataGame3 =
 
 }
 
-// signature game typedef.
+/******************************
+ * signature game typedef.
+ */
 typedef DataGame4 = 
 {
 	/******************************
@@ -325,27 +386,38 @@ typedef DataGame4 =
 	var id: String;
 	
 	/******************************
+	 * typedef id.
+	 * when server sends a message to client, client needs to know what typedef it is. so when creating a typedef at this class, go to PlayState _websocket.onmessage and add the typedef there. tid starts at 10 and ends at 99. 10 to 40 is reserved for games.
+	 */
+	var tid: Int;
+	
+	/******************************
+	 * the name of the event at server -> Events.hx or client -> NetworkEventsMain.hx that this typedef can be sent to.
+	 */
+	var _event_name: String;
+	
+	/******************************
 	 * the username of the player.
 	 */
 	var _username: String;
 	
 	/******************************
-	 * unit x coordinate. you have requested this gameboard piece.
+	 * unit x coordinate. this is the unit that you moved from.
 	 */
 	var _gameXXold:Int;
 	
 	/******************************
-	 * unit y coordinate. you have requested this gameboard piece.
+	 * unit y coordinate. this is the unit that you moved from.
 	 */
 	var _gameYYold:Int;
 	
 	/******************************
-	 * unit x coordinate. you have requested a piece be moved here.
+	 * unit x coordinate. this is the unit that you moved to.
 	 */
 	var _gameXXnew:Int;
 	
 	/******************************
-	 * unit y coordinate. you have requested a piece be moved here.
+	 * unit y coordinate. this is the unit that you moved to.
 	 */
 	var _gameYYnew:Int;
 	
@@ -400,13 +472,26 @@ typedef DataGame4 =
 	var _unitNumberTrade:Array<Int>;
 }
 
-// movement.
+/******************************
+ * variables relating to moving a piece. Also has history variables.
+ */
 typedef DataMovement = 
 {
 	/******************************
 	 * player instance. this tells one player from another.
 	 */
 	var id: String;
+	
+	/******************************
+	 * typedef id.
+	 * when server sends a message to client, client needs to know what typedef it is. so when creating a typedef at this class, go to PlayState _websocket.onmessage and add the typedef there. tid starts at 10 and ends at 99. 10 to 40 is reserved for games.
+	 */
+	var tid: Int;
+	
+	/******************************
+	 * the name of the event at server -> Events.hx or client -> NetworkEventsMain.hx that this typedef can be sent to.
+	 */
+	var _event_name: String;
 	
 	/******************************
 	 * the username of the player.
@@ -449,8 +534,8 @@ typedef DataMovement =
 	var _room: Int;	
 	
 	/******************************
-	 * If events a and b are sent from event c to the server in that order, sometimes the server will send back event b to the client before the server finishes event a.
-	 * to solve that problem, at client, move event b to the bottom of event a and if this var has the name of event b then at that code line event b will be executed.
+	 * you can pass any text here. The text is sent to server and at server if text matches then do something. clear the text after sending the event to server.
+	 * for example, this is needed for game room. without a "sender" code, each player will go to this event at client the total amount of users in this room. so if there are two players and one spectator watching, each player will go to this event, at client, three times. however, at server, if this var text is "sender" then instead of a broadcast to room, _sender.send is used.
 	 */
 	var _triggerEvent: String;
 	
@@ -517,13 +602,26 @@ typedef DataMovement =
 }
 	
 	
-// a game message such as check or checkmate.
+/******************************
+ * a game message such as check or checkmate.
+ */
 typedef DataGameMessage = 
 {
 	/******************************
 	 * player instance. this tells one player from another.
 	 */
 	var id: String;
+	
+	/******************************
+	 * typedef id.
+	 * when server sends a message to client, client needs to know what typedef it is. so when creating a typedef at this class, go to PlayState _websocket.onmessage and add the typedef there. tid starts at 10 and ends at 99. 10 to 40 is reserved for games.
+	 */
+	var tid: Int;
+	
+	/******************************
+	 * the name of the event at server -> Events.hx or client -> NetworkEventsMain.hx that this typedef can be sent to.
+	 */
+	var _event_name: String;
 	
 	/******************************
 	 * the username of the player.
@@ -536,8 +634,8 @@ typedef DataGameMessage =
 	var _room: Int;
 	
 	/******************************
-	 * If events a and b are sent from event c to the server in that order, sometimes the server will send back event b to the client before the server finishes event a.
-	 * to solve that problem, at client, move event b to the bottom of event a and if this var has the name of event b then at that code line event b will be executed.
+	 * you can pass any text here. The text is sent to server and at server if text matches then do something. clear the text after sending the event to server.
+	 * for example, this is needed for game room. without a "sender" code, each player will go to this event at client the total amount of users in this room. so if there are two players and one spectator watching, each player will go to this event, at client, three times. however, at server, if this var text is "sender" then instead of a broadcast to room, _sender.send is used.
 	 */
 	var _triggerEvent: String;
 	
@@ -572,6 +670,17 @@ typedef DataDailyQuests =
 	 * player instance. this tells one player from another.
 	 */
 	var id: String;
+	
+	/******************************
+	 * typedef id.
+	 * when server sends a message to client, client needs to know what typedef it is. so when creating a typedef at this class, go to PlayState _websocket.onmessage and add the typedef there. tid starts at 10 and ends at 99. 10 to 40 is reserved for games.
+	 */
+	var tid: Int;
+	
+	/******************************
+	 * the name of the event at server -> Events.hx or client -> NetworkEventsMain.hx that this typedef can be sent to.
+	 */
+	var _event_name: String;
 	
 	/******************************
 	 * the username of the player.
@@ -632,14 +741,26 @@ typedef DataDailyQuests =
 	
 }
 
-
-// a message box questions.
+/******************************
+ * a message box questions.
+ */
 typedef DataQuestions = 
 {
 	/******************************
 	 * player instance. this tells one player from another.
 	 */
 	var id: String;
+	
+	/******************************
+	 * typedef id.
+	 * when server sends a message to client, client needs to know what typedef it is. so when creating a typedef at this class, go to PlayState _websocket.onmessage and add the typedef there. tid starts at 10 and ends at 99. 10 to 40 is reserved for games.
+	 */
+	var tid: Int;
+	
+	/******************************
+	 * the name of the event at server -> Events.hx or client -> NetworkEventsMain.hx that this typedef can be sent to.
+	 */
+	var _event_name: String;
 	
 	/******************************
 	 * the username of the player.
@@ -677,8 +798,8 @@ typedef DataQuestions =
 	var _room: Int;
 	
 	/******************************
-	 * If events a and b are sent from event c to the server in that order, sometimes the server will send back event b to the client before the server finishes event a.
-	 * to solve that problem, at client, move event b to the bottom of event a and if this var has the name of event b then at that code line event b will be executed.
+	 * you can pass any text here. The text is sent to server and at server if text matches then do something. clear the text after sending the event to server.
+	 * for example, this is needed for game room. without a "sender" code, each player will go to this event at client the total amount of users in this room. so if there are two players and one spectator watching, each player will go to this event, at client, three times. however, at server, if this var text is "sender" then instead of a broadcast to room, _sender.send is used.
 	 */
 	var _triggerEvent: String;
 	
@@ -698,6 +819,17 @@ typedef DataOnlinePlayers =
 	var id:String;
 	
 	/******************************
+	 * typedef id.
+	 * when server sends a message to client, client needs to know what typedef it is. so when creating a typedef at this class, go to PlayState _websocket.onmessage and add the typedef there. tid starts at 10 and ends at 99. 10 to 40 is reserved for games.
+	 */
+	var tid: Int;
+	
+	/******************************
+	 * the name of the event at server -> Events.hx or client -> NetworkEventsMain.hx that this typedef can be sent to.
+	 */
+	var _event_name: String;
+	
+	/******************************
 	 * the username of the player.
 	 */
 	var _username: String;
@@ -708,8 +840,8 @@ typedef DataOnlinePlayers =
 	var _room: Int;
 	
 	/******************************
-	 * If events a and b are sent from event c to the server in that order, sometimes the server will send back event b to the client before the server finishes event a.
-	 * to solve that problem, at client, move event b to the bottom of event a and if this var has the name of event b then at that code line event b will be executed.
+	 * you can pass any text here. The text is sent to server and at server if text matches then do something. clear the text after sending the event to server.
+	 * for example, this is needed for game room. without a "sender" code, each player will go to this event at client the total amount of users in this room. so if there are two players and one spectator watching, each player will go to this event, at client, three times. however, at server, if this var text is "sender" then instead of a broadcast to room, _sender.send is used.
 	 */
 	var _triggerEvent: String;
 	
@@ -747,9 +879,25 @@ typedef DataTournaments =
 	var id:String;
 	
 	/******************************
+	 * typedef id.
+	 * when server sends a message to client, client needs to know what typedef it is. so when creating a typedef at this class, go to PlayState _websocket.onmessage and add the typedef there. tid starts at 10 and ends at 99. 10 to 40 is reserved for games.
+	 */
+	var tid: Int;
+	
+	/******************************
+	 * the name of the event at server -> Events.hx or client -> NetworkEventsMain.hx that this typedef can be sent to.
+	 */
+	var _event_name: String;
+	
+	/******************************
 	 * the username of the player.
 	 */
 	var _username: String;
+	
+	/******************************
+	 * the email address of player 1 if set. it is used for tournament.
+	 */
+	var _email_address: String;
 	
 	/******************************
 	 * if this name is not empty then its the name of the user in the tournament.
@@ -791,9 +939,15 @@ typedef DataTournaments =
 	 */
 	var _game_id: Int;
 	
-	var _round_current: Int;		// current round of the tournament. 16 player tournament = this value of 0. 8 players has this value set at 1.
-
-	var _rounds_total: Int;					// when the round_current equals this value then the tournament is at its last round.
+	/******************************
+	 * current round of the tournament. 16 player tournament = this value of 0. 8 players has this value set at 1.
+	 */
+	var _round_current: Int;
+	
+	/******************************
+	 * when the round_current equals this value then the tournament is at its last round.
+	 */
+	var _rounds_total: Int;
 	
 	/******************************
 	 * game move total for player
@@ -833,6 +987,11 @@ typedef DataTournaments =
 	 * for player 1, we use a lock so that the mailer knows that the player is in the process of moving a piece.
 	 */
 	var _timestamp: Int;
+	
+	/******************************
+	 * is the player subscribed to tournament mail. every game board peice moved will be sent by email to the player.
+	 */
+	var _reminder_by_mail: Bool;
 }
 
 // player's account and server information
@@ -844,14 +1003,40 @@ typedef DataAccount =
 	var id: String;
 	
 	/******************************
+	 * typedef id.
+	 * when server sends a message to client, client needs to know what typedef it is. so when creating a typedef at this class, go to PlayState _websocket.onmessage and add the typedef there. tid starts at 10 and ends at 99. 10 to 40 is reserved for games.
+	 */
+	var tid: Int;
+	
+	/******************************
+	 * the name of the event at server -> Events.hx or client -> NetworkEventsMain.hx that this typedef can be sent to.
+	 */
+	var _event_name: String;
+	
+	/******************************
 	 * the username of the player.
 	 */
 	var _username: String;
 	
 	/******************************
+	 * if this field is not empty then the username has matched one of the names from the bad list. the user cannot login with a bad word.
+	 */
+	var _username_restricted: String;
+		
+	/******************************
 	 * password hash encrypted with md5.
 	 */
 	var _password_hash: String;
+	
+	/******************************
+	 * the email address of player 1 if set.
+	 */
+	var _email_address: String;
+	
+	/******************************
+	 * 0: don't send email address validation code. 1: send.
+	 */
+	var _send_email_address_validation_code: Bool;
 	
 	/******************************
 	 * the current message to be displayed as message box.
@@ -912,6 +1097,17 @@ typedef DataMisc =
 	var id: String;
 	
 	/******************************
+	 * typedef id.
+	 * when server sends a message to client, client needs to know what typedef it is. so when creating a typedef at this class, go to PlayState _websocket.onmessage and add the typedef there. tid starts at 10 and ends at 99. 10 to 40 is reserved for games.
+	 */
+	var tid: Int;
+	
+	/******************************
+	 * the name of the event at server -> Events.hx or client -> NetworkEventsMain.hx that this typedef can be sent to.
+	 */
+	var _event_name: String;
+	
+	/******************************
 	 * the username of the player.
 	 */
 	var _username: String;
@@ -922,9 +1118,8 @@ typedef DataMisc =
 	var _room: Int;
 	
 	/******************************
-	 * If events a and b are sent from event c to the server in that order, sometimes the server will send back event b to the client before the server finishes event a.
-	 * to solve that problem, at client, move event b to the bottom of event a and if this var has the name of event b then at that code line event b will be executed.
-	 * a value of "foo" means that the event after it will not be outputted at server console.
+	 * you can pass any text here. The text is sent to server and at server if text matches then do something. clear the text after sending the event to server.
+	 * for example, this is needed for game room. without a "sender" code, each player will go to this event at client the total amount of users in this room. so if there are two players and one spectator watching, each player will go to this event, at client, three times. however, at server, if this var text is "sender" then instead of a broadcast to room, _sender.send is used.
 	 */
 	var _triggerEvent: String;
 	
@@ -1032,7 +1227,18 @@ typedef DataPlayers =
 	var id: String;
 	
 	/******************************
-	 * the username of the client.
+	 * typedef id.
+	 * when server sends a message to client, client needs to know what typedef it is. so when creating a typedef at this class, go to PlayState _websocket.onmessage and add the typedef there. tid starts at 10 and ends at 99. 10 to 40 is reserved for games.
+	 */
+	var tid: Int;
+	
+	/******************************
+	 * the name of the event at server -> Events.hx or client -> NetworkEventsMain.hx that this typedef can be sent to.
+	 */
+	var _event_name: String;
+	
+	/******************************
+	 * the username of the player.
 	 */
 	var _username:String;
 	
@@ -1098,8 +1304,8 @@ typedef DataPlayers =
 	var _room: Int;
 	
 	/******************************
-	 * If events a and b are sent from event c to the server in that order, sometimes the server will send back event b to the client before the server finishes event a.
-	 * to solve that problem, at client, move event b to the bottom of event a and if this var has the name of event b then at that code line event b will be executed.
+	 * you can pass any text here. The text is sent to server and at server if text matches then do something. clear the text after sending the event to server.
+	 * for example, this is needed for game room. without a "sender" code, each player will go to this event at client the total amount of users in this room. so if there are two players and one spectator watching, each player will go to this event, at client, three times. however, at server, if this var text is "sender" then instead of a broadcast to room, _sender.send is used. 
 	 */
 	var _triggerEvent: String;
 	
@@ -1226,6 +1432,17 @@ typedef DataStatistics =
 	var id: String;
 	
 	/******************************
+	 * typedef id.
+	 * when server sends a message to client, client needs to know what typedef it is. so when creating a typedef at this class, go to PlayState _websocket.onmessage and add the typedef there. tid starts at 10 and ends at 99. 10 to 40 is reserved for games.
+	 */
+	var tid: Int;
+	
+	/******************************
+	 * the name of the event at server -> Events.hx or client -> NetworkEventsMain.hx that this typedef can be sent to.
+	 */
+	var _event_name: String;
+	
+	/******************************
 	 * the username of the player.
 	 */
 	var _username: String;	
@@ -1251,8 +1468,8 @@ typedef DataStatistics =
 	var _chess_elo_rating: Float;
 	
 	/******************************
-	 * If events a and b are sent from event c to the server in that order, sometimes the server will send back event b to the client before the server finishes event a.
-	 * to solve that problem, at client, move event b to the bottom of event a and if this var has the name of event b then at that code line event b will be executed.
+	 * you can pass any text here. The text is sent to server and at server if text matches then do something. clear the text after sending the event to server.
+	 * for example, this is needed for game room. without a "sender" code, each player will go to this event at client the total amount of users in this room. so if there are two players and one spectator watching, each player will go to this event, at client, three times. however, at server, if this var text is "sender" then instead of a broadcast to room, _sender.send is used.
 	 */
 	var _triggerEvent: String;	
 	
@@ -1263,6 +1480,7 @@ typedef DataStatistics =
 	var _shortest_time_game_played:Int;
 	var _longest_time_game_played:Int;
 	var _longest_current_winning_streak:Int;
+	
 	/******************************
 	 * from any game played.
 	 */
@@ -1334,6 +1552,17 @@ typedef DataHouse =
 	 * player instance. this tells one player from another.
 	 */
 	var id: String;
+	
+	/******************************
+	 * typedef id.
+	 * when server sends a message to client, client needs to know what typedef it is. so when creating a typedef at this class, go to PlayState _websocket.onmessage and add the typedef there. tid starts at 10 and ends at 99. 10 to 40 is reserved for games.
+	 */
+	var tid: Int;
+	
+	/******************************
+	 * the name of the event at server -> Events.hx or client -> NetworkEventsMain.hx that this typedef can be sent to.
+	 */
+	var _event_name: String;
 	
 	/******************************
 	 * the username of the player.
@@ -1444,6 +1673,17 @@ typedef DataLeaderboards =
 	var id: String;
 	
 	/******************************
+	 * typedef id.
+	 * when server sends a message to client, client needs to know what typedef it is. so when creating a typedef at this class, go to PlayState _websocket.onmessage and add the typedef there. tid starts at 10 and ends at 99. 10 to 40 is reserved for games.
+	 */
+	var tid: Int;
+	
+	/******************************
+	 * the name of the event at server -> Events.hx or client -> NetworkEventsMain.hx that this typedef can be sent to.
+	 */
+	var _event_name: String;
+	
+	/******************************
 	 * the username of the player.
 	 */
 	var _username: String;
@@ -1459,6 +1699,7 @@ typedef DataLeaderboards =
 	var _experiencePoints: String;
 	
 	var _houseCoins: String;
+	
 	var _worldFlag: String;
 }
 
@@ -1472,7 +1713,18 @@ class RegTypedef
 	public static var _dataGame:DataGame = 
 	{
 		id: Std.string(FlxG.random.int(100000000, 999999999)) + Std.string(FlxG.random.int(100000000, 999999999)),
-		_room: 0					// current room that the user is in. zero equals no room.
+		
+		tid: 10,
+		
+		/******************************
+		 * the name of the event at server -> Events.hx or client -> NetworkEventsMain.hx that this typedef can be sent to.
+		 */
+		_event_name: "",
+		
+		/******************************
+		 * current room that the user is in. zero equals lobby.
+		 */
+		_room: 0
 		
 	}
 	
@@ -1482,18 +1734,73 @@ class RegTypedef
 	public static var _dataGame0:DataGame0 = 
 	{
 		id: Std.string(FlxG.random.int(100000000, 999999999)) + Std.string(FlxG.random.int(100000000, 999999999)),
-		_username: "", 				// the username of the player.	
-		_gameUnitNumberNew: -1,			// unit number. 0-64
-		_gameUnitNumberOld: -1,			// unit number. 0-64
-		_gameXXold: -1,				// unit x coordinate. you have requested this gameboard piece.
-		_gameYYold: -1,				// unit y coordinate. you have requested this gameboard piece.
-		_gameXXnew: -1,				// unit x coordinate. you have requested a piece be moved here.
-		_gameYYnew: -1,				// unit y coordinate. you have requested a piece be moved here.
-		_gameXXold2: -1,				// unit x coordinate. you have requested this gameboard piece.
-		_gameYYold2: -1,				// unit y coordinate. you have requested this gameboard piece.
-		_triggerNextStuffToDo:0,	// used to determine if the pawn is En Passant. also in Reversi, if all 4 discs have been placed on the board.
-		_room: 0,					// current room that the user is in. zero equals no room.
-		_isThisPieceAtBackdoor: false,		// each board game should use this for only one var.
+		
+		tid: 11,
+		
+		/******************************
+		 * the name of the event at server -> Events.hx or client -> NetworkEventsMain.hx that this typedef can be sent to.
+		 */
+		_event_name: "",
+		
+		/******************************
+		 * the username of the player.
+		 */
+		_username: "",
+		
+		/******************************
+		 * // unit number. 0-64
+		 */
+		_gameUnitNumberNew: -1,
+		
+		/******************************
+		 * unit number. 0-64
+		 */
+		_gameUnitNumberOld: -1,
+		
+		/******************************
+		 * unit x coordinate. this is the unit that you moved from.
+		 */
+		_gameXXold: -1,
+		
+		/******************************
+		 * unit y coordinate. this is the unit that you moved from.
+		 */
+		_gameYYold: -1,
+		
+		/******************************
+		 * unit x coordinate. this is the unit that you moved to.
+		 */
+		_gameXXnew: -1,
+		
+		/******************************
+		 * unit y coordinate. this is the unit that you moved to.
+		 */
+		_gameYYnew: -1,
+		
+		/******************************
+		 * unit x coordinate. this is the unit that you moved from.
+		 */
+		_gameXXold2: -1,
+		
+		/******************************
+		 * unit y coordinate. this is the unit that you moved from.
+		 */
+		_gameYYold2: -1,
+		
+		/******************************
+		 * used to determine if the pawn is En Passant. also in Reversi, if all 4 discs have been placed on the board.
+		 */
+		_triggerNextStuffToDo:0,
+		
+		/******************************
+		 * current room that the user is in. zero equals lobby.
+		 */
+		_room: 0,
+		
+		/******************************
+		 * each board game should use this for only one var.
+		 */
+		_isThisPieceAtBackdoor: false,
 		
 	}
 	
@@ -1503,30 +1810,132 @@ class RegTypedef
 	public static var _dataGame1:DataGame1 = 
 	{
 		id: Std.string(FlxG.random.int(100000000, 999999999)) + Std.string(FlxG.random.int(100000000, 999999999)),
-		_username: "", 				// the username of the player.	
-		_pieceValue: -1,				// this is the point value of each piece on the standard gameboard
-		_uniqueValue: -1,				// unique value of a piece.
-		_gameUnitNumberNew: -1,			// unit number. 0-64
-		_gameUnitNumberOld: -1,			// unit number. 0-64
-		_gameUnitNumberNew2: -1,		// unit number. 0-64
-		_gameUnitNumberOld2: -1,		// unit number. 0-64
-		_gameXXold: -1,				// unit x coordinate. you have requested this gameboard piece.
-		_gameYYold: -1,				// unit y coordinate. you have requested this gameboard piece.
-		_gameXXnew: -1,				// unit x coordinate. you have requested a piece be moved here.
-		_gameYYnew: -1,				// unit y coordinate. you have requested a piece be moved here.
-		_gameXXold2: -1,				// unit x coordinate. you have requested this gameboard piece.
-		_gameYYold2: -1,				// unit y coordinate. you have requested this gameboard piece.
-		_gameXXnew2: -1,				// unit x coordinate. you have requested a piece be moved here.
-		_gameYYnew2: -1,				// unit y coordinate. you have requested a piece be moved here.
-		_isEnPassant: false,		// is pawn En passant? 
-		_isEnPassantPawnNumber: [0,0],	// the most recent pawn in En passant.
-		_triggerNextStuffToDo:0,	// used to determine if the pawn is En Passant. also in Reversi, if all 4 discs have been placed on the board.
-		_pointValue2: -1,				// castling vars to move the rook.
-		_uniqueValue2: -1,			// castling vars.
-		_promotePieceLetter: "",		// this is the letter used in notation of a promoted piece selected.
-		_doneEnPassant: false,		// for notation.
-		_room: 0,					// current room that the user is in. zero equals no room.
-		// capturing unit image value for history when using the backwards button.
+		
+		tid: 12,
+		
+		/******************************
+		 * the name of the event at server -> Events.hx or client -> NetworkEventsMain.hx that this typedef can be sent to.
+		 */
+		_event_name: "",
+		
+		/******************************
+		 * the username of the player.
+		 */
+		_username: "",	
+		
+		/******************************
+		 * this is the point value of each piece on the standard gameboard
+		 */
+		_pieceValue: -1,
+		
+		/******************************
+		 * unique value of a piece.
+		 */
+		_uniqueValue: -1,
+		
+		/******************************
+		 * unit number. 0-64
+		 */
+		_gameUnitNumberNew: -1,
+		
+		/******************************
+		 * unit number. 0-64
+		 */
+		_gameUnitNumberOld: -1,
+		
+		/******************************
+		 * unit number. 0-64
+		 */
+		_gameUnitNumberNew2: -1,
+		
+		/******************************
+		 * unit number. 0-64
+		 */
+		_gameUnitNumberOld2: -1,
+		
+		/******************************
+		 * unit x coordinate. this is the unit that you moved from.
+		 */
+		_gameXXold: -1,
+		
+		/******************************
+		 * unit y coordinate. this is the unit that you moved from.
+		 */
+		_gameYYold: -1,
+		
+		/******************************
+		 * unit x coordinate. this is the unit that you moved to.
+		 */
+		_gameXXnew: -1,
+		
+		/******************************
+		 * unit y coordinate. this is the unit that you moved to.
+		 */
+		_gameYYnew: -1,
+		
+		/******************************
+		 * unit x coordinate. this is the unit that you moved from. second piece that might need moving when first piece is moving.
+		 */
+		_gameXXold2: -1,
+		
+		/******************************
+		 * unit y coordinate. this is the unit that you moved from. second piece that might need moving when first piece is moving.
+		 */
+		_gameYYold2: -1,
+		
+		/******************************
+		 * unit x coordinate. this is the unit that you moved to. second piece that might need moving when first piece is moving.
+		 */
+		_gameXXnew2: -1,
+		
+		/******************************
+		 * unit y coordinate. this is the unit that you moved to. second piece that might need moving when first piece is moving.
+		 */
+		_gameYYnew2: -1,
+		
+		/******************************
+		 * is pawn En passant? 
+		 */
+		_isEnPassant: false,
+		
+		/******************************
+		 * the most recent pawn in En passant.
+		 */
+		_isEnPassantPawnNumber: [0,0],
+		
+		/******************************
+		 * used to determine if the pawn is En Passant. also in Reversi, if all 4 discs have been placed on the board.
+		 */
+		_triggerNextStuffToDo:0,
+		
+		/******************************
+		 * castling vars to move the rook.
+		 */
+		_pointValue2: -1,
+		
+		/******************************
+		 * castling vars.
+		 */
+		_uniqueValue2: -1,
+		
+		/******************************
+		 * this is the letter used in notation of a promoted piece selected.
+		 */
+		_promotePieceLetter: "",
+		
+		/******************************
+		 * for notation.
+		 */
+		_doneEnPassant: false,
+		
+		/******************************
+		 * current room that the user is in. zero equals lobby.
+		 */
+		_room: 0,
+		
+		/******************************
+		 * capturing unit image value for history when using the backwards button.
+		 */
 		_piece_capturing_image_value: 0,
 	}
 	
@@ -1536,12 +1945,43 @@ class RegTypedef
 	public static var _dataGame2:DataGame2 = 
 	{
 		id: Std.string(FlxG.random.int(100000000, 999999999)) + Std.string(FlxG.random.int(100000000, 999999999)),
-		_username: "", 				// the username of the player.	
-		_gameXXold: -1,				// unit x coordinate. you have requested this gameboard piece.
-		_gameYYold: -1,				// unit y coordinate. you have requested this gameboard piece.
-		_triggerNextStuffToDo:0,	// used to determine if the pawn is En Passant. also in Reversi, if all 4 discs have been placed on the board.
-		_pointValue2: -1,				// castling vars to move the rook.
-		_room: 0,					// current room that the user is in. zero equals no room.		
+		
+		tid: 13,
+		
+		/******************************
+		 * the name of the event at server -> Events.hx or client -> NetworkEventsMain.hx that this typedef can be sent to.
+		 */
+		_event_name: "",
+		
+		/******************************
+		 * the username of the player.
+		 */
+		_username: "",
+		
+		/******************************
+		 * unit x coordinate. this is the unit that you moved from.
+		 */
+		_gameXXold: -1,
+		
+		/******************************
+		 * unit y coordinate. this is the unit that you moved from.
+		 */
+		_gameYYold: -1,
+		
+		/******************************
+		 * used to determine if the pawn is En Passant. also in Reversi, if all 4 discs have been placed on the board.
+		 */
+		_triggerNextStuffToDo:0,
+		
+		/******************************
+		 * castling vars to move the rook.
+		 */
+		_pointValue2: -1,
+		
+		/******************************
+		 * current room that the user is in. zero equals lobby.
+		 */
+		_room: 0,		
 	}
 	
 	/******************************
@@ -1550,12 +1990,43 @@ class RegTypedef
 	public static var _dataGame3:DataGame3 = 
 	{
 		id: Std.string(FlxG.random.int(100000000, 999999999)) + Std.string(FlxG.random.int(100000000, 999999999)),
-		_username: "", 				// the username of the player.	
-		_gameUnitNumberNew: -1,			// unit number. 0-64
-		_triggerEventForAllPlayers: true,		// is pawn En passant? 
-		_triggerNextStuffToDo:0,	// used to determine if the pawn is En Passant. also in Reversi, if all 4 discs have been placed on the board.
-		_rolledA6: false,		// move again.
-		_room: 0,					// current room that the user is in. zero equals no room.
+		
+		tid: 14,
+		
+		/******************************
+		 * the name of the event at server -> Events.hx or client -> NetworkEventsMain.hx that this typedef can be sent to.
+		 */
+		_event_name: "",
+		
+		/******************************
+		 * the username of the player.
+		 */
+		_username: "",
+		
+		/******************************
+		 * unit number. 0-64
+		 */
+		_gameUnitNumberNew: -1,
+		
+		/******************************
+		 * is pawn En passant?
+		 */
+		_triggerEventForAllPlayers: true,
+		
+		/******************************
+		 * used to determine if the pawn is En Passant. also in Reversi, if all 4 discs have been placed on the board.
+		 */
+		_triggerNextStuffToDo:0,
+		
+		/******************************
+		 * move again.
+		 */
+		_rolledA6: false,
+		
+		/******************************
+		 * current room that the user is in. zero equals lobby.
+		 */
+		_room: 0,
 
 	}
 	
@@ -1565,17 +2036,72 @@ class RegTypedef
 	public static var _dataGame4:DataGame4 = 
 	{
 		id: Std.string(FlxG.random.int(100000000, 999999999)) + Std.string(FlxG.random.int(100000000, 999999999)),
-		_username: "", 				// the username of the player.	
-		_gameXXold: -1,				// unit x coordinate. you have requested this gameboard piece.
-		_gameYYold: -1,				// unit y coordinate. you have requested this gameboard piece.
-		_gameXXnew: -1,				// unit x coordinate. you have requested a piece be moved here.
-		_gameYYnew: -1,				// unit y coordinate. you have requested a piece be moved here.
-		_gameXXold2: -1,			// used in trade unit. this is the other player's unit. player moving would like to trade other player's unit.
-		_gameYYold2: -1,			// used in trade unit. this is the other player's unit. player moving would like to trade other player's unit.
-		_gameXXnew2: -1,			// used in trade unit. this is the player that is moving piece. player would like to trade this unit.
-		_gameYYnew2: -1,			// used in trade unit. this is the player that is moving piece. player would like to trade this unit.
-		_room: 0,					// current room that the user is in. zero equals no room.
-		_rentBonus: [0.01, 0.01, 0.01, 0.01],		// total rent bonus. this value of 0.01 is needed because this var is used in multiplication and we cannot times by zero or else we get zero for the result which is not desired.
+		
+		tid: 15,
+		
+		/******************************
+		 * the name of the event at server -> Events.hx or client -> NetworkEventsMain.hx that this typedef can be sent to.
+		 */
+		_event_name: "",
+		
+		/******************************
+		 * the username of the player.
+		 */
+		_username: "",
+		
+		/******************************
+		 * unit x coordinate. this is the unit that you moved from.
+		 */
+		_gameXXold: -1,
+		
+		/******************************
+		 * unit y coordinate. this is the unit that you moved from.
+		 */
+		_gameYYold: -1,
+		
+		/******************************
+		 * unit x coordinate. this is the unit that you moved to.
+		 */
+		_gameXXnew: -1,
+		
+		/******************************
+		 * unit y coordinate. this is the unit that you moved to.
+		 */
+		_gameYYnew: -1,
+		
+		/******************************
+		 * used in trade unit. this is the other player's unit. player moving would like to trade other player's unit.
+		 */
+		_gameXXold2: -1,
+		
+		/******************************
+		 * used in trade unit. this is the other player's unit. player moving would like to trade other player's unit.
+		 */
+		_gameYYold2: -1,
+		
+		/******************************
+		 * used in trade unit. this is the player that is moving piece. player would like to trade this unit.
+		 */
+		_gameXXnew2: -1,
+		
+		/******************************
+		 * used in trade unit. this is the player that is moving piece. player would like to trade this unit.
+		 */
+		_gameYYnew2: -1,
+		
+		/******************************
+		 * current room that the user is in. zero equals lobby.
+		 */
+		_room: 0,
+		
+		/******************************
+		 * total rent bonus. this value of 0.01 is needed because this var is used in multiplication and we cannot times by zero or else we get zero for the result which is not desired.
+		 */
+		_rentBonus: [0.01, 0.01, 0.01, 0.01],
+		
+		/******************************
+		 * yy and xx values. output of -1 = not used. 0 = nobody owns this unit. 1 = player 1's unit. 2:player 2's unit. 3:player 3's unit. 4:player 4's unit.
+		 */
 		_gameUniqueValueForPiece:
 		[[0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0],
 		[0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0],
@@ -1584,8 +2110,12 @@ class RegTypedef
 		[0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0],
 		[0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0],
 		[0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0],
-		[0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0]],	// yy and xx values. output of -1 = not used. 0 = nobody owns this unit. 1 = player 1's unit. 2:player 2's unit. 3:player 3's unit. 4:player 4's unit.		
-		//amount of houses on each unit.
+		[0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0]],
+		
+		/******************************
+		 * amount of houses on each unit.
+		 * the first zero is yy value and the second is xx value.
+		 */
 		_gameHouseTaxiCabOrCafeStoreForPiece:
 		[[0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0],
 		[0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0],
@@ -1594,8 +2124,11 @@ class RegTypedef
 		[0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0],
 		[0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0],
 		[0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0],
-		[0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0]], // the first zero is yy value and the second is xx value.
-						
+		[0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0]],
+		
+		/******************************
+		 * the first zero is yy value and the second is xx value.
+		 */
 		_gameUndevelopedValueOfUnit: 
 		[0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 		0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -1604,9 +2137,12 @@ class RegTypedef
 		0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 		0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 		0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-		0, 0, 0, 0, 0, 0, 0, 0, 0, 0], // the first zero is yy value and the second is xx value.
-			
-		_unitNumberTrade: [0, 0], // used when trading units. this holds the value of a unit number. this var is useful. it can change an ownership of a unit. see Reg._gameUniqueValueForPiece.
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+		
+		/******************************
+		 * used when trading units. this holds the value of a unit number. this var is useful. it can change an ownership of a unit. see Reg._gameUniqueValueForPiece.
+		 */
+		_unitNumberTrade: [0, 0],
 	}
 	
 	/******************************
@@ -1614,38 +2150,105 @@ class RegTypedef
 	 */
 	public static var _dataMovement:DataMovement = 
 	{
-		id: Std.string(FlxG.random.int(100000000, 999999999)) + Std.string(FlxG.random.int(100000000, 999999999)), // player instance. this tells one player from another.
-		_username: "", 				// the username of the player.
+		/******************************
+		 * player instance. this tells one player from another.
+		 */
+		id: Std.string(FlxG.random.int(100000000, 999999999)) + Std.string(FlxG.random.int(100000000, 999999999)),
+		
+		tid: 40,
+		
+		/******************************
+		 * the name of the event at server -> Events.hx or client -> NetworkEventsMain.hx that this typedef can be sent to.
+		 */
+		_event_name: "",
+		
+		/******************************
+		 * the username of the player.
+		 */
+		_username: "",
+		
 		_gid: "",
+		
 		_spectatorWatching: 0,
+		
 		_username_room_host: "",
+		
 		_history_get_all: 0,
 		
-		_gameDiceMaximumIndex: -1, // unit number. 0-64
+		/*******************************
+		 * unit number. 0-64
+		 */
+		_gameDiceMaximumIndex: -1,
+
+		/*******************************
+		 * used to determine if the pawn is En Passant. also in Reversi, if all 4 discs have been placed on the board.
+		 */
+		 _triggerNextStuffToDo: 0,
 		
-		 _triggerNextStuffToDo: 0, // used to determine if the pawn is En Passant. also in Reversi, if all 4 discs have been placed on the board.
+		 /******************************
+		 * current room that the user is in. zero equals lobby.
+		 */
+		_room: 0,
 		
-		_room: 0, // current room that the user is in. zero equals no room
 		/******************************
-		 * If events a and b are sent from event c to the server in that order, sometimes the server will send back event b to the client before the server finishes event a.
-		 * to solve that problem, at client, move event b to the bottom of event a and if this var has the name of event b then at that code line event b will be executed.
+		 * you can pass any text here. The text is sent to server and at server if text matches then do something. clear the text after sending the event to server.
+		* for example, this is needed for game room. without a "sender" code, each player will go to this event at client the total amount of users in this room. so if there are two players and one spectator watching, each player will go to this event, at client, three times. however, at server, if this var text is "sender" then instead of a broadcast to room, _sender.send is used.
 		 */
 		_triggerEvent: "",
 		
 		_point_value: "",
+		
 		_unique_value: "",
 		
-		_moveHistoryPieceLocationOld1: "",		// move history, the selected first piece
-		_moveHistoryPieceLocationNew1: "",		// moved the first piece to selected location.
-		_moveHistoryPieceLocationOld2: "",		// second piece, such as, the rook when castling. the second piece selected for that game move.
-		_moveHistoryPieceLocationNew2: "",		// moved the second piece to selected location.
+		/******************************
+		 * move history, the selected first piece.
+		 */
+		_moveHistoryPieceLocationOld1: "", 
 		
-		_moveHistoryPieceValueOld1: "",		// image value of the selected first piece. if its a rook that first player selected then its a value of 4 else for second player then its a value of 14. normally this value is 0 because after the move, no piece is at that location.
-		_moveHistoryPieceValueNew1: "",		// this refers to the value of the piece at the new selected moved to location.
-		_moveHistoryPieceValueOld2: "",		// the second piece value, or piece image, normally this unit is empty because the second piece was moved to a new unit.
-		_moveHistoryPieceValueNew2: "",		// this is the second piece moved to value of the image, so that the image can be moved to the new location.
-		_moveHistoryPieceValueOld3: "",		// the captured piece value, its image.
-		_moveHistoryTotalCount: 0,			// the total amount of all moves from all player playing gaming game.
+		/******************************
+		 * moved the first piece to selected location.
+		 */
+		_moveHistoryPieceLocationNew1: "",
+		
+		/******************************
+		 * second piece, such as, the rook when castling. the second piece selected for that game move.
+		 */
+		_moveHistoryPieceLocationOld2: "",
+		
+		/******************************
+		 * moved the second piece to selected location.
+		 */
+		_moveHistoryPieceLocationNew2: "",
+		
+		/******************************
+		 * image value of the selected first piece. if its a rook that first player selected then its a value of 4 else for second player then its a value of 14. normally this value is 0 because after the move, no piece is at that location.
+		 */
+		_moveHistoryPieceValueOld1: "",
+		
+		/******************************
+		 * this refers to the value of the piece at the new selected moved to location.
+		 */
+		_moveHistoryPieceValueNew1: "",
+		
+		/******************************
+		 * the second piece value, or piece image, normally this unit is empty because the second piece was moved to a new unit.
+		 */
+		_moveHistoryPieceValueOld2: "",
+		
+		/******************************
+		 * this is the second piece moved to value of the image, so that the image can be moved to the new location.
+		 */
+		_moveHistoryPieceValueNew2: "",
+		
+		/******************************
+		 * the captured piece value, its image.
+		 */
+		_moveHistoryPieceValueOld3: "",
+		
+		/******************************
+		 * the total amount of all moves from all player playing gaming game.
+		 */
+		_moveHistoryTotalCount: 0,
 	}
 
 	/******************************
@@ -1654,23 +2257,60 @@ class RegTypedef
 	public static var _dataGameMessage:DataGameMessage = 
 	{
 		id: Std.string(FlxG.random.int(100000000, 999999999)) + Std.string(FlxG.random.int(100000000, 999999999)),
-		_username: "", 				// the username of the player.	
-		_room: 0,					// current room that the user is in. zero equals no room.
+		
+		tid: 41,
+		
 		/******************************
-		 * If events a and b are sent from event c to the server in that order, sometimes the server will send back event b to the client before the server finishes event a.
-		 * to solve that problem, at client, move event b to the bottom of event a and if this var has the name of event b then at that code line event b will be executed.
+		 * the name of the event at server -> Events.hx or client -> NetworkEventsMain.hx that this typedef can be sent to.
+		 */
+		_event_name: "",
+		
+		/******************************
+		 * the username of the player.
+		 */
+		_username: "",
+		
+		/******************************
+		 * current room that the user is in. zero equals lobby.
+		 */
+		_room: 0,
+		
+		/******************************
+		 * you can pass any text here. The text is sent to server and at server if text matches then do something. clear the text after sending the event to server.
+		* for example, this is needed for game room. without a "sender" code, each player will go to this event at client the total amount of users in this room. so if there are two players and one spectator watching, each player will go to this event, at client, three times. however, at server, if this var text is "sender" then instead of a broadcast to room, _sender.send is used.
 		 */
 		_triggerEvent: "",
-		_gameMessage: "",				// an example of this would be a chess game where a player just received a message saying that the king is in check. 
+		
+		/******************************
+		 * an example of this would be a chess game where a player just received a message saying that the king is in check. 
+		 */
+		_gameMessage: "",
+		
 		_userTo: "",
+		
 		_userFrom: "",
-		_questionAnsweredAs:false // this false word sometimes comes up as function. just made the word "false" without quotes.
+		
+		/******************************
+		 * this false word sometimes comes up as function. just made the word "false" without quotes.
+		 */
+		_questionAnsweredAs:false
 	}
 	
 	public static var _dataDailyQuests:DataDailyQuests = 
 	{
 		id: Std.string(FlxG.random.int(100000000, 999999999)) + Std.string(FlxG.random.int(100000000, 999999999)),
-		_username: "", 				// the username of the player.
+		
+		tid: 42,
+		
+		/******************************
+		 * the name of the event at server -> Events.hx or client -> NetworkEventsMain.hx that this typedef can be sent to.
+		 */
+		_event_name: "",
+		
+		/******************************
+		 * the username of the player.
+		 */
+		_username: "",
 		
 		/******************************
 		 * Win three board games in a row.
@@ -1732,19 +2372,59 @@ class RegTypedef
 	public static var _dataQuestions:DataQuestions = 
 	{
 		id: Std.string(FlxG.random.int(100000000, 999999999)) + Std.string(FlxG.random.int(100000000, 999999999)),
-		_username: "", 				// the username of the player.	
-		_gameMessage: "",				// an example of this would be a chess game where a player just received a message saying that the king is in check. 
-		_drawOffer: false,				// chess draw offer. false=not yet asked. true=yes.
-		_drawAnsweredAs: false,			// chess draw was answered as, -false:no, true:yes 
-		_restartGameOffer:false,		// restart game offer. false=not yet asked. true=yes.
-		_restartGameAnsweredAs:false,	// restart game was answered as, false:no, true:yes.
-		_room: 0,						// current room that the user is in. zero equals no room.
+		
+		tid: 43,
+		
 		/******************************
-		 * If events a and b are sent from event c to the server in that order, sometimes the server will send back event b to the client before the server finishes event a.
-		 * to solve that problem, at client, move event b to the bottom of event a and if this var has the name of event b then at that code line event b will be executed.
+		 * the name of the event at server -> Events.hx or client -> NetworkEventsMain.hx that this typedef can be sent to.
+		 */
+		_event_name: "",
+		
+		/******************************
+		 * the username of the player.
+		 */
+		_username: "",
+		
+		/******************************
+		 * an example of this would be a chess game where a player just received a message saying that the king is in check.
+		 */
+		_gameMessage: "",
+		
+		/******************************
+		 * chess draw offer. false=not yet asked. true=yes.
+		 */
+		_drawOffer: false,
+		
+		/******************************
+		 * chess draw was answered as, false:no, true:yes
+		 */
+		_drawAnsweredAs: false,
+		
+		/******************************
+		 * restart game offer. false:not yet asked. true:yes.
+		 */
+		_restartGameOffer:false,
+		
+		 /******************************
+		 * restart game was answered as, false:no, true:yes.
+		 */
+		 _restartGameAnsweredAs:false,
+		
+		/******************************
+		 * current room that the user is in. zero equals lobby.
+		 */
+		_room: 0,
+		
+		/******************************
+		 * you can pass any text here. The text is sent to server and at server if text matches then do something. clear the text after sending the event to server.
+		* for example, this is needed for game room. without a "sender" code, each player will go to this event at client the total amount of users in this room. so if there are two players and one spectator watching, each player will go to this event, at client, three times. however, at server, if this var text is "sender" then instead of a broadcast to room, _sender.send is used.
 		 */
 		_triggerEvent: "",
-		_gameOver:false					// is the game over?
+		
+		/******************************
+		 * is the game over?
+		 */
+		_gameOver:false
 	}
 	
 	/******************************
@@ -1753,14 +2433,33 @@ class RegTypedef
 	public static var _dataOnlinePlayers:DataOnlinePlayers =
 	{
 		id: Std.string(FlxG.random.int(100000000, 999999999)) + Std.string(FlxG.random.int(100000000, 999999999)),
-		_username: "", 				// the username of the player.	
-		_room: 0,						// current room that the user is in. zero equals no room.
+		
+		tid: 44,
+		
 		/******************************
-		 * If events a and b are sent from event c to the server in that order, sometimes the server will send back event b to the client before the server finishes event a.
-		 * to solve that problem, at client, move event b to the bottom of event a and if this var has the name of event b then at that code line event b will be executed.
+		 * the name of the event at server -> Events.hx or client -> NetworkEventsMain.hx that this typedef can be sent to.
+		 */
+		_event_name: "",
+		
+		/******************************
+		 * the username of the player.
+		 */
+		_username: "",
+		
+		/******************************
+		 * current room that the user is in. zero equals lobby.
+		 */
+		_room: 0,
+		
+		/******************************
+		 * you can pass any text here. The text is sent to server and at server if text matches then do something. clear the text after sending the event to server.
+		* for example, this is needed for game room. without a "sender" code, each player will go to this event at client the total amount of users in this room. so if there are two players and one spectator watching, each player will go to this event, at client, three times. however, at server, if this var text is "sender" then instead of a broadcast to room, _sender.send is used.
 		 */
 		_triggerEvent: "",
-		// players names that are online.
+		
+		/******************************
+		 * players names that are online.
+		 */
 		_usernamesOnline: ["", "", "", "", "", "", "", "", "", "",
 					"", "", "", "", "", "", "", "", "", "",
 					"", "", "", "", "", "", "", "", "", "",
@@ -1773,7 +2472,10 @@ class RegTypedef
 					"", "", "", "", "", "", "", "", "", "",
 					"", "", "", "", "", "", "", "", "", "",
 					"", "", "", "", "", "", "", "", "", "",],		
-		// any game played. players game wins of players online.
+		
+		/******************************
+		 * any game played. players game wins of players online.
+		 */
 		_gamesAllTotalWins: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 					0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 					0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -1786,7 +2488,10 @@ class RegTypedef
 					0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 					0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 					0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],			
-		// any game played. players game losses of players online.
+		
+		/******************************
+		 * any game played. players game losses of players online.
+		 */
 		_gamesAllTotalLosses: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 					 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 					 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -1799,7 +2504,10 @@ class RegTypedef
 					 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 					 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 					 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],			
-		// any game played. players game draws of players online.
+		
+		/******************************
+		 * any game played. players game draws of players online.
+		 */
 		_gamesAllTotalDraws: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 					0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 					0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -1813,7 +2521,9 @@ class RegTypedef
 					0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 					0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 		
-		// chess Elo rating for every player online.			
+		/******************************
+		 * chess Elo rating for every player online.
+		 */			
 		_chess_elo_rating: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 					0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 					0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -1833,26 +2543,79 @@ class RegTypedef
 	public static var _dataTournaments:DataTournaments = 
 	{
 		id: Std.string(FlxG.random.int(100000000, 999999999)) + Std.string(FlxG.random.int(100000000, 999999999)),
-		_username: "", 				// the username of the player.	
-		// current room that the user is in. zero equals no room.
-		_player1: "",	// if this name is not empty then its the name of the user in the tournament.
+		
+		tid: 45,
+		
+		/******************************
+		 * the name of the event at server -> Events.hx or client -> NetworkEventsMain.hx that this typedef can be sent to.
+		 */
+		_event_name: "",
+		
+		/******************************
+		 * the username of the player.
+		 */
+		_username: "",
+		
+		_email_address: "",
+		
+		/******************************
+		 * if this name is not empty then its the name of the user in the tournament.
+		 */
+		_player1: "",
+		
 		_player2: "",
+		
 		_gid: "",
+		
 		_tournament_started: false,
+		
 		_player_maximum: 0,
+		
 		_player_current: 0,
+		
+		/******************************
+		 * current room that the user is in. zero equals lobby.
+		 */
 		_room: 0,
+		
 		_game_id: 0,
 		_round_current: 0,
 		_rounds_total: 0,
 		_move_total: 0,
+		
+		/*****************************
+		 * 0:false. 1:true.
+		 */
 		_game_over: 0,
+		
+		/*****************************
+		 * when game is over, values are... 0:false 1:true. 
+		 */
 		_won_game: 0,
+		
+		/*****************************
+		 * should player move piece?
+		 */
 		_move_piece: false,
+		
+		/******************************
+		 * time is seconds you have to move a piece. failing to move piece within time allowed will result in losing the game.
+		 */
 		_time_remaining_player1: "",
 		_time_remaining_player2: "",
+		
+		/******************************
+		 * is it the players turn to move. a value of 1 = player1, 2=player2, etc.
+		 */
 		_move_number_current: 0,
+		
+		/******************************
+		 * timestamp for player 1. 
+		 * player 2 is not needed. the time might not be actuate when working with another players timestamp. the reason might be that a few seconds might be off from the time it takes to get and display the time. within that time, a player might have moved piece when instead we forfeit the game based on no activity from the user.
+		 * for player 1, we use a lock so that the mailer knows that the player is in the process of moving a piece.
+		 */
 		_timestamp: 0,
+		_reminder_by_mail: false,
 	}
 	
 	/******************************
@@ -1861,17 +2624,72 @@ class RegTypedef
 	public static var _dataAccount:DataAccount = 
 	{
 		id: Std.string(FlxG.random.int(100000000, 999999999)) + Std.string(FlxG.random.int(100000000, 999999999)),
-		_username: "", 					// the username of the player.	
+		
+		tid: 46,
+		
+		/******************************
+		 * the name of the event at server -> Events.hx or client -> NetworkEventsMain.hx that this typedef can be sent to.
+		 */
+		_event_name: "",
+		
+		/******************************
+		 * the username of the player.
+		 */
+		_username: "",
+		
+		/******************************
+		 * if this field is not empty then the username has matched one of the names from the bad list. the user cannot login with a bad word.
+		 */
+		_username_restricted: "",
+		
+		/******************************
+		 * password hash encrypted with md5.
+		 */
 		_password_hash: "",
-		_popupMessage: "",				// the current message to be displayed as a message box.
-		_hostname: "",						// used to return the this local hosts name.
-		_ip: "",						// IP of player.
-		_alreadyOnlineHost: false,			// is there two computers with the same host name connected to server?
-		_alreadyOnlineUser: false,			// is there already a user with that username online?
+		
+		/******************************
+		 * user's email address.
+		 */
+		_email_address: "",
+		
+		/******************************
+		 * code sent to email address. validated email addresses receive tournament email if subscribed. 
+		 */
+		_send_email_address_validation_code: false,
+		
+		/******************************
+		 * the current message to be displayed as a message box.
+		 */
+		_popupMessage: "",
+		
+		/******************************
+		 * used to return the this local hosts name.
+		 */
+		_hostname: "",
+		
+		/******************************
+		 * IP address of player.
+		 */
+		_ip: "",
+		
+		/******************************
+		 * is there two computers with the same host name connected to server?
+		 */
+		_alreadyOnlineHost: false,
+		
+		/******************************
+		 * is there already a user with that username online?
+		 */
+		_alreadyOnlineUser: false,
+		
 		_server_fast_send: false,
+		
 		_server_blocking: false,
+		
 		_clients_connected: 0,
+		
 		_guest_account: false,
+		
 		_avatarNumber: "0.png",
 	}
 	
@@ -1881,43 +2699,75 @@ class RegTypedef
 	public static var _dataMisc:DataMisc = 
 	{
 		id: Std.string(FlxG.random.int(100000000, 999999999)) + Std.string(FlxG.random.int(100000000, 999999999)),
-		_username: "", 				// the username of the player.	
-		// current room that the user is in. zero equals no room.
-		_room: 0,	
+		
+		tid: 47,
+		
 		/******************************
-		 * If events a and b are sent from event c to the server in that order, sometimes the server will send back event b to the client before the server finishes event a.
-		 * to solve that problem, at client, move event b to the bottom of event a and if this var has the name of event b then at that code line event b will be executed.
+		 * the name of the event at server -> Events.hx or client -> NetworkEventsMain.hx that this typedef can be sent to.
+		 */
+		_event_name: "",
+		
+		/******************************
+		 * the username of the player.
+		 */
+		_username: "",
+		
+		/******************************
+		 * current room that the user is in. zero equals lobby.
+		 */
+		_room: 0,	
+		
+		/******************************
+		 * you can pass any text here. The text is sent to server and at server if text matches then do something. clear the text after sending the event to server.
+		* for example, this is needed for game room. without a "sender" code, each player will go to this event at client the total amount of users in this room. so if there are two players and one spectator watching, each player will go to this event, at client, three times. however, at server, if this var text is "sender" then instead of a broadcast to room, _sender.send is used.
 		 */
 		_triggerEvent: "",
-		// the username of the player.
-		_spectatorWatching: false,	// this user entered the game from the lobby when clicking the "watch game" button. this user can only watch the game. this player cannot play the game even when game ends.
 		
-		// 0 = empty, 1 computer game, 2 creating room, 3 = firth player waiting to play game. 4 = second player in waiting room. 5 third player in waiting room if any. 6 - forth player in waiting room if any. 7 - room full, 8 - playing game / waiting game.
+		/******************************
+		 * this user entered the game from the lobby when clicking the "watch game" button. this user can only watch the game. this player cannot play the game even when game ends.
+		 */
+		_spectatorWatching: false,
+		
+		/******************************
+		 * 0 = empty, 1 computer game, 2 creating room, 3 = firth player waiting to play game. 4 = second player in waiting room. 5 third player in waiting room if any. 6 - forth player in waiting room if any. 7 - room full, 8 - playing game / waiting game.
+		 */
 		_roomState:	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 					 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 					 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 					 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 					 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-		// maximum number of players that can play the selected game.
+		
+		/******************************
+		 * maximum number of players that can play the selected game.
+		 */
 		_roomPlayerLimit:	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 					 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 					 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 					 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 					 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-		// current total of players in a room.						 
+		
+		/******************************
+		 * current total of players in a room.
+		 */						 
 		_roomPlayerCurrentTotal: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 						 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 					 	 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 						 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 						 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-		// used to list the games at lobby. see RegFunctions.gameName(). also, for not a host player, the data from here will populate _dataMisc._gameId for that player. 
+		
+		/******************************
+		 * used to list the games at lobby. see RegFunctions.gameName(). also, for not a host player, the data from here will populate _dataMisc._gameId for that player. 
 		//-1: no data, 0:checkers, 1:chess, etc.
+		 */
 		_roomGameIds:	[-1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
 						 -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
 						 -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
 						 -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
 						 -1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
-		// a list of every username that is a host of a room.
+		
+		/******************************
+		 * a list of every username that is a host of a room.
+		 */
 		_roomHostUsername:
 						["", "", "", "", "", "", "", "", "", "",
 					"", "", "", "", "", "", "", "", "", "",
@@ -1931,44 +2781,75 @@ class RegTypedef
 					"", "", "", "", "", "", "", "", "", "",
 					"", "", "", "", "", "", "", "", "", "",
 					"", "", "", "", "", "", "", "", "", ""],
-					
-		// if this vars value is true then a different player will not be able change the room state until the player has finished the "Greater RoomState Value" event at "Get Room Data" event. Note: that when a player leaves the game room, since that userLocation will always be a value of zero, a _roomIsLocked is not needed.
+		
+		/******************************
+		 * if this vars value is true then a different player will not be able change the room state until the player has finished the "Greater RoomState Value" event at "Get Room Data" event. Note: that when a player leaves the game room, since that userLocation will always be a value of zero, a _roomIsLocked is not needed.
+		 */
 		_roomIsLocked: 
 						[0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 						 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 					 	 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 						 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 						 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-		// If vars value is true then a check for a room lock will be made. This is used only when entering a room. If mouse clicked the "refresh room" button or leaving a game room then a check will not be made because in these cases a check is not needed. See Note: at _roomIsLocked for the reason why.
+		
+		/******************************
+		 * If vars value is true then a check for a room lock will be made. This is used only when entering a room. If mouse clicked the "refresh room" button or leaving a game room then a check will not be made because in these cases a check is not needed. See Note: at _roomIsLocked for the reason why.
+		 */
 		_roomCheckForLock: 
 						[0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 						 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 					 	 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 						 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 						 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],	
-		//When a room lock is true then this room cannot be entered by the current player and this is the message saying that someone is already accessing the room so try again shortly.
+		
+		/******************************
+		 * When a room lock is true then this room cannot be entered by the current player and this is the message saying that someone is already accessing the room so try again shortly.
+		 */
 		_roomLockMessage: "",
-		// if this value is true than the host is playing against the computer.
+		
+		/******************************
+		 * if this value is true than the host is playing against the computer.
+		 */
 		_vsComputer: 
 						[0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 						 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 					 	 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 						 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 						 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-		// if true then this room allows spectators.
+		
+		/******************************
+		 * if true then this room allows spectators.
+		 */
 		_allowSpectators:
 						[0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 						 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 					 	 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 						 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 						 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],	
-		_userLocation: 0,				// currently where the user is at. lobby, __scene_waiting_room, etc. 0:lobby, 1:creating room, 2:__scene_waiting_room, 3:game room.
-		_chat: "",						// chat text of the player.
-		_gameRoom: false,				// should player enter the game room.
-		_clientCommandMessage: "",				// ban message. player blocked other player from playing at that room for that session.
-		_clientCommandUsers: "",
-		_clientCommandIPs: ""
 		
+		/******************************
+		 * currently where the user is at. lobby, __scene_waiting_room, etc. 0:lobby, 1:creating room, 2:__scene_waiting_room, 3:game room.
+		 */
+		_userLocation: 0,
+		
+		/******************************
+		 * chat text of the player.
+		 */
+		_chat: "",
+		
+		/******************************
+		 * should player enter the game room.
+		 */
+		_gameRoom: false,
+		
+		/******************************
+		 * ban message. player blocked other player from playing at that room for that session.
+		 */
+		_clientCommandMessage: "",
+		
+		_clientCommandUsers: "",
+		
+		_clientCommandIPs: ""
 		
 	};
 	
@@ -1978,49 +2859,159 @@ class RegTypedef
 	public static var _dataPlayers:DataPlayers = 
 	{
 		id: Std.string(FlxG.random.int(100000000, 999999999)) + Std.string(FlxG.random.int(100000000, 999999999)),
-		_username: "",						// username of the client.
-		_usernamesDynamic: ["", "", "", ""],
-		_usernamesStatic: ["", "", "", ""], 
-		_usernamesTotalDynamic: 0, // current total of players playing the game.
-		_usernamesTotalStatic: 0, // total players that can play a game in that game room.
-		_spectatorPlaying: false, // user who was once playing but is now watching the game being played.
-		_spectatorWatching: false,	// this user entered the game from the lobby when clicking the "watch game" button. this user can only watch the game. this player cannot play the game even when game ends.
-		_spectatorWatchingGetMoveNumber: 0,	// send the current move number to the watching spectator so that the timer and white box underneath the P1, P2, P3 or P4 moves, can be updated.		
-		_avatarNumber: ["0.png", "0.png", "0.png", "0.png"], 	// This is the profile avatar image number used to display the image.
-		// save the player's game player state to the database. is the player playing a game or waiting to play. 
-		// 0: = not playing but still at game room. 
-		// 1: playing a game. 
-		// 2: left game room while still playing it. 
-		// 3: left room when game was over. 
-		// 4: quit game.
-		// this var is used to display players who are waiting for a game at the game room and to get the _count of how many players are waiting at game room.		
-		_gamePlayersValues: [0, 0, 0, 0],		
-		_moveNumberDynamic: [0, 0, 0, 0],
-		_room: 0,							// current room that the user is in. zero equals no room.
+		
+		tid: 48,
+		
 		/******************************
-		 * If events a and b are sent from event c to the server in that order, sometimes the server will send back event b to the client before the server finishes event a.
-		 * to solve that problem, at client, move event b to the bottom of event a and if this var has the name of event b then at that code line event b will be executed.
+		 * the name of the event at server -> Events.hx or client -> NetworkEventsMain.hx that this typedef can be sent to.
+		 */
+		_event_name: "",
+		
+		/******************************
+		 * the username of the player.
+		 */
+		_username: "",
+		
+		_usernamesDynamic: ["", "", "", ""],
+				
+		_usernamesStatic: ["", "", "", ""], 
+		
+		/******************************
+		 * current total of players playing the game.
+		 */
+		_usernamesTotalDynamic: 0,
+		
+		/******************************
+		 * total players that can play a game in that game room.
+		 */
+		_usernamesTotalStatic: 0,
+		
+		/******************************
+		 * user who was once playing but is now watching the game being played.
+		 */
+		_spectatorPlaying: false,
+		
+		/******************************
+		 * this user entered the game from the lobby when clicking the "watch game" button. this user can only watch the game. this player cannot play the game even when game ends.
+		 */
+		_spectatorWatching: false,
+		
+		/******************************
+		 * send the current move number to the watching spectator so that the timer and white box underneath the P1, P2, P3 or P4 moves, can be updated.
+		 */
+		_spectatorWatchingGetMoveNumber: 0,		
+		
+		/******************************
+		 * This is the profile avatar image number used to display the image.
+		 */
+		_avatarNumber: ["0.png", "0.png", "0.png", "0.png"],
+		
+		/******************************
+		 * save the player's game player state to the database. is the player playing a game or waiting to play. 
+		 * 0: = not playing but still at game room. 
+		 * 1: playing a game. 
+		 * 2: left game room while still playing it. 
+		 * 3: left room when game was over. 
+		 * 4: quit game.
+		 * this var is used to display players who are waiting for a game at the game room and to get the _count of how many players are waiting at game room.
+		 */		
+		_gamePlayersValues: [0, 0, 0, 0],		
+		
+		_moveNumberDynamic: [0, 0, 0, 0],
+		
+		/******************************
+		 * current room that the user is in. zero equals lobby.
+		 */
+		_room: 0,
+		
+		/******************************
+		 * you can pass any text here. The text is sent to server and at server if text matches then do something. clear the text after sending the event to server.
+		* for example, this is needed for game room. without a "sender" code, each player will go to this event at client the total amount of users in this room. so if there are two players and one spectator watching, each player will go to this event, at client, three times. however, at server, if this var text is "sender" then instead of a broadcast to room, _sender.send is used.
 		 */
 		_triggerEvent: "",
+		
 		_gameId: -1,		
 		
-		_gamesAllTotalWins: [0, 0, 0, 0],			// any game played. total game wins.
-		_gamesAllTotalLosses: [0, 0, 0, 0],			// any game played. total game losses.
-		_gamesAllTotalDraws: [0, 0, 0, 0],			// any game played. total game draws.
-		_gameName: "",						// the game being played.
-		_usernameInvite: "",				// username of the sent room invite.
-		_gameMessage: "",					// game win, lose or draw messages.
-		_actionWho: "",						// player that you want something done to.
-		_actionNumber: 0,					// refers to an action, eg, 1 = kick. see the "Action By Player" event at server.
-		_actionDo: -1,						// targeted player must do an action of _actionNumber. this var can be a time remaining var or whatever is needed for an Int.
-		_moveTimeRemaining: [0, 0, 0, 0],	// time remaining to make a move. when time reaches 0, the game ends and that player losses.
-		_score: [0, 0, 0, 0],				// total score in game.
-		_cash: [0, 0, 0, 0],				// total cash in game.
-		_quitGame: false,					// player had quit game.
-		_isGameFinished: true,				// false if game is still being played. defaults to true because when entering the game room the game for those players has not started yet.
+		/******************************
+		 * any game played. total game wins for player.
+		 */
+		_gamesAllTotalWins: [0, 0, 0, 0],
 		
-		_gameIsFinished: false,				// SAVE A VAR TO MYSQL SO THAT SOMEONE CANNOT INVITE WHEN STILL IN GAME ROOM. ALSO USED TO PASS A VAR TO USER SPECTATOR WATCHING. THAT VAR IS USED TO START A GAME FOR THAT SPECTATOR IF THE _gameIsFinished VALUE IS FALSE.
-		_moveTotal: 0, // how many times a player moved a piece.
+		/******************************
+		 * any game played. total game losses for player.
+		 */
+		_gamesAllTotalLosses: [0, 0, 0, 0],
+		
+		/******************************
+		 * any game played. total game draws for player.
+		 */
+		_gamesAllTotalDraws: [0, 0, 0, 0],
+		
+		/******************************
+		 * the game being played.
+		 */
+		_gameName: "",
+		
+		/******************************
+		 * username of the sent room invite.
+		 */
+		_usernameInvite: "",
+		
+		/******************************
+		 * game win, lose or draw messages.
+		 */
+		_gameMessage: "",
+		
+		/******************************
+		 * player that you want something done to.
+		 */
+		_actionWho: "",
+		
+		/******************************
+		 * refers to an action, eg, 1 = kick. see the "Action By Player" event at server.
+		 */
+		_actionNumber: 0,
+		
+		/******************************
+		 * targeted player must do an action of _actionNumber. this var can be a time remaining var or whatever is needed for an Int.
+		 */
+		_actionDo: -1,
+		
+		/******************************
+		 * time remaining to make a move. when time reaches 0, the game ends and that player losses.
+		 */
+		_moveTimeRemaining: [0, 0, 0, 0],
+		
+		/******************************
+		 * total score in game.
+		 */
+		_score: [0, 0, 0, 0],
+		
+		/******************************
+		 * total cash in game.
+		 */
+		_cash: [0, 0, 0, 0],
+		
+		/******************************
+		 * player had quit game.
+		 */
+		_quitGame: false,
+		
+		/******************************
+		 * false if game is still being played. defaults to true because when entering the game room the game for those players has not started yet.
+		 */
+		_isGameFinished: true,
+		
+		/******************************
+		 * SAVE A VAR TO MYSQL SO THAT SOMEONE CANNOT INVITE WHEN STILL IN GAME ROOM. ALSO USED TO PASS A VAR TO USER SPECTATOR WATCHING. THAT VAR IS USED TO START A GAME FOR THAT SPECTATOR IF THE _gameIsFinished VALUE IS FALSE.
+		 */
+		_gameIsFinished: false,
+		
+		/******************************
+		 * how many times a player moved a piece.
+		 */
+		_moveTotal: 0,
+		
 		/******************************
 		* this is the time when game is started.
 		*/
@@ -2054,19 +3045,42 @@ class RegTypedef
 	public static var _dataStatistics:DataStatistics = 
 	{
 		id: Std.string(FlxG.random.int(100000000, 999999999)) + Std.string(FlxG.random.int(100000000, 999999999)),
-		_username: "", 				// the username of the player.
+		
+		tid: 49,
+		
+		/******************************
+		 * the name of the event at server -> Events.hx or client -> NetworkEventsMain.hx that this typedef can be sent to.
+		 */
+		_event_name: "",
+		
+		/******************************
+		 * the username of the player.
+		 */
+		_username: "",
+		
+		/******************************
+		 * current room that the user is in. zero equals lobby.
+		 */
 		_room: 0,	
+		
 		/******************************
 		 * this is the time when game is started.
 		 */
 		_timeTotal: 0,
-		_moveTimeRemaining: [0, 0, 0, 0], // time since game has started.
-		_chess_elo_rating: 0, // current chess Elo rating for player.
-		
 		
 		/******************************
-		 * If events a and b are sent from event c to the server in that order, sometimes the server will send back event b to the client before the server finishes event a.
-		 * to solve that problem, at client, move event b to the bottom of event a and if this var has the name of event b then at that code line event b will be executed.
+		 * time since game has started.
+		 */
+		_moveTimeRemaining: [0, 0, 0, 0],
+		
+		/******************************
+		 * current chess Elo rating for player.
+		 */
+		_chess_elo_rating: 0,
+		
+		/******************************
+		 * you can pass any text here. The text is sent to server and at server if text matches then do something. clear the text after sending the event to server.
+		* for example, this is needed for game room. without a "sender" code, each player will go to this event at client the total amount of users in this room. so if there are two players and one spectator watching, each player will go to this event, at client, three times. however, at server, if this var text is "sender" then instead of a broadcast to room, _sender.send is used.
 		 */
 		_triggerEvent: "",
 		
@@ -2074,6 +3088,10 @@ class RegTypedef
 		_highest_experience_points: 0,
 		_highest_credits: 0,
 		_highest_house_coins: 0,
+		
+		/******************************
+		 * this block is for any game played.
+		 */
 		_shortest_time_game_played: 0,
 		_longest_time_game_played: 0,
 		_longest_current_winning_streak: 0,
@@ -2082,10 +3100,21 @@ class RegTypedef
 		_highest_losing_streak: 0,
 		_longest_current_draw_streak: 0,
 		_highest_draw_streak: 0,
-	
-		_gamesAllTotalWins: 0,		// all game wins for player.
-		_gamesAllTotalLosses: 0,	// all game losses for player.
-		_gamesAllTotalDraws: 0,		// all game draws for player.
+		
+		/******************************
+		 * all game wins for player.
+		 */
+		_gamesAllTotalWins: 0,
+		
+		/******************************
+		 * all game losses for player.
+		 */
+		_gamesAllTotalLosses: 0,
+		
+		/******************************
+		 * all game draws for player.
+		 */
+		_gamesAllTotalDraws: 0,
 		
 		_checkersWins: 0,
 		_checkersLosses: 0,
@@ -2103,10 +3132,25 @@ class RegTypedef
 		_signatureGameLosses: 0,
 		_signatureGameDraws: 0,
 		
-		_creditsToday: 0,			// credits given on event day. credits can be redeemed for a month of paid membership. Maximum of 5 credits per event day.
-		_creditsTotal: 0,			// each credit_today value is written to this value. this value only decreases when credits are used to redeem something, such as 1 month of membership.
-		_experiencePoints: 0,		// each game played gives some experience points. get enough experience point to increase players level.
-		_houseCoins: 100, 				// at the house event, after a game is played, some coins will be given. Use those coins to buy house furniture. Access your house from the house button at lobby.
+		/******************************
+		 * credits given on event day. credits can be redeemed for a month of paid membership. Maximum of 5 credits per event day.
+		 */
+		_creditsToday: 0,
+		
+		/******************************
+		 * each credit_today value is written to this value. this value only decreases when credits are used to redeem something, such as 1 month of membership.
+		 */
+		_creditsTotal: 0,
+		
+		/******************************
+		 * each game played gives some experience points. get enough experience point to increase players level.
+		 */
+		_experiencePoints: 0,
+		
+		/******************************
+		 * at the house event, after a game is played, some coins will be given. Use those coins to buy house furniture. Access your house from the house button at lobby.
+		 */
+		_houseCoins: 100,
 		
 	}
 	
@@ -2116,19 +3160,76 @@ class RegTypedef
 	public static var _dataHouse:DataHouse = 
 	{
 		id: Std.string(FlxG.random.int(100000000, 999999999)) + Std.string(FlxG.random.int(100000000, 999999999)),
-		_username: "", 				// the username of the player.
-		_sprite_number: "", // refers to a sprite that was bought to display at house. eg, 1.png.
-		_sprite_name: "", // this is the name of the sprite in the order it was bought and then after, in the order of was changed using the z-order buttons of bring to front and bring to back.
-		_items_x: "", // all items x position that is separated by a comma.
-		_items_y: "", // all items y position that is separated by a comma.
-		_map_x: "", // map x coordinates on scene at the time the item was bought or mouse dragged then mouse released.
-		_map_y: "", // map y coordinates on scene at the time the item was bought or mouse dragged then mouse released.
-		_map_offset_x: "", // when the map is moved up, down, left or right, this value increases in size by those pixels. this var is used at House update() so that the map hover can be displayed when outside of its default map boundaries. it is also added or subtracted to the mouse coordinates at other classes so that the map or panel items can correctly be detected by the mouse. for example, the mouse.x cannot be at a value of 2000 when the stage has a width of about 1400.
+		
+		tid: 50,
+		
+		/******************************
+		 * the name of the event at server -> Events.hx or client -> NetworkEventsMain.hx that this typedef can be sent to.
+		 */
+		_event_name: "",
+		
+		/******************************
+		 * the username of the player.
+		 */
+		_username: "",
+		
+		/******************************
+		 * refers to a sprite that was bought to display at house. eg, 1.png.
+		 */
+		_sprite_number: "",
+		
+		/******************************
+		 * this is the name of the sprite in the order it was bought and then after, in the order of was changed using the z-order buttons of bring to front and bring to back.
+		 */
+		_sprite_name: "",
+		
+		/******************************
+		 * all items x position that is separated by a comma.
+		 */
+		_items_x: "",
+		
+		/******************************
+		 * all items y position that is separated by a comma.
+		 */
+		_items_y: "",
+		
+		/******************************
+		 * map x coordinates on scene at the time the item was bought or mouse dragged then mouse released.
+		 */
+		_map_x: "",
+		
+		/******************************
+		 * map y coordinates on scene at the time the item was bought or mouse dragged then mouse released.
+		 */
+		_map_y: "",
+		
+		/******************************
+		 * when the map is moved up, down, left or right, this value increases in size by those pixels. this var is used at House update() so that the map hover can be displayed when outside of its default map boundaries. it is also added or subtracted to the mouse coordinates at other classes so that the map or panel items can correctly be detected by the mouse. for example, the mouse.x cannot be at a value of 2000 when the stage has a width of about 1400.
+		 */
+		_map_offset_x: "",
+		
 		_map_offset_y: "",
-		_item_is_hidden: "", // is this item hidden?
-		_is_item_purchased: "", // a list of 1 and 0's separated by a comma. the first value in this list refers to item 1. if that value is 1 then that item was purchased.
-		_item_direction_facing: "", // stores the direction that the furniture item is facing. values of 0=SE, 1:SW, 2:NE, 3:NW.
-		_item_order: "", // the order of the furniture items displayed.
+		
+		/******************************
+		 * is this item hidden?
+		 */
+		_item_is_hidden: "",
+		
+		/******************************
+		 * a list of 1 and 0's separated by a comma. the first value in this list refers to item 1. if that value is 1 then that item was purchased.
+		 */
+		_is_item_purchased: "",
+		
+		/******************************
+		 * stores the direction that the furniture item is facing. values of 0=SE, 1:SW, 2:NE, 3:NW.
+		 */
+		_item_direction_facing: "",
+		
+		/******************************
+		 * the order of the furniture items displayed.
+		 */
+		_item_order: "",
+		
 		/******************************
 		* when value is true the furniture item will be displayed on the map behind a wall. This string contains true and false values up to 200 furniture items separated by a comma.
 		*/
@@ -2149,6 +3250,7 @@ class RegTypedef
 	 * this var is shown under a left tile.
 	 */
 		_wall_up_behind: "",
+		
 		_wall_up_in_front: "",
 		
 		/******************************
@@ -2165,16 +3267,38 @@ class RegTypedef
 		 * the visibility state of all up wall tiles.
 		 */
 		_wall_up_behind_is_hidden: "",
+		
 		_wall_up_in_front_is_hidden: "",
 	}
 		
 	public static var _dataLeaderboards:DataLeaderboards = 
 	{
 		id: Std.string(FlxG.random.int(100000000, 999999999)) + Std.string(FlxG.random.int(100000000, 999999999)),
-		_username: "", 				// the username of the player.
-		_usernames: "",				// this holds all players in a top leaderboard list. the usernames in the list is separated with a comma.
-		_experiencePoints: "",		// total XP for all players. each XP is separated by a comma.
+		
+		tid: 51,
+		
+		/******************************
+		 * the name of the event at server -> Events.hx or client -> NetworkEventsMain.hx that this typedef can be sent to.
+		 */
+		_event_name: "",
+		
+		/******************************
+		 * the username of the player.
+		 */
+		_username: "",
+		
+		/******************************
+		 * this holds all players in a top leaderboard list. the usernames in the list is separated with a comma.
+		 */
+		_usernames: "",
+		
+		/******************************
+		 * total XP for all players. each XP is separated by a comma.
+		 */
+		_experiencePoints: "",
+		
 		_houseCoins: "",
+		
 		_worldFlag: "",
 	}
 	
@@ -2208,26 +3332,28 @@ class RegTypedef
 	public static function resetTypedefDataOnce():Void
 	{
 		_dataGame0.id = _dataGame.id;
-		_dataGame0._username = ""; 				// the username of the player.	
-		_dataGame0._room = 0;					// current room that the user is in. zero equals no room.
 		
+		_dataGame0._username = "";	
+		_dataGame0._room = 0;
 		_dataGame1.id = _dataGame.id;
-		_dataGame1._username = ""; 				// the username of the player.	
-		_dataGame1._room = 0;
 		
+		_dataGame1._username = "";
+		_dataGame1._room = 0;		
 		_dataGame2.id = _dataGame.id;
-		_dataGame2._username = ""; 				// the username of the player.	
+		_dataGame2._username = "";	
 		_dataGame2._room = 0;
 		
 		_dataGame3.id = _dataGame.id;
-		_dataGame3._username = ""; 				// the username of the player.	
+		_dataGame3._username = "";
 		_dataGame3._room = 0;
 		
 		_dataGame4.id = _dataGame.id;
-		_dataGame4._username = ""; 				// the username of the player.	
+		_dataGame4._username = "";
 		_dataGame4._room = 0;
 		
-		// -1 = not used. 0 = nobody owns this unit. 1 = player 1's unit. 2:player 2's unit. 3:player 3's unit. 4:player 4's unit. the first value is yy value and the second is xx value.
+		/******************************
+		 * -1 = not used. 0 = nobody owns this unit. 1 = player 1's unit. 2:player 2's unit. 3:player 3's unit. 4:player 4's unit. the first value is yy value and the second is xx value.
+		 */
 		_dataGame4._gameUniqueValueForPiece = 
 		[[0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0],
 		[0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0],
@@ -2238,7 +3364,9 @@ class RegTypedef
 		[0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0],
 		[0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0]];	
 		
-		// how many house/taxi/store pieces are on units. the first value is yy value and the second is xx value.
+		/******************************
+		 * how many house/taxi/store pieces are on units. the first value is yy value and the second is xx value.
+		 */
 		_dataGame4._gameHouseTaxiCabOrCafeStoreForPiece =
 		[[0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0],
 		[0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0],
@@ -2249,7 +3377,9 @@ class RegTypedef
 		[0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0],
 		[0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0]];
 						
-		// Undeveloped units. no houses, taxi or cafe, nobody owns this unit when a value for that unit equals not 0.  the first value is yy value and the second is xx value.				
+		/******************************
+		 * Undeveloped units. no houses, taxi or cafe, nobody owns this unit when a value for that unit equals not 0.  the first value is yy value and the second is xx value.
+		 */
 		_dataGame4._gameUndevelopedValueOfUnit =
 		[0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 		0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -2260,11 +3390,10 @@ class RegTypedef
 		0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 		0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 		
-		
 		//#############################
 		
-		_dataMovement.id = _dataGame.id;// player instance. this tells one player from another.
-		_dataMovement._username = ""; 				// the username of the player.
+		_dataMovement.id = _dataGame.id;
+		_dataMovement._username = "";
 		_dataMovement._gid = "";
 		_dataMovement._spectatorWatching = 0;
 		
@@ -2272,14 +3401,13 @@ class RegTypedef
 		* used to get the history from the room host.
 		*/
 		_dataMovement._username_room_host = "";
-		_dataMovement._history_get_all = 0;
-		
-		_dataMovement._room = 0; 		// current room that the user is in. zero equals no room.
+		_dataMovement._history_get_all = 0;		
+		_dataMovement._room = 0;
 		
 		//#############################
 		
 		_dataGameMessage.id = _dataGame.id;
-		_dataGameMessage._username = ""; 	// the username of the player.	
+		_dataGameMessage._username = "";
 		_dataGameMessage._room = 0;
 		
 		//#############################
@@ -2297,14 +3425,19 @@ class RegTypedef
 		//#############################
 		
 		_dataQuestions.id = _dataGame.id;
-		_dataQuestions._username = ""; 	// the username of the player.	
+		_dataQuestions._username = "";	
 		_dataQuestions._room = 0;	
 		
 		//#############################
 		
 		_dataTournaments.id = _dataGame.id;
-		_dataTournaments._username = ""; 		// the username of the player.	
-		_dataTournaments._player1 = "";	// _player1: "",	// if this name is not empty then its the name of the user in the tournament.
+		_dataTournaments._username = "";
+		
+		/******************************
+		 * if this name is not empty then its the name of the user in the tournament.
+		 */
+		_dataTournaments._player1 = "";
+		
 		_dataTournaments._player2 = "";
 		_dataTournaments._gid = "";
 		_dataTournaments._tournament_started = false;
@@ -2321,51 +3454,91 @@ class RegTypedef
 		_dataTournaments._time_remaining_player2 = "";
 		_dataTournaments._move_number_current = -1;
 		_dataTournaments._timestamp = 0;
+		_dataTournaments._reminder_by_mail = false;
 		
 		//#############################
 		
 		_dataAccount.id = _dataGame.id;
-		//_dataAccount._username = ""; 	// the username of the player.	
-		_dataAccount._popupMessage = "";				// the current message to be displayed as a message box.
-		_dataAccount._hostname = "";						// used to return the this local hosts name.
+		
+		/******************************
+		 * the current message to be displayed at a message box.
+		 */
+		_dataAccount._popupMessage = "";
+		
+		/******************************
+		 * used to return the this local hosts name.
+		 */
+		_dataAccount._hostname = "";
+		
 		_dataAccount._password_hash = "";
-		_dataAccount._ip = "";							// IP of player.
-		_dataAccount._alreadyOnlineHost = false;		// is there two computers with the same host name connected to server?
-		_dataAccount._alreadyOnlineUser = false;		// is there already a user with that username online?
+		
+		/******************************
+		 * IP address of player.
+		 */
+		_dataAccount._ip = "";
+		
+		/******************************
+		 * is there two computers with the same host name connected to server?
+		 */
+		_dataAccount._alreadyOnlineHost = false;
+		
+		/******************************
+		 * is there already a user with that username online?
+		 */
+		_dataAccount._alreadyOnlineUser = false;
 		
 		//#############################
 		
 		_dataMisc.id = _dataGame.id;
-		_dataMisc._username = "";			// the username of the player.
-		_dataMisc._room = 0;					// current room that the user is in. zero equals no room.
+		
+		/******************************
+		 * the username of the player.
+		 */
+		_dataMisc._username = "";
+		
+		/******************************
+		 * current room that the user is in. zero equals no room.
 		// 0 = empty, 1 computer game, 2 creating room, 3 = firth player waiting to play game. 4 = second player in waiting room. 5 third player in waiting room if any. 6 - forth player in waiting room if any. 7 - room full, 8 - playing game / waiting game.
+		 */
+		_dataMisc._room = 0;
 		
 		_dataMisc._roomState =	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 						 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 						 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 						 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 						 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-		// maximum number of players that can play the selected game.
+		
+		/******************************
+		 * maximum number of players that can play the selected game.
+		 */
 		_dataMisc._roomPlayerLimit = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 						  0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 						  0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 						  0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 						  0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-		// current total of players in a room.						 
+		
+		/******************************
+		 * current total of players in a room.
+		 */
 		_dataMisc._roomPlayerCurrentTotal = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 						0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 						0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 						0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 						0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-		// used to list the games at lobby. see RegFunctions.gameName(). also, for not a host player, the data from here will populate RegTypedef._dataMisc._gameId for that player. 
+		
+		/******************************
+		 * used to list the games at lobby. see RegFunctions.gameName(). also, for not a host player, the data from here will populate RegTypedef._dataMisc._gameId for that player. 
 		//-1: no data, 0:checkers, 1:chess, etc.
+		 */
 		_dataMisc._roomGameIds =	[-1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
 						 -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
 						 -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
 						 -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
 						 -1, -1, -1, -1, -1, -1, -1, -1, -1, -1];
 		
-		// a list of every username that is a host of a room.
+		/******************************
+		 * a list of every username that is a host of a room.
+		 */
 		_dataMisc._roomHostUsername =
 						["", "", "", "", "", "", "", "", "", "",
 					"", "", "", "", "", "", "", "", "", "",
@@ -2379,50 +3552,117 @@ class RegTypedef
 					"", "", "", "", "", "", "", "", "", "",
 					"", "", "", "", "", "", "", "", "", "",
 					"", "", "", "", "", "", "", "", "", ""];
-					
-		// if this vars value is true then a different player will not be able change the room state until the player has finished the "Greater RoomState Value" event at "Get Room Data" event. Note: that when a player leaves the game room, since that userLocation will always be a value of zero, a _roomIsLocked is not needed.	
+		
+		/******************************
+		 * if this vars value is true then a different player will not be able change the room state until the player has finished the "Greater RoomState Value" event at "Get Room Data" event. Note: that when a player leaves the game room, since that userLocation will always be a value of zero, a _roomIsLocked is not needed.	
+		 */
 		_dataMisc._roomIsLocked = 
 						[0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 						 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 					 	 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 						 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 						 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-		// If vars value is true then a check for a room lock will be made. This is used only when entering a room. If mouse clicked the "refresh room" button or leaving a game room then a check will not be made because in these cases a check is not needed. See Note: at _roomIsLocked for the reason why.
+		
+		/******************************
+		 * If vars value is true then a check for a room lock will be made. This is used only when entering a room. If mouse clicked the "refresh room" button or leaving a game room then a check will not be made because in these cases a check is not needed. See Note: at _roomIsLocked for the reason why.
+		*/
 		_dataMisc._roomCheckForLock =
 						[0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 						 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 					 	 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 						 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 						 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];	
-		// When a room lock is true then this room cannot be entered by the current player and this is the message saying that someone is already accessing the room so try again shortly.
+		
+		/******************************
+		 * When a room lock is true then this room cannot be entered by the current player and this is the message saying that someone is already accessing the room so try again shortly.
+		 */
 		_dataMisc._roomLockMessage = "";
-		_dataMisc._userLocation = 0;				// currently where the user is at. lobby, __scene_waiting_room, etc. 0:lobby, 1:creating room, 2:__scene_waiting_room, 3:room game playing.
+		
+		/******************************
+		 * currently where the user is at. lobby, __scene_waiting_room, etc. 0:lobby, 1:creating room, 2:__scene_waiting_room, 3:room game playing.
+		 */
+		_dataMisc._userLocation = 0;
 		
 		//#############################
 		
 		_dataPlayers.id = _dataGame.id;
-		_dataPlayers._username = "";					// username of the client.
+		
+		/******************************
+		 * the username of the player.
+		 */
+		_dataPlayers._username = "";
 		
 		//#############################
 		
 		_dataHouse.id = _dataGame.id;
-		_dataHouse._username = "";					// username of the client.
-		_dataHouse._sprite_number = ""; // refers to a sprite that was bought to display at house. eg, 1.png.
-		_dataHouse._sprite_name = ""; // this is the name of the sprite in the order it was bought and then after, in the order of was changed using the z-order buttons of bring to front and bring to back.
-	 	_dataHouse._items_x = ""; // all items x position that is separated by a comma.
-		_dataHouse._items_y = ""; // all items y position that is separated by a comma.
-		_dataHouse._map_x = ""; // map x coordinates on scene at the time the item was bought or mouse dragged then mouse released.
-		_dataHouse._map_y = ""; // map y coordinates on scene at the time the item was bought or mouse dragged then mouse released.
-		_dataHouse._map_offset_x = ""; // when the map is moved up, down, left or right, this value increases in size by those pixels. this var is used at House update() so that the map hover can be displayed when outside of its default map boundaries. it is also added or subtracted to the mouse coordinates at other classes so that the map or panel items can correctly be detected by the mouse. for example, the mouse.x cannot be at a value of 2000 when the stage has a width of about 1400.
+		
+		/******************************
+		 * the username of the player.
+		 */
+		_dataHouse._username = "";
+		
+		/******************************
+		 * refers to a sprite that was bought to display at house. eg, 1.png.
+		 */
+		_dataHouse._sprite_number = "";
+		
+		/******************************
+		 * this is the name of the sprite in the order it was bought and then after, in the order of was changed using the z-order buttons of bring to front and bring to back.
+		 */
+		_dataHouse._sprite_name = "";
+	 	
+		/******************************
+		 * all items x position that is separated by a comma.
+		 */
+		_dataHouse._items_x = "";
+		
+		/******************************
+		 * all items y position that is separated by a comma.
+		 */
+		_dataHouse._items_y = "";
+		
+		/******************************
+		 * map x coordinates on scene at the time the item was bought or mouse dragged then mouse released.
+		 */
+		_dataHouse._map_x = "";
+		
+		/******************************
+		 * map y coordinates on scene at the time the item was bought or mouse dragged then mouse released.
+		 */
+		_dataHouse._map_y = "";
+		
+		/******************************
+		 * when the map is moved up, down, left or right, this value increases in size by those pixels. this var is used at House update() so that the map hover can be displayed when outside of its default map boundaries. it is also added or subtracted to the mouse coordinates at other classes so that the map or panel items can correctly be detected by the mouse. for example, the mouse.x cannot be at a value of 2000 when the stage has a width of about 1400.
+		 */
+		_dataHouse._map_offset_x = "";
+		
 		_dataHouse._map_offset_y = "";
-		_dataHouse._item_is_hidden = ""; // is this item hidden?
-		_dataHouse._is_item_purchased = ""; // a list of 1 and 0's separated by a comma. the first value in this list refers to item 1. if that value is 1 then that item was purchased.
-		_dataHouse._item_direction_facing = ""; // stores the direction that the furniture item is facing. values of 0=SE, 1:SW, 2:NE, 3:NW.
-		_dataHouse._item_order = ""; // the order of the furniture items displayed.
+		
+		/******************************
+		 * is this item hidden?
+		 */
+		_dataHouse._item_is_hidden = "";
+		
+		/******************************
+		 * a list of 1 and 0's separated by a comma. the first value in this list refers to item 1. if that value is 1 then that item was purchased.
+		 */
+		_dataHouse._is_item_purchased = "";
+		
+		/******************************
+		 * stores the direction that the furniture item is facing. values of 0=SE, 1:SW, 2:NE, 3:NW.
+		 */
+		_dataHouse._item_direction_facing = "";
+		
+		/******************************
+		 * the order of the furniture items displayed.
+		 */
+		_dataHouse._item_order = "";
+		
 		/******************************
 		* when value is true the furniture item will be displayed on the map behind a wall. This string contains true and false values up to 200 furniture items separated by a comma.
 		*/
 		_dataHouse._item_behind_walls = "";
+		
 		/******************************
 		 * this holds all floor tiles on the map. This var is read from left to right but that data is placed on the map starting from the top left of map and then moving right and similar to reading words in a book.
 		 */
@@ -2438,7 +3678,9 @@ class RegTypedef
 	 * this var is shown under a left tile.
 	 */
 		_dataHouse._wall_up_behind = "";
+		
 		_dataHouse._wall_up_in_front = "";
+		
 		/******************************
 		 * the visibility state of all floor tiles.
 		 */
@@ -2453,151 +3695,437 @@ class RegTypedef
 		 * the visibility state of all up wall tiles.
 		 */
 		_dataHouse._wall_up_behind_is_hidden = "";
+		
 		_dataHouse._wall_up_in_front_is_hidden = "";
 		
 		resetTypedefDataSome(); 
 		resetTypedefData();
 	}
 	
-	// returning to lobby. called after then event "Lesser RoomState Value" is called.
+	/******************************
+	 * returning to lobby. called after then event "Lesser RoomState Value" is called.
+	 */
 	public static function resetTypedefDataSome():Void
 	{
-		_dataMisc._spectatorWatching = false;		// this user entered the game from the lobby when clicking the "watch game" button. this user can only watch the game. this player cannot play the game even when game ends.
-		_dataPlayers._spectatorWatching = false;	// this user entered the game from the lobby when clicking the "watch game" button. this user can only watch the game. this player cannot play the game even when game ends.
-		_dataPlayers._spectatorWatchingGetMoveNumber = 0;		// send the current move number to the watching spectator so that the timer and white box underneath the P1, P2, P3 or P4 moves, can be updated.
+		/******************************
+		 * this user entered the game from the lobby when clicking the "watch game" button. this user can only watch the game. this player cannot play the game even when game ends.
+		 */
+		_dataMisc._spectatorWatching = false;
 		
-		_dataPlayers._usernamesDynamic = ["", "", "", ""]; // one to four usernames of the players in the waiting room or game room.
-		_dataPlayers._usernamesStatic = ["", "", "", ""]; // the difference between _usernamesDynamic and _usernamesStatic is that a username can get removed from the list of _usernamesDynamic, but the _usernamesStatic will always have the same names through the actions within the game room.
-		_dataPlayers._usernamesTotalDynamic = 0; // current total of players playing the game.
-		_dataPlayers._usernamesTotalStatic = 0; // total players that can play a game in that game room.
-		_dataPlayers._spectatorPlaying = false; 		// user who was once playing but is now watching the game being played. 
+		/******************************
+		 * this user entered the game from the lobby when clicking the "watch game" button. this user can only watch the game. this player cannot play the game even when game ends.
+		 */
+		_dataPlayers._spectatorWatching = false;
+		
+		/******************************
+		 * send the current move number to the watching spectator so that the timer and white box underneath the P1, P2, P3 or P4 moves, can be updated.
+		 */
+		_dataPlayers._spectatorWatchingGetMoveNumber = 0;
+		
+		/******************************
+		 * one to four usernames of the players in the waiting room or game room.
+		 */
+		_dataPlayers._usernamesDynamic = ["", "", "", ""];
+		
+		/******************************
+		 * the difference between _usernamesDynamic and _usernamesStatic is that a username can get removed from the list of _usernamesDynamic, but the _usernamesStatic will always have the same names through the actions within the game room.
+		 */
+		_dataPlayers._usernamesStatic = ["", "", "", ""];
+		
+		/******************************
+		 * current total of players playing the game.
+		 */
+		_dataPlayers._usernamesTotalDynamic = 0;
+		
+		/******************************
+		 * total players that can play a game in that game room.
+		 */
+		_dataPlayers._usernamesTotalStatic = 0;
+		
+		/******************************
+		 * user who was once playing but is now watching the game being played.
+		 */
+		_dataPlayers._spectatorPlaying = false;
+		
 		_dataPlayers._moveNumberDynamic = [0, 0, 0, 0];
-		_dataPlayers._room = 0;	// current room that the user is in. zero equals no room.
+		
+		/******************************
+		 * current room that the user is in. zero equals no room.
+		 */
+		_dataPlayers._room = 0;
+		
 		_dataPlayers._gameId = -1;
 		
-		_dataPlayers._gamesAllTotalWins = [0, 0, 0, 0];			// total game wins of host player.
-		_dataPlayers._gamesAllTotalLosses = [0, 0, 0, 0];		// total game losses of host player.
-		_dataPlayers._gamesAllTotalDraws = [0, 0, 0, 0];			// total game draws of host player.
-		_dataPlayers._gameName = "";					// the game being played.
-		_dataPlayers._moveTimeRemaining = [0, 0, 0, 0];	// LEAVE THIS CODE HERE. DON'T MOVE. time remaining to make a move. when time reaches 0, the game ends and that player losses.
+		/******************************
+		 * total game wins of player.
+		 */
+		_dataPlayers._gamesAllTotalWins = [0, 0, 0, 0];
+		
+		/******************************
+		 * total game losses of player.
+		 */
+		_dataPlayers._gamesAllTotalLosses = [0, 0, 0, 0];
+		
+		/******************************
+		 * total game draws of player.
+		 */
+		_dataPlayers._gamesAllTotalDraws = [0, 0, 0, 0];
+		
+		/******************************
+		 * the game being played.
+		 */
+		_dataPlayers._gameName = "";
+		
+		/******************************
+		 * LEAVE THIS CODE HERE. DON'T MOVE. time remaining to make a move. when time reaches 0, the game ends and that player losses.
+		 */
+		_dataPlayers._moveTimeRemaining = [0, 0, 0, 0];
 			
 		//#################################
-		//_dataTournaments._player1 = "";	// if this name is not empty then its the name of the user in the tournament.
 		_dataTournaments._player2 = "";
 		_dataTournaments._move_total = 0;
 	}
 	
-	// restarting game. changing states.
+	/******************************
+	 * restarting game. changing states.
+	 */
 	public static function resetTypedefData():Void
 	{
-		_dataGame0._gameUnitNumberNew = -1;			// unit number. 0-64
-		_dataGame0._gameUnitNumberOld = -1;			// unit number. 0-64
-		_dataGame0._gameXXold = -1;					// unit x coordinate. you have requested this gameboard piece.
-		_dataGame0._gameYYold = -1;					// unit y coordinate. you have requested this gameboard piece.
-		_dataGame0._gameXXnew = -1;					// unit x coordinate. you have requested a piece be moved here.
-		_dataGame0._gameYYnew = -1;					// unit y coordinate. you have requested a piece be moved here.
-		_dataGame0._gameXXold2 = -1;				// unit x coordinate. you have requested this gameboard piece.
-		_dataGame0._gameYYold2 = -1;				// unit y coordinate. you have requested this gameboard piece.
-		_dataGame0._triggerNextStuffToDo = 0;	// used to determine if the pawn is En Passant. also in Reversi, if all 4 discs have been placed on the board.
-		_dataGame0._isThisPieceAtBackdoor = false;			// each board game should use this for only one var.
+		/******************************
+		 * unit number. 0-64
+		 */
+		_dataGame0._gameUnitNumberNew = -1;
+		
+		/******************************
+		 * unit number. 0-64
+		 */
+		_dataGame0._gameUnitNumberOld = -1;
+		
+		/******************************
+		 * unit x coordinate. this is the unit that you moved from.
+		 */
+		_dataGame0._gameXXold = -1;
+		
+		/******************************
+		 * unit y coordinate. this is the unit that you moved from.
+		 */
+		_dataGame0._gameYYold = -1;
+		
+		/******************************
+		 * unit x coordinate. this is the unit that you moved to.
+		 */
+		_dataGame0._gameXXnew = -1;
+		
+		/******************************
+		 * unit y coordinate. this is the unit that you moved to.
+		 */
+		_dataGame0._gameYYnew = -1;
+		
+		/******************************
+		 * unit x coordinate. this is the unit that you moved from.
+		 */
+		_dataGame0._gameXXold2 = -1;
+		
+		/******************************
+		 * unit y coordinate. this is the unit that you moved from.
+		 */
+		_dataGame0._gameYYold2 = -1;
+		
+		/******************************
+		 * used to determine if the pawn is En Passant. also in Reversi, if all 4 discs have been placed on the board.
+		 */
+		_dataGame0._triggerNextStuffToDo = 0;
+		
+		/******************************
+		 * each board game should use this for only one var.
+		 */
+		_dataGame0._isThisPieceAtBackdoor = false;
 		
 		//#############################
 		
-		_dataGame1._pieceValue = -1;				// this is the point value of each piece on the standard gameboard
-		_dataGame1._uniqueValue = -1;				// unique value of a piece.
-		_dataGame1._gameUnitNumberNew = -1;			// unit number. 0-64
-		_dataGame1._gameUnitNumberOld = -1;			// unit number. 0-64
-		_dataGame1._gameUnitNumberNew2 = -1;		// unit number. 0-64
-		_dataGame1._gameUnitNumberOld2 = -1;		// unit number. 0-64
-		_dataGame1._gameXXold = -1;					// unit x coordinate. you have requested this gameboard piece.
-		_dataGame1._gameYYold = -1;					// unit y coordinate. you have requested this gameboard piece.
-		_dataGame1._gameXXnew = -1;					// unit x coordinate. you have requested a piece be moved here.
-		_dataGame1._gameYYnew = -1;					// unit y coordinate. you have requested a piece be moved here.
-		_dataGame1._gameXXold2 = -1;				// unit x coordinate. you have requested this gameboard piece.
-		_dataGame1._gameYYold2 = -1;				// unit y coordinate. you have requested this gameboard piece.
-		_dataGame1._gameXXnew2 = -1;				// unit x coordinate. you have requested a piece be moved here.
-		_dataGame1._gameYYnew2 = -1;				// unit y coordinate. you have requested a piece be moved here.
-		_dataGame1._isEnPassant = false;		// is pawn En passant? 
-		_dataGame1._isEnPassantPawnNumber = [0,0];	// the most recent pawn in En passant.
-		_dataGame1._triggerNextStuffToDo = 0;	// used to determine if the pawn is En Passant. also in Reversi, if all 4 discs have been placed on the board.
-		_dataGame1._pointValue2 = -1;				// castling vars to move the rook.
-		_dataGame1._uniqueValue2 = -1;				// castling vars.
-		_dataGame1._promotePieceLetter = "";	// this is the letter used in notation of a promoted piece selected.
-		_dataGame1._doneEnPassant = false;		// for notation.
-		// capturing unit image value for history when using the backwards button.
-	 	_dataGame1._piece_capturing_image_value = 0;
+		/******************************
+		 * this is the point value of each piece on the standard gameboard.
+		 */
+		_dataGame1._pieceValue = -1;
+		
+		/******************************
+		 * unique value of a piece.
+		 */
+		_dataGame1._uniqueValue = -1;
+		
+		/******************************
+		 * unit number. 0-64
+		 */
+		_dataGame1._gameUnitNumberNew = -1;
+		
+		/******************************
+		 * unit number. 0-64
+		 */
+		_dataGame1._gameUnitNumberOld = -1;
+		
+		/******************************
+		 * unit number. 0-64
+		 */
+		_dataGame1._gameUnitNumberNew2 = -1;
+		
+		/******************************
+		 * unit number. 0-64
+		 */
+		_dataGame1._gameUnitNumberOld2 = -1;
+		
+		/******************************
+		 * unit x coordinate. this is the unit that you moved from.
+		 */
+		_dataGame1._gameXXold = -1;
+		
+		/******************************
+		 * unit y coordinate. this is the unit that you moved from.
+		 */
+		_dataGame1._gameYYold = -1;
+		
+		/******************************
+		 * unit x coordinate. this is the unit that you moved to.
+		 */
+		_dataGame1._gameXXnew = -1;
+		
+		/******************************
+		 * unit y coordinate. this is the unit that you moved to.
+		 */
+		_dataGame1._gameYYnew = -1;
+		
+		/******************************
+		 * unit x coordinate. this is the unit that you moved from.
+		 */
+		_dataGame1._gameXXold2 = -1;
+		
+		/******************************
+		 * unit y coordinate. this is the unit that you moved from.
+		 */
+		_dataGame1._gameYYold2 = -1;
+		
+		/******************************
+		 * unit x coordinate. this is the unit that you moved to.
+		 */
+		_dataGame1._gameXXnew2 = -1;
+		
+		/******************************
+		 * unit y coordinate. this is the unit that you moved to.
+		 */
+		_dataGame1._gameYYnew2 = -1;
+		
+		/******************************
+		 * is pawn En passant? 
+		 */
+		_dataGame1._isEnPassant = false;
+		
+		/******************************
+		 * the most recent pawn in En passant.
+		 */
+		_dataGame1._isEnPassantPawnNumber = [0,0];
+		
+		/******************************
+		 * used to determine if the pawn is En Passant. also in Reversi, if all 4 discs have been placed on the board.
+		 */
+		_dataGame1._triggerNextStuffToDo = 0;
+		
+		/******************************
+		 * castling vars to move the rook.
+		 */
+		_dataGame1._pointValue2 = -1;
+		
+		/******************************
+		 * castling vars.
+		 */
+		_dataGame1._uniqueValue2 = -1;
+		
+		/******************************
+		 * this is the letter used in notation of a promoted piece selected.
+		 */
+		_dataGame1._promotePieceLetter = "";
+		
+		/******************************
+		 * for notation.
+		 * capturing unit image value for history when using the backwards button.
+		 */
+		_dataGame1._doneEnPassant = false;
+	 	
+		_dataGame1._piece_capturing_image_value = 0;
 	
-		//#################################
+		//#############################
 		
-		_dataGame2._gameXXold = -1;					// unit x coordinate. you have requested this gameboard piece.
-		_dataGame2._gameYYold = -1;					// unit y coordinate. you have requested this gameboard piece.
-		_dataGame2._triggerNextStuffToDo = 0;	// used to determine if the pawn is En Passant. also in Reversi, if all 4 discs have been placed on the board.
-		_dataGame2._pointValue2 = -1;				// castling vars to move the rook.
+		_dataGame2._gameXXold = -1;
 		
-		//#################################
+		_dataGame2._gameYYold = -1;
 		
-		_dataGame3._gameUnitNumberNew = -1;			// unit number. 0-64
+		/******************************
+		 * used to determine if the pawn is En Passant. also in Reversi, if all 4 discs have been placed on the board.
+		 */
+		_dataGame2._triggerNextStuffToDo = 0;
+		
+		/******************************
+		 * castling vars to move the rook.
+		 */
+		_dataGame2._pointValue2 = -1;
+		
+		//#############################
+		
+		_dataGame3._gameUnitNumberNew = -1;
+		
 		_dataGame3._triggerEventForAllPlayers = true;
+		
 		_dataGame3._triggerNextStuffToDo = 0;
-		_dataGame3._rolledA6 = false;		// move again.
 		
-		//#################################
+		/******************************
+		 * move again.
+		 */
+		_dataGame3._rolledA6 = false;
 		
-		_dataGame4._gameXXold = -1;					// unit x coordinate. you have requested this gameboard piece.
-		_dataGame4._gameYYold = -1;					// unit y coordinate. you have requested this gameboard piece.
-		_dataGame4._gameXXnew = -1;					// unit x coordinate. you have requested a piece be moved here.
-		_dataGame4._gameYYnew = -1;					// unit y coordinate. you have requested a piece be moved here.
-		_dataGame4._gameXXold2 = -1;				// used in trade unit. this is the player that is moving piece. player would like to trade this unit.
-		_dataGame4._gameYYold2 = -1;				// used in trade unit. this is the player that is moving piece. player would like to trade this unit.
-		_dataGame4._gameXXnew2 = -1;				// used in trade unit. this is the other player's unit. player moving would like to trade other player's unit.
-		_dataGame4._gameYYnew2 = -1;				// used in trade unit. this is the other player's unit. player moving would like to trade other player's unit.
-		_dataGame4._rentBonus = [0.01, 0.01, 0.01, 0.01];			// total rent bonus in game. this value of 0.01 is needed because this var is used in multiplication and we cannot times by zero or else we get zero for the result which is not desired.
+		//#############################
 		
-		_dataGame4._unitNumberTrade = [0, 0]; // used when trading units. this holds the value of a unit number. this var is useful. it can change an ownership of a unit. see Reg._gameUniqueValueForPiece.
+		_dataGame4._gameXXold = -1;
 		
-		//#################################
+		_dataGame4._gameYYold = -1;
 		
-		_dataMovement._gameDiceMaximumIndex = -1; // unit number. 0-64
+		_dataGame4._gameXXnew = -1;
 		
-		_dataMovement._triggerNextStuffToDo = 0; // used to determine if the pawn is En Passant. also in Reversi, if all 4 discs have been placed on the board.		
+		_dataGame4._gameYYnew = -1;
 		
-		// all players move history for the game.
-		_dataMovement._moveHistoryPieceLocationOld1 = "";		// move history, the selected first piece
-		_dataMovement._moveHistoryPieceLocationNew1 = "";		// moved the first piece to selected location.
-		_dataMovement._moveHistoryPieceLocationOld2 = "";		// second piece, such as, the rook when castling. the second piece selected for that game move.
-		_dataMovement._moveHistoryPieceLocationNew2 = "";		// moved the second piece to selected location.
+		_dataGame4._gameXXold2 = -1;
 		
-		_dataMovement._moveHistoryPieceValueOld1 = "";		// image value of the selected first piece. if its a rook that first player selected then its a value of 4 else for second player then its a value of 14. normally this value is 0 because after the move, no piece is at that location.
-		_dataMovement._moveHistoryPieceValueNew1 = "";		// this refers to the value of the piece at the new selected moved to location.
-		_dataMovement._moveHistoryPieceValueOld2 = "";		// the second piece value, or piece image, normally this unit is empty because the second piece was moved to a new unit.
-		_dataMovement._moveHistoryPieceValueNew2 = "";		// this is the second piece moved to value of the image, so that the image can be moved to the new location.
-		_dataMovement._moveHistoryTotalCount = 0;			// the total amount of all moves from all player playing gaming game.
+		_dataGame4._gameYYold2 = -1;
+		
+		_dataGame4._gameXXnew2 = -1;
+		
+		_dataGame4._gameYYnew2 = -1;
+		
+		/******************************
+		 * // total rent bonus in game. this value of 0.01 is needed because this var is used in multiplication and we cannot times by zero or else we get zero for the result which is not desired.
+		 */
+		_dataGame4._rentBonus = [0.01, 0.01, 0.01, 0.01];
+		
+		/******************************
+		 * used when trading units. this holds the value of a unit number. this var is useful. it can change an ownership of a unit. see Reg._gameUniqueValueForPiece.
+		 */
+		_dataGame4._unitNumberTrade = [0, 0];
+		
+		//#############################
+		
+		/******************************
+		 * unit number. 0-64
+		 */
+		_dataMovement._gameDiceMaximumIndex = -1;
+		
+		/******************************
+		 * used to determine if the pawn is En Passant. also in Reversi, if all 4 discs have been placed on the board.
+		 */
+		_dataMovement._triggerNextStuffToDo = 0;
+		
+		/******************************
+		 * all players move history for the game.
+		 * move history, the selected first piece
+		 */
+		_dataMovement._moveHistoryPieceLocationOld1 = "";
+		
+		/******************************
+		 * moved the first piece to selected location.
+		 */
+		_dataMovement._moveHistoryPieceLocationNew1 = "";
+		
+		/******************************
+		 * second piece, such as, the rook when castling. the second piece selected for that game move.
+		 */
+		_dataMovement._moveHistoryPieceLocationOld2 = "";
+		
+		/******************************
+		 * moved the second piece to selected location.
+		 */
+		_dataMovement._moveHistoryPieceLocationNew2 = "";
+		
+		/******************************
+		 * image value of the selected first piece. if its a rook that first player selected then its a value of 4 else for second player then its a value of 14. normally this value is 0 because after the move, no piece is at that location.
+		 */
+		_dataMovement._moveHistoryPieceValueOld1 = "";
+		
+		/******************************
+		 * this refers to the value of the piece at the new selected moved to location.
+		 */
+		_dataMovement._moveHistoryPieceValueNew1 = "";
+		
+		/******************************
+		 * the second piece value, or piece image, normally this unit is empty because the second piece was moved to a new unit.
+		 */
+		_dataMovement._moveHistoryPieceValueOld2 = "";
+		
+		/******************************
+		 * this is the second piece moved to value of the image, so that the image can be moved to the new location.
+		 */
+		_dataMovement._moveHistoryPieceValueNew2 = "";
+		
+		/******************************
+		 * the total amount of all moves from all player playing gaming game.
+		 */
+		_dataMovement._moveHistoryTotalCount = 0;
+		
 		_dataMovement._triggerEvent = "";
 		
-		//#################################
+		//#############################
 		
-		_dataGameMessage._gameMessage = "";			// an example of this would be a chess game where a player just received a message saying that the king is in check. this event sends that same message to the other party.	
+		/******************************
+		 * an example of this would be a chess game where a player just received a message saying that the king is in check. this event sends that same message to the other party.	
+		 */
+		_dataGameMessage._gameMessage = "";
+		
 		_dataGameMessage._userTo = "";
+		
 		_dataGameMessage._userFrom = "";
+		
 		_dataGameMessage._questionAnsweredAs = false; 
+		
 		_dataGameMessage._triggerEvent = "";
 		
-		//#################################
+		//#############################
 		
-		_dataQuestions._gameMessage = "";			// an example of this would be a chess game where a player just received a message saying that the king is in check. this event sends that same message to the other party.	
-		_dataQuestions._drawOffer = false;			// chess draw offer. false=not yet asked. true=yes.
-		_dataQuestions._drawAnsweredAs = false;		// chess draw was answered as, -false:no, true:yes 
-		_dataQuestions._restartGameOffer = false;		// restart game offer. false=not yet asked. true=yes.
-		_dataQuestions._restartGameAnsweredAs = false;	// restart game was answered as, false:no, true:yes.
-		_dataQuestions._gameOver = false;							// is the game over?
+		/******************************
+		 * an example of this would be a chess game where a player just received a message saying that the king is in check. this event sends that same message to the other party.
+		 */
+		_dataQuestions._gameMessage = "";	
+		
+		/******************************
+		 * // chess draw offer. false:not yet asked. true:yes.
+		 */
+		_dataQuestions._drawOffer = false;			
+		
+		/******************************
+		 * chess draw was answered as, false:no, true:yes
+		 */
+		_dataQuestions._drawAnsweredAs = false; 
+		
+		/******************************
+		 * restart game offer. false:not yet asked. true:yes.
+		 */
+		_dataQuestions._restartGameOffer = false;
+		
+		/******************************
+		 * restart game was answered as, false:no, true:yes.
+		 */
+		_dataQuestions._restartGameAnsweredAs = false;
+		
+		/******************************
+		 * is the game over?
+		 */
+		_dataQuestions._gameOver = false;
+		
 		_dataQuestions._triggerEvent = "";
 
-		//#################################
+		//#############################
 		
-		// every player's name, win, lose, draw...
 		_dataOnlinePlayers.id = _dataGame.id;
-		_dataOnlinePlayers._room = 0;						// current room that the user is in. zero equals no room.
-		// players names that are online.
+		
+		_dataOnlinePlayers._room = 0;
+		
+		/******************************
+		 * players names that are online.
+		 */
 		_dataOnlinePlayers._usernamesOnline =  ["", "", "", "", "", "", "", "", "", "",
 						"", "", "", "", "", "", "", "", "", "",
 						"", "", "", "", "", "", "", "", "", "",
@@ -2610,7 +4138,10 @@ class RegTypedef
 						"", "", "", "", "", "", "", "", "", "",
 						"", "", "", "", "", "", "", "", "", "",
 						"", "", "", "", "", "", "", "", "", "",];		
-		// players game wins of players online.
+		
+		/******************************
+		 * players game wins of players online.
+		 */
 		_dataOnlinePlayers._gamesAllTotalWins = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 						0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 						0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -2623,7 +4154,10 @@ class RegTypedef
 						0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 						0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 						0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-		// players game losses of players online.
+		
+		/******************************
+		 * players game losses of players online.
+		 */
 		_dataOnlinePlayers._gamesAllTotalLosses = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 						 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 						 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -2636,7 +4170,10 @@ class RegTypedef
 						 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 						 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 						 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];		
-		// players game draws of players online.
+		
+		/******************************
+		 * players game draws of players online.
+		 */
 		_dataOnlinePlayers._gamesAllTotalDraws = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 						0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 						0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -2665,35 +4202,91 @@ class RegTypedef
 						
 		_dataOnlinePlayers._triggerEvent = "";
 		
-		//#################################
-
-		_dataMisc._chat = "";					// chat text of the player.
-		_dataMisc._gameRoom = false;				// should player enter the game room.
-		_dataMisc._clientCommandMessage = "";				// ban message. player blocked other player from playing again at that room for that session.
+		//#############################
+		/******************************
+		 * chat text of the player.
+		 */
+		_dataMisc._chat = ""; 
+		
+		/******************************
+		 * should player enter the game room.
+		 */
+		_dataMisc._gameRoom = false;
+		
+		/******************************
+		 * ban message. player blocked other player from playing again at that room for that session.
+		 */
+		_dataMisc._clientCommandMessage = "";
+		
 		_dataMisc._clientCommandUsers = "";
+		
 		_dataMisc._clientCommandIPs = "";
+		
 		_dataMisc._triggerEvent = "";
-				
-		//#################################
-		// save the player's game player state to the database. is the player playing a game or waiting to play. 
-		// 0: = not playing but still at game room. 
-		// 1: playing a game. 
-		// 2: left game room while still playing it. 
-		// 3: left game or game room when game was over.
-		// 4: quit game.
-		// this var is used to display players who are waiting for a game at the game room and to get the _count of how many players are waiting at game room.
+		
+		/******************************
+		 * save the player's game player state to the database. is the player playing a game or waiting to play.
+		 * 0: = not playing but still at game room.
+		 * 1: playing a game.
+		 * 2: left game room while still playing it.
+		 * 3: left game or game room when game was over.
+		 * 4: quit game.
+		 * this var is used to display players who are waiting for a game at the game room and to get the _count of how many players are waiting at game room.
+		 */
 		_dataPlayers._gamePlayersValues = [0, 0, 0, 0];
-		_dataPlayers._usernameInvite = "";				// username of the sent room invite.
-		_dataPlayers._score = [0, 0, 0, 0];				// total score in game.
-		_dataPlayers._cash = [7000, 7000, 7000, 7000];	// total cash in game.
-		_dataPlayers._gameMessage = "";			// an example of this would be a chess game where a player just received a message saying that the king is in check. 
-		_dataPlayers._actionWho = "";			// player that you want something done to.
-		_dataPlayers._actionNumber = 0;			// refers to an action, eg, 1 = kick. see the "Action By Player" event at server.
-		_dataPlayers._actionDo = -1;			// targeted player must do an action of _actionNumber. this var can be a time remaining var or whatever is needed for an Int.
-		_dataPlayers._quitGame = false;			// while playing the game, a player has clicked the quit game button if true.
-		_dataPlayers._isGameFinished = true;	// false if game is still being played. defaults to true because when entering the game room the game for those players has not started yet.
-		_dataPlayers._gameIsFinished = false;				// SAVE A VAR TO MYSQL SO THAT SOMEONE CANNOT INVITE WHEN STILL IN GAME ROOM. ALSO USED TO PASS A VAR TO USER SPECTATOR WATCHING. THAT VAR IS USED TO START A GAME FOR THAT SPECTATOR IF THE _gameIsFinished VALUE IS FALSE.
+		
+		/******************************
+		 * username of the sent room invite.
+		 */
+		_dataPlayers._usernameInvite = "";
+		
+		/******************************
+		 * total score in game.
+		 */
+		_dataPlayers._score = [0, 0, 0, 0];
+		
+		/******************************
+		 * total cash in game.
+		 */
+		_dataPlayers._cash = [7000, 7000, 7000, 7000];
+		
+		/******************************
+		 * an example of this would be a chess game where a player just received a message saying that the king is in check. 
+		 */
+		_dataPlayers._gameMessage = "";
+		
+		/******************************
+		 * player that you want something done to.
+		 */
+		_dataPlayers._actionWho = "";
+		
+		/******************************
+		 * refers to an action, eg, 1 = kick. see the "Action By Player" event at server.
+		 */
+		_dataPlayers._actionNumber = 0;
+		
+		/******************************
+		 * targeted player must do an action of _actionNumber. this var can be a time remaining var or whatever is needed for an Int.
+		 */
+		_dataPlayers._actionDo = -1;
+		
+		/******************************
+		 * while playing the game, a player has clicked the quit game button if true.
+		 */
+		_dataPlayers._quitGame = false;
+		
+		/******************************
+		 * false if game is still being played. defaults to true because when entering the game room the game for those players has not started yet.
+		 */
+		_dataPlayers._isGameFinished = true;
+		
+		/******************************
+		 * SAVE A VAR TO MYSQL SO THAT SOMEONE CANNOT INVITE WHEN STILL IN GAME ROOM. ALSO USED TO PASS A VAR TO USER SPECTATOR WATCHING. THAT VAR IS USED TO START A GAME FOR THAT SPECTATOR IF THE _gameIsFinished VALUE IS FALSE.
+		 */
+		_dataPlayers._gameIsFinished = false;
+		
 		_dataPlayers._triggerEvent = "";
+		
 		_dataPlayers._checkers_king_total = 0;
 		
 		/******************************
@@ -2702,15 +4295,14 @@ class RegTypedef
 		 */
 		_dataPlayers._piece_total_for_winner = 0; 
 		
-		//#################################
+		//#############################
 		
 		_dataTournaments._won_game = 0;
 		
-		//#################################
+		//#############################
 
 		_dataStatistics._timeTotal = 0;
-		_dataStatistics._moveTimeRemaining = [0, 0, 0, 0]; // time since game has started.
-		//_dataStatistics._chess_elo_rating = 0;		
+		_dataStatistics._moveTimeRemaining = [0, 0, 0, 0];
 		_dataStatistics._total_games_played = 0;
 		_dataStatistics._highest_experience_points = 0;
 		_dataStatistics._highest_credits = 0;
@@ -2756,4 +4348,4 @@ class RegTypedef
 		_dataPlayers._cash[3] = FlxMath.roundDecimal(_dataPlayers._cash[3], 2);
 	}
 	
-}//
+}//

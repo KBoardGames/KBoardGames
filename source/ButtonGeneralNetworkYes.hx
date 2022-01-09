@@ -2,18 +2,11 @@
     Copyright (c) 2021 KBoardGames.com
     This program is part of KBoardGames client software.
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published
-    by the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+    This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+    This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Affero General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU Affero General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 package;
@@ -84,6 +77,10 @@ class ButtonGeneralNetworkYes extends FlxUIButton
 	private var _innerColor:FlxColor;
 	private var _text:String;
 	
+	/******************************
+	 * when alpha for button is not 1, it cannot be clicked. when a dialog box is closed or after a button is pressed, we need to wait these many ticks until it is clickable again.
+	 */
+	private var _tick_button:Int = Reg._framerate; // 1 second.
 	/**
 	 * @param	x				The x location of the button on the screen.
 	 * @param	y				The y location of the button on the screen.
@@ -104,6 +101,8 @@ class ButtonGeneralNetworkYes extends FlxUIButton
 		_startY = y;
 	
 		_text = text;
+		
+		_tick_button = Reg._framerate;
 		
 		_refresh_online_list = refresh_online_list;
 		_id_refresh = id_refresh;
@@ -131,18 +130,15 @@ class ButtonGeneralNetworkYes extends FlxUIButton
 		_innerColor = innerColor;
 		var _lineStyle = { thickness: 8.0, color: RegCustom._button_border_color[Reg._tn]};
 		FlxSpriteUtil.drawRect(this, 0, 0, _button_width, _button_height + 10, _innerColor, _lineStyle);
-		
 	}
 	
 	// this function must not be removed. also stops double firing of button sound at ActionKeyboard.hx.
 	override public function update(elapsed:Float):Void
 	{
-		if (RegTriggers._buttons_set_not_active == false
-		&& _id == ID)
+		if (_id == ID)
 		{		
 			if (ActionInput.overlaps(this, null)
 			&&  FlxG.mouse.justPressed == true
-			&&  FlxG.mouse.enabled == true
 			&&	alpha == 1) 
 			{
 				// this button has been pressed. remove focus from the chatter input box.
@@ -150,7 +146,7 @@ class ButtonGeneralNetworkYes extends FlxUIButton
 				
 				if (RegCustom._sound_enabled[Reg._tn] == true
 				&&  Reg2._scrollable_area_is_scrolling == false)
-					FlxG.sound.play("click", 1, false);				
+					FlxG.sound.play("click", 1, false);
 			}		
 		}
 		
@@ -188,22 +184,35 @@ class ButtonGeneralNetworkYes extends FlxUIButton
 			if (RegTypedef._dataMisc._userLocation == 0)
 				Reg._buttonCodeValues = "";
 			alpha = 1;
-			Reg2._lobby_button_alpha = 0.3;
+			Reg2._lobby_button_alpha = 1;
 		}
 		
 		else if (Reg._buttonCodeValues == "")
 		{
-			Reg2._lobby_button_alpha = 0.3;
-			alpha = 1;
+			_tick_button -= 1;
 		}
 		
-		else if (Reg._buttonCodeValues != ""
-		&&	Reg._disconnectNow == false)
+		if (_tick_button <= 0)
 		{
-			alpha = 0.3;
+			Reg2._lobby_button_alpha = 1;
+			alpha = 1;
+			_tick_button = Reg._framerate;
+			Reg._buttonDown = false;
 		}
 		
 		if (alpha == 1 && _id == ID) super.update(elapsed);
-	}
-	
+		
+		if (ActionInput.overlaps(this, null)
+		&&	Reg._buttonCodeValues == ""
+		&&	Reg._disconnectNow == false
+		&&	FlxG.mouse.justPressed == true
+		||	Reg._buttonDown == true
+		&&	alpha == 1
+		)
+		{
+			alpha = 0.3;
+			_tick_button = Reg._framerate;
+			Reg._buttonDown = true;
+		}
+	}	
 }

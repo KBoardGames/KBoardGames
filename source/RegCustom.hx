@@ -1,19 +1,12 @@
- /*
+/*
     Copyright (c) 2021 KBoardGames.com
     This program is part of KBoardGames client software.
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published
-    by the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+    This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+    This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Affero General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU Affero General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 package;
@@ -378,13 +371,18 @@ class RegCustom
 	/******************************
 	 * username for player 1.
 	 */
-	public static var _profile_username_p1:Array<String> = [];
-	public static var _profile_username_p2:Array<String> = [];
+	public static var _profile_username_p1:Array<String> = ["Guest1", "", "", "", ""];
+	public static var _profile_username_p2:String = "Guest2";
 	
 	/******************************
 	 * password for player 1. needed to login to lobby. player 2 does not use a password field.
 	 */
-	public static var _profile_password_p1:String = "";
+	public static var _profile_password_p1:Array<String> = ["", "", "", "", ""];
+	
+	/******************************
+	 * optional email address for player 1. used to get notices for tournamant play. player 2 does not use a email address field.
+	 */
+	public static var _profile_email_address_p1:Array<String> = ["", "", "", "", ""];
 		 
 	/******************************
 	 * this is the maximum time permitted when assigning time for a game at the configuration scene. this var is used only at ConfigurationGames.hx to change the timer values.
@@ -442,22 +440,23 @@ class RegCustom
 	public static var _world_flags_number:Array<Int> = [];
 	
 	/******************************
-	 * these vars are reset here when returning to the mainMenu. These vars are not reset at menuState.
+	 * if true then a validation code will be sent to user's email address for email address verification. note that validation will alway happen for new email addresses. So this value will be set to true after an email address changes and after requesting to resend another email address validation code.
 	 */
-	public static function resetConfigurationVars():Void
-	{
-		_profile_username_p1.splice(0, _profile_username_p1.length);
-		_profile_username_p1.push("Guest1");
-		
-		_profile_username_p2.splice(0, _profile_username_p2.length);
-		_profile_username_p2.push("Guest2");
-		
-		resetConfigurationVars2();
-	}
+	public static var _send_email_address_validation_code:Bool = false;
 	
 	/******************************
 	 * these vars are reset here when returning to the mainMenu. These vars are not reset at menuState.
 	 */
+	public static function resetConfigurationVars():Void
+	{
+		_profile_username_p1 		= ["Guest1", "", "", "", ""];
+		_profile_username_p2 		= "Guest2";
+		_profile_password_p1 		= ["", "", "", "", ""];
+		_profile_email_address_p1 	= ["", "", "", "", ""];
+		
+		resetConfigurationVars2();
+	}
+	
 	public static function resetConfigurationVars2():Void
 	{
 		_theme_name.splice(0, _theme_name.length);

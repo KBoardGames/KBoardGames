@@ -2,23 +2,17 @@
     Copyright (c) 2021 KBoardGames.com
     This program is part of KBoardGames client software.
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published
-    by the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+    This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+    This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Affero General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU Affero General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 package;
 import flixel.math.FlxPoint;
 import flixel.ui.FlxVirtualPad.FlxActionMode;
+import lime.ui.MouseCursor;
 
 #if house
 	import modules.house.*;
@@ -108,7 +102,7 @@ class SceneLobby extends FlxState
 	/******************************
 	 * button total displayed. also change this value at server.
 	 */
-	private var _room_total:Int = 24;
+	public static var _room_total:Int = 24;
 	
 	/******************************
 	 * access members here.
@@ -141,11 +135,6 @@ class SceneLobby extends FlxState
 	 * white bar with text such as host, game title, spectators, overtop of it.
 	 */
 	private var _table_header_background:FlxSprite;
-		
-	/******************************
-	 * to center the button's text at menuBar to button's height, those buttons need more than one update() call. when this var is not 0 then these buttons will be visible to scene, since the buttons text is now centered. without this var, the buttons text will be displayed at top of buttons for a brief second, showing what appears to be a display bug.
-	 */
-	private var _ticks_buttons_menuBar:Int = 0;
 		
 	/******************************
 	 * message number used to display message box about cannot enter room message.
@@ -185,9 +174,8 @@ class SceneLobby extends FlxState
 		_lobby_data_received_do_once = true;
 		_number = 0;
 		_populate_table_body = false;
-		_ticks_buttons_menuBar = 1;
 		
-		FlxG.autoPause = false;	// this application will pause when not in focus.		
+		FlxG.autoPause = false;
 		
 		if (__scene_background != null) remove(__scene_background);	
 			__scene_background = new SceneBackground();
@@ -271,7 +259,7 @@ class SceneLobby extends FlxState
 				remove(__game_chatter);
 				__game_chatter.destroy();
 			}
-			__game_chatter = new GameChatter(2);
+			__game_chatter = new GameChatter(4);
 			__game_chatter.visible = true;
 			
 			if (GameChatter.__scrollable_area2 != null)	
@@ -280,7 +268,7 @@ class SceneLobby extends FlxState
 				GameChatter.__scrollable_area2.visible = true;
 			}
 			
-			GameChatter._groupChatterScroller.x = 0; // value of 375 work with below var to hide,
+			GameChatter._groupChatterScroller.x = 0;
 			
 			add(__game_chatter);
 		}
@@ -399,7 +387,7 @@ class SceneLobby extends FlxState
 				_table_column_text[i].destroy();
 			}		
 			
-			// table calumn text.
+			// table column text.
 			_table_column_text[i] = new FlxText(_column_x[i] - _offset_x - _offset2_x, 121, 0, _column_name[i]);
 			_table_column_text[i].setFormat(Reg._fontDefault, Reg._font_size, FlxColor.BLACK);
 			_table_column_text[i].scrollFactor.set(0, 0);
@@ -424,13 +412,6 @@ class SceneLobby extends FlxState
 			
 			_group_button_for_room[i] = new ButtonGeneralNetworkYes(100 - _offset_x, 126 - _offset_y + ((i + 1) * 70), Std.string(i) + ": " + _buttonState[RegTypedef._dataMisc._roomState[(i + 1)]], 215, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, null, RegCustom._button_color[Reg._tn], false, _id);
 			
-			#if html5
-				if (i >= 2)
-				{
-					_group_button_for_room[i].label.color = FlxColor.WHITE;
-				}
-			#end
-						
 			_group_button_for_room[i].setPosition(100 - _offset_x, 126 - _offset_y + ((i+1) * 70));
 			
 			_group_button_for_room[i].ID = _id;
@@ -541,11 +522,7 @@ class SceneLobby extends FlxState
 	
 	private function button_clicked(_num):Void
 	{
-		#if html5
-			if (_num < 3) goto_room(_num);
-		#else			
-			goto_room(_num);
-		#end
+		goto_room(_num);
 	}
 		
 	/******************************
@@ -608,12 +585,8 @@ class SceneLobby extends FlxState
 		RegTypedef._dataMovement._gid = RegTypedef._dataMisc._gid[_number];
 		RegTypedef._dataMovement._spectatorWatching = 1;
 		
-		PlayState.clientSocket.send("Get Statistics Win Loss Draw", RegTypedef._dataPlayers); 	
-		haxe.Timer.delay(function (){}, Reg2._event_sleep);
-		
-		PlayState.clientSocket.send("Greater RoomState Value", RegTypedef._dataMisc); 
-		haxe.Timer.delay(function (){}, Reg2._event_sleep);
-
+		PlayState.send("Get Statistics Win Loss Draw", RegTypedef._dataPlayers);		
+		PlayState.send("Greater RoomState Value", RegTypedef._dataMisc); 
 	}
 	
 	/******************************
@@ -667,33 +640,6 @@ class SceneLobby extends FlxState
 			__game_chatter.visible = false;
 			__game_chatter.active = false;
 		}
-		
-		#if house
-			if (RegCustom._house_feature_enabled[Reg._tn] == true)
-			{
-				if (__menu_bar._buttonHouse != null) __menu_bar._buttonHouse.active = false;
-			}
-		#end
-		
-		#if miscellaneous
-			if (__menu_bar._buttonMiscMenu != null) 
-				__menu_bar._buttonMiscMenu.active = false;
-		#end
-		
-		#if dailyQuests
-			if (__menu_bar._button_daily_quests != null) 
-				__menu_bar._button_daily_quests.active = false;
-		#end
-		
-		#if leaderboards
-			if (__menu_bar._button_leaderboards != null) 
-				__menu_bar._button_leaderboards.active = false;
-		#end
-		
-		#if tournaments
-			if (__menu_bar._button_tournaments != null) 
-				__menu_bar._button_tournaments.active = false;
-		#end
 		
 		if (_button_lobby_refresh != null)
 		{
@@ -778,64 +724,12 @@ class SceneLobby extends FlxState
 		}
 	}
 	
-	// this shows the menuBar buttons after a brief second.
-	private function ticks_buttons_menuBar():Void
-	{
-		#if house
-			if (RegCustom._house_feature_enabled[Reg._tn] == true)
-			{
-				if (__menu_bar._buttonHouse != null) 
-				{
-					__menu_bar._buttonHouse.active = true;
-					__menu_bar._buttonHouse.visible = true;
-				}
-			}
-		#end
-		
-		#if miscellaneous
-			if (__menu_bar._buttonMiscMenu != null) 
-				__menu_bar._buttonMiscMenu.active = true;
-				
-			if (__menu_bar._buttonMiscMenu != null) 
-				__menu_bar._buttonMiscMenu.visible = true;
-		#end
-		
-		#if dailyQuests
-			if (__menu_bar._button_daily_quests != null) 
-				__menu_bar._button_daily_quests.active = true;
-			
-			if (__menu_bar._button_daily_quests != null) 
-				__menu_bar._button_daily_quests.visible = true;
-		#end
-		
-		#if leaderboards
-			if (__menu_bar._button_leaderboards != null) 
-				__menu_bar._button_leaderboards.active = true;
-				
-			if (__menu_bar._button_leaderboards != null) 
-				__menu_bar._button_leaderboards.visible = true;
-		#end
-		
-		#if tournaments
-			if (__menu_bar._button_tournaments != null) 
-				__menu_bar._button_tournaments.active = true;
-			
-			if (__menu_bar._button_tournaments != null) 
-				__menu_bar._button_tournaments.visible = true;
-		#end
-		
-	}
-
 	private function button_refresh():Void
 	{
 		// player is at lobby, so a check for room lock is not needed to be sent to this event.
 		RegTypedef._dataMisc._roomCheckForLock[0] = 0;
 		
-		// used for bug tracking. see function receive() at TcpClient.
-		RegTypedef._dataMisc._triggerEvent = "foo"; // anything can be used here.
-		
-		PlayState.clientSocket.send("Get Room Data", RegTypedef._dataMisc);
-		haxe.Timer.delay(function (){}, Reg2._event_sleep);
+		PlayState.send("Get Room Data", RegTypedef._dataMisc);		
 	}
 	
 	private function button_code_values():Void
@@ -850,11 +744,6 @@ class SceneLobby extends FlxState
 			Reg._yesNoKeyPressValueAtMessage = 0;
 			
 			goto_room(Reg._inviteRoomNumberToJoin);
-			
-			FlxG.mouse.reset();
-			FlxG.mouse.enabled = true;
-			
-			
 		}
 			
 		// invite to room,  cancel button pressed.
@@ -865,11 +754,6 @@ class SceneLobby extends FlxState
 			
 			//Reg._buttonCodeValues = ""; this var is cleared at ButtonGeneralNetworkYes class
 			Reg._yesNoKeyPressValueAtMessage = 0;
-			
-			FlxG.mouse.reset();
-			FlxG.mouse.enabled = true;
-			
-			
 		}
 		
 		// room full, or room creating message.
@@ -882,11 +766,6 @@ class SceneLobby extends FlxState
 			
 			Reg._yesNoKeyPressValueAtMessage = 0;
 			//Reg._buttonCodeValues = ""; this var is cleared at ButtonGeneralNetworkYes class
-			
-			FlxG.mouse.reset();
-			FlxG.mouse.enabled = true;
-			
-			
 		}
 		
 		// room not ready. someone is in that room.
@@ -899,11 +778,6 @@ class SceneLobby extends FlxState
 			
 			Reg._yesNoKeyPressValueAtMessage = 0;
 			//Reg._buttonCodeValues = ""; this var is cleared at ButtonGeneralNetworkYes class
-			
-			FlxG.mouse.reset();
-			FlxG.mouse.enabled = true;
-			
-			
 		}
 		
 		if (Reg._yesNoKeyPressValueAtMessage > 0 && Reg._buttonCodeValues == "l2222")
@@ -942,11 +816,9 @@ class SceneLobby extends FlxState
 		if (RegTriggers._ticks_buttons_menuBar == true)
 		{
 			RegTriggers._ticks_buttons_menuBar = false;
-			_ticks_buttons_menuBar = 1;
 			
 			_group_scrollable_area.active = true;
-			__scrollable_area.active = true;
-			
+			__scrollable_area.active = true;			
 		}
 		
 		#if miscellaneous
@@ -1078,101 +950,25 @@ class SceneLobby extends FlxState
 	
 	override public function update(elapsed:Float):Void 
 	{
+		// this sets the mouse to a scrollable area so that the buttons on it can be updated. update() function does not seem to work for FlxScrollableArea.hx when returning to lobby when mouse is not located at its stage.	
+		if (Reg._buttonDown == true)
+			FlxG.mouse.setGlobalScreenPositionUnsafe(20, 200);
+		
 		if (Reg._loggedIn == true && Reg._at_create_room == false && Reg._at_waiting_room == false && Reg._at_lobby == true)
 		{
-			// _ticks_buttons_menuBar needs to be done this way so that when lobby first loads and mouse is at menuBar, the buttons' text is displayed centered to each button.
-			if (_ticks_buttons_menuBar == 2)
-			{
-				FlxG.mouse.reset();
-				FlxG.mouse.enabled = true;
-		
-				_ticks_buttons_menuBar = 3;
-				
-				#if miscellaneous
-					__menu_bar._buttonMiscMenu.active = true;
-				#end
-				
-				#if house
-					if (__menu_bar._buttonHouse != null) __menu_bar._buttonHouse.active = true;
-				#end
-				
-				
-			}
-			
-			if (_ticks_buttons_menuBar == 1)
-			{
-				_ticks_buttons_menuBar = 2;				
-				
-				ticks_buttons_menuBar();
-				
-			}
-			
-			// fix a camera display bug where the _button_daily_quests can also be clicked from the right side of the screen because of the chatter scrollable area scrolling part of the scene.
-			#if miscellaneous
-				if (_ticks_buttons_menuBar == 3
-				&& __menu_bar._buttonMiscMenu.visible == true
-				)
-				{
-					if (FlxG.mouse.x > FlxG.width / 2
-					&&  FlxG.mouse.y >= FlxG.height - 50) 
-					{
-						#if miscellaneous
-							if (__menu_bar._buttonMiscMenu.active == true)
-							{
-								__menu_bar._buttonMiscMenu.active = false;
-								
-							}							
-						#end
-						
-						#if house
-							if (__menu_bar._buttonHouse != null)
-							{
-								if (__menu_bar._buttonHouse.active == true) 
-								{
-									__menu_bar._buttonHouse.active = false;
-									
-								}
-							}
-						#end
-					}
-					else
-					{
-						#if miscellaneous
-							if (__menu_bar._buttonMiscMenu.active == false)
-							{
-								__menu_bar._buttonMiscMenu.active = true;
-								
-							}
-						#end
-						
-						#if house
-							if (__menu_bar._buttonHouse != null) 
-							{
-								if (__menu_bar._buttonHouse.active == false)
-								{
-									__menu_bar._buttonHouse.active = true;
-									
-								}							
-							}
-						#end
-					}
-				
-				}
-			#end
-			
 			for (i in 0... _room_total)
 			{
 				// if mouse is on the button plus any offset made by the box scroller and mouse is pressed...
 				if (FlxG.mouse.y + ButtonGeneralNetworkYes._scrollarea_offset_y >= _group_button_for_room[i]._startY &&  FlxG.mouse.y + ButtonGeneralNetworkYes._scrollarea_offset_y <= _group_button_for_room[i]._startY + _group_button_for_room[i]._button_height + 7 && FlxG.mouse.y < FlxG.height - 50
 				&& FlxG.mouse.x + ButtonGeneralNetworkYes._scrollarea_offset_x >= _group_button_for_room[i]._startX &&  FlxG.mouse.x + ButtonGeneralNetworkYes._scrollarea_offset_x <= _group_button_for_room[i]._startX + _group_button_for_room[i]._button_width && FlxG.mouse.justPressed == true )
 				{
-					if (_group_button_for_room[i].alpha == 1)
+					if (Reg2._lobby_button_alpha == 1)
 					{
 						if (RegCustom._sound_enabled[Reg._tn] == true
 						&&  Reg2._scrollable_area_is_scrolling == false)
 							FlxG.sound.play("click", 1, false);
 					
-						_group_button_for_room[i].alpha = 0.3;
+						//_group_button_for_room[i].alpha = 0.3;
 						Reg2._lobby_button_alpha = 0.3;
 						button_clicked((i + 1));
 						
@@ -1189,8 +985,8 @@ class SceneLobby extends FlxState
 			//############################# BUTTON TEXT
 			if (_group_button_for_room[0] != null && RegTypedef._dataMisc._roomCheckForLock[RegTypedef._dataMisc._room] == 0 ) 
 			{	
-				// display the player vs player room.
-				for (i in 1... _room_total + 1)	
+				// display the player vs player rooms.
+				for (i in 1... _room_total)	
 				{
 					// output either a room full or watch game button label.
 					// this is a room that is not full. using   will stop button highlight. remember that button needs an update to work correctly.
@@ -1221,7 +1017,6 @@ class SceneLobby extends FlxState
 				)
 				{
 					draw_table_all_body_text();
-					
 				}
 			}
 		}
@@ -1230,130 +1025,127 @@ class SceneLobby extends FlxState
 		
 		triggers();
 		
-		if (Reg._getRoomData == true)
+		if (Reg._at_lobby == true) 
 		{
-			if (_lobby_data_received == false 
-			&& _lobby_data_received_do_once == true)
+			if (Reg._getRoomData == true)
 			{
-				_lobby_data_received_do_once = false;
+				if (_lobby_data_received == false 
+				&& _lobby_data_received_do_once == true)
+				{
+					_lobby_data_received_do_once = false;
+					
+					// used to display a message if the room is locked. when getting this event, the _userLocation is set to a greater value. the next time at this code a message about a locked room cannot be given if this value is not 0.
+					RegTypedef._dataMisc._userLocation = 0;
+					PlayState.send("Get Room Data", RegTypedef._dataMisc);					
+				}
 				
-				// used to display a message is the room is locked. when getting this event, the _userLocation is set to a greater value. the next time to this code a message about a locked room cannot be given if this value is not 0.
-				RegTypedef._dataMisc._userLocation = 0;
-				PlayState.clientSocket.send("Get Room Data", RegTypedef._dataMisc);
-				haxe.Timer.delay(function (){}, Reg2._event_sleep);
+				if (_lobby_data_received == true)
+				{
+					_lobby_data_received = false;
+					
+					// do not re-enter this function. instead, do to create room or waiting room.
+					Reg._getRoomData = false;
+					
+					// first player can enter __scene_waiting_room but the next player cannot enter that same room until these room descriptions are displayed beside the room button.
+					if (RegTypedef._dataMisc._roomHostUsername[_number] == "" && RegTypedef._dataMisc._roomGameIds[_number] == -1 &&
+			RegTypedef._dataMisc._roomPlayerCurrentTotal[_number] == 0 && RegTypedef._dataMisc._roomState[_number] == 0)
+					{ }
+					else if (RegTypedef._dataMisc._roomHostUsername[_number] == "" || RegTypedef._dataMisc._roomGameIds[_number] == -1 ||
+			RegTypedef._dataMisc._roomPlayerCurrentTotal[_number] == 0)
+					{
+						data_not_ready_for_waitingRoom(_number);
+						return;
+					}
+					
+					// if true then the player clicked room a or b to play against the computer.
+					if (RegTypedef._dataMisc._vsComputer[_number] == 1)
+					{
+						if (_number == 1) Reg._gameId = 4;
+						else Reg._gameId = 1;
+						
+						RegTypedef._dataMisc._room = _number;
+						
+						Reg._getRoomData = true;
+						set_not_active_for_buttons();		
+						
+						Reg._game_online_vs_cpu = true;
+						RegTypedef._dataPlayers._spectatorPlaying = true;
+				
+						//------------------------
+						// playing against the computer. this is the computer name and avatar.	
+						Reg2._offline_cpu_host_name2 = RegTypedef._dataMisc._roomHostUsername[RegTypedef._dataMisc._room];
+						
+						for (i in 0...5)
+						{
+							if (Reg2._offline_cpu_host_names[i] 
+							==  Reg2._offline_cpu_host_name2)
+								RegCustom._profile_avatar_number2[Reg._tn] = Reg2._offline_cpu_avatar_number[i];
+													
+						}
+			
+						//------------------------
+				
+						SceneCreateRoom.createRoomOnlineAgainstCPU();
+						
+						return;
+					}
+					
+									
+					else if (RegTypedef._dataMisc._roomState[_number] == 1)
+					{
+						room_full(0, _number); // message about a user already creating room.			
+					}
+					
+					else if (RegTypedef._dataMisc._roomState[_number] == 8
+					&& RegTypedef._dataMisc._allowSpectators[_number] == 1 ) // Reg._gameId <= 1 && 
+					{
+						watch_game(_number);
+					}
+					
+					// cannot enter room.
+					else if (RegTypedef._dataMisc._roomPlayerCurrentTotal[_number] >= RegTypedef._dataMisc._roomPlayerLimit[_number] && RegTypedef._dataMisc._roomPlayerLimit[_number] > 0) 
+					{
+						room_full(1, _number); // a message about room full.
+					}
+					
+					else
+					{
+						//GameChatter.clearText();
+						Reg._playerLeftGame = false;
+						
+						RegTypedef._dataMisc._room = _number;
+						
+						//ActionInput.enable();				
+						
+						Reg._currentRoomState = RegTypedef._dataMisc._roomState[RegTypedef._dataMisc._room];
+						
+						// creating room.
+						if (RegTypedef._dataMisc._roomState[RegTypedef._dataMisc._room] == 0 && Reg._inviteRoomNumberToJoin == 0)	
+						{
+							RegTypedef._dataMisc._roomCheckForLock[RegTypedef._dataMisc._room] = 1;
+							PlayState.send("Is Room Locked", RegTypedef._dataMisc);
+						}
+						
+						// waiting room.
+						else if (RegTypedef._dataMisc._roomPlayerCurrentTotal[_number] < RegTypedef._dataMisc._roomPlayerLimit[_number] && RegTypedef._dataMisc._roomPlayerLimit[_number] > 0)
+						{
+							RegTypedef._dataMisc._userLocation = 2;
+							RegTypedef._dataMisc._roomCheckForLock[RegTypedef._dataMisc._room] = 1;
+							PlayState.send("Is Room Locked", RegTypedef._dataMisc);		
+							
+						}
+						
+						// set invite var back to 0.
+						Reg._inviteRoomNumberToJoin = 0;
+					}
+				}			
 			}
 			
-			if (_lobby_data_received == true)
-			{
-				_lobby_data_received = false;
-				
-				// do not re-enter this function. instead, do to create room or waiting room.
-				Reg._getRoomData = false;
-				
-				// first player can enter __scene_waiting_room but the next player cannot enter that same room until these room descriptions are displayed beside the room button.
-				if (RegTypedef._dataMisc._roomHostUsername[_number] == "" && RegTypedef._dataMisc._roomGameIds[_number] == -1 &&
-		RegTypedef._dataMisc._roomPlayerCurrentTotal[_number] == 0 && RegTypedef._dataMisc._roomState[_number] == 0)
-				{ }
-				else if (RegTypedef._dataMisc._roomHostUsername[_number] == "" || RegTypedef._dataMisc._roomGameIds[_number] == -1 ||
-		RegTypedef._dataMisc._roomPlayerCurrentTotal[_number] == 0)
-				{
-					data_not_ready_for_waitingRoom(_number);
-					return;
-				}
-				
-				// if true then the player clicked room a or b to play against the computer.
-				if (RegTypedef._dataMisc._vsComputer[_number] == 1)
-				{
-					if (_number == 1) Reg._gameId = 4;
-					else Reg._gameId = 1;
-					
-					RegTypedef._dataMisc._room = _number;
-					
-					Reg._getRoomData = true;
-					set_not_active_for_buttons();		
-					
-					Reg._game_online_vs_cpu = true;
-					RegTypedef._dataPlayers._spectatorPlaying = true;
-			
-					//------------------------
-					// playing against the computer. this is the computer name and avatar.	
-					Reg2._offline_cpu_host_name2 = RegTypedef._dataMisc._roomHostUsername[RegTypedef._dataMisc._room];
-					
-					for (i in 0...5)
-					{
-						if (Reg2._offline_cpu_host_names[i] 
-						==  Reg2._offline_cpu_host_name2)
-							RegCustom._profile_avatar_number2[Reg._tn] = Reg2._offline_cpu_avatar_number[i];
-												
-					}
-		
-					//------------------------
-			
-					SceneCreateRoom.createRoomOnlineAgainstCPU();
-					
-					return;
-				}
-				
-								
-				else if (RegTypedef._dataMisc._roomState[_number] == 1)
-				{
-					room_full(0, _number); // message about a user already creating room.			
-				}
-				
-				else if (RegTypedef._dataMisc._roomState[_number] == 8
-				&& RegTypedef._dataMisc._allowSpectators[_number] == 1 ) // Reg._gameId <= 1 && 
-				{
-					watch_game(_number);
-				}
-				
-				// cannot enter room.
-				else if (RegTypedef._dataMisc._roomPlayerCurrentTotal[_number] >= RegTypedef._dataMisc._roomPlayerLimit[_number] && RegTypedef._dataMisc._roomPlayerLimit[_number] > 0) 
-				{
-					room_full(1, _number); // a message about room full.
-				}
-				
-				else
-				{
-					//GameChatter.clearText();
-					Reg._playerLeftGame = false;
-					
-					RegTypedef._dataMisc._room = _number;
-					
-					//ActionInput.enable();				
-					
-					Reg._currentRoomState = RegTypedef._dataMisc._roomState[RegTypedef._dataMisc._room];
-					
-					// creating room.
-					if (RegTypedef._dataMisc._roomState[RegTypedef._dataMisc._room] == 0 && Reg._inviteRoomNumberToJoin == 0)	
-					{
-						RegTypedef._dataMisc._roomCheckForLock[RegTypedef._dataMisc._room] = 1;
-						PlayState.clientSocket.send("Is Room Locked", RegTypedef._dataMisc);
-						haxe.Timer.delay(function (){}, Reg2._event_sleep);						
-					}
-					
-					// waiting room.
-					else if (RegTypedef._dataMisc._roomPlayerCurrentTotal[_number] < RegTypedef._dataMisc._roomPlayerLimit[_number] && RegTypedef._dataMisc._roomPlayerLimit[_number] > 0)
-					{
-						RegTypedef._dataMisc._userLocation = 2;
-						RegTypedef._dataMisc._roomCheckForLock[RegTypedef._dataMisc._room] = 1;
-						PlayState.clientSocket.send("Is Room Locked", RegTypedef._dataMisc);		
-						haxe.Timer.delay(function (){}, Reg2._event_sleep);
-					}
-					
-					// set invite var back to 0.
-					Reg._inviteRoomNumberToJoin = 0;
-				}
-			}
-			
-			
+			if (Reg._yesNoKeyPressValueAtMessage > 0) 
+				button_code_values();
 		}
-		
-		if (Reg._yesNoKeyPressValueAtMessage > 0) 
-			button_code_values();
-		
 		// if at SceneMenu then set __scrollable_area active to false so that a mouse click at SceneMenu cannot trigger a button click at __scrollable_area.
-		if (FlxG.mouse.y >= FlxG.height - 50
-		&&	_ticks_buttons_menuBar >= 3)
+		if (FlxG.mouse.y >= FlxG.height - 50)
 		{
 			_group_scrollable_area.active = false;
 			__scrollable_area.active = false;

@@ -2,21 +2,19 @@
     Copyright (c) 2021 KBoardGames.com
     This program is part of KBoardGames client software.
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published
-    by the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+    This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+    This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Affero General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU Affero General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 package;
+
+import yaml.Yaml;
+import yaml.Parser;
+import yaml.Renderer;
+import yaml.util.ObjectMap;
 
 /**
  * these are common functions that two or more classes share.
@@ -316,9 +314,9 @@ class RegFunctions
 	public static function fontsSharpen():Void
 	{
 		// sharpen the fonts.
-		FlxG.stage.quality = StageQuality.MEDIUM;		
+		FlxG.stage.quality = StageQuality.BEST;		
 		FlxG.camera.antialiasing = true;
-		FlxG.camera.pixelPerfectRender = false;
+		FlxG.camera.pixelPerfectRender = true;
 	}
 	
 		
@@ -405,11 +403,6 @@ class RegFunctions
 		#else		
 			var _directory = StringTools.replace(Path.directory(Sys.programPath()), "\\", "/") + "/themes/";
 			var saveFile = sys.io.File.write(_directory + RegCustom._theme_name[Reg._tn]);
-				
-			
-			saveFile.writeString("_profile_username_p1: " + RegCustom._profile_username_p1[Reg._tn] + "\r\n");
-			
-			saveFile.writeString("_profile_username_p2: " + RegCustom._profile_username_p2[Reg._tn] + "\r\n");
 			
 			saveFile.writeString("_gameboard_units_odd_shade_number: " + RegCustom._gameboard_units_odd_shade_number[Reg._tn][0] + ", " + RegCustom._gameboard_units_odd_shade_number[Reg._tn][1] + "\r\n");
 			saveFile.writeString("_gameboard_units_even_shade_number: " + RegCustom._gameboard_units_even_shade_number[Reg._tn][0] + ", " + RegCustom._gameboard_units_even_shade_number[Reg._tn][1] + "\r\n");
@@ -606,18 +599,6 @@ class RegFunctions
 						}
 						catch (e:Dynamic){}
 							
-						try
-						{
-							RegCustom._profile_username_p1[Reg._tn] = Std.string(data.get("_profile_username_p1"));
-						}
-						catch (e:Dynamic){}
-						
-						try
-						{	
-							RegCustom._profile_username_p2[Reg._tn] = Std.string(data.get("_profile_username_p2"));
-						}
-						catch (e:Dynamic){}
-						
 						try
 						{
 							var _array_tmp = Std.string(data.get("_gameboard_units_odd_shade_number"));
@@ -1241,8 +1222,6 @@ class RegFunctions
 	// the values of this function will be changed when after the next theme is read from the themes folder. this function only pushes the array so that the theme can populate these vars.
 	static public function push_next_theme():Void
 	{
-		RegCustom._profile_username_p1.push("Guest1");
-		RegCustom._profile_username_p2.push("Guest2");
 		RegCustom._gameboard_units_odd_shade_number.push([1, 3]);
 		RegCustom._gameboard_units_even_shade_number.push([9, 1]);
 		RegCustom._gameboard_units_odd_color_number.push([3, 1]);
@@ -1329,13 +1308,11 @@ class RegFunctions
 		#if !html5
 			if (_gameMenu.data._tn != null && Reg._tn == -1)
 				Reg._tn = _gameMenu.data._tn;
-				
-				// load configurations up to the current theme selected. this will avoid a client crash. The reason is theme 1 can be the selected theme when entering the configuration menu but theme 0 would not have been loaded. therefore, theme 0 would not have its created array that Reg._tn would make. the result is a crash. Since array element 1 cannot exist without the element of 0.
+			
+			// load configurations up to the current theme selected. this will avoid a client crash. The reason is theme 1 can be the selected theme when entering the configuration menu but theme 0 would not have been loaded. therefore, theme 0 would not have its created array that Reg._tn would make. the result is a crash. Since array element 1 cannot exist without the element of 0.
 			// this code will always display the selected theme when user enters the configuration menu.
 			for (i in 0... Reg._tn + 1)
 			{
-				gameMenu_arrays();				
-					
 				if (_gameMenu.data._theme_name_current != null)
 					RegCustom._theme_name_current = _gameMenu.data._theme_name_current;
 
@@ -1349,16 +1326,50 @@ class RegFunctions
 				}
 				
 			}
-			
-			if (_gameMenu.data._profile_username_p1 != null)
-				RegCustom._profile_username_p1[Reg._tn] = _gameMenu.data._profile_username_p1;
-					
-			if (_gameMenu.data._profile_username_p2 != null)
-				RegCustom._profile_username_p2[Reg._tn] = _gameMenu.data._profile_username_p2;
 				
-			if (_gameMenu.data._profile_password_p1 != null)
-				RegCustom._profile_password_p1 = _gameMenu.data._profile_password_p1;
+			for (i in 0...5)
+			{
+				if (_gameMenu.data._profile_username_p1 != null)
+				{
+					RegCustom._profile_username_p1[i] = _gameMenu.data._profile_username_p1[i];
+					
+					if (RegCustom._profile_username_p1[i] == null)
+						RegCustom._profile_username_p1[i] = "";
+				}	
+
+				if (RegCustom._profile_username_p1[i] == ""
+				||	RegCustom._profile_username_p1[i].toLowerCase() == "Guest") RegCustom._profile_username_p1[i] = "Guest1";
+						
+				if (RegCustom._profile_username_p2 == "") RegCustom._profile_username_p2 = "Guest2";
+				
+				if (_gameMenu.data._profile_password_p1 != null)
+				{
+					RegCustom._profile_password_p1[i] = _gameMenu.data._profile_password_p1[i];
+					
+					if (RegCustom._profile_password_p1[i] == null)
+						RegCustom._profile_password_p1[i] = "";
+				}
+					
+				if (_gameMenu.data._profile_email_address_p1 != null)
+				{
+					RegCustom._profile_email_address_p1[i] = _gameMenu.data._profile_email_address_p1[i];
+					
+					if (RegCustom._profile_email_address_p1[i] == null)
+						RegCustom._profile_email_address_p1[i] = "";
+				}
+			}
 			
+			// send email validation code only once pre client session because this Reg var never gets reset.
+			if (_gameMenu.data._send_email_address_validation_code != null
+			&&	Reg._doOnce_email_address_validate == true)
+				RegTypedef._dataAccount._send_email_address_validation_code = RegCustom._send_email_address_validation_code = _gameMenu.data._send_email_address_validation_code;
+			
+			if (_gameMenu.data._profile_username_p2 != null)
+				RegCustom._profile_username_p2 = _gameMenu.data._profile_username_p2;
+				
+			if (_gameMenu.data._CRN != null)
+				CID3._CRN = _gameMenu.data._CRN;
+				
 			if (_gameMenu.data._profile_avatar_number1 != null)
 				RegCustom._profile_avatar_number1[Reg._tn] = _gameMenu.data._profile_avatar_number1;
 			
@@ -1378,7 +1389,7 @@ class RegFunctions
 			// this is needed again to update the theme name at the top right corner of the configuration menu.
 			RegCustom._theme_name_current = RegCustom._theme_name[Reg._tn];		
 			
-		#end
+		#end		
 	}
 	
 	/******************************
@@ -1398,18 +1409,28 @@ class RegFunctions
 			
 			_gameMenu.data._theme_name_current = RegCustom._theme_name_current;
 			
-			if (RegCustom._profile_username_p1[Reg._tn] == "") RegCustom._profile_username_p1[Reg._tn] = "Guest1";
+			if (RegCustom._profile_username_p1[CID3._CRN] == ""
+			||	RegCustom._profile_username_p1[CID3._CRN].toLowerCase() == "Guest") RegCustom._profile_username_p1[CID3._CRN] = "Guest1";
 			
-			if (RegCustom._profile_username_p2[Reg._tn] == "") RegCustom._profile_username_p2[Reg._tn] = "Guest2";
+			if (RegCustom._profile_username_p2 == "") RegCustom._profile_username_p2 = "Guest2";
+		
+			for (i in 0...5)
+			{
+				_gameMenu.data._profile_username_p1[i] = CID3._group_username_input[i].text;
+				
+				_gameMenu.data._profile_password_p1[i] = CID3._group_password_input[i].text;	
+					
+				_gameMenu.data._profile_email_address_p1[i] = CID3._group_email_address_input[i].text;
+			}
 			
-			_gameMenu.data._profile_username_p1 = RegCustom._profile_username_p1[Reg._tn];
-			
-			_gameMenu.data._profile_username_p2 = RegCustom._profile_username_p2[Reg._tn];
-			
-			_gameMenu.data._profile_password_p1 = RegCustom._profile_password_p1;
+			_gameMenu.data._profile_username_p2 = RegCustom._profile_username_p2;
 			
 			// this need to be clear or else the old username will be used at next login.
 			RegTypedef._dataAccount._username = "";
+			
+			_gameMenu.data._CRN = CID3._CRN;
+			
+			_gameMenu.data._send_email_address_validation_code = RegCustom._send_email_address_validation_code;
 			
 			_gameMenu.data._profile_avatar_number1 = RegCustom._profile_avatar_number1[Reg._tn];
 			
@@ -1426,13 +1447,28 @@ class RegFunctions
 			
 		#end
 		
+		// at every configuration save an email address can be validated. so set this value back to true.
+		Reg._doOnce_email_address_validate = true;
+		
 		// notice after save is clicked from ConfigurationsOutput.saveConfig().
 		if (RegCustom._go_back_to_title_after_save[Reg._tn] == false)
-			RegTriggers._config_menu_save_notice = true;
+			RegTriggers._saveConfig_notice = true;
 		else
 			FlxG.switchState(new MenuState());
 		
 		
+	}
+	
+	/******************************
+	 * 	Returns `true` if `s` contains `value` and  `false` otherwise.
+		When `value` is `null`, the result is unspecified.
+	 */
+	public static inline function contains(s:String, value:String):Bool {
+		#if (js && js_es >= 6)
+		return (cast s).includes(value);
+		#else 
+		return s.indexOf(value) != -1;
+		#end
 	}
 	
 	// arrays for the save/load functions.
@@ -1450,6 +1486,9 @@ class RegFunctions
 		
 		_gameMenu.data._time_remaining_for_game = new Array<Array<Int>>();
 		
+		_gameMenu.data._profile_username_p1 = new Array<String>();
+		_gameMenu.data._profile_password_p1 = new Array<String>();
+		_gameMenu.data._profile_email_address_p1 = new Array<String>();
 	}
 	
 	/******************************

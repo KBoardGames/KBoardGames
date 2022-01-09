@@ -2,18 +2,11 @@
     Copyright (c) 2021 KBoardGames.com
     This program is part of KBoardGames client software.
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published
-    by the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+    This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+    This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Affero General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU Affero General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 package;
@@ -27,7 +20,12 @@ package;
  * @author kboardgames.com
  */
 class MessageBox extends FlxGroup
-{	
+{
+	/******************************
+	 * used to deplay the display of the message box.
+	 */
+	private var _ticks:Float = 0;
+	
 	/******************************
 	 * when true, the message box will follow the cursor until the mouse button is released.
 	 */
@@ -51,7 +49,7 @@ class MessageBox extends FlxGroup
 	/******************************
 	 * the output message text. 
 	 */
-	public static var _textMessage:FlxText;
+	private var _textMessage:FlxText;
 	
 	
 	public var _textTimer:FlxText; // keep message box open for 30 sec. this is the text to show how much time is remaining.
@@ -59,17 +57,17 @@ class MessageBox extends FlxGroup
 	/******************************
 	 * the output message OK button.
 	 */
-	public var _buttonMessageOK:ButtonAlwaysActiveNetworkYes;
+	private var _buttonMessageOK:ButtonAlwaysActiveNetworkYes;
 	
 	/******************************
 	 * ok button that is only used when the cancel button is displayed. this is needed because this button's width is smaller than the other button that has the ok text.
 	 */
-	public var _button5:ButtonAlwaysActiveNetworkYes;
+	private var _button5:ButtonAlwaysActiveNetworkYes;
 	
 	/******************************
 	 * cancel button.
 	 */
-	public var _button6:ButtonAlwaysActiveNetworkYes;
+	private var _button6:ButtonAlwaysActiveNetworkYes;
 	
 	private var _timeRemaining:Int = 30;
 	private var _timeDo:Timer;
@@ -115,6 +113,9 @@ class MessageBox extends FlxGroup
 		super();
 		
 		ID = _id = id;
+		
+		SceneGameRoom.messageBoxMessageOrder();
+		_ticks = 0;
 		
 		_displayMessage = displayMessage;
 		_useYesNoButtons = useYesNoButtons;
@@ -283,6 +284,7 @@ class MessageBox extends FlxGroup
 			_textMessage.text = str1;
 			
 			_displayMessage = true;
+			_ticks = 0;
 		}
 	}
 	
@@ -334,9 +336,6 @@ class MessageBox extends FlxGroup
 			if (_useYesNoButtons == true) Reg._yesNoKeyPressValueAtMessage = 3;
 			else Reg._yesNoKeyPressValueAtMessage = 1;
 			
-			FlxG.mouse.reset();
-			FlxG.mouse.enabled = true;
-			
 			// button does not fire when this code is in the button class.
 			if (RegCustom._sound_enabled[Reg._tn] == true
 			&&  Reg2._scrollable_area_is_scrolling == false)
@@ -350,14 +349,24 @@ class MessageBox extends FlxGroup
 	public function popupMessageShow():Void
 	{			
 		if (Reg._messageId == _id)
-		{			
+		{
+			RegTriggers._buttons_set_not_active = false;
+			
+			if (_ticks < 4)
+			{
+				return;
+			}	
+			
+			_ticks = 6;
+			
+			hideButtons();
+
 			// this stops a bug where another message of the same title is seen when pressing the ok button when changing states. hence, return to lobby button was clicked and two message boxes boxes displayed one after another.
 			if (Reg._clearDoubleMessage == true)
 			{
 				Reg._clearDoubleMessage = false;
 				_displayMessage = false;
 			}
-			
 			
 			#if neko
 				for (i in 0...3333333){} // used to delay the display of this message box.
@@ -367,12 +376,12 @@ class MessageBox extends FlxGroup
 				for (i in 0...3333333){}
 			#end	
 			
-			
+			/*
 			if (Reg._doUpdate == false && Reg._buttonCodeValues == "" && _displayMessage == false || Reg._loginSuccessfulWasRead == true && Reg._buttonCodeValues == "") 
 			{
 				//Reg._loginSuccessfulWasRead = true; 
 				return;		
-			} 
+			}*/
 		
 			_messageBox.visible = true;
 			_title.visible = true;
@@ -381,9 +390,6 @@ class MessageBox extends FlxGroup
 			// if true then show the message, such as, an error or a login message attempt.
 			if (_displayMessage == true)
 			{
-				FlxG.mouse.reset();
-				FlxG.mouse.enabled = true;
-				
 				_textMessage.visible = true;			
 				
 				if (_useYesNoButtons == true)
@@ -402,7 +408,7 @@ class MessageBox extends FlxGroup
 	{			
 		if (Reg._messageId == _id)
 		{
-			FlxG.mouse.enabled = true;
+			_ticks = 0;
 			Reg2._message_box_just_closed = true;
 			
 			// make lobby active after kick/ban message box is mouse clicked.
@@ -412,6 +418,8 @@ class MessageBox extends FlxGroup
 				RegTriggers._lobby = true;
 			}
 			
+			Reg._message_id_temp = 0;
+			
 			Reg._messageFocusId.pop();
 			if (Reg._messageFocusId[Reg._messageFocusId.length - 1] > 0)
 			Reg._messageId = Reg._messageFocusId[Reg._messageFocusId.length-1];
@@ -420,20 +428,27 @@ class MessageBox extends FlxGroup
 			if (Reg._buttonCodeFocusValues[Reg._buttonCodeFocusValues.length - 1] != null)
 			Reg._buttonCodeValues = Reg._buttonCodeFocusValues[Reg._buttonCodeFocusValues.length - 1];
 			Reg._buttonCodeFocusValues.pop();
+	
+			
+			// make lobby active after kick/ban message box is mouse clicked.
+			if (Reg._buttonCodeValues == "l1020")
+			{
+				Reg._buttonCodeValues = "";
+				RegTriggers._lobby = true;
+			}
 			
 			hideButtons();	
 			
 			RegTriggers._buttons_set_not_active = false;
 			
-			destroy();			
-			
-			
+			destroy();		
 		} 
 	}	
 	
 	override public function destroy()
 	{		
 		_timeDo.stop();
+		_ticks = 0;
 		
 		if (_buttonMessageOK != null)
 		{
@@ -464,9 +479,16 @@ class MessageBox extends FlxGroup
 	}
 	
 	override public function update(elapsed:Float):Void 
-	{	
+	{
 		if (Reg._messageId == _id)
 		{
+			_ticks = RegFunctions.incrementTicks(_ticks, 60 / Reg._framerate);
+			
+			if (_ticks < 6) 
+			{
+				popupMessageShow();
+			}
+
 			if (_useTimer == true)
 			{
 				_timeDo.run = function() 
@@ -489,6 +511,18 @@ class MessageBox extends FlxGroup
 			
 		}
 
+		else
+		{
+			hideButtons();
+			_ticks = 0;
+		}
+		
+		if (Reg._messageFocusId.length == 0) 
+		{
+			Reg2.resetMessageBox();
+			_ticks = 0;
+		}
+		
 		super.update(elapsed);
 	}
 	

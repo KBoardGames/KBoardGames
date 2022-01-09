@@ -2,18 +2,11 @@
     Copyright (c) 2021 KBoardGames.com
     This program is part of KBoardGames client software.
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published
-    by the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+    This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+    This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Affero General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU Affero General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 package;
@@ -64,9 +57,10 @@ class ConfigurationOutput extends FlxGroup
 	{
 		super();
 		
-		FlxG.autoPause = false;	// this application will pause when not in focus.
+		FlxG.autoPause = false;
 		Reg2.resetRegVars();
 		
+		CID3._user_account_row = 5;
 		initialize();
 		
 		// a negative x value moves the scrollable area in the opposite direction.
@@ -499,6 +493,9 @@ class ConfigurationOutput extends FlxGroup
 	private function saveConfig():Void
 	{
 		Reg.__scrollable_area_scroll_y = __scrollable_area.scroll.y;
+	
+		// email address regex. if result is false then the email address will not be saved. see if (CID3._button_p1.has_toggle == true) code block.
+		var _email_address_regex = ~/[A-Z0-9._%-]+@[A-Z0-9.-]+\.[A-Z][A-Z][A-Z]*/i;
 		
 		if (CID3._button_p1.has_toggle == true)
 		{
@@ -506,20 +503,46 @@ class ConfigurationOutput extends FlxGroup
 				Avatars._image_profile_avatar.loadGraphic("vendor/multiavatar/" + RegCustom._profile_avatar_number1[Reg._tn]);
 			#end
 		
-			if (RegCustom._profile_username_p1[Reg._tn] == ""
-			||	CID3._usernameInput.text.toLowerCase() == "guest")
+			if (RegCustom._profile_username_p1[CID3._CRN] == ""
+			||	CID3._username_input.text.toLowerCase() == "guest")
 			{
-				RegCustom._profile_username_p1[Reg._tn] = "Guest1";
-				CID3._usernameInput.text = "Guest1";
+				RegCustom._profile_username_p1[CID3._CRN] = "Guest1";
+				CID3._username_input.text = "Guest1";
 			}
 			
-			else if (CID3._password_input.text.length <= 3)
+			// Cannot save theme. Password field and email address field must be empty for guest accounts.
+			else if (CID3._group_username_input[CID3._CRN].text.substr(0, 5).toLowerCase() == "guest"
+			&&	CID3._group_password_input[CID3._CRN].text.length != 0
+			||	CID3._group_username_input[CID3._CRN].text.substr(0, 5).toLowerCase() == "guest"
+			&&	CID3._group_email_address_input[CID3._CRN].text.length != 0)
 			{
-				RegTriggers._config_menu_save_notice = true;
+				Reg._messageId = 9013;
+				Reg._buttonCodeValues = "v1013";
+				SceneGameRoom.messageBoxMessageOrder();
 				return;
 			}
 			
-			RegCustom._profile_password_p1 = CID3._password_input.text;
+			else if (CID3._group_password_input[CID3._CRN].text.length <= 3
+			&&		 CID3._group_username_input[CID3._CRN].text.substr(0, 5).toLowerCase() != "guest")
+			{
+				Reg._messageId = 9012;
+				Reg._buttonCodeValues = "v1012";
+				SceneGameRoom.messageBoxMessageOrder();
+				return;
+			}
+			
+			else if (CID3._group_email_address_input[CID3._CRN].text != "" 
+			&&	_email_address_regex.match(CID3._group_email_address_input[CID3._CRN].text) == false 
+			&&	CID3._group_username_input[CID3._CRN].text.substr(0, 5).toLowerCase() != "guest")
+			{
+				Reg._messageId = 9014;
+				Reg._buttonCodeValues = "v1014";
+				SceneGameRoom.messageBoxMessageOrder();
+				return;
+			}
+			
+			// RegCustom._profile_email_address_p1 is set at IdsMessageBox case 9001 
+			RegCustom._profile_password_p1[CID3._CRN] = CID3._group_password_input[CID3._CRN].text;
 			
 		}
 		else
@@ -529,16 +552,16 @@ class ConfigurationOutput extends FlxGroup
 			#end
 				
 		
-			if (RegCustom._profile_username_p2[Reg._tn] == "")
+			if (RegCustom._profile_username_p2 == "")
 			{
-				RegCustom._profile_username_p2[Reg._tn] = "Guest2";
-				CID3._usernameInput.text = "Guest2";
+				RegCustom._profile_username_p2 = "Guest2";
+				CID3._username_input.text = "Guest2";
 			}
 		}
 		
 		// reset theme vars back to default if this value is zero.
 		if (Reg._tn == 0) RegCustom.resetConfigurationVars2;
-				
+		
 		RegFunctions.saveConfig();
 	}
 	
@@ -554,22 +577,13 @@ class ConfigurationOutput extends FlxGroup
 		TextGeneral._scrollarea_offset_x = __scrollable_area.scroll.x;
 		TextGeneral._scrollarea_offset_y = __scrollable_area.scroll.y - 770;
 				
-		if (RegTriggers._config_menu_save_notice == true)
+		if (RegTriggers._saveConfig_notice == true)
 		{
-			RegTriggers._config_menu_save_notice = false;
+			RegTriggers._saveConfig_notice = false;
 			
-			if (CID3._usernameInput.text.substr(0, 5).toLowerCase() != "guest"
-			&&	CID3._password_input.text.length <= 3)
-			{
-				Reg._messageId = 9012;
-				Reg._buttonCodeValues = "v1012";
-			}
+			Reg._messageId = 9001;
+			Reg._buttonCodeValues = "v1000";
 			
-			else
-			{
-				Reg._messageId = 9001;
-				Reg._buttonCodeValues = "v1000";
-			}
 			SceneGameRoom.messageBoxMessageOrder();			
 		}
 				
@@ -612,8 +626,24 @@ class ConfigurationOutput extends FlxGroup
 			add(_button_games);
 		}
 		
-		// profile password message about cannot save theme because password field has to few characters.
+		// which saving a theme, profile password message about cannot save theme because password field has to few characters.
 		if (Reg._yesNoKeyPressValueAtMessage > 0 && Reg._buttonCodeValues == "v1012")
+		{
+			Reg._yesNoKeyPressValueAtMessage = 0;
+			Reg._buttonCodeValues = "";
+			
+		}
+		
+		// which saving a theme, profile password message about guest accounts must have an empty password.
+		if (Reg._yesNoKeyPressValueAtMessage > 0 && Reg._buttonCodeValues == "v1013")
+		{
+			Reg._yesNoKeyPressValueAtMessage = 0;
+			Reg._buttonCodeValues = "";
+			
+		}
+		
+		// while saving a theme, this is a message about email address is not valid.
+		if (Reg._yesNoKeyPressValueAtMessage > 0 && Reg._buttonCodeValues == "v1014")
 		{
 			Reg._yesNoKeyPressValueAtMessage = 0;
 			Reg._buttonCodeValues = "";

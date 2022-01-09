@@ -2,18 +2,11 @@
     Copyright (c) 2021 KBoardGames.com
     This program is part of KBoardGames client software.
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published
-    by the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+    This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+    This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Affero General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU Affero General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 package;
@@ -140,12 +133,6 @@ class Reg2 extends FlxGroup
 	public static var _input_field_number:Int = 0;
 	
 	/******************************
-	 * at the login box the username input box is populated with this var if this var is not empty.
-	 */
-	public static var _username_last_remembered:String = "";
-	
-	
-	/******************************
 	 * after an event is sent to the server a sleep command is used to delay the next event to the server in the hopes that this stops an invalid error at server that is triggered when two or more events are sent near the same time.
 	 * TODO if you still get an invalid error at position 0 then events cannot be one after another. instead, the second event is called at the first event function at the time that the server sends data back to that function.
 	*/
@@ -242,7 +229,6 @@ class Reg2 extends FlxGroup
 	public static function resetRegVarsOnce():Void
 	{		
 		_removePlayerFromTypedefPlayers = true;
-		_username_last_remembered = "";
 		_do_once_game_start_request = false;
 		_do_once_accept_game_start_request = false;
 	}
@@ -256,7 +242,7 @@ class Reg2 extends FlxGroup
 		_message_box_just_closed = false;
 		_offline_cpu_host_name2 = "";
 		_offline_cpu_host_name3 = "";
-		_lobby_button_alpha = 0.3;
+		_lobby_button_alpha = 1;
 		_messageFileExists = "";
 		_getGameInstrcutions = "";
 		_key_output = "";

@@ -2,18 +2,11 @@
     Copyright (c) 2021 KBoardGames.com
     This program is part of KBoardGames client software.
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published
-    by the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+    This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+    This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Affero General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU Affero General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 // If the game crashes without an error then copy the music files to the bin folder.
@@ -41,9 +34,6 @@ class MenuState extends FlxState
 	//public var _sound_channel:SoundChannel;
 	
 	public var __action_commands:ActionCommands;
-	
-	// Toggles fullscreen mode off or on.
-	private var _toggleFullscreen:ButtonGeneralNetworkNo; 
 
 	// chess skill level buttons.
 	private var _button_b1:ButtonToggleFlxState;
@@ -51,13 +41,33 @@ class MenuState extends FlxState
 	private var _button_b3:ButtonToggleFlxState;
 	
 	/******************************
-	* Saves the bool value of fullscreen.
-	*/
+	 * Toggles fullscreen mode off or on.
+	 */
+	private var _toggleFullscreen:ButtonGeneralNetworkNo;
+	
+	/******************************
+	 * Saves the scale mode setting.
+	 */
 	private var _gameMenu:FlxSave;
 	
 	public static var _str:String = ""; // message box text.
 
 	private var _software_new_check:ButtonGeneralNetworkNo;
+	
+	/******************************
+		 * The scale modes. Changes the game's aspect ratio and/or size. Can maintain the aspect ratio of width and height and can windowbox the game if necessary.
+	 */
+	private var scaleModes:Array<ScaleMode> = [RELATIVE, RATIO_DEFAULT, RATIO_FILL_SCREEN, FILL];
+	
+	/******************************
+	* Change the scale mode. The scale mode changes the width and height of the program's window settings.
+	*/
+	private var _button_scale_mode:ButtonGeneralNetworkNo;
+
+	/******************************
+	 * This holds the value of the scale mode selected.
+	 */
+	private var scaleModeIndex:Int = 0;
 	
 	/******************************
 	 * when this value is true some elements at update() will be set active.
@@ -120,6 +130,11 @@ class MenuState extends FlxState
 	 */
 	private var _ticks_startup:Float = 0;
 	
+	/******************************
+	 * in html5 build the variable at the Internet.hx class function does not get populated before its return command. therefore this variable is used to delay code, which comes after the Internet.hx class function call, until the Internet.hx class function variable does get populated.
+	 */
+	private var _ticks_internet:Int = 0;
+		 
 	private var _bot_ben:ButtonToggleFlxState;
 	private var _bot_tina:ButtonToggleFlxState;
 	private var _bot_piper:ButtonToggleFlxState;
@@ -141,16 +156,15 @@ class MenuState extends FlxState
 		persistentDraw = true;
 		persistentUpdate = false;
 		
+		FlxG.scaleMode = new RatioScaleMode();
 		Reg._at_game_room = false; // needed here since auto return after save options could be enabled.
-				
+		Reg._at_lobby = false;
+		
 		_is_active = true;
 		_ip = Reg._ipAddress;
 		
 		// when returned to a state after mouse was set to not visible, system mouse will not show at that new state when mouse it set to visible.
 		FlxG.mouse.useSystemCursor = false;		
-		FlxG.mouse.reset();
-		FlxG.mouse.enabled = true;
-		
 		RegTypedef.resetTypedefData(); 
 		
 		#if house
@@ -162,12 +176,10 @@ class MenuState extends FlxState
 			RegCustom._chat_when_at_lobby_enabled[Reg._tn] = false;
 			RegCustom._chat_when_at_room_enabled[Reg._tn] = false;
 			RegCustom._timer_enabled[Reg._tn] = false;
-			
-			// 886 = current first icon x position (multiplaer icon) for neko/cpp, times 79 which is 64 pixels for the icon plus 15 more for the space between the icons. 64 is the icon width / 2.
-			_icon_offset_x = 562; // 886 * (79 * 2) + (64 / 2) 			
-		#else
-			_icon_offset_x = 886;		
-		#end
+		#end	
+		
+		// 886 = current first icon x position (multiplaer icon) for neko/cpp, times 79 which is 64 pixels for the icon plus 15 more for the space between the icons. 64 is the icon width / 2.
+		_icon_offset_x = 886; // 886 * (79 * 2) + (64 / 2) 			
 		
 		RegTriggers.resetTriggers(); 		
 		RegFunctions.fontsSharpen();
@@ -183,7 +195,15 @@ class MenuState extends FlxState
 			Reg._tn = -1; // this value will be loaded from hard drive.
 			
 			// we use true here so that some items are loaded. a value of false is the default for this function so that so items are only loaded when a condition is met.
-			RegCustom.resetConfigurationVars();
+			RegCustom.resetConfigurationVars();			
+			
+			// load data.
+			RegCustom._chess_skill_level_offline = RegFunctions._gameMenu.data._chess_skill_level_offline;
+			Reg2._menu_state_username_p1 = RegFunctions._gameMenu.data._menu_state_username_p1;
+			
+			if (RegFunctions._gameMenu.data.scaleModeIndex != null)
+				scaleModeIndex = RegFunctions._gameMenu.data.scaleModeIndex;
+
 			RegFunctions.loadConfig(true);
 			
 			if (Reg._tn == -1) Reg._tn = 0; // avoid a client crash by setting the selected theme to default.
@@ -195,7 +215,12 @@ class MenuState extends FlxState
 			RegCustom.assign_colors();
 		
 		#else
-			RegCustom.resetConfigurationVars();		
+			Reg._tn = 0;
+			RegCustom.resetConfigurationVars();	
+			RegCustom.resetConfigurationVars2();			
+			
+			RegCustom.assign_colors();
+			bgColor = RegCustomColors.color_client_background();
 		#end
 		
 		Reg.resetRegVars(); 
@@ -214,22 +239,55 @@ class MenuState extends FlxState
 		Reg._at_menu_state = true;
 		
 		RegCustom._chess_skill_level_online = RegCustom._chess_skill_level_offline;
-		
-		if (Reg._startFullscreen == true) FlxG.fullscreen = true;
-		
-		if (Reg._clientReadyForPublicRelease == false)
-		{
-			__action_commands = new ActionCommands(); 
-			add(__action_commands);
-		}
-		
+				
 		setExitHandler(function() 
 		{
 			// put any code here. it will be ran before client exits.
+			RegFunctions._gameMenu.data._chess_skill_level_offline = RegCustom._chess_skill_level_offline;
+			RegFunctions._gameMenu.data._menu_state_username_p1 = Reg2._menu_state_username_p1;
 			
+			// save data
+			RegFunctions._gameMenu.flush();
+			RegFunctions._gameMenu.close;
 		});
 		
 		Reg2._scrollable_area_is_scrolling = false;
+		
+		//https://stackoverflow.com/questions/36822025/execute-url-path-in-external-program-in-haxe
+		//case "Linux", "BSD", "Android": Sys.command("xdg-open", [url]);
+		//case "Mac": Sys.command("open", [url]);
+		//case "Windows": Sys.command("start", [url]);
+		//Sys.command("start", ["https://localhost"]);
+		//Sys.command("start", ["Games.exe"]);
+		// Example, just use... Sys.command("batch.bat");
+		
+	}
+	
+	private function full_screen_toggle():Void
+	{
+		FlxG.fullscreen = !FlxG.fullscreen;
+	}
+	
+	private function setScaleMode(scaleMode:ScaleMode)
+	{
+		_button_scale_mode.label.text = "Scale Mode: " + scaleMode;
+
+		FlxG.scaleMode = switch (scaleMode)
+		{			
+			case ScaleMode.RELATIVE:
+				new RelativeScaleMode(0.95, 0.95);
+				
+			case ScaleMode.RATIO_DEFAULT:
+				new RatioScaleMode();
+
+			case ScaleMode.RATIO_FILL_SCREEN:
+				new RatioScaleMode(true);
+
+			case ScaleMode.FILL:
+				new FillScaleMode();
+
+		}
+
 	}
 	
 	private function chess_skill_level_setup():Void
@@ -355,8 +413,6 @@ class MenuState extends FlxState
 			
 			buttonsIconsActive();
 
-			FlxG.mouse.reset();
-			FlxG.mouse.enabled = true;
 			Reg._at_menu_state = true;
 		}
 		
@@ -367,8 +423,6 @@ class MenuState extends FlxState
 
 			buttonsIconsActive();
 		
-			FlxG.mouse.reset();
-			FlxG.mouse.enabled = true;
 			Reg._at_menu_state = true;
 		}
 		
@@ -404,8 +458,6 @@ class MenuState extends FlxState
 			Reg._buttonCodeValues = "";
 			buttonsIconsActive();
 			
-			FlxG.mouse.reset();
-			FlxG.mouse.enabled = true;
 			Reg._at_menu_state = true;
 		}
 		
@@ -416,8 +468,6 @@ class MenuState extends FlxState
 						
 			buttonsIconsActive();
 			
-			FlxG.mouse.reset();
-			FlxG.mouse.enabled = true;
 			Reg._at_menu_state = true;
 		}
 		
@@ -430,8 +480,6 @@ class MenuState extends FlxState
 			buttonsIconsActive();
 			
 			Reg._at_menu_state = true;
-			FlxG.mouse.reset();
-			FlxG.mouse.enabled = true;
 			Reg._at_menu_state = true;
 		}
 		
@@ -443,8 +491,6 @@ class MenuState extends FlxState
 
 			buttonsIconsActive();
 			
-			FlxG.mouse.reset();
-			FlxG.mouse.enabled = true;
 			Reg._at_menu_state = true;
 		}
 		
@@ -456,54 +502,9 @@ class MenuState extends FlxState
 
 			buttonsIconsActive();
 			
-			FlxG.mouse.reset();
-			FlxG.mouse.enabled = true;
 			Reg._at_menu_state = true;
 		}
 		
-		// question about give your username at the config scene. pressed ok.
-		if (Reg._yesNoKeyPressValueAtMessage == 1 && Reg._buttonCodeValues == "z1050")
-		{
-			Reg._buttonCodeValues = "";
-			Reg._yesNoKeyPressValueAtMessage = 0;
-
-			buttonsIconsActive();
-			
-			titleMenu(3);
-			
-			FlxG.mouse.reset();
-			FlxG.mouse.enabled = true;
-			Reg._at_menu_state = true;
-		}
-		
-		// question about give your username at the config scene. pressed register button.
-		if (Reg._yesNoKeyPressValueAtMessage == 2 && Reg._buttonCodeValues == "z1050")
-		{
-			Reg._buttonCodeValues = "";
-			Reg._yesNoKeyPressValueAtMessage = 0;
-
-			buttonsIconsActive();
-			
-			Internet.URLgoto("https://" + Reg._websiteHomeUrl + "/en/ucp.php?mode=register", 2);
-			
-			FlxG.mouse.reset();
-			FlxG.mouse.enabled = true;
-			Reg._at_menu_state = true;
-		}
-		
-		//  question about give your username at the config scene. pressed "x".
-		if (Reg._yesNoKeyPressValueAtMessage == 3 && Reg._buttonCodeValues == "z1050")
-		{
-			Reg._buttonCodeValues = "";
-			Reg._yesNoKeyPressValueAtMessage = 0;
-
-			buttonsIconsActive();
-			
-			FlxG.mouse.reset();
-			FlxG.mouse.enabled = true;
-			Reg._at_menu_state = true;
-		}
-			
 	}
 	
 	private function startupFunctions():Void
@@ -525,46 +526,54 @@ class MenuState extends FlxState
 			add(Reg.__menu_bar);
 		}
 		
-		buttonFullScreen();				// toggle window/fullscreen mode
-	}
-	
-	private function initializeGameMenu():Void
-	{
-		#if !html5	
-			_gameMenu = new FlxSave(); // initialize
-			_gameMenu.bind("LoginData"); // bind to the named save slot.
-
-			if (_gameMenu.data.fullscreen != null) loadMenu();
-		#end
-	}
-	
-	private function buttonFullScreen():Void
-	{
 		// Get event data. only search the internet once, when event data is not populated.
 		_client_online = Internet.isWebsiteAvailable();
 		
 		#if !html5	
 			if (_client_online == true)
 			{
-				_software_new_check = new ButtonGeneralNetworkNo(15, FlxG.height - 40, "", 385, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, checkForNewSoftware, RegCustom._button_color[Reg._tn], false, 1);
+				_software_new_check = new ButtonGeneralNetworkNo(15, FlxG.height - 40, "", 385, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, checkForNewSoftware, RegCustom._button_color[Reg._tn], false, 0);
 				_software_new_check.label.text = "Check For New Software";
 				_software_new_check.label.font = Reg._fontDefault;
 				add(_software_new_check);
 			}
-		#end
-		
-		if (Reg._clientReadyForPublicRelease == false)
-		{
-			_toggleFullscreen = new ButtonGeneralNetworkNo(0, FlxG.height - 40, "", 305, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, toggleFullScreenClicked, RegCustom._button_color[Reg._tn], false, 1);
+			
+			_button_scale_mode = new ButtonGeneralNetworkNo(_software_new_check.width + _software_new_check.x + 15, FlxG.height - 40, "Scale Mode", 360, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, scaleClicked, RegCustom._button_color[Reg._tn], false, 0);
+			_button_scale_mode.label.font = Reg._fontDefault;
+			add(_button_scale_mode);
+			
+			scaleModeLoad(); // change scale mode to the scale mode that was saved.
+		#else
+			_toggleFullscreen = new ButtonGeneralNetworkNo(15, FlxG.height - 40, "", 300, 35, Reg._font_size, 0xFFCCFF33, 0, full_screen_toggle, 0xFF000044, false);
 			_toggleFullscreen.label.text = "Toggle Fullscreen";
 			_toggleFullscreen.label.font = Reg._fontDefault;
-			#if html5
-				_toggleFullscreen.x = 15;
-			#else			
-				_toggleFullscreen.x = _software_new_check.width + _software_new_check.x + 15;
-			#end
 			add(_toggleFullscreen);
-		}
+		#end
+	}
+	
+	public function scaleClicked():Void
+	{
+		scaleModeIndex = FlxMath.wrap(scaleModeIndex + 1, 0, scaleModes.length - 1);
+		setScaleMode(scaleModes[scaleModeIndex]);
+
+		RegFunctions._gameMenu.data.scaleModeIndex = scaleModeIndex - 1;
+
+		// save data
+		RegFunctions._gameMenu.flush();
+		RegFunctions._gameMenu.close;
+	}
+
+	public function scaleModeLoad():Void
+	{
+		scaleModeIndex = FlxMath.wrap(scaleModeIndex + 1, 0, scaleModes.length - 1);
+		setScaleMode(scaleModes[scaleModeIndex]);
+
+		RegFunctions._gameMenu.data.scaleModeIndex = scaleModeIndex - 1;
+		
+		// save data
+		RegFunctions._gameMenu.flush();
+		RegFunctions._gameMenu.close;
+
 	}
 	
 	private function checkForNewSoftware():Void
@@ -572,83 +581,61 @@ class MenuState extends FlxState
 		Reg._messageId = 3;
 		Reg._buttonCodeValues = "z1020";		
 		SceneGameRoom.messageBoxMessageOrder();
-
-		FlxG.mouse.reset();
-		FlxG.mouse.enabled = true;
-	}
-	
-	private function toggleFullScreenClicked():Void
-	{
-		if (Reg._clientReadyForPublicRelease == false)
-		{
-			// there is a bug where once client is maximized in window mode, two mouse clicks on the button "toggle fullscreen" are needed to return back to window mode. the problem seems to be that a windowed fullscreen is considered the same as a borderless fullscreen this is why the maximized button is disabled when Reg._clientReadyForPublicRelease is false. to take a screenshot of a fullscreen in window mode, press the M key then press it again to return to normal window mode.
-			FlxG.fullscreen = !FlxG.fullscreen;
-			saveMenu();
-		}
 	}
 	
 	// try to connect to the server.
 	public function tryToConnect():Void
 	{
 		#if html5
-			RegCustom._profile_username_p1[Reg._tn] = "Guest";
+			RegCustom._profile_username_p1[CID3._CRN] = "Guest";
 		
 		#end
 		
-		// TODO
-		/*if (RegCustom._profile_username_p1[Reg._tn] == "" 
-		||  RegCustom._profile_username_p1[Reg._tn] == "Guest1") 
-		{
-			goingOnlineIsUsernameSet();
-		}
-		else*/
-		{			
-			Reg._alreadyOnlineHost = false;
-			Reg._alreadyOnlineUser = false;
-			RegTypedef.resetTypedefDataOnce(); RegTypedef.resetTypedefData();		
-			RegTypedef.resetHouseData();
-			Reg.system_reset(); 
-			Reg2.system_reset();
-			Reg.resetRegVarsOnce();
-			Reg.resetRegVars();
-			Reg2.resetRegVarsOnce();
-			Reg2.resetRegVars();
-			RegCustom.resetRegVars();
-			RegTriggers.resetTriggers();
-			Reg._game_offline_vs_cpu = false;
-			Reg._game_offline_vs_player = false;
-			Reg._gameId = -1;	 
+		Reg._alreadyOnlineHost = false;
+		Reg._alreadyOnlineUser = false;
+		RegTypedef.resetTypedefDataOnce(); RegTypedef.resetTypedefData();		
+		RegTypedef.resetHouseData();
+		Reg.system_reset(); 
+		Reg2.system_reset();
+		Reg.resetRegVarsOnce();
+		Reg.resetRegVars();
+		Reg2.resetRegVarsOnce();
+		Reg2.resetRegVars();
+		RegCustom.resetRegVars();
+		RegTriggers.resetTriggers();
+		Reg._game_offline_vs_cpu = false;
+		Reg._game_offline_vs_player = false;
+		Reg._gameId = -1;	 
+	
+		getIPaddressFromServerOrMain();
 		
-			getIPaddressFromServerOrMain();
+		#if !html5						
+			// get version number file from internet and compare it with this client's offline file, to determine if this client should shutdown for a software update.
+			var _online = Internet.isWebsiteAvailable();
+			if (_online == true) Internet.webVersionFileExist();
 			
-			#if !html5						
-				// get version number file from internet and compare it with this client's offline file, to determine if this client should shutdown for a software update.
-				var _online = Internet.isWebsiteAvailable();
-				if (_online == true) Internet.webVersionFileExist();
+			// if false then the version number from Internet.webVersionFileExist() function of the versionClient.txt at website passed the check An update was not needed. The value of Reg._doOnce is changed at Internet.webVersionFileExist().
+		
+			if (Reg._doOnce == false) 
+			{
+				canClientUpdate();
+			}
+			else
+			{
+				Reg._doOnce = false;
 				
-				// if false then the version number from Internet.webVersionFileExist() function of the versionClient.txt at website passed the check An update was not needed. The value of Reg._doOnce is changed at Internet.webVersionFileExist().
+				serverConnectingErrorMessages();
+								
+			}
 			
-				if (Reg._doOnce == false) 
-				{
-					canClientUpdate();
-				}
-				else
-				{
-					Reg._doOnce = false;
-					
-					serverConnectingErrorMessages();
-									
-				}
+		#end
+		
+		#if html5
+			RegTypedef._dataAccount._username = "bot ben";
+			Reg._at_menu_state = false;
+			FlxG.switchState(new PlayState());
 				
-			#end
-			
-			#if html5
-				RegTypedef._dataAccount._username = "bot ben";
-				Reg._at_menu_state = false;
-				FlxG.switchState(new PlayState());
-					
-			#end
-		}
+		#end
 	}
 
 	private function getIPaddressFromServerOrMain():Void
@@ -796,33 +783,6 @@ class MenuState extends FlxState
 		}
 	}
 	
-	public function saveMenu():Void
-	{
-		#if !html5
-			// save data
-			if (_gameMenu == null) _gameMenu = new FlxSave(); // initialize
-			
-			_gameMenu.bind("LoginData"); // bind to the named save slot.
-			_gameMenu.data.fullscreen = FlxG.fullscreen;
-			
-			_gameMenu.flush();
-			_gameMenu.close();
-		#end
-	}
-
-	public function loadMenu():Void
-	{
-		if (Reg._clientReadyForPublicRelease == false)
-		{
-			#if !html5
-				if (Reg._menustate_initiated == false)
-					FlxG.fullscreen = _gameMenu.data.fullscreen;
-				
-				Reg._menustate_initiated = true;
-			#end
-		}
-	}
-
 	private function eventCurrentAndUpcoming():Void
 	{
 		var _offsetEventColumn1Y:Int = 29;
@@ -1050,11 +1010,7 @@ class MenuState extends FlxState
 		
 		var _textMonth = EventSchedule.getMonthText(_intMonth, _textMonth);
 		
-		#if html5
-			_textUpcoming.text = " N/A";
-		#else
-			_textUpcoming.text = _textMonth + " " + _upcomingDay;
-		#end
+		_textUpcoming.text = _textMonth + " " + _upcomingDay;
 	}
 	
 	private function titleIcons():Void
@@ -1093,6 +1049,7 @@ class MenuState extends FlxState
 			_sprite.color = RegCustomColors.client_text_color();
 			_sprite.scrollFactor.set(0, 0);
 			_sprite.updateHitbox();
+			_sprite.visible = false;
 			add(_sprite);	
 			
 			// add this member to _group_sprite.			
@@ -1125,11 +1082,6 @@ class MenuState extends FlxState
 		// all gameboards images are stored in frames.
 		_game_highlighted = new FlxSprite(_icon_offset_x - 2, 440 + _offset_icons_and__event_scheduler_y - 2);
 		
-		#if html5
-			// TODO sys.ssl certificate commands are needed so that html5 can connect to server.
-			_game_highlighted.x = _icon_offset_x + 77;
-		#end
-		
 		_game_highlighted.loadGraphic("assets/images/iconsHover.png", true, 66, 66); // height is the same value as width.
 		_game_highlighted.scrollFactor.set(0, 0);
 		_game_highlighted.animation.add("play", [0, 1], 10, true);
@@ -1154,17 +1106,22 @@ class MenuState extends FlxState
 			}
 		#end
 		if (_num == 4) clientHelp();
-		if (_num == 5)
-		{
-			Reg._at_menu_state = false;
-			FlxG.switchState(new MenuCredits());
-		}
+		if (_num == 5) credits();
 	}
 	
 	private function clientHelp():Void
 	{
 		Reg._messageId = 6;
 		Reg._buttonCodeValues = "a1000";
+		SceneGameRoom.messageBoxMessageOrder();
+		
+		buttonsIconsNotActive();
+	}
+	
+	private function credits():Void
+	{
+		Reg._messageId = 20;
+		Reg._buttonCodeValues = "a1100";
 		SceneGameRoom.messageBoxMessageOrder();
 		
 		buttonsIconsNotActive();
@@ -1219,20 +1176,18 @@ class MenuState extends FlxState
 			}
 			
 			// add the none bot name as the last button displayed at this scene. the name is from the configuration menu. this list of names is only seen when application build is set to debug.
-			if (RegCustom._profile_username_p1[Reg._tn] != ""
-			&&	RegCustom._profile_username_p1[Reg._tn] != "Guest2"
-			&&	RegCustom._profile_username_p1[Reg._tn] != "Bot ben".toLowerCase()
-			&&	RegCustom._profile_username_p1[Reg._tn] != "Bot tina".toLowerCase()
-			&&	RegCustom._profile_username_p1[Reg._tn] != "Bot piper".toLowerCase()
-			&&	RegCustom._profile_username_p1[Reg._tn] != "Bot amy".toLowerCase()
-			&&	RegCustom._profile_username_p1[Reg._tn] != "Bot zak".toLowerCase()
+			if (RegCustom._profile_username_p1[CID3._CRN] != ""
+			&&	RegCustom._profile_username_p1[CID3._CRN] != "Guest2"
+			&&	RegCustom._profile_username_p1[CID3._CRN] != "Bot ben".toLowerCase()
+			&&	RegCustom._profile_username_p1[CID3._CRN] != "Bot tina".toLowerCase()
+			&&	RegCustom._profile_username_p1[CID3._CRN] != "Bot piper".toLowerCase()
+			&&	RegCustom._profile_username_p1[CID3._CRN] != "Bot amy".toLowerCase()
+			&&	RegCustom._profile_username_p1[CID3._CRN] != "Bot zak".toLowerCase()
 			)
 			{
-				#if !html5
-					_profile_username_p1 = new ButtonToggleFlxState(750+90, 230, 100, RegCustom._profile_username_p1[Reg._tn], 200, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, profile_username_p1, RegCustom._button_color[Reg._tn], false);
-					_profile_username_p1.label.font = Reg._fontDefault;
-					add(_profile_username_p1);
-				#end
+				_profile_username_p1 = new ButtonToggleFlxState(750+90, 230, 100, RegCustom._profile_username_p1[CID3._CRN], 200, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, profile_username_p1, RegCustom._button_color[Reg._tn], false);
+				_profile_username_p1.label.font = Reg._fontDefault;
+				add(_profile_username_p1);
 			}
 			
 			// this does the button toggle.
@@ -1251,28 +1206,28 @@ class MenuState extends FlxState
 			
 			else
 			{
-				if (RegCustom._profile_username_p1[Reg._tn] == "Bot ben".toLowerCase())
+				if (RegCustom._profile_username_p1[CID3._CRN] == "Bot ben".toLowerCase())
 					botUseBenOnline();
 				
-				else if (RegCustom._profile_username_p1[Reg._tn] == "Bot tina".toLowerCase())
+				else if (RegCustom._profile_username_p1[CID3._CRN] == "Bot tina".toLowerCase())
 					botUseTinaOnline();
 				
-				else if (RegCustom._profile_username_p1[Reg._tn] == "Bot piper".toLowerCase())
+				else if (RegCustom._profile_username_p1[CID3._CRN] == "Bot piper".toLowerCase())
 					botUsePiperOnline();			
 				
-				else if (RegCustom._profile_username_p1[Reg._tn] == "Bot amy".toLowerCase())
+				else if (RegCustom._profile_username_p1[CID3._CRN] == "Bot amy".toLowerCase())
 					botUseAmyOnline();
 				
-				else if (RegCustom._profile_username_p1[Reg._tn] == "Bot zak".toLowerCase())
+				else if (RegCustom._profile_username_p1[CID3._CRN] == "Bot zak".toLowerCase())
 					botUseZakOnline();				
 				
-				else if (RegCustom._profile_username_p1[Reg._tn] != ""
-				&&	RegCustom._profile_username_p1[Reg._tn] != "Guest2"
-				&&	RegCustom._profile_username_p1[Reg._tn] != "Bot ben".toLowerCase()
-				&&	RegCustom._profile_username_p1[Reg._tn] != "Bot tina".toLowerCase()
-				&&	RegCustom._profile_username_p1[Reg._tn] != "Bot piper".toLowerCase()
-				&&	RegCustom._profile_username_p1[Reg._tn] != "Bot amy".toLowerCase()
-				&&	RegCustom._profile_username_p1[Reg._tn] != "Bot zak".toLowerCase()
+				else if (RegCustom._profile_username_p1[CID3._CRN] != ""
+				&&	RegCustom._profile_username_p1[CID3._CRN] != "Guest2"
+				&&	RegCustom._profile_username_p1[CID3._CRN] != "Bot ben".toLowerCase()
+				&&	RegCustom._profile_username_p1[CID3._CRN] != "Bot tina".toLowerCase()
+				&&	RegCustom._profile_username_p1[CID3._CRN] != "Bot piper".toLowerCase()
+				&&	RegCustom._profile_username_p1[CID3._CRN] != "Bot amy".toLowerCase()
+				&&	RegCustom._profile_username_p1[CID3._CRN] != "Bot zak".toLowerCase()
 				) 
 					profile_username_p1();
 				
@@ -1297,7 +1252,7 @@ class MenuState extends FlxState
 		_bot_zak.has_toggle = false;
 		_bot_zak.set_toggled(false);
 		
-		if (RegCustom._profile_username_p1[Reg._tn] != ""
+		if (RegCustom._profile_username_p1[CID3._CRN] != ""
 		&&	_profile_username_p1 != null)
 		{
 			_profile_username_p1.has_toggle = false;
@@ -1364,7 +1319,7 @@ class MenuState extends FlxState
 	{
 		if (_profile_username_p1 != null)
 		{
-			RegTypedef._dataAccount._username = RegCustom._profile_username_p1[Reg._tn];
+			RegTypedef._dataAccount._username = RegCustom._profile_username_p1[CID3._CRN];
 			
 			Reg2._menu_state_username_p1 = 5;
 			
@@ -1379,12 +1334,8 @@ class MenuState extends FlxState
 	{
 		_is_active = true;
 		
-		#if !html5
-			if (_eventSchedulerHover != null) _eventSchedulerHover.active = true;
-				
-			if (_software_new_check != null) _software_new_check.active = true;
-			if (_game_highlighted != null) _game_highlighted.active = true;
-		#end
+		if (_eventSchedulerHover != null) _eventSchedulerHover.active = true;
+		if (_game_highlighted != null) _game_highlighted.active = true;
 		
 		for (i in 0...6)
 		{
@@ -1397,12 +1348,8 @@ class MenuState extends FlxState
 	{
 		_is_active = false;
 		
-		#if !html5
-			if (_eventSchedulerHover != null) _eventSchedulerHover.active = false;
-			
-			if (_software_new_check != null) _software_new_check.active = false;
-			if (_game_highlighted != null) _game_highlighted.active = false;
-		#end
+		if (_eventSchedulerHover != null) _eventSchedulerHover.active = false;
+		if (_game_highlighted != null) _game_highlighted.active = false;
 		
 		for (i in 0...6)
 		{
@@ -1411,22 +1358,10 @@ class MenuState extends FlxState
 		
 	}
 	
-	private function goingOnlineIsUsernameSet():Void
-	{
-		Reg._messageId = 7;
-		Reg._buttonCodeValues = "z1050";
-		SceneGameRoom.messageBoxMessageOrder();
-		
-		buttonsIconsNotActive();
-	}
-	
 	private function center_icon_text_to_icon_box():Void
 	{
 		_icon_text_title_description.screenCenter(X);
-		
-		#if !html5
-			_icon_text_title_description.x += 330;
-		#end
+		_icon_text_title_description.x += 330;
 	}
 	
 	static function setExitHandler(_exit:Void->Void):Void 
@@ -1450,27 +1385,23 @@ class MenuState extends FlxState
 	
 	override public function update(elapsed:Float):Void
 	{
+		//if (FlxG.mouse.justPressed == true) FlxG.fullscreen = true;
+		
 		if (_ticks_startup < 20) _ticks_startup += 1;
 		
 		if (_ticks_startup == 1)
 		{
-			#if !html5
-				initializeGameMenu();			// for save/load configuration.
-			#end
-						
 			startupFunctions();
 			drawBOTbuttonsOnScene();
 			chess_skill_level_setup();
 			
-			#if !html5
-				if (_client_online == true)
-				{
-					if (Reg2._eventName[0] == "") Internet.getAllEvents();
-					if (Reg2._eventName[0] == "") Internet.getAllEvents();
-					if (Reg2._eventName[0] == "") Internet.getAllEvents();
-				}
-			#end
-			
+			if (_client_online == true)
+			{
+				if (Reg2._eventName[0] == "") Internet.getAllEvents();
+				if (Reg2._eventName[0] == "") Internet.getAllEvents();
+				if (Reg2._eventName[0] == "") Internet.getAllEvents();	
+			}
+				
 			Reg._hasUserConnectedToServer = false;
 			Reg._notation_output = true;
 			
@@ -1491,12 +1422,8 @@ class MenuState extends FlxState
 			if (_button_b3.has_toggle == true)
 				RegCustom._chess_skill_level_online = 2;
 			
-			#if !html5
-				draw_event_scheduler();
-			#end
-			
 			_text_version_display = new FlxText(0, 0, 0, "V" + Reg._version);
-			_text_version_display.setFormat(Reg._fontDefault, 22);
+			_text_version_display.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
 			_text_version_display.scrollFactor.set();
 						
 			if (Reg._websiteNameTitle != Reg._websiteNameTitleCompare)
@@ -1506,15 +1433,29 @@ class MenuState extends FlxState
 			
 			_text_version_display.setPosition(FlxG.width - _text_version_display.fieldWidth - 15, FlxG.height - 40);
 			add(_text_version_display);	
-				
+			
+			if (Reg._clientReadyForPublicRelease == false)
+			{
+				__action_commands = new ActionCommands(); 
+				add(__action_commands);
+			} 
+			
 			Reg._gameJumpTo = 0;
-						 
+			
 			_ticks_startup = 30;
 		}
 		
 		// normal update() stuff.
 		if (_ticks_startup == 30)
-		{
+		{			
+			if (Reg2._eventName[0] != ""
+			&&	_ticks_internet == 0
+			&&	Reg._buttonCodeValues == "")
+			{
+				_ticks_internet = 1;
+				draw_event_scheduler();
+			}
+			
 			if (Reg._buttonCodeValues != "") buttonCodeValues();
 		
 			// every time a user connects to the server, the server create a file with the name of the users host name. If the host name matches the name of the file, in the host directory at server, then that means there is already a client opened at that device. Therefore do the following.
@@ -1526,7 +1467,8 @@ class MenuState extends FlxState
 			||  Reg._isThisServerPaidMember == false 
 			||  Reg._hostname_message == true 
 			||  Reg._ip_message == true 
-			||  Reg._login_failed == true)
+			||  Reg._login_failed == true
+			||	Reg._username_restricted == true)
 			{
 
 				if (Reg._clientDisconnected == true)
@@ -1557,8 +1499,10 @@ class MenuState extends FlxState
 					_str = "Failed to get the ip from the website address. Is the website online?";
 					
 				else if (Reg._login_failed == true) 
-					_str = "Login failed. Verify your username and password at the configuration menu.";
+					_str = "Login failed. Verify your username and password at the configuration menu. Note, your selected username could be restricted.";
 					
+				else if (Reg._username_restricted == true)
+					_str = "Login rejected because your username has a bad word or a reserved word.";
 				Reg._messageId = 10;
 				Reg._buttonCodeValues = "m1000";
 				SceneGameRoom.messageBoxMessageOrder();
@@ -1577,7 +1521,8 @@ class MenuState extends FlxState
 				Reg._hostname_message = false;
 				Reg._ip_message = false;
 				Reg._login_failed = false;				
-				
+				Reg._username_restricted = false;
+				RegTypedef._dataAccount._username_restricted = "";
 			}
 
 			// this block of code is needed so that the connect button will try to connect again.
@@ -1588,39 +1533,38 @@ class MenuState extends FlxState
 				
 				buttonsIconsActive();
 			}
-						
-			#if !html5
-				if (_eventSchedulerHover != null)
+			
+			if (_eventSchedulerHover != null)
+			{
+				if (Reg._gameJumpTo == 0)
 				{
-					if (Reg._gameJumpTo == 0)
+					_eventSchedulerHover.visible = false;
+					
+					if (ActionInput.overlaps(_eventSchedulerHover)
+					&&	_eventSchedulerHover.active == true)
+					{			
+						_eventSchedulerHover.visible = true;
+					}
+						
+					if (ActionInput.overlaps(_eventSchedulerHover) 
+					&& ActionInput.justPressed() == true
+					&& _is_active == true
+					)
 					{
-						_eventSchedulerHover.visible = false;
+						if (RegCustom._sound_enabled[Reg._tn] == true
+						&&	Reg2._scrollable_area_is_scrolling == false)
+							FlxG.sound.play("click", 1, false);
+					
+						if (_eventSchedulerHover != null) _eventSchedulerHover.active = false;					
+							buttonsIconsNotActive();
 						
-						if (ActionInput.overlaps(_eventSchedulerHover)
-						&&	_eventSchedulerHover.active == true)
-						{			
-							_eventSchedulerHover.visible = true;
-						}
-							
-						if (ActionInput.overlaps(_eventSchedulerHover) 
-						&& ActionInput.justPressed() == true
-						&& _is_active == true
-						)
-						{
-							if (RegCustom._sound_enabled[Reg._tn] == true
-							&&	Reg2._scrollable_area_is_scrolling == false)
-								FlxG.sound.play("click", 1, false);
-						
-							if (_eventSchedulerHover != null) _eventSchedulerHover.active = false;					
-								buttonsIconsNotActive();
-							
-							Reg._at_menu_state = false;
-							FlxG.switchState(new EventSchedule());
-						}
+						Reg._at_menu_state = false;
+						FlxG.switchState(new EventSchedule());
 					}
 				}
-			
-			#end
+			}
+		
+		
 			
 			if (RegTriggers._mainStateMakeActiveElements == true)
 			{
@@ -1717,12 +1661,31 @@ class MenuState extends FlxState
 			Reg._buttonCodeValues = "";
 			Reg._yesNoKeyPressValueAtMessage = 0;
 
-			FlxG.openURL("http://kboardgames.com/en/viewtopic.php?f=10&t=13","_blank"); 
+			FlxG.openURL("https://kboardgames.com/index.php?p=30","_blank"); 
 			
 			buttonsIconsActive();
 		}
 	
 		if (Reg._yesNoKeyPressValueAtMessage >= 2 && Reg._buttonCodeValues == "a1000")
+		{
+			Reg._buttonCodeValues = "";
+			Reg._yesNoKeyPressValueAtMessage = 0;
+			
+			buttonsIconsActive();
+		}
+		
+		// view the credits page.
+		if (Reg._yesNoKeyPressValueAtMessage == 1 && Reg._buttonCodeValues == "a1100")
+		{
+			Reg._buttonCodeValues = "";
+			Reg._yesNoKeyPressValueAtMessage = 0;
+
+			FlxG.openURL("https://kboardgames.com/index.php?p=31","_blank"); 
+			
+			buttonsIconsActive();
+		}
+		
+		if (Reg._yesNoKeyPressValueAtMessage >= 2 && Reg._buttonCodeValues == "a1100")
 		{
 			Reg._buttonCodeValues = "";
 			Reg._yesNoKeyPressValueAtMessage = 0;
@@ -1744,8 +1707,6 @@ class MenuState extends FlxState
 		#if !html5
 			if (FlxG.mouse.justPressed == true)
 			{
-				if (Reg._startFullscreen == true) FlxG.fullscreen = true; 
-				
 				if (_sound_channel != null)
 					_sound_channel.stop();
 			}
@@ -1753,3 +1714,12 @@ class MenuState extends FlxState
 		*/
 	}
 }//
+
+@:enum
+abstract ScaleMode(String) to String
+{
+	var RELATIVE = "relative 95%";
+	var RATIO_DEFAULT = "ratio";
+	var RATIO_FILL_SCREEN = "screenfill)";
+	var FILL = "fill";
+}

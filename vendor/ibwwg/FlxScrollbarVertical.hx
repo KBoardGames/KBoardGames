@@ -133,7 +133,7 @@ class FlxScrollbarVertical extends FlxSpriteGroup
 	 */
 	public function new( x:Float, y:Float, Width:Float, Height:Float, content_height_extra:Int = 0, Color:FlxColor, Camera:FlxScrollableArea, ?InitiallyVisible:Bool=false, ?viewPort:FlxRect, ?MouseWheelMultiplier:Int = 0, content_width:Float, content_height:Float, id:Int = 0, vertical_bar_bring_up:Bool = false, vertical_bar_bring_down:Bool = false) 
 	{
-		super( x, y);
+		super(x, y);
 		
 		_track_color = 0xff111111; // dark gray;
 		
@@ -241,11 +241,11 @@ class FlxScrollbarVertical extends FlxSpriteGroup
 			if (FlxG.mouse.justPressed
 			&&	Reg2._scrollable_area_is_scrolling == false
 			&&	Reg._messageId == 0
-			&&	Reg2._lobby_button_alpha == 0.3
+			&&	Reg2._lobby_button_alpha == 1
 			|| _doOnce == 0
 			&&	Reg2._scrollable_area_is_scrolling == false
 			&&	Reg._messageId == 0
-			&&	Reg2._lobby_button_alpha == 0.3
+			&&	Reg2._lobby_button_alpha == 1
 			&& _id == 0
 			&& _id == ID)
 			{
@@ -355,8 +355,7 @@ class FlxScrollbarVertical extends FlxSpriteGroup
 		}
 		
 		// FlxG.mouse.pressed code above does not work for this var.
-		if (FlxG.mouse.enabled == true
-		&&	FlxG.mouse.pressed == false)
+		if (FlxG.mouse.pressed == false)
 			Reg2._scrollable_area_is_scrolling = false;
 				
 		tryToScrollPage = false;

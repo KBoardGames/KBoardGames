@@ -2,18 +2,11 @@
     Copyright (c) 2021 KBoardGames.com
     This program is part of KBoardGames client software.
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published
-    by the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+    This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+    This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Affero General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU Affero General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 package;
@@ -73,6 +66,7 @@ class TextGeneral extends FlxText
 	private var _background_visible:Bool = true;
 	
 	private var _id:Int = 0;
+	private var _text:String = "";
 	
 	/**
 	 * Creates a new `FlxText` object at the specified position.
@@ -93,12 +87,21 @@ class TextGeneral extends FlxText
 		
 		_startX = x;
 		_startY = y;
-		
+	
+		_text = Text;
 		_scrollarea_offset_x = 0;
 		_scrollarea_offset_y = 0;
-		
 		Reg._text_general_id += 1;
-		_id = ID = Reg._text_general_id;
+		
+		// Reg._text_general_id is always a value of -1 when entering PlayState. Therefore, this is used for an id value.
+		if (RegTypedef._dataAccount._ip != ""
+		&&	RegTypedef._dataAccount._hostname != "")
+		{
+			_id = ID = Std.parseInt(RegTypedef._dataGame.id.substr(0, 7)) + Reg._text_general_id;
+		}
+		
+		else _id = ID = Reg._text_general_id;
+		
 		_multi_line = multi_line;
 		_background_width = background_width;
 		_background_height = background_height;
@@ -109,7 +112,7 @@ class TextGeneral extends FlxText
 	}
 
 	// this function is needed. it draws this class background to some scenes.
-	override function regenGraphic():Void {}
+	override function regenGraphic():Void { if (_id != ID) return; }
 	
 	// this function is needed to update the FlxSprite which is used as the text background.
 	override public function update(elapsed:Float):Void
@@ -118,7 +121,6 @@ class TextGeneral extends FlxText
 		
 		_ticks = RegFunctions.incrementTicks(_ticks, 60 / Reg._framerate);
 		
-		// to highlight a row on mouse over replace this if condition with if (_ticks >= 15) then just above the super.update(elapsed) line remove else _ticks = 35. Warning doing this is CPU intensive.
 		if (_ticks < 35)
 		{
 			var oldWidth:Int = 0;
@@ -140,8 +142,8 @@ class TextGeneral extends FlxText
 				newHeight = oldHeight;
 			}
 			
-			if (_id == ID && oldWidth != newWidth
-			||	_id == ID && oldHeight != newHeight)
+			if (oldWidth != newWidth
+			||	oldHeight != newHeight)
 			{
 				// Need to generate a new buffer to store the text graphic
 				height = newHeight;
@@ -158,7 +160,6 @@ class TextGeneral extends FlxText
 						// highlight the background if mouse is overtop.
 						/*
 						if (_text_state[ID] < 2
-						&&	FlxG.mouse.enabled == true
 						&&	FlxG.mouse.x > _startX
 						&&  FlxG.mouse.x < _startX + _background_width
 						&&  FlxG.mouse.y + _scrollarea_offset_y > _startY
@@ -189,7 +190,6 @@ class TextGeneral extends FlxText
 						// highlight the background if mouse is overtop.
 						/*
 						if (_text_state[ID] < 2
-						&&	FlxG.mouse.enabled == true
 						&&	FlxG.mouse.x > _startX
 						&&  FlxG.mouse.x < FlxG.width - 55
 						&&  FlxG.mouse.y + _scrollarea_offset_y > _startY
@@ -229,7 +229,6 @@ class TextGeneral extends FlxText
 						// highlight the background if mouse is overtop.
 						/*
 						if (_text_state[ID] < 2
-						&&	FlxG.mouse.enabled == true
 						&&	FlxG.mouse.x > _startX
 						&&  FlxG.mouse.x < FlxG.width - 55
 						&&  FlxG.mouse.y + _scrollarea_offset_y > _startY
@@ -259,7 +258,6 @@ class TextGeneral extends FlxText
 						// highlight the background if mouse is overtop./*
 						/*
 						if (_text_state[ID] < 2
-						&&	FlxG.mouse.enabled == true
 						&&	FlxG.mouse.x > _startX
 						&&  FlxG.mouse.x < FlxG.width - 55
 						&&  FlxG.mouse.y + _scrollarea_offset_y > _startY
@@ -290,23 +288,32 @@ class TextGeneral extends FlxText
 				
 			}
 			
-			if (textField != null && textField.text != null && textField.text.length > 0)
-			{
-				// Now that we've cleared a buffer, we need to actually render the text to it
-				copyTextFormat(_defaultFormat, _formatAdjusted);
-				
-				_matrix.identity();
-				
-				applyBorderStyle();
-				//applyBorderTransparency();
-				applyFormats(_formatAdjusted, false);
-				
-				drawTextFieldTo(graphic.bitmap);
-			}
-			
-			_regen = false;
-		} else _ticks = 35;
+		} 
 		
+		else
+		{
+			_ticks = 35;
+			_regen = true;
+		}
+		
+		if (_regen == true)
+		{
+			// Now that we've cleared a buffer, we need to actually render the text to it
+			//copyTextFormat(_defaultFormat, _formatAdjusted);
+			
+			_matrix.identity();
+			
+			//applyBorderStyle();
+			//applyBorderTransparency();
+			//applyFormats(_formatAdjusted, false);
+			
+			drawTextFieldTo(graphic.bitmap);
+			
+			Reg._can_join_server = true;
+			_regen = false;
+
+		}
+
 		super.update(elapsed);
 	}
 }

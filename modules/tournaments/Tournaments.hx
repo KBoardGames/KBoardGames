@@ -2,18 +2,11 @@
     Copyright (c) 2021 KBoardGames.com
     This program is part of KBoardGames client software.
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published
-    by the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+    This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+    This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Affero General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU Affero General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 package modules.tournaments;
@@ -27,7 +20,10 @@ import flixel.text.FlxText;
  * @author kboardgames.com
  */
 class Tournaments extends FlxGroup
-{	
+{
+	private var _title_sub:FlxText;
+	private var _tourny1:FlxText;
+		
 	/******************************
 	 * true if the player moved a piece on the board in tournament play.
 	 */
@@ -42,8 +38,7 @@ class Tournaments extends FlxGroup
 	{
 		super();	
 		
-		FlxG.mouse.enabled = true;
-		FlxG.autoPause = false;	// this application will pause when not in focus.
+		FlxG.autoPause = false;
 		
 		if (Reg.__title_bar2 != null) remove(Reg.__title_bar2);
 		Reg.__title_bar2 = new TitleBar("Tournaments");
@@ -57,12 +52,26 @@ class Tournaments extends FlxGroup
 	
 	public function _tournament_standard_8():Void
 	{
-		var _title_sub = new FlxText(15, 180, FlxG.width - 15, "Tournament Chess Standard (" + Std.string(RegTypedef._dataTournaments._player_current) + "/" + Std.string(RegTypedef._dataTournaments._player_maximum) + ")");
+		if (_title_sub != null)
+		{
+			_title_sub.visible = false;
+			remove(_title_sub);
+			_title_sub.destroy();
+		}
+		
+		_title_sub = new FlxText(15, 180, FlxG.width - 15, "Tournament Chess Standard (" + Std.string(RegTypedef._dataTournaments._player_current) + "/" + Std.string(RegTypedef._dataTournaments._player_maximum) + ")");
 		_title_sub.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_topic_title_text_color());
 		_title_sub.scrollFactor.set();
 		add(_title_sub);
 		
-		var _tourny1 = new FlxText(15, _title_sub.y + 50, FlxG.width - 15, "");
+		if (_tourny1 != null)
+		{
+			_tourny1.visible = false;
+			remove(_tourny1);
+			_tourny1.destroy();
+		}
+		
+		_tourny1 = new FlxText(15, _title_sub.y + 50, FlxG.width - 15, "");
 		_tourny1.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
 		_tourny1.scrollFactor.set();
 		add(_tourny1);
@@ -110,6 +119,13 @@ class Tournaments extends FlxGroup
 			
 			_tourny1.text = "You have been eliminated from this tournament.";
 			
+			if (_button_move_piece != null)
+			{
+				_button_move_piece.visible = false;
+				remove(_button_move_piece);
+				_button_move_piece.destroy();
+			}
+			
 			_button_move_piece = new ButtonGeneralNetworkYes(_tourny1.x + _tourny1.textField.textWidth + 15, _tourny1.y, "Preview", 215, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, preview.bind(1), RegCustom._button_color[Reg._tn], false);		
 			_button_move_piece.label.font = Reg._fontDefault;
 			_button_move_piece.scrollFactor.set(0, 0);
@@ -139,8 +155,8 @@ class Tournaments extends FlxGroup
 		if (_num == 1)
 		{
 			Reg._gameId = 1;
-			RegTypedef._dataMisc._room = 2;
-			PlayState.allTypedefRoomUpdate(2);
+			RegTypedef._dataMisc._room = SceneLobby._room_total;
+			PlayState.allTypedefRoomUpdate(SceneLobby._room_total);
 		}
 		
 		RegTypedef._dataPlayers._moveNumberDynamic[0] = 0;
@@ -153,8 +169,7 @@ class Tournaments extends FlxGroup
 		Reg._gameOverForAllPlayers = false;
 		Reg._playerCanMovePiece = true;
 		
-		PlayState.clientSocket.send("Greater RoomState Value", RegTypedef._dataMisc); 
-		haxe.Timer.delay(function (){}, Reg2._event_sleep);
+		PlayState.send("Greater RoomState Value", RegTypedef._dataMisc); 		
 	}
 	
 	/******************************
@@ -176,10 +191,10 @@ class Tournaments extends FlxGroup
 		RegTypedef._dataPlayers._spectatorWatching = true;
 		
 		if (_num == 1)
-		{
-			Reg._gameId = 1;
-			RegTypedef._dataMisc._room = 2;
-			PlayState.allTypedefRoomUpdate(2);
+		{			
+			RegTypedef._dataMisc._room = SceneLobby._room_total;
+			Reg._gameId = RegTypedef._dataMisc._roomGameIds[RegTypedef._dataMisc._room] = 1;
+			PlayState.allTypedefRoomUpdate(SceneLobby._room_total);
 		}
 		
 		RegTypedef._dataPlayers._moveNumberDynamic[0] = 0;
@@ -192,8 +207,7 @@ class Tournaments extends FlxGroup
 		Reg._gameOverForAllPlayers = true;
 		Reg._playerCanMovePiece = false;
 		
-		PlayState.clientSocket.send("Greater RoomState Value", RegTypedef._dataMisc); 
-		haxe.Timer.delay(function (){}, Reg2._event_sleep);
+		PlayState.send("Greater RoomState Value", RegTypedef._dataMisc); 		
 	}
 		
 	override public function destroy()
@@ -203,9 +217,11 @@ class Tournaments extends FlxGroup
 	
 	override public function update(elapsed:Float):Void
 	{
-		if (RegTriggers._jump_to_tournament_standard_chess_8 == true)
+		if (Reg._at_tournaments == false) return;
+		
+		if (RegTriggers._tournament_standard_chess_8 == true)
 		{
-			RegTriggers._jump_to_tournament_standard_chess_8 = false;
+			RegTriggers._tournament_standard_chess_8 = false;
 			_tournament_standard_8();
 		}
 		

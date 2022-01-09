@@ -2,18 +2,11 @@
     Copyright (c) 2021 KBoardGames.com
     This program is part of KBoardGames client software.
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published
-    by the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+    This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+    This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Affero General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU Affero General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 package;
@@ -32,7 +25,7 @@ class NewAccount extends FlxGroup
 	{
 		super();	
 		
-		FlxG.autoPause = false;	// this application will pause when not in focus.
+		FlxG.autoPause = false;
 		RegTypedef._dataStatistics._chess_elo_rating = 800;
 		
 		if (Reg.__title_bar2 != null) remove(Reg.__title_bar2);
@@ -128,9 +121,6 @@ class NewAccount extends FlxGroup
 	
 	private function closeState():Void
 	{
-		FlxG.mouse.reset();
-		FlxG.mouse.enabled = true;
-		
 		RegTriggers._returnToLobbyMakeButtonsActive = true;
 		
 		visible = false;
@@ -158,7 +148,7 @@ class NewAccount extends FlxGroup
 			else if (_button_b3.has_toggle == true)
 				RegTypedef._dataStatistics._chess_elo_rating = 1600;
 						
-			PlayState.clientSocket.send("Save New Account Configurations", RegTypedef._dataStatistics);
+			PlayState.send("Save New Account Configurations", RegTypedef._dataStatistics);
 			closeState();
 		}
 		

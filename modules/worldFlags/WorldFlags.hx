@@ -2,18 +2,11 @@
     Copyright (c) 2021 KBoardGames.com
     This program is part of KBoardGames client software.
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published
-    by the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+    This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+    This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Affero General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU Affero General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 package modules.worldFlags;
@@ -365,7 +358,7 @@ class WorldFlags
 			_text_title_world_flags = new FlxText(0, Usernames._question_username_suggestions_enabled.y + 100, 0, "World Flags");
 		#else
 			// place this text just underneath the username inputbox.
-			_text_title_world_flags = new FlxText(0, CID3._text_username.y + 75, 0, "World Flags");
+			_text_title_world_flags = new FlxText(0, CID3._text_username.y + 310, 0, "World Flags");
 		#end
 		
 		_text_title_world_flags.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_topic_title_text_color());
@@ -373,7 +366,12 @@ class WorldFlags
 		_text_title_world_flags.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		CID3._group.add(_text_title_world_flags);		
 		
-		_world_flag_selected = new FlxText(15, 250, 0, "Selected country flag for player 1.");
+		// background for the selected flag which could be a solid white color. this is needed because the white flag is not seen at the white theme.
+		CID3._default_flag_background = new FlxSprite(12, _text_title_world_flags.y + 102);
+		CID3._default_flag_background.makeGraphic(70, 46, 0xff000000);
+		CID3._group.add(CID3._default_flag_background);
+		
+		_world_flag_selected = new FlxText(15, 0, 0, "Selected country flag for player 1.");
 		_world_flag_selected.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
 		_world_flag_selected.fieldWidth = FlxG.width - 90;
 		_world_flag_selected.y = _text_title_world_flags.y + 55;
@@ -393,11 +391,17 @@ class WorldFlags
 		CID3._group.add(_world_flags_notice);
 	}
 	
+	// an image that borders a flag at the location of the mouse cursor.
 	public static function world_flag_highlight():Void
 	{
 		// used to position the world_flagss on rows.
 		var _y:Float = 0;
 		var _x:Float = 0;
+		
+		// background for the default first flag which is a solid white color. this is needed because the white flag is not seen at the white theme.
+		var _default_flag_background = new FlxSprite(147, _world_flags_notice.y + _world_flags_notice.height + 14);
+		_default_flag_background.makeGraphic(70, 46, 0xff000000);
+		CID3._group.add(_default_flag_background);
 		
 		for (i in 0... _total)
 		{
@@ -453,7 +457,7 @@ class WorldFlags
 		});
 		
 		for (i in 0... _total)
-		{			
+		{
 			_image_world_flags = new FlxSprite(0, 0);
 			_image_world_flags.loadGraphic("modules/worldFlags/assets/images/"+ _flags_abbv[i].toLowerCase() +".png");
 			_image_world_flags.visible = false;

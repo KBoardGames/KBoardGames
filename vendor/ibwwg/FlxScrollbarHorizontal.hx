@@ -370,8 +370,7 @@ class FlxScrollbarHorizontal extends FlxSpriteGroup
 		}
 		
 		// FlxG.mouse.pressed code above does not work for this var.
-		if (FlxG.mouse.enabled == true
-		&&	FlxG.mouse.pressed == false)
+		if (FlxG.mouse.pressed == false)
 			Reg2._scrollable_area_is_scrolling = false;
 				
 		tryToScrollPage = false;

@@ -2,18 +2,11 @@
     Copyright (c) 2021 KBoardGames.com
     This program is part of KBoardGames client software.
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published
-    by the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+    This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+    This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Affero General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU Affero General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 package;
@@ -34,16 +27,61 @@ class ActionCommands extends FlxGroup
 	*/
 	private var _logoff_timer_start:Bool = true;
 	
+	private var _background:FlxSprite;
+	
+	private var _maximize_stage:FlxText;
+	private var _output_trace_data:FlxText;
+	private var _screenshot_scene:FlxText;
+	private var _exit_client:FlxText;
+	private var _toggle_help:FlxText;
+	
 	public function new() 
 	{
 		super();
-			
+		
+		_background = new FlxSprite(0, 0);
+		_background.makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
+		_background.alpha = 0.7;
+		_background.scrollFactor.set(0, 0);
+		_background.visible = false;
+		add(_background);
+		
+		_maximize_stage = new FlxText(30, 30, 0, "ALT + M: Maximize stage", Reg._font_size);
+		_maximize_stage.color = FlxColor.RED;
+		_maximize_stage.scrollFactor.set(0, 0);
+		_maximize_stage.visible = false;
+		add(_maximize_stage);
+		
+		_output_trace_data = new FlxText(30, 60, 0, "ALT + T: Output trace", Reg._font_size);
+		_output_trace_data.color = FlxColor.RED;
+		_output_trace_data.scrollFactor.set(0, 0);
+		_output_trace_data.visible = false;
+		add(_output_trace_data);
+		
+		_screenshot_scene = new FlxText(30, 90, 0, "ALT + S: Screenshot", Reg._font_size);
+		_screenshot_scene.color = FlxColor.RED;
+		_screenshot_scene.scrollFactor.set(0, 0);
+		_screenshot_scene.visible = false;
+		add(_screenshot_scene);
+		
+		_exit_client = new FlxText(30, 120, 0, "ESC: Exit client", Reg._font_size);
+		_exit_client.color = FlxColor.RED;
+		_exit_client.scrollFactor.set(0, 0);
+		_exit_client.visible = false;
+		add(_exit_client);
+		
+		_toggle_help = new FlxText(30, 150, 0, "ALT + SPACEBAR: Toggle this help", Reg._font_size);
+		_toggle_help.color = FlxColor.RED;
+		_toggle_help.scrollFactor.set(0, 0);
+		_toggle_help.visible = false;
+		add(_toggle_help);
+		
 		_logoff_timer = new FlxTimer();
 	}
 	/***************************************************************************
 	 * output trace data when a display bug displays. helps find where in code when bugs happens.
 	 */
-	public static function commandTraceAll():Void
+	public static function output_trace_data():Void
 	{
 		trace ("1:_dataMisc.id: "+RegTypedef._dataMisc.id);
 		trace ("2:_dataMisc._room: "+RegTypedef._dataMisc._room);
@@ -99,7 +137,7 @@ class ActionCommands extends FlxGroup
 		trace ("49:Reg._gameHost :"+Reg._gameHost);
 	}
 	
-	public function commandESC():Void 
+	public function exit_client():Void 
 	{
 		Reg._messageId = 15000;
 		Reg._buttonCodeValues = "s9"; // value 9 = esc charCode. a value other than 0 is needed or else the message will not be displayed.		
@@ -154,32 +192,52 @@ class ActionCommands extends FlxGroup
 		
 		logoffCountdown(); // determine if player should be logged off at every game tick.
 		
-		if (Reg._loggedIn == true)
-		{
-			#if desktop
-				if ( FlxG.keys.justReleased.ESCAPE )
-					commandESC();
+		#if desktop
+			if ( FlxG.keys.justReleased.ESCAPE )
+				exit_client();
+			
+			if (FlxG.keys.pressed.ALT
+			&&	FlxG.keys.justPressed.T )
+				output_trace_data();
 				
-				if ( FlxG.keys.justReleased.T )
-					commandTraceAll();
-					
-				if ( FlxG.keys.justReleased.F )
-					FlxG.fullscreen = !FlxG.fullscreen;
-					
-			#end
-		}
-		
-		#if !html5
-			if (FlxG.keys.justReleased.M 
-			&&	Reg.__title_bar._title.text != "Configurations: Profile")
+			if (FlxG.keys.pressed.ALT
+			&&	FlxG.keys.justPressed.S)
 			{
-				Lib.application.window.borderless = false;
-				Lib.application.window.maximized = !Lib.application.window.maximized;
+				var _title = TitleBar._title_for_screenshot;
+				_title = StringTools.replace(_title, " ", "");
+				
+				var _ra = FlxG.random.int(100000, 999999);
+				
+				Sys.command(sys.FileSystem.absolutePath("scripts/screenCapture " + _title + "_" + _ra + ".jpg"));
+			}
+			
+		#end
+	
+		#if !html5
+			if (FlxG.keys.pressed.ALT
+			&&	FlxG.keys.justPressed.M 
+			&&	TitleBar._title_for_screenshot != "Configurations: Profile"
+			)
+			{
+				#if !html5
+					Lib.application.window.maximized = !Lib.application.window.maximized;
+				#end
 			}
 		#end
 		
+		if (FlxG.keys.pressed.ALT
+		&&	FlxG.keys.justPressed.SPACE)
+		{
+			_background.visible = !_background.visible;
+			_maximize_stage.visible = !_maximize_stage.visible;
+			_output_trace_data.visible = !_output_trace_data.visible;
+			_screenshot_scene.visible = !_screenshot_scene.visible;
+			_exit_client.visible = !_exit_client.visible;
+			_toggle_help.visible = !_toggle_help.visible;
+		}
 		
 		super.update(elapsed);
+		
 	}
 	
 }//
