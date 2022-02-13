@@ -537,13 +537,11 @@ class IDsWinLoseOrDraw extends FlxState
 				Reg._gameOverForPlayer = true;
 				Reg._gameOverForAllPlayers = true;
 				RegFunctions.playerAllStop();
-								
+				
 			}
 		}
 		
-		var _found:Bool = false;
-		
-		
+		var _found:Bool = false;		
 		
 		// chess. if we are here then game was checkmated.
 		if (Reg._gameId == 1 && RegTriggers._chessCheckmateEvent == true)
@@ -555,7 +553,7 @@ class IDsWinLoseOrDraw extends FlxState
 			Reg._gameOverForPlayer = true;
 			Reg._gameOverForAllPlayers = true;
 			RegFunctions.playerAllStop();
-						
+			
 			var _piecesWhite:Int = 0;
 			var _piecesBlack:Int = 0;
 			

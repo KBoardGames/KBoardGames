@@ -132,8 +132,8 @@ class FlxPreloader extends FlxBasePreloader
 	 */
 	override public function update(Percent:Float):Void
 	{
-		_bmpBar.scaleX = Percent * (_width - 30) * 2;
-		_text.text = Std.string(FlxG.VERSION) + " " + Std.int(Percent * 192) + "%";
+		_bmpBar.scaleX = Percent * (_width - 80) * 2;
+		_text.text = Std.string(FlxG.VERSION) + ":  " + Std.int(Percent * 161) + "%";
 		
 		if (Percent < 0.1)
 		{

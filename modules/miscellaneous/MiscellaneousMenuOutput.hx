@@ -16,7 +16,10 @@ package modules.miscellaneous;
  * @author kboardgames.com
  */
 class MiscellaneousMenuOutput extends FlxState
-{	
+{
+	public static var __title_bar:TitleBar;
+	public static var __menu_bar:MenuBar; 
+	
 	/******************************
 	 * background gradient, texture and plain color for a scene.
 	 */
@@ -80,14 +83,19 @@ class MiscellaneousMenuOutput extends FlxState
 		__scrollable_area.antialiasing = true;
 		__scrollable_area.pixelPerfectRender = true;
 		
-		if (Reg.__title_bar2 != null)	remove(Reg.__title_bar2);
-		if (_int == 30) Reg.__title_bar2 = new TitleBar("Game Statistics");
-		else Reg.__title_bar2 = new TitleBar("Game Instructions");
-		add(Reg.__title_bar2);
+		if (__title_bar != null)	remove(__title_bar);
+		if (_int == 30) __title_bar = new TitleBar("Game Statistics");
+		else __title_bar = new TitleBar("Game Instructions");
+		add(__title_bar);
 		
-		if (Reg.__menu_bar2 != null) remove(Reg.__menu_bar2);
-		Reg.__menu_bar2 = new MenuBar();
-		add(Reg.__menu_bar2);
+		if (__menu_bar != null)
+		{
+			remove(__menu_bar);
+			__menu_bar.destroy();
+		}
+		
+		__menu_bar = new MenuBar();
+		add(__menu_bar);
 		
 		_close = new ButtonGeneralNetworkYes(0, FlxG.height-40, "Exit", 150 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, closeState, RegCustom._button_color[Reg._tn], false);
 		_close.active = true;

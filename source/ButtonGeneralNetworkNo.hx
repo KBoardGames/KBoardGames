@@ -111,6 +111,11 @@ class ButtonGeneralNetworkNo extends FlxUIButton
 		
 	}
 	
+	override public function destroy():Void
+	{
+		super.destroy();
+	}	
+	
 	// this function must not be removed. also stops double firing of button sound at ActionKeyboard.hx.
 	override public function update(elapsed:Float):Void
 	{
@@ -141,11 +146,7 @@ class ButtonGeneralNetworkNo extends FlxUIButton
 			}
 		}
 		
-		if (Reg._buttonCodeValues == "")
-		{
-			Reg2._lobby_button_alpha = 1;
-			alpha = 1;
-		}
+		if (Reg._buttonCodeValues == "") alpha = 1;
 		
 		else if (Reg._buttonCodeValues != ""
 		&&	Reg._disconnectNow == false)

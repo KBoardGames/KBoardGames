@@ -37,6 +37,12 @@ class SceneBackground extends FlxGroup
 		super();
 		
 		// fill the screen with a random color.
+		if (_background_color != null)
+		{
+			remove(_background_color);
+			_background_color.destroy();
+		}
+		
 		_background_color = new FlxSprite();
 		_background_color.makeGraphic(FlxG.width, FlxG.height, FlxColor.WHITE);
 		_background_color.color = FlxColor.fromHSB(FlxG.random.int(1, 360), RegCustom._client_background_saturation[Reg._tn], RegCustom._client_background_brightness[Reg._tn]);
@@ -120,6 +126,12 @@ class SceneBackground extends FlxGroup
 		
 		if (RegCustom._gradient_background_enabled[Reg._tn] == true)
 		{
+			if (_background_gradient_color != null)
+			{
+				remove(_background_gradient_color);
+				_background_gradient_color.destroy();
+			}
+			
 			_background_gradient_color = new FlxSprite(0, 0, "assets/images/gameboardGradientBackground.jpg");
 			_background_gradient_color.color = RegCustomColors.gradient_color();
 			_background_gradient_color.scrollFactor.set(0, 0);
@@ -131,6 +143,12 @@ class SceneBackground extends FlxGroup
 		
 		if (RegCustom._texture_background_enabled[Reg._tn] == true)
 		{
+			if (_background_texture_color != null)
+			{
+					remove(_background_texture_color);
+					_background_texture_color.destroy();
+			}
+			
 			_background_texture_color = new FlxSprite(0, 0, "assets/images/scenes/textures/" + Std.string(RegCustom._texture_background_image_number[Reg._tn]) + ".jpg"); // 44 is half of hud height.
 			_background_texture_color.scrollFactor.set(0, 0);
 			if (RegCustom._background_alpha_enabled[Reg._tn] == true)
@@ -138,5 +156,30 @@ class SceneBackground extends FlxGroup
 			add(_background_texture_color);
 		}
 	}
-	
+
+	override public function destroy():Void
+	{
+		if (_background_color != null)
+		{
+			remove(_background_color);
+			_background_color.destroy();
+			_background_color = null;
+		}
+		
+		if (_background_gradient_color != null)
+		{
+			remove(_background_gradient_color);
+			_background_gradient_color.destroy();
+			_background_gradient_color = null;
+		}
+		
+		if (_background_texture_color != null)
+		{
+			remove(_background_texture_color);
+			_background_texture_color.destroy();
+			_background_texture_color = null;
+		}
+		
+		super.destroy();
+	}
 }

@@ -37,8 +37,7 @@ class IdsMessageBox extends FlxGroup
 		
 		RegFunctions._gameMenu = new FlxSave(); // initialize		
 		RegFunctions._gameMenu.bind("ConfigurationsMenu"); // bind to the named save slot.
-			
-			
+		
 		if (Reg._messageId > 0)
 		{
 			switch (Reg._messageId)
@@ -169,11 +168,12 @@ class IdsMessageBox extends FlxGroup
 				
 				case 9010: _msg = new MessageBox(9010, "Yes", "No", true, true, false, false, "", "Theme saved.");
 				
-				case 9012: _msg = new MessageBox(9012, "Yes", "No", true, true, false, false, "", 'Cannot save theme. Password must be greater than 3 characters because you are not using a guest account.');
+				case 9012: _msg = new MessageBox(9012, "Yes", "No", true, true, false, false, "", 'Cannot save theme. Username and/or password must be greater than 3 characters because you are not using a guest account.');
 				
 				case 9013: _msg = new MessageBox(9013, "Yes", "No", true, true, false, false, "", 'Cannot save theme. Password field and email address field must be empty for guest accounts.');
 				
 				case 9014: _msg = new MessageBox(9014, "Yes", "No", true, true, false, false, "", 'Cannot save theme. Email address is not valid.');
+				case 9015: _msg = new MessageBox(9015, "Yes", "No", true, true, false, false, "", 'Cannot save theme. Username must be greater than 3 characters.');
 				
 				// menu credits 10000-10999
 				case 10001: _msg = new MessageBox(10001, "Yes", "No", true, true, true, false, "Website Credits.", "Display the full credits page at " + Reg._websiteNameTitle + " website?");
@@ -389,7 +389,20 @@ class IdsMessageBox extends FlxGroup
 				add(_msg);
 			}
 			
+			// TODO this var does not seem to be needed anymore. buttons still are set to alpha 0.3 when this var is set to false.
 			RegTriggers._buttons_set_not_active = true;
 		}
-	}	
+	}
+	
+	override public function destroy():Void
+	{
+		if (_msg != null)
+		{
+			remove(_msg);
+			_msg.destroy();
+			_msg = null;
+		}
+		
+		super.destroy();
+	}
 }

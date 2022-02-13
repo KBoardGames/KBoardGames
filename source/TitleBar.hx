@@ -17,7 +17,12 @@ import flixel.system.scaleModes.RatioScaleMode;
  * @author kboardgames.com
  */
 class TitleBar extends FlxGroup
-{	
+{
+	/******************************
+	 * The invite table needs time to populated its data. This spinner is displayed so that the user knows that there will be a delay in the loading of the data.
+	 */
+	public var _spinner:FlxSprite;
+	
 	/******************************
 	 * menu bar background.
 	 */
@@ -46,13 +51,31 @@ class TitleBar extends FlxGroup
 		else if (RegCustom._title_bar_background_number[Reg._tn] == 12)
 			_color = FlxColor.BLACK;
 		
+		if (_background != null) 
+		{
+			remove(_background);
+			_background.destroy();
+		}
+		
 		_background = new FlxSprite(0, Reg.__title_bar_offset_y);
 		_background.makeGraphic(FlxG.width, 55, _color);
 		_background.color.brightness = RegCustom._title_bar_background_brightness[Reg._tn];
 		_background.scrollFactor.set(0,0);
 		add(_background);
 		
-		_title = new FlxText(15, 4 + Reg.__title_bar_offset_y, 0, _text);
+		var _offset_y:Int = 0;
+		
+		#if html5
+			_offset_y = - 10;
+		#end
+		
+		if (_title != null) 
+		{
+			remove(_title);
+			_title.destroy();
+		}
+		
+		_title = new FlxText(80, 4 + Reg.__title_bar_offset_y + _offset_y, 0, _text);
 		_title.setFormat(Reg._fontDefault, 50, RegCustomColors.title_bar_text_color());
 		_title.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 3);
 		
@@ -62,6 +85,22 @@ class TitleBar extends FlxGroup
 		||	Reg._at_waiting_room == true) _title.scrollFactor.set(1,0);
 		else _title.scrollFactor.set(0,0);
 		add(_title);
+		
+		if (_spinner != null) 
+		{
+			remove(_spinner);
+			_spinner.destroy();
+		}
+		
+		_spinner = new FlxSprite(0, 0);
+		_spinner.loadGraphic("assets/images/spinner.png", true, 64, 64);
+		_spinner.animation.add("play", [0, 1, 2, 3, 4, 5, 6, 7], 45);
+		_spinner.animation.play("play");
+		_spinner.visible = false;
+		if (Reg._at_lobby == true
+		||	Reg._at_waiting_room == true) _spinner.scrollFactor.set(1,0);
+		else _spinner.scrollFactor.set(0,0);
+		add(_spinner);
 	}
 	
 	public function update_text(_text:String):Void
@@ -71,6 +110,34 @@ class TitleBar extends FlxGroup
 	
 	override public function destroy():Void
 	{
+		if (_spinner != null)
+		{
+			remove(_spinner);
+			_spinner.destroy();
+			_spinner = null;
+		}
+		
+		if (_background != null)
+		{
+			remove(_background);
+			_background.destroy();
+			_background = null;
+		}
+		
+		if (_title != null)
+		{
+			remove(_title);
+			_title.destroy();
+			_title = null;
+		}
+		
+		if (_button_disconnect != null)
+		{
+			remove(_button_disconnect);
+			_button_disconnect.destroy();
+			_button_disconnect = null;
+		}
+		
 		super.destroy();
 	}
 }

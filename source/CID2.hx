@@ -358,4 +358,9 @@ class CID2 extends FlxGroup
 	 * moves the button down,
 	 */
 	public static var _offset_button_y:Int = 15;
+	
+	override public function destroy():Void
+	{
+		super.destroy();		
+	}
 }

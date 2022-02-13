@@ -37,7 +37,11 @@ package;
  */
 
 class NetworkEventsMain extends FlxState
-{
+{	
+	public var _text_client_login_data2:FlxText;
+	public var _text_client_login_data3:FlxText;	
+	public var _text_client_login_data4:FlxText;
+	
 	/******************************
 	 * a user had pressed the ESC key. if player has lost game then when an event "Player Left Game Room" is called, this var will be used to stop the event "Lesser RoomState Value" from disconnecting player because the "Lose Game" event will be called later down the code.
 	 * 
@@ -107,19 +111,14 @@ class NetworkEventsMain extends FlxState
 		// set a close event. If the server exits or crashes then do the following.
 		PlayState._websocket.onclose = function()
 		{
+			trace("disconnected"); // do not remove.
+			
 			PlayState._websocket = null;
-			trace("disconnected");
 			PlayState.updateInfo();
 			
 			Reg._serverDisconnected = true;
 			FlxG.switchState(new MenuState()); 
 		};
-	}
-	
-	override public function destroy()
-	{
-		
-		super.destroy();
 	}
 	
 	public static function gotoMovePlayerEvent():Void
@@ -795,19 +794,32 @@ class NetworkEventsMain extends FlxState
 		PlayState._text_client_login_data.text = "Clients Data.\n\n";
 		PlayState._text_client_login_data.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		
-		PlayState._text_client_login_data2.text = "Logging in as: " + RegTypedef._dataAccount._username + ".\n";
-		PlayState._text_client_login_data2.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
+		if (_text_client_login_data2 == null)
+		{		
+			_text_client_login_data2 = new TextGeneral(15, FlxG.height / 2 - 200 + 80, 0, "Logging in as: " + RegTypedef._dataAccount._username + ".\n", 8);
+			_text_client_login_data2.scrollFactor.set(0, 0);
+			_text_client_login_data2.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
+			_text_client_login_data2.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
+			add(_text_client_login_data2);
+		}
 		
+		if (_text_client_login_data3 == null)
+		{
+			_text_client_login_data3 = new TextGeneral(15, _text_client_login_data2.y + 80, 0, "IP Address: " + _data._ip + ".\n");
+			_text_client_login_data3.scrollFactor.set(0, 0);
+			_text_client_login_data3.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
+			_text_client_login_data3.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
+			add(_text_client_login_data3);
+		}
 		
-		PlayState._text_client_login_data3.text = ""
-			+ "Last known IP: " + _data._ip + ".\n";
-		PlayState._text_client_login_data3.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
-		
-		PlayState._text_client_login_data4.text = ""
-			+ "Hostname: " + _data._hostname + ".\n";
-		PlayState._text_client_login_data4.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
-		
-		
+		if (_text_client_login_data4 == null)
+		{
+			_text_client_login_data4 = new TextGeneral(15, _text_client_login_data3.y + 80, 0, "Hostname: " + _data._hostname + ".\n");
+			_text_client_login_data4.scrollFactor.set(0, 0);
+			_text_client_login_data4.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
+			_text_client_login_data4.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
+			add(_text_client_login_data4);
+		}
 		// if _alreadyOnlineHost equals true that than means there is already a client opened at that device.
 		if ( RegTypedef._dataAccount._alreadyOnlineHost == true && Reg._loginMoreThanOnce == false)
 		{
@@ -880,11 +892,9 @@ class NetworkEventsMain extends FlxState
 				Reg._doOnce = true;
 				
 				PlayState._text_client_login_data.visible = false;
-				PlayState._text_client_login_data2.visible = false;
-				PlayState._text_client_login_data3.visible = false;
-				PlayState._text_client_login_data4.visible = false;
-				
-				PlayState._press_key_to_login.visible = false;
+				_text_client_login_data2.visible = false;
+				_text_client_login_data3.visible = false;
+				_text_client_login_data4.visible = false;
 				PlayState._text_logging_in.visible = false;
 				
 				PlayState.allTypedefUsernameUpdate(Reg._username);
@@ -1227,11 +1237,11 @@ class NetworkEventsMain extends FlxState
 				}
 				
 				
-				Reg.__menu_bar4._button_refresh_list.active = true;
-				Reg.__menu_bar4._button_refresh_list.visible = true;	
+				SceneWaitingRoom.__menu_bar._button_refresh_list.active = true;
+				SceneWaitingRoom.__menu_bar._button_refresh_list.visible = true;	
 				
-				Reg.__menu_bar4._button_return_to_lobby_from_waiting_room.active = true;
-				Reg.__menu_bar4._button_return_to_lobby_from_waiting_room.visible = true;
+				SceneWaitingRoom.__menu_bar._button_return_to_lobby_from_waiting_room.active = true;
+				SceneWaitingRoom.__menu_bar._button_return_to_lobby_from_waiting_room.visible = true;
 				
 			}
 			
@@ -1319,7 +1329,7 @@ class NetworkEventsMain extends FlxState
 				
 				PlayState.send("Set Room Data", _data);					
 				
-				if (Reg.__menu_bar3._buttonCreateRoom.visible == true)
+				if (SceneCreateRoom.__menu_bar._buttonCreateRoom.visible == true)
 					_data._roomState[_data._room] -= 1;
 			}
 			
@@ -1380,11 +1390,11 @@ class NetworkEventsMain extends FlxState
 			Reg._roomPlayerLimit = 0;
 			Reg._currentRoomState = 0;
 			
-			Reg.__menu_bar3._buttonReturnToLobby.visible = false;
-			Reg.__menu_bar3._buttonReturnToLobby.active = false;
+			SceneCreateRoom.__menu_bar._buttonReturnToLobby.visible = false;
+			SceneCreateRoom.__menu_bar._buttonReturnToLobby.active = false;
 			
-			Reg.__menu_bar3._buttonCreateRoom.visible = false;
-			Reg.__menu_bar3._buttonCreateRoom.active = false;
+			SceneCreateRoom.__menu_bar._buttonCreateRoom.visible = false;
+			SceneCreateRoom.__menu_bar._buttonCreateRoom.active = false;
 
 			RegTypedef._dataMisc._room = 0; // returning to the lobby
 			RegTypedef._dataMisc._userLocation = 0;
@@ -1465,14 +1475,14 @@ class NetworkEventsMain extends FlxState
 					PlayState.send("Move History All Entry", RegTypedef._dataMovement); 			
 				}
 				
-				else if (Reg.__menu_bar3._buttonCreateRoom.visible == false 
+				else if (SceneCreateRoom.__menu_bar._buttonCreateRoom.visible == false 
 				&&  Reg._currentRoomState == 2)
 				{
-					Reg.__menu_bar3._buttonReturnToLobby.active = true;
-					Reg.__menu_bar3._buttonReturnToLobby.visible = true;
+					SceneCreateRoom.__menu_bar._buttonReturnToLobby.active = true;
+					SceneCreateRoom.__menu_bar._buttonReturnToLobby.visible = true;
 					
-					Reg.__menu_bar3._buttonCreateRoom.active = true;
-					Reg.__menu_bar3._buttonCreateRoom.visible = true; 
+					SceneCreateRoom.__menu_bar._buttonCreateRoom.active = true;
+					SceneCreateRoom.__menu_bar._buttonCreateRoom.visible = true; 
 					
 					RegTriggers._createRoom = true;
 					
@@ -1483,8 +1493,8 @@ class NetworkEventsMain extends FlxState
 				&&  Reg._currentRoomState < 7)
 				{
 					//__scene_create_room._buttonCreateRoom.visible = false;
-					Reg.__menu_bar3._buttonReturnToLobby.active = false;
-					Reg.__menu_bar3._buttonCreateRoom.active = false;
+					SceneCreateRoom.__menu_bar._buttonReturnToLobby.active = false;
+					SceneCreateRoom.__menu_bar._buttonCreateRoom.active = false;
 					
 					RegTriggers.__scene_waiting_room = true;
 				}
@@ -1513,7 +1523,7 @@ class NetworkEventsMain extends FlxState
 		{
 			RegTypedef._dataPlayers._gameId = RegTypedef._dataMisc._roomGameIds[RegTypedef._dataMisc._room];
 		}
-									
+		
 		RegTypedef._dataMisc._roomHostUsername = _data._roomHostUsername;
 		RegTypedef._dataMisc._gid = _data._gid;
 		
@@ -1527,7 +1537,7 @@ class NetworkEventsMain extends FlxState
 		RegTypedef._dataMisc._roomPlayerLimit = _data._roomPlayerLimit;
 		RegTypedef._dataMisc._roomPlayerCurrentTotal = _data._roomPlayerCurrentTotal;
 
-		RegTypedef._dataMisc._vsComputer = _data._vsComputer;
+		RegTypedef._dataMisc._rated_game = _data._rated_game;
 		RegTypedef._dataMisc._allowSpectators = _data._allowSpectators;
 
 		if (RegTypedef._dataMisc._userLocation == 2)
@@ -1542,8 +1552,177 @@ class NetworkEventsMain extends FlxState
 		// at lobby?
 		if (RegTypedef._dataMisc._userLocation == 0)
 		{
+			SceneLobby._do_once = true;
 			SceneLobby._lobby_data_received = true;
-			SceneLobby._refresh_table = true;
+			/*
+			RegTypedef._dataMisc._roomState[1] = 3;
+			RegTypedef._dataMisc._roomState[2] = 7;
+			RegTypedef._dataMisc._roomState[3] = 3;
+			RegTypedef._dataMisc._roomState[4] = 3;
+			RegTypedef._dataMisc._roomState[5] = 2;
+			RegTypedef._dataMisc._roomState[6] = 7;
+			RegTypedef._dataMisc._roomState[7] = 8;
+			RegTypedef._dataMisc._roomState[8] = 8;
+			RegTypedef._dataMisc._roomState[9] = 8;
+			RegTypedef._dataMisc._roomState[10] = 7;
+			RegTypedef._dataMisc._roomState[11] = 2;
+			RegTypedef._dataMisc._roomState[12] = 3;
+			RegTypedef._dataMisc._roomState[13] = 8;
+			RegTypedef._dataMisc._roomState[14] = 2;
+			RegTypedef._dataMisc._roomState[15] = 8;
+			RegTypedef._dataMisc._roomState[16] = 2;
+			RegTypedef._dataMisc._roomState[17] = 7;
+			RegTypedef._dataMisc._roomState[18] = 8;
+			RegTypedef._dataMisc._roomState[19] = 3;
+			RegTypedef._dataMisc._roomState[20] = 3;
+			RegTypedef._dataMisc._roomState[21] = 7;
+			RegTypedef._dataMisc._roomState[22] = 7;
+			RegTypedef._dataMisc._roomState[23] = 8;
+			
+			RegTypedef._dataMisc._roomHostUsername[1] = "Jeti";
+			RegTypedef._dataMisc._roomHostUsername[2] = "rastarx";
+			RegTypedef._dataMisc._roomHostUsername[3] = "Sabadilla";
+			RegTypedef._dataMisc._roomHostUsername[4] = "EstaXen";
+			RegTypedef._dataMisc._roomHostUsername[5] = "";
+			RegTypedef._dataMisc._roomHostUsername[6] = "qentroz";
+			RegTypedef._dataMisc._roomHostUsername[7] = "EloBender";
+			RegTypedef._dataMisc._roomHostUsername[8] = "GameGeek";
+			RegTypedef._dataMisc._roomHostUsername[9] = "Udela";
+			RegTypedef._dataMisc._roomHostUsername[10] = "dogbone";
+			RegTypedef._dataMisc._roomHostUsername[11] = "";
+			RegTypedef._dataMisc._roomHostUsername[12] = "InError";
+			RegTypedef._dataMisc._roomHostUsername[13] = "MingmeiCheng";
+			RegTypedef._dataMisc._roomHostUsername[14] = "";
+			RegTypedef._dataMisc._roomHostUsername[15] = "laceyAnt";
+			RegTypedef._dataMisc._roomHostUsername[16] = "";
+			RegTypedef._dataMisc._roomHostUsername[17] = "stillwater";
+			RegTypedef._dataMisc._roomHostUsername[18] = "ponyride";
+			RegTypedef._dataMisc._roomHostUsername[19] = "sam";
+			RegTypedef._dataMisc._roomHostUsername[20] = "drumspirit";
+			RegTypedef._dataMisc._roomHostUsername[21] = "blueberry";
+			RegTypedef._dataMisc._roomHostUsername[22] = "margaret";
+			RegTypedef._dataMisc._roomHostUsername[23] = "Noob";
+			
+			RegTypedef._dataMisc._roomGameIds[1] = 1;
+			RegTypedef._dataMisc._roomGameIds[2] = 3;
+			RegTypedef._dataMisc._roomGameIds[3] = 0;
+			RegTypedef._dataMisc._roomGameIds[4] = 4;
+			RegTypedef._dataMisc._roomGameIds[5] = 3;
+			RegTypedef._dataMisc._roomGameIds[6] = 2;
+			RegTypedef._dataMisc._roomGameIds[7] = 1;
+			RegTypedef._dataMisc._roomGameIds[8] = 2;
+			RegTypedef._dataMisc._roomGameIds[9] = 0;
+			RegTypedef._dataMisc._roomGameIds[10] = 4;
+			RegTypedef._dataMisc._roomGameIds[11] = 3;
+			RegTypedef._dataMisc._roomGameIds[12] = 4;
+			RegTypedef._dataMisc._roomGameIds[13] = 1;
+			RegTypedef._dataMisc._roomGameIds[14] = 4;
+			RegTypedef._dataMisc._roomGameIds[15] = 0;
+			RegTypedef._dataMisc._roomGameIds[16] = 1;
+			RegTypedef._dataMisc._roomGameIds[17] = 3;
+			RegTypedef._dataMisc._roomGameIds[18] = 2;
+			RegTypedef._dataMisc._roomGameIds[19] = 0;
+			RegTypedef._dataMisc._roomGameIds[20] = 4;
+			RegTypedef._dataMisc._roomGameIds[21] = 3;
+			RegTypedef._dataMisc._roomGameIds[22] = 1;
+			RegTypedef._dataMisc._roomGameIds[23] = 0;
+			
+			RegTypedef._dataMisc._roomPlayerLimit[1] = 2;
+			RegTypedef._dataMisc._roomPlayerLimit[2] = 2;
+			RegTypedef._dataMisc._roomPlayerLimit[3] = 2;
+			RegTypedef._dataMisc._roomPlayerLimit[4] = 4;
+			RegTypedef._dataMisc._roomPlayerLimit[5] = 2;
+			RegTypedef._dataMisc._roomPlayerLimit[6] = 2;
+			RegTypedef._dataMisc._roomPlayerLimit[7] = 2;
+			RegTypedef._dataMisc._roomPlayerLimit[8] = 2;
+			RegTypedef._dataMisc._roomPlayerLimit[9] = 2;
+			RegTypedef._dataMisc._roomPlayerLimit[10] = 3;
+			RegTypedef._dataMisc._roomPlayerLimit[11] = 2;
+			RegTypedef._dataMisc._roomPlayerLimit[12] = 2;
+			RegTypedef._dataMisc._roomPlayerLimit[13] = 2;
+			RegTypedef._dataMisc._roomPlayerLimit[14] = 3;
+			RegTypedef._dataMisc._roomPlayerLimit[15] = 2;
+			RegTypedef._dataMisc._roomPlayerLimit[16] = 2;
+			RegTypedef._dataMisc._roomPlayerLimit[17] = 2;
+			RegTypedef._dataMisc._roomPlayerLimit[18] = 2;
+			RegTypedef._dataMisc._roomPlayerLimit[19] = 2;
+			RegTypedef._dataMisc._roomPlayerLimit[20] = 4;
+			RegTypedef._dataMisc._roomPlayerLimit[21] = 2;
+			RegTypedef._dataMisc._roomPlayerLimit[22] = 2;
+			RegTypedef._dataMisc._roomPlayerLimit[23] = 2;
+			
+			RegTypedef._dataMisc._roomPlayerCurrentTotal[1] = 1;
+			RegTypedef._dataMisc._roomPlayerCurrentTotal[2] = 2;
+			RegTypedef._dataMisc._roomPlayerCurrentTotal[3] = 1;
+			RegTypedef._dataMisc._roomPlayerCurrentTotal[4] = 3;
+			RegTypedef._dataMisc._roomPlayerCurrentTotal[5] = 1;
+			RegTypedef._dataMisc._roomPlayerCurrentTotal[6] = 2;
+			RegTypedef._dataMisc._roomPlayerCurrentTotal[7] = 2;
+			RegTypedef._dataMisc._roomPlayerCurrentTotal[8] = 2;
+			RegTypedef._dataMisc._roomPlayerCurrentTotal[9] = 2;
+			RegTypedef._dataMisc._roomPlayerCurrentTotal[10] = 3;
+			RegTypedef._dataMisc._roomPlayerCurrentTotal[11] = 1;
+			RegTypedef._dataMisc._roomPlayerCurrentTotal[12] = 1;
+			RegTypedef._dataMisc._roomPlayerCurrentTotal[13] = 2;
+			RegTypedef._dataMisc._roomPlayerCurrentTotal[14] = 1;
+			RegTypedef._dataMisc._roomPlayerCurrentTotal[15] = 2;
+			RegTypedef._dataMisc._roomPlayerCurrentTotal[16] = 1;
+			RegTypedef._dataMisc._roomPlayerCurrentTotal[17] = 2;
+			RegTypedef._dataMisc._roomPlayerCurrentTotal[18] = 2;
+			RegTypedef._dataMisc._roomPlayerCurrentTotal[19] = 1;
+			RegTypedef._dataMisc._roomPlayerCurrentTotal[20] = 1;
+			RegTypedef._dataMisc._roomPlayerCurrentTotal[21] = 2;
+			RegTypedef._dataMisc._roomPlayerCurrentTotal[22] = 2;
+			RegTypedef._dataMisc._roomPlayerCurrentTotal[23] = 2;
+			
+			RegTypedef._dataMisc._rated_game[1] = 1;
+			RegTypedef._dataMisc._rated_game[2] = 1;
+			RegTypedef._dataMisc._rated_game[3] = 1;
+			RegTypedef._dataMisc._rated_game[4] = 0;
+			RegTypedef._dataMisc._rated_game[5] = 1;
+			RegTypedef._dataMisc._rated_game[6] = 0;
+			RegTypedef._dataMisc._rated_game[7] = 1;
+			RegTypedef._dataMisc._rated_game[8] = 1;
+			RegTypedef._dataMisc._rated_game[9] = 1;
+			RegTypedef._dataMisc._rated_game[10] = 0;
+			RegTypedef._dataMisc._rated_game[11] = 1;
+			RegTypedef._dataMisc._rated_game[12] = 1;
+			RegTypedef._dataMisc._rated_game[13] = 1;
+			RegTypedef._dataMisc._rated_game[14] = 0;
+			RegTypedef._dataMisc._rated_game[15] = 0;
+			RegTypedef._dataMisc._rated_game[16] = 1;
+			RegTypedef._dataMisc._rated_game[17] = 1;
+			RegTypedef._dataMisc._rated_game[18] = 1;
+			RegTypedef._dataMisc._rated_game[19] = 0;
+			RegTypedef._dataMisc._rated_game[20] = 1;
+			RegTypedef._dataMisc._rated_game[21] = 1;
+			RegTypedef._dataMisc._rated_game[22] = 1;
+			RegTypedef._dataMisc._rated_game[23] = 1;
+			
+			RegTypedef._dataMisc._allowSpectators[1] = 1;
+			RegTypedef._dataMisc._allowSpectators[2] = 0;
+			RegTypedef._dataMisc._allowSpectators[3] = 1;
+			RegTypedef._dataMisc._allowSpectators[4] = 1;
+			RegTypedef._dataMisc._allowSpectators[5] = 1;
+			RegTypedef._dataMisc._allowSpectators[6] = 0;
+			RegTypedef._dataMisc._allowSpectators[7] = 1;
+			RegTypedef._dataMisc._allowSpectators[8] = 1;
+			RegTypedef._dataMisc._allowSpectators[9] = 1;
+			RegTypedef._dataMisc._allowSpectators[10] = 0;
+			RegTypedef._dataMisc._allowSpectators[11] = 0;
+			RegTypedef._dataMisc._allowSpectators[12] = 0;
+			RegTypedef._dataMisc._allowSpectators[13] = 1;
+			RegTypedef._dataMisc._allowSpectators[14] = 1;
+			RegTypedef._dataMisc._allowSpectators[15] = 1;
+			RegTypedef._dataMisc._allowSpectators[16] = 0;
+			RegTypedef._dataMisc._allowSpectators[17] = 0;
+			RegTypedef._dataMisc._allowSpectators[18] = 1;
+			RegTypedef._dataMisc._allowSpectators[19] = 1;
+			RegTypedef._dataMisc._allowSpectators[20] = 0;
+			RegTypedef._dataMisc._allowSpectators[21] = 0;
+			RegTypedef._dataMisc._allowSpectators[22] = 0;
+			RegTypedef._dataMisc._allowSpectators[23] = 1;
+			*/
 		}
 			
 		#if !html5
@@ -2502,10 +2681,6 @@ class NetworkEventsMain extends FlxState
 			RegTypedef._dataPlayers._gamesAllTotalWins = _data._gamesAllTotalWins;
 			RegTypedef._dataPlayers._gamesAllTotalLosses = _data._gamesAllTotalLosses;
 			RegTypedef._dataPlayers._gamesAllTotalDraws = _data._gamesAllTotalDraws;
-			
-			Reg._gameMessage = "";
-			Reg._outputMessage = false;
-						
 		}
 	}
 	
@@ -2961,11 +3136,15 @@ trace("--------------------");
 			// no need for a (if (_data._room == ) check because at server this is broadcast based on the room var.
 			RegTypedef._dataOnlinePlayers = _data;
 			
-			Reg.__menu_bar4._button_refresh_list.active = true;
-			Reg.__menu_bar4._button_refresh_list.visible = true;	
+			//InviteTable._populated_table_body = false;
+			RegTriggers._waiting_room_refresh_invite_list = true;
+			InviteTable._ticks_invite_list = 0;
 			
-			Reg.__menu_bar4._button_return_to_lobby_from_waiting_room.active = true;
-			Reg.__menu_bar4._button_return_to_lobby_from_waiting_room.visible = true;
+			SceneWaitingRoom.__menu_bar._button_refresh_list.active = true;
+			SceneWaitingRoom.__menu_bar._button_refresh_list.visible = true;	
+			
+			SceneWaitingRoom.__menu_bar._button_return_to_lobby_from_waiting_room.active = true;
+			SceneWaitingRoom.__menu_bar._button_return_to_lobby_from_waiting_room.visible = true;
 
 			// get the stats for the waiting room.
 			if (RegTypedef._dataMisc._userLocation == 2 
@@ -3303,5 +3482,45 @@ trace("--------------------");
 			Reg._isThisPieceAtBackdoor = true;
 			Reg._playerCanMovePiece = true;
 		}
+	}
+	
+	override public function destroy():Void
+	{
+		if (_text_client_login_data2 != null)
+		{
+			remove(_text_client_login_data2);
+			_text_client_login_data2.destroy();
+			_text_client_login_data2 = null;
+		}
+		
+		if (_text_client_login_data3 != null)
+		{
+			remove(_text_client_login_data3);
+			_text_client_login_data3.destroy();
+			_text_client_login_data3 = null;
+		}
+		
+		if (_text_client_login_data4 != null)
+		{
+			remove(_text_client_login_data4);
+			_text_client_login_data4.destroy();
+			_text_client_login_data4 = null;
+		}
+		
+		__scene_lobby = null;
+		__scene_create_room = null;
+		__scene_waiting_room = null;
+		__ids_win_lose_or_draw = null;
+	
+		#if	chess
+			if (__chess_check_or_checkmate != null)
+			{
+				remove(__chess_check_or_checkmate);
+				__chess_check_or_checkmate.destroy();
+				__chess_check_or_checkmate = null;
+			}
+		#end
+		
+		super.destroy();
 	}
 }//

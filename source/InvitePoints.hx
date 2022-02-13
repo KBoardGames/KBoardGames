@@ -24,6 +24,7 @@ class InvitePoints extends FlxText
 		super(x, y, _fieldWidth, _text, _textSize);
 		
 		ID = _rowNumber = rowNumber;
+		color = RegCustom._client_text_color_number[Reg._tn];
 	}
 
 	override public function destroy()
@@ -35,20 +36,21 @@ class InvitePoints extends FlxText
 	override public function update(elapsed:Float):Void 
 	{
 		if (Reg._at_waiting_room == false) return;
-		
-		if (InviteTable._populated_table_body == false
-		&&	RegTriggers._waiting_room_refresh_invite_list == true)
+
+		if (ID == _rowNumber)
 		{
-			if (ID == _rowNumber 
-			&&	RegTypedef._dataOnlinePlayers._usernamesOnline[ID] != "")
+			if (SceneWaitingRoom.__title_bar._spinner.visible == false)
 			{
-				var _math:Float = RegTypedef._dataOnlinePlayers._gamesAllTotalWins[ID] + (RegTypedef._dataOnlinePlayers._gamesAllTotalLosses[ID] * 0.5);
-				text = Std.string(FlxMath.roundDecimal(_math, 3)); // points.
+				if (Reg._usernamesOnline[ID] != "")
+				{
+					text = Std.string(Reg._invite_points[ID]); // points.
+				}
+				
+				else text = "";
 			}
 			
-			else if (ID == _rowNumber)
-				text = "";
-			
+			else text = "";
+				
 			super.update(elapsed);
 		}
 	}

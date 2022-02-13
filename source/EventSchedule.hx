@@ -17,7 +17,12 @@ package;
  */
 class EventSchedule extends FlxState
 {
+	public static var __title_bar:TitleBar;
+	public static var __menu_bar:MenuBar;
+	
 	public var __action_commands:ActionCommands;
+	
+	private var _textDay:Array<FlxText> = [];
 	
 	/******************************
 	 * to title text
@@ -86,7 +91,7 @@ class EventSchedule extends FlxState
 	/******************************
 	 * day of week starts at 0 for Sunday.
 	 */
-	private var _intDayOfWeek:Int;
+	private static var _intDayOfWeek:Int;
 	
 	/******************************
 	 * current day number.
@@ -159,6 +164,8 @@ class EventSchedule extends FlxState
 	 * there are three rows for the event on one calendar square. this offset var is used when an event text and its background need to be actually positioned.
 	 */
 	private var _offsetEventRow3Y:Int = 75;
+	
+	private var _calendarBackground:FlxSprite;
 	
 	/******************************
 	 * this borders the current day on the calendar.
@@ -277,12 +284,24 @@ class EventSchedule extends FlxState
 		__scene_background = new SceneBackground();
 		add(__scene_background);
 		
-		var _calendarBackground = new FlxSprite(0, 0);
+		if (_calendarBackground != null)
+		{
+			remove(_calendarBackground);
+			_calendarBackground.destroy();
+		}
+		
+		_calendarBackground = new FlxSprite(0, 0);
 		_calendarBackground.loadGraphic("assets/images/calendarGrid.png", false);
 		_calendarBackground.scrollFactor.set(0, 0);	
 		_calendarBackground.screenCenter(XY);
 		_calendarBackground.y += 53;
 		add(_calendarBackground);
+		
+		if (_current_day_border != null)
+		{
+			remove(_current_day_border);
+			_current_day_border.destroy();
+		}
 		
 		_current_day_border = new FlxSprite(0, 0);
 		_current_day_border.loadGraphic("assets/images/calendarDayBorder.png", false);
@@ -295,11 +314,20 @@ class EventSchedule extends FlxState
 		_intMonthCurrent = _intMonth;
 		_intYear = 	Std.parseInt(DateTools.format(Date.now(), "%Y"));
 		
-		// the title of the game.
-		var _title_background = new FlxSprite(0, Reg.__title_bar_offset_y);
-		_title_background.makeGraphic(FlxG.width, 55, Reg._title_bar_background_enabled); 
-		_title_background.scrollFactor.set(1,0);
-		add(_title_background);
+		if (__title_bar != null) 
+		{
+			remove(__title_bar);
+			__title_bar.destroy();
+		}
+		
+		__title_bar = new TitleBar("");
+		add(__title_bar);
+		
+		if (_textCalendarTitle != null)
+		{
+			remove(_textCalendarTitle);
+			_textCalendarTitle.destroy();
+		}
 		
 		_textCalendarTitle = new FlxText(15, 4 + Reg.__title_bar_offset_y, 0, "");
 		_textCalendarTitle.scrollFactor.set(0, 0);
@@ -317,14 +345,32 @@ class EventSchedule extends FlxState
 		calendarOutput();		
 		calendarDayImageOutput();
 		
+		if (_title != null)
+		{
+			remove(_title);
+			_title.destroy();
+		}
+		
 		_title = new ButtonGeneralNetworkNo(FlxG.width - 300, 12 + Reg.__title_bar_offset_y, "To Title", 170 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, backToTitle, RegCustom._button_color[Reg._tn]);
 		_title.label.font = Reg._fontDefault;
 		add(_title);
-				
+		
+		if (_forwards != null)
+		{
+			remove(_forwards);
+			_forwards.destroy();
+		}
+		
 		_forwards = new ButtonGeneralNetworkNo(_title.x - 15 - 80, 12 + Reg.__title_bar_offset_y, ">", 80, 35, 22, RegCustom._button_text_color[Reg._tn], 0, calendarForward, RegCustom._button_color[Reg._tn]);
 		_forwards.label.font = Reg._fontDefault;
 		_forwards.label.size = 22;
 		add(_forwards);
+		
+		if (_backwards != null)
+		{
+			remove(_backwards);
+			_backwards.destroy();
+		}
 		
 		_backwards = new ButtonGeneralNetworkNo(_forwards.x - 15 - 80, 12 + Reg.__title_bar_offset_y, "<", 80, 35, 22, RegCustom._button_text_color[Reg._tn], 0, calendarBackward, RegCustom._button_color[Reg._tn]);
 		_backwards.label.font = Reg._fontDefault;
@@ -335,6 +381,12 @@ class EventSchedule extends FlxState
 		
 		if (Reg._clientReadyForPublicRelease == false)
 		{
+			if (__action_commands != null)
+			{
+				remove(__action_commands);
+				__action_commands.destroy();
+			}
+			
 			__action_commands = new ActionCommands(); 
 			add(__action_commands);
 		} 
@@ -503,8 +555,9 @@ class EventSchedule extends FlxState
 	* this does leap years. 0 = Sunday, 6 = Saturday.
 	*/
 	public static function getDayOfWeek(_intYear:Int, _intMonth:Int, _intDay:Int):Int
-	{
-		var _intDayOfWeek = new Date(_intYear, _intMonth, _intDay, 1, 1, 1).getDay();
+	{		
+		_intDayOfWeek = new Date(_intYear, _intMonth, _intDay, 1, 1, 1).getDay();
+		
 		return _intDayOfWeek;
 	}
 	
@@ -722,6 +775,13 @@ class EventSchedule extends FlxState
 	 */
 	private function daysNewItToScene():Void
 	{
+		for (i in 0... _text_title_days.length)
+		{
+			remove(_text_title_days[i]);
+			_text_title_days[i].destroy();
+			_text_title_days[i] = null;
+		}
+		
 		for (i in 0...7)
 		{
 			_text_title_days[i] = new FlxText(0, 0, 0, _title_days[i]);
@@ -733,6 +793,22 @@ class EventSchedule extends FlxState
 			add(_text_title_days[i]);
 		}		
 			
+		var _i = -1;	// array elements, used to delete them.
+		
+		for (yy in 0...7)
+		{
+			for (xx in 0...7)
+			{
+				_i += 1;
+				if (_textDay[_i] != null)
+				{
+					remove(_textDay[_i]);
+					_textDay[_i].destroy();
+					_textDay[_i] = null;
+				}
+			}
+		}
+		
 		var _i = -1;	// array elements, used to create them.
 		
 		// draw the day numbers to the scene.
@@ -742,13 +818,13 @@ class EventSchedule extends FlxState
 			{
 				_i += 1;
 				
-				var _textDay = new FlxText(_intCalendarCoordinateX[xx], _intCalendarCoordinateY[yy], 0, "");
-				_textDay.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.WHITE);
-				_textDay.scrollFactor.set();
-				_textDay.fieldWidth = 152;
-				_textDay.text = _stringDayPrintToCalendar[_i];
+				_textDay[_i] = new FlxText(_intCalendarCoordinateX[xx], _intCalendarCoordinateY[yy], 0, "");
+				_textDay[_i].setFormat(Reg._fontDefault, Reg._font_size, FlxColor.WHITE);
+				_textDay[_i].scrollFactor.set();
+				_textDay[_i].fieldWidth = 152;
+				_textDay[_i].text = _stringDayPrintToCalendar[_i];
 								
-				_textDayNumber.push(_textDay);
+				_textDayNumber.push(_textDay[_i]);
 				add(_textDayNumber[_i]);
 				
 				if (_i >= 36) break;
@@ -946,6 +1022,163 @@ class EventSchedule extends FlxState
 			
 		}
 	}	
+	
+	override public function destroy():Void
+	{
+		var _i = -1;	// array elements, used to delete them.
+		
+		for (yy in 0...7)
+		{
+			for (xx in 0...7)
+			{
+				_i += 1;
+				if (_textDay[_i] != null)
+				{
+					remove(_textDay[_i]);
+					_textDay[_i].destroy();
+					_textDay[_i] = null;
+				}
+			}
+		}
+		
+		if (_calendarBackground != null)
+		{
+			remove(_calendarBackground);
+			_calendarBackground.destroy();
+			_calendarBackground = null;
+		}
+		
+		if (__action_commands != null)
+		{
+			remove(__action_commands);
+			__action_commands.destroy();
+			__action_commands = null;
+		}
+		
+		if (_title != null)
+		{
+			remove(_title);
+			_title.destroy();
+			_title = null;
+		}
+		
+		if (_textCalendarTitle != null)
+		{
+			remove(_textCalendarTitle);
+			_textCalendarTitle.destroy();
+			_textCalendarTitle = null;
+		}
+		
+		if (_text_title_days != null)
+		{
+			for (i in 0... _text_title_days.length)
+			{
+				remove(_text_title_days[i]);
+				_text_title_days[i].destroy();
+				_text_title_days[i] = null;
+			}
+		}
+		
+		if (_current_day_border != null)
+		{
+			remove(_current_day_border);
+			_current_day_border.destroy();
+			_current_day_border = null;
+		}
+		
+		if (_textDayNumber != null)
+		{
+			for (i in 0... _textDayNumber.length)
+			{
+				remove(_textDayNumber[i]);
+				_textDayNumber[i].destroy();
+				_textDayNumber[i] = null;
+			}
+		}
+		
+		if (_bgEventRow1Number != null)
+		{
+			for (i in 0... _bgEventRow1Number.length)
+			{
+				remove(_bgEventRow1Number[i]);
+				_bgEventRow1Number[i].destroy();
+				_bgEventRow1Number[i] = null;
+			}
+		}
+	
+		if (_bgEventRow2Number != null)
+		{
+			for (i in 0... _bgEventRow2Number.length)
+			{
+				remove(_bgEventRow2Number[i]);
+				_bgEventRow2Number[i].destroy();
+				_bgEventRow2Number[i] = null;
+			}
+		}
+		
+		if (_bgEventRow3Number != null)
+		{
+			for (i in 0... _bgEventRow3Number.length)
+			{
+				remove(_bgEventRow3Number[i]);
+				_bgEventRow3Number[i].destroy();
+				_bgEventRow3Number[i] = null;
+			}
+		}
+		
+		if (_textEventRow1Number != null)
+		{
+			for (i in 0... _textEventRow1Number.length)
+			{
+				remove(_textEventRow1Number[i]);
+				_textEventRow1Number[i].destroy();
+				_textEventRow1Number[i] = null;
+			}
+		}
+		
+		if (_textEventRow2Number != null)
+		{
+			for (i in 0... _textEventRow2Number.length)
+			{
+				remove(_textEventRow2Number[i]);
+				_textEventRow2Number[i].destroy();
+				_textEventRow2Number[i] = null;
+			}
+		}
+		
+		if (_textEventRow3Number != null)
+		{
+			for (i in 0... _textEventRow3Number.length)
+			{
+				remove(_textEventRow3Number[i]);
+				_textEventRow3Number[i].destroy();
+				_textEventRow3Number[i] = null;
+			}
+		}
+			
+		if (_backwards != null)
+		{
+			remove(_backwards);
+			_backwards.destroy();
+			_backwards = null;
+		}
+	
+		if (_forwards != null)
+		{
+			remove(_forwards);
+			_forwards.destroy();
+			_forwards = null;
+		}
+		
+		if (__scene_background != null)
+		{
+			remove(__scene_background);
+			__scene_background.destroy();
+			__scene_background = null;
+		}
+		
+		super.destroy();
+	}
 	
 	override public function update(elapsed:Float):Void 
 	{

@@ -30,6 +30,9 @@ import vendor.ibwwg.FlxScrollableArea;
  */
 class Leaderboards extends FlxGroup
 {
+	public static var __title_bar:TitleBar;
+	public static var __menu_bar:MenuBar; 
+	
 	/******************************
 	 * white bar with text such as host, game title, spectators, overtop of it.
 	 */
@@ -265,13 +268,23 @@ class Leaderboards extends FlxGroup
 			
 			scrollable_area();
 			
-			if (Reg.__title_bar2 != null) remove(Reg.__title_bar2);
-			Reg.__title_bar2 = new TitleBar("Leaderboards");
-			add(Reg.__title_bar2);
+			if (__title_bar != null)
+			{
+				remove(__title_bar);
+				__title_bar.destroy();
+			}
 			
-			if (Reg.__menu_bar2 != null) remove(Reg.__menu_bar2);
-			Reg.__menu_bar2 = new MenuBar();
-			add(Reg.__menu_bar2);
+			__title_bar = new TitleBar("Leaderboards");
+			add(__title_bar);
+			
+			if (__menu_bar != null)
+			{
+				remove(__menu_bar);
+				__menu_bar.destroy();
+			}
+			
+			__menu_bar = new MenuBar();
+			add(__menu_bar);
 			
 			table_header_columns();
 		}

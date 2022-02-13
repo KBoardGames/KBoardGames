@@ -24,6 +24,7 @@ class InviteUsername extends FlxText
 		super(x, y, _fieldWidth, _text, _textSize);
 		
 		ID = _rowNumber = rowNumber;
+		color = RegCustom._client_text_color_number[Reg._tn];
 	}
 
 	override public function destroy()
@@ -36,14 +37,17 @@ class InviteUsername extends FlxText
 	{
 		if (Reg._at_waiting_room == false) return;
 		
-		if (InviteTable._populated_table_body == false
-		&&	RegTriggers._waiting_room_refresh_invite_list == true)
+		if (ID == _rowNumber)
 		{
-			if (ID == _rowNumber && RegTypedef._dataOnlinePlayers._usernamesOnline[ID] != "")
-				text = RegTypedef._dataOnlinePlayers._usernamesOnline[ID];
-				
-			else if (ID == _rowNumber)
-				text = "";
+			if (SceneWaitingRoom.__title_bar._spinner.visible == false)
+			{
+				if (Reg._usernamesOnline[ID] != "")
+					text = Reg._usernamesOnline[ID];
+					
+				else text = "";
+			}
+			
+			else text = "";
 			
 			super.update(elapsed);
 		}

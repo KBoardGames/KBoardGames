@@ -21,6 +21,9 @@ import flixel.text.FlxText;
  */
 class Tournaments extends FlxGroup
 {
+	public static var __title_bar:TitleBar;
+	public static var __menu_bar:MenuBar; 
+	
 	private var _title_sub:FlxText;
 	private var _tourny1:FlxText;
 		
@@ -40,13 +43,23 @@ class Tournaments extends FlxGroup
 		
 		FlxG.autoPause = false;
 		
-		if (Reg.__title_bar2 != null) remove(Reg.__title_bar2);
-		Reg.__title_bar2 = new TitleBar("Tournaments");
-		add(Reg.__title_bar2);
+		if (__title_bar != null)
+		{
+			remove(__title_bar);
+			__title_bar.destroy();
+		}
 		
-		if (Reg.__menu_bar2 != null) remove(Reg.__menu_bar2);
-		Reg.__menu_bar2 = new MenuBar();
-		add(Reg.__menu_bar2);
+		__title_bar = new TitleBar("Tournaments");
+		add(__title_bar);
+		
+		if (__menu_bar != null)
+		{
+			remove(__menu_bar);
+			__menu_bar.destroy();
+		}
+		
+		__menu_bar = new MenuBar();
+		add(__menu_bar);
 		
 	}
 	
@@ -141,8 +154,8 @@ class Tournaments extends FlxGroup
 	{
 		_piece_move_completed = false;
 				
-		Reg.__menu_bar2._scene_tournaments_exit.active = false;
-		Reg.__menu_bar2.active = false;
+		__menu_bar._scene_tournaments_exit.active = false;
+		__menu_bar.active = false;
 		
 		_button_move_piece.active = false;
 		
@@ -179,8 +192,8 @@ class Tournaments extends FlxGroup
 	{
 		_piece_move_completed = true;
 				
-		Reg.__menu_bar2._scene_tournaments_exit.active = false;
-		Reg.__menu_bar2.active = false;
+		__menu_bar._scene_tournaments_exit.active = false;
+		__menu_bar.active = false;
 		
 		_button_move_piece.active = false;
 		

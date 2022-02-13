@@ -659,12 +659,8 @@ class ChessCheckOrCheckmate extends FlxSubState
 			Reg._chessOriginOfcheckmateYYnew = Reg._gameYYnew; 
 			Reg._chessOriginOfcheckmateXXnew = Reg._gameXXnew;
 	
-			if (Reg._chessCheckmateBypass == false)
-			{
-				Reg._checkmate = true;				
-				doCheckmate();
-			}
-			
+			Reg._checkmate = true;				
+			doCheckmate();	
 		}
 		
 		// if defending king is in check.
@@ -687,13 +683,9 @@ class ChessCheckOrCheckmate extends FlxSubState
 			
 			if (Reg._game_offline_vs_cpu == true && Reg._playerMoving == 1)
 			Reg._chessCheckBypass = true;
-						
+			
 		}
 		
-		if (Reg._chessCheckmateBypass == true)
-		{
-			Reg._outputMessage = false;
-		}
 	}
 	
 	public function doCheckmate():Void
@@ -710,12 +702,15 @@ class ChessCheckOrCheckmate extends FlxSubState
 				
 		ChessCapturingUnits.capturingUnits();
 			
-		if (__ids_win_lose_or_draw == null)
+		if (__ids_win_lose_or_draw != null)
 		{
-			__ids_win_lose_or_draw = new IDsWinLoseOrDraw();
-			add(__ids_win_lose_or_draw);
-		
+			remove(__ids_win_lose_or_draw);
+			__ids_win_lose_or_draw.destroy();
 		}
+		
+		__ids_win_lose_or_draw = new IDsWinLoseOrDraw();
+		add(__ids_win_lose_or_draw);
+		
 		__ids_win_lose_or_draw.canPlayerMove2();
 	}
 	

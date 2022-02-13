@@ -98,4 +98,9 @@ class CID3 extends FlxGroup
 	 * background for the selected flag which could be a solid white color. this is needed because the white flag is not seen at the white theme.
 	 */
 	public static var _default_flag_background:FlxSprite;
+	
+	override public function destroy():Void
+	{
+		super.destroy();		
+	}
 }

@@ -162,11 +162,6 @@ class Reg2 extends FlxGroup
 	public static var _random_num:Array<Int> = []; 
 	
 	/******************************
-	 * used only when first logging in. checks one time only for new accounts. a new account could be that a check Elo rating is 0. meaning that the user has not selected a check rank. so, we enter an event to check for that and this var will be then set to true so that we do not go to that event again. not until we re login.
-	 */
-	public static var _checked_for_new_account:Bool = false;
-	
-	/******************************
 	 * when host enters game room and an automatic game start is set to true, this stop a second game request message box from displaying for none host player after none host player accepts the offer. the problem was that when Reg._createGameRoom is set to true then the room is reset but the event for a request is then sent. when the other player accepts the other, the Reg._createGameRoom is set to true again to start the game and the second message box is then seen.
 	 */
 	public static var _do_once_game_start_request:Bool = false;
@@ -178,10 +173,9 @@ class Reg2 extends FlxGroup
 	public static var _menu_state_username_p1:Int = -1;
 	
 	/******************************
-	 * TODO Note this var is never set to true. therefore, it is corrently not used. this var might be useful someday so all value of false is left in code.
 	 * while scrolling the page, this stops a sound from firing when mouse goes overtop of a button or image. the reason for a sound is that some buttons or images only need a mouse press not a release and when scrolling the page, a mouse press is used.
 	 */
-	public static var _scrollable_area_is_scrolling = true;
+	public static var _scrollable_area_is_scrolling = false;
 	
 	/******************************
 	 * this is used at scrollable area. each time a button is clicked at the lobby, this value is plus 1. at the ButtonGeneralNetworkYes.hx class when alpha is set to 1 then this is minus 1. the scrollable area will not scroll unless this value is 0.3.
@@ -216,7 +210,12 @@ class Reg2 extends FlxGroup
 	 */
 	public static var _gameId_sprite_highlight:FlxSprite;
 	
+	/******************************
+	 * used only when first logging in. checks one time only for new accounts. a new account could be that a check Elo rating is 0. meaning that the user has not selected a check rank. so, we enter an event to check for that and this var will be then set to true so that we do not go to that event again. not until we re login.
+	 */
+	public static var _checked_for_new_account:Bool = false;
 	
+
 	
 	public static function system_reset():Void
 	{
@@ -238,7 +237,7 @@ class Reg2 extends FlxGroup
 	{
 		resetMessageBox();
 		
-		_scrollable_area_is_scrolling = true;
+		_scrollable_area_is_scrolling = false;
 		_message_box_just_closed = false;
 		_offline_cpu_host_name2 = "";
 		_offline_cpu_host_name3 = "";

@@ -10,7 +10,6 @@
 */
 
 package;
-import openfl.geom.ColorTransform;
 
 /**
  * use this button when at anytime after a button click there will be data sent to the server, such as restarting a game or returning to lobby. if an exit button is clicked then use the ButtonGeneral class. the reason is that no other buttons can be triggered. there is no way to overload the server.
@@ -73,7 +72,6 @@ class ButtonGeneralNetworkYes extends FlxUIButton
 	private var _refresh_online_list:Bool = false;
 	private var _id_refresh:Int = 0; // used as the id of the refresh online list.
 	
-	private var _colorTransform:ColorTransform;
 	private var _innerColor:FlxColor;
 	private var _text:String;
 	
@@ -101,6 +99,7 @@ class ButtonGeneralNetworkYes extends FlxUIButton
 		_startY = y;
 	
 		_text = text;
+		if (_text == "") visible = false;
 		
 		_tick_button = Reg._framerate;
 		
@@ -132,6 +131,11 @@ class ButtonGeneralNetworkYes extends FlxUIButton
 		FlxSpriteUtil.drawRect(this, 0, 0, _button_width, _button_height + 10, _innerColor, _lineStyle);
 	}
 	
+	override public function destroy():Void
+	{
+		super.destroy();
+	}	
+	
 	// this function must not be removed. also stops double firing of button sound at ActionKeyboard.hx.
 	override public function update(elapsed:Float):Void
 	{
@@ -147,32 +151,35 @@ class ButtonGeneralNetworkYes extends FlxUIButton
 				if (RegCustom._sound_enabled[Reg._tn] == true
 				&&  Reg2._scrollable_area_is_scrolling == false)
 					FlxG.sound.play("click", 1, false);
+					
+				Reg2._lobby_button_alpha = 0.3;
 			}		
 		}
 		
 		// when pressing the refresh online user list button, this code is needed so that it populates the table without creating text and buttons.
-		if (_refresh_online_list == true)
+		if (Reg._at_waiting_room == true && _refresh_online_list == true)
 		{
-			for (i in 0...120)
+			// no username found, so make this button off screen so that user cannot click it and its not visible,
+			if (_id_refresh >= 7000 && _id_refresh <= 8000) 
 			{
-				// no username found, so make this button off screen so that user cannot click it and its not visible,
-				if ((i + 7000) == _id_refresh) 
+				if (RegTriggers._waiting_room_refresh_invite_list == true 
+				||	Reg._usernamesOnline[(_id_refresh - 7000)] == ""
+				||	SceneWaitingRoom.__title_bar._spinner.visible == true)
 				{
-					if (RegTypedef._dataOnlinePlayers._usernamesOnline[i] == "")
-					{
-						label.text = "";
-						y = 2000;
-						visible = false;
-					}
-					
-					else //if (Reg._move_number_current == 0 && GameChatter._chatterIsOpen == false)
-					{
-						label.text = "Send";
-						y = _startY - 14;
-						visible = true;
-					}
-				}			
-			}
+					label.text = "";
+					y = 2000;
+					visible = false;
+					super.update(elapsed);
+				}
+				
+				else
+				{
+					label.text = "Send";
+					y = _startY - 14;
+					visible = true;
+				}
+			}			
+		
 		}	
 		
 		if (Reg._at_lobby == true
@@ -192,13 +199,29 @@ class ButtonGeneralNetworkYes extends FlxUIButton
 			_tick_button -= 1;
 		}
 		
-		if (_tick_button <= 0)
+		// show button clearly when tick expire.
+		if (_tick_button <= 0
+		&&	_id != 9999
+		// show button clearly when tick expire and after table at waiting room has been populated.
+		||	_tick_button <= 0
+		&&	_id == 9999 
+		// show button clearly when tick expire and when update list at waiting room has not been mouse clicked.
+		&&	InviteTable._ticks_invite_list
+		==	Reg._maximum_server_connections
+		||	_tick_button <= 0
+		&&	_id == 9999 
+		&&	InviteTable._ticks_invite_list == 0)
 		{
-			Reg2._lobby_button_alpha = 1;
+			if (Reg._at_lobby == true
+			||	Reg._at_waiting_room == true)
+				Reg2._lobby_button_alpha = 1;
+			
 			alpha = 1;
 			_tick_button = Reg._framerate;
 			Reg._buttonDown = false;
 		}
+		
+		if (label.text == "") visible = false;
 		
 		if (alpha == 1 && _id == ID) super.update(elapsed);
 		
@@ -213,6 +236,16 @@ class ButtonGeneralNetworkYes extends FlxUIButton
 			alpha = 0.3;
 			_tick_button = Reg._framerate;
 			Reg._buttonDown = true;
+		}
+		
+		if (_id == 9999
+		&&	_id == ID
+		&&	InviteTable._ticks_invite_list
+		!=	Reg._maximum_server_connections
+		&&	InviteTable._ticks_invite_list > 0
+		)
+		{
+			alpha = 0.3;
 		}
 	}	
 }

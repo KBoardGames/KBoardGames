@@ -40,7 +40,7 @@ class MenuBar extends FlxGroup
 	/******************************
 	 * the icons that can be selected such as house or leaderboards
 	 */
-	public var _lobby_sprite:FlxSprite;
+	public var _lobby_sprite:Array<FlxSprite> = [];
 	
 	/******************************
 	 * this is the name of the lobby icon that can be selected. each name is outputted at the far right side of the last lobby icon when the mouse cursor is on one of those icons at this MeunBar.hx.
@@ -54,6 +54,8 @@ class MenuBar extends FlxGroup
 	 * menuBar background.
 	 */
 	public var _background:FlxSprite;
+	
+	private var _button_disconnect:ButtonGeneralNetworkYes;
 	
 	//####################### house
 	#if house
@@ -95,9 +97,7 @@ class MenuBar extends FlxGroup
 		public var _scene_leaderboards_exit:ButtonGeneralNetworkYes;
 	#end
 	
-	public var __scene_create_room:SceneCreateRoom;
 	public var __new_account:NewAccount;
-	public var __scene_waiting_room:SceneWaitingRoom;
 	
 	 /* hides the grid that would be shown underneath the lobby and disconnect buttons and also displays another horizontal bar at the top of the scene.
 	 */
@@ -146,7 +146,7 @@ class MenuBar extends FlxGroup
 	 */
 	public var _rewards:Array<String> = ["0", "0", "0"];
 	//#############end daily quests
-	
+
 	//##################tournaments
 	
 	/******************************
@@ -155,25 +155,14 @@ class MenuBar extends FlxGroup
 	public var _scene_tournaments_exit:ButtonGeneralNetworkYes;
 	//##############end tournaments
 	
-	private var _scene_lobby:FlxState;
-	
 	/******************************
 	 * 
 	 * @param	_from_menuState		true if somewhere at the menu state. The player has not connected yet and might be at the help scene or credits scene. this is needed because if at playState then the disconnect button will trigger a close but if not connected then this is used to return to menu state.
 	 * @param	_at_chatter			is player at the chatter. This is used to create a small red bar underneath the chatter background. this is needed because at waiting room this red bar will not go in front of the chatter background, so another new to this class is needed at chatter.
 	 */
-	override public function new(_from_menuState:Bool = false, _at_chatter:Bool = false, house:Dynamic = null, items:Dynamic = null, scene_create_room:SceneCreateRoom = null, scene_waiting_room:SceneWaitingRoom = null, scene_lobby:FlxState = null):Void
+	override public function new(_from_menuState:Bool = false, _at_chatter:Bool = false, house:Dynamic = null, items:Dynamic = null):Void
 	{
 		super();
-		
-		if (scene_lobby != null)
-			_scene_lobby = scene_lobby;
-		
-		if (scene_create_room != null)
-			__scene_create_room = scene_create_room;
-		
-		if (scene_waiting_room != null)
-			__scene_waiting_room = scene_waiting_room;
 		
 		#if house
 			if (house != null)
@@ -194,6 +183,12 @@ class MenuBar extends FlxGroup
 		else if (RegCustom._menu_bar_background_number[Reg._tn] == 12)
 			_color = FlxColor.BLACK;
 		
+		if (_background != null)
+		{
+			remove(_background);
+			_background.destroy();
+		}
+			
 		if(_at_chatter == false) 
 		{
 			_background = new FlxSprite(0, FlxG.height - 50);
@@ -209,7 +204,13 @@ class MenuBar extends FlxGroup
 		add(_background);
 		
 		// width is 35 + 15 extra pixels for the space between the button at the edge of screen.
-		var _button_disconnect = new ButtonGeneralNetworkYes(FlxG.width - 60, FlxG.height - 40, "X", 45, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, disconnect.bind(_from_menuState), 0xFFCC0000, false, 9999);
+		if (_button_disconnect != null)
+		{
+			remove(_button_disconnect);
+			_button_disconnect.destroy();
+		}
+		
+		_button_disconnect = new ButtonGeneralNetworkYes(FlxG.width - 60, FlxG.height - 40, "X", 45, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, disconnect.bind(_from_menuState), 0xFFCC0000, false, 9999);
 		_button_disconnect.scrollFactor.set(0, 0);
 		_button_disconnect.label.font = Reg._fontDefault;
 		add(_button_disconnect);
@@ -225,15 +226,26 @@ class MenuBar extends FlxGroup
 				menu_house();
 		#end
 		
-		if (Reg._hasUserConnectedToServer == false || Reg._at_create_room == true)
+		// without Reg._hasUserConnectedToServer var create room cannot be entered.
+		if (Reg._hasUserConnectedToServer == false
+		&& Reg._at_lobby == true
+		|| Reg._at_create_room == true)
 			menu_create_room();
 			
-		if (Reg._hasUserConnectedToServer == false || Reg._at_waiting_room == true)
+		if (Reg._hasUserConnectedToServer == false
+		&&	Reg	._at_lobby == true
+		||	Reg._at_waiting_room == true)
 			menu_waiting_room();
 		
-		if (Reg._at_misc == true) menu_misc();
-		if (Reg._at_daily_quests == true) menu_daily_quests();
-		if (Reg._at_tournaments == true) menu_tournaments();
+		if (Reg._at_misc == true) 
+			menu_misc();
+		
+		if (Reg._at_daily_quests == true)
+			menu_daily_quests();
+		
+		if (Reg._at_tournaments == true) 
+			menu_tournaments();
+		
 		#if flags
 			if (Reg._at_leaderboards == true) menu_leaderboards();
 		#end
@@ -257,7 +269,7 @@ class MenuBar extends FlxGroup
 			} else RegTriggers._returnToLobbyMakeButtonsActive = true;
 		#else
 			RegTriggers._returnToLobbyMakeButtonsActive = true;
-		#end		
+		#end
 	}
 	
 	private function menu_lobby():Void
@@ -326,17 +338,26 @@ class MenuBar extends FlxGroup
 		{
 			// add title here by increase the max number then go to titleMenu then go to the bottom of update(). 
 			// all gameboards images are stored in frames.
-			_lobby_sprite = new FlxSprite(0, 0);
-			_lobby_sprite.loadGraphic("assets/images/iconsLobby.png", true, 70, 44);
-			_lobby_sprite.scrollFactor.set(0, 0);
-			_lobby_sprite.color = RegCustomColors.client_text_color();
-			_lobby_sprite.updateHitbox();
-			_lobby_sprite.visible = false;
-			add(_lobby_sprite);	
+			if (_lobby_sprite != null)
+			{
+				if (_lobby_sprite[i] != null)
+				{
+					remove(_lobby_sprite[i]);
+					_lobby_sprite[i].destroy();
+				}
+			}
+			
+			_lobby_sprite[i] = new FlxSprite(0, 0);
+			_lobby_sprite[i].loadGraphic("assets/images/iconsLobby.png", true, 70, 44);
+			_lobby_sprite[i].scrollFactor.set(0, 0);
+			_lobby_sprite[i].color = RegCustomColors.client_text_color();
+			_lobby_sprite[i].updateHitbox();
+			_lobby_sprite[i].visible = false;
+			add(_lobby_sprite[i]);	
 			
 			// add this member to Reg._group_lobby_sprite.			
-			Reg._group_lobby_sprite.push(_lobby_sprite);
-			Reg._group_lobby_sprite[i].setPosition(500 - 14 + (i * 70), FlxG.height - _lobby_sprite.height - 3);
+			Reg._group_lobby_sprite.push(_lobby_sprite[i]);
+			Reg._group_lobby_sprite[i].setPosition(500 - 14 + (i * 70), FlxG.height - _lobby_sprite[i].height - 3);
 			Reg._group_lobby_sprite[i].animation.add(Std.string(Reg._lobby_icon_number[i]), [Reg._lobby_icon_number[i]], 30, false);
 			Reg._group_lobby_sprite[i].animation.play(Std.string(Reg._lobby_icon_number[i]));
 			Reg._group_lobby_sprite[i].visible = true;
@@ -345,7 +366,13 @@ class MenuBar extends FlxGroup
 		
 		if (Reg._lobby_icon_total > -1)
 		{
-			_group_lobby_sprite_highlighted = new FlxSprite(500 - 2, FlxG.height - _lobby_sprite.height - 3 - 2);
+			if (_group_lobby_sprite_highlighted != null)
+			{
+				remove(_group_lobby_sprite_highlighted);
+				_group_lobby_sprite_highlighted.destroy();
+			}
+			
+			_group_lobby_sprite_highlighted = new FlxSprite(500 - 2, FlxG.height - _lobby_sprite[0].height - 3 - 2);
 			_group_lobby_sprite_highlighted.loadGraphic("assets/images/iconsHoverLobby.png", true, 70, 48); // height is the same value as width.
 			_group_lobby_sprite_highlighted.scrollFactor.set(0, 0);
 			_group_lobby_sprite_highlighted.animation.add("play", [0, 1], 10, true);
@@ -355,9 +382,24 @@ class MenuBar extends FlxGroup
 			add(_group_lobby_sprite_highlighted);
 		}
 		
+		if (_lobby_icon_names != null)
+		{
+			remove(_lobby_icon_names);
+			_lobby_icon_names.destroy();
+		}
+		
 		_lobby_icon_names = new FlxText(500 - 14 + 95 + (Reg._lobby_icon_total * 70), FlxG.height - 35, 0, "");
 		_lobby_icon_names.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
 		add(_lobby_icon_names);
+		
+		// from actionCommand.hx jump to creating room.
+		if (RegTriggers._jump_creating_room == true
+		&&	RegTypedef._dataMisc._room == 0)
+		{
+			RegTypedef._dataMisc._room = 1;
+			PlayState.__scene_lobby.goto_room(1);
+		}
+		
 	}
 	
 	private function menu_house():Void
@@ -427,6 +469,15 @@ class MenuBar extends FlxGroup
 			}
 			_buttonCreateRoom.screenCenter(X);
 			add(_buttonCreateRoom);
+			
+			RegTriggers._jump_creating_room = false;
+			
+			if (Reg._at_create_room == true
+			&&	RegTriggers._jump_waiting_room == true)
+			{
+				Reg._gameId = Reg._jump_game_id;
+				scene_create_room_goto_waiting_room();
+			}
 		}
 		
 		if (_buttonReturnToLobby == null)
@@ -449,24 +500,42 @@ class MenuBar extends FlxGroup
 	{
 		var _offset:Int = 20;
 		
+		if (_button_return_to_lobby_from_waiting_room != null)
+		{
+			remove(_button_return_to_lobby_from_waiting_room);
+			_button_return_to_lobby_from_waiting_room.destroy();
+		}
+		
 		_button_return_to_lobby_from_waiting_room = new ButtonGeneralNetworkYes(40 + _offset, FlxG.height-40, "To Lobby", 205, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, scene_waiting_room_return_to_lobby, RegCustom._button_color[Reg._tn], false, 109);
 		_button_return_to_lobby_from_waiting_room.label.font = Reg._fontDefault;
 		_button_return_to_lobby_from_waiting_room.visible = false;
 		_button_return_to_lobby_from_waiting_room.active = false;
 		add(_button_return_to_lobby_from_waiting_room);
-				
-		_button_refresh_list = new ButtonGeneralNetworkYes(260 + _offset, FlxG.height-40, "Update List", 205, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, scene_waiting_room_refresh_online_list, RegCustom._button_color[Reg._tn], false, 110);		
+		
+		if (_button_refresh_list != null)
+		{
+			remove(_button_refresh_list);
+			_button_refresh_list.destroy();
+		}
+		
+		_button_refresh_list = new ButtonGeneralNetworkYes(260 + _offset, FlxG.height-40, "Update List", 205, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, scene_waiting_room_refresh_online_list, RegCustom._button_color[Reg._tn], false, 9999);		
 		_button_refresh_list.label.font = Reg._fontDefault;
 		_button_refresh_list.scrollFactor.set(0, 0);
-		_button_refresh_list.visible = false;
-		_button_refresh_list.active = false;
+		_button_refresh_list.visible = true;
+		_button_refresh_list.active = true;
 		add(_button_refresh_list);				
+		
+		if (_buttonGameRoom != null)
+		{
+			remove(_buttonGameRoom);
+			_buttonGameRoom.destroy();
+		}
 		
 		_buttonGameRoom = new ButtonGeneralNetworkYes(220 + 260 + _offset, FlxG.height-40, "Game Room", 205, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, scene_waiting_room_goto_game_room, RegCustom._button_color[Reg._tn], false, 111);
 		_buttonGameRoom.label.font = Reg._fontDefault;
 		_buttonGameRoom.visible = false;
 		_buttonGameRoom.active = false;
-		add(_buttonGameRoom);		
+		add(_buttonGameRoom);
 	}
 	
 	/******************************
@@ -474,6 +543,12 @@ class MenuBar extends FlxGroup
 	 */
 	private function menu_misc():Void
 	{
+		if (_misc_menu_exit != null)
+		{
+			remove(_misc_menu_exit);
+			_misc_menu_exit.destroy();
+		}
+		
 		_misc_menu_exit = new ButtonGeneralNetworkYes(30, FlxG.height - 40, "Exit", 150 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, scene_misc_exit, RegCustom._button_color[Reg._tn], true, 112);
 		_misc_menu_exit.label.font = Reg._fontDefault;
 		_misc_menu_exit.screenCenter(X);
@@ -486,6 +561,12 @@ class MenuBar extends FlxGroup
 	 */
 	private function menu_daily_quests():Void
 	{
+		if (_scene_daily_quests_exit != null)
+		{
+			remove(_scene_daily_quests_exit);
+			_scene_daily_quests_exit.destroy();
+		}
+		
 		_scene_daily_quests_exit = new ButtonGeneralNetworkYes(30, FlxG.height - 40, "Exit", 150 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, scene_daily_quests_exit, RegCustom._button_color[Reg._tn], true, 113);
 		_scene_daily_quests_exit.label.font = Reg._fontDefault;
 		_scene_daily_quests_exit.screenCenter(X);
@@ -501,6 +582,12 @@ class MenuBar extends FlxGroup
 		{
 			if (_rewards[i] == "1")
 			{
+				if (_button_claim_reward != null)
+				{
+					remove(_button_claim_reward);
+					_button_claim_reward.destroy();
+				}
+				
 				_button_claim_reward = new ButtonGeneralNetworkYes(_scene_daily_quests_exit.x-200, FlxG.height - 40, "Claim", 185, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, scene_daily_quests_claim_reward, RegCustom._button_color[Reg._tn], false, 114);
 				_button_claim_reward.label.font = Reg._fontDefault;
 				add(_button_claim_reward);
@@ -519,6 +606,12 @@ class MenuBar extends FlxGroup
 	 */
 	private function menu_tournaments():Void
 	{
+		if (_scene_tournaments_exit != null)
+		{
+			remove(_scene_tournaments_exit);
+			_scene_tournaments_exit.destroy();
+		}
+		
 		_scene_tournaments_exit = new ButtonGeneralNetworkYes(30, FlxG.height - 40, "Exit", 150 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, scene_tournaments_exit, RegCustom._button_color[Reg._tn], true, 115);
 		_scene_tournaments_exit.label.font = Reg._fontDefault;
 		_scene_tournaments_exit.screenCenter(X);
@@ -528,6 +621,12 @@ class MenuBar extends FlxGroup
 		add(_scene_tournaments_exit);
 		
 		#if tournaments
+			if (_button_tournaments_reminder_by_mail != null)
+			{
+				remove(_button_tournaments_reminder_by_mail);
+				_button_tournaments_reminder_by_mail.destroy();
+			}
+			
 			_button_tournaments_reminder_by_mail = new ButtonGeneralNetworkYes(0, FlxG.height - 40, "Unsubcribe Mail", 245, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, tournaments_reminder_by_mail, RegCustom._button_color[Reg._tn], false, 0);
 			_button_tournaments_reminder_by_mail.scrollFactor.set(0, 0);
 			_button_tournaments_reminder_by_mail.label.font = Reg._fontDefault;
@@ -535,7 +634,13 @@ class MenuBar extends FlxGroup
 			_button_tournaments_reminder_by_mail.visible = false;
 			_button_tournaments_reminder_by_mail.active = false;
 			add(_button_tournaments_reminder_by_mail);
-		
+
+			if (_button_tournament_participating != null)
+			{
+				remove(_button_tournament_participating);
+				_button_tournament_participating.destroy();
+			}
+			
 			_button_tournament_participating = new ButtonGeneralNetworkYes(0, FlxG.height - 40, "Leave Tournament", 245, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, tournaments_Participating, RegCustom._button_color[Reg._tn], false, 0);
 			_button_tournament_participating.scrollFactor.set(0, 0);
 			_button_tournament_participating.label.font = Reg._fontDefault;
@@ -573,6 +678,12 @@ class MenuBar extends FlxGroup
 	private function menu_leaderboards():Void
 	{
 		#if leaderboards
+			if (_scene_leaderboards_exit != null)
+			{
+				remove(_scene_leaderboards_exit);
+				_scene_leaderboards_exit.destroy();
+			}
+			
 			_scene_leaderboards_exit = new ButtonGeneralNetworkYes(0, FlxG.height - 40, "To Lobby", 160 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, scene_leaderboard_return_to_lobby , RegCustom._button_color[Reg._tn], false, 116);		
 			_scene_leaderboards_exit.label.font = Reg._fontDefault;
 			_scene_leaderboards_exit.screenCenter(X);
@@ -593,11 +704,7 @@ class MenuBar extends FlxGroup
 		if (GameChatter.__scrollable_area4 != null)	GameChatter.__scrollable_area4 = null;
 		
 		if (_from_menuState == false) PlayState.prepareToDisconnect();
-		else 
-		{
-			if (_scene_lobby != null) _scene_lobby.destroy();
-			FlxG.switchState(new MenuState());
-		}
+		else FlxG.switchState(new MenuState());
 	}
 	
 	private function set_all_menu_bar_elements_not_active():Void
@@ -765,7 +872,7 @@ class MenuBar extends FlxGroup
 	{
 		#if house
 			set_all_menu_bar_elements_not_active(); // reset buttons to false because just after closing a dialog box, that class will reset state of buttons back to active.
-			
+		
 			if (__house.__house_foundation_put != null)
 			{
 				__house.__house_foundation_put.visible = false;
@@ -802,7 +909,12 @@ class MenuBar extends FlxGroup
 			if (RegTypedef._dataStatistics._chess_elo_rating > 0) PlayState.__scene_lobby.set_active_for_buttons();
 			Reg._at_house = false;
 			
-			if (_tracker != null) remove(_tracker);
+			if (_tracker != null)
+			{
+				remove(_tracker);
+				_tracker.destroy();
+			}
+			
 			_tracker = new FlxSprite(0, 0);
 			_tracker.loadGraphic("modules/house/assets/images/tracker.png", false);
 			_tracker.scrollFactor.set(1, 1);
@@ -811,7 +923,7 @@ class MenuBar extends FlxGroup
 			
 			// the tracker is centered to the screen, so that the camera will focus on the scene as if the scene had never had an offset that may have been created by house map which is where an furniture item can be placed onto and where the mouse can scroll to see more of a map. so when scrolling happens, the offset is created at every scene because camera focuses on all scenes. this command is the fix.
 			FlxG.camera.follow(_tracker, FlxCameraFollowStyle.LOCKON);
-			
+		
 			// is this a new user account. we are here because all server events have been complete after the login and this is the last of the login setup.
 			if (Reg2._checked_for_new_account == false
 			&&  RegTypedef._dataStatistics._chess_elo_rating == 0
@@ -984,6 +1096,12 @@ class MenuBar extends FlxGroup
 		PlayState.__scene_lobby.set_not_active_for_buttons();
 		
 		#if leaderboards
+			if (__leaderboards != null)
+			{
+				remove(__leaderboards);
+				__leaderboards.destroy();
+			}
+		
 			__leaderboards = new Leaderboards();		
 			add(__leaderboards);
 		#end		
@@ -1014,6 +1132,12 @@ class MenuBar extends FlxGroup
 			
 			Reg._at_misc = true;
 			
+			if (__miscellaneous_menu != null)
+			{
+				remove(__miscellaneous_menu);
+				__miscellaneous_menu.destroy();
+			}
+			
 			__miscellaneous_menu = new MiscellaneousMenu();
 			add(__miscellaneous_menu);
 		#end
@@ -1038,6 +1162,12 @@ class MenuBar extends FlxGroup
 			
 			Reg._at_daily_quests = true;
 			
+			if (__daily_quests != null)
+			{
+				remove(__daily_quests);
+				__daily_quests.destroy();
+			}
+			
 			__daily_quests = new DailyQuests();
 			add(__daily_quests);
 			
@@ -1059,6 +1189,12 @@ class MenuBar extends FlxGroup
 			
 			Reg._at_tournaments = true;
 			
+			if (__tournaments != null)
+			{
+				remove(__tournaments);
+				__tournaments.destroy();
+			}
+			
 			__tournaments = new Tournaments();		
 			add(__tournaments);
 			
@@ -1074,19 +1210,8 @@ class MenuBar extends FlxGroup
 	 */
 	public function scene_create_room_goto_waiting_room():Void
 	{
-		// if image selected. id == 1
-		if (SceneCreateRoom._buttonHumanOrComputerGame.label.text == "Computer"
-		) 
-		{
-			Reg._game_online_vs_cpu = true;
-			SceneCreateRoom.createRoomOnlineAgainstCPU();
-			
-			visible = false;
-			active = false;
-		}
-		
 		// entering the waiting room.
-		else if (Reg._at_waiting_room == false)
+		if (Reg._at_waiting_room == false)
 		{
 			// this line is needed.
 			if (Reg._roomPlayerLimit == 0) Reg._roomPlayerLimit = 2;
@@ -1118,7 +1243,6 @@ class MenuBar extends FlxGroup
 			RegTypedef._dataMisc._roomCheckForLock[RegTypedef._dataMisc._room] = 0;	
 			RegTypedef._dataMisc._roomState[RegTypedef._dataMisc._room] = 1;
 			
-					
 			// when returning to the lobby from this room, since this value it was never saved to the database, it will be set back to 0 when the "set room data" event is called. 
 			if (SceneCreateRoom._buttonAllowSpectatorsGame.label.text == "Yes")
 				RegTypedef._dataMisc._allowSpectators[RegTypedef._dataMisc._room] = 1;
@@ -1127,6 +1251,10 @@ class MenuBar extends FlxGroup
 			
 			PlayState.send("Is Room Locked", RegTypedef._dataMisc);
 			
+			InviteTable._ticks_invite_list = 0;
+			//InviteTable._populated_table_body = false;
+			RegTriggers._waiting_room_refresh_invite_list = true;
+			Reg2._scrollable_area_is_scrolling = false;
 		}
 	}
 	
@@ -1189,23 +1317,14 @@ class MenuBar extends FlxGroup
 	// refresh a list, a scrollable area with users that can be invited to the room.
 	public function scene_waiting_room_refresh_online_list():Void
 	{
-		for (i in 0...121)
-		{
-			// clear list so that old data will not be displayed. a user may not be online since last update.
-			RegTypedef._dataOnlinePlayers._usernamesOnline[i] = "";
-			RegTypedef._dataOnlinePlayers._gamesAllTotalWins[i] = 0;
-			RegTypedef._dataOnlinePlayers._gamesAllTotalLosses[i] = 0;
-			RegTypedef._dataOnlinePlayers._gamesAllTotalDraws[i] = 0;	
-			RegTypedef._dataOnlinePlayers._chess_elo_rating[i] = 0;
-			
-		}
-		
-		PlayState.send("Logged In Users", RegTypedef._dataOnlinePlayers);
-			
 		_button_refresh_list.active = false;
 		
-		InviteTable._populated_table_body = false;
-		RegTriggers._waiting_room_refresh_invite_list = true;
+		for (i in 0... TableColumnSort._flipY.length)
+		{
+			TableColumnSort._flipY[i] = false;
+		}	
+		
+		PlayState.send("Logged In Users", RegTypedef._dataOnlinePlayers);
 	}
 	
 	/******************************
@@ -1302,12 +1421,146 @@ class MenuBar extends FlxGroup
 	
 	override public function destroy()
 	{
+		if (_lobby_sprite != null)
+		{
+			for (i in 0... _lobby_sprite.length)
+			{
+				remove(_lobby_sprite[i]);
+				_lobby_sprite[i].destroy();
+				_lobby_sprite[i] = null;
+			}
+		}
+	
+		if (_lobby_icon_names != null)
+		{
+			remove(_lobby_icon_names);
+			_lobby_icon_names.destroy();
+			_lobby_icon_names = null;
+		}
+	
+		if (_group_lobby_sprite_highlighted != null)
+		{
+			remove(_group_lobby_sprite_highlighted);
+			_group_lobby_sprite_highlighted.destroy();
+			_group_lobby_sprite_highlighted = null;
+		}
+	
+		if (_background != null)
+		{
+			remove(_background);
+			_background.destroy();
+			_background = null;
+		}
+	
+		#if dailyQuests
+			if (__daily_quests != null)
+			{
+				remove(__daily_quests);
+				__daily_quests.destroy();
+				__daily_quests = null;
+			}
+		#end
+	
+		if (__new_account != null)
+		{
+			remove(__new_account);
+			__new_account.destroy();
+			__new_account = null;
+		}
+		
+		if (_buttonCreateRoom != null)
+		{
+			remove(_buttonCreateRoom);
+			_buttonCreateRoom.destroy();
+			_buttonCreateRoom = null;
+		}
+		
+		if (_buttonReturnToLobby != null)
+		{
+			remove(_buttonReturnToLobby);
+			_buttonReturnToLobby.destroy();
+			_buttonReturnToLobby = null;
+		}
+		
+		if (_buttonGameRoom != null)
+		{
+			remove(_buttonGameRoom);
+			_buttonGameRoom.destroy();
+			_buttonGameRoom = null;
+		}
+		
+		if (_button_return_to_lobby_from_waiting_room != null)
+		{
+			remove(_button_return_to_lobby_from_waiting_room);
+			_button_return_to_lobby_from_waiting_room.destroy();
+			_button_return_to_lobby_from_waiting_room = null;
+		}
+		
+		if (_button_refresh_list != null)
+		{
+			remove(_button_refresh_list);
+			_button_refresh_list.destroy();
+			_button_refresh_list = null;
+		}
+		
+		if (_misc_menu_exit != null)
+		{
+			remove(_misc_menu_exit);
+			_misc_menu_exit.destroy();
+			_misc_menu_exit = null;
+		}
+		
+		if (_scene_daily_quests_exit != null)
+		{
+			remove(_scene_daily_quests_exit);
+			_scene_daily_quests_exit.destroy();
+			_scene_daily_quests_exit = null;
+		}
+	
+		if (_button_claim_reward != null)
+		{
+			remove(_button_claim_reward);
+			_button_claim_reward.destroy();
+			_button_claim_reward = null;
+		}
+	
+		if (_scene_tournaments_exit != null)
+		{
+			remove(_scene_tournaments_exit);
+			_scene_tournaments_exit.destroy();
+			_scene_tournaments_exit = null;
+		}
+			
+		#if tournaments
+			if (__tournaments != null)
+			{
+				remove(__tournaments);
+				__tournaments.destroy();
+				__tournaments = null;
+			}
+			
+			if (_button_tournaments_reminder_by_mail != null)
+			{
+				remove(_button_tournaments_reminder_by_mail);
+				_button_tournaments_reminder_by_mail.destroy();
+				_button_tournaments_reminder_by_mail = null;
+			}
+			
+			if (_button_tournament_participating != null)
+			{
+				remove(_button_tournament_participating);
+				_button_tournament_participating.destroy();
+				_button_tournament_participating = null;
+			}
+		#end
+		
 		#if miscellaneous
 			if (__miscellaneous_menu != null)
 			{
 				__miscellaneous_menu.visible = false;
 				remove(__miscellaneous_menu);
 				__miscellaneous_menu.destroy();
+				__miscellaneous_menu = null;
 			}
 		#end
 		
@@ -1315,44 +1568,84 @@ class MenuBar extends FlxGroup
 		{
 			remove(_bgHorizontal);
 			_bgHorizontal.destroy();
+			_bgHorizontal = null;
 		}
 		
 		if (_to_lobby != null)
 		{
 			remove(_to_lobby);
 			_to_lobby.destroy();
+			_to_lobby = null;
 		}
 
 		#if house
+			if (_tracker != null)
+			{
+				remove(_tracker);
+				_tracker.destroy();
+				_tracker = null;
+			}
+			
+			if (__house != null)
+			{
+				__house = null;
+				_items = null;
+			}
+		
+			if (_buttonToFurnitureGetMenu != null)
+			{
+				remove(_buttonToFurnitureGetMenu);
+				_buttonToFurnitureGetMenu.destroy();
+				_buttonToFurnitureGetMenu = null;
+			}
+			
 			if (_buttonToFurniturePutMenu != null)
 			{
 				remove(_buttonToFurniturePutMenu);
 				_buttonToFurniturePutMenu.destroy();
+				_buttonToFurniturePutMenu = null;
 			}
 			
 			if (_buttonToFoundationPutMenu != null)
 			{
 				remove(_buttonToFoundationPutMenu);
 				_buttonToFoundationPutMenu.destroy();
+				_buttonToFoundationPutMenu = null;
 			}
 		
 			if (_save != null)
 			{
 				remove(_save);
 				_save.destroy();
+				_save = null;
 			}
 		#end
 		
 		#if leaderboards
+			if (_scene_leaderboards_exit != null)
+			{
+				remove(_scene_leaderboards_exit);
+				_scene_leaderboards_exit.destroy();
+				_scene_leaderboards_exit = null;
+			}
+
 			if (__leaderboards != null)
 			{
 				__leaderboards.destroy();
 				
 				__leaderboards.visible = false;
 				__leaderboards.active = false;
+				__leaderboards = null;
 			}
 		#end
 		
+		if (_button_disconnect != null)
+		{
+			remove(_button_disconnect);
+			_button_disconnect.destroy();
+			_button_disconnect = null;
+		}
+		visible = false;
 		super.destroy();
 	}
 	
@@ -1384,9 +1677,15 @@ class MenuBar extends FlxGroup
 					_group_lobby_sprite_highlighted.x = 502 - 15 + (i * 70); 
 					_lobby_icon_names.text = _lobby_icon_name[i];
 					
+					if (FlxG.mouse.justPressed == true)
+						PlayState.__scene_lobby._lobby_sprite_mouse_just_pressed = true;
+						
 					if (FlxG.mouse.justReleased == true
-					&&	Reg._buttonDown == false)
+					&&	Reg._buttonDown == false
+					&&	PlayState.__scene_lobby._lobby_sprite_mouse_just_pressed == true)
 					{
+						PlayState.__scene_lobby._lobby_sprite_mouse_just_pressed = false;
+						
 						if (RegCustom._sound_enabled[Reg._tn] == true
 						&&  Reg2._scrollable_area_is_scrolling == false)
 							FlxG.sound.play("click", 1, false);	
@@ -1399,7 +1698,8 @@ class MenuBar extends FlxGroup
 							case 3: scene_lobby_tournaments();
 							case 4: scene_lobby_miscMenu();
 						}
-					}
+					}		
+					
 				}
 			}
 		}
@@ -1457,9 +1757,34 @@ class MenuBar extends FlxGroup
 					_save.active = false;
 				#end
 			}
+		
+			// end house
+			//#############################
 		#end
-		// end house
-		//#############################
+		
+		// not at house but this is needed to do a elo skill check.
+			
+		// is this a new user account. we are here because all server events have been complete after the login and this is the last of the login setup.
+		if (PlayState.__scene_lobby != null
+		&&	RegCustom._house_feature_enabled[Reg._tn] == false)
+		{
+			if (Reg2._checked_for_new_account == false
+			&&  RegTypedef._dataStatistics._chess_elo_rating == 0
+			||  Reg2._checked_for_new_account == false
+			&&	RegTypedef._dataAccount._username.substr(0, 5) == "Guest")
+			{
+				set_all_menu_bar_elements_not_active(); // reset buttons to false because just after closing a dialog box, that class will reset state of buttons back to active.
+				
+				Reg2._checked_for_new_account = true;
+				PlayState.__scene_lobby.set_not_active_for_buttons();
+				
+				if (__new_account == null)
+				{
+					__new_account = new NewAccount();
+					add(__new_account);
+				}
+			}
+		}
 		
 		#if tournaments
 			if (_button_tournaments_reminder_by_mail != null)

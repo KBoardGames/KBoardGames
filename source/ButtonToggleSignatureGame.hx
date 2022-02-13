@@ -75,6 +75,11 @@ class ButtonToggleSignatureGame extends FlxUIButton
 
 	}
 	
+	override public function destroy():Void
+	{
+		super.destroy();
+	}
+	
 	// this function must not be removed. also stops double firing of button sound at ActionKeyboard.hx.
 	override public function update(elapsed:Float):Void 
 	{

@@ -231,9 +231,31 @@ class RegTriggers
 	public static var _buttons_set_not_active:Bool = false;
 	
 	/******************************
+	 * At ActionCommands.hx this is the request made to jump to the waiting room from title scene. however, we need to go to the creating room first or else features at the waiting room will be broken.
+	 */
+	public static var _jump_creating_room:Bool = false;
+	
+	/******************************
+	 * At ActionCommands.hx this is the request made to jump to the waiting room from title scene.
+	 */
+	public static var _jump_waiting_room:Bool = false;
+	
+	/******************************
+	 * At ActionCommands.hx this is the request made to jump to the game room from title scene.
+	 */
+	public static var _jump_game_room:Bool = false;
+	
+	/******************************
 	 * should the chatter scroll right?
 	 */
 	public static var _scrollRight:Bool = false;
+	
+	public static function reset_triggers_once():Void
+	{
+		_jump_creating_room = false;
+		_jump_waiting_room = false;
+		_jump_game_room = false;
+	}
 	
 	public static function resetTriggers():Void
 	{

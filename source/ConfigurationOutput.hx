@@ -23,6 +23,9 @@ package;
  */
 class ConfigurationOutput extends FlxGroup
 {
+	public static var __title_bar:TitleBar;
+	public static var __menu_bar:MenuBar;
+	
 	private var _offset_x:Int = -50;
 	private var _offset_y:Int = 50;
 	private var _offset:Int = 30;	
@@ -64,7 +67,14 @@ class ConfigurationOutput extends FlxGroup
 		initialize();
 		
 		// a negative x value moves the scrollable area in the opposite direction.
-		if (__scrollable_area != null) FlxG.cameras.remove(__scrollable_area);
+		if (__scrollable_area != null) 
+		{
+			FlxG.cameras.remove(__scrollable_area);
+			
+			__scrollable_area.destroy();
+			__scrollable_area = null;
+		}
+		
 		__scrollable_area = new FlxScrollableArea(new FlxRect( 0, 0, FlxG.width, FlxG.height - 50), CID3._group.getHitbox(), ResizeMode.NONE, 0, 100, -1, FlxColor.LIME, null, 1000, true);
 			
 		FlxG.cameras.add( __scrollable_area );
@@ -72,13 +82,23 @@ class ConfigurationOutput extends FlxGroup
 		__scrollable_area.pixelPerfectRender = true;
 		
 		//-----------------------------
-		if (Reg.__title_bar != null) remove(Reg.__title_bar);
-		Reg.__title_bar = new TitleBar("Configurations: General");
-		add(Reg.__title_bar);
+		if (__title_bar != null) 
+		{
+			remove(__title_bar);
+			__title_bar.destroy();
+		}
 		
-		if (Reg.__menu_bar != null) remove(Reg.__menu_bar);
-		Reg.__menu_bar = new MenuBar(true);
-		add(Reg.__menu_bar);
+		__title_bar = new TitleBar("Configuration.");
+		add(__title_bar);
+		
+		if (__menu_bar != null)
+		{
+			remove(__menu_bar);
+			__menu_bar.destroy();
+		}
+		
+		__menu_bar = new MenuBar(true);
+		add(__menu_bar);
 		
 		// save. avatars, general configuration toggle buttons at menu bar.
 		sceneMenuButtons();
@@ -99,20 +119,17 @@ class ConfigurationOutput extends FlxGroup
 		theme_menu();
 		button_theme_should_hide();
 	}
-
-	override public function destroy()
+	
+	public function initialize():Void
 	{
-		if (__configurations_games != null)
-		{
-			remove(__configurations_games);
-			__configurations_games.destroy();
-		}
-		
 		if (__configurations_general != null)
 		{
 			remove(__configurations_general);
 			__configurations_general.destroy();
 		}
+		
+		__configurations_general = new ConfigurationGeneral(this);
+		add(__configurations_general);
 		
 		if (__configurations_profile != null)
 		{
@@ -120,81 +137,16 @@ class ConfigurationOutput extends FlxGroup
 			__configurations_profile.destroy();
 		}
 		
-		if (_save != null)
-		{
-			remove(_save);
-			_save.destroy();
-		}
-		
-		if (_button_profile != null)
-		{
-			remove(_button_profile);
-			_button_profile.destroy();
-		}
-		
-		if (_button_general != null)
-		{
-			remove(_button_general);
-			_button_general.destroy();
-		}
-		
-		if (_button_games != null)
-		{
-			remove(_button_games);
-			_button_games.destroy();
-		}
-		
-		if (_background_gradient_scene != null)
-		{
-			remove(_background_gradient_scene);
-			_background_gradient_scene.destroy();
-		}
-		
-		if (__scrollable_area != null)
-		{
-			remove(__scrollable_area);
-			__scrollable_area.destroy();
-		}
-		
-		if (_button_theme_minus != null)
-		{
-			remove(_button_theme_minus);
-			_button_theme_minus.destroy();
-		}
-		
-		if (_button_theme != null)
-		{
-			remove(_button_theme);
-			_button_theme.destroy();
-		}
-		
-		if (_button_theme_plus != null)
-		{
-			remove(_button_theme_plus);
-			_button_theme_plus.destroy();
-		}
-		
-		super.destroy();		
-	}
-	
-	public function initialize():Void
-	{
-		if (__configurations_general != null)
-			remove(__configurations_general);
-		
-		__configurations_general = new ConfigurationGeneral(this);
-		add(__configurations_general);
-		
-		if (__configurations_profile != null)
-			remove(__configurations_profile);
-		
 		__configurations_profile = new ConfigurationProfile(this);
 		add(__configurations_profile);
 		
 		if (__configurations_games != null)
+		{
 			remove(__configurations_games);
-			
-		__configurations_games = new ConfigurationGames(this);
+			__configurations_games.destroy();
+		}
+		
+		__configurations_games = new ConfigurationGames();
 		add(__configurations_games);
 		
 	}
@@ -232,8 +184,6 @@ class ConfigurationOutput extends FlxGroup
 		
 	public function buttonGames():Void
 	{
-		Reg.__title_bar.update_text("Configurations: Games");
-		
 		buttonToggle();
 		
 		if (_button_games != null)
@@ -274,9 +224,7 @@ class ConfigurationOutput extends FlxGroup
 	 * this displays the game board and its colors.
 	 */
 	public function buttonGeneral():Void
-	{
-		Reg.__title_bar.update_text("Configurations: General");
-		
+	{	
 		buttonToggle();
 		
 		if (_button_general != null)
@@ -318,8 +266,6 @@ class ConfigurationOutput extends FlxGroup
 	 */
 	public function buttonProfile():Void
 	{
-		Reg.__title_bar.update_text("Configurations: Profile");
-		
 		buttonToggle();
 		
 		if (__configurations_profile != null
@@ -369,7 +315,7 @@ class ConfigurationOutput extends FlxGroup
 			}
 		}
 				
-		var _text = new FlxText(870, 15 + Reg.__title_bar_offset_y, 0, "Theme", Reg._font_size);
+		var _text = new FlxText(870, 15 + Reg.Reg.__title_bar_offset_y, 0, "Theme", Reg._font_size);
 		_text.font = Reg._fontDefault;
 		_text.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		_text.color = RegCustomColors.client_text_color();
@@ -467,6 +413,7 @@ class ConfigurationOutput extends FlxGroup
 		{
 			_button_profile.visible = false;
 			remove(_button_profile);
+			_button_profile.destroy();
 			_button_profile = null;
 		}
 		
@@ -474,6 +421,7 @@ class ConfigurationOutput extends FlxGroup
 		{
 			_button_general.visible = false;
 			remove(_button_general);
+			_button_general.destroy();
 			_button_general = null;
 		}
 		
@@ -481,6 +429,7 @@ class ConfigurationOutput extends FlxGroup
 		{
 			_button_games.visible = false;
 			remove(_button_games);
+			_button_games.destroy();
 			_button_games = null;
 		}
 				
@@ -523,6 +472,8 @@ class ConfigurationOutput extends FlxGroup
 			}
 			
 			else if (CID3._group_password_input[CID3._CRN].text.length <= 3
+			&&		 CID3._group_username_input[CID3._CRN].text.substr(0, 5).toLowerCase() != "guest"
+			||		 CID3._group_username_input[CID3._CRN].text.length <= 3
 			&&		 CID3._group_username_input[CID3._CRN].text.substr(0, 5).toLowerCase() != "guest")
 			{
 				Reg._messageId = 9012;
@@ -539,7 +490,7 @@ class ConfigurationOutput extends FlxGroup
 				Reg._buttonCodeValues = "v1014";
 				SceneGameRoom.messageBoxMessageOrder();
 				return;
-			}
+			} 
 			
 			// RegCustom._profile_email_address_p1 is set at IdsMessageBox case 9001 
 			RegCustom._profile_password_p1[CID3._CRN] = CID3._group_password_input[CID3._CRN].text;
@@ -563,6 +514,95 @@ class ConfigurationOutput extends FlxGroup
 		if (Reg._tn == 0) RegCustom.resetConfigurationVars2;
 		
 		RegFunctions.saveConfig();
+	}
+	
+	override public function destroy():Void
+	{
+		if (__scrollable_area != null)
+		{
+			remove(__scrollable_area);	
+			__scrollable_area.destroy();
+			__scrollable_area = null;
+		}
+		
+		if (__configurations_general != null)
+		{
+			remove(__configurations_general);
+			__configurations_general.destroy();
+			__configurations_general = null;
+		}
+		
+		if (__configurations_profile != null)
+		{
+			remove(__configurations_profile);
+			__configurations_profile.destroy();
+			__configurations_profile = null;
+		}
+		
+		if (__configurations_games != null)
+		{
+			remove(__configurations_games);
+			__configurations_games.destroy();
+			__configurations_games = null;
+		}
+		
+		if (_button_general != null)
+		{
+			remove(_button_general);
+			_button_general.destroy();
+			_button_general = null;
+		}
+		
+		if (_button_profile != null)
+		{
+			remove(_button_profile);
+			_button_profile.destroy();
+			_button_profile = null;
+		}
+		
+		if (_button_games != null)
+		{
+			remove(_button_games);
+			_button_games.destroy();
+			_button_games = null;
+		}
+		
+		if (_background_gradient_scene != null)
+		{
+			remove(_background_gradient_scene);
+			_background_gradient_scene.destroy();
+			_background_gradient_scene = null;
+		}
+		
+		if (_button_theme_minus != null)
+		{
+			remove(_button_theme_minus);
+			_button_theme_minus.destroy();
+			_button_theme_minus = null;
+		}
+		
+		if (_button_theme != null)
+		{
+			remove(_button_theme);
+			_button_theme.destroy();
+			_button_theme = null;
+		}
+		
+		if (_button_theme_plus != null)
+		{
+			remove(_button_theme_plus);
+			_button_theme_plus.destroy();
+			_button_theme_plus = null;
+		}
+		
+		if (_save != null)
+		{
+			remove(_save);
+			_save.destroy();
+			_save = null;
+		}
+		
+		super.destroy();
 	}
 	
 	override public function update(elapsed:Float):Void
@@ -626,7 +666,7 @@ class ConfigurationOutput extends FlxGroup
 			add(_button_games);
 		}
 		
-		// which saving a theme, profile password message about cannot save theme because password field has to few characters.
+		// which saving a theme, profile password message about cannot save theme because username or password field has to few characters.
 		if (Reg._yesNoKeyPressValueAtMessage > 0 && Reg._buttonCodeValues == "v1012")
 		{
 			Reg._yesNoKeyPressValueAtMessage = 0;

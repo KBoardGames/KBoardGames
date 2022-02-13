@@ -24,7 +24,7 @@ class Configuration extends FlxState
 	override public function create():Void
 	{
 		super.create();
-			
+		
 		persistentDraw = true;
 		persistentUpdate = true;
 		
@@ -49,21 +49,56 @@ class Configuration extends FlxState
 		#else
 			RegCustom.resetConfigurationVars();		
 		#end
+
+		if (_output != null)
+		{
+			remove(_output);
+			_output.destroy();
+			_output = null;
+		}
 		
 		_output = new ConfigurationOutput();
 		add(_output);
 		
 		if (Reg._clientReadyForPublicRelease == false)
 		{
-			__action_commands = new ActionCommands(); 
+			if (__action_commands != null)
+			{
+				remove(__action_commands);
+				__action_commands.destroy();
+				__action_commands = null;
+			}
+			
+			__action_commands = new ActionCommands();
 			add(__action_commands);
 		}
+	}
+	
+	override public function destroy():Void
+	{
+		
+		if (__action_commands != null)
+		{
+			remove(__action_commands);
+			__action_commands.destroy();
+			__action_commands = null;
+		}
+	
+		if (_output != null)
+		{
+			remove(_output);
+			_output.destroy();
+			_output = null;
+		}
+		
+		super.destroy();
 	}
 	
 	override public function update(elapsed:Float):Void 
 	{
 		// should message box be displayed?
 		if (Reg._messageId > 0 && Reg._messageId != 1000000
+		&&	Reg._messageId != Reg._message_id_temp
 		&&	RegTriggers._buttons_set_not_active == false)
 		{
 			var _msg = new IdsMessageBox();

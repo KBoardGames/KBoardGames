@@ -24,6 +24,7 @@ class SceneLobbyRoomPlayerLimitText extends FlxText
 		super(x, y, _fieldWidth, _text, _textSize);
 		
 		_id = id;
+		color = RegCustom._client_text_color_number[Reg._tn];
 	}
 	
 	override public function destroy()

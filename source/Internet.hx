@@ -18,10 +18,11 @@ package;
 class Internet extends FlxGroup
 {
 	public static var _bool:Bool = false;
+	public static var _http:Http;
 	
 	public static function webVersionFileExist():Void
 	{
-		var _http = new haxe.Http("http://" + Reg._websiteHomeUrl + "/" + "files/versionClient.txt");
+		_http = new haxe.Http("http://" + Reg._websiteHomeUrl + "/" + "files/versionClient.txt");
 		
 		var _str:String = "Failed to get client's version number from a file at " + Reg._websiteNameTitle + " website. ";
 		Reg._doOnce = false;
@@ -58,7 +59,7 @@ class Internet extends FlxGroup
 	
 	public static function serverFileExist():Bool
 	{
-		var _http = new haxe.Http("http://" + Reg._websiteHomeUrl + "/server/" + "server");
+		_http = new haxe.Http("http://" + Reg._websiteHomeUrl + "/server/" + "server");
 		
 		var _str:String = "Server is offline. Try again later.";
 		var _bool:Bool = false;
@@ -107,7 +108,7 @@ class Internet extends FlxGroup
 			_str = _str.substr(8, _str.length);	
 		
 		// check to see if this is a paid IP address. here we search the MySQL database table "users" with this IP address to see if the data found has a value of 1 which is a paid account.
-		var _http = new haxe.Http(Reg._websiteHomeUrl + "/server/" + "serverDomain.php");
+		_http = new haxe.Http(Reg._websiteHomeUrl + "/server/" + "serverDomain.php");
 		
 		// in serverDomain.php the serverDomain parameter will have the value of _str.
 		_http.setParameter( "serverDomain", _str);
@@ -144,15 +145,15 @@ class Internet extends FlxGroup
 		var result:Bool;
 		
 		// any data could be in this json file. If this file is found then user is connected to the internet. This method is 10 times faster than a php request.
-		var http = new haxe.Http("http://" + Reg._websiteHomeUrl + "/server/online.json");
+		_http = new haxe.Http("http://" + Reg._websiteHomeUrl + "/server/online.json");
 
-		http.onData = function (data:String)
+		_http.onData = function (data:String)
 		  result = true;
 		
-		http.onError = function (error)
+		_http.onError = function (error)
 		  result = false;
 		
-		http.request();
+		_http.request();
 
 		if (result == false) return false;
 		else return true;
@@ -163,7 +164,7 @@ class Internet extends FlxGroup
 	{
 		try
 		{
-			var _http = new haxe.Http("http://" + Reg._websiteHomeUrl + "/server/" + "getAllEvents.php");
+			_http = new haxe.Http("http://" + Reg._websiteHomeUrl + "/server/" + "getAllEvents.php");
 		
 			// in getAllEvents.php the getAllEvents parameter will have the value of _str.
 			_http.setParameter("getAllEventNames", "names");
@@ -254,19 +255,42 @@ class Internet extends FlxGroup
 	
 	public static function getHostname():Void
 	{
-		var http = new haxe.Http("http://" + Reg._websiteHomeUrl + "/server/getHostname.php?id=" + RegTypedef._dataAccount._ip);
+		_http = new haxe.Http("http://" + Reg._websiteHomeUrl + "/server/getHostname.php?id=" + RegTypedef._dataAccount._ip);
 		
-		http.onData = function (data:String) 
+		_http.onData = function (data:String) 
 		{
 			RegTypedef._dataAccount._hostname = data;
 		}
 
-		http.onError = function (error) 
+		_http.onError = function (error) 
 		{
 		  trace('error: $error');
 		}
 
-		http.request();
+		_http.request();
+	}
+	
+	// gets queue data. should user wait in queue until the user with access enters the lobby from a timeout or when that user clicks any key. only then can the other player with a value here of 1 can go to the front door.
+	public static function front_door_queue():Void
+	{
+		var _username = RegTypedef._dataAccount._username;
+		_username = StringTools.replace(RegTypedef._dataAccount._username, " ", "%20");
+		
+		_http = new haxe.Http("http://" + Reg._websiteHomeUrl + "/server/frontDoorQueue.php?token=J39BsrUDd94mWd4Jd341&q=" + _username);
+		
+		_http.onData = function (data:String) 
+		{
+			PlayState._front_door_queue = Std.parseInt(data);
+			
+			if (data == null) PlayState._front_door_queue = 0;
+		}
+
+		_http.onError = function (error) 
+		{
+			trace('error: $error');
+		}
+
+		_http.request();
 	}
 	
 	// gets ip from a website file. if ip is not found then user cannot login. therefore, user must first login to the website before this works.
@@ -274,27 +298,19 @@ class Internet extends FlxGroup
 	// http://checkip.dyndns.com
 	public static function getIP():Void
 	{
-		var http = new haxe.Http("http://ipecho.net/plain");
+		_http = new haxe.Http("http://ipecho.net/plain");
 		
-		http.onData = function (data:String) 
+		_http.onData = function (data:String) 
 		{
 			RegTypedef._dataAccount._ip = data;
 		}
 
-		http.onError = function (error) 
+		_http.onError = function (error) 
 		{
 		  trace('error: $error');
 		}
 
-		http.request();
-	}
-		
-	public static function getAndroidAPKfile():Void
-	{
-		var _url = "http://kboardgames.com/files/Board_Games_Client_Android.zip";
-		Lib.getURL( new URLRequest (_url));  
-		
-		//openfl.system.System.exit(0);
+		_http.request();
 	}
 	
 	/******************************
@@ -313,5 +329,11 @@ class Internet extends FlxGroup
 		Lib.getURL( new URLRequest (_url), _str);   
 		
 		return _type;
+	}
+	
+	override public function destroy():Void
+	{
+		
+		super.destroy();
 	}
 }

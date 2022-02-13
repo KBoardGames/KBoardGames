@@ -1,3 +1,65 @@
+Version 1.23.13 2021-2-13
+
+New Features.
+
+	lobby table columns and waiting room table columns can now be sorted by clicking an arrow image that is displayed at the header of a column.
+
+	Front door user queue session. No simultaneous logins allowed.
+
+	When release mode is set to false the hotkeys can now be used to quickly jump to either the waiting room or the game room.
+
+	Added spinner image, symbolizing client is busy, to the title bar.
+
+	User can now choose to not have a rated game.
+
+Feature changed.
+
+	Text now correctly vertically aligned to the title bar in HTML5.
+
+	Added a large amount of left padding to the title bar text.
+
+	Removed the while loop used to speed the display of invite users data. The while loop is not needed because code has been optimized.
+
+	Added a clickable button to the number wheel.
+
+	Did memory cleanup to a fair amount of classes.	
+
+	At lobby the table column "Against" is now called "Rated Game".
+
+	Message box now can only be closed after FlxTimer time expires.
+
+	The username minimum character limit for online play is now 3-12 characters.
+
+	Subtitle removed from the configuration title bar.
+
+Bugs fixed.
+
+	Fixed a "too many heap sections" out of memory error that would crash the client. Lack of memory cleanup resulted in data growing to a very large size.
+	
+	The preloader percentage text did not stop at 100 percent.
+
+	Accidentally commented a line that stopped the input box caret from resetting back to default after text was sent to chatter.
+
+	The event schedule was added to the title scene after the admin commands was added to the title scene. Therefore, pressing ALT + SPACEBAR would not fade the event schedule image.
+
+	Last lobby button was a duplicate of the second to last lobby button. 
+
+	Text not shown for yellow theme at lobby table body and waiting room table body.
+
+	Mouse global screen position command most of the time stopped message box buttons from firing at lobby scene, house scene, and tournament scene.
+
+	Double fire of a lobby button would stop user from entering that room.
+
+	Server crashed after ending a game because the variable _usernamesStatic was used instead named _usernamesStaic. Notice the missing "t".
+	
+	Setting ELO skill level for online play would not work for user when house feature was turned off.
+
+	Incorrect title bar color at first load of the calendar.
+
+	Lobby table header and waiting room table header are now displayed above their table body.
+
+	Fixed two incorrect row padding at the configuration general section.
+
 Version 1.22.2 2021-1-9
 
 New Features.

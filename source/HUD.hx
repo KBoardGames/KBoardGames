@@ -540,6 +540,218 @@ class HUD extends FlxState
 		
 	override public function destroy()
 	{
+		if (_bg != null)
+		{
+			remove(_bg);
+			_bg.destroy();
+			_bg = null;
+		}
+		
+		#if avatars
+			if (_image_profile_avatar_p1 != null)
+			{
+				remove(_image_profile_avatar_p1);
+				_image_profile_avatar_p1.destroy();
+				_image_profile_avatar_p1 = null;
+			}
+			
+			if (_image_profile_avatar_p2 != null)
+			{
+				remove(_image_profile_avatar_p2);
+				_image_profile_avatar_p2.destroy();
+				_image_profile_avatar_p2 = null;
+			}
+			
+			if (_image_profile_avatar_p3 != null)
+			{
+				remove(_image_profile_avatar_p3);
+				_image_profile_avatar_p3.destroy();
+				_image_profile_avatar_p3 = null;
+			}
+			
+			if (_image_profile_avatar_p4 != null)
+			{
+				remove(_image_profile_avatar_p4);
+				_image_profile_avatar_p4.destroy();
+				_image_profile_avatar_p4 = null;
+			}
+			
+		#end
+	
+		if (_row_username != null)
+		{
+			remove(_row_username);
+			_row_username.destroy();
+			_row_username = null;
+		}
+		
+		if (_row_win_total != null)
+		{
+			remove(_row_win_total);
+			_row_win_total.destroy();
+			_row_win_total = null;
+		}
+		
+		if (_row_other != null)
+		{
+			remove(_row_other);
+			_row_other.destroy();
+			_row_other = null;
+		}
+		
+		if (_row_username_p1 != null)
+		{
+			remove(_row_username_p1);
+			_row_username_p1.destroy();
+			_row_username_p1 = null;
+		}
+		
+		if (_row_username_p2 != null)
+		{
+			remove(_row_username_p2);
+			_row_username_p2.destroy();
+			_row_username_p2 = null;
+		}
+		
+		if (_row_username_p3 != null)
+		{
+			remove(_row_username_p3);
+			_row_username_p3.destroy();
+			_row_username_p3 = null;
+		}
+		
+		if (_row_username_p4 != null)
+		{
+			remove(_row_username_p4);
+			_row_username_p4.destroy();
+			_row_username_p4 = null;
+		}
+		
+		if (_row_total_wins_p1 != null)
+		{
+			remove(_row_total_wins_p1);
+			_row_total_wins_p1.destroy();
+			_row_total_wins_p1 = null;
+		}
+		
+		if (_row_total_wins_p2 != null)
+		{
+			remove(_row_total_wins_p2);
+			_row_total_wins_p2.destroy();
+			_row_total_wins_p2 = null;
+		}
+		
+		if (_row_total_wins_p3 != null)
+		{
+			remove(_row_total_wins_p3);
+			_row_total_wins_p3.destroy();
+			_row_total_wins_p3 = null;
+		}
+		
+		if (_row_total_wins_p4 != null)
+		{
+			remove(_row_total_wins_p4);
+			_row_total_wins_p4.destroy();
+			_row_total_wins_p4 = null;
+		}
+		
+		if (_row_total_other_p1 != null)
+		{
+			remove(_row_total_other_p1);
+			_row_total_other_p1.destroy();
+			_row_total_other_p1 = null;
+		}
+		
+		if (_row_total_other_p2 != null)
+		{
+			remove(_row_total_other_p2);
+			_row_total_other_p2.destroy();
+			_row_total_other_p2 = null;
+		}
+		
+		if (_row_total_other_p3 != null)
+		{
+			remove(_row_total_other_p3);
+			_row_total_other_p3.destroy();
+			_row_total_other_p3 = null;
+		}
+		
+		if (_row_total_other_p4 != null)
+		{
+			remove(_row_total_other_p4);
+			_row_total_other_p4.destroy();
+			_row_total_other_p4 = null;
+		}
+		
+		if (_row_bg_username != null)
+		{
+			remove(_row_bg_username);
+			_row_bg_username.destroy();
+			_row_bg_username = null;
+		}
+		
+		if (_row_bg_win_total != null)
+		{
+			remove(_row_bg_win_total);
+			_row_bg_win_total.destroy();
+			_row_bg_win_total = null;
+		}
+		
+		if (_row_bg_other != null)
+		{
+			remove(_row_bg_other);
+			_row_bg_other.destroy();
+			_row_bg_other = null;
+		}
+		
+		if (_row_bg_header_username != null)
+		{
+			remove(_row_bg_header_username);
+			_row_bg_header_username.destroy();
+			_row_bg_header_username = null;
+		}
+		
+		if (_row_bg_header_win_total != null)
+		{
+			remove(_row_bg_header_win_total);
+			_row_bg_header_win_total.destroy();
+			_row_bg_header_win_total = null;
+		}
+		
+		if (_row_bg_header_other != null)
+		{
+			remove(_row_bg_header_other);
+			_row_bg_header_other.destroy();
+			_row_bg_header_other = null;
+		}
+		
+		if (textGameTurnsP1 != null)
+		{
+			remove(textGameTurnsP1);
+			textGameTurnsP1.destroy();
+			textGameTurnsP1 = null;
+		}
+		
+		if (textGameTurnsP2 != null)
+		{
+			remove(textGameTurnsP2);
+			textGameTurnsP2.destroy();
+			textGameTurnsP2 = null;
+		}
+		
+		if (textGameTurnsP3 != null)
+		{
+			remove(textGameTurnsP3);
+			textGameTurnsP3.destroy();
+			textGameTurnsP3 = null;
+		}
+		
+		if (textGameTurnsP4 != null)
+		{
+			remove(textGameTurnsP4);
+			textGameTurnsP4.destroy();
+			textGameTurnsP4 = null;
+		}
 		
 		super.destroy();
 	}

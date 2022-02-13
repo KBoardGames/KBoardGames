@@ -24,7 +24,7 @@ class SceneLobbyGameAgainstText extends FlxText
 		super(x, y, _fieldWidth, _text, _textSize);
 		
 		_id = id;
-
+		color = RegCustom._client_text_color_number[Reg._tn];
 	}
 
 	override public function destroy()
@@ -41,10 +41,10 @@ class SceneLobbyGameAgainstText extends FlxText
 		for (i in 0...27)
 		{
 			var _host:String = RegTypedef._dataMisc._roomHostUsername[i];
-			var _vsComputer:Int = RegTypedef._dataMisc._vsComputer[i];
-			var _title:String = "Human";
+			var _rated_game:Int = RegTypedef._dataMisc._rated_game[i];
+			var _title:String = "False";
 			
-			if (_vsComputer == 1) _title = "Computer";
+			if (_rated_game == 1) _title = "True";
 			
 			if (i == _id) 
 			{

@@ -236,6 +236,12 @@ class SceneGameRoom extends FlxState
 		
 		if (Reg._clientReadyForPublicRelease == false)
 		{
+			if (__action_commands != null)
+			{
+				remove(__action_commands);
+				__action_commands.destroy();
+			}
+			
 			__action_commands = new ActionCommands(); 
 			add(__action_commands);
 		}
@@ -747,13 +753,7 @@ class SceneGameRoom extends FlxState
 			
 			if (Reg._game_offline_vs_cpu == true || Reg._game_offline_vs_player == true) 
 			{
-				if (Reg._game_online_vs_cpu == true)
-				{
-					SceneCreateRoom.createRoomOnlineAgainstCPU();
-				}
-				
-				else Reg._gameJumpTo = 0;
-				
+				Reg._gameJumpTo = 0;				
 				Reg._gameOverForAllPlayers = false;
 				Reg._gameOverForPlayer = false;
 				Reg._createGameRoom = true;

@@ -17,6 +17,9 @@ package;
  */
 class EventDescription extends FlxSubState
 {
+	public static var __title_bar:TitleBar;
+	public static var __menu_bar:MenuBar;
+	
 	public var __action_commands:ActionCommands;
 	
 	/******************************
@@ -24,6 +27,10 @@ class EventDescription extends FlxSubState
 	 */
 	private var __scene_background:SceneBackground;
 	
+	private var _topic_title:FlxText;
+	private var _eventTitle:FlxText;
+	private var _text:FlxText;
+		
 	public function new(_str:String):Void
 	{
 		super();	
@@ -52,29 +59,52 @@ class EventDescription extends FlxSubState
 			}
 		}
 		
-		var _topic_title = new FlxText(0, 0, 0, "Event Description");
+		if (_topic_title != null)
+		{
+			remove(_topic_title);
+			_topic_title.destroy();
+		}
+		
+		_topic_title = new FlxText(0, 0, 0, "Event Description");
 		_topic_title.setFormat(Reg._fontDefault, 30, RegCustomColors.client_topic_title_text_color());
 		_topic_title.scrollFactor.set();
 		_topic_title.setPosition(15, 15);
 		_topic_title.screenCenter(X);
 		add(_topic_title);
 		
-		var _eventTitle = new FlxText(0, 0, 0, Reg2._eventName[i]);
+		if (_eventTitle != null)
+		{
+			remove(_eventTitle);
+			_eventTitle.destroy();
+		}
+		
+		_eventTitle = new FlxText(0, 0, 0, Reg2._eventName[i]);
 		_eventTitle.setFormat(Reg._fontDefault, 30, RegCustomColors.client_topic_title_text_color());
 		_eventTitle.scrollFactor.set();
 		_eventTitle.setPosition(50, 75);
 		add(_eventTitle);
 		
-		var _text = new FlxText(0, 0, 0, Reg2._eventDescription[i]);
+		if (_text != null)
+		{
+			remove(_text);
+			_text.destroy();
+		}
+		
+		_text = new FlxText(0, 0, 0, Reg2._eventDescription[i]);
 		_text.setFormat(Reg._fontDefault, 24, RegCustomColors.client_text_color());
 		_text.scrollFactor.set();
 		_text.fieldWidth = FlxG.width - 100;
 		_text.setPosition(50, 135);
 		add(_text);
 		
-		if (Reg.__menu_bar != null)	remove(Reg.__menu_bar);
-		Reg.__menu_bar = new MenuBar(true);
-		add(Reg.__menu_bar);
+		if (__menu_bar != null)
+		{
+			remove(__menu_bar);
+			__menu_bar.destroy();
+		}
+		
+		__menu_bar = new MenuBar(true);
+		add(__menu_bar);
 		
 		var _close = new ButtonGeneralNetworkNo(FlxG.width - 240, FlxG.height - 40, "Exit", 165, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, closeSubstate, RegCustom._button_color[Reg._tn]);
 		_close.label.font = Reg._fontDefault;
@@ -82,6 +112,12 @@ class EventDescription extends FlxSubState
 		
 		if (Reg._clientReadyForPublicRelease == false)
 		{
+			if (__action_commands != null)
+			{
+				remove(__action_commands);
+				__action_commands.destroy();
+			}
+			
 			__action_commands = new ActionCommands(); 
 			add(__action_commands);
 		}
@@ -89,6 +125,41 @@ class EventDescription extends FlxSubState
 	
 	private function closeSubstate():Void
 	{
+		if (__action_commands != null)
+		{
+			remove(__action_commands);
+			__action_commands.destroy();
+			__action_commands = null;
+		}
+		
+		if (__scene_background != null)
+		{
+			remove(__scene_background);
+			__scene_background.destroy();
+			__scene_background = null;
+		}
+		
+		if (_topic_title != null)
+		{
+			remove(_topic_title);
+			_topic_title.destroy();
+			_topic_title = null;
+		}
+		
+		if (_eventTitle != null)
+		{
+			remove(_eventTitle);
+			_eventTitle.destroy();
+			_eventTitle = null;
+		}
+		
+		if (_text != null)
+		{
+			remove(_text);
+			_text.destroy();
+			_text = null;
+		}
+		
 		close();		
 	}
 

@@ -17,6 +17,8 @@ package;
  */
 class MenuStateOfflinePlayers extends MenuState
 {
+	public static var __title_bar:TitleBar;
+	public static var __menu_bar:MenuBar;
 	
 	override public function create():Void
 	{
@@ -39,9 +41,14 @@ class MenuStateOfflinePlayers extends MenuState
 		RegFunctions.fontsSharpen();		
 		startupFunctions();
 		
-		if (Reg.__title_bar != null) remove(Reg.__title_bar);
-		Reg.__title_bar = new TitleBar("Player 1 vs Player 2", true);
-		add(Reg.__title_bar);
+		if (__title_bar != null) 
+		{
+			remove(__title_bar);
+			__title_bar.destroy();
+		}
+		
+		__title_bar = new TitleBar("Player 1 vs Player 2", true);
+		add(__title_bar);
 		
 		if (Reg._total_games_in_release > 0)
 		{
@@ -53,6 +60,12 @@ class MenuStateOfflinePlayers extends MenuState
 		
 		if (Reg._clientReadyForPublicRelease == false)
 		{
+			if (__action_commands != null)
+			{
+				remove(__action_commands);
+				__action_commands.destroy();
+			}
+			
 			__action_commands = new ActionCommands(); 
 			add(__action_commands);
 		} 

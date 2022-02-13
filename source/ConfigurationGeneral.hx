@@ -24,14 +24,16 @@ class ConfigurationGeneral extends CID2
 	
 	// this class is created when clicking the gear button. It is used to display scrollbar configuration content of either games, general or profile category.
 	private var __configurations_output:ConfigurationOutput;
-	
-	// if mobile then this subState is called when user keyboard input is needed.
-	private var __action_keyboard:ActionKeyboard;
-	
+		
 	/******************************
 	 * an event is executed after a user clicks a button. these are the events for this class.
 	 */
 	private var __e:ConfigurationGeneralEvents;
+	
+	/******************************
+	 * call update only once then call it after user input.
+	 */
+	private var _do_once:Bool = true;
 	
 	override public function new(menu_configurations_output:ConfigurationOutput):Void
 	{
@@ -736,7 +738,7 @@ class ConfigurationGeneral extends CID2
 		CID2._group_button.push(CID2._button_table_body_background_number_plus);
 		CID2._group.add(CID2._group_button[_num]);
 		
-		CID2._sprite_table_body_background_image = new FlxSprite(CID2._button_table_body_background_number_minus.x + 100, CID2._button_table_body_background_number_minus.y, "assets/images/capturingUnits.png");
+		CID2._sprite_table_body_background_image = new FlxSprite(CID2._button_table_body_background_number_minus.x + 100, CID2._button_table_body_background_number_minus.y - 15, "assets/images/capturingUnits.png");
 		CID2._sprite_table_body_background_image.color = RegCustomColors.color_table_body_background();		
 		CID2._group.add(CID2._sprite_table_body_background_image);
 	}
@@ -745,7 +747,7 @@ class ConfigurationGeneral extends CID2
 	{
 		_num += 1;
 		
-		CID2._question_table_body_background_brightness = new TextGeneral(15, CID2._button_table_body_background_number_minus.height + CID2._button_table_body_background_number_minus.y + CID2._offset_rows_y, 800, "Table background body brightness.", 8, true, true);
+		CID2._question_table_body_background_brightness = new TextGeneral(15, CID2._button_table_body_background_number_minus.height + CID2._button_table_body_background_number_minus.y + CID2._offset_rows_y, 800, "Table background body brightness.");
 		CID2._question_table_body_background_brightness.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
 		CID2._question_table_body_background_brightness.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		CID2._group.add(CID2._question_table_body_background_brightness);
@@ -773,7 +775,7 @@ class ConfigurationGeneral extends CID2
 	{
 		_num += 1;
 		
-		CID2._question_table_body_background_saturation = new TextGeneral(15, CID2._button_table_body_background_brightness_number_minus.height + CID2._button_table_body_background_brightness_number_minus.y + CID2._offset_rows_y, 800, "Table background body saturation.", 8, true, true);
+		CID2._question_table_body_background_saturation = new TextGeneral(15, CID2._button_table_body_background_brightness_number_minus.height + CID2._button_table_body_background_brightness_number_minus.y + CID2._offset_rows_y, 800, "Table background body saturation.");
 		CID2._question_table_body_background_saturation.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
 		CID2._question_table_body_background_saturation.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		CID2._group.add(CID2._question_table_body_background_saturation);
@@ -1425,7 +1427,7 @@ class ConfigurationGeneral extends CID2
 		}
 	}
 	
-	override public function update(elapsed:Float):Void
+	private function user_input():Void
 	{
 		if (RegCustom._notation_panel_background_color_enabled[Reg._tn] == false &&	CID2._sprite_notation_panel_background_color.visible == true)
 		{
@@ -1491,8 +1493,1089 @@ class ConfigurationGeneral extends CID2
 				
 			}
 		}
+	}
+		
+	override public function destroy():Void
+	{		
+		if (CID2._button_default_colors_checkers != null)
+		{
+			CID2._group.remove(CID2._button_default_colors_checkers);
+			CID2._button_default_colors_checkers.destroy();
+			CID2._button_default_colors_checkers = null;
+		}
+		
+		if (CID2._button_default_colors_chess != null)
+		{	
+			CID2._group.remove(CID2._button_default_colors_chess);	
+			CID2._button_default_colors_chess.destroy();
+			CID2._button_default_colors_chess = null;
+		}
+		
+		if (CID2._gameboard_border_title != null)
+		{	
+			CID2._group.remove(CID2._gameboard_border_title);	
+			CID2._gameboard_border_title.destroy();
+			CID2._gameboard_border_title = null;
+		}
+		
+		if (CID2._text_title_odd_units != null)
+		{	
+			CID2._group.remove(CID2._text_title_odd_units);	
+			CID2._text_title_odd_units.destroy();
+			CID2._text_title_odd_units = null;
+		}
+		
+		if (CID2._text_title_even_units != null)
+		{	
+			CID2._group.remove(CID2._text_title_even_units);
+			CID2._text_title_even_units.destroy();
+			CID2._text_title_even_units = null;
+		}
+		
+		if (CID2._text_odd_units_shade != null)
+		{	
+			CID2._group.remove(CID2._text_odd_units_shade);
+			CID2._text_odd_units_shade.destroy();
+			CID2._text_odd_units_shade = null;
+		}
+		
+		if (CID2._text_even_units_shade != null)
+		{	
+			CID2._group.remove(CID2._text_even_units_shade);
+			CID2._text_even_units_shade.destroy();
+			CID2._text_even_units_shade = null;
+		}
+		
+		if (CID2._text_odd_units_color != null)
+		{	
+			CID2._group.remove(CID2._text_odd_units_color);
+			CID2._text_odd_units_color.destroy();
+			CID2._text_odd_units_color = null;
+		}
+		
+		if (CID2._text_even_units_color != null)
+		{	
+			CID2._group.remove(CID2._text_even_units_color);
+			CID2._text_even_units_color.destroy();
+			CID2._text_even_units_color = null;
+		}
+		
+		if (CID2._text_client_background_brightness != null)
+		{	
+			CID2._group.remove(CID2._text_client_background_brightness);
+			CID2._text_client_background_brightness.destroy();
+			CID2._text_client_background_brightness = null;
+		}
+		
+		if (CID2._text_client_background_saturation != null)
+		{	
+			CID2._group.remove(CID2._text_client_background_saturation);
+			CID2._text_client_background_saturation.destroy();
+			CID2._text_client_background_saturation = null;
+		}
+		
+		if (CID2._text_table_body_background_brightness != null)
+		{	
+			CID2._group.remove(CID2._text_table_body_background_brightness);
+			CID2._text_table_body_background_brightness.destroy();
+			CID2._text_table_body_background_brightness = null;
+		}
+		
+		if (CID2._text_table_body_background_saturation != null)
+		{	
+			CID2._group.remove(CID2._text_table_body_background_saturation);
+			CID2._text_table_body_background_saturation.destroy();
+			CID2._text_table_body_background_saturation = null;
+		}
+		
+		if (CID2._button_shade_odd_units_minus != null)
+		{	
+			CID2._group.remove(CID2._button_shade_odd_units_minus);
+			CID2._button_shade_odd_units_minus.destroy();
+			CID2._button_shade_odd_units_minus = null;
+		}
+		
+		if (CID2._button_shade_odd_units_plus != null)
+		{	
+			CID2._group.remove(CID2._button_shade_odd_units_plus);
+			CID2._button_shade_odd_units_plus.destroy();
+			CID2._button_shade_odd_units_plus = null;
+		}
+		
+		if (CID2._button_shade_even_units_minus != null)
+		{	
+			CID2._group.remove(CID2._button_shade_even_units_minus);
+			CID2._button_shade_even_units_minus.destroy();
+			CID2._button_shade_even_units_minus = null;
+		}
+		
+		if (CID2._button_shade_even_units_plus != null)
+		{	
+			CID2._group.remove(CID2._button_shade_even_units_plus);
+			CID2._button_shade_even_units_plus.destroy();
+			CID2._button_shade_even_units_plus = null;
+		}
+		
+		if (CID2._button_color_odd_units_minus != null)
+		{	
+			CID2._group.remove(CID2._button_color_odd_units_minus);
+			CID2._button_color_odd_units_minus.destroy();
+			CID2._button_color_odd_units_minus = null;
+		}
+		
+		if (CID2._button_color_odd_units_plus != null)
+		{	
+			CID2._group.remove(CID2._button_color_odd_units_plus);
+			CID2._button_color_odd_units_plus.destroy();
+			CID2._button_color_odd_units_plus = null;
+		}
+		
+		if (CID2._button_color_even_units_minus != null)
+		{	
+			CID2._group.remove(CID2._button_color_even_units_minus);
+			CID2._button_color_even_units_minus.destroy();
+			CID2._button_color_even_units_minus = null;
+		}
+		
+		if (CID2._button_color_even_units_plus != null)
+		{	
+			CID2._group.remove(CID2._button_color_even_units_plus);
+			CID2._button_color_even_units_plus.destroy();
+			CID2._button_color_even_units_plus = null;
+		}
+		
+		if (CID2._sprite_board_game_unit_odd != null)
+		{	
+			CID2._group.remove(CID2._sprite_board_game_unit_odd);
+			CID2._sprite_board_game_unit_odd.destroy();
+			CID2._sprite_board_game_unit_odd = null;
+		}
+		
+		if (CID2._sprite_board_game_unit_even != null)
+		{	
+			CID2._group.remove(CID2._sprite_board_game_unit_even);
+			CID2._sprite_board_game_unit_even.destroy();
+			CID2._sprite_board_game_unit_even = null;
+		}
+		
+		if (CID2._sprite_gameboard_border != null)
+		{	
+			CID2._group.remove(CID2._sprite_gameboard_border);
+			CID2._sprite_gameboard_border.destroy();
+			CID2._sprite_gameboard_border = null;
+		}
+		
+		if (CID2._sprite_gameboard_coordinates != null)
+		{	
+			CID2._group.remove(CID2._sprite_gameboard_coordinates);
+			CID2._sprite_gameboard_coordinates.destroy();
+			CID2._sprite_gameboard_coordinates = null;
+		}
+		
+		if (CID2._sprite_client_background_image != null)
+		{	
+			CID2._group.remove(CID2._sprite_client_background_image);
+			CID2._sprite_client_background_image.destroy();
+			CID2._sprite_client_background_image = null;
+		}
+		
+		if (CID2._sprite_gradient_background_image != null)
+		{	
+			CID2._group.remove(CID2._sprite_gradient_background_image);
+			CID2._sprite_gradient_background_image.destroy();
+			CID2._sprite_gradient_background_image = null;
+		}
+		
+		if (CID2._sprite_texture_background_image != null)
+		{	
+			CID2._group.remove(CID2._sprite_texture_background_image);
+			CID2._sprite_texture_background_image.destroy();
+			CID2._sprite_texture_background_image = null;
+		}
+		
+		if (CID2._sprite_table_body_background_image != null)
+		{	
+			CID2._group.remove(CID2._sprite_table_body_background_image);
+			CID2._sprite_table_body_background_image.destroy();
+			CID2._sprite_table_body_background_image = null;
+		}
+		
+		if (CID2._sprite_notation_panel_background_color != null)
+		{	
+			CID2._group.remove(CID2._sprite_notation_panel_background_color);
+			CID2._sprite_notation_panel_background_color.destroy();
+			CID2._sprite_notation_panel_background_color = null;
+		}
+		
+		if (CID2._sprite_notation_panel_text_color != null)
+		{	
+			CID2._group.remove(CID2._sprite_notation_panel_text_color);
+			CID2._sprite_notation_panel_text_color.destroy();
+			CID2._sprite_notation_panel_text_color = null;
+		}
+		
+		if (CID2._sprite_client_topic_title_text_color != null)
+		{	
+			CID2._group.remove(CID2._sprite_client_topic_title_text_color);
+			CID2._sprite_client_topic_title_text_color.destroy();
+			CID2._sprite_client_topic_title_text_color = null;
+		}
+		
+		if (CID2._sprite_client_text_color != null)
+		{	
+			CID2._group.remove(CID2._sprite_client_text_color);
+			CID2._sprite_client_text_color.destroy();
+			CID2._sprite_client_text_color = null;
+		}
+		
+		if (CID2._sprite_title_bar_text_color != null)
+		{	
+			CID2._group.remove(CID2._sprite_title_bar_text_color);
+			CID2._sprite_title_bar_text_color.destroy();
+			CID2._sprite_title_bar_text_color = null;
+		}
+		
+		if (CID2._sprite_title_bar_background_color != null)
+		{	
+			CID2._group.remove(CID2._sprite_title_bar_background_color);
+			CID2._sprite_title_bar_background_color.destroy();
+			CID2._sprite_title_bar_background_color = null;
+		}
+		
+		if (CID2._text_title_bar_background_brightness != null)
+		{	
+			CID2._group.remove(CID2._text_title_bar_background_brightness);
+			CID2._text_title_bar_background_brightness.destroy();
+			CID2._text_title_bar_background_brightness = null;
+		}
+		
+		if (CID2._sprite_menu_bar_background_color != null)
+		{	
+			CID2._group.remove(CID2._sprite_menu_bar_background_color);
+			CID2._sprite_menu_bar_background_color.destroy();
+			CID2._sprite_menu_bar_background_color = null;
+		}
+		
+		if (CID2._text_menu_bar_background_brightness != null)
+		{	
+			CID2._group.remove(CID2._text_menu_bar_background_brightness);
+			CID2._text_menu_bar_background_brightness.destroy();
+			CID2._text_menu_bar_background_brightness = null;
+		}
+		
+		if (CID2._button_gradient_texture_background_minus != null)
+		{	
+			CID2._group.remove(CID2._button_gradient_texture_background_minus);
+			CID2._button_gradient_texture_background_minus.destroy();
+			CID2._button_gradient_texture_background_minus = null;
+		}
+		
+		if (CID2._button_gradient_texture_background_minus != null)
+		{	
+			CID2._group.remove(CID2._button_gradient_texture_background_plus);
+			CID2._button_gradient_texture_background_plus.destroy();
+			CID2._button_gradient_texture_background_minus = null;
+		}
+		
+		if (CID2._button_client_background_minus != null)
+		{	
+			CID2._group.remove(CID2._button_client_background_minus);
+			CID2._button_client_background_minus.destroy();
+			CID2._button_client_background_minus = null;
+		}
+		
+		if (CID2._button_client_background_plus != null)
+		{	
+			CID2._group.remove(CID2._button_client_background_plus);
+			CID2._button_client_background_plus.destroy();
+			CID2._button_client_background_plus = null;
+		}
+		
+		if (CID2._sprite_capturing_units != null)
+		{	
+			CID2._group.remove(CID2._sprite_capturing_units);
+			CID2._sprite_capturing_units.destroy();
+			CID2._sprite_capturing_units = null;
+		}
+		
+		if (CID2._sprite_chess_path_to_king_bg != null)
+		{	
+			CID2._group.remove(CID2._sprite_chess_path_to_king_bg);
+			CID2._sprite_chess_path_to_king_bg.destroy();
+			CID2._sprite_chess_path_to_king_bg = null;
+		}
+		
+		if (CID2._button_capturing_units_change_color_minus != null)
+		{	
+			CID2._group.remove(CID2._button_capturing_units_change_color_minus);
+			CID2._button_capturing_units_change_color_minus.destroy();
+			CID2._button_capturing_units_change_color_minus = null;
+		}
+		
+		if (CID2._button_capturing_units_change_color_plus != null)
+		{	
+			CID2._group.remove(CID2._button_capturing_units_change_color_plus);
+			CID2._button_capturing_units_change_color_plus.destroy();
+			CID2._button_capturing_units_change_color_plus = null;
+		}
+		
+		if (CID2._question_leaderboard_enabled != null)
+		{	
+			CID2._group.remove(CID2._question_leaderboard_enabled);
+			CID2._question_leaderboard_enabled.destroy();
+			CID2._question_leaderboard_enabled = null;
+		}
+		
+		if (CID2._question_gameboard_coordinates_enabled != null)
+		{	
+			CID2._group.remove(CID2._question_gameboard_coordinates_enabled);
+			CID2._question_gameboard_coordinates_enabled.destroy();
+			CID2._question_gameboard_coordinates_enabled = null;
+		}
+		
+		if (CID2._question_notation_panel_enabled != null)
+		{	
+			CID2._group.remove(CID2._question_notation_panel_enabled);
+			CID2._question_notation_panel_enabled.destroy();
+			CID2._question_notation_panel_enabled = null;
+		}
+		
+		if (CID2._question_background_alpha_enabled != null)
+		{	
+			CID2._group.remove(CID2._question_background_alpha_enabled);
+			CID2._question_background_alpha_enabled.destroy();
+			CID2._question_background_alpha_enabled = null;
+		}
+		
+		if (CID2._question_gameboard_border_enabled != null)
+		{	
+			CID2._group.remove(CID2._question_gameboard_border_enabled);
+			CID2._question_gameboard_border_enabled.destroy();
+			CID2._question_gameboard_border_enabled = null;
+		}
+		
+		if (CID2._question_notation_panel_40_percent_alpha_enabled != null)
+		{	
+			CID2._group.remove(CID2._question_notation_panel_40_percent_alpha_enabled);
+			CID2._question_notation_panel_40_percent_alpha_enabled.destroy();
+			CID2._question_notation_panel_40_percent_alpha_enabled = null;
+		}
+		
+		if (CID2._question_notation_panel_same_background_color != null)
+		{	
+			CID2._group.remove(CID2._question_notation_panel_same_background_color);
+			CID2._question_notation_panel_same_background_color.destroy();
+			CID2._question_notation_panel_same_background_color = null;
+		}
+		
+		if (CID2._question_notation_panel_background_color != null)
+		{	
+			CID2._group.remove(CID2._question_notation_panel_background_color);
+			CID2._question_notation_panel_background_color.destroy();
+			CID2._question_notation_panel_background_color = null;
+		}
+		
+		if (CID2._question_notation_panel_text_color_number != null)
+		{	
+			CID2._group.remove(CID2._question_notation_panel_text_color_number);
+			CID2._question_notation_panel_text_color_number.destroy();
+			CID2._question_notation_panel_text_color_number = null;
+		}
+		
+		if (CID2._question_client_topic_title_text_color_number != null)
+		{	
+			CID2._group.remove(CID2._question_client_topic_title_text_color_number);
+			CID2._question_client_topic_title_text_color_number.destroy();
+			CID2._question_client_topic_title_text_color_number = null;
+		}
+		
+		if (CID2._question_client_text_color_number != null)
+		{	
+			CID2._group.remove(CID2._question_client_text_color_number);
+			CID2._question_client_text_color_number.destroy();
+			CID2._question_client_text_color_number = null;
+		}
+		
+		if (CID2._question_title_bar_text_color_number != null)
+		{	
+			CID2._group.remove(CID2._question_title_bar_text_color_number);
+			CID2._question_title_bar_text_color_number.destroy();
+			CID2._question_title_bar_text_color_number = null;
+		}
+		
+		if (CID2._question_gradient_background_enabled != null)
+		{	
+			CID2._group.remove(CID2._question_gradient_background_enabled);
+			CID2._question_gradient_background_enabled.destroy();
+			CID2._question_gradient_background_enabled = null;
+		}
+		
+		if (CID2._question_client_background_brightness != null)
+		{	
+			CID2._group.remove(CID2._question_client_background_brightness);
+			CID2._question_client_background_brightness.destroy();
+			CID2._question_client_background_brightness = null;
+		}
+		
+		if (CID2._question_client_background_saturation != null)
+		{	
+			CID2._group.remove(CID2._question_client_background_saturation);
+			CID2._question_client_background_saturation.destroy();
+			CID2._question_client_background_saturation = null;
+		}
+		
+		if (CID2._question_table_body_background != null)
+		{	
+			CID2._group.remove(CID2._question_table_body_background);
+			CID2._question_table_body_background.destroy();
+			CID2._question_table_body_background = null;
+		}
+		
+		if (CID2._question_table_body_background_brightness != null)
+		{	
+			CID2._group.remove(CID2._question_table_body_background_brightness);
+			CID2._question_table_body_background_brightness.destroy();
+			CID2._question_table_body_background_brightness = null;
+		}
+		
+		if (CID2._question_table_body_background_saturation != null)
+		{	
+			CID2._group.remove(CID2._question_table_body_background_saturation);
+			CID2._question_table_body_background_saturation.destroy();
+			CID2._question_table_body_background_saturation = null;
+		}
+		
+		if (CID2._question_goto_title != null)
+		{	
+			CID2._group.remove(CID2._question_goto_title);
+			CID2._question_goto_title.destroy();
+			CID2._question_goto_title = null;
+		}
+		
+		if (CID2._question_start_game_request != null)
+		{	
+			CID2._group.remove(CID2._question_start_game_request);
+			CID2._question_start_game_request.destroy();
+			CID2._question_start_game_request = null;
+		}
+		
+		if (CID2._question_start_game_offline_confirmation != null)
+		{	
+			CID2._group.remove(CID2._question_start_game_offline_confirmation);
+			CID2._question_start_game_offline_confirmation.destroy();
+			CID2._question_start_game_offline_confirmation = null;
+		}
+		
+		if (CID2._question_accept_start_game_request != null)
+		{	
+			CID2._group.remove(CID2._question_accept_start_game_request);
+			CID2._question_accept_start_game_request.destroy();
+			CID2._question_accept_start_game_request = null;
+		}
+		
+		if (CID2._question_to_lobby_waiting_room_confirmation != null)
+		{	
+			CID2._group.remove(CID2._question_to_lobby_waiting_room_confirmation);
+			CID2._question_to_lobby_waiting_room_confirmation.destroy();
+			CID2._question_to_lobby_waiting_room_confirmation = null;
+		}
+		
+		if (CID2._question_to_game_room_from_waiting_room != null)
+		{	
+			CID2._group.remove(CID2._question_to_game_room_from_waiting_room);
+			CID2._question_to_game_room_from_waiting_room.destroy();
+			CID2._question_to_game_room_from_waiting_room = null;
+		}
+		
+		if (CID2._question_to_lobby_game_room_confirmation != null)
+		{	
+			CID2._group.remove(CID2._question_to_lobby_game_room_confirmation);
+			CID2._question_to_lobby_game_room_confirmation.destroy();
+			CID2._question_to_lobby_game_room_confirmation = null;
+		}
+		
+		if (CID2._question_to_title_from_game_room != null)
+		{	
+			CID2._group.remove(CID2._question_to_title_from_game_room);
+			CID2._question_to_title_from_game_room.destroy();
+			CID2._question_to_title_from_game_room = null;
+		}
+		
+		if (CID2._question_chat_turn_off_for_lobby != null)
+		{	
+			CID2._group.remove(CID2._question_chat_turn_off_for_lobby);
+			CID2._question_chat_turn_off_for_lobby.destroy();
+			CID2._question_chat_turn_off_for_lobby = null;
+		}
+		
+		if (CID2._question_move_timer_enabled != null)
+		{	
+			CID2._group.remove(CID2._question_move_timer_enabled);
+			CID2._question_move_timer_enabled.destroy();
+			CID2._question_move_timer_enabled = null;
+		}
+		
+		if (CID2._question_move_total_enabled != null)
+		{	
+			CID2._group.remove(CID2._question_move_total_enabled);
+			CID2._question_move_total_enabled.destroy();
+			CID2._question_move_total_enabled = null;
+		}
+		
+		if (CID2._question_capturing_units_enabled != null)
+		{	
+			CID2._group.remove(CID2._question_capturing_units_enabled);
+			CID2._question_capturing_units_enabled.destroy();
+			CID2._question_capturing_units_enabled = null;
+		}
+		
+		if (CID2._question_button_colors != null)
+		{	
+			CID2._group.remove(CID2._question_button_colors);
+			CID2._question_button_colors.destroy();
+			CID2._question_button_colors = null;
+		}
+		
+		if (CID2._question_music_enabled != null)
+		{	
+			CID2._group.remove(CID2._question_music_enabled);
+			CID2._question_music_enabled.destroy();
+			CID2._question_music_enabled = null;
+		}
+		
+		if (CID2._question_title_bar_background_number != null)
+		{	
+			CID2._group.remove(CID2._question_title_bar_background_number);
+			CID2._question_title_bar_background_number.destroy();
+			CID2._question_title_bar_background_number = null;
+		}
+		
+		if (CID2._question_title_bar_background_brightness != null)
+		{	
+			CID2._group.remove(CID2._question_title_bar_background_brightness);
+			CID2._question_title_bar_background_brightness.destroy();
+			CID2._question_title_bar_background_brightness = null;
+		}
+		
+		if (CID2._question_menu_bar_background_number != null)
+		{	
+			CID2._group.remove(CID2._question_menu_bar_background_number);
+			CID2._question_menu_bar_background_number.destroy();
+			CID2._question_menu_bar_background_number = null;
+		}
+		
+		if (CID2._question_menu_bar_background_brightness != null)
+		{	
+			CID2._group.remove(CID2._question_menu_bar_background_brightness);
+			CID2._question_menu_bar_background_brightness.destroy();
+			CID2._question_menu_bar_background_brightness = null;
+		}
+		
+		if (CID2._question_sound_enabled != null)
+		{	
+			CID2._group.remove(CID2._question_sound_enabled);
+			CID2._question_sound_enabled.destroy();
+			CID2._question_sound_enabled = null;
+		}
+		
+		if (CID2._text_empty != null)
+		{	
+			CID2._group.remove(CID2._text_empty);
+			CID2._text_empty.destroy();
+			CID2._text_empty = null;
+		}
+		
+		if (CID2._question_pager_enabled != null)
+		{	
+			CID2._group.remove(CID2._question_pager_enabled);
+			CID2._question_pager_enabled.destroy();
+			CID2._question_pager_enabled = null;
+		}
+		
+		if (CID2._button_leaderboard_enabled != null)
+		{	
+			CID2._group.remove(CID2._button_leaderboard_enabled);
+			CID2._button_leaderboard_enabled.destroy();
+			CID2._button_leaderboard_enabled = null;
+		}
+		
+		if (CID2._question_button_colors_output != null)
+		{	
+			CID2._group.remove(CID2._question_button_colors_output);
+			CID2._question_button_colors_output.destroy();
+			CID2._question_button_colors_output = null;
+		}
+		
+		if (CID2._house_feature_question != null)
+		{	
+			CID2._group.remove(CID2._house_feature_question);
+			CID2._house_feature_question.destroy();
+			CID2._house_feature_question = null;
+		}
+		
+		if (CID2._button_house_feature_enabled != null)
+		{	
+			CID2._group.remove(CID2._button_house_feature_enabled);
+			CID2._button_house_feature_enabled.destroy();
+			CID2._button_house_feature_enabled = null;
+		}
+		
+		if (CID2._button_goto_title_enabled != null)
+		{	
+			CID2._group.remove(CID2._button_goto_title_enabled);
+			CID2._button_goto_title_enabled.destroy();
+			CID2._button_goto_title_enabled = null;
+		}
+		
+		if (CID2._button_gameboard_border_minus != null)
+		{	
+			CID2._group.remove(CID2._button_gameboard_border_minus);
+			CID2._button_gameboard_border_minus.destroy();
+			CID2._button_gameboard_border_minus = null;
+		}
+		
+		if (CID2._button_gameboard_border_plus != null)
+		{	
+			CID2._group.remove(CID2._button_gameboard_border_plus);
+			CID2._button_gameboard_border_plus.destroy();
+			CID2._button_gameboard_border_plus = null;
+		}
+		
+		if (CID2._button_gameboard_border_enabled != null)
+		{	
+			CID2._group.remove(CID2._button_gameboard_border_enabled);
+			CID2._button_gameboard_border_enabled.destroy();
+			CID2._button_gameboard_border_enabled = null;
+		}
+		
+		if (CID2._button_gameboard_coordinates_enabled != null)
+		{	
+			CID2._group.remove(CID2._button_gameboard_coordinates_enabled);
+			CID2._button_gameboard_coordinates_enabled.destroy();
+			CID2._button_gameboard_coordinates_enabled = null;
+		}
+		
+		if (CID2._button_send_automatic_start_game_request != null)
+		{	
+			CID2._group.remove(CID2._button_send_automatic_start_game_request);
+			CID2._button_send_automatic_start_game_request.destroy();
+			CID2._button_send_automatic_start_game_request = null;
+		}
+		
+		if (CID2._button_start_game_offline_confirmation != null)
+		{	
+			CID2._group.remove(CID2._button_start_game_offline_confirmation);
+			CID2._button_start_game_offline_confirmation.destroy();
+			CID2._button_start_game_offline_confirmation = null;
+		}
+		
+		if (CID2._button_accept_automatic_start_game_request != null)
+		{	
+			CID2._group.remove(CID2._button_accept_automatic_start_game_request);
+			CID2._button_accept_automatic_start_game_request.destroy();
+			CID2._button_accept_automatic_start_game_request = null;
+		}
+		
+		if (CID2._button_to_lobby_waiting_room_confirmation != null)
+		{	
+			CID2._group.remove(CID2._button_to_lobby_waiting_room_confirmation);
+			CID2._button_to_lobby_waiting_room_confirmation.destroy();
+			CID2._button_to_lobby_waiting_room_confirmation = null;
+		}
+		
+		if (CID2._button_to_lobby_game_room_confirmation != null)
+		{	
+			CID2._group.remove(CID2._button_to_lobby_game_room_confirmation);
+			CID2._button_to_lobby_game_room_confirmation.destroy();
+			CID2._button_to_lobby_game_room_confirmation = null;
+		}
+		
+		if (CID2._button_to_game_room_from_waiting_room != null)
+		{	
+			CID2._group.remove(CID2._button_to_game_room_from_waiting_room);
+			CID2._button_to_game_room_from_waiting_room.destroy();
+			CID2._button_to_game_room_from_waiting_room = null;
+		}
+		
+		if (CID2._button_to_title_from_game_room != null)
+		{	
+			CID2._group.remove(CID2._button_to_title_from_game_room);
+			CID2._button_to_title_from_game_room.destroy();
+			CID2._button_to_title_from_game_room = null;
+		}
+		
+		if (CID2._button_chat_turn_off_for_lobby != null)
+		{	
+			CID2._group.remove(CID2._button_chat_turn_off_for_lobby);
+			CID2._button_chat_turn_off_for_lobby.destroy();
+			CID2._button_chat_turn_off_for_lobby = null;
+		}
+		
+		if (CID2._button_chat_turn_off_when_in_room != null)
+		{	
+			CID2._group.remove(CID2._button_chat_turn_off_when_in_room);
+			CID2._button_chat_turn_off_when_in_room.destroy();
+			CID2._button_chat_turn_off_when_in_room = null;
+		}
+		
+		if (CID2._button_move_timer_enabled != null)
+		{	
+			CID2._group.remove(CID2._button_move_timer_enabled);
+			CID2._button_move_timer_enabled.destroy();
+			CID2._button_move_timer_enabled = null;
+		}
+		
+		if (CID2._button_move_total_enabled != null)
+		{	
+			CID2._group.remove(CID2._button_move_total_enabled);
+			CID2._button_move_total_enabled.destroy();
+			CID2._button_move_total_enabled = null;
+		}
+		
+		if (CID2._button_notation_panel_enabled != null)
+		{	
+			CID2._group.remove(CID2._button_notation_panel_enabled);
+			CID2._button_notation_panel_enabled.destroy();
+			CID2._button_notation_panel_enabled = null;
+		}
+		
+		if (CID2._button_notation_panel_40_percent_alpha_enabled != null)
+		{	
+			CID2._group.remove(CID2._button_notation_panel_40_percent_alpha_enabled);
+			CID2._button_notation_panel_40_percent_alpha_enabled.destroy();
+			CID2._button_notation_panel_40_percent_alpha_enabled = null;
+		}
+		
+		if (CID2._button_notation_panel_same_background_color_enabled != null)
+		{	
+			CID2._group.remove(CID2._button_notation_panel_same_background_color_enabled);
+			CID2._button_notation_panel_same_background_color_enabled.destroy();
+			CID2._button_notation_panel_same_background_color_enabled = null;
+		}
+		
+		if (CID2._button_notation_panel_background_color_enabled != null)
+		{	
+			CID2._group.remove(CID2._button_notation_panel_background_color_enabled);
+			CID2._button_notation_panel_background_color_enabled.destroy();
+			CID2._button_notation_panel_background_color_enabled = null;
+		}
+		
+		if (CID2._button_notation_panel_background_color_number_minus != null)
+		{	
+			CID2._group.remove(CID2._button_notation_panel_background_color_number_minus);
+			CID2._button_notation_panel_background_color_number_minus.destroy();
+			CID2._button_notation_panel_background_color_number_minus = null;
+		}
+		
+		if (CID2._button_notation_panel_background_color_number_plus != null)
+		{	
+			CID2._group.remove(CID2._button_notation_panel_background_color_number_plus);
+			CID2._button_notation_panel_background_color_number_plus.destroy();
+			CID2._button_notation_panel_background_color_number_plus = null;
+		}
+		
+		if (CID2._button_notation_panel_text_color_number_minus != null)
+		{	
+			CID2._group.remove(CID2._button_notation_panel_text_color_number_minus);
+			CID2._button_notation_panel_text_color_number_minus.destroy();
+			CID2._button_notation_panel_text_color_number_minus = null;
+		}
+		
+		if (CID2._button_notation_panel_text_color_number_plus != null)
+		{	
+			CID2._group.remove(CID2._button_notation_panel_text_color_number_plus);
+			CID2._button_notation_panel_text_color_number_plus.destroy();
+			CID2._button_notation_panel_text_color_number_plus = null;
+		}
+		
+		if (CID2._button_client_topic_title_text_color_number_minus != null)
+		{	
+			CID2._group.remove(CID2._button_client_topic_title_text_color_number_minus);
+			CID2._button_client_topic_title_text_color_number_minus.destroy();
+			CID2._button_client_topic_title_text_color_number_minus = null;
+		}
+		
+		if (CID2._button_client_topic_title_text_color_number_plus != null)
+		{	
+			CID2._group.remove(CID2._button_client_topic_title_text_color_number_plus);
+			CID2._button_client_topic_title_text_color_number_plus.destroy();
+			CID2._button_client_topic_title_text_color_number_plus = null;
+		}
+		
+		if (CID2._button_client_text_color_number_minus != null)
+		{	
+			CID2._group.remove(CID2._button_client_text_color_number_minus);
+			CID2._button_client_text_color_number_minus.destroy();
+			CID2._button_client_text_color_number_minus = null;
+		}
+		
+		if (CID2._button_client_text_color_number_plus != null)
+		{	
+			CID2._group.remove(CID2._button_client_text_color_number_plus);
+			CID2._button_client_text_color_number_plus.destroy();
+			CID2._button_client_text_color_number_plus = null;
+		}
+		
+		if (CID2._button_title_bar_text_color_number_minus != null)
+		{	
+			CID2._group.remove(CID2._button_title_bar_text_color_number_minus);
+			CID2._button_title_bar_text_color_number_minus.destroy();
+			CID2._button_title_bar_text_color_number_minus = null;
+		}
+		
+		if (CID2._button_title_bar_text_color_number_plus != null)
+		{	
+			CID2._group.remove(CID2._button_title_bar_text_color_number_plus);
+			CID2._button_title_bar_text_color_number_plus.destroy();
+			CID2._button_title_bar_text_color_number_plus = null;
+		}
+		
+		if (CID2._button_gameboard_even_units_show_enabled != null)
+		{	
+			CID2._group.remove(CID2._button_gameboard_even_units_show_enabled);
+			CID2._button_gameboard_even_units_show_enabled.destroy();
+			CID2._button_gameboard_even_units_show_enabled = null;
+		}
+		
+		if (CID2._button_gradient_texture_background_enabled != null)
+		{	
+			CID2._group.remove(CID2._button_gradient_texture_background_enabled);
+			CID2._button_gradient_texture_background_enabled.destroy();
+			CID2._button_gradient_texture_background_enabled = null;
+		}
+		
+		if (CID2._button_client_background_enabled != null)
+		{	
+			CID2._group.remove(CID2._button_client_background_enabled);
+			CID2._button_client_background_enabled.destroy();
+			CID2._button_client_background_enabled = null;
+		}
+		
+		if (CID2._button_client_texture_background_enabled != null)
+		{	
+			CID2._group.remove(CID2._button_client_texture_background_enabled);
+			CID2._button_client_texture_background_enabled.destroy();
+			CID2._button_client_texture_background_enabled = null;
+		}
+		
+		if (CID2._button_client_texture_background_plus != null)
+		{	
+			CID2._group.remove(CID2._button_client_texture_background_plus);
+			CID2._button_client_texture_background_plus.destroy();
+			CID2._button_client_texture_background_plus = null;
+		}
+		
+		if (CID2._button_client_texture_background_minus != null)
+		{	
+			CID2._group.remove(CID2._button_client_texture_background_minus);
+			CID2._button_client_texture_background_minus.destroy();
+			CID2._button_client_texture_background_minus = null;
+		}
+		
+		if (CID2._button_background_alpha_enabled != null)
+		{	
+			CID2._group.remove(CID2._button_background_alpha_enabled);
+			CID2._button_background_alpha_enabled.destroy();
+			CID2._button_background_alpha_enabled = null;
+		}
+		
+		if (CID2._button_capturing_units != null)
+		{	
+			CID2._group.remove(CID2._button_capturing_units);
+			CID2._button_capturing_units.destroy();
+			CID2._button_capturing_units = null;
+		}
+		
+		if (CID2._button_client_background_saturation_minus != null)
+		{	
+			CID2._group.remove(CID2._button_client_background_saturation_minus);
+			CID2._button_client_background_saturation_minus.destroy();
+			CID2._button_client_background_saturation_minus = null;
+		}
+		
+		if (CID2._button_client_background_saturation_plus != null)
+		{	
+			CID2._group.remove(CID2._button_client_background_saturation_plus);
+			CID2._button_client_background_saturation_plus.destroy();
+			CID2._button_client_background_saturation_plus = null;
+		}
+		
+		if (CID2._button_client_background_brightness_minus != null)
+		{	
+			CID2._group.remove(CID2._button_client_background_brightness_minus);
+			CID2._button_client_background_brightness_minus.destroy();
+		}
+		
+		if (CID2._button_client_background_brightness_plus != null)
+		{	
+			CID2._group.remove(CID2._button_client_background_brightness_plus);
+			CID2._button_client_background_brightness_plus.destroy();
+			CID2._button_client_background_brightness_plus = null;
+		}
+		
+		if (CID2._button_table_body_background_number_minus != null)
+		{	
+			CID2._group.remove(CID2._button_table_body_background_number_minus);
+			CID2._button_table_body_background_number_minus.destroy();
+			CID2._button_table_body_background_number_minus = null;
+		}
+		
+		if (CID2._button_table_body_background_number_plus != null)
+		{	
+			CID2._group.remove(CID2._button_table_body_background_number_plus);
+			CID2._button_table_body_background_number_plus.destroy();
+			CID2._button_table_body_background_number_plus = null;
+		}
+		
+		if (CID2._button_table_body_background_brightness_number_minus != null)
+		{	
+			CID2._group.remove(CID2._button_table_body_background_brightness_number_minus);
+			CID2._button_table_body_background_brightness_number_minus.destroy();
+			CID2._button_table_body_background_brightness_number_minus = null;
+		}
+		
+		if (CID2._button_table_body_background_brightness_number_plus != null)
+		{	
+			CID2._group.remove(CID2._button_table_body_background_brightness_number_plus);
+			CID2._button_table_body_background_brightness_number_plus.destroy();
+			CID2._button_table_body_background_brightness_number_plus = null;
+		}
+		
+		if (CID2._button_table_body_background_saturation_number_minus != null)
+		{	
+			CID2._group.remove(CID2._button_table_body_background_saturation_number_minus);
+			CID2._button_table_body_background_saturation_number_minus.destroy();
+			CID2._button_table_body_background_saturation_number_minus = null;
+		}
+		
+		if (CID2._button_table_body_background_saturation_number_plus != null)
+		{	
+			CID2._group.remove(CID2._button_table_body_background_saturation_number_plus);
+			CID2._button_table_body_background_saturation_number_plus.destroy();
+			CID2._button_table_body_background_saturation_number_plus = null;
+		}
+		
+		if (CID2._button_color != null)
+		{	
+			CID2._group.remove(CID2._button_color);
+			CID2._button_color.destroy();
+			CID2._button_color = null;
+		}
+		
+		if (CID2._button_border_color != null)
+		{	
+			CID2._group.remove(CID2._button_border_color);
+			CID2._button_border_color.destroy();
+			CID2._button_border_color = null;
+		}
+		
+		if (CID2._button_text_color != null)
+		{	
+			CID2._group.remove(CID2._button_text_color);
+			CID2._button_text_color.destroy();
+			CID2._button_text_color = null;
+		}
+		
+		if (CID2._button_color_output != null)
+		{	
+			CID2._group.remove(CID2._button_color_output);
+			CID2._button_color_output.destroy();
+			CID2._button_color_output = null;
+		}
+		
+		if (CID2._button_music_enabled != null)
+		{	
+			CID2._group.remove(CID2._button_music_enabled);
+			CID2._button_music_enabled.destroy();
+			CID2._button_music_enabled = null;
+		}
+		
+		if (CID2._button_sound_enabled != null)
+		{	
+			CID2._group.remove(CID2._button_sound_enabled);
+			CID2._button_sound_enabled.destroy();
+			CID2._button_sound_enabled = null;
+		}
+		
+		if (CID2._button_title_bar_background_number_minus != null)
+		{	
+			CID2._group.remove(CID2._button_title_bar_background_number_minus);
+			CID2._button_title_bar_background_number_minus.destroy();
+			CID2._button_title_bar_background_number_minus = null;
+		}
+		
+		if (CID2._button_title_bar_background_number_plus != null)
+		{	
+			CID2._group.remove(CID2._button_title_bar_background_number_plus);
+			CID2._button_title_bar_background_number_plus.destroy();
+			CID2._button_title_bar_background_number_plus = null;
+		}
+		
+		if (CID2._button_title_bar_background_brightness_minus != null)
+		{	
+			CID2._group.remove(CID2._button_title_bar_background_brightness_minus);
+			CID2._button_title_bar_background_brightness_minus.destroy();
+			CID2._button_title_bar_background_brightness_minus = null;
+		}
+		
+		if (CID2._button_title_bar_background_brightness_plus != null)
+		{	
+			CID2._group.remove(CID2._button_title_bar_background_brightness_plus);
+			CID2._button_title_bar_background_brightness_plus.destroy();
+			CID2._button_title_bar_background_brightness_plus = null;
+		}
+		
+		if (CID2._button_menu_bar_background_number_minus != null)
+		{	
+			CID2._group.remove(CID2._button_menu_bar_background_number_minus);
+			CID2._button_menu_bar_background_number_minus.destroy();
+			CID2._button_menu_bar_background_number_minus = null;
+		}
+		
+		if (CID2._button_menu_bar_background_number_plus != null)
+		{	
+			CID2._group.remove(CID2._button_menu_bar_background_number_plus);
+			CID2._button_menu_bar_background_number_plus.destroy();
+			CID2._button_menu_bar_background_number_plus = null;
+		}
+		
+		if (CID2._button_menu_bar_background_brightness_minus != null)
+		{	
+			CID2._group.remove(CID2._button_menu_bar_background_brightness_minus);
+			CID2._button_menu_bar_background_brightness_minus.destroy();
+			CID2._button_menu_bar_background_brightness_minus = null;
+		}
+		
+		if (CID2._button_menu_bar_background_brightness_plus != null)
+		{	
+			CID2._group.remove(CID2._button_menu_bar_background_brightness_plus);
+			CID2._button_menu_bar_background_brightness_plus.destroy();
+			CID2._button_menu_bar_background_brightness_plus = null;
+		}
+		
+		if (CID2._button_pager_enabled != null)
+		{	
+			CID2._group.remove(CID2._button_pager_enabled);
+			CID2._button_pager_enabled.destroy();
+			CID2._button_pager_enabled = null;
+		}
+		
+		super.destroy();
+	}
+	
+	override public function update(elapsed:Float):Void
+	{
+		if (FlxG.keys.pressed.ANY
+		||	FlxG.mouse.justPressed == true
+		||	FlxG.mouse.justPressedMiddle == true
+		||	FlxG.mouse.justPressedRight == true
+		|| _do_once == true)
+		{
+			_do_once = false;
+			user_input();
+		}
 		
 		super.update(elapsed);		
 	}
 	
-}//
+}//

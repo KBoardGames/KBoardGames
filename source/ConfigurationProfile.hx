@@ -39,6 +39,11 @@ class ConfigurationProfile extends FlxGroup
 	 */
 	private var _ticks:Int = 0;
 	
+	/******************************
+	 * call update only once then call it after user input.
+	 */
+	private var _do_once:Bool = true;
+	
 	private var __action_keyboard:ActionKeyboard;	
 	private var __configurations_output:ConfigurationOutput;
 	private var __e:ConfigurationProfileEvents;
@@ -428,17 +433,7 @@ class ConfigurationProfile extends FlxGroup
 		}
 	}
 	
-	override public function destroy():Void
-	{
-		if (CID3._text_empty != null)
-		{
-			remove(CID3._text_empty);
-			CID3._text_empty.destroy();
-			CID3._text_empty = null; // null is needed here.
-		}
-	}
-	
-	override public function update(elapsed:Float):Void
+	private function user_input():Void
 	{
 		for (i in 0... CID3._user_account_row)
 		{
@@ -855,9 +850,123 @@ class ConfigurationProfile extends FlxGroup
 					#end
 				}
 			}
+		}		
+
+	}	
+	
+	override public function destroy():Void
+	{
+		if (CID3._button_p1 != null)
+		{
+			CID3._group.remove(CID3._button_p1);
+			CID3._button_p1.destroy();
+			CID3._button_p1 = null;
 		}
 		
-		super.update(elapsed);		
+		if (CID3._button_p2 != null)
+		{	
+			CID3._group.remove(CID3._button_p2);
+			CID3._button_p2.destroy();
+			CID3._button_p2 = null;
+		}
 		
+		if (CID3._profile_general_instructions != null)
+		{	
+			CID3._group.remove(CID3._profile_general_instructions);
+			CID3._profile_general_instructions.destroy();
+			CID3._profile_general_instructions = null;
+		}
+		
+		if (CID3._text_username != null)
+		{			
+			CID3._group.remove(CID3._text_username);
+			CID3._text_username.destroy();
+			CID3._text_username = null;
+		}
+		
+		if (CID3._username_input != null)
+		{		
+			CID3._group.remove(CID3._username_input);
+			CID3._username_input.destroy();
+			CID3._username_input = null;
+		}
+		
+		if (CID3._text_password != null)
+		{
+			CID3._group.remove(CID3._text_password);
+			CID3._text_password.destroy();
+			CID3._text_password = null;
+		}
+		
+		if (CID3._password_input != null)
+		{
+			CID3._group.remove(CID3._password_input);
+			CID3._password_input.destroy();
+			CID3._password_input = null;
+		}
+		
+		if (CID3._text_email_address != null)
+		{
+			CID3._group.remove(CID3._text_email_address);
+			CID3._text_email_address.destroy();
+			CID3._text_email_address = null;
+		}
+		
+		if (CID3._email_address_input != null)
+		{
+			CID3._group.remove(CID3._email_address_input);
+			CID3._email_address_input.destroy();
+			CID3._email_address_input = null;
+		}
+		
+		if (CID3._text_empty != null)
+		{
+			CID3._group.remove(CID3._text_empty);
+			CID3._text_empty.destroy();
+			CID3._text_empty = null;
+		}
+		
+		if (CID3._question_email_address_validation_code_enabled != null)
+		{
+			CID3._group.remove(CID3._question_email_address_validation_code_enabled);
+			CID3._question_email_address_validation_code_enabled.destroy();
+			CID3._question_email_address_validation_code_enabled = null;
+		}
+		
+		if (CID3._button_email_address_validation_code_enabled != null)
+		{
+			CID3._group.remove(CID3._button_email_address_validation_code_enabled);
+			CID3._button_email_address_validation_code_enabled.destroy();
+			CID3._button_email_address_validation_code_enabled = null;
+		}
+		
+		if (CID3._sprite_user_account != null)
+		{
+			CID3._group.remove(CID3._sprite_user_account);
+			CID3._sprite_user_account.destroy();
+			CID3._sprite_user_account = null;
+		}
+		
+		if (CID3._default_flag_background != null)
+		{
+			CID3._group.remove(CID3._default_flag_background);
+			CID3._default_flag_background.destroy();
+			CID3._default_flag_background = null;
+		}
+		
+		if (CID3._group != null)
+		{	
+			CID3._group.remove(CID3._group);
+			CID3._group.destroy();
+			CID3._group = null;
+		}
+		
+	}	
+	
+
+	override public function update(elapsed:Float):Void
+	{
+		user_input();
+		super.update(elapsed);		
 	}
 }//

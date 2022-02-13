@@ -16,7 +16,10 @@ package;
  * @author kboardgames.com
  */
 class NewAccount extends FlxGroup
-{	
+{
+	public static var __title_bar:TitleBar;
+	public static var __menu_bar:MenuBar; 
+	
 	private var _button_b1:ButtonToggleFlxState;
 	private var _button_b2:ButtonToggleFlxState;
 	private var _button_b3:ButtonToggleFlxState;
@@ -28,13 +31,23 @@ class NewAccount extends FlxGroup
 		FlxG.autoPause = false;
 		RegTypedef._dataStatistics._chess_elo_rating = 800;
 		
-		if (Reg.__title_bar2 != null) remove(Reg.__title_bar2);
-		Reg.__title_bar2 = new TitleBar("New Account");
-		add(Reg.__title_bar2);
+		if (__title_bar != null)
+		{
+			remove(__title_bar);
+			__title_bar.destroy();
+		}
 		
-		if (Reg.__menu_bar2 != null) remove(Reg.__menu_bar2);
-		Reg.__menu_bar2 = new MenuBar();
-		add(Reg.__menu_bar2);		
+		__title_bar = new TitleBar("New Account");
+		add(__title_bar);
+		
+		if (__menu_bar != null)
+		{
+			remove(__menu_bar);
+			__menu_bar.destroy();
+		}
+		
+		__menu_bar = new MenuBar();
+		add(__menu_bar);		
 		
 		//#############################
 		

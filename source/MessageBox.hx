@@ -114,7 +114,7 @@ class MessageBox extends FlxGroup
 		
 		ID = _id = id;
 		
-		SceneGameRoom.messageBoxMessageOrder();
+		//SceneGameRoom.messageBoxMessageOrder();
 		_ticks = 0;
 		
 		_displayMessage = displayMessage;
@@ -244,7 +244,8 @@ class MessageBox extends FlxGroup
 		
 	private function messageWasRead():Void
 	{
-		if (Reg._messageId == _id)
+		if (Reg._messageId == _id
+		&&	GameMessage._ticks_close == false)
 		{
 			Reg._yesNoKeyPressValueAtMessage = 1; // ok key was pressed.
 			
@@ -315,7 +316,8 @@ class MessageBox extends FlxGroup
 
 	public function cancelWasPressed():Void
 	{	
-		if (Reg._messageId == _id)
+		if (Reg._messageId == _id
+		&&	GameMessage._ticks_close == false)
 		{
 			Reg._yesNoKeyPressValueAtMessage = 2; // cancel key was pressed.
 			//Reg._buttonCodeValues = "";
@@ -331,7 +333,8 @@ class MessageBox extends FlxGroup
 	
 	private function buttonX():Void
 	{	
-		if (Reg._messageId == _id)
+		if (Reg._messageId == _id
+		&&	GameMessage._ticks_close == false)
 		{
 			if (_useYesNoButtons == true) Reg._yesNoKeyPressValueAtMessage = 3;
 			else Reg._yesNoKeyPressValueAtMessage = 1;
@@ -431,11 +434,11 @@ class MessageBox extends FlxGroup
 	
 			
 			// make lobby active after kick/ban message box is mouse clicked.
-			if (Reg._buttonCodeValues == "l1020")
+			/*if (Reg._buttonCodeValues == "l1020")
 			{
 				Reg._buttonCodeValues = "";
 				RegTriggers._lobby = true;
-			}
+			}*/
 			
 			hideButtons();	
 			

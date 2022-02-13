@@ -93,12 +93,7 @@ class GameChatter extends FlxGroup
 	 * used to grab buttons from the game room class.
 	 */
 	private var __scene_game_room:SceneGameRoom;	
-	
-	/******************************
-	 * the menu bar at the button of the scene.
-	 */
-	private	var __menu_bar:MenuBar;
-	
+		
 	/******************************
 	 * lobby
 	 */
@@ -128,6 +123,11 @@ class GameChatter extends FlxGroup
 	 * needed to move the cursor of the inputText because a var can get the value of a caret but cannot for some reason set the value to the caret index.
 	 */
 	private var _caretIndex:Int = 0;
+	
+	/******************************
+	 * this text is needed to fix a bug. it shows a scroll bar by feeding new lines to the FlxScrollableArea. this scrollbar move up until its bottom edge reaches the bottom of the FlxScrollableArea.
+	 */
+	private	var _text:FlxText;
 	
 	public function new(id:Int = 0, scene_game_room:SceneGameRoom = null) 
 	{
@@ -174,7 +174,7 @@ class GameChatter extends FlxGroup
 		_group.add(_box);
 
 		// this text is needed to fix a bug. it shows a scroll bar by feeding new lines to the FlxScrollableArea. this scrollbar move up until its bottom edge reaches the bottom of the FlxScrollableArea.
-		var _text = new FlxText(1045, FlxG.height - Reg._offsetScreenY, 0, "");
+		_text = new FlxText(1045, FlxG.height - Reg._offsetScreenY, 0, "");
 		_text.setFormat(null, 17, RegCustomColors.client_text_color(), LEFT);
 		_text.offset.set(0, 10);
 		_text.font = Reg._fontDefault;
@@ -377,7 +377,7 @@ class GameChatter extends FlxGroup
 				chat_input_from_button();
 				text = "";
 				
-				//_input_chat.caretIndex = _input_chat.text.length; // this fixes a bug where the caret does not reset back to 0 when the enter key is pressed. p1 side is fine. p2 and computer is no longer buggy.
+				_input_chat.caretIndex = _input_chat.text.length; // this fixes a bug where the caret does not reset back to 0 when the enter key is pressed. p1 side is fine. p2 and computer is no longer buggy.
 				
 				#if mobile
 					RegTriggers._keyboard_close = true;
@@ -745,6 +745,7 @@ class GameChatter extends FlxGroup
 		
 		if (_chatterOpenCloseButton != null)
 		{
+			// TODO verify... is this block needed?
 			if (_chatterOpenCloseButton.label != null)
 			{
 				remove(_chatterOpenCloseButton.label);
@@ -755,6 +756,75 @@ class GameChatter extends FlxGroup
 			remove(_chatterOpenCloseButton);
 			_chatterOpenCloseButton.destroy();
 			_chatterOpenCloseButton = null;
+		}
+		
+		if (_title_background != null)
+		{
+			_groupChatterScroller.remove(_title_background);
+			_group.remove(_title_background);
+			remove(_title_background);
+			_title_background.destroy();
+			_title_background = null;
+		}
+		
+		if (_chatInputButton != null)
+		{
+			_groupChatterScroller.remove(_chatInputButton);
+			_group.remove(_chatInputButton);
+			remove(_chatInputButton);
+			_chatInputButton.destroy();
+			_chatInputButton = null;
+		}
+		
+		if (_sprite_input_chat_border != null)
+		{
+			_groupChatterScroller.remove(_sprite_input_chat_border);
+			_group.remove(_sprite_input_chat_border);
+			remove(_sprite_input_chat_border);
+			_sprite_input_chat_border.destroy();
+			_sprite_input_chat_border = null;
+		}
+		
+		if (_sprite_input_chat_background != null)
+		{
+			_groupChatterScroller.remove(_sprite_input_chat_background);
+			_group.remove(_sprite_input_chat_background);
+			remove(_sprite_input_chat_background);
+			_sprite_input_chat_background.destroy();
+			_sprite_input_chat_background = null;
+		}			 
+		
+		if (_input_chat != null)
+		{
+			_groupChatterScroller.remove(_input_chat);
+			_group.remove(_input_chat);
+			remove(_input_chat);
+			_input_chat.destroy();
+			_input_chat = null;
+		}		
+		
+		if (_group_text != null)
+		{
+			_group.remove(_group_text);
+			remove(_group_text);
+			_group_text.destroy();
+			_group_text = null;
+		}		
+		
+		if (_box != null)
+		{
+			_group.remove(_box);
+			remove(_box);
+			_box.destroy();
+			_box = null;
+		}
+		
+		if (_text != null)
+		{
+			_group.remove(_text);
+			remove(_text);
+			_text.destroy();
+			_text = null;
 		}
 		
 		super.destroy();
@@ -795,10 +865,12 @@ class GameChatter extends FlxGroup
 		//canTypeInChatter();
 		
 		// chatter input field.
-		/*if (_input_chat.hasFocus == true) 
+		if (_input_chat.hasFocus == true) 
 		{
 			if (_input_chat.text == "") _input_chat.caretIndex = 0;
-			
+		}
+		
+		/*
 			// these are needed so that the input field can be set back to focused after a keyboard button press.
 			Reg2._input_field_caret_location = _input_chat.caretIndex;
 			Reg2._input_field_number = 1;

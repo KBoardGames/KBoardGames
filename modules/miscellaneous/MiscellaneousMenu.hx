@@ -16,7 +16,10 @@ package modules.miscellaneous;
  * @author kboardgames.com
  */
 class MiscellaneousMenu extends FlxGroup
-{		
+{
+	public static var __title_bar:TitleBar;
+	public static var __menu_bar:MenuBar; 
+	
 	public var __miscellaneous_menu_output:MiscellaneousMenuOutput;	
 		
 	/******************************
@@ -39,13 +42,23 @@ class MiscellaneousMenu extends FlxGroup
 		__scene_background = new SceneBackground();
 		add(__scene_background);
 		
-		if (Reg.__title_bar2 != null) remove(Reg.__title_bar2);
-		Reg.__title_bar2 = new TitleBar("Miscellaneous");
-		add(Reg.__title_bar2);
+		if (__title_bar != null)
+		{
+			remove(__title_bar);
+			__title_bar.destroy();
+		}
 		
-		if (Reg.__menu_bar2 != null) remove(Reg.__menu_bar2);
-		Reg.__menu_bar2 = new MenuBar();
-		add(Reg.__menu_bar2);
+		__title_bar = new TitleBar("Miscellaneous");
+		add(__title_bar);
+		
+		if (__menu_bar != null)
+		{
+			remove(__menu_bar);
+			__menu_bar.destroy();
+		}
+		
+		__menu_bar = new MenuBar();
+		add(__menu_bar);
 	
 		//#############################
 		var _statisticsAll = new ButtonGeneralNetworkYes(30, 125, "Statistics", 200 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, statisticsAll, RegCustom._button_color[Reg._tn]);

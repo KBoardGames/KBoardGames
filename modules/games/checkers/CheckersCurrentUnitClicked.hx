@@ -165,12 +165,7 @@ class CheckersCurrentUnitClicked extends FlxSprite
 			// p is the unit number. at the loop below, p starts at the top-left corner of the gameboard, the xx/yy value of zero, and increments as each unit is looped and moving in the direction of east. when the end of that first row is loop, the next row will be looped and p will still continue to be increased in size.
 			
 			var p = -1;
-/*
-trace("Reg._playerCanMovePiece " + Reg._playerCanMovePiece);
-trace("Reg._checkersFoundPieceToJumpOver " +Reg._checkersFoundPieceToJumpOver);
-trace("Reg._checkersIsThisFirstMove " + Reg._checkersIsThisFirstMove);
-*/
-
+			
 			if (Reg._playerCanMovePiece == true
 			&&  Reg._at_input_keyboard == false)
 			{			 

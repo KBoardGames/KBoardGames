@@ -38,44 +38,26 @@ package;
 class GameCreate extends FlxState
 {
 	/******************************
-	 * is it a check or checkmate? anything related to a checkmate such as setting capturing units for the king or determining if a pawn can free the king from check, etc.
-	 */
-	#if chess
-		private var __chess_check_or_checkmate:ChessCheckOrCheckmate; // instance of a class.
-	#end
-	
-	/******************************
 	 * player move piece total time.
 	 */
 	public static var _t:Int = 0;
 	
 	/******************************
-	 * buy, sell, trade or pay rent. main game loop.
-	 */
-	#if wheelEstate
-		public var __signature_game_main:SignatureGameMain;
-	#end
-	
-	/******************************
-	 * the unit is highlighted when the mouse is clicked on it.
-	 */
-	public var __game_image_current_unit:GameImageCurrentUnit;
-	
-	/******************************
 	* the dice wheel, highlights each number, in turn. from 1 to 6. the number highlighted, after a mouse click, is the number used to move a piece that many times from the piece's current location.
 	*/
 	public var __number_wheel:NumberWheel;
+	private var __number_wheel_button:NumberWheelButton;
 	
 	public var _playerPieces1:Dynamic;
 	public var _playerPieces2:Dynamic;
 	public var _playerPieces3:Dynamic;
 	public var _playerPieces4:Dynamic;
 	
-	/******************************
-	 * the numbers 1 to 8 and the letter a to h at the side of the gameboard.
-	 */
 	private var _gameboardBorder:FlxSprite;
 	
+	// the numbers 1 to 8 and the letter a to h at the side of the gameboard.
+	private	var _coordinates = new FlxSprite();
+			
 	/******************************
 	 * fill the screen with a random color.
 	 */
@@ -93,6 +75,7 @@ class GameCreate extends FlxState
 	
 	/******************************
 	* this refers to the chess, checker or another board currently displayed.
+	* TODO this seems to be used but does it do anything? note that this var has been excluded from destroy function.
 	*/
 	public static var _gameBoard:Array<FlxSprite> = [];
 	
@@ -103,18 +86,16 @@ class GameCreate extends FlxState
 	
 	/******************************
 	 * holds all player's pieces. used to ADD both player's pieces to the screen.
+	 * this var is used outside of this class.
 	 */
 	public var _groupPlayerPieces:FlxSpriteGroup;
 	
 	/******************************
 	 * a sprite group that refers to highlights any square, with an image, that the player is able to move the piece to.
+	 * this var is used outside of this class.
 	 */
 	public var _groupCapturingUnit:FlxSpriteGroup;
-	
-	#if wheelEstate
-		public var __game_house_taxi_cafe:SignatureGameReferenceImages;
-	#end
-	
+		
 	/******************************
 	 * background gradient, texture and plain color for a scene.
 	 */
@@ -127,16 +108,19 @@ class GameCreate extends FlxState
 		public static var _currentUnitClicked_gameID0:CheckersCurrentUnitClicked;
 	#end
 	
-	#if chess
-		public static var _currentUnitClicked_gameID1:	ChessCurrentUnitClicked;
-	#end
-	
 	#if checkers
 		private var __checkers:Checkers;
 	#end
 	
 	#if chess
 		private var __chess:Chess;
+		public static var _currentUnitClicked_gameID1:	ChessCurrentUnitClicked;
+		
+		/******************************
+	 * is it a check or checkmate? anything related to a checkmate such as setting capturing units for the king or determining if a pawn can free the king from check, etc.
+	 */
+	
+		private var __chess_check_or_checkmate:ChessCheckOrCheckmate; // instance of a class.
 	#end
 	
 	#if reversi
@@ -145,10 +129,19 @@ class GameCreate extends FlxState
 	
 	#if snakesAndLadders
 		private var __snakes_and_ladders:SnakesAndLadders;
+		private var __snakes_and_ladders_clickMe:SnakesAndLaddersClickMe;
 	#end
 	
 	#if wheelEstate
 		private var __signature_game:SignatureGame;
+		public var __game_house_taxi_cafe:SignatureGameReferenceImages;
+		
+		/******************************
+		* buy, sell, trade or pay rent. main game loop.
+		*/
+		private var __signature_game_clickMe:SignatureGameClickMe;
+		public var __signature_game_main:SignatureGameMain;
+	
 	#end
 	
 	public function new(ids_win_lose_or_draw:IDsWinLoseOrDraw, chess_check_or_checkmate:Dynamic) 
@@ -407,10 +400,7 @@ class GameCreate extends FlxState
 						ChessCapturingUnits.capturingUnits();						
 						
 						if (Reg._chessCheckBypass == false)
-						{							
-							if (Reg._chessCheckmateBypass == false) 
-								__chess_check_or_checkmate.isThisCheckOrCheckmate();
-						}
+							__chess_check_or_checkmate.isThisCheckOrCheckmate();
 						
 						GameClearVars.clearVarsOnMoveUpdate();
 						GameClearVars.clearCheckAndCheckmateVars();
@@ -614,10 +604,16 @@ class GameCreate extends FlxState
 			add(_gameboardBorder);
 		}
 		
-		// the numbers 1 to 8 and the letter a to h at the side of the gameboard.
 		if (RegCustom._gameboard_coordinates_enabled[Reg._tn] == true)
 		{
-			var _coordinates = new FlxSprite();
+			// the numbers 1 to 8 and the letter a to h at the side of the gameboard.
+			if (_coordinates != null)
+			{
+				remove(_coordinates);
+				_coordinates.destroy();
+			}
+			
+			_coordinates = new FlxSprite();
 			_coordinates.loadGraphic("assets/images/coordinates.png", false);
 			_coordinates.setPosition(Reg._unitXgameBoardLocation[0]-30, Reg._unitYgameBoardLocation[0]-30);
 			_coordinates.scrollFactor.set(0, 0);
@@ -627,22 +623,50 @@ class GameCreate extends FlxState
 	
 	public function gameId_dice(X:Float, Y:Float):Void
 	{
+		if (__number_wheel_button != null)
+		{
+			remove(__number_wheel_button);
+			__number_wheel_button.destroy();
+		}
+		
+		__number_wheel_button = new NumberWheelButton(X + 28, Y + 30);
+		add(__number_wheel_button);
+		
+		if (__number_wheel != null)
+		{
+			remove(__number_wheel);
+			__number_wheel.destroy();
+		}
+		
 		__number_wheel = new NumberWheel(X, Y);
 		add(__number_wheel);
 		
 		#if snakesAndLadders
 			if (Reg._gameId == 3)
 			{
-				var _clickMe = new SnakesAndLaddersClickMe(X, Y, __number_wheel);
-				add(_clickMe);	
+				if (__snakes_and_ladders_clickMe != null)
+				{	
+					remove(__snakes_and_ladders_clickMe);
+					__snakes_and_ladders_clickMe.destroy();
+				}
+				
+				// if changing the number wheel button, this x and y coordinates also needs changing.
+				__snakes_and_ladders_clickMe = new SnakesAndLaddersClickMe(X - 1, Y - 6, __number_wheel);
+				add(__snakes_and_ladders_clickMe);	
 			}
 		#end
 		
 		#if wheelEstate
 			if (Reg._gameId == 4)
 			{
-				var _clickMe = new SignatureGameClickMe(X, Y, __number_wheel, __ids_win_lose_or_draw, _playerPieces1, _playerPieces2, _playerPieces3, _playerPieces4);
-				add(_clickMe);	
+				if (__signature_game_clickMe != null)
+				{
+					remove(__signature_game_clickMe);
+					__signature_game_clickMe.destroy();
+				}
+				
+				__signature_game_clickMe = new SignatureGameClickMe(X - 1, Y - 6, __number_wheel, __ids_win_lose_or_draw, _playerPieces1, _playerPieces2, _playerPieces3, _playerPieces4);
+				add(__signature_game_clickMe);	
 			}
 		#end
 	}
@@ -667,5 +691,162 @@ class GameCreate extends FlxState
 		RegTypedef._dataStatistics._timeTotal = _t;
 	}
 	
+	override function destroy():Void
+	{
+		if (__number_wheel != null)
+		{
+			remove(__number_wheel);
+			__number_wheel.destroy();
+			__number_wheel = null;
+		}
+		
+		if (__number_wheel_button != null)
+		{
+			remove(__number_wheel_button);
+			__number_wheel_button.destroy();
+			__number_wheel_button = null;
+		}
+		
+		if (_playerPieces1 != null)
+		{
+			_spriteGroup.remove(_playerPieces1);
+			remove(_playerPieces1);
+			_playerPieces1.destroy();
+			_playerPieces1 = null;
+		}
+		
+		if (_playerPieces2 != null)
+		{
+			_spriteGroup.remove(_playerPieces2);
+			remove(_playerPieces2);
+			_playerPieces2.destroy();
+			_playerPieces2 = null;
+		}
+		
+		if (_playerPieces3 != null)
+		{
+			_spriteGroup.remove(_playerPieces3);
+			remove(_playerPieces3);
+			_playerPieces3.destroy();
+			_playerPieces3 = null;
+		}
+		
+		if (_playerPieces4 != null)
+		{
+			_spriteGroup.remove(_playerPieces4);
+			remove(_playerPieces4);
+			_playerPieces4.destroy();
+			_playerPieces4 = null;
+		}
+		
+		if (_gameboardBorder != null)
+		{
+			remove(_gameboardBorder);
+			_gameboardBorder.destroy();
+			_gameboardBorder = null;
+		}
+		
+		if (_coordinates != null)
+		{
+			remove(_coordinates);
+			_coordinates.destroy();
+			_coordinates = null;
+		}
+		
+		if (_background_scene_color != null)
+		{
+			remove(_background_scene_color);
+			_background_scene_color.destroy();
+			_background_scene_color = null;
+		}
+		
+		if (_background_gradient_scene != null)
+		{
+			remove(_background_gradient_scene);
+			_background_gradient_scene.destroy();
+			_background_gradient_scene = null;
+		}
+		
+		if (__scene_background != null)
+		{		
+			remove(__scene_background);
+			__scene_background.destroy();
+			__scene_background = null;
+		}
+		
+		if (_sprite_board_game_unit_even != null)
+		{
+			remove(_sprite_board_game_unit_even);
+			_sprite_board_game_unit_even.destroy();
+			_sprite_board_game_unit_even = null;
+		}
+		
+		if (_sprite_board_game_unit_odd != null)
+		{
+			remove(_sprite_board_game_unit_odd);
+			_sprite_board_game_unit_odd.destroy();
+			_sprite_board_game_unit_odd = null;
+		}
+		
+		#if checkers
+			if (__checkers != null)
+			{
+				remove(__checkers);
+				__checkers.destroy();
+				__checkers = null;
+			}
+		#end
+		
+		#if chess
+			if (__chess != null)
+			{
+				remove(__chess);
+				__chess.destroy();
+				__chess = null;
+			}
+		#end
+		
+		#if eversi
+			if (__reversi != null)
+			{
+				remove(__reversi);
+				__reversi.destroy();
+				__reversi = null;
+			}
+		#end
+		
+		#if snakesAndLadders
+			if (__snakes_and_ladders != null)
+			{
+				remove(__snakes_and_ladders);
+				__snakes_and_ladders.destroy();
+				__snakes_and_ladders = null;
+			}
+			
+			if (__snakes_and_ladders_clickMe != null)
+			{
+				remove(__snakes_and_ladders_clickMe);
+				__snakes_and_ladders_clickMe.destroy();
+				__snakes_and_ladders_clickMe = null;
+			}
+		#end
+		
+		#if wheelEstate
+			if (__signature_game != null)
+			{
+				remove(__signature_game);
+				__signature_game.destroy();
+				__signature_game = null;
+			}
+			
+			if (__signature_game_clickMe != null)
+			{
+				remove(__signature_game_clickMe);
+				__signature_game_clickMe.destroy();
+				__signature_game_clickMe = null;
+			}
+		#end
+		
+	}
 	
 }//

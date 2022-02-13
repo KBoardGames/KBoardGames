@@ -1182,9 +1182,9 @@ typedef DataMisc =
 	var _userLocation: Int;
 	
 	/******************************
-	 * if this value is true then the host is playing against the computer.
+	 * if this value is true then the player is in a rated game.
 	 */
-	var _vsComputer: Array<Int>;
+	var _rated_game: Array<Int>;
 	
 	/******************************
 	 * if true then this room allows spectators.
@@ -2810,12 +2810,12 @@ class RegTypedef
 		/******************************
 		 * if this value is true than the host is playing against the computer.
 		 */
-		_vsComputer: 
-						[0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-						 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-					 	 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-						 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-						 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+		_rated_game: 
+						[1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+						 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+					 	 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+						 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+						 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
 		
 		/******************************
 		 * if true then this room allows spectators.

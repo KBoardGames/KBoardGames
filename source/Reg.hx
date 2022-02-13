@@ -42,7 +42,7 @@ class Reg
 	 * only change the version number here. this value must be changed every time this complete program with dll's are copied to the localhost/files/windows folder.
 	 * no need to copy this var then paste to the bottom of this class because this value does not change while client is running.
 	 */
-	public static var _version:String = "1.21.4";
+	public static var _version:String = "1.23.13";
 	
 	/******************************
 	 * total games available in this release.
@@ -1124,10 +1124,21 @@ class Reg
 	public static var _clearDoubleMessage:Bool = false; // sometimes a double message is seen when changing state. when set to true then this fixes it.
 	public static var _drawOffer:Bool = false;
 	public static var _restartOffer:Bool = false;
-		
-	public static var _kickOrBanMessage:String = ""; // display a message at menuState when user is kicked or banned and that user tried to login.
 	
-	public static var _gameId:Int = 0; // a number referring to a game being played. 0=checkers, 1=chess, etc.
+	/******************************
+	 * display a message at menuState when user is kicked or banned and that user tried to login.
+	 */
+	public static var _kickOrBanMessage:String = "";
+	
+	/******************************
+	 * a number referring to a game being played. 0=checkers, 1=chess, etc.
+	 */
+	public static var _gameId:Int = 0;
+
+	/******************************
+	 * at ActionCommand.hx when jumping to either waiting room or game room, this is the game selected. this value is passed to _gameId.
+	 */
+	public static var _jump_game_id:Int = 0;
 	
 	public static var _jumpingWhatDirection:Int = -1; // this var is need to determine what jumped over unit to remove that units piece at. 1=NE. 2=SE. 3=SW. 4=NW. note this cannot go in a class because of the way instances are called.
 	
@@ -1267,11 +1278,6 @@ class Reg
 	 * pawns can attack different than where they can move. the result is that the _capturingUnitsForPieces var will register both as places a pawn can move. therefore, we use this var to hide the angle movements, if there is no attacking piece at those locations, until a chess stalemate check is complete.
 	 */
 	public static var _chessStalemateBypassCheck:Bool = false;
-	
-	/******************************
-	 * when its the computer turn to search for a checkmate in 2 moves or more, this stops a checkmate message from displaying if checkmate is found in a loop depth greater than 1.
-	 */
-	public static var _chessCheckmateBypass:Bool = false;
 	
 	/******************************
 	 * when computer is playing, this stops a second check from displaying. 1 putting the king in check and 2 when a check is searched when its the computer turn to move.
@@ -1495,56 +1501,26 @@ class Reg
 	 */
 	public static var _at_house:Bool = false;
 	
-	
-	/******************************
-	 * lobby. Cannot share with another class instance.
-	 */
-	public static var __title_bar:TitleBar;
-	
-	/******************************
-	 * all other class such as leaderboards, credits, misc, new account.
-	 */
-	public static var __title_bar2:TitleBar; 
-	
+		
 	/******************************
 	 * moves everything down.
 	 */
 	public static var __title_bar_offset_y:Int = 10;
 	
 	/******************************
-	 * SceneCreateRoom. Cannot share with another class instance.
-	 */
-	public static var __title_bar3:TitleBar;
-	
-	/******************************
-	 * SceneWaitingRoom. Cannot share with another class instance.
-	 */
-	public static var __title_bar4:TitleBar;
-	
-	/******************************
-	 * lobby. Cannot share with another class instance.
-	 */
-	public static var __menu_bar:MenuBar;
-	
-	/******************************
-	 * all other class such as leaderboards, credits, misc, new account.
-	 */
-	public static var __menu_bar2:MenuBar;
-	
-	/******************************
-	 * SceneCreateRoom. Cannot share with another class instance.
-	 */
-	public static var __menu_bar3:MenuBar;
-	
-	/******************************
-	 * SceneWaitingRoom. Cannot share with another class instance.
-	 */
-	public static var __menu_bar4:MenuBar; 
-	
-	/******************************
 	 * theme number var. default theme has this value of 0. all themes are taken from the themes folder. all themes from that folder will do a var push. so, the second theme from the folder will have a value of 2.
 	 */
 	public static var _tn:Int = -1;
+		
+	/******************************
+	 * at other classes call this to update table.
+	 */
+	public static var _table_column_sort_do_once:Bool = false;
+	
+	/******************************
+	 * this is the table column currently selected.
+	 */
+	public static var _tc:Int = 0;
 	
 	/******************************
 	 * total amount of themes available excluding default theme.
@@ -1557,9 +1533,9 @@ class Reg
 	public static var __scrollable_area_scroll_y:Float;
 	
 	/******************************
-	 * this is the instance of the text general class value. this value is used to highlight the background of the text when the mouse is within the region of the background displayed behind the text that is part of the TextGeneral class.
+	 * at configuration scene and at the front door the TextGeneral background in drawn to scene. this gives each of the instance of a class a different id so to know when to draw the background to the scene. everytime a new TextGeneral instance is create, this var will increment in value.
 	 */
-	public static var _text_general_id:Int = -1;
+	public static var _text_general_id:Int = 0;
 	
 	/******************************
 	 * if true then user has already been to MenuState.hx.
@@ -1601,6 +1577,12 @@ class Reg
 	 * the reason is two or more instances cannot share the same typedef data.
 	 */
 	public static var _can_join_server:Bool = true; 
+	
+	// Invite table variables. they are used to output data to the scrollable area.
+	public static var _usernamesOnline:Array<String> = [];
+	public static var _chess_elo_rating:Array<Float> = [];
+	public static var _invite_points:Array<Float> = [];
+	public static var _invite_percentage:Array<Float> = [];
 	
 	/******************************
 	 * change the _public var to true if release is ready for the public.
@@ -1685,7 +1667,6 @@ class Reg
 		
 		set_for_public();
 		
-		_text_general_id = -1;
 		_avatar_total = 300;
 		__scrollable_area_scroll_y = 0;
 		_websiteHomeUrl = "kboardgames.com";
@@ -1767,6 +1748,8 @@ class Reg
 			ChessECO.listToArray();
 		#end
 		
+		_tc = 0;
+		_text_general_id = 0;
 		_gameIsNowOver = false;
 		_signatureGameUnitNumberTrade = [0, 0];
 		_number_wheel_get_value = false;
@@ -1929,9 +1912,7 @@ class Reg
 		
 		_chessStalemate = false;
 		_chessStalemateBypassCheck = false;
-		_chessCheckmateBypass = false;
 		_chessCheckBypass = false;
-		
 		_inviteRoomNumberToJoin = 0;
 		
 		for (u in 0...2)
@@ -2210,4 +2191,4 @@ class Reg
 		_gameJumpTo = 0; 
 		
 	}
-}//
+}//

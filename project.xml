@@ -64,9 +64,9 @@
 		<sound path="pager.ogg" id="pager"/>
 	</assets>
 	
-	<!-- comment this for smaller build size and faster program loading.		
-	<assets path="assets/music" embed="false" rename="music" unless="flash">
-		<music path="intro_1.ogg" id="intro"/>
+	<!-- comment this for smaller build size and faster program loading.-->		
+	<!--<assets path="assets/music" embed="true" rename="music" unless="flash">
+		<music path="moonlightSonata.ogg" id="intro"/>
 	</assets>-->
 	
 	<assets path="assets/fonts" embed="true" include="*.ttf"/>
@@ -84,7 +84,7 @@
 	
 	<!-- Client modules _____________________________ -->
 		
-	<!-- comment these two lines to disable client world flags. Commenting these lines will also disable leaderboards.-->		
+	<!-- comment these two lines to disable client world flags. Commenting these lines will also disable leaderboards.-->	
 	<define name="flags" />
 	<assets path="modules/worldFlags/assets/images" embed="true" />
 	<define name="leaderboards" />
@@ -95,7 +95,7 @@
 	<define name="username_suggestions" />
 	<define name="tournaments" />
 	<define name="miscellaneous" />
-		
+	
 	<define name="dailyQuests" />
 	<assets path="modules/dailyQuests/assets/images" embed="true" />
 
@@ -103,8 +103,7 @@
 	<assets path="modules/house/assets/images" embed="true" />
 	
 	<define name="checkers" />
-	<assets path="modules/games/checkers/assets/images" embed="true" />
-	
+	<assets path="modules/games/checkers/assets/images" embed="true" />	
 	<define name="chess" />
 	<assets path="modules/games/chess/assets/images" embed="true" />
 	

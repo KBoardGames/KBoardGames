@@ -18,6 +18,9 @@ package modules.dailyQuests;
  */
 class DailyQuests extends FlxGroup
 {
+	public static var __title_bar:TitleBar;
+	public static var __menu_bar:MenuBar;
+	
 	/******************************
 	 * moves everything down.
 	 */	
@@ -166,13 +169,23 @@ class DailyQuests extends FlxGroup
 		_title_background_large.scrollFactor.set(0, 0);
 		add(_title_background_large);
 		
-		if (Reg.__title_bar != null) remove(Reg.__title_bar);
-		Reg.__title_bar = new TitleBar("Daily Quests");
-		add(Reg.__title_bar);
+		if (__title_bar != null) 
+		{
+			remove(__title_bar);
+			__title_bar.destroy();
+		}
 		
-		if (Reg.__menu_bar != null)	remove(Reg.__menu_bar);
-		Reg.__menu_bar = new MenuBar();
-		add(Reg.__menu_bar);
+		__title_bar = new TitleBar("Daily Quests");
+		add(__title_bar);
+		
+		if (__menu_bar != null)
+		{
+			remove(__menu_bar);
+			__menu_bar.destroy();
+		}
+		
+		__menu_bar = new MenuBar();
+		add(__menu_bar);
 		
 		drawRewardIconsAndText();
 		drawGaugeEmpty();
@@ -409,7 +422,7 @@ class DailyQuests extends FlxGroup
 		if (_ticks < 5) _ticks += 1;
 		
 		// if at SceneMenu then set __scrollable_area active to false so that a mouse click at SceneMenu cannot trigger a button click at __scrollable_area.
-		if (_ticks >= 5 && _group != null && Reg.__menu_bar != null)
+		if (_ticks >= 5 && _group != null && __menu_bar != null)
 		{
 			if (FlxG.mouse.y >= FlxG.height - 50)
 			{

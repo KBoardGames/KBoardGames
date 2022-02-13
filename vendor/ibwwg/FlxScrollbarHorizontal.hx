@@ -218,6 +218,25 @@ class FlxScrollbarHorizontal extends FlxSpriteGroup
 		super.draw();
 	}
 	
+	override public function destroy():Void
+	{
+		if (_track != null)
+		{
+			remove(_track);
+			_track.destroy();
+			_track = null;
+		}
+		
+		if (_bar != null)
+		{
+			remove(_bar);
+			_bar.destroy();
+			_bar = null;
+		}
+		
+		super.destroy();
+	}
+	
 	override public function update(elapsed:Float)
 	{
 		if (Reg._messageId > 0)
@@ -255,11 +274,11 @@ class FlxScrollbarHorizontal extends FlxSpriteGroup
 			if (FlxG.mouse.justPressed
 			&&	Reg2._scrollable_area_is_scrolling == false
 			&&	Reg._messageId == 0
-			&&	Reg2._lobby_button_alpha == 0.3
+			&&	Reg2._lobby_button_alpha == 1
 			|| _doOnce == 0
 			&&	Reg2._scrollable_area_is_scrolling == false
 			&&	Reg._messageId == 0
-			&&	Reg2._lobby_button_alpha == 0.3
+			&&	Reg2._lobby_button_alpha == 1
 			&& _id == 0
 			&& _id == ID)
 			{
@@ -369,10 +388,6 @@ class FlxScrollbarHorizontal extends FlxSpriteGroup
 			_dragStartedAt = null;			
 		}
 		
-		// FlxG.mouse.pressed code above does not work for this var.
-		if (FlxG.mouse.pressed == false)
-			Reg2._scrollable_area_is_scrolling = false;
-				
 		tryToScrollPage = false;
 		_doOnce = 1;
 		

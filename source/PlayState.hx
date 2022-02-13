@@ -30,20 +30,14 @@ import vendor.ws.Types;
  */
 class PlayState extends FlxState
 {
+	public static var __title_bar:TitleBar;
+	
 	private var _msg:IdsMessageBox;
 	
 	/******************************
 	 * this gives the user a list of events displayed at front door as they are completed because logging in to the lobby takes a few seconds. 
 	 */
 	public static var _text_client_login_data:FlxText;
-	public static var _text_client_login_data2:FlxText;
-	public static var _text_client_login_data3:FlxText;	
-	public static var _text_client_login_data4:FlxText;
-	
-	/******************************
-	 * when at the front door, this is a message to press a key to login to lobby.
-	 */
-	public static var _press_key_to_login:FlxText;
 	
 	public static var _websocket:WebSocket;
 	
@@ -82,9 +76,30 @@ class PlayState extends FlxState
 	/******************************
 	 * in html5 build the variable at the Internet.hx class function does not get populated before its return command. therefore this variable is used to delay code, which comes after the Internet.hx class function call, until the Internet.hx class function variable does get populated.
 	 */
-	private var _ticks_ip:Int = 0;
-	private var _ticks_hostname:Int = 0;
-
+	private var _ticks_ip:Int = -1;
+	private var _ticks_hostname:Int = -1;
+	
+	/******************************
+	 * when at front door, user has so many seconds to press a key to enter lobby. if user has not pressed a key within these many ticks then user will be directed to the lobby.
+	 */
+	private var _ticks_lobby:Int = 0;
+	
+	/******************************
+	 * user will be directed to the lobby from the front door when _ticks_lobby reaches this value.
+	 */
+	private var _ticks_lobby_maximum:Int = 240;
+	
+	/******************************
+	 * before the user is sent to the front door, send a request to website to determine what position that user is at. a request will be sent to Internet.hx class every 1 second until the user is at position 1. The user can enter to the front door when at position 1.
+	 * remember without this code, when two or more users enter to the front door at the same time, data will be corrupt and those users will not be able to go to lobby.
+	 */
+	public static var _front_door_queue:Int = 0;
+	
+	/******************************
+	 * every 1 second, when this ticks reaches Reg._framerate, if user cannot yet go to the front door, another request to Internet.front_door_queue() will be made.
+	 */
+	private var _ticks_front_door_queue:Int = 0;
+	
 	/******************************
 	 * text the client is trying to login to server.
 	 */
@@ -102,7 +117,7 @@ class PlayState extends FlxState
 	 */
 	#if chess
 		private var __chess_check_or_checkmate:ChessCheckOrCheckmate;
-   #end
+	#end
    
 	/******************************
 	 * disconnect if true.
@@ -117,9 +132,14 @@ class PlayState extends FlxState
 		super.create();
 		
 		RegFunctions.fontsSharpen();
+		Reg._can_join_server = true;
 		
 		persistentDraw = true;
 		persistentUpdate = true;
+		
+		_ticks_ip = - 1;
+		_ticks_hostname = - 1;
+		_ticks_lobby = 0;		
 		
 		_id = ID = Std.parseInt(RegTypedef._dataGame.id.substr(0, 7));
 		
@@ -153,9 +173,14 @@ class PlayState extends FlxState
 				
 		getPlayersNamesAndAvatars();
 		
-		if (Reg.__title_bar != null) remove(Reg.__title_bar);
-			Reg.__title_bar = new TitleBar("Front Door");
-			add(Reg.__title_bar);		
+		if (__title_bar != null) 
+		{
+			remove(__title_bar);
+			__title_bar.destroy();
+		}
+		
+		__title_bar = new TitleBar("Front Door");
+		add(__title_bar);		
 		
 		_text_logging_in = new FlxText(0, 660, 0, "Logging in to server...");
 		_text_logging_in.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
@@ -211,33 +236,10 @@ class PlayState extends FlxState
 		if (Reg._client_socket_is_connected == true)
 		{
 			Reg._client_socket_is_connected = false;
-			PlayState._websocket.close();
+			_websocket.close();
 		}
 		
 		FlxG.switchState(new MenuState());
-	}
-	
-	override public function destroy()
-	{
-		if ( __scene_lobby != null)
-		{
-			remove(__scene_lobby);
-			__scene_lobby.destroy();
-		}
-		
-		if (__scene_create_room != null)
-		{
-			remove(__scene_create_room);
-			__scene_create_room.destroy();
-		}
-		
-		if (__scene_waiting_room != null)
-		{
-			remove(__scene_waiting_room);
-			__scene_waiting_room.destroy();
-		}
-		
-		super.destroy();
 	}
 	
 	static function setExitHandler(_exit:Void->Void):Void 
@@ -344,6 +346,37 @@ class PlayState extends FlxState
 	
 	private function client():Void
 	{
+		// a value of 1 means that the user can enter to the front door.
+		// a value of 2 means that the user is next user to enter the front door.
+		// the order of the user is determined by the timestamp. a user's data is removed from the database when disconnecting or when entering the front door. the that time, the user with a value of 2 will be a value of 1 at the next check to the database. that check is made at Internet.front_door_queue.
+		if (Reg._game_offline_vs_player == false
+		&&	Reg._game_offline_vs_cpu == false)
+		{
+			if (_id == ID)
+			{
+				if (_ticks_front_door_queue == 0)
+				{
+					Internet.front_door_queue();
+			
+					if (_front_door_queue == 1)
+					{
+						Reg._gameMessage = "Welcome.";
+						_ticks_ip = 0;
+					}
+					
+					else if (_front_door_queue > 1)
+						Reg._gameMessage = "You are " + _front_door_queue + " in queue. Please wait...";
+				} 
+				
+				_ticks_front_door_queue += 1;
+				if (_ticks_front_door_queue >= Reg._framerate * 2)
+					_ticks_front_door_queue = 0;
+					
+				Reg._outputMessage = true;
+			}
+		} else _ticks_ip = 0;
+		
+		// get ip address for the front door.
 		if (_ticks_ip == 0
 		&&	_id == ID
 		&&	Reg._can_join_server == true)
@@ -425,6 +458,7 @@ class PlayState extends FlxState
 						{
 							var unserializer = new Unserializer(_str);
 							var _data:DataGame = unserializer.unserialize();
+							unserializer = null;
 							go_to_event(_data);
 						}
 						
@@ -432,6 +466,7 @@ class PlayState extends FlxState
 						{
 							var unserializer = new Unserializer(_str);
 							var _data:DataGame0 = unserializer.unserialize();
+							unserializer = null;
 							go_to_event(_data);
 						}
 						
@@ -439,6 +474,7 @@ class PlayState extends FlxState
 						{
 							var unserializer = new Unserializer(_str);
 							var _data:DataGame1 = unserializer.unserialize();
+							unserializer = null;
 							go_to_event(_data);
 						}
 						
@@ -446,6 +482,7 @@ class PlayState extends FlxState
 						{
 							var unserializer = new Unserializer(_str);
 							var _data:DataGame2 = unserializer.unserialize();
+							unserializer = null;
 							go_to_event(_data);
 						}
 						
@@ -453,6 +490,7 @@ class PlayState extends FlxState
 						{
 							var unserializer = new Unserializer(_str);
 							var _data:DataGame3 = unserializer.unserialize();
+							unserializer = null;
 							go_to_event(_data);
 						}
 						
@@ -460,6 +498,7 @@ class PlayState extends FlxState
 						{
 							var unserializer = new Unserializer(_str);
 							var _data:DataGame4 = unserializer.unserialize();
+							unserializer = null;
 							go_to_event(_data);
 						}
 						
@@ -467,6 +506,7 @@ class PlayState extends FlxState
 						{
 							var unserializer = new Unserializer(_str);
 							var _data:DataMovement = unserializer.unserialize();
+							unserializer = null;
 							go_to_event(_data);
 						}						
 						
@@ -474,6 +514,7 @@ class PlayState extends FlxState
 						{
 							var unserializer = new Unserializer(_str);
 							var _data:DataGameMessage = unserializer.unserialize();
+							unserializer = null;
 							go_to_event(_data);
 						}
 						
@@ -481,6 +522,7 @@ class PlayState extends FlxState
 						{
 							var unserializer = new Unserializer(_str);
 							var _data:DataDailyQuests = unserializer.unserialize();
+							unserializer = null;
 							go_to_event(_data);
 						}
 						
@@ -488,6 +530,7 @@ class PlayState extends FlxState
 						{
 							var unserializer = new Unserializer(_str);
 							var _data:DataQuestions = unserializer.unserialize();
+							unserializer = null;
 							go_to_event(_data);
 						}
 						
@@ -495,6 +538,7 @@ class PlayState extends FlxState
 						{
 							var unserializer = new Unserializer(_str);
 							var _data:DataOnlinePlayers = unserializer.unserialize();
+							unserializer = null;
 							go_to_event(_data);
 						}
 						
@@ -502,6 +546,7 @@ class PlayState extends FlxState
 						{
 							var unserializer = new Unserializer(_str);
 							var _data:DataTournaments = unserializer.unserialize();
+							unserializer = null;
 							go_to_event(_data);
 						}
 						
@@ -509,6 +554,7 @@ class PlayState extends FlxState
 						{
 							var unserializer = new Unserializer(_str);
 							var _data:DataAccount = unserializer.unserialize();
+							unserializer = null;
 							go_to_event(_data);
 						}
 						
@@ -516,6 +562,7 @@ class PlayState extends FlxState
 						{
 							var unserializer = new Unserializer(_str);
 							var _data:DataMisc = unserializer.unserialize();
+							unserializer = null;
 							go_to_event(_data);
 						}
 						
@@ -523,6 +570,7 @@ class PlayState extends FlxState
 						{
 							var unserializer = new Unserializer(_str);
 							var _data:DataPlayers = unserializer.unserialize();
+							unserializer = null;
 							go_to_event(_data);
 						}
 						
@@ -530,6 +578,7 @@ class PlayState extends FlxState
 						{
 							var unserializer = new Unserializer(_str);
 							var _data:DataStatistics = unserializer.unserialize();
+							unserializer = null;
 							go_to_event(_data);
 						}						
 						
@@ -537,6 +586,7 @@ class PlayState extends FlxState
 						{
 							var unserializer = new Unserializer(_str);
 							var _data:DataHouse = unserializer.unserialize();
+							unserializer = null;
 							go_to_event(_data);
 						}						
 						
@@ -544,7 +594,8 @@ class PlayState extends FlxState
 						{
 							var unserializer = new Unserializer(_str);
 							var _data:DataLeaderboards = unserializer.unserialize();
-							go_to_event(_data);
+							unserializer = null;
+							go_to_event(_data);	
 						}
 						
 					};
@@ -576,7 +627,7 @@ class PlayState extends FlxState
 		}
 			
 		if (_ticks_ip == 1
-		&&	_ticks_hostname == 0
+		&&	_ticks_hostname == -1
 		&&	RegTypedef._dataAccount._ip != ""
 		&&	_id == ID)
 		{
@@ -587,11 +638,13 @@ class PlayState extends FlxState
 		
 		}
 		
+		// display the front door text for this user and set the lobby ticks so that if user has not pressed a key within time allowed, that user will be redirected to lobby. see FlxG.keys.justPressed.ANY == true code.
 		if (_ticks_hostname == 1
 		&&	RegTypedef._dataAccount._hostname != ""
 		&&	_id == ID)
 		{
 			_ticks_hostname = 2;
+			_ticks_lobby = 1;
 			
 			if (Reg._game_online_vs_cpu == true || Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false)		
 			{
@@ -623,29 +676,6 @@ class PlayState extends FlxState
 				_text_client_login_data.setPosition(15, FlxG.height / 2 - 200);
 				_text_client_login_data.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_topic_title_text_color());
 				add(_text_client_login_data);
-						
-				_text_client_login_data2 = new TextGeneral(15, FlxG.height / 2 - 200 + 80, 0, "", 8, true, false, 0, 0, true);
-				_text_client_login_data2.scrollFactor.set(0, 0);
-				_text_client_login_data2.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
-				add(_text_client_login_data2);
-				
-				_text_client_login_data3 = new TextGeneral(15, _text_client_login_data2.y + 80, 0, "", 8, true, false, 0, 0, true);
-				_text_client_login_data3.scrollFactor.set(0, 0);
-				_text_client_login_data3.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
-				add(_text_client_login_data3);
-				
-				_text_client_login_data4 = new TextGeneral(15, _text_client_login_data3.y + 80, 0, "", 8, true, false, 0, 0, true);
-				_text_client_login_data4.scrollFactor.set(0, 0);
-				_text_client_login_data4.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
-				add(_text_client_login_data4);
-				
-				_press_key_to_login = new FlxText(0, 700, 0, "Press any key to continue.");
-				_press_key_to_login.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
-				_press_key_to_login.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
-				_press_key_to_login.scrollFactor.set(0, 0);			
-				_press_key_to_login.screenCenter(X);
-				add(_press_key_to_login);	
-				
 				
 				if (Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false)
 				{
@@ -675,6 +705,12 @@ class PlayState extends FlxState
 			
 			if (Reg._clientReadyForPublicRelease == false)
 			{
+				if (__action_commands != null)
+				{
+					remove(__action_commands);
+					__action_commands.destroy();
+				}
+				
 				__action_commands = new ActionCommands(); 
 				add(__action_commands);
 			}
@@ -685,7 +721,8 @@ class PlayState extends FlxState
 			Reg._hasUserConnectedToServer = true;	
 				
 		if (_id == ID 
-		&& RegTypedef._dataMisc.id == RegTypedef._dataGame.id)
+		&&	_ticks_ip != -1
+		&&	RegTypedef._dataMisc.id == RegTypedef._dataGame.id)
 			_ticks_ip = 1;
 	}
 
@@ -718,7 +755,11 @@ class PlayState extends FlxState
 				
 				//ActionInput.enable();
 	
-				if (Reg._lobbyDisplay == true) {Reg._lobbyDisplay = false;  __scene_lobby.display(); }		
+				if (Reg._lobbyDisplay == true)
+				{
+					Reg._lobbyDisplay = false;
+					__scene_lobby.display();
+				}		
 				
 				__scene_lobby.visible = true;			
 				__scene_lobby.__scrollable_area.visible = true;
@@ -983,14 +1024,9 @@ class PlayState extends FlxState
 	
 	private function gameMessage():Void
 	{
-		if (Reg._chessCheckmateBypass == true
-		&& Reg._gameMessage != "Check" 
-		&& Reg._gameMessage != "White piece wins."
-		&& Reg._gameMessage != "Black piece wins."
-		|| Reg._gameMessage == "") return;
-	
-		openSubState( new GameMessage());		
-		Reg._outputMessage = false;
+		if (Reg._gameMessage != ""
+		&&	Reg._outputMessage == true)
+			openSubState( new GameMessage());
 	}
 	
 	/******************************
@@ -1036,6 +1072,118 @@ class PlayState extends FlxState
 		RegTypedef._dataMovement._username = 		_username; 
 		RegTypedef._dataStatistics._username = 		_username;
 		RegTypedef._dataHouse._username = 			_username;
+	}
+	
+	
+	override public function destroy()
+	{
+		if (__action_keyboard != null)
+		{
+			remove(__action_keyboard);
+			__action_keyboard.destroy();
+			__action_keyboard = null;
+		}
+		
+		if (__scene_background != null)
+		{
+			remove(__scene_background);
+			__scene_background.destroy();
+			__scene_background = null;
+		}
+		
+		if (__action_commands != null)
+		{	
+			remove(__action_commands);
+			__action_commands.destroy();
+			__action_commands = null;
+		}
+		
+		if (__scene_lobby != null)
+		{	
+			remove(__scene_lobby);
+			__scene_lobby.destroy();
+			__scene_lobby = null;
+		}
+		
+		if (__scene_create_room != null)
+		{	
+			remove(__scene_create_room);
+			__scene_create_room.destroy();
+			__scene_create_room = null;
+		}
+		
+		if (__scene_waiting_room != null)
+		{	
+			remove(__scene_waiting_room);
+			__scene_waiting_room.destroy();
+			__scene_waiting_room = null;
+		}
+		
+		if (__scene_game_room != null)
+		{	
+			remove(__scene_game_room);
+			__scene_game_room.destroy();
+			__scene_game_room = null;
+		}
+		
+		if (__network_events_main != null)
+		{	
+			remove(__network_events_main);
+			__network_events_main.destroy();
+			__network_events_main = null;
+		}
+		
+		if (__ids_win_lose_or_draw != null)
+		{	
+			remove(__ids_win_lose_or_draw);
+			__ids_win_lose_or_draw.destroy();
+			__ids_win_lose_or_draw = null;
+		}
+
+		#if chess
+			if (__chess_check_or_checkmate != null)
+			{	
+				remove(__chess_check_or_checkmate);
+				__chess_check_or_checkmate.destroy();
+				__chess_check_or_checkmate = null;
+			}
+		#end
+		
+		if (_text_logging_in != null)
+		{	
+			remove(_text_logging_in);
+			_text_logging_in.destroy();
+			_text_logging_in = null;
+		}
+		
+		if (_msg != null)
+		{	
+			remove(_msg);
+			_msg.destroy();
+			_msg = null;
+		}
+		
+		if (_text_client_login_data != null)
+		{	
+			remove(_text_client_login_data);
+			_text_client_login_data.destroy();
+			_text_client_login_data = null;
+		}
+		
+		// websocket cannot be removed nor destroyed.
+		if (_websocket != null)
+		{	
+			_websocket = null;
+		}
+		
+		if (messageBox != null)
+		{	
+			remove(messageBox);
+			messageBox.destroy();
+			messageBox = null;
+		}
+			
+		super.destroy();
 	}
 	
 	/******************************
@@ -1107,7 +1255,7 @@ class PlayState extends FlxState
 					{
 						Reg._doUpdate = false;
 						
-						Reg.__title_bar.visible = false;
+						__title_bar.visible = false;
 						
 						//#if mobile
 							if (__action_keyboard != null) 
@@ -1132,11 +1280,11 @@ class PlayState extends FlxState
 			
 		}
 		
-		// user is sending logging in data to the server.
-		if (FlxG.mouse.justPressed == true
-		||	FlxG.mouse.pressedMiddle == true
-		||	FlxG.mouse.pressedRight == true
-		||	FlxG.keys.justPressed.ANY == true)
+		if (_ticks_lobby > 0 && _ticks_lobby < _ticks_lobby_maximum) 
+			_ticks_lobby += 1;
+			
+		// user is sending logging in data to the server. do not use key/mouse click. that will stop some message box, their buttons, from firing.
+		if (_ticks_lobby == _ticks_lobby_maximum)
 		{
 			if (Reg._isLoggingIn == true 
 			&&	Reg._game_offline_vs_cpu == false
@@ -1148,6 +1296,7 @@ class PlayState extends FlxState
 					FlxG.sound.play("click", 1, false);
 				
 				Reg._isLoggingIn = false; 
+				Reg._buttonDown = true;
 				
 				// client at website is only for guest accounts.
 				#if html5
@@ -1165,7 +1314,9 @@ class PlayState extends FlxState
 		}
 		
 		// player is entering the lobby.
-		lobbyEnter();
+		if (Reg._at_create_room == false
+		&&	Reg._at_waiting_room == false)
+			lobbyEnter();
 		
 		if (RegTriggers._lobby == true
 		&& PlayState._clientDisconnect == false
@@ -1175,8 +1326,9 @@ class PlayState extends FlxState
 		&& Reg._game_offline_vs_player == false)
 		{
 			Reg._at_lobby = true;
+			// lobby table starts at id 0. set first column as default.
+			Reg._tc = 0;
 			RegTriggers._lobby = false;
-			Reg2._lobby_button_alpha = 1;
 			RegTriggers._buttons_set_not_active = false;
 			
 			if (__scene_game_room != null)
@@ -1287,9 +1439,11 @@ class PlayState extends FlxState
 		if (RegTriggers.__scene_waiting_room == true)
 		{
 			Reg._at_lobby = false;
+			// waiting room invite table starts at id 100.
+			Reg._tc = 100; // default to the first table column.
 			RegTriggers.__scene_waiting_room = false;
 			Reg._clearDoubleMessage = false;
-			Reg2._lobby_button_alpha = 0.3;
+			Reg2._lobby_button_alpha = 1;
 			RegTriggers._buttons_set_not_active = false;
 			Reg._at_waiting_room = true;
 			

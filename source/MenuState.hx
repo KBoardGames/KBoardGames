@@ -24,12 +24,68 @@ package;
 	import modules.house.*;
 #end
 
+typedef Season =
+{
+	var _spring:Bool;
+	var _summer:Bool;
+	var _fall:Bool;
+	var _winter:Bool;
+}
+
+
 /**
  * ...
  * @author kboardgames.com
  */
 class MenuState extends FlxState
-{
+{	
+	public static var _season:Season = 
+	{
+		_spring: false,
+		_summer: false,
+		_fall: false,
+		_winter: false,
+
+	}
+
+	public static var __title_bar:TitleBar;
+	public static var __menu_bar:MenuBar;
+	
+	private var _event_scheduler_border:FlxSprite;
+	private var _textCurrent:FlxText;
+	private var _textUpcoming:FlxText;
+	private var _icons_background:FlxSprite;
+	private	var _icon_border_between_other_icons:FlxSprite;
+	private var _gameOptions:FlxText;
+	
+	private var _offsetEventColumn1Y:Int = 29;
+	private var _offsetEventColumn2Y:Int = 54;
+	private var _offsetEventColumn3Y:Int = 79;
+		
+	// the background behind a calendar square. Each square can have three events on it. the location of the event text is called a column.
+	private var _bgEventColumn1Number:FlxSprite;
+	private var _bgEventColumn2Number:FlxSprite;
+	private var _bgEventColumn3Number:FlxSprite;
+	
+	// three events are displayed one after another on a event schedule current square.
+	private var _textEventColumn1Number:FlxText;
+	private var _textEventColumn2Number:FlxText;
+	private var _textEventColumn3Number:FlxText;
+	
+	/******************************
+	 * day starts at 1.
+	 */
+	private var _intDay = Std.parseInt(DateTools.format(Date.now(), "%d"));
+	
+	/******************************
+	 * month January starts at 0 not 1.
+	 */
+	private var _intMonth = Std.parseInt(DateTools.format(Date.now(), "%m")) -1;	
+	
+	private var _intYear = Std.parseInt(DateTools.format(Date.now(), "%Y"));
+	
+	private var _effects:FlxTypedGroup<SceneEffects>; // a group of flakes
+	
 	//public var _music:Sound;
 	//public var _sound_channel:SoundChannel;
 	
@@ -73,7 +129,7 @@ class MenuState extends FlxState
 	 * when this value is true some elements at update() will be set active.
 	 * when a dialog box is open, users are still able to click something underneath it. a function is called to set active to false for those elements but some will set back to true at update() without this code.
 	 */
-	private var _is_active:Bool = true;
+	private static var _is_active:Bool = true;
 		
 	private var _offset_current_x:Int = 4;
 	private var _offset_current_y:Int = 1;
@@ -83,13 +139,13 @@ class MenuState extends FlxState
 	/******************************
 	 * this moves everything. title and all text and sprite.
 	 */
-	private var _offset_icons_and__event_scheduler_y:Int = - 60;
+	private var _offset_icons_and__event_scheduler_y:Int = - 40;
 	
 	/******************************
 	 * this is the event scheduler box. This shows the current and upcoming events.
 	 */
 	private var _eventSchedulerBackground:FlxSprite; // see calendar and events classes.
-	private var _eventSchedulerHover:FlxSprite;
+	private static var _eventSchedulerHover:FlxSprite;
 	
 	/******************************
 	 * reg_ipAddress changes at this state so we need to store the real IP address here.
@@ -104,12 +160,12 @@ class MenuState extends FlxState
 	/******************************
 	 * when clicking on a title icon image, this image has a border that highlighted it.
 	 */
-	public var _game_highlighted:FlxSprite;
+	public static var _game_highlighted:FlxSprite;
 	
 	/******************************
 	 * this holds the title icons. value starts at 0. access members here.
 	 */
-	public var _group_sprite:Array<FlxSprite> = [];
+	public static var _group_sprite:Array<FlxSprite> = [];
 	
 	public var _icon_text_title_description:FlxText;
 	
@@ -134,7 +190,11 @@ class MenuState extends FlxState
 	 * in html5 build the variable at the Internet.hx class function does not get populated before its return command. therefore this variable is used to delay code, which comes after the Internet.hx class function call, until the Internet.hx class function variable does get populated.
 	 */
 	private var _ticks_internet:Int = 0;
-		 
+	
+	/******************************
+	 * description of the bot username.
+	 */
+	private var _bot_text:FlxText;
 	private var _bot_ben:ButtonToggleFlxState;
 	private var _bot_tina:ButtonToggleFlxState;
 	private var _bot_piper:ButtonToggleFlxState;
@@ -149,6 +209,11 @@ class MenuState extends FlxState
 	 */
 	private var __scene_background:SceneBackground;
 	
+	/******************************
+	 * this scenes image of a chessboard.
+	 */
+	private var _gameBackground:FlxSprite;
+	
 	private var _textEventSchedule:FlxText;
 	
 	override public function create():Void
@@ -156,9 +221,13 @@ class MenuState extends FlxState
 		persistentDraw = true;
 		persistentUpdate = false;
 		
+		get_season();
+		
 		FlxG.scaleMode = new RatioScaleMode();
 		Reg._at_game_room = false; // needed here since auto return after save options could be enabled.
 		Reg._at_lobby = false;
+		Reg._at_create_room = false;
+		Reg._at_waiting_room = false;
 		
 		_is_active = true;
 		_ip = Reg._ipAddress;
@@ -181,47 +250,14 @@ class MenuState extends FlxState
 		// 886 = current first icon x position (multiplaer icon) for neko/cpp, times 79 which is 64 pixels for the icon plus 15 more for the space between the icons. 64 is the icon width / 2.
 		_icon_offset_x = 886; // 886 * (79 * 2) + (64 / 2) 			
 		
+		RegTriggers.reset_triggers_once();
 		RegTriggers.resetTriggers(); 		
 		RegFunctions.fontsSharpen();
 		
 		Reg.resetRegVarsOnce();
+		
 		getIPaddressFromServerOrMain();
-		
-		#if !html5
-			//------------------------------
-			RegFunctions._gameMenu = new FlxSave(); // initialize		
-			RegFunctions._gameMenu.bind("ConfigurationsMenu"); // bind to the named save slot.
-			
-			Reg._tn = -1; // this value will be loaded from hard drive.
-			
-			// we use true here so that some items are loaded. a value of false is the default for this function so that so items are only loaded when a condition is met.
-			RegCustom.resetConfigurationVars();			
-			
-			// load data.
-			RegCustom._chess_skill_level_offline = RegFunctions._gameMenu.data._chess_skill_level_offline;
-			Reg2._menu_state_username_p1 = RegFunctions._gameMenu.data._menu_state_username_p1;
-			
-			if (RegFunctions._gameMenu.data.scaleModeIndex != null)
-				scaleModeIndex = RegFunctions._gameMenu.data.scaleModeIndex;
-
-			RegFunctions.loadConfig(true);
-			
-			if (Reg._tn == -1) Reg._tn = 0; // avoid a client crash by setting the selected theme to default.
-			
-			if (Reg._tn == 0) RegCustom.resetConfigurationVars2();			
-			
-			RegFunctions.themes_recursive_file_loop();
-			
-			RegCustom.assign_colors();
-		
-		#else
-			Reg._tn = 0;
-			RegCustom.resetConfigurationVars();	
-			RegCustom.resetConfigurationVars2();			
-			
-			RegCustom.assign_colors();
-			bgColor = RegCustomColors.color_client_background();
-		#end
+		loadData();
 		
 		Reg.resetRegVars(); 
 		Reg2.resetRegVarsOnce();
@@ -239,8 +275,9 @@ class MenuState extends FlxState
 		Reg._at_menu_state = true;
 		
 		RegCustom._chess_skill_level_online = RegCustom._chess_skill_level_offline;
-				
-		setExitHandler(function() 
+		
+		// the offline chess skill level and player 1 username on exit.
+		setExitHandler(function()
 		{
 			// put any code here. it will be ran before client exits.
 			RegFunctions._gameMenu.data._chess_skill_level_offline = RegCustom._chess_skill_level_offline;
@@ -249,18 +286,63 @@ class MenuState extends FlxState
 			// save data
 			RegFunctions._gameMenu.flush();
 			RegFunctions._gameMenu.close;
+			
 		});
 		
 		Reg2._scrollable_area_is_scrolling = false;
 		
-		//https://stackoverflow.com/questions/36822025/execute-url-path-in-external-program-in-haxe
-		//case "Linux", "BSD", "Android": Sys.command("xdg-open", [url]);
-		//case "Mac": Sys.command("open", [url]);
-		//case "Windows": Sys.command("start", [url]);
-		//Sys.command("start", ["https://localhost"]);
-		//Sys.command("start", ["Games.exe"]);
-		// Example, just use... Sys.command("batch.bat");
+		//if (RegCustom._music_enabled[Reg._tn] == true)
+		//	FlxG.sound.playMusic("intro", 1, false);
 		
+	}
+	
+	private function loadData():Void
+	{
+		#if !html5
+			if (RegFunctions._gameMenu != null) RegFunctions._gameMenu.destroy();
+			RegFunctions._gameMenu = new FlxSave(); // initialize		
+			RegFunctions._gameMenu.bind("ConfigurationsMenu"); // bind to the named save slot.
+			
+			Reg._tn = -1; // this value will be loaded from hard drive.
+			
+			// we use true here so that some items are loaded. a value of false is the default for this function so that so items are only loaded when a condition is met.
+			RegCustom.resetConfigurationVars();			
+			
+			RegCustom._chess_skill_level_offline = RegFunctions._gameMenu.data._chess_skill_level_offline;
+			Reg2._menu_state_username_p1 = RegFunctions._gameMenu.data._menu_state_username_p1;
+			
+			if (RegFunctions._gameMenu.data.scaleModeIndex != null)
+				scaleModeIndex = RegFunctions._gameMenu.data.scaleModeIndex;
+
+			RegFunctions.loadConfig(true);
+			
+			if (Reg._tn == -1) Reg._tn = 0; // avoid a client crash by setting the selected theme to default.
+			
+			if (Reg._tn == 0) RegCustom.resetConfigurationVars2();			
+			
+			RegFunctions.themes_recursive_file_loop();
+			RegCustom.assign_colors();
+		
+		#else
+			Reg._tn = 0;
+			RegCustom.resetConfigurationVars();	
+			RegCustom.resetConfigurationVars2();			
+			
+			RegCustom.assign_colors();
+			bgColor = RegCustomColors.color_client_background();
+		#end
+		
+	}
+	
+	/******************************
+	 * seasons are used to display the correct scene effect such as rain for fall or snow for winter.
+	 */
+	private function get_season():Void
+	{
+		// if winter.
+		if (_intDay >= 21 && _intMonth == 12 // dec 21 to end of dec.
+		||	_intDay <= 20 && _intMonth <= 2) // jan 1 to mar 20 
+			_season._winter = true;
 	}
 	
 	private function full_screen_toggle():Void
@@ -268,6 +350,9 @@ class MenuState extends FlxState
 		FlxG.fullscreen = !FlxG.fullscreen;
 	}
 	
+	/******************************
+	 * In window mode change the stage width and height dimentions after one of these scale mode options are selected.
+	 */	
 	private function setScaleMode(scaleMode:ScaleMode)
 	{
 		_button_scale_mode.label.text = "Scale Mode: " + scaleMode;
@@ -292,21 +377,45 @@ class MenuState extends FlxState
 	
 	private function chess_skill_level_setup():Void
 	{
-		var _gameOptions = new FlxText(30, 620, 0, "What is your chess skill level for offline play?");
+		if (_gameOptions != null)
+		{
+			remove(_gameOptions);
+			_gameOptions.destroy();
+		}
+		
+		_gameOptions = new FlxText(30, 620, 0, "What is your chess skill level for offline play?");
 		_gameOptions.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
 		_gameOptions.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		_gameOptions.scrollFactor.set();
 		add(_gameOptions);
+		
+		if (_button_b1 != null)
+		{
+			remove(_button_b1);
+			_button_b1.destroy();
+		}
 		
 		_button_b1 = new ButtonToggleFlxState(_gameOptions.x + _gameOptions.textField.width + 15, 615, 1, "Beginner", 200, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, chess_skill_selected.bind(0), RegCustom._button_color[Reg._tn], false);
 		_button_b1.has_toggle = true;
 		_button_b1.label.font = Reg._fontDefault;
 		add(_button_b1);
 		
+		if (_button_b2 != null)
+		{
+			remove(_button_b2);
+			_button_b2.destroy();
+		}
+		
 		_button_b2 = new ButtonToggleFlxState(_button_b1.x + _button_b1.label.textField.width + 15, 615, 2, "Intermediate", 200, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, chess_skill_selected.bind(1), RegCustom._button_color[Reg._tn], false);
 		_button_b2.label.font = Reg._fontDefault;
 		_button_b2.has_toggle = true;
 		add(_button_b2);
+		
+		if (_button_b3 != null)
+		{
+			remove(_button_b3);
+			_button_b3.destroy();
+		}
 		
 		_button_b3 = new ButtonToggleFlxState(_button_b2.x + _button_b2.label.textField.width + 15, 615, 3, "Advance", 200, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, chess_skill_selected.bind(2), RegCustom._button_color[Reg._tn], false);
 		_button_b3.label.font = Reg._fontDefault;
@@ -361,7 +470,13 @@ class MenuState extends FlxState
 	public function draw_event_scheduler():Void
 	{
 		if (_client_online == true)
-		{		
+		{
+			if (_eventSchedulerBackground != null)
+			{
+				remove(_eventSchedulerBackground);
+				_eventSchedulerBackground.destroy();
+			}
+			
 			_eventSchedulerBackground = new FlxSprite(0, 0);
 			_eventSchedulerBackground.loadGraphic("assets/images/eventSchedulerBackground.png", false);
 			_eventSchedulerBackground.scrollFactor.set(0, 0);	
@@ -370,14 +485,26 @@ class MenuState extends FlxState
 			_eventSchedulerBackground.color = RegCustomColors.color_client_background();
 			_eventSchedulerBackground.alpha = 0.50;
 			add(_eventSchedulerBackground);
+
+			if (_event_scheduler_border != null)
+			{
+				remove(_event_scheduler_border);
+				_event_scheduler_border.destroy();
+			}
 			
-			var _event_scheduler_border = new FlxSprite(0, 0);
+			_event_scheduler_border = new FlxSprite(0, 0);
 			_event_scheduler_border.loadGraphic("assets/images/eventSchedulerBorder.png", false);
 			_event_scheduler_border.scrollFactor.set(0, 0);	
 			_event_scheduler_border.scale.set(1.05, 1.05);
 			_event_scheduler_border.setPosition(200 - 8, 440 - 8 + _offset_icons_and__event_scheduler_y);
 			//_event_scheduler_border.color = FlxColor.RED;
 			add(_event_scheduler_border);
+			
+			if (_eventSchedulerHover != null)
+			{
+				remove(_eventSchedulerHover);
+				_eventSchedulerHover.destroy();
+			}
 			
 			_eventSchedulerHover = new FlxSprite(0, 0);
 			_eventSchedulerHover.loadGraphic("assets/images/eventSchedulerHover.png", false);
@@ -403,10 +530,7 @@ class MenuState extends FlxState
 			Reg._buttonCodeValues = "";
 			Reg._yesNoKeyPressValueAtMessage = 0;
 
-			#if android
-				Internet.getAndroidAPKfile();
-			#elseif html5
-			#elseif desktop
+			#if desktop
 				Sys.command("start", ["boardGamesUpdaterClient.bat"]);
 				Sys.exit(0);
 			#end
@@ -480,7 +604,6 @@ class MenuState extends FlxState
 			buttonsIconsActive();
 			
 			Reg._at_menu_state = true;
-			Reg._at_menu_state = true;
 		}
 		
 		// no recent version available when after clicking a button to check for an newer version of the software.
@@ -511,47 +634,118 @@ class MenuState extends FlxState
 	{
 		if (__scene_background != null)
 		{
-			remove(__scene_background);
+			remove(__scene_background);	
 			__scene_background.destroy();
 		}
 		
-		if (__scene_background != null) remove(__scene_background);	
-			__scene_background = new SceneBackground();
+		__scene_background = new SceneBackground();
 		add(__scene_background);
+		
+		if (_gameBackground != null) 
+		{
+			remove(_gameBackground);
+			_gameBackground.destroy();
+		}
+		
+		_gameBackground = new FlxSprite(15, FlxG.height - 425, "assets/images/gameBackground.jpg");
+		_gameBackground.alpha = 0.45;
+		add(_gameBackground);
+		
+		set_effects();
 		
 		if (Reg._at_menu_state_offline == true)
 		{
-			if (Reg.__menu_bar != null) remove(Reg.__menu_bar);
-			Reg.__menu_bar = new MenuBar(true);
-			add(Reg.__menu_bar);
+			if (__menu_bar != null)
+			{
+				remove(__menu_bar);
+				__menu_bar.destroy();
+			}
+			
+			__menu_bar = new MenuBar(true);
+			add(__menu_bar);
 		}
 		
 		// Get event data. only search the internet once, when event data is not populated.
 		_client_online = Internet.isWebsiteAvailable();
 		
+		if (_toggleFullscreen != null)
+		{
+			remove(_toggleFullscreen);
+			_toggleFullscreen.destroy();
+		}
+		
+		_toggleFullscreen = new ButtonGeneralNetworkNo(15, FlxG.height - 40, "", 300, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, full_screen_toggle, RegCustom._button_color[Reg._tn], false);
+		_toggleFullscreen.label.text = "Toggle Fullscreen";
+		_toggleFullscreen.label.font = Reg._fontDefault;
+		add(_toggleFullscreen);
+		
 		#if !html5	
 			if (_client_online == true)
 			{
-				_software_new_check = new ButtonGeneralNetworkNo(15, FlxG.height - 40, "", 385, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, checkForNewSoftware, RegCustom._button_color[Reg._tn], false, 0);
+				if (_software_new_check != null)
+				{
+					remove(_software_new_check);
+					_software_new_check.destroy();
+				}
+				
+				_software_new_check = new ButtonGeneralNetworkNo(330, FlxG.height - 40, "", 385, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, checkForNewSoftware, RegCustom._button_color[Reg._tn], false, 0);
 				_software_new_check.label.text = "Check For New Software";
 				_software_new_check.label.font = Reg._fontDefault;
 				add(_software_new_check);
 			}
 			
-			_button_scale_mode = new ButtonGeneralNetworkNo(_software_new_check.width + _software_new_check.x + 15, FlxG.height - 40, "Scale Mode", 360, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, scaleClicked, RegCustom._button_color[Reg._tn], false, 0);
+			if (_button_scale_mode != null)
+			{
+				remove(_button_scale_mode);
+				_button_scale_mode.destroy();
+			}
+			
+			_button_scale_mode = new ButtonGeneralNetworkNo(_software_new_check.width + _software_new_check.x + 15, FlxG.height - 40, "Scale Mode", 360, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, scaleModeClicked, RegCustom._button_color[Reg._tn], false, 0);
 			_button_scale_mode.label.font = Reg._fontDefault;
 			add(_button_scale_mode);
 			
 			scaleModeLoad(); // change scale mode to the scale mode that was saved.
-		#else
-			_toggleFullscreen = new ButtonGeneralNetworkNo(15, FlxG.height - 40, "", 300, 35, Reg._font_size, 0xFFCCFF33, 0, full_screen_toggle, 0xFF000044, false);
-			_toggleFullscreen.label.text = "Toggle Fullscreen";
-			_toggleFullscreen.label.font = Reg._fontDefault;
-			add(_toggleFullscreen);
 		#end
 	}
 	
-	public function scaleClicked():Void
+	/******************************
+	 * add effects to the scene according to the season.
+	 */
+	private function set_effects():Void
+	{		
+		if (Reg._at_menu_state == true)
+		{
+			if (_effects != null) 
+			{
+				remove(_effects);
+				_effects.destroy();
+			}
+			
+			_effects = new FlxTypedGroup<SceneEffects>();
+			add(_effects);
+			
+			// effects: 1:snow, 2:rain.
+			if (_season._fall == true || _season._winter == true)
+			{
+				for (i in 0...600)
+				{
+					var _ra = FlxG.random.int(-150, 1440);
+					var _ra2 = FlxG.random.int( -1440, 0);
+					var _ra3 = FlxG.random.int( -1440, 1440);
+					
+					// rain.
+					if (_season._fall == true)
+						_effects.add(new SceneEffects(_ra, _ra3, i % 10, 1));
+					// snow.
+					if (_season._winter == true)
+						_effects.add(new SceneEffects(_ra, _ra2, i % 10, 0));
+					
+				}	
+			}
+		}
+	}
+	
+	public function scaleModeClicked():Void
 	{
 		scaleModeIndex = FlxMath.wrap(scaleModeIndex + 1, 0, scaleModes.length - 1);
 		setScaleMode(scaleModes[scaleModeIndex]);
@@ -584,11 +778,11 @@ class MenuState extends FlxState
 	}
 	
 	// try to connect to the server.
-	public function tryToConnect():Void
+	public static function PlayStateEnter():Void
 	{
 		#if html5
-			RegCustom._profile_username_p1[CID3._CRN] = "Guest";
-		
+			RegCustom._profile_username_p1[CID3._CRN] = "Guest1";
+			
 		#end
 		
 		Reg._alreadyOnlineHost = false;
@@ -625,20 +819,18 @@ class MenuState extends FlxState
 				Reg._doOnce = false;
 				
 				serverConnectingErrorMessages();
-								
 			}
 			
 		#end
 		
 		#if html5
-			RegTypedef._dataAccount._username = "bot ben";
 			Reg._at_menu_state = false;
 			FlxG.switchState(new PlayState());
-				
+			
 		#end
 	}
 
-	private function getIPaddressFromServerOrMain():Void
+	public static function getIPaddressFromServerOrMain():Void
 	{
 		Reg._ipAddress = Reg._ipAddressServerMain;
 			
@@ -660,7 +852,7 @@ class MenuState extends FlxState
 		#end
 	}
 	
-	private function canClientUpdate():Void
+	private static function canClientUpdate():Void
 	{
 		// check to see if the IP address is paid because we may be using third party IP address. here we check the MySQL database table users for this IP address to see if it has a paid value.
 		var _online = Internet.isWebsiteAvailable();
@@ -703,7 +895,7 @@ class MenuState extends FlxState
 		}
 	}
 	
-	private function clientUpdate():Void
+	private static function clientUpdate():Void
 	{	
 		Reg._messageId = 1;
 		Reg._buttonCodeValues = "z1000";
@@ -713,7 +905,7 @@ class MenuState extends FlxState
 	}
 	
 		
-	private function serverConnectingErrorMessages():Void
+	private static function serverConnectingErrorMessages():Void
 	{
 		Reg._messageId = 2;
 		Reg._buttonCodeValues = "z1010";
@@ -722,7 +914,7 @@ class MenuState extends FlxState
 		buttonsIconsNotActive();
 	}
 	
-	private function noNewerSoftwareFoundMessages():Void
+	private static function noNewerSoftwareFoundMessages():Void
 	{
 		Reg._messageId = 4;
 		Reg._buttonCodeValues = "z1030";
@@ -785,20 +977,6 @@ class MenuState extends FlxState
 	
 	private function eventCurrentAndUpcoming():Void
 	{
-		var _offsetEventColumn1Y:Int = 29;
-		var _offsetEventColumn2Y:Int = 54;
-		var _offsetEventColumn3Y:Int = 79;
-		
-		// the background behind a calendar square. Each square can have three events on it. the location of the event text is called a column.
-	 	var _bgEventColumn1Number:FlxSprite;
-		var _bgEventColumn2Number:FlxSprite;
-		var _bgEventColumn3Number:FlxSprite;
-		
-		// three events are displayed one after another on a event schedule current square.
-		var _textEventColumn1Number:FlxText;
-		var _textEventColumn2Number:FlxText;
-		var _textEventColumn3Number:FlxText;
-		
 		// used to display the day number text and events text on the calendar.
 		var _intCalendarCoordinateY:Float = _icon_text_title_description.y + 50;	 
 		var _intCalendarCoordinateX:Float = _eventSchedulerBackground.x + 11;
@@ -807,17 +985,6 @@ class MenuState extends FlxState
 	 	var _offsetBgColumnY:Int = 1;
 		var _offsetBgColumnX:Int = -13;
 		var _offsetUpcomingEventX:Int = 189; // this value moves the upcoming event text from the current column to the upcoming column.
-	
-		/******************************
-		 * day starts at 1.
-		 */
-		var _intDay = Std.parseInt(DateTools.format(Date.now(), "%d"));
-		
-		/******************************
-		 * month January starts at 0 not 1.
-		 */
-		var _intMonth = Std.parseInt(DateTools.format(Date.now(), "%m")) -1;	
-		var _intYear = 	Std.parseInt(DateTools.format(Date.now(), "%Y"));
 		
 		var _textMonth:String = "";
 		var _intDaysInMonth = EventSchedule.getDaysInMonth(_intMonth, _textMonth, _intYear);
@@ -826,7 +993,13 @@ class MenuState extends FlxState
 		 * get only three events for the event schedule current position.
 		 */
 		var _eventNoMoreThanThree:Int = 0; 
-				
+		
+		if (_textEventSchedule != null)
+		{
+			remove(_textEventSchedule);
+			_textEventSchedule.destroy();
+		}
+		
 		_textEventSchedule = new FlxText(0, 0, 0, "Event Schedule");
 		_textEventSchedule.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
 		_textEventSchedule.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
@@ -834,14 +1007,26 @@ class MenuState extends FlxState
 		_textEventSchedule.scrollFactor.set(0, 0);
 		add(_textEventSchedule);
 		
-		var _textCurrent = new FlxText(0, 0, 0, "Current");
+		if (_textCurrent != null)
+		{
+			remove(_textCurrent);
+			_textCurrent.destroy();
+		}
+		
+		_textCurrent = new FlxText(0, 0, 0, "Current");
 		_textCurrent.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.WHITE);
 		_textCurrent.setPosition(225, 374 + 60 + _offset_icons_and__event_scheduler_y);
 		_textCurrent.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		_textCurrent.scrollFactor.set();
 		add(_textCurrent);
 		
-		var _textUpcoming = new FlxText(414, 374 + 60 + _offset_icons_and__event_scheduler_y, 0, "");
+		if (_textUpcoming != null)
+		{
+			remove(_textUpcoming);
+			_textUpcoming.destroy();
+		}
+		
+		_textUpcoming = new FlxText(414, 374 + 60 + _offset_icons_and__event_scheduler_y, 0, "");
 		_textUpcoming.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.WHITE);
 		_textUpcoming.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		_textUpcoming.scrollFactor.set();
@@ -854,11 +1039,23 @@ class MenuState extends FlxState
 			{
 				if (_eventNoMoreThanThree == 0)
 				{
+					if (_bgEventColumn1Number != null)
+					{
+						remove(_bgEventColumn1Number);
+						_bgEventColumn1Number.destroy();
+					}
+					
 					_bgEventColumn1Number = new FlxSprite(190 + _offset_current_x, 410 + 60 + _offset_current_y + _offset_icons_and__event_scheduler_y);
 					_bgEventColumn1Number.makeGraphic(166, 25);
 					_bgEventColumn1Number.scrollFactor.set(0, 0);	
 					_bgEventColumn1Number.color = EventSchedule.setBgRowColor(Reg2._eventBackgroundColour[i]);
 					add(_bgEventColumn1Number);
+					
+					if (_textEventColumn1Number != null)
+					{
+						remove(_textEventColumn1Number);
+						_textEventColumn1Number.destroy();
+					}
 					
 					_textEventColumn1Number = new FlxText(193 + _offset_current_x, 407 + 60 + _offset_current_y + _offset_icons_and__event_scheduler_y, 0, "");
 					_textEventColumn1Number.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.WHITE);
@@ -872,11 +1069,23 @@ class MenuState extends FlxState
 				
 				else if (_eventNoMoreThanThree == 1)
 				{
+					if (_bgEventColumn2Number != null)
+					{
+						remove(_bgEventColumn2Number);
+						_bgEventColumn2Number.destroy();
+					}
+					
 					_bgEventColumn2Number = new FlxSprite(190 + _offset_current_x, 435 + 60 + _offset_current_y + _offset_icons_and__event_scheduler_y);
 					_bgEventColumn2Number.makeGraphic(166, 25);
 					_bgEventColumn2Number.scrollFactor.set(0, 0);	
 					_bgEventColumn2Number.color = EventSchedule.setBgRowColor(Reg2._eventBackgroundColour[i]);
 					add(_bgEventColumn2Number);
+					
+					if (_textEventColumn2Number != null)
+					{
+						remove(_textEventColumn2Number);
+						_textEventColumn2Number.destroy();
+					}
 					
 					_textEventColumn2Number = new FlxText(193 + _offset_current_x, 432 + 60 + _offset_current_y + _offset_icons_and__event_scheduler_y, 0, "");
 					_textEventColumn2Number.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.WHITE);
@@ -891,11 +1100,23 @@ class MenuState extends FlxState
 				
 				else if (_eventNoMoreThanThree == 2)
 				{
+					if (_bgEventColumn3Number != null)
+					{
+						remove(_bgEventColumn3Number);
+						_bgEventColumn3Number.destroy();
+					}
+					
 					_bgEventColumn3Number = new FlxSprite(190 + _offset_current_x, 460 + 60 + _offset_current_y + _offset_icons_and__event_scheduler_y);
 					_bgEventColumn3Number.makeGraphic(166, 25);
 					_bgEventColumn3Number.scrollFactor.set(0, 0);	
 					_bgEventColumn3Number.color = EventSchedule.setBgRowColor(Reg2._eventBackgroundColour[i]);
 					add(_bgEventColumn3Number);
+					
+					if (_textEventColumn3Number != null)
+					{
+						remove(_textEventColumn3Number);
+						_textEventColumn3Number.destroy();
+					}
 					
 					_textEventColumn3Number = new FlxText(193 + _offset_current_x, 457 + 60 + _offset_current_y + _offset_icons_and__event_scheduler_y, 0, "");
 					_textEventColumn3Number.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.WHITE);
@@ -928,11 +1149,23 @@ class MenuState extends FlxState
 					{
 						if (_eventNoMoreThanThree == 0)
 						{
+							if (_bgEventColumn1Number != null)
+							{
+								remove(_bgEventColumn1Number);
+								_bgEventColumn1Number.destroy();
+							}
+							
 							_bgEventColumn1Number = new FlxSprite(379 + _offset_upcoming_x, 410 + 60 + _offset_upcoming_y + _offset_icons_and__event_scheduler_y);
 							_bgEventColumn1Number.makeGraphic(166, 25);
 							_bgEventColumn1Number.scrollFactor.set(0, 0);	
 							_bgEventColumn1Number.color = EventSchedule.setBgRowColor(Reg2._eventBackgroundColour[i]);
 							add(_bgEventColumn1Number);
+							
+							if (_textEventColumn1Number != null)
+							{
+								remove(_textEventColumn1Number);
+								_textEventColumn1Number.destroy();
+							}
 							
 							_textEventColumn1Number = new FlxText(383 + _offset_upcoming_x, 407 + 60 + _offset_upcoming_y + _offset_icons_and__event_scheduler_y, 0, "");
 							_textEventColumn1Number.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.WHITE);
@@ -949,11 +1182,23 @@ class MenuState extends FlxState
 						
 						else if (_eventNoMoreThanThree == 1)
 						{
+							if (_bgEventColumn2Number != null)
+							{
+								remove(_bgEventColumn2Number);
+								_bgEventColumn2Number.destroy();
+							}
+							
 							_bgEventColumn2Number = new FlxSprite(379 + _offset_upcoming_x, 435 + 60 + _offset_upcoming_y + _offset_icons_and__event_scheduler_y);
 							_bgEventColumn2Number.makeGraphic(166, 25);
 							_bgEventColumn2Number.scrollFactor.set(0, 0);	
 							_bgEventColumn2Number.color = EventSchedule.setBgRowColor(Reg2._eventBackgroundColour[i]);
 							add(_bgEventColumn2Number);
+							
+							if (_textEventColumn2Number != null)
+							{
+								remove(_textEventColumn2Number);
+								_textEventColumn2Number.destroy();
+							}
 							
 							_textEventColumn2Number = new FlxText(383 + _offset_upcoming_x, 432 + 60 + _offset_upcoming_y + _offset_icons_and__event_scheduler_y, 0, "");
 							_textEventColumn2Number.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.WHITE);
@@ -968,11 +1213,23 @@ class MenuState extends FlxState
 						
 						else if (_eventNoMoreThanThree == 2)
 						{
+							if (_bgEventColumn3Number != null)
+							{
+								remove(_bgEventColumn3Number);
+								_bgEventColumn3Number.destroy();
+							}
+							
 							_bgEventColumn3Number = new FlxSprite(379 + _offset_upcoming_x, 460 + 60 + _offset_upcoming_y + _offset_icons_and__event_scheduler_y);
 							_bgEventColumn3Number.makeGraphic(166, 25);
 							_bgEventColumn3Number.scrollFactor.set(0, 0);	
 							_bgEventColumn3Number.color = EventSchedule.setBgRowColor(Reg2._eventBackgroundColour[i]);
 							add(_bgEventColumn3Number);
+							
+							if (_textEventColumn3Number != null)
+							{
+								remove(_textEventColumn3Number);
+								_textEventColumn3Number.destroy();
+							}
 							
 							_textEventColumn3Number = new FlxText(383 + _offset_upcoming_x, 457 + 60 + _offset_upcoming_y + _offset_icons_and__event_scheduler_y, 0, "");
 							_textEventColumn3Number.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.WHITE);
@@ -1015,6 +1272,12 @@ class MenuState extends FlxState
 	
 	private function titleIcons():Void
 	{
+		if (_icon_text_title_description != null)
+		{
+			remove(_icon_text_title_description);
+			_icon_text_title_description.destroy();
+		}
+		
 		_icon_text_title_description = new FlxText(0, 390 + _offset_icons_and__event_scheduler_y, 0, "Multiplayer Online. (World)");
 				
 		_icon_text_title_description.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
@@ -1026,7 +1289,13 @@ class MenuState extends FlxState
 		_group_sprite.splice(0, _group_sprite.length);
 		
 		// the icons background.
-		var _icons_background = new FlxSprite(20, 120);
+		if (_icons_background != null)
+		{
+			remove(_icons_background);
+			_icons_background.destroy();
+		}
+		
+		_icons_background = new FlxSprite(20, 120);
 		_icons_background.loadGraphic("assets/images/iconsBackground.png");
 		_icons_background.color = RegCustomColors.color_client_background();
 		_icons_background.setPosition(_icon_offset_x - 11, 440 + _offset_icons_and__event_scheduler_y - 11);
@@ -1034,7 +1303,13 @@ class MenuState extends FlxState
 		_icons_background.alpha = 0.50;
 		add(_icons_background);
 		
-		var _icon_border_between_other_icons = new FlxSprite(_icons_background.x, _icons_background.y);
+		if (_icon_border_between_other_icons != null)
+		{
+			remove(_icon_border_between_other_icons);
+			_icon_border_between_other_icons.destroy();
+		}
+		
+		_icon_border_between_other_icons = new FlxSprite(_icons_background.x, _icons_background.y);
 		_icon_border_between_other_icons.loadGraphic("assets/images/iconsBorder.png");
 		//_icon_border_between_other_icons.color = FlxColor.RED;
 		_icon_border_between_other_icons.scrollFactor.set(0, 0);
@@ -1079,6 +1354,12 @@ class MenuState extends FlxState
 		}
 		
 		// when clicking on a game image, this image has a border that highlighted it.
+		if (_game_highlighted != null)
+		{
+			remove(_game_highlighted);
+			_game_highlighted.destroy();
+		}
+		
 		// all gameboards images are stored in frames.
 		_game_highlighted = new FlxSprite(_icon_offset_x - 2, 440 + _offset_icons_and__event_scheduler_y - 2);
 		
@@ -1094,7 +1375,7 @@ class MenuState extends FlxState
 	{		
 		RegTriggers._buttons_set_not_active = false;
 		
-		if (_num == 0) tryToConnect();
+		if (_num == 0) PlayStateEnter();
 		if (_num == 1) offlinePlayers();
 		//if (_num == 2) TODO add something here;
 		
@@ -1134,46 +1415,67 @@ class MenuState extends FlxState
 		
 		if (Reg._clientReadyForPublicRelease == false)
 		{
-			var _bot_text = new FlxText(15, 180, 0, "Click bot player button then click multiplayer online icon.");
+			if (_bot_text != null)
+			{
+				remove(_bot_text);
+				_bot_text.destroy();
+			}
+			
+			_bot_text = new FlxText(15, 180, 0, "Click bot player button then click multiplayer online icon.");
 			_bot_text.scrollFactor.set();
 			_bot_text.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
 			_bot_text.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 			add(_bot_text);	
 			
-			if (_bot_ben == null)
+			if (_bot_ben != null)
 			{
-				_bot_ben = new ButtonToggleFlxState(15, 230, 100, "Bot ben", 150, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, botUseBenOnline, RegCustom._button_color[Reg._tn], false);
-				_bot_ben.label.font = Reg._fontDefault;
-				add(_bot_ben);			
+				remove(_bot_ben);
+				_bot_ben.destroy();
 			}
 			
-			if (_bot_tina == null)
+			_bot_ben = new ButtonToggleFlxState(15, 230, 100, "Bot ben", 150, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, botUseBenOnline, RegCustom._button_color[Reg._tn], false);
+			_bot_ben.label.font = Reg._fontDefault;
+			add(_bot_ben);			
+			
+			if (_bot_tina != null)
 			{
-				_bot_tina = new ButtonToggleFlxState(150+30, 230, 100, "Bot tina", 150, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, botUseTinaOnline, RegCustom._button_color[Reg._tn], false);
-				_bot_tina.label.font = Reg._fontDefault;
-				add(_bot_tina);		
+				remove(_bot_tina);
+				_bot_tina.destroy();
 			}
 			
-			if (_bot_piper == null)
+			_bot_tina = new ButtonToggleFlxState(150+30, 230, 100, "Bot tina", 150, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, botUseTinaOnline, RegCustom._button_color[Reg._tn], false);
+			_bot_tina.label.font = Reg._fontDefault;
+			add(_bot_tina);		
+			
+			if (_bot_piper != null)
 			{
-				_bot_piper = new ButtonToggleFlxState(300+45, 230, 100, "Bot piper", 150, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, botUsePiperOnline, RegCustom._button_color[Reg._tn], false);
-				_bot_piper.label.font = Reg._fontDefault;
-				add(_bot_piper);		
+				remove(_bot_piper);
+				_bot_piper.destroy();
 			}
 			
-			if (_bot_amy == null)
+			_bot_piper = new ButtonToggleFlxState(300+45, 230, 100, "Bot piper", 150, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, botUsePiperOnline, RegCustom._button_color[Reg._tn], false);
+			_bot_piper.label.font = Reg._fontDefault;
+			add(_bot_piper);		
+			
+			if (_bot_amy != null)
 			{
-				_bot_amy = new ButtonToggleFlxState(450+60, 230, 100, "Bot amy", 150, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, botUseAmyOnline, RegCustom._button_color[Reg._tn], false);
-				_bot_amy.label.font = Reg._fontDefault;
-				add(_bot_amy);			
+				remove(_bot_amy);
+				_bot_amy.destroy();
 			}
 			
-			if (_bot_zak == null)
+			_bot_amy = new ButtonToggleFlxState(450+60, 230, 100, "Bot amy", 150, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, botUseAmyOnline, RegCustom._button_color[Reg._tn], false);
+			_bot_amy.label.font = Reg._fontDefault;
+			add(_bot_amy);			
+			
+			if (_bot_zak != null)
 			{
-				_bot_zak = new ButtonToggleFlxState(600+75, 230, 100, "Bot zak", 150, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, botUseZakOnline, RegCustom._button_color[Reg._tn], false);
-				_bot_zak.label.font = Reg._fontDefault;
-				add(_bot_zak);
+				remove(_bot_zak);
+				_bot_zak.destroy();
 			}
+			
+			_bot_zak = new ButtonToggleFlxState(600+75, 230, 100, "Bot zak", 150, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, botUseZakOnline, RegCustom._button_color[Reg._tn], false);
+			_bot_zak.label.font = Reg._fontDefault;
+			add(_bot_zak);
 			
 			// add the none bot name as the last button displayed at this scene. the name is from the configuration menu. this list of names is only seen when application build is set to debug.
 			if (RegCustom._profile_username_p1[CID3._CRN] != ""
@@ -1185,6 +1487,12 @@ class MenuState extends FlxState
 			&&	RegCustom._profile_username_p1[CID3._CRN] != "Bot zak".toLowerCase()
 			)
 			{
+				if (_profile_username_p1 != null)
+				{
+					remove(_profile_username_p1);
+					_profile_username_p1.destroy();
+				}
+				
 				_profile_username_p1 = new ButtonToggleFlxState(750+90, 230, 100, RegCustom._profile_username_p1[CID3._CRN], 200, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, profile_username_p1, RegCustom._button_color[Reg._tn], false);
 				_profile_username_p1.label.font = Reg._fontDefault;
 				add(_profile_username_p1);
@@ -1344,7 +1652,7 @@ class MenuState extends FlxState
 		
 	}
 	
-	private function buttonsIconsNotActive():Void
+	private static function buttonsIconsNotActive():Void
 	{
 		_is_active = false;
 		
@@ -1380,6 +1688,187 @@ class MenuState extends FlxState
 	
 	override public function destroy():Void
 	{
+		if (Reg._at_menu_state == true)
+		{
+			if (_season._fall == true && _season._winter == true)
+			{
+				for (i in 0..._effects.length)
+				{
+					remove(_effects.members[i]);
+					_effects.members[i].destroy();
+					_effects.members[i] = null;
+				}
+			}
+		}
+		
+		if (__action_commands != null)
+		{
+			remove(__action_commands);
+			__action_commands.destroy();
+			__action_commands = null;
+		}
+		
+		if (__scene_background != null)
+		{			
+			remove(__scene_background);
+			__scene_background.destroy();
+			__scene_background = null;
+		}
+		
+		if (_button_b1 != null)
+		{	
+			remove(_button_b1);
+			_button_b1.destroy();
+			_button_b1 = null;
+		}
+		
+		if (_button_b2 != null)
+		{		
+			remove(_button_b2);
+			_button_b2.destroy();
+			_button_b2 = null;
+		}
+		
+		if (_button_b3 != null)
+		{		
+			remove(_button_b3);
+			_button_b3.destroy();
+			_button_b3 = null;
+		}
+		
+		if (_toggleFullscreen != null)
+		{		
+			remove(_toggleFullscreen);
+			_toggleFullscreen.destroy();
+			_toggleFullscreen = null;
+		}
+		
+		// cannot remove _gameMenu
+		if (_gameMenu != null)
+		{
+			_gameMenu.destroy();
+			_gameMenu = null;
+		}
+		
+		if (_software_new_check != null)
+		{		
+			remove(_software_new_check);
+			_software_new_check.destroy();
+			_software_new_check = null;
+		}
+		
+		if (_button_scale_mode != null)
+		{		
+			remove(_button_scale_mode);
+			_button_scale_mode.destroy();
+			_button_scale_mode = null;
+		}
+		
+		if (_eventSchedulerBackground != null)
+		{		
+			remove(_eventSchedulerBackground);
+			_eventSchedulerBackground.destroy();
+			_eventSchedulerBackground = null;
+		}
+		
+		if (_eventSchedulerHover != null)
+		{		
+			remove(_eventSchedulerHover);
+			_eventSchedulerHover.destroy();
+			_eventSchedulerHover = null;
+		}
+		
+		if (_sprite != null)
+		{		
+			remove(_sprite);
+			_sprite.destroy();
+			_sprite = null;
+		}
+		
+		if (_game_highlighted != null)
+		{		
+			remove(_game_highlighted);
+			_game_highlighted.destroy();
+			_game_highlighted = null;
+		}
+		
+		if (_icon_text_title_description != null)
+		{		
+			remove(_icon_text_title_description);
+			_icon_text_title_description.destroy();
+			_icon_text_title_description = null;
+		}
+		
+		if (_text_version_display != null)
+		{		
+			remove(_text_version_display);
+			_text_version_display.destroy();
+			_text_version_display = null;
+		}
+		
+		if (_bot_text != null)
+		{		
+			remove(_bot_text);
+			_bot_text.destroy();
+			_bot_text = null;
+		}
+		
+		if (_bot_ben != null)
+		{		
+			remove(_bot_ben);
+			_bot_ben.destroy();
+			_bot_ben = null;
+		}
+		
+		if (_bot_tina != null)
+		{		
+			remove(_bot_tina);
+			_bot_tina.destroy();
+			_bot_tina = null;
+		}
+		
+		if (_bot_piper != null)
+		{		
+			remove(_bot_piper);
+			_bot_piper.destroy();
+			_bot_piper = null;
+		}
+		
+		if (_bot_amy != null)
+		{		
+			remove(_bot_amy);
+			_bot_amy.destroy();
+			_bot_amy = null;
+		}
+		
+		if (_bot_zak != null)
+		{		
+			remove(_bot_zak);
+			_bot_zak.destroy();
+			_bot_zak = null;
+		}
+		
+		if (_profile_username_p1 != null)
+		{		
+			remove(_profile_username_p1);
+			_profile_username_p1.destroy();
+			_profile_username_p1 = null;
+		}
+		
+		if (_gameBackground != null)
+		{		
+			remove(_gameBackground);
+			_gameBackground.destroy();
+			_gameBackground = null;
+		}
+		
+		if (_textEventSchedule != null)
+		{		
+			remove(_textEventSchedule);
+			_textEventSchedule.destroy();
+			_textEventSchedule = null;
+		}
+		
 		super.destroy();
 	}
 	
@@ -1405,9 +1894,14 @@ class MenuState extends FlxState
 			Reg._hasUserConnectedToServer = false;
 			Reg._notation_output = true;
 			
-			if (Reg.__title_bar != null) remove(Reg.__title_bar);
-			Reg.__title_bar = new TitleBar(Reg._websiteNameTitle);
-			add(Reg.__title_bar);
+			if (__title_bar != null) 
+			{
+				remove(__title_bar);
+				__title_bar.destroy();
+			}
+			
+			__title_bar = new TitleBar(Reg._websiteNameTitle);
+			add(__title_bar);
 			
 			_clicked = false; // the sound does not play for the icons the first time. this is the fix.
 			
@@ -1422,6 +1916,12 @@ class MenuState extends FlxState
 			if (_button_b3.has_toggle == true)
 				RegCustom._chess_skill_level_online = 2;
 			
+			if (_text_version_display != null)
+			{
+				remove(_text_version_display);
+				_text_version_display.destroy();
+			}
+			
 			_text_version_display = new FlxText(0, 0, 0, "V" + Reg._version);
 			_text_version_display.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
 			_text_version_display.scrollFactor.set();
@@ -1433,12 +1933,6 @@ class MenuState extends FlxState
 			
 			_text_version_display.setPosition(FlxG.width - _text_version_display.fieldWidth - 15, FlxG.height - 40);
 			add(_text_version_display);	
-			
-			if (Reg._clientReadyForPublicRelease == false)
-			{
-				__action_commands = new ActionCommands(); 
-				add(__action_commands);
-			} 
 			
 			Reg._gameJumpTo = 0;
 			
@@ -1454,6 +1948,18 @@ class MenuState extends FlxState
 			{
 				_ticks_internet = 1;
 				draw_event_scheduler();
+				
+				if (Reg._clientReadyForPublicRelease == false)
+				{
+					if (__action_commands != null)
+					{
+						remove(__action_commands);
+						__action_commands.destroy();
+					}
+					
+					__action_commands = new ActionCommands(); 
+					add(__action_commands);
+				} 
 			}
 			
 			if (Reg._buttonCodeValues != "") buttonCodeValues();
@@ -1661,7 +2167,7 @@ class MenuState extends FlxState
 			Reg._buttonCodeValues = "";
 			Reg._yesNoKeyPressValueAtMessage = 0;
 
-			FlxG.openURL("https://kboardgames.com/index.php?p=30","_blank"); 
+			FlxG.openURL("http://kboardgames.com/index.php?p=30","_blank"); 
 			
 			buttonsIconsActive();
 		}
@@ -1680,7 +2186,7 @@ class MenuState extends FlxState
 			Reg._buttonCodeValues = "";
 			Reg._yesNoKeyPressValueAtMessage = 0;
 
-			FlxG.openURL("https://kboardgames.com/index.php?p=31","_blank"); 
+			FlxG.openURL("http://kboardgames.com/index.php?p=31","_blank"); 
 			
 			buttonsIconsActive();
 		}
@@ -1695,6 +2201,7 @@ class MenuState extends FlxState
 		
 		// should message box be displayed?
 		if (Reg._messageId > 0 && Reg._messageId != 1000000
+		&&	Reg._messageId != Reg._message_id_temp
 		&&	RegTriggers._buttons_set_not_active == false)
 		{
 			var _msg = new IdsMessageBox();

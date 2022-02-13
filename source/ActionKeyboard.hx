@@ -185,7 +185,58 @@ class ActionKeyboard extends FlxGroup
 	}
 	
 	override public function destroy():Void
-	{		
+	{
+		_group_button.splice(0, _group_button.length);
+		
+		if (_button_rows != null)
+		{
+			remove(_button_rows);
+			_button_rows.destroy();
+			_button_rows = null;
+		}
+		
+		if (_button1 != null)
+		{
+			remove(_button1);
+			_button1.destroy();
+			_button1 = null;
+		}
+		
+		if (_button2 != null)
+		{
+			remove(_button2);
+			_button2.destroy();
+			_button2 = null;
+		}
+		
+		if (_button3 != null)
+		{
+			remove(_button3);
+			_button3.destroy();
+			_button3 = null;
+		}
+		
+		if (_button4 != null)
+		{
+			remove(_button4);
+			_button4.destroy();
+			_button4 = null;
+		}
+		
+		if (_button5 != null)
+		{
+			remove(_button5);
+			_button5.destroy();
+			_button5 = null;
+		}
+		
+		if (_button6 != null)
+		{
+			remove(_button6);
+			_button6.destroy();
+			_button6 = null;
+		}
+		
 		super.destroy();
 	}
 }

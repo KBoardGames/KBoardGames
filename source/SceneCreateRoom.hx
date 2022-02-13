@@ -17,13 +17,20 @@ package;
  */
 class SceneCreateRoom extends FlxState
 {
+	public static var __title_bar:TitleBar;
+	public static var __menu_bar:MenuBar; 
+	
+	private var _t1:FlxText;
+	private var _t2:FlxText;
+	private var _t3:FlxText;
+	private var _t4:FlxText;
+	private var _t5:FlxText;
+	
 	/******************************
 	* when creating a game, this will be the default number of total players permitted for the game.
 	*/
 	public static var _textMaximumPlayersForGame:FlxText;
 	
-	public var _vsHumanOrComputerGame:FlxText;
-
 	/******************************
 	* minus 1 from the total permitted players that can play the game.
 	*/
@@ -44,8 +51,8 @@ class SceneCreateRoom extends FlxState
 	private var _textAllowSpectatorsGame:FlxText;
 	private var _text_allow_minutes:FlxText;
 		
-	// used to select either human to computer to play a game against.		
-	public static var	_buttonHumanOrComputerGame:ButtonGeneralNetworkNo;
+	// if true then game stats will be updated after game is over for player.		
+	public static var _button_game_rated:ButtonGeneralNetworkNo;
 		
 	/******************************
 	 * moves all row data to the left side.
@@ -57,7 +64,15 @@ class SceneCreateRoom extends FlxState
 	 */
 	private var _offsetX2:Int = 13;
 	private var _offset_y:Int = 250;
-		
+	
+	private var _table_row:FlxSprite;
+	private var _table_horizontal_cell_padding:FlxSprite;
+	private var _table_horizontal_bottom_cell_padding:FlxSprite;
+	private var _table_vertical_cell_padding1:FlxSprite;
+	private var _table_vertical_cell_padding2:FlxSprite;
+	private var _table_vertical_cell_padding3:FlxSprite;
+	private var _table_vertical_cell_padding4:FlxSprite;
+	
 	public function new() 
 	{
 		super();
@@ -71,46 +86,94 @@ class SceneCreateRoom extends FlxState
 			RegFunctions.gameIds_create();
 			RegFunctions.gameIds_draw_sprite(this);
 			
-			//--------------------------------- Header columns for the data rows.		
-			var _t1 = new FlxText(100 - _offsetX - _offsetX2, 130 + _offset_y, 0, "Game");
+			//--------------------------------- Header columns for the data rows.
+			if (_t1 != null)
+			{
+				remove(_t1);
+				_t1.destroy();
+			}
+			
+			_t1 = new FlxText(100 - _offsetX - _offsetX2, 130 + _offset_y, 0, "Game");
 			_t1.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_topic_title_text_color());
 			_t1.scrollFactor.set();
 			add(_t1);
 			
-			var _t2 = new FlxText(420 - _offsetX - _offsetX2, 130 + _offset_y, 0, "Players");
+			if (_t2 != null)
+			{
+				remove(_t2);
+				_t2.destroy();
+			}
+			
+			_t2 = new FlxText(420 - _offsetX - _offsetX2, 130 + _offset_y, 0, "Players");
 			_t2.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_topic_title_text_color());
 			_t2.scrollFactor.set();
 			add(_t2);
 			
-			var _t3 = new FlxText(600 - _offsetX - _offsetX2, 130 + _offset_y, 0, "Against");
+			if (_t3 != null)
+			{
+				remove(_t3);
+				_t3.destroy();
+			}
+			
+			_t3 = new FlxText(600 - _offsetX - _offsetX2, 130 + _offset_y, 0, "Rated Game");
 			_t3.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_topic_title_text_color());
 			_t3.scrollFactor.set();
 			add(_t3);
 			
-			var _t4 = new FlxText(828 - _offsetX - _offsetX2, 130 + _offset_y, 0, "Spectators");
+			if (_t4 != null)
+			{
+				remove(_t4);
+				_t4.destroy();
+			}
+			
+			_t4 = new FlxText(828 - _offsetX - _offsetX2, 130 + _offset_y, 0, "Spectators");
 			_t4.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_topic_title_text_color());
 			_t4.scrollFactor.set();
 			add(_t4);
 			
-			var _t5 = new FlxText(1040 - _offsetX - _offsetX2, 130 + _offset_y, 0, "Minutes");
+			if (_t5 != null)
+			{
+				remove(_t5);
+				_t5.destroy();
+			}
+			
+			_t5 = new FlxText(1040 - _offsetX - _offsetX2, 130 + _offset_y, 0, "Minutes");
 			_t5.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_topic_title_text_color());
 			_t5.scrollFactor.set();
 			add(_t5);
 			
-			// Create the text boxes underneath the buttons. Note that the last count ends before another loop, so only 26 loops will be made. 
-			var _table_row = new FlxSprite(0, 0);
+			// Create the table row.
+			if (_table_row != null)
+			{
+				remove(_table_row);
+				_table_row.destroy();
+			}
+			
+			_table_row = new FlxSprite(0, 0);
 			_table_row.makeGraphic(FlxG.width, 55, RegCustomColors.color_table_body_background());		
 			_table_row.setPosition(20, 120 + 70 + _offset_y); 
 			_table_row.scrollFactor.set(0, 0);
 			add(_table_row);
 			
-			var _table_horizontal_cell_padding = new FlxSprite(0, 0);
+			if (_table_horizontal_cell_padding != null)
+			{
+				remove(_table_horizontal_cell_padding);
+				_table_horizontal_cell_padding.destroy();
+			}
+			
+			_table_horizontal_cell_padding = new FlxSprite(0, 0);
 			_table_horizontal_cell_padding.makeGraphic(FlxG.width, 2, FlxColor.BLACK);		
 			_table_horizontal_cell_padding.setPosition(20, 120 + 70 + _offset_y); 
 			_table_horizontal_cell_padding.scrollFactor.set(0, 0);
 			add(_table_horizontal_cell_padding);
 			
-			var _table_horizontal_bottom_cell_padding = new FlxSprite(0, 0);
+			if (_table_horizontal_bottom_cell_padding != null)
+			{
+				remove(_table_horizontal_bottom_cell_padding);
+				_table_horizontal_bottom_cell_padding.destroy();
+			}
+			
+			_table_horizontal_bottom_cell_padding = new FlxSprite(0, 0);
 			_table_horizontal_bottom_cell_padding.makeGraphic(FlxG.width, 2, FlxColor.BLACK);		
 			_table_horizontal_bottom_cell_padding.setPosition(20, 120 + 55 + 70 + _offset_y - 2); 
 			_table_horizontal_bottom_cell_padding.scrollFactor.set(0, 0);
@@ -119,56 +182,102 @@ class SceneCreateRoom extends FlxState
 			//-----------------------------
 			// a black bar between table rows.
 			// first column border. columns are minus 30 from Header column text.
-			var _table_vertical_cell_padding = new FlxSprite(0, 0);
-			_table_vertical_cell_padding.makeGraphic(2, 55, 0xFF000000);		
-			_table_vertical_cell_padding.setPosition(404 - _offsetX - _offsetX2, 120 + (1 * 70) + _offset_y); 
-			_table_vertical_cell_padding.scrollFactor.set(0, 0);
-			add(_table_vertical_cell_padding);
+			if (_table_vertical_cell_padding1 != null)
+			{
+				remove(_table_vertical_cell_padding1);
+				_table_vertical_cell_padding1.destroy();
+			}
 			
-			var _table_vertical_cell_padding = new FlxSprite(0, 0);
-			_table_vertical_cell_padding.makeGraphic(2, 55, 0xFF000000);		
-			_table_vertical_cell_padding.setPosition(584 - _offsetX - _offsetX2, 120 + (1 * 70) + _offset_y); 
-			_table_vertical_cell_padding.scrollFactor.set(0, 0);
-			add(_table_vertical_cell_padding);
+			_table_vertical_cell_padding1 = new FlxSprite(0, 0);
+			_table_vertical_cell_padding1.makeGraphic(2, 55, 0xFF000000);		
+			_table_vertical_cell_padding1.setPosition(404 - _offsetX - _offsetX2, 120 + (1 * 70) + _offset_y); 
+			_table_vertical_cell_padding1.scrollFactor.set(0, 0);
+			add(_table_vertical_cell_padding1);
 			
-			var _table_vertical_cell_padding = new FlxSprite(0, 0);
-			_table_vertical_cell_padding.makeGraphic(2, 55, 0xFF000000);		
-			_table_vertical_cell_padding.setPosition(812 - _offsetX - _offsetX2, 120 + (1 * 70) + _offset_y); 
-			_table_vertical_cell_padding.scrollFactor.set(0, 0);
-			add(_table_vertical_cell_padding);
+			if (_table_vertical_cell_padding2 != null)
+			{
+				remove(_table_vertical_cell_padding2);
+				_table_vertical_cell_padding2.destroy();
+			}
+			_table_vertical_cell_padding2 = new FlxSprite(0, 0);
+			_table_vertical_cell_padding2.makeGraphic(2, 55, 0xFF000000);		
+			_table_vertical_cell_padding2.setPosition(584 - _offsetX - _offsetX2, 120 + (1 * 70) + _offset_y); 
+			_table_vertical_cell_padding2.scrollFactor.set(0, 0);
+			add(_table_vertical_cell_padding2);
 			
-			var _table_vertical_cell_padding = new FlxSprite(0, 0);
-			_table_vertical_cell_padding.makeGraphic(2, 55, 0xFF000000);		
-			_table_vertical_cell_padding.setPosition(1024 - _offsetX - _offsetX2, 120 + (1 * 70) + _offset_y); 
-			_table_vertical_cell_padding.scrollFactor.set(0, 0);
-			add(_table_vertical_cell_padding);
+			if (_table_vertical_cell_padding3 != null)
+			{
+				remove(_table_vertical_cell_padding3);
+				_table_vertical_cell_padding3.destroy();
+			}
 			
-			// computer or human toggle button.
-			_buttonHumanOrComputerGame = new ButtonGeneralNetworkNo(600 - _offsetX - _offsetX2, 130 + (1 * 70) + _offset_y, "", 160, 40, 22, 0xFF000000, 0, toggleAgainstHumanOrComputer);
-			_buttonHumanOrComputerGame.label.text = "Human";
-			_buttonHumanOrComputerGame.label.font = Reg._fontDefault;	
-			_buttonHumanOrComputerGame.label.bold = true;
-			add(_buttonHumanOrComputerGame);
+			_table_vertical_cell_padding3 = new FlxSprite(0, 0);
+			_table_vertical_cell_padding3.makeGraphic(2, 55, 0xFF000000);		
+			_table_vertical_cell_padding3.setPosition(812 - _offsetX - _offsetX2, 120 + (1 * 70) + _offset_y); 
+			_table_vertical_cell_padding3.scrollFactor.set(0, 0);
+			add(_table_vertical_cell_padding3);
+			
+			if (_table_vertical_cell_padding4 != null)
+			{
+				remove(_table_vertical_cell_padding4);
+				_table_vertical_cell_padding4.destroy();
+			}
+			
+			_table_vertical_cell_padding4 = new FlxSprite(0, 0);
+			_table_vertical_cell_padding4.makeGraphic(2, 55, 0xFF000000);		
+			_table_vertical_cell_padding4.setPosition(1024 - _offsetX - _offsetX2, 120 + (1 * 70) + _offset_y); 
+			_table_vertical_cell_padding4.scrollFactor.set(0, 0);
+			add(_table_vertical_cell_padding4);
+			
+			// game rated?
+			if (_button_game_rated != null)
+			{
+				remove(_button_game_rated);
+				_button_game_rated.destroy();
+			}
+			
+			_button_game_rated = new ButtonGeneralNetworkNo(603 - _offsetX - _offsetX2, 132 + (1 * 70) + _offset_y, "True", 80, 35, 22, 0xFF000000, 0, toggle_game_rated, RegCustomColors.button_colors());
+			_button_game_rated.label.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.button_text_colors());
+			add(_button_game_rated);
 			
 			// the word checkers with empty spaces are needed to address a strange text alignment bug.
+			if (_textGame != null)
+			{
+				remove(_textGame);
+				_textGame.destroy();
+			}
+			
 			_textGame = new FlxText(83 - _offsetX, 135 + (1 * 70) + _offset_y, 0, "Checkers", Reg._font_size);
 			_textGame.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
 			add(_textGame);
+			
+			if (_textMaximumPlayersForGame != null)
+			{
+				remove(_textMaximumPlayersForGame);
+				_textMaximumPlayersForGame.destroy();
+			}
 			
 			_textMaximumPlayersForGame = new FlxText(420 - _offsetX - _offsetX2, 135 + (1 * 70) + _offset_y, 35, "", Reg._font_size);
 			_textMaximumPlayersForGame.text = "2";
 			_textMaximumPlayersForGame.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
 			add(_textMaximumPlayersForGame);
 			
-			_vsHumanOrComputerGame = new FlxText(600 - _offsetX - _offsetX2, 135 + (1 * 70) + _offset_y, 0, "", Reg._font_size);
-			_vsHumanOrComputerGame.text = "Human";
-			_vsHumanOrComputerGame.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
-			add(_vsHumanOrComputerGame);
+			if (_buttonAllowSpectatorsGame != null)
+			{
+				remove(_buttonAllowSpectatorsGame);
+				_buttonAllowSpectatorsGame.destroy();
+			}
 			
 			_buttonAllowSpectatorsGame = new ButtonGeneralNetworkNo(818 - _offsetX, 132 + (1 * 70) + _offset_y, "Yes", 65, 35, 22, 0xFF000000, 0, spectatorsGame, RegCustomColors.button_colors());		
 			_buttonAllowSpectatorsGame.label.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.button_text_colors());
 			_buttonAllowSpectatorsGame.label.bold = true;
 			add(_buttonAllowSpectatorsGame);
+			
+			if (_textAllowSpectatorsGame != null)
+			{
+				remove(_textAllowSpectatorsGame);
+				_textAllowSpectatorsGame.destroy();
+			}
 			
 			_textAllowSpectatorsGame = new FlxText(828 - _offsetX - _offsetX2, 135 + (1 * 70) + _offset_y, 35, "", Reg._font_size);
 			_textAllowSpectatorsGame.text = "No";
@@ -176,6 +285,12 @@ class SceneCreateRoom extends FlxState
 			_textAllowSpectatorsGame.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
 			_textAllowSpectatorsGame.visible = false;
 			add(_textAllowSpectatorsGame);
+			
+			if (_text_allow_minutes != null)
+			{
+				remove(_text_allow_minutes);
+				_text_allow_minutes.destroy();
+			}
 			
 			_text_allow_minutes = new FlxText(1040 - _offsetX - _offsetX2, 135 + (1 * 70) + _offset_y, 35, "", Reg._font_size);
 			_text_allow_minutes.fieldWidth = 300;
@@ -197,16 +312,23 @@ class SceneCreateRoom extends FlxState
 	
 	public function initialize():Void
 	{
+		if (__title_bar != null)
+		{
+			remove(__title_bar);
+			__title_bar.destroy();
+		}
 		
-		//#############################
-		// this button is not added to the _group, so it will not scroll with the other buttons.
-		if (Reg.__title_bar3 != null) remove(Reg.__title_bar3);
-		Reg.__title_bar3 = new TitleBar("Creating Room " + Std.string(RegTypedef._dataMisc._room));
-		add(Reg.__title_bar3);
+		__title_bar = new TitleBar("Creating Room " + Std.string(RegTypedef._dataMisc._room));
+		add(__title_bar);
 		
-		if (Reg.__menu_bar3 != null) remove(Reg.__menu_bar3);
-		Reg.__menu_bar3 = new MenuBar(false, false, null, null, this);
-		add(Reg.__menu_bar3);
+		if (__menu_bar != null) 
+		{
+			remove(__menu_bar);
+			__menu_bar.destroy();
+		}
+		
+		__menu_bar = new MenuBar(false, false, null, null);
+		add(__menu_bar);
 		
 		// might need to recreate the scrollbar to bring it back up.
 
@@ -216,8 +338,7 @@ class SceneCreateRoom extends FlxState
 		if (Reg._total_games_in_release > 0)
 		{
 			_textMaximumPlayersForGame.text = "2";		
-			_buttonHumanOrComputerGame.label.text = "Human";
-			
+				
 			game(Reg2._gameIds_that_can_be_selected[0]); 
 		}
 		
@@ -227,11 +348,23 @@ class SceneCreateRoom extends FlxState
 	
 	public function amountOfPlayersForGame():Void
 	{
+		if (_minusTotalPlayersForGame != null)
+		{
+			remove(_minusTotalPlayersForGame);
+			_minusTotalPlayersForGame.destroy();
+		}
+		
 		_minusTotalPlayersForGame = new ButtonGeneralNetworkNo(423 - _offsetX - _offsetX2, 130 + (1 * 70 + 1) + _offset_y, "-", 40, 40, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, playersTotalToggleMinus);
 		_minusTotalPlayersForGame.offset.y = 2;
 		_minusTotalPlayersForGame.label.font = Reg._fontDefault;
 		_minusTotalPlayersForGame.label.bold = true;
 		add(_minusTotalPlayersForGame);
+		
+		if (_plusTotalPlayersForGame != null)
+		{
+			remove(_plusTotalPlayersForGame);
+			_plusTotalPlayersForGame.destroy();
+		}
 		
 		_plusTotalPlayersForGame = new ButtonGeneralNetworkNo(513 - _offsetX - _offsetX2, 130 + (1 * 70 + 1) + _offset_y, "+", 40, 40, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, playersTotalTogglePlus);		
 		_plusTotalPlayersForGame.offset.y = 2;
@@ -285,22 +418,10 @@ class SceneCreateRoom extends FlxState
 		if ( _num == 3 ) _textMaximumPlayersForGame.x = 420 - _offsetX - _offsetX2;
 		if ( _num == 4 ) _textMaximumPlayersForGame.x = 477 - _offsetX - _offsetX2; // displayed after the min button.
 		
-		RegTypedef._dataMisc._vsComputer[RegTypedef._dataMisc._room] = 0;
 		RegTypedef._dataMisc._allowSpectators[RegTypedef._dataMisc._room] = 1;
-		/*
-		if (_num == 1) // against button when doing chess online. // uncomment when doing chess online.
-		{
-			_buttonHumanOrComputerGame.active = true;
-			_buttonHumanOrComputerGame.visible = true;
-						
-			_textAllowSpectatorsGame.text = "No";
-		}*/
-
+		
 		if (_num == 0 || _num == 1 || _num == 2 || _num == 3) // remove _num == 1 when doing chess online.
 		{
-			_buttonHumanOrComputerGame.active = false;
-			_buttonHumanOrComputerGame.visible = false;
-			
 			_textAllowSpectatorsGame.text = "Yes";
 		}
 		
@@ -322,96 +443,184 @@ class SceneCreateRoom extends FlxState
 		else _buttonAllowSpectatorsGame.label.text = "Yes";
 	}
 	
-	private function buttonAgainstGame():Void
+	private function toggle_game_rated():Void
 	{
-		_buttonHumanOrComputerGame.visible = false;
-	}
+		if (_button_game_rated.label.text == "True")
+			_button_game_rated.label.text = "False";
 			
-	public static function createRoomOnlineAgainstCPU():Void
-	{
-		RegTypedef._dataPlayers._room = RegTypedef._dataMisc._room;
-		
-		if (Reg._game_online_vs_cpu == true
-		&&  Reg._gameId == 1) 
-		{			
-			RegTypedef._dataPlayers._gameName = "Chess";
-			RegTypedef._dataPlayers._gameId = 1;
-			
-			RegTypedef._dataPlayers._usernamesDynamic[0] = "";
-			RegTypedef._dataPlayers._usernamesDynamic[1] = "";
-			RegTypedef._dataPlayers._usernamesDynamic[2] = "";
-			RegTypedef._dataPlayers._usernamesDynamic[3] = "";
-			
-			RegTypedef._dataPlayers._username = RegTypedef._dataPlayers._usernamesDynamic[0] = RegTypedef._dataPlayers._usernamesStatic[0] = RegTypedef._dataAccount._username;
-			
-			RegTypedef._dataMisc._roomLockMessage = "";
-			RegTypedef._dataMisc._roomIsLocked[RegTypedef._dataMisc._room] = 0;
-			RegTypedef._dataMisc._roomCheckForLock[RegTypedef._dataMisc._room] = 0;
-			
-			RegTypedef._dataMisc._userLocation = 2;
-			RegTypedef._dataMisc._roomState[RegTypedef._dataMisc._room] = 7;
-			RegTypedef._dataMisc._gameRoom = true;
-			//RegTypedef._dataMisc._roomHostUsername[RegTypedef._dataMisc._room] = RegTypedef._dataMisc._username;
-			RegTypedef._dataMisc._roomPlayerCurrentTotal[RegTypedef._dataMisc._room] = 2;
-			RegTypedef._dataMisc._roomPlayerLimit[RegTypedef._dataMisc._room] = 2;			
-			RegTypedef._dataMisc._vsComputer[RegTypedef._dataMisc._room] = 1;
-			RegTypedef._dataMisc._allowSpectators[RegTypedef._dataMisc._room] = 0;
-			RegTypedef._dataMisc._roomGameIds[RegTypedef._dataMisc._room] = 1;
-			
-			Reg._gameOverForPlayer = false;
-			Reg._gameOverForAllPlayers = false;
-			Reg._gameHost = true;
-			
-			RegTypedef._dataMisc._gameRoom = true;
-			
-			PlayState.send("Greater RoomState Value", RegTypedef._dataMisc); 			
-			
-			Reg._alreadyOnlineHost = false;
-			Reg._alreadyOnlineUser = false;
-						
-			Reg.playChessVsCPU();
-			Reg._game_offline_vs_player = false;
-			//ActionInput.enable();			
-			
-		}
-		
-			
-		RegTypedef._dataPlayers._usernamesDynamic[1] = Reg2._offline_cpu_host_name2;
-		RegTypedef._dataPlayers._avatarNumber[1] = RegCustom._profile_avatar_number2[Reg._tn];
-		
+		else
+			_button_game_rated.label.text = "True";
 	}
 	
-	private function toggleAgainstHumanOrComputer():Void
+	override public function destroy():Void
 	{
-		if (_buttonHumanOrComputerGame.label.text == "Computer")
-			_buttonHumanOrComputerGame.label.text = "Human";
-		else
-			_buttonHumanOrComputerGame.label.text = "Computer";
+		if (__title_bar != null)
+		{
+			__title_bar.visible = false;
+			remove(__title_bar);
+			__title_bar.destroy();
+			__title_bar = null;
+		}
+		
+		if (__menu_bar != null) 
+		{
+			__menu_bar.visible = false;
+			remove(__menu_bar);
+			__menu_bar.destroy();
+			__menu_bar = null;
+		}
+		
+		if (_t1 != null)
+		{
+			remove(_t1);
+			_t1.destroy();
+			_t1 = null;
+		}
+		
+		if (_t2 != null)
+		{
+			remove(_t2);
+			_t2.destroy();
+			_t2 = null;		
+		}
+		
+		if (_t3 != null)
+		{
+			remove(_t3);
+			_t3.destroy();
+			_t3	= null;
+		}
+		
+		if (_t4 != null)
+		{
+			remove(_t4);
+			_t4.destroy();
+			_t4 = null;	
+		}
+		
+		if (_t5 != null)
+		{
+			remove(_t5);
+			_t5.destroy();
+			_t5 = null;
+		}
+		
+		if (_textMaximumPlayersForGame != null)
+		{
+			remove(_textMaximumPlayersForGame);
+			_textMaximumPlayersForGame.destroy();
+			_textMaximumPlayersForGame = null;		
+		}
+		
+		if (_minusTotalPlayersForGame != null)
+		{
+			remove(_minusTotalPlayersForGame);
+			_minusTotalPlayersForGame.destroy();
+			_minusTotalPlayersForGame = null;
+		}
+		
+		if (_plusTotalPlayersForGame != null)
+		{
+			remove(_plusTotalPlayersForGame);
+			_plusTotalPlayersForGame.destroy();
+			_plusTotalPlayersForGame = null;
+		}
+		
+		if (_textGame != null)
+		{
+			remove(_textGame);
+			_textGame.destroy();
+			_textGame = null;
+		}
+		
+		if (_buttonAllowSpectatorsGame != null)
+		{
+			remove(_buttonAllowSpectatorsGame);
+			_buttonAllowSpectatorsGame.destroy();
+			_buttonAllowSpectatorsGame = null;
+		}
+		
+		if (_textAllowSpectatorsGame != null)
+		{
+			remove(_textAllowSpectatorsGame);
+			_textAllowSpectatorsGame.destroy();
+			_textAllowSpectatorsGame = null;
+		}
+		
+		if (_text_allow_minutes != null)
+		{
+			remove(_text_allow_minutes);
+			_text_allow_minutes.destroy();
+			_text_allow_minutes = null;
+		}
+		
+		if (_button_game_rated != null)
+		{
+			remove(_button_game_rated);
+			_button_game_rated.destroy();
+			_button_game_rated = null;
+		}
+		
+		if (_table_row != null)
+		{
+			remove(_table_row);
+			_table_row.destroy();
+			_table_row = null;
+		}
+		
+		if (_table_horizontal_cell_padding != null)
+		{
+			remove(_table_horizontal_cell_padding);
+			_table_horizontal_cell_padding.destroy();
+			_table_horizontal_cell_padding = null;
+		}
+		
+		if (_table_horizontal_bottom_cell_padding != null)
+		{
+			remove(_table_horizontal_bottom_cell_padding);
+			_table_horizontal_bottom_cell_padding.destroy();
+			_table_horizontal_bottom_cell_padding = null;		
+		}
+		
+		if (_table_vertical_cell_padding1 != null)
+		{
+			remove(_table_vertical_cell_padding1);
+			_table_vertical_cell_padding1.destroy();
+			_table_vertical_cell_padding1 = null;
+		}
+		
+		if (_table_vertical_cell_padding2 != null)
+		{
+			remove(_table_vertical_cell_padding2);
+			_table_vertical_cell_padding2.destroy();
+			_table_vertical_cell_padding2 = null;
+		}
+		
+		if (_table_vertical_cell_padding3 != null)
+		{
+			remove(_table_vertical_cell_padding3);
+			_table_vertical_cell_padding3.destroy();
+			_table_vertical_cell_padding3 = null;
+		}
+		
+		if (_table_vertical_cell_padding4 != null)
+		{
+			remove(_table_vertical_cell_padding4);
+			_table_vertical_cell_padding4.destroy();
+			_table_vertical_cell_padding4 = null;
+		}
 	}
 	
 	override public function update(elapsed:Float):Void 
 	{
 		//if (Reg._at_create_room == false) return;
 		
-		// if player selected "computer" at game 4 of the drop down menu, then hide the buttons that increases the amount of players for the signature game since currently only 1 computer player can play in that game. 
 		if (Reg._gameId == 4)
 		{
-			if (_buttonHumanOrComputerGame.label.text == "Computer")
-			{
-				_textMaximumPlayersForGame.text = "2";
-				_minusTotalPlayersForGame.visible = false;
-				_minusTotalPlayersForGame.active = false;
-				_plusTotalPlayersForGame.visible = false;
-				_plusTotalPlayersForGame.active = false;
-			}
-			
-			else
-			{
-				_minusTotalPlayersForGame.active = true;
-				_minusTotalPlayersForGame.visible = true;
-				_plusTotalPlayersForGame.active = true;
-				_plusTotalPlayersForGame.visible = true;
-			}
+			_minusTotalPlayersForGame.active = true;
+			_minusTotalPlayersForGame.visible = true;
+			_plusTotalPlayersForGame.active = true;
+			_plusTotalPlayersForGame.visible = true;
 		}
 		
 		else if (Reg._total_games_in_release > 0)
@@ -422,31 +631,6 @@ class SceneCreateRoom extends FlxState
 			_plusTotalPlayersForGame.active = false;
 		}
 		
-		// TODO uncomment when doing a chess game against the computer online.
-		// for a game, if "Computer" was selected at the drop down menu then at the spectators row set the text to "No" because spectators cannot be an option since most network events will not work.
-		/*if (Reg._gameId == 1)
-		{
-			_vsHumanOrComputerGame.visible = false;
-			
-			if (_buttonHumanOrComputerGame.label.text == "Computer")
-			{
-				_buttonAllowSpectatorsGame.visible = false;
-				_buttonAllowSpectatorsGame.active = false;
-				_textAllowSpectatorsGame.visible = true;
-			}
-			
-			else
-			{
-				_buttonAllowSpectatorsGame.active = true;
-				_buttonAllowSpectatorsGame.visible = true;
-				_textAllowSpectatorsGame.visible = false;
-			}
-		}
-		
-		else*/ 
-		if (Reg._total_games_in_release > 0)
-			_vsHumanOrComputerGame.visible = true;
-				
 		for (i in 0... Reg._total_games_in_release)
 		{
 			if (Reg2._gameId_sprite[i] != null)
@@ -471,6 +655,12 @@ class SceneCreateRoom extends FlxState
 			}
 		}
 		
+		// do not move this code.
+		if (_button_game_rated.label.text == "True")
+			RegTypedef._dataMisc._rated_game[RegTypedef._dataMisc._room] = 1;
+		else
+			RegTypedef._dataMisc._rated_game[RegTypedef._dataMisc._room] = 0;
+			
 		super.update(elapsed);
 	}
 	

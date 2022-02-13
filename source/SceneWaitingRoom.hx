@@ -19,6 +19,9 @@ package;
 // RegTypedef._dataMisc._roomState[RegTypedef._dataMisc._room], // 0 = empty, 1 computer game, 2 creating room, 3 = firth player waiting to play game. 4 = second player in waiting room. 5 third player in waiting room if any. 6 - forth player in waiting room if any. 7 - room full, 8 - playing game / waiting game.
 class SceneWaitingRoom extends FlxState 
 {
+	public static var __title_bar:TitleBar;
+	public static var __menu_bar:MenuBar; 
+	
 	/******************************
 	 * background gradient, texture and plain color for a scene.
 	 */
@@ -87,6 +90,12 @@ class SceneWaitingRoom extends FlxState
 		add(__scene_background);
 		
 		// creates the invite table and also sends the invite request to the server.
+		if (_invite_table != null)
+		{
+			remove(_invite_table);
+			_invite_table.destroy();
+		}
+		
 		_invite_table = new InviteTable(this);
 		add(_invite_table);
 		
@@ -162,23 +171,33 @@ class SceneWaitingRoom extends FlxState
 		var _gameName = RegFunctions.gameName(RegTypedef._dataMisc._roomGameIds[RegTypedef._dataMisc._room]);
 		RegTypedef._dataPlayers._gameName = _gameName;	
 		
-		if (Reg.__title_bar4 != null) remove(Reg.__title_bar4);
-		Reg.__title_bar4 = new TitleBar("Room " + Std.string(RegTypedef._dataMisc._room ) + " - " + _gameName);
-		add(Reg.__title_bar4);
+		if (__title_bar != null) 
+		{
+			remove(__title_bar);
+			__title_bar.destroy();
+		}
 		
-		if (Reg.__menu_bar4 != null) remove(Reg.__menu_bar4);
-		Reg.__menu_bar4 = new MenuBar(false, false, null, null, null, this);
-		add(Reg.__menu_bar4);
+		__title_bar = new TitleBar("Room " + Std.string(RegTypedef._dataMisc._room ) + " - " + _gameName);
+		add(__title_bar);
+		
+		if (__menu_bar != null) 
+		{
+			remove(__menu_bar);
+			__menu_bar.destroy();
+		}
+		
+		__menu_bar = new MenuBar(false, false, null, null);
+		add(__menu_bar);
 		
 		// computer resources are at a maximum when populating the user online list. clicking these buttons at that time would not trigger an event. so hide them until all fields are populated.
-		Reg.__menu_bar4._button_return_to_lobby_from_waiting_room.visible = false;
-		Reg.__menu_bar4._button_return_to_lobby_from_waiting_room.active = false;
+		__menu_bar._button_return_to_lobby_from_waiting_room.visible = false;
+		__menu_bar._button_return_to_lobby_from_waiting_room.active = false;
 		
-		Reg.__menu_bar4._button_refresh_list.visible = false;	
-		Reg.__menu_bar4._button_refresh_list.active = false;
+		__menu_bar._button_refresh_list.visible = false;	
+		__menu_bar._button_refresh_list.active = false;
 		
-		Reg.__menu_bar4._buttonGameRoom.visible = false;
-		Reg.__menu_bar4._buttonGameRoom.active = false; 
+		__menu_bar._buttonGameRoom.visible = false;
+		__menu_bar._buttonGameRoom.active = false; 
 		
 		RegTypedef._dataPlayers._username = RegTypedef._dataAccount._username;
 	
@@ -186,10 +205,6 @@ class SceneWaitingRoom extends FlxState
 		
 		PlayState.allTypedefRoomUpdate(RegTypedef._dataMisc._room);
 		
-		InviteTable._doOnce = false;
-		
-		
-		//-------------------------------
 		if (RegCustom._chat_when_at_room_enabled[Reg._tn] == true)
 		{
 			if (__game_chatter != null) 
@@ -205,6 +220,8 @@ class SceneWaitingRoom extends FlxState
 			GameChatter._groupChatterScroller.x = 0;
 			add(__game_chatter);
 		}
+		
+		RegTriggers._jump_waiting_room = false;
 	}
 		
 	public function scrollable_area():Void
@@ -383,30 +400,36 @@ class SceneWaitingRoom extends FlxState
 				||  Reg._currentRoomState == 5 && _textPlayer3Stats.text != ""
 				||  Reg._currentRoomState == 6 && _textPlayer4Stats.text != "")
 				{
-					Reg.__menu_bar4._buttonGameRoom.active = true;
-					Reg.__menu_bar4._buttonGameRoom.visible = true;
+					__menu_bar._buttonGameRoom.active = true;
+					__menu_bar._buttonGameRoom.visible = true;
 					
+					if (RegTriggers._jump_game_room == true)
+					{
+						RegTriggers._jump_game_room = false;
+						Reg._buttonCodeValues = "r1001";
+						Reg._yesNoKeyPressValueAtMessage = 1;
+					}
 				}
 			}
 			else if (Reg._buttonCodeValues != "p1000") // player does not exist so delete button.
 			{
-				Reg.__menu_bar4._buttonGameRoom.visible = false;
-				Reg.__menu_bar4._buttonGameRoom.active = false;
+				__menu_bar._buttonGameRoom.visible = false;
+				__menu_bar._buttonGameRoom.active = false;
 			}
 				
 						
 			if (Reg._currentRoomState >= 2 && Std.string(RegTypedef._dataAccount._username) != Std.string(RegTypedef._dataPlayers._usernamesDynamic[0]) && RegTypedef._dataPlayers._actionWho == "")
 			{
-				Reg.__menu_bar4._buttonGameRoom.visible = false;
-				Reg.__menu_bar4._buttonGameRoom.active = false;	
+				__menu_bar._buttonGameRoom.visible = false;
+				__menu_bar._buttonGameRoom.active = false;	
 			}
 			
 		}
 		else
 		{		
 			// only one player is in room.
-			Reg.__menu_bar4._buttonGameRoom.visible = false;					
-			Reg.__menu_bar4._buttonGameRoom.active = false;	
+			__menu_bar._buttonGameRoom.visible = false;					
+			__menu_bar._buttonGameRoom.active = false;	
 		}
 
 	}
@@ -509,7 +532,62 @@ class SceneWaitingRoom extends FlxState
 	}
 		
 	override public function destroy()
-	{		
+	{
+		if (_textPlayer1Stats != null) 
+		{
+			remove(_textPlayer1Stats);
+			_textPlayer1Stats.destroy();
+			_textPlayer1Stats = null;
+		}
+		
+		if (_textPlayer2Stats != null) 
+		{
+			remove(_textPlayer2Stats);
+			_textPlayer2Stats.destroy();
+			_textPlayer2Stats = null;
+		}
+		
+		if (_textPlayer3Stats != null) 
+		{
+			remove(_textPlayer3Stats);
+			_textPlayer3Stats.destroy();
+			_textPlayer3Stats = null;
+		}
+		
+		if (_textPlayer4Stats != null) 
+		{
+			remove(_textPlayer4Stats);
+			_textPlayer4Stats.destroy();
+			_textPlayer4Stats = null;
+		}
+		
+		if (bodyBg != null) 
+		{
+			remove(bodyBg);
+			bodyBg.destroy();
+			bodyBg = null;
+		}
+		
+		if (__title_bar != null) 
+		{
+			remove(__title_bar);
+			__title_bar.destroy();
+			__title_bar = null;
+		}
+		
+		if (__menu_bar != null) 
+		{
+			remove(__menu_bar);
+			__menu_bar.destroy();
+			__menu_bar = null;
+		}
+		
+		if (_invite_table != null)
+		{
+			remove(_invite_table);
+			_invite_table.destroy();
+		}
+		
 		if (__game_chatter != null)
 		{
 			remove(__game_chatter);
@@ -530,6 +608,9 @@ class SceneWaitingRoom extends FlxState
 	{
 		if (Reg._at_waiting_room == false) return; 
 		
+		// send the offset of the scrollable area to the button class so that when scrolling the scrollable area, the buttons will not be fired at an incorrect scene location. for example, without this offset, when scrolling to the right about 100 pixels worth, the button could fire at 100 pixels to the right of the button's far right location.
+			ButtonGeneralNetworkYes._scrollarea_offset_x = __scrollable_area.scroll.x;
+			ButtonGeneralNetworkYes._scrollarea_offset_y = __scrollable_area.scroll.y;
 		if (FlxG.keys.justReleased.ANY
 		||	FlxG.mouse.justPressed == true)
 			FlxG.sound.destroy(true);

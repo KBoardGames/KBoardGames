@@ -22,6 +22,11 @@ package;
 class GameHistoryAndNotations extends FlxGroup
 {
 	/******************************
+	 * this text is needed to fix a bug. it shows a scroll bar by feeding new lines to the FlxScrollableArea. this scrollbar move up until its bottom edge reaches the bottom of the FlxScrollableArea.
+	 */
+	private var _text:FlxText;
+		
+	/******************************
 	 * text to be displayed at the scroller.
 	 */
 	public static var _message_for_scrollable_area:FlxText;
@@ -40,11 +45,6 @@ class GameHistoryAndNotations extends FlxGroup
 	 * pointer to the scroller.
 	 */
 	public static var __scrollable_area:FlxScrollableArea;
-	
-	/******************************
-	 * an image used as a border that surrounds the scrollableArea.
-	 */
-	public static var _notationDisplayBorder:FlxSprite;
 	
 	/******************************
 	 * used to darken the scrollableArea region.
@@ -77,8 +77,14 @@ class GameHistoryAndNotations extends FlxGroup
 		add(_box);
 		_group_scrollable_area.add(_box);
 
+		if (_text != null)
+		{
+			remove(_text);
+			_text.destroy();
+		}
+		
 		// this text is needed to fix a bug. it shows a scroll bar by feeding new lines to the FlxScrollableArea. this scrollbar move up until its bottom edge reaches the bottom of the FlxScrollableArea.
-		var _text = new FlxText(40, FlxG.height - Reg._offsetScreenY + 13, 0, "");
+		_text = new FlxText(40, FlxG.height - Reg._offsetScreenY + 13, 0, "");
 		_text.setFormat(null, 17, FlxColor.WHITE, LEFT);
 		_text.offset.set(0, 10);
 		_text.font = Reg._fontDefault;
@@ -660,12 +666,15 @@ class GameHistoryAndNotations extends FlxGroup
 	{
 		if (_box != null)
 		{
+			_group_scrollable_area.remove(_box);
 			remove(_box);
 			_box.destroy();
+			_box = null;
 		}
 		
 		if (_message_for_scrollable_area != null)
 		{
+			_group_scrollable_area.remove(_message_for_scrollable_area);
 			remove(_message_for_scrollable_area);
 			_message_for_scrollable_area.destroy();
 			_message_for_scrollable_area = null;
@@ -676,13 +685,6 @@ class GameHistoryAndNotations extends FlxGroup
 			cameras.remove(__scrollable_area);
 			__scrollable_area.destroy();
 			__scrollable_area = null;
-		}
-		
-		if (_group_scrollable_area != null)
-		{
-			remove(_group_scrollable_area);
-			_group_scrollable_area.destroy();
-			_group_scrollable_area = null;
 		}
 		
 		if (_notation != null)
@@ -707,7 +709,14 @@ class GameHistoryAndNotations extends FlxGroup
 			_scrollingTextP2 = null;
 		}
 		
-		
+		if (_text != null)
+		{
+			_group_scrollable_area.remove(_text);
+			remove(_text);
+			_text.destroy();
+			_text = null;
+		}	
+	
 		super.destroy();
 	}
 

@@ -55,12 +55,17 @@ class FlxScrollableArea extends FlxCamera
 	private var _scrollbarColour:FlxColor;
 	private var _resizeModeGoal:ResizeMode;
 	private var _id:Int = 0;
-
+	
+	/******************************
+	 * when ticks is a set value then the scrollbar can be moved. a button press will not trigger a sound event without this var. the reason is that when a mouse is clicked, the Reg2._scrollable_area_is_scrolling is set to true. there is no way to know if either a button is pressed or a scrollable area is pressed because they both can share the same space. so this tick will only set Reg2._scrollable_area_is_scrolling to true when it is a set value. this gives the button click event time to trigger the sound event.
+	 */
+	private var _ticks_delay:Int = 0;
+	
 	/******************************
 	* background gradient, texture and plain color for a scene.
 	*/
 	public var __scene_background:SceneBackground;
-			
+	
 	private var _hiddenPixelAllowance:Float = 1.0; // don't bother showing scrollbars if this many pixels would go out of view (float weirdness fix)
 	/**
 	 * Creates a specialized FlxCamera that can be added to FlxG.cameras.
@@ -342,17 +347,6 @@ class FlxScrollableArea extends FlxCamera
 		return value;
 	}
 	
-	override public function destroy() 
-	{
-		for (bar in [_horizontalScrollbar, _verticalScrollbar]) 
-		{
-			_state.remove(bar);
-			bar.destroy();
-		}
-		
-		super.destroy();
-	}
-	
 	function set_content(value:FlxRect):FlxRect 
 	{
 		content = value;
@@ -372,6 +366,25 @@ class FlxScrollableArea extends FlxCamera
 		_verticalScrollbar.forceRedraw();
 	}
 	
+	override public function destroy() 
+	{
+		for (_bar in [_horizontalScrollbar, _verticalScrollbar]) 
+		{
+			_state.remove(_bar);
+			_bar.destroy();
+			_bar = null;
+		}		
+		
+		if (__scene_background != null)
+		{
+			_state.remove(__scene_background);
+			__scene_background.destroy();
+			__scene_background = null;
+		}
+		
+		super.destroy();
+	}
+	
 	override public function update(elapsed:Float)
 	{
 		// currently used for chatter. this moves the scrollable area to the right. id with a value of 1 is used for the second scrollable area which is always at the right side of the screen. must not be used in a block of code when using a do_once var because the scrollable area will flicker then not be visable.
@@ -387,6 +400,19 @@ class FlxScrollableArea extends FlxCamera
 				_do_once = false;
 			}
 		}
+		
+		// FlxG.mouse.pressed code above does not work for this var.
+		if (FlxG.mouse.pressed == true || _ticks_delay > 0)
+		{
+			_ticks_delay += 1;
+			
+			if (_ticks_delay > 12) 
+				Reg2._scrollable_area_is_scrolling = true;
+		}
+		
+		else Reg2._scrollable_area_is_scrolling = false;
+		
+		if (_ticks_delay > 12) _ticks_delay = 0;
 		
 		super.update(elapsed);
 	}

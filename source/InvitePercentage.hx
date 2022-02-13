@@ -24,6 +24,7 @@ class InvitePercentage extends FlxText
 		super(x, y, _fieldWidth, _text, _textSize);
 		
 		ID = _rowNumber = rowNumber;
+		color = RegCustom._client_text_color_number[Reg._tn];
 	}
 
 	override public function destroy()
@@ -35,24 +36,21 @@ class InvitePercentage extends FlxText
 	override public function update(elapsed:Float):Void 
 	{
 		if (Reg._at_waiting_room == false) return;
-		
-		if (InviteTable._populated_table_body == false
-		&&	RegTriggers._waiting_room_refresh_invite_list == true)
-		{
-			// win percentage.
-			if (ID == _rowNumber && RegTypedef._dataOnlinePlayers._usernamesOnline[ID] != "")
-			{
-				// calculates the winning percentage. 
-				var _totalGamesGet:Float = RegTypedef._dataOnlinePlayers._gamesAllTotalWins[ID] + RegTypedef._dataOnlinePlayers._gamesAllTotalLosses[ID] + RegTypedef._dataOnlinePlayers._gamesAllTotalDraws[ID];
 
-				var _winningPercentage:Float = (RegTypedef._dataOnlinePlayers._gamesAllTotalWins[ID] / _totalGamesGet);
+		if (ID == _rowNumber)
+		{
+			if (SceneWaitingRoom.__title_bar._spinner.visible == false)
+			{
+				// win percentage.
+				if (Reg._usernamesOnline[ID] != "")
+				{
+					text = Std.string(Reg._invite_percentage[ID]); // win percentage.				
+				} 
 				
-				var _winnings:Float = FlxMath.roundDecimal(_winningPercentage * 100, 3);
-				text = Std.string(_winnings); // win percentage.				
-			} 
+				else text = "";
+			}
 			
-			else if (ID == _rowNumber)
-				text = "";
+			else text = "";
 			
 			super.update(elapsed);
 		}

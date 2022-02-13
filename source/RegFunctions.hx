@@ -65,6 +65,45 @@ class RegFunctions
 		return ticks;
 	}
 	
+	
+	// here we use the ip address to find the username of the user logged into the website. if found, the user will be sent to the lobby.
+	public static function front_door_queue(_ip:String):String
+	{
+		_ip = "&ip=" + _ip;
+		
+		// DO NOT USE SPECIAL CHARACTERS IN THIS TOKEN IT MAY BREAK LOGINS.
+		var _token = "token=J39BsrUDd94mWd4Jd341";
+		var _str = Reg._websiteHomeUrl + "server/frontDoorQueue.php?" + _token + _ip;		
+		var _http = new haxe.Http(_str);		
+		var _data:String = "";
+		
+		_http.onData = function (data:String) 
+		{
+			if (data.substr(0, 1) == "<") 
+			{
+				// display error message.
+			}
+			
+			else 
+			{
+				// we found the file if we are here.
+				if (data == "")
+				{
+					_data = "";
+				}
+				
+				else _data = data;
+			}
+		}
+
+		_http.onError = function (_error)
+		{			
+		}
+		
+		_http.request();
+		return _data;
+	}
+	
 	/******************************
 	* _p value is a unit number that starts from the top-left corner (0) and ends at the bottom-right corner (63).
 	*/

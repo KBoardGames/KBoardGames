@@ -17,13 +17,14 @@ package;
  */
 class ConfigurationGames extends FlxGroup
 {
-	private var __configurations_output:ConfigurationOutput;
+	/******************************
+	 * call update only once then call it after user input.
+	 */
+	private var _do_once:Bool = true;
 	
-	override public function new(menu_configurations_output:ConfigurationOutput):Void
+	override public function new():Void
 	{
 		super();
-		
-		__configurations_output = menu_configurations_output;
 		
 		sceneGames();
 	}
@@ -809,8 +810,8 @@ class ConfigurationGames extends FlxGroup
 		CID1._sprite_display_queen_from_p2_chess_set.loadGraphic("modules/games/chess/assets/images/set" + RegCustom._chess_set_for_player2[Reg._tn] + "/5.png", false, 75, 75);
 		CID1._sprite_display_king_from_p2_chess_set.loadGraphic("modules/games/chess/assets/images/set" + RegCustom._chess_set_for_player2[Reg._tn] + "/6.png", false, 75, 75);
 	}
-		
-	override public function update(elapsed:Float):Void
+	
+	private function user_input():Void
 	{
 		if (RegCustom._chess_future_capturing_units_enabled[Reg._tn] == false && CID1._sprite_chess_future_capturing_units_bg.visible == true)
 		{
@@ -862,6 +863,499 @@ class ConfigurationGames extends FlxGroup
 				}
 				
 			}
+		}		
+		
+	}
+	
+	override public function destroy():Void
+	{
+		if (CID1._sprite_chess_future_capturing_units != null)
+		{
+			CID1._group.remove(CID1._sprite_chess_future_capturing_units);
+			CID1._sprite_chess_future_capturing_units.destroy();
+			CID1._sprite_chess_future_capturing_units = null;
+		}
+		
+		if (CID1._sprite_chess_future_capturing_units_bg != null)
+		{
+			CID1._group.remove(CID1._sprite_chess_future_capturing_units_bg);
+			CID1._sprite_chess_future_capturing_units_bg.destroy();
+			CID1._sprite_chess_future_capturing_units_bg = null;
+		}
+		
+		if (CID1._sprite_chess_path_to_king != null)
+		{
+			CID1._group.remove(CID1._sprite_chess_path_to_king);
+			CID1._sprite_chess_path_to_king.destroy();
+			CID1._sprite_chess_path_to_king = null;
+		}
+		
+		if (CID1._sprite_chess_path_to_king_bg != null)
+		{
+			CID1._group.remove(CID1._sprite_chess_path_to_king_bg);
+			CID1._sprite_chess_path_to_king_bg.destroy();
+			CID1._sprite_chess_path_to_king_bg = null;
+		}
+		
+		if (CID1._sprite_display_pawn_from_p1_chess_set != null)
+		{
+			CID1._group.remove(CID1._sprite_display_pawn_from_p1_chess_set);
+			CID1._sprite_display_pawn_from_p1_chess_set.destroy();
+			CID1._sprite_display_pawn_from_p1_chess_set = null;
+		}
+		
+		if (CID1._sprite_display_pawn_from_p2_chess_set != null)
+		{
+			CID1._group.remove(CID1._sprite_display_pawn_from_p2_chess_set);
+			CID1._sprite_display_pawn_from_p2_chess_set.destroy();
+			CID1._sprite_display_pawn_from_p2_chess_set = null;
+		}
+		
+		if (CID1._sprite_display_bishop_from_p1_chess_set != null)
+		{
+			CID1._group.remove(CID1._sprite_display_bishop_from_p1_chess_set);
+			CID1._sprite_display_bishop_from_p1_chess_set.destroy();
+			CID1._sprite_display_bishop_from_p1_chess_set = null;
+		}
+		
+		if (CID1._sprite_display_bishop_from_p2_chess_set != null)
+		{
+			CID1._group.remove(CID1._sprite_display_bishop_from_p2_chess_set);
+			CID1._sprite_display_bishop_from_p2_chess_set.destroy();
+			CID1._sprite_display_bishop_from_p2_chess_set = null;
+		}
+		
+		if (CID1._sprite_display_horse_from_p1_chess_set != null)
+		{
+			CID1._group.remove(CID1._sprite_display_horse_from_p1_chess_set);
+			CID1._sprite_display_horse_from_p1_chess_set.destroy();
+			CID1._sprite_display_horse_from_p1_chess_set = null;
+		}
+		
+		if (CID1._sprite_display_horse_from_p2_chess_set != null)
+		{
+			CID1._group.remove(CID1._sprite_display_horse_from_p2_chess_set);
+			CID1._sprite_display_horse_from_p2_chess_set.destroy();
+			CID1._sprite_display_horse_from_p2_chess_set = null;
+		}
+		
+		if (CID1._sprite_display_rook_from_p1_chess_set != null)
+		{
+			CID1._group.remove(CID1._sprite_display_rook_from_p1_chess_set);
+			CID1._sprite_display_rook_from_p1_chess_set.destroy();
+			CID1._sprite_display_rook_from_p1_chess_set = null;
+		}
+		
+		if (CID1._sprite_display_rook_from_p2_chess_set != null)
+		{
+			CID1._group.remove(CID1._sprite_display_rook_from_p2_chess_set);
+			CID1._sprite_display_rook_from_p2_chess_set.destroy();
+			CID1._sprite_display_rook_from_p2_chess_set = null;
+		}
+		
+		if (CID1._sprite_display_queen_from_p1_chess_set != null)
+		{
+			CID1._group.remove(CID1._sprite_display_queen_from_p1_chess_set);
+			CID1._sprite_display_queen_from_p1_chess_set.destroy();
+			CID1._sprite_display_queen_from_p1_chess_set = null;
+		}
+		
+		if (CID1._sprite_display_queen_from_p2_chess_set != null)
+		{
+			CID1._group.remove(CID1._sprite_display_queen_from_p2_chess_set);
+			CID1._sprite_display_queen_from_p2_chess_set.destroy();
+			CID1._sprite_display_queen_from_p2_chess_set = null;
+		}
+		
+		if (CID1._sprite_display_king_from_p1_chess_set != null)
+		{
+			CID1._group.remove(CID1._sprite_display_king_from_p1_chess_set);
+			CID1._sprite_display_king_from_p1_chess_set.destroy();
+			CID1._sprite_display_king_from_p1_chess_set = null;
+		}
+		
+		if (CID1._sprite_display_king_from_p2_chess_set != null)
+		{
+			CID1._group.remove(CID1._sprite_display_king_from_p2_chess_set);
+			CID1._sprite_display_king_from_p2_chess_set.destroy();
+			CID1._sprite_display_king_from_p2_chess_set = null;
+		}
+		
+		if (CID1._checkers_game_minutes != null)
+		{
+			CID1._group.remove(CID1._checkers_game_minutes);
+			CID1._checkers_game_minutes.destroy();
+			CID1._checkers_game_minutes = null;
+		}
+		
+		if (CID1._game_minutes != null)
+		{
+			CID1._group.remove(CID1._game_minutes);
+			CID1._game_minutes.destroy();
+			CID1._game_minutes = null;
+		}
+		
+		if (CID1._chess_game_minutes != null)
+		{
+			CID1._group.remove(CID1._chess_game_minutes);
+			CID1._chess_game_minutes.destroy();
+			CID1._chess_game_minutes = null;
+		}
+		
+		if (CID1._reversi_game_minutes != null)
+		{
+			CID1._group.remove(CID1._reversi_game_minutes);
+			CID1._reversi_game_minutes.destroy();
+			CID1._reversi_game_minutes = null;
+		}
+		
+		if (CID1._snakes_ladders_game_minutes != null)
+		{
+			CID1._group.remove(CID1._snakes_ladders_game_minutes);
+			CID1._snakes_ladders_game_minutes.destroy();
+			CID1._snakes_ladders_game_minutes = null;
+		}
+		
+		if (CID1._signature_game_minutes != null)
+		{
+			CID1._group.remove(CID1._signature_game_minutes);
+			CID1._signature_game_minutes.destroy();
+			CID1._signature_game_minutes = null;
+		}
+		
+		if (CID1._button_game_skill_level_chess != null)
+		{
+			CID1._group.remove(CID1._button_game_skill_level_chess);
+			CID1._button_game_skill_level_chess.destroy();
+			CID1._button_game_skill_level_chess = null;
+		}
+		
+		if (CID1._text_game_skill_level_chess != null)
+		{
+			CID1._group.remove(CID1._text_game_skill_level_chess);
+			CID1._text_game_skill_level_chess.destroy();
+			CID1._text_game_skill_level_chess = null;
+		}
+		
+		if (CID1._description_game_minutes != null)
+		{
+			CID1._group.remove(CID1._description_game_minutes);
+			CID1._description_game_minutes.destroy();
+			CID1._description_game_minutes = null;
+		}
+		
+		if (CID1._chess != null)
+		{
+			CID1._group.remove(CID1._chess);
+			CID1._chess.destroy();
+			CID1._chess = null;
+		}
+		
+		if (CID1._title_checkers_game_minutes != null)
+		{
+			CID1._group.remove(CID1._title_checkers_game_minutes);
+			CID1._title_checkers_game_minutes.destroy();
+			CID1._title_checkers_game_minutes = null;
+		}
+		
+		if (CID1._title_chess_game_minutes != null)
+		{
+			CID1._group.remove(CID1._title_chess_game_minutes);
+			CID1._title_chess_game_minutes.destroy();
+			CID1._title_chess_game_minutes = null;
+		}
+		
+		if (CID1._title_reversi_game_minutes != null)
+		{
+			CID1._group.remove(CID1._title_reversi_game_minutes);
+			CID1._title_reversi_game_minutes.destroy();
+			CID1._title_reversi_game_minutes = null;
+		}
+		
+		if (CID1._title_snakes_ladders_game_minutes != null)
+		{
+			CID1._group.remove(CID1._title_snakes_ladders_game_minutes);
+			CID1._title_snakes_ladders_game_minutes.destroy();
+			CID1._title_snakes_ladders_game_minutes = null;
+		}
+		
+		if (CID1._title_signature_game_minutes != null)
+		{
+			CID1._group.remove(CID1._title_signature_game_minutes);
+			CID1._title_signature_game_minutes.destroy();
+			CID1._title_signature_game_minutes = null;
+		}
+		
+		if (CID1._question_chess_show_last_piece_moved != null)
+		{
+			CID1._group.remove(CID1._question_chess_show_last_piece_moved);
+			CID1._question_chess_show_last_piece_moved.destroy();
+			CID1._question_chess_show_last_piece_moved = null;
+		}
+		
+		if (CID1._question_chess_future_capturing_units_enabled != null)
+		{
+			CID1._group.remove(CID1._question_chess_future_capturing_units_enabled);
+			CID1._question_chess_future_capturing_units_enabled.destroy();
+			CID1._question_chess_future_capturing_units_enabled = null;
+		}
+		
+		if (CID1._question_chess_path_to_king_enabled != null)
+		{
+			CID1._group.remove(CID1._question_chess_path_to_king_enabled);
+			CID1._question_chess_path_to_king_enabled.destroy();
+			CID1._question_chess_path_to_king_enabled = null;
+		}
+		
+		if (CID1._question_chess_set_for_player1 != null)
+		{
+			CID1._group.remove(CID1._question_chess_set_for_player1);
+			CID1._question_chess_set_for_player1.destroy();
+			CID1._question_chess_set_for_player1 = null;
+		}
+		
+		if (CID1._question_chess_set_for_player1_color != null)
+		{
+			CID1._group.remove(CID1._question_chess_set_for_player1_color);
+			CID1._question_chess_set_for_player1_color.destroy();
+			CID1._question_chess_set_for_player1_color = null;
+		}
+		
+		if (CID1._question_chess_set_for_player2 != null)
+		{
+			CID1._group.remove(CID1._question_chess_set_for_player2);
+			CID1._question_chess_set_for_player2.destroy();
+			CID1._question_chess_set_for_player2 = null;
+		}
+		
+		if (CID1._question_chess_set_for_player2_color != null)
+		{
+			CID1._group.remove(CID1._question_chess_set_for_player2_color);
+			CID1._question_chess_set_for_player2_color.destroy();
+			CID1._question_chess_set_for_player2_color = null;
+		}
+		
+		if (CID1._question_chess_opening_moves_enabled != null)
+		{
+			CID1._group.remove(CID1._question_chess_opening_moves_enabled);
+			CID1._question_chess_opening_moves_enabled.destroy();
+			CID1._question_chess_opening_moves_enabled = null;
+		}
+		
+		if (CID1._button_chess_opening_moves_enabled != null)
+		{
+			CID1._group.remove(CID1._button_chess_opening_moves_enabled);
+			CID1._button_chess_opening_moves_enabled.destroy();
+			CID1._button_chess_opening_moves_enabled = null;
+		}
+		
+		if (CID1._button_chess_show_last_piece_moved != null)
+		{
+			CID1._group.remove(CID1._button_chess_show_last_piece_moved);
+			CID1._button_chess_show_last_piece_moved.destroy();
+			CID1._button_chess_show_last_piece_moved = null;
+		}
+		
+		if (CID1._button_chess_future_capturing_units_enabled != null)
+		{
+			CID1._group.remove(CID1._button_chess_future_capturing_units_enabled);
+			CID1._button_chess_future_capturing_units_enabled.destroy();
+			CID1._button_chess_future_capturing_units_enabled = null;
+		}
+		
+		if (CID1._button_chess_future_capturing_units_minus != null)
+		{
+			CID1._group.remove(CID1._button_chess_future_capturing_units_minus);
+			CID1._button_chess_future_capturing_units_minus.destroy();
+			CID1._button_chess_future_capturing_units_minus = null;
+		}
+		
+		if (CID1._button_chess_future_capturing_units_plus != null)
+		{
+			CID1._group.remove(CID1._button_chess_future_capturing_units_plus);
+			CID1._button_chess_future_capturing_units_plus.destroy();
+			CID1._button_chess_future_capturing_units_plus = null;
+		}
+		
+		if (CID1._button_chess_future_capturing_units_number != null)
+		{
+			CID1._group.remove(CID1._button_chess_future_capturing_units_number);
+			CID1._button_chess_future_capturing_units_number.destroy();
+			CID1._button_chess_future_capturing_units_number = null;
+		}
+		
+		if (CID1._button_chess_path_to_king_enabled != null)
+		{
+			CID1._group.remove(CID1._button_chess_path_to_king_enabled);
+			CID1._button_chess_path_to_king_enabled.destroy();
+			CID1._button_chess_path_to_king_enabled = null;
+		}
+		
+		if (CID1._button_chess_path_to_king_minus != null)
+		{
+			CID1._group.remove(CID1._button_chess_path_to_king_minus);
+			CID1._button_chess_path_to_king_minus.destroy();
+			CID1._button_chess_path_to_king_minus = null;
+		}
+		
+		if (CID1._button_chess_path_to_king_plus != null)
+		{
+			CID1._group.remove(CID1._button_chess_path_to_king_plus);
+			CID1._button_chess_path_to_king_plus.destroy();
+			CID1._button_chess_path_to_king_plus = null;
+		}
+		
+		if (CID1._button_chess_path_to_king_number != null)
+		{
+			CID1._group.remove(CID1._button_chess_path_to_king_number);
+			CID1._button_chess_path_to_king_number.destroy();
+			CID1._button_chess_path_to_king_number = null;
+		}
+		
+		if (CID1._button_chess_set_for_player1_minus != null)
+		{
+			CID1._group.remove(CID1._button_chess_set_for_player1_minus);
+			CID1._button_chess_set_for_player1_minus.destroy();
+			CID1._button_chess_set_for_player1_minus = null;
+		}
+		
+		if (CID1._button_chess_set_for_player1_plus != null)
+		{
+			CID1._group.remove(CID1._button_chess_set_for_player1_plus);
+			CID1._button_chess_set_for_player1_plus.destroy();
+			CID1._button_chess_set_for_player1_plus = null;
+		}
+		
+		if (CID1._button_chess_set_for_player1_color_minus != null)
+		{
+			CID1._group.remove(CID1._button_chess_set_for_player1_color_minus);
+			CID1._button_chess_set_for_player1_color_minus.destroy();
+			CID1._button_chess_set_for_player1_color_minus = null;
+		}
+		
+		if (CID1._button_chess_set_for_player1_color_plus != null)
+		{
+			CID1._group.remove(CID1._button_chess_set_for_player1_color_plus);
+			CID1._button_chess_set_for_player1_color_plus.destroy();
+			CID1._button_chess_set_for_player1_color_plus = null;
+		}
+		
+		if (CID1._button_chess_set_for_player2_minus != null)
+		{
+			CID1._group.remove(CID1._button_chess_set_for_player2_minus);
+			CID1._button_chess_set_for_player2_minus.destroy();
+			CID1._button_chess_set_for_player2_minus = null;
+		}
+		
+		if (CID1._button_chess_set_for_player2_plus != null)
+		{
+			CID1._group.remove(CID1._button_chess_set_for_player2_plus);
+			CID1._button_chess_set_for_player2_plus.destroy();
+			CID1._button_chess_set_for_player2_plus = null;
+		}
+		
+		if (CID1._button_chess_set_for_player2_color_minus != null)
+		{
+			CID1._group.remove(CID1._button_chess_set_for_player2_color_minus);
+			CID1._button_chess_set_for_player2_color_minus.destroy();
+			CID1._button_chess_set_for_player2_color_minus = null;
+		}
+		
+		if (CID1._button_chess_set_for_player2_color_plus != null)
+		{
+			CID1._group.remove(CID1._button_chess_set_for_player2_color_plus);
+			CID1._button_chess_set_for_player2_color_plus.destroy();
+			CID1._button_chess_set_for_player2_color_plus = null;
+		}
+		
+		if (CID1._checkers_minus_minutes != null)
+		{
+			CID1._group.remove(CID1._checkers_minus_minutes);
+			CID1._checkers_minus_minutes.destroy();
+			CID1._checkers_minus_minutes = null;
+		}
+		
+		if (CID1._checkers_plus_minutes != null)
+		{
+			CID1._group.remove(CID1._checkers_plus_minutes);
+			CID1._checkers_plus_minutes.destroy();
+			CID1._checkers_plus_minutes = null;
+		}
+		
+		if (CID1._chess_minus_minutes != null)
+		{
+			CID1._group.remove(CID1._chess_minus_minutes);
+			CID1._chess_minus_minutes.destroy();
+			CID1._chess_minus_minutes = null;
+		}
+		
+		if (CID1._chess_plus_minutes != null)
+		{
+			CID1._group.remove(CID1._chess_plus_minutes);
+			CID1._chess_plus_minutes.destroy();
+			CID1._chess_plus_minutes = null;
+		}
+		
+		if (CID1._reversi_minus_minutes != null)
+		{
+			CID1._group.remove(CID1._reversi_minus_minutes);
+			CID1._reversi_minus_minutes.destroy();
+			CID1._reversi_minus_minutes = null;
+		}
+		
+		if (CID1._reversi_plus_minutes != null)
+		{
+			CID1._group.remove(CID1._reversi_plus_minutes);
+			CID1._reversi_plus_minutes.destroy();
+			CID1._reversi_plus_minutes = null;
+		}
+		
+		if (CID1._snakes_ladders_minus_minutes != null)
+		{
+			CID1._group.remove(CID1._snakes_ladders_minus_minutes);
+			CID1._snakes_ladders_minus_minutes.destroy();
+			CID1._snakes_ladders_minus_minutes = null;
+		}
+		
+		if (CID1._snakes_ladders_plus_minutes != null)
+		{
+			CID1._group.remove(CID1._snakes_ladders_plus_minutes);
+			CID1._snakes_ladders_plus_minutes.destroy();
+			CID1._snakes_ladders_plus_minutes = null;
+		}
+		
+		if (CID1._signature_minus_minutes != null)
+		{
+			CID1._group.remove(CID1._signature_minus_minutes);
+			CID1._signature_minus_minutes.destroy();
+			CID1._signature_minus_minutes = null;
+		}
+		
+		if (CID1._signature_plus_minutes != null)
+		{
+			CID1._group.remove(CID1._signature_plus_minutes);
+			CID1._signature_plus_minutes.destroy();
+			CID1._signature_plus_minutes = null;
+		}
+		
+		if (CID1._button_end_of_group_y_padding != null)
+		{
+			CID1._group.remove(CID1._button_end_of_group_y_padding);
+			CID1._button_end_of_group_y_padding.destroy();
+			CID1._button_end_of_group_y_padding = null;
+		}
+	}
+	
+	override public function update(elapsed:Float):Void
+	{
+		if (FlxG.keys.pressed.ANY
+		||	FlxG.mouse.justPressed == true
+		||	FlxG.mouse.justPressedMiddle == true
+		||	FlxG.mouse.justPressedRight == true
+		|| _do_once == true)
+		{
+			_do_once = false;
+			user_input();
 		}
 		
 		super.update(elapsed);
