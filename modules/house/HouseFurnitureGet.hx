@@ -393,16 +393,14 @@ class HouseFurnitureGet extends FlxGroup
 				_group_sprite[i].animation.play("1");
 				
 				
-				if (ActionInput.justPressed() == true)
+				if (ActionInput.justReleased() == true)
 				{
 					if (RegCustom._sound_enabled[Reg._tn] == true
 					&&  Reg2._scrollable_area_is_scrolling == false)
-						FlxG.sound.play("click", 1, false);
-				}
+						FlxG.sound.playMusic("click", 1, false);
 					
-				if (ActionInput.justReleased() == true)
 					buyingFurnitureItemConfirm(i);
-				
+				}
 			}
 			
 			else _group_sprite[i].animation.play("0");

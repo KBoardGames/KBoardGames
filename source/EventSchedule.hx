@@ -20,7 +20,7 @@ class EventSchedule extends FlxState
 	public static var __title_bar:TitleBar;
 	public static var __menu_bar:MenuBar;
 	
-	public var __action_commands:ActionCommands;
+	public var __hotkeys:Hotkeys;
 	
 	private var _textDay:Array<FlxText> = [];
 	
@@ -241,23 +241,18 @@ class EventSchedule extends FlxState
 	private var _locationInCalendar:Int = 0;	
 	
 	/******************************
-	 * used to stop a double firing of mouse. the firing is once at mainState when clicking the text to enter this class and again at this class if mouse is located at a calendar text.
-	 */
-	private var _ticks:Int = 0;
-	
-	/******************************
 	 * background gradient, texture and plain color for a scene.
 	 */
 	private var __scene_background:SceneBackground;
 	
 	override public function create():Void
 	{
-		persistentDraw = false;
+		openSubState(new SceneTransition());
+		
+		persistentDraw = true;
 		persistentUpdate = false;
 		
 		Reg2._scrollable_area_is_scrolling = false;
-		
-		_ticks = 0;
 		
 		_textDayNumber.splice(0, _textDayNumber.length);
 		_bgEventRow1Number.splice(0, _bgEventRow1Number.length);
@@ -379,17 +374,14 @@ class EventSchedule extends FlxState
 		_backwards.active = false;
 		add(_backwards);
 		
-		if (Reg._clientReadyForPublicRelease == false)
+		if (__hotkeys != null)
 		{
-			if (__action_commands != null)
-			{
-				remove(__action_commands);
-				__action_commands.destroy();
-			}
-			
-			__action_commands = new ActionCommands(); 
-			add(__action_commands);
-		} 
+			remove(__hotkeys);
+			__hotkeys.destroy();
+		}
+		
+		__hotkeys = new Hotkeys(); 
+		add(__hotkeys); 
 	}
 		
 	/******************************
@@ -760,15 +752,10 @@ class EventSchedule extends FlxState
 
 	private function backToTitle():Void
 	{
-		if (RegCustom._sound_enabled[Reg._tn] == true)
-			FlxG.sound.play("click", 1, false);
-
 		RegTriggers._mainStateMakeActiveElements = true;
 		
-		//close();
 		FlxG.switchState(new MenuState());
 	}
-	
 	
 	/******************************
 	 * print the days to the scene.
@@ -1048,11 +1035,11 @@ class EventSchedule extends FlxState
 			_calendarBackground = null;
 		}
 		
-		if (__action_commands != null)
+		if (__hotkeys != null)
 		{
-			remove(__action_commands);
-			__action_commands.destroy();
-			__action_commands = null;
+			remove(__hotkeys);
+			__hotkeys.destroy();
+			__hotkeys = null;
 		}
 		
 		if (_title != null)
@@ -1182,9 +1169,7 @@ class EventSchedule extends FlxState
 	
 	override public function update(elapsed:Float):Void 
 	{
-		if (_ticks == 0 && FlxG.mouse.pressed == false) _ticks = 1; 
-		
-		else if (ActionInput.justPressed() == true && _ticks == 1)
+		if (ActionInput.justReleased() == true)
 		{
 			for (i in 0...37)
 			{
@@ -1193,8 +1178,8 @@ class EventSchedule extends FlxState
 				{
 					if (RegCustom._sound_enabled[Reg._tn] == true
 					&&	Reg2._scrollable_area_is_scrolling == false)
-						FlxG.sound.play("click", 1, false);
-					openSubState(new EventDescription(_textEventRow1Number[i].text));
+						FlxG.sound.playMusic("click", 1, false);
+					openSubState(new EventDescription(_textEventRow1Number[i].text, this));
 				}
 				
 				if (ActionInput.overlaps(_bgEventRow2Number[i])
@@ -1202,8 +1187,8 @@ class EventSchedule extends FlxState
 				{
 					if (RegCustom._sound_enabled[Reg._tn] == true
 					&&	Reg2._scrollable_area_is_scrolling == false)
-						FlxG.sound.play("click", 1, false);
-					openSubState(new EventDescription(_textEventRow2Number[i].text));
+						FlxG.sound.playMusic("click", 1, false);
+					openSubState(new EventDescription(_textEventRow2Number[i].text, this));
 				}
 				
 				if (ActionInput.overlaps(_bgEventRow3Number[i])
@@ -1211,15 +1196,23 @@ class EventSchedule extends FlxState
 				{
 					if (RegCustom._sound_enabled[Reg._tn] == true
 					&&	Reg2._scrollable_area_is_scrolling == false)
-						FlxG.sound.play("click", 1, false);
-					openSubState(new EventDescription(_textEventRow3Number[i].text));
+						FlxG.sound.playMusic("click", 1, false);
+					openSubState(new EventDescription(_textEventRow3Number[i].text, this));
 				}
 				
 			}			
 			
 		}
 		
-		super.update(elapsed);	
+		super.update(elapsed);
+		
+		if (RegTriggers._run_flxstate_effects_for_calendar == true)
+		{
+			RegTriggers._run_flxstate_effects_for_calendar = false;
+			visible = true;
+			openSubState(new SceneTransition());
+		}
+
 	}
 	
 }//

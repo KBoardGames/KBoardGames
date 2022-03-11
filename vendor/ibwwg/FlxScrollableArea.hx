@@ -4,7 +4,6 @@ import flixel.FlxCamera;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
-import flixel.math.FlxPoint;
 import flixel.math.FlxRect;
 import flixel.util.FlxColor;
 
@@ -62,6 +61,11 @@ class FlxScrollableArea extends FlxCamera
 	private var _ticks_delay:Int = 0;
 	
 	/******************************
+	 * haxe has a timing issue where the update function is read at b class before a class. this var is used to address the issue by only reading the content of that update function after the tick has a value of 2. 
+	 */
+	public static var _ticks_update:Int = 0;
+	
+	/******************************
 	* background gradient, texture and plain color for a scene.
 	*/
 	public var __scene_background:SceneBackground;
@@ -87,18 +91,20 @@ class FlxScrollableArea extends FlxCamera
 		
 		_id = ID = id;
 		
+		_ticks_update = 0;
 		ScrollbarColour = 0xff666666; // gray
 		
 		_state = State;
 		if (_state == null)
 			_state = FlxG.state;
+		
+		if (TitleBar._title_for_screenshot != "Game Room")
+			_state.openSubState(new SceneTransition());
  
 		// stops a bug at configuration menu, where the scene background is always the same color as the header.
 		if (_id == 1000) bgColor = 0x00000000;
 		
 		// vertical bar at the left side of the scrollable area.
-		var _color = RegCustomColors.title_bar_background_color();
-		
 		var _spr = new FlxSprite(-2, 0);
 		_spr.makeGraphic(6, FlxG.height, FlxColor.BLUE);
 		_spr.scrollFactor.set(0, 0);
@@ -140,6 +146,7 @@ class FlxScrollableArea extends FlxCamera
 		_horizontalScrollbar.scrollFactor.set(0, 0);
 		
 		onResize();
+		visible = false;
 	}
 
 	/******************************
@@ -387,6 +394,17 @@ class FlxScrollableArea extends FlxCamera
 	
 	override public function update(elapsed:Float)
 	{
+		// this is needed to stop a flicker.
+		_ticks_update += 1;
+		
+		if (_ticks_update == 3) 
+		{
+			_ticks_update = 4;
+			visible = true;
+		}
+		
+		if (_ticks_update < 2) return;
+		
 		// currently used for chatter. this moves the scrollable area to the right. id with a value of 1 is used for the second scrollable area which is always at the right side of the screen. must not be used in a block of code when using a do_once var because the scrollable area will flicker then not be visable.
 		if (_id == 4 || _id == 5 || _id == 6)
 		{
@@ -399,18 +417,22 @@ class FlxScrollableArea extends FlxCamera
 				redrawBars();
 				_do_once = false;
 			}
+			
+			// this is needed here because when another camera is used, such as chatter, the chatter scene is not affected by the hotkey background alpha when the ALT+SPACEBAR is used.
+			if (Hotkeys._background.alpha == 0.9) alpha = 0.1;
+			else alpha = 1;
 		}
 		
 		// FlxG.mouse.pressed code above does not work for this var.
-		if (FlxG.mouse.pressed == true || _ticks_delay > 0)
+		if (FlxG.mouse.pressed == true)
 		{
 			_ticks_delay += 1;
 			
 			if (_ticks_delay > 12) 
 				Reg2._scrollable_area_is_scrolling = true;
+				
+			else Reg2._scrollable_area_is_scrolling = false;
 		}
-		
-		else Reg2._scrollable_area_is_scrolling = false;
 		
 		if (_ticks_delay > 12) _ticks_delay = 0;
 		

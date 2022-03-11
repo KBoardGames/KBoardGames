@@ -81,6 +81,9 @@ class ButtonGeneralNetworkNo extends FlxUIButton
 	 */
 	public function new(x:Float = 0, y:Float = 0, ?text:String, button_width:Int = 80, button_height:Int = 40, textSize:Int = 20, textColor:FlxColor = 0xFFFFFFFF, textPadding:Int = 0, ?onClick:Void->Void, innerColor:FlxColor = 0xFF000066, use_down_click:Bool = false, id:Int = 0)
 	{
+		// do not use. this feature needs to remain hardcoded.
+		use_down_click = false;
+		
 		super(x, y-7, text, onClick, false, false, RegCustom._button_color[Reg._tn]);
 		
 		_startX = x;
@@ -119,34 +122,23 @@ class ButtonGeneralNetworkNo extends FlxUIButton
 	// this function must not be removed. also stops double firing of button sound at ActionKeyboard.hx.
 	override public function update(elapsed:Float):Void
 	{
-		if (alpha == 1 && _id == ID)
+		if (_id == ID)
 		{
-			if (justPressed == true)
+			if (FlxG.mouse.pressed == false && justReleased == true && Reg._buttonDown == true)
 			{
 				// this button has been pressed. remove focus from the chatter input box.
 				if (GameChatter._input_chat != null) GameChatter._input_chat.hasFocus = false;
 				
-				if (RegCustom._sound_enabled[Reg._tn] == true)
-				{				
-					if (Reg2._scrollable_area_is_scrolling == false
-					&&	Reg._tn > 0
-					||	Reg2._scrollable_area_is_scrolling == false
-					&&	Reg._tn == 0 // theme named default.
-					&&	FlxG.mouse.y <= 50
-					&&  Reg2._scrollable_area_is_scrolling == false
-					||	Reg._tn == 0 // theme named default.
-					&&	FlxG.mouse.y >= FlxG.height - 50
-					&&  Reg2._scrollable_area_is_scrolling == false
-					||	Reg._at_configuration_menu == false)
-						FlxG.sound.play("click", 1, false);
-						
-					else if (Reg2._scrollable_area_is_scrolling == false)
-						FlxG.sound.play("error", 1, false);
+				if (RegCustom._sound_enabled[Reg._tn] == true
+				&&	Reg2._scrollable_area_is_scrolling == false
+				&&	Reg._tn == 0)
+				{
+					FlxG.sound.play("error", 1, false);
 				}	
 			}
 		}
 		
-		if (Reg._buttonCodeValues == "") alpha = 1;
+		if (Reg._buttonCodeValues == "" && Reg._messageId == 0) alpha = 1;
 		
 		else if (Reg._buttonCodeValues != ""
 		&&	Reg._disconnectNow == false)
@@ -154,7 +146,33 @@ class ButtonGeneralNetworkNo extends FlxUIButton
 			alpha = 0.3;
 		}
 		
+		if (Reg._at_configuration_menu == true
+		&&	Reg._at_input_keyboard == true
+		&&	_id != 10000
+		&&	_id == ID
+		&&	FlxG.mouse.y < FlxG.height - 50)
+			skipButtonUpdate = true;
+			
+		if (Reg._at_configuration_menu == true
+		&&	Reg._at_input_keyboard == false
+		&&	_id != 10000
+		&&	_id == ID
+		&&	FlxG.mouse.y < FlxG.height - 50)
+			skipButtonUpdate = false;
+			
 		if (alpha == 1 && _id == ID) super.update(elapsed);
+
 	}
-		
+	
+	override function onOverHandler():Void
+	{
+		Reg._buttonDown = true;
+		super.onOverHandler();
+	}
+	
+	override function onOutHandler():Void
+	{
+		Reg._buttonDown = false;
+		super.onOutHandler();
+	}
 }//

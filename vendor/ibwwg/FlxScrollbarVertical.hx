@@ -17,7 +17,8 @@ import flixel.util.FlxColor;
  * @author kboardgames.com
  */
 class FlxScrollbarVertical extends FlxSpriteGroup
-{	/**************************************************************************
+{	
+	/******************************
 	 * this is all the content, rather you see it or not, its width inside of the FlxScrollableArea.
 	 */
 	public var _content_width:Float = 0;
@@ -176,7 +177,6 @@ class FlxScrollbarVertical extends FlxSpriteGroup
 	override public function draw() 
 	{
 		if (_vertical_bar_bring_down == true && _id == ID) return;
-		
 		if (_id != ID) return;
 		
 		if (_stale == true || _auto_update_track == true)
@@ -260,11 +260,9 @@ class FlxScrollbarVertical extends FlxSpriteGroup
 			if (FlxG.mouse.justPressed
 			&&	Reg2._scrollable_area_is_scrolling == false
 			&&	Reg._messageId == 0
-			&&	Reg2._lobby_button_alpha == 1
 			|| _doOnce == 0
 			&&	Reg2._scrollable_area_is_scrolling == false
 			&&	Reg._messageId == 0
-			&&	Reg2._lobby_button_alpha == 1
 			&& _id == 0
 			&& _id == ID)
 			{

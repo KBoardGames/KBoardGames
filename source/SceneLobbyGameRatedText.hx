@@ -15,7 +15,7 @@ package;
  * lobby scrollable area data, such as, room state, room game. 
  * @author kboardgames.com
  */
-class SceneLobbyGameAgainstText extends FlxText
+class SceneLobbyGameRatedText extends FlxText
 {
 	public var _id:Int = 0;
 	
@@ -38,7 +38,7 @@ class SceneLobbyGameAgainstText extends FlxText
 		if (Reg._at_lobby == false) return;
 		
 		// this code is needed so that it refreshes the lobby scrollable area data without new the text.
-		for (i in 0...27)
+		for (i in 0... SceneLobby._room_total)
 		{
 			var _host:String = RegTypedef._dataMisc._roomHostUsername[i];
 			var _rated_game:Int = RegTypedef._dataMisc._rated_game[i];
@@ -49,10 +49,12 @@ class SceneLobbyGameAgainstText extends FlxText
 			if (i == _id) 
 			{
 				if (_host != ""
-				&&	RegTypedef._dataMisc._roomPlayerCurrentTotal[i] > 0) 
+				&&	RegTypedef._dataMisc._roomPlayerCurrentTotal[i] > 0
+				&&	RegTypedef._dataMisc._roomState[i] != 2) 
 				{
 					text = _title;
 				}
+				
 				else text = " ";
 			}
 		}

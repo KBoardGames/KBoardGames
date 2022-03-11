@@ -15,7 +15,7 @@ package;
  * a typedef is a block of vars that are passed to the server.
  * @author kboardgames.com
  */
-
+ 
 /******************************
  * these vars afre copy() to other DataGame typedef vars such as DataGame0.
  */
@@ -1021,7 +1021,7 @@ typedef DataAccount =
 	/******************************
 	 * if this field is not empty then the username has matched one of the names from the bad list. the user cannot login with a bad word.
 	 */
-	var _username_restricted: String;
+	var _username_banned: String;
 		
 	/******************************
 	 * password hash encrypted with md5.
@@ -1052,16 +1052,6 @@ typedef DataAccount =
 	 * IP of player.
 	 */
 	var _ip: String;
-	
-	/******************************
-	 * is there two computers with the same host name connected to server?
-	 */
-	var _alreadyOnlineHost: Bool;
-	
-	/******************************
-	 * is there already a user with that username online?
-	 */
-	var _alreadyOnlineUser: Bool;
 	
 	/******************************
 	 * outputs if server is blocking
@@ -1215,7 +1205,6 @@ typedef DataMisc =
 	 * currently used from banning players.
 	 */
 	var _clientCommandIPs: String;
-	
 }
 
 // all players inside a room. their data, such as cash, wins, losses.
@@ -1701,6 +1690,35 @@ typedef DataLeaderboards =
 	var _houseCoins: String;
 	
 	var _worldFlag: String;
+}
+
+typedef DataServerMessage = 
+{
+	/******************************
+	 * player instance. this tells one player from another.
+	 */
+	id: String,
+	
+	/******************************
+	 * typedef id.
+	 * when server sends a message to client, client needs to know what typedef it is. so when creating a typedef at this class, go to PlayState _websocket.onmessage and add the typedef there. tid starts at 10 and ends at 99. 10 to 40 is reserved for games.
+	 */
+	tid: Int,
+	
+	/******************************
+	 * the name of the event at server -> Events.hx or client -> NetworkEventsMain.hx that this typedef can be sent to.
+	 */
+	_event_name: String,
+	
+	/******************************
+	 * a message about the server will go offline.
+	 */
+	_message_offline: String,
+	
+	/******************************
+	 * send a message to all clients.
+	 */
+	_message_online: String,
 }
 
 class RegTypedef
@@ -2640,7 +2658,7 @@ class RegTypedef
 		/******************************
 		 * if this field is not empty then the username has matched one of the names from the bad list. the user cannot login with a bad word.
 		 */
-		_username_restricted: "",
+		_username_banned: "",
 		
 		/******************************
 		 * password hash encrypted with md5.
@@ -2671,16 +2689,6 @@ class RegTypedef
 		 * IP address of player.
 		 */
 		_ip: "",
-		
-		/******************************
-		 * is there two computers with the same host name connected to server?
-		 */
-		_alreadyOnlineHost: false,
-		
-		/******************************
-		 * is there already a user with that username online?
-		 */
-		_alreadyOnlineUser: false,
 		
 		_server_fast_send: false,
 		
@@ -2848,9 +2856,7 @@ class RegTypedef
 		_clientCommandMessage: "",
 		
 		_clientCommandUsers: "",
-		
-		_clientCommandIPs: ""
-		
+		_clientCommandIPs: "",
 	};
 	
 	/******************************
@@ -3302,6 +3308,28 @@ class RegTypedef
 		_worldFlag: "",
 	}
 	
+	public static var _dataServerMessage:DataServerMessage = 
+	{
+		id: Std.string(FlxG.random.int(100000000, 999999999)) + Std.string(FlxG.random.int(100000000, 999999999)),
+		
+		tid: 52,
+		
+		/******************************
+		 * the name of the event at server -> Events.hx or client -> NetworkEventsMain.hx that this typedef can be sent to.
+		 */
+		_event_name: "",
+		
+		/******************************
+		 * a message about the server will go offline.
+		 */
+		_message_offline: "",
+		
+		/******************************
+		 * send a message to all clients.
+		 */
+		_message_online: "",
+	}
+	
 	public static function resetHouseData():Void
 	{
 		_dataHouse._sprite_number = "";
@@ -3476,16 +3504,6 @@ class RegTypedef
 		 * IP address of player.
 		 */
 		_dataAccount._ip = "";
-		
-		/******************************
-		 * is there two computers with the same host name connected to server?
-		 */
-		_dataAccount._alreadyOnlineHost = false;
-		
-		/******************************
-		 * is there already a user with that username online?
-		 */
-		_dataAccount._alreadyOnlineUser = false;
 		
 		//#############################
 		
@@ -4219,7 +4237,6 @@ class RegTypedef
 		_dataMisc._clientCommandMessage = "";
 		
 		_dataMisc._clientCommandUsers = "";
-		
 		_dataMisc._clientCommandIPs = "";
 		
 		_dataMisc._triggerEvent = "";
@@ -4348,4 +4365,4 @@ class RegTypedef
 		_dataPlayers._cash[3] = FlxMath.roundDecimal(_dataPlayers._cash[3], 2);
 	}
 	
-}//
+}//

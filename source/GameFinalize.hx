@@ -30,30 +30,10 @@ class GameFinalize extends FlxGroup
 		__scene_game_room = scene_game_room;
 	}	
 	
-	public function id0():Void
-	{
-		
-	}
-
-	public function id1():Void
-	{
-		
-	}
-
-	public function id2():Void
-	{
-		
-	}
-
-	public function id3():Void
-	{
-		
-	}
-
 	public function id4():Void
 	{
 		#if wheelEstate
-			var _signatureGame = __scene_game_room.__game_create.__signature_game_main;
+			var _signatureGame = __scene_game_room.__game_create.__signature_game_main;     
 			
 			
 			if (SignatureGameMain.background != null)

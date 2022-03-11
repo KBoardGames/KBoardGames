@@ -64,7 +64,7 @@ class GameImageCurrentUnit extends FlxSprite
 					&& ActionInput.coordinateY() < _startY + 75 + (yy * 75)
 					)
 					{
-						// if mouse is clicked and is at that player's piece then use an image to highlight that unit. 
+						// if at the player's piece then highlight that unit. 
 						if (Reg._gameHost == true && ActionInput.overlaps(Reg._groupPlayer1) 
 						||  Reg._gameHost == false && ActionInput.overlaps(Reg._groupPlayer2)
 						)
@@ -214,6 +214,8 @@ class GameImageCurrentUnit extends FlxSprite
 		
 	override public function update (elapsed:Float)
 	{
+		if (Reg._messageId != 0) return;
+		
 		if (RegTypedef._dataMisc._spectatorWatching == false
 		||  RegTypedef._dataTournaments._move_piece == true)
 		{

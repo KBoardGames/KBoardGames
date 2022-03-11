@@ -51,6 +51,9 @@ class MenuState extends FlxState
 	public static var __title_bar:TitleBar;
 	public static var __menu_bar:MenuBar;
 	
+	private var _fullscreen_yes:Int = 0;
+	private var _fullscreen_no:Int = 0;
+	
 	private var _event_scheduler_border:FlxSprite;
 	private var _textCurrent:FlxText;
 	private var _textUpcoming:FlxText;
@@ -86,10 +89,7 @@ class MenuState extends FlxState
 	
 	private var _effects:FlxTypedGroup<SceneEffects>; // a group of flakes
 	
-	//public var _music:Sound;
-	//public var _sound_channel:SoundChannel;
-	
-	public var __action_commands:ActionCommands;
+	public var __hotkeys:Hotkeys;
 
 	// chess skill level buttons.
 	private var _button_b1:ButtonToggleFlxState;
@@ -228,12 +228,15 @@ class MenuState extends FlxState
 		Reg._at_lobby = false;
 		Reg._at_create_room = false;
 		Reg._at_waiting_room = false;
+		Reg._at_input_keyboard = false;
 		
 		_is_active = true;
 		_ip = Reg._ipAddress;
 		
 		// when returned to a state after mouse was set to not visible, system mouse will not show at that new state when mouse it set to visible.
-		FlxG.mouse.useSystemCursor = false;		
+		FlxG.mouse.useSystemCursor = false;	
+		FlxG.mouse.visible = true;
+		
 		RegTypedef.resetTypedefData(); 
 		
 		#if house
@@ -273,6 +276,7 @@ class MenuState extends FlxState
 		#end
 		
 		Reg._at_menu_state = true;
+		Reg._display_queue_message = true;
 		
 		RegCustom._chess_skill_level_online = RegCustom._chess_skill_level_offline;
 		
@@ -291,8 +295,16 @@ class MenuState extends FlxState
 		
 		Reg2._scrollable_area_is_scrolling = false;
 		
-		//if (RegCustom._music_enabled[Reg._tn] == true)
-		//	FlxG.sound.playMusic("intro", 1, false);
+		/*
+		if (RegCustom._music_enabled[Reg._tn] == true)
+		{
+			if (Reg._menustate_initiated == false)
+				FlxG.sound.play("intro", 1, true);
+		}
+		*/
+		Reg._menustate_initiated = true;
+		
+		openSubState(new SceneTransition());
 		
 	}
 	
@@ -341,13 +353,25 @@ class MenuState extends FlxState
 	{
 		// if winter.
 		if (_intDay >= 21 && _intMonth == 12 // dec 21 to end of dec.
-		||	_intDay <= 20 && _intMonth <= 2) // jan 1 to mar 20 
+		||	_intMonth == 0
+		||	_intMonth == 1
+		||	_intDay <= 20 && _intMonth == 2) // jan 1 to mar 20 
 			_season._winter = true;
 	}
 	
 	private function full_screen_toggle():Void
 	{
-		FlxG.fullscreen = !FlxG.fullscreen;
+		if (FlxG.fullscreen == false) 
+		{
+			_fullscreen_yes = 3;
+			_fullscreen_no = 0;
+		}
+		
+		else
+		{
+			_fullscreen_yes = 0;
+			_fullscreen_no = 3;
+		}
 	}
 	
 	/******************************
@@ -724,22 +748,31 @@ class MenuState extends FlxState
 			_effects = new FlxTypedGroup<SceneEffects>();
 			add(_effects);
 			
-			// effects: 1:snow, 2:rain.
-			if (_season._fall == true || _season._winter == true)
+			if (_season._fall == true)
 			{
-				for (i in 0...600)
+				for (i in 0...2000)
 				{
-					var _ra = FlxG.random.int(-150, 1440);
+					var _ra = FlxG.random.int(-350, 1440);
 					var _ra2 = FlxG.random.int( -1440, 0);
 					var _ra3 = FlxG.random.int( -1440, 1440);
 					
 					// rain.
 					if (_season._fall == true)
 						_effects.add(new SceneEffects(_ra, _ra3, i % 10, 1));
+				}	
+			}
+			
+			if (_season._winter == true)
+			{
+				for (i in 0...600)
+				{
+					var _ra = FlxG.random.int(-350, 1440);
+					var _ra2 = FlxG.random.int( -1440, 0);
+					var _ra3 = FlxG.random.int( -1440, 1440);
+					
 					// snow.
 					if (_season._winter == true)
 						_effects.add(new SceneEffects(_ra, _ra2, i % 10, 0));
-					
 				}	
 			}
 		}
@@ -1014,7 +1047,7 @@ class MenuState extends FlxState
 		}
 		
 		_textCurrent = new FlxText(0, 0, 0, "Current");
-		_textCurrent.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.WHITE);
+		_textCurrent.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
 		_textCurrent.setPosition(225, 374 + 60 + _offset_icons_and__event_scheduler_y);
 		_textCurrent.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		_textCurrent.scrollFactor.set();
@@ -1027,7 +1060,7 @@ class MenuState extends FlxState
 		}
 		
 		_textUpcoming = new FlxText(414, 374 + 60 + _offset_icons_and__event_scheduler_y, 0, "");
-		_textUpcoming.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.WHITE);
+		_textUpcoming.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
 		_textUpcoming.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		_textUpcoming.scrollFactor.set();
 		add(_textUpcoming);
@@ -1321,7 +1354,7 @@ class MenuState extends FlxState
 			// all gameboards images are stored in frames.
 			_sprite = new FlxSprite(20, 120);
 			_sprite.loadGraphic("assets/images/icons.png", true, 64, 64);
-			_sprite.color = RegCustomColors.client_text_color();
+			_sprite.color = RegCustomColors.title_icon_color();
 			_sprite.scrollFactor.set(0, 0);
 			_sprite.updateHitbox();
 			_sprite.visible = false;
@@ -1701,11 +1734,11 @@ class MenuState extends FlxState
 			}
 		}
 		
-		if (__action_commands != null)
+		if (__hotkeys != null)
 		{
-			remove(__action_commands);
-			__action_commands.destroy();
-			__action_commands = null;
+			remove(__hotkeys);
+			__hotkeys.destroy();
+			__hotkeys = null;
 		}
 		
 		if (__scene_background != null)
@@ -1874,7 +1907,18 @@ class MenuState extends FlxState
 	
 	override public function update(elapsed:Float):Void
 	{
-		//if (FlxG.mouse.justPressed == true) FlxG.fullscreen = true;
+		// there is a bug where a return to normal window from fullscreen will need an additional mouse click here if window is maximized. this is the fix. for the rest of the full screen code, see FlxG.fullscreen at update function.
+		if (_fullscreen_yes > 0)
+		{
+			FlxG.fullscreen = true;
+			_fullscreen_yes -= 1;
+		}
+		
+		if (_fullscreen_no > 0)
+		{
+			FlxG.fullscreen = false;
+			_fullscreen_no -= 1;
+		}
 		
 		if (_ticks_startup < 20) _ticks_startup += 1;
 		
@@ -1886,9 +1930,21 @@ class MenuState extends FlxState
 			
 			if (_client_online == true)
 			{
-				if (Reg2._eventName[0] == "") Internet.getAllEvents();
-				if (Reg2._eventName[0] == "") Internet.getAllEvents();
-				if (Reg2._eventName[0] == "") Internet.getAllEvents();	
+				// try three times to get the calendar event data from website page.
+				if (Reg2._eventName[0] == "" || Reg2._eventName[0].length > 40) Internet.getAllEvents();
+				if (Reg2._eventName[0] == "" || Reg2._eventName[0].length > 40) Internet.getAllEvents();
+				if (Reg2._eventName[0] == "" || Reg2._eventName[0].length > 40) Internet.getAllEvents();	
+				
+				// display an error message if failed to get data.
+				if (Reg2._eventName[0] == "" || Reg2._eventName[0].length > 40)
+				{
+					#if !html5
+						Reg._calendar_event_data = true;
+						
+						// do not display the calendar.
+						Reg2._eventName[0] = "";
+					#end
+				}
 			}
 				
 			Reg._hasUserConnectedToServer = false;
@@ -1949,32 +2005,33 @@ class MenuState extends FlxState
 				_ticks_internet = 1;
 				draw_event_scheduler();
 				
-				if (Reg._clientReadyForPublicRelease == false)
+				if (__hotkeys != null)
 				{
-					if (__action_commands != null)
-					{
-						remove(__action_commands);
-						__action_commands.destroy();
-					}
-					
-					__action_commands = new ActionCommands(); 
-					add(__action_commands);
-				} 
+					remove(__hotkeys);
+					__hotkeys.destroy();
+				}
+				
+				__hotkeys = new Hotkeys(); 
+				add(__hotkeys);
 			}
 			
 			if (Reg._buttonCodeValues != "") buttonCodeValues();
 		
 			// every time a user connects to the server, the server create a file with the name of the users host name. If the host name matches the name of the file, in the host directory at server, then that means there is already a client opened at that device. Therefore do the following.
 			if (Reg._clientDisconnected == true 
-			||  Reg._displayOneDeviceErrorMessage == true
 			||  Reg._cannotConnectToServer == true
+			||	Reg._alreadyOnlineUser == true
+			||	Reg._alreadyOnlineHost == true
 			||  Reg._serverDisconnected == true 
 			||  RegTriggers._kickOrBan == true 
 			||  Reg._isThisServerPaidMember == false 
 			||  Reg._hostname_message == true 
 			||  Reg._ip_message == true 
 			||  Reg._login_failed == true
-			||	Reg._username_restricted == true)
+			||	Reg._username_banned == true
+			||	Reg._calendar_event_data == true
+			||	Reg._front_door_queue_data == true
+			||	Reg._ping_time_expired == true)
 			{
 
 				if (Reg._clientDisconnected == true)
@@ -2002,13 +2059,31 @@ class MenuState extends FlxState
 					_str = "Failed to get your hostname. Is the web server online?";
 				
 				else if (Reg._ip_message == true)
-					_str = "Failed to get the ip from the website address. Is the website online?";
+					_str = "Failed to get the IP address from the website. Is the website online? Is the IP address service available?";
 					
 				else if (Reg._login_failed == true) 
 					_str = "Login failed. Verify your username and password at the configuration menu. Note, your selected username could be restricted.";
 					
-				else if (Reg._username_restricted == true)
-					_str = "Login rejected because your username has a bad word or a reserved word.";
+				else if (Reg._username_banned == true)
+				{
+					_str = "Your username was rejected because it matches a restricted word or reserved word. Please select another username.";
+				}
+				
+				else if (Reg._calendar_event_data == true)
+				{
+					_str = "Could not get calendar event data.";
+				}
+				
+				else if (Reg._front_door_queue_data == true)
+				{
+					_str = "Could not get front door queue data.";
+				}
+				
+				else if (Reg._ping_time_expired == true)
+				{
+					_str = "Server disconnected this client due to a lack of user activity.";
+				}
+				
 				Reg._messageId = 10;
 				Reg._buttonCodeValues = "m1000";
 				SceneGameRoom.messageBoxMessageOrder();
@@ -2016,7 +2091,6 @@ class MenuState extends FlxState
 				buttonsIconsNotActive();
 				
 				Reg._clientDisconnected = false;
-				Reg._displayOneDeviceErrorMessage = false;
 				Reg._cannotConnectToServer = false;
 				Reg._serverDisconnected = false;
 				Reg._alreadyOnlineHost = false;
@@ -2027,8 +2101,11 @@ class MenuState extends FlxState
 				Reg._hostname_message = false;
 				Reg._ip_message = false;
 				Reg._login_failed = false;				
-				Reg._username_restricted = false;
-				RegTypedef._dataAccount._username_restricted = "";
+				Reg._username_banned = false;
+				RegTypedef._dataAccount._username_banned = "";
+				Reg._calendar_event_data = false;
+				Reg._front_door_queue_data = false;
+				Reg._ping_time_expired = false;
 			}
 
 			// this block of code is needed so that the connect button will try to connect again.
@@ -2039,38 +2116,6 @@ class MenuState extends FlxState
 				
 				buttonsIconsActive();
 			}
-			
-			if (_eventSchedulerHover != null)
-			{
-				if (Reg._gameJumpTo == 0)
-				{
-					_eventSchedulerHover.visible = false;
-					
-					if (ActionInput.overlaps(_eventSchedulerHover)
-					&&	_eventSchedulerHover.active == true)
-					{			
-						_eventSchedulerHover.visible = true;
-					}
-						
-					if (ActionInput.overlaps(_eventSchedulerHover) 
-					&& ActionInput.justPressed() == true
-					&& _is_active == true
-					)
-					{
-						if (RegCustom._sound_enabled[Reg._tn] == true
-						&&	Reg2._scrollable_area_is_scrolling == false)
-							FlxG.sound.play("click", 1, false);
-					
-						if (_eventSchedulerHover != null) _eventSchedulerHover.active = false;					
-							buttonsIconsNotActive();
-						
-						Reg._at_menu_state = false;
-						FlxG.switchState(new EventSchedule());
-					}
-				}
-			}
-		
-		
 			
 			if (RegTriggers._mainStateMakeActiveElements == true)
 			{
@@ -2100,17 +2145,17 @@ class MenuState extends FlxState
 						_game_highlighted.visible = true;
 							
 						if (i == 0) 
-							_icon_text_title_description.text = "Multiplayer Online. (World)";
+							_icon_text_title_description.text = "Multiplayer Online.";
 						if (i == 1)
-							_icon_text_title_description.text = "Offline (Player vs Player)";
+							_icon_text_title_description.text = "Player vs Player. Offline.";
 						if (i == 2)
 							_icon_text_title_description.text = "Nothing here yet.";
 						if (i == 3)
-							_icon_text_title_description.text = "Configuration Menu. (Gear)";
+							_icon_text_title_description.text = "Configuration Menu.";
 						if (i == 4)
-							_icon_text_title_description.text = "Client Help. (Question)";
+							_icon_text_title_description.text = "Client Help.";
 						if (i == 5)
-							_icon_text_title_description.text = "Credits. (Attribution)";
+							_icon_text_title_description.text = "Credits.";
 
 						center_icon_text_to_icon_box();
 						// next go to the next for() code block above this for() code.
@@ -2130,7 +2175,7 @@ class MenuState extends FlxState
 				_group_sprite[3].alpha = 0.25;
 			#end
 			
-			if (ActionInput.justPressed() == true
+			if (ActionInput.justReleased() == true
 			&& _group_sprite.length > 0)
 			{		
 				for (i in 0... 6)
@@ -2141,23 +2186,9 @@ class MenuState extends FlxState
 					{
 						if (RegCustom._sound_enabled[Reg._tn] == true
 						&&	Reg2._scrollable_area_is_scrolling == false)
-							FlxG.sound.play("click", 1, false);
-					
-						_clicked = true;
-					}
-				}
-			}
-			
-			else if (ActionInput.justReleased() == true
-			&&  _group_sprite.length > 0
-			&&  _clicked == true)
-			{
-				for (i in 0... 6)
-				{
-					if (ActionInput.overlaps(_group_sprite[i]) == true
-					&&  _group_sprite[i].active == true
-					&&	RegTriggers._buttons_set_not_active == false)
+							FlxG.sound.playMusic("click", 1, false);
 						titleMenu(i);
+					}
 				}
 			}
 		}
@@ -2209,16 +2240,37 @@ class MenuState extends FlxState
 		}
 		
 		super.update(elapsed);
-		
-		/*
-		#if !html5
-			if (FlxG.mouse.justPressed == true)
+			
+		if (_eventSchedulerHover != null)
+		{
+			if (Reg._gameJumpTo == 0)
 			{
-				if (_sound_channel != null)
-					_sound_channel.stop();
+				_eventSchedulerHover.visible = false;
+				
+				if (ActionInput.overlaps(_eventSchedulerHover)
+				&&	_eventSchedulerHover.active == true)
+				{			
+					_eventSchedulerHover.visible = true;
+				}
+					
+				if (ActionInput.overlaps(_eventSchedulerHover) 
+				&& ActionInput.justReleased() == true
+				&& _is_active == true
+				)
+				{
+					if (RegCustom._sound_enabled[Reg._tn] == true
+					&&	Reg2._scrollable_area_is_scrolling == false)
+						FlxG.sound.playMusic("click", 1, false);
+				
+					if (_eventSchedulerHover != null) _eventSchedulerHover.active = false;					
+						buttonsIconsNotActive();
+					
+					Reg._at_menu_state = false;
+					FlxG.switchState(new EventSchedule());
+				}
 			}
-		#end
-		*/
+		}
+		
 	}
 }//
 

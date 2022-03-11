@@ -20,7 +20,7 @@ class EventDescription extends FlxSubState
 	public static var __title_bar:TitleBar;
 	public static var __menu_bar:MenuBar;
 	
-	public var __action_commands:ActionCommands;
+	public var __hotkeys:Hotkeys;
 	
 	/******************************
 	 * background gradient, texture and plain color for a scene.
@@ -30,13 +30,19 @@ class EventDescription extends FlxSubState
 	private var _topic_title:FlxText;
 	private var _eventTitle:FlxText;
 	private var _text:FlxText;
-		
-	public function new(_str:String):Void
+	
+	private var _state:FlxState;
+	
+	public function new(_str:String, state:FlxState = null):Void
 	{
 		super();	
 		
-		persistentDraw = false;
+		openSubState(new SceneTransition());
+		
+		persistentDraw = true;
 		persistentUpdate = false;
+		
+		_state = state;
 		
 		if (__scene_background != null)
 		{
@@ -106,30 +112,27 @@ class EventDescription extends FlxSubState
 		__menu_bar = new MenuBar(true);
 		add(__menu_bar);
 		
-		var _close = new ButtonGeneralNetworkNo(FlxG.width - 240, FlxG.height - 40, "Exit", 165, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, closeSubstate, RegCustom._button_color[Reg._tn]);
+		var _close = new ButtonGeneralNetworkNo(FlxG.width - 240, FlxG.height - 40, "Exit", 165, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, close_substate, RegCustom._button_color[Reg._tn]);
 		_close.label.font = Reg._fontDefault;
 		add(_close);
 		
-		if (Reg._clientReadyForPublicRelease == false)
+		if (__hotkeys != null)
 		{
-			if (__action_commands != null)
-			{
-				remove(__action_commands);
-				__action_commands.destroy();
-			}
-			
-			__action_commands = new ActionCommands(); 
-			add(__action_commands);
+			remove(__hotkeys);
+			__hotkeys.destroy();
 		}
+		
+		__hotkeys = new Hotkeys(); 
+		add(__hotkeys);
 	}
 	
-	private function closeSubstate():Void
+	private function close_substate():Void
 	{
-		if (__action_commands != null)
+		if (__hotkeys != null)
 		{
-			remove(__action_commands);
-			__action_commands.destroy();
-			__action_commands = null;
+			remove(__hotkeys);
+			__hotkeys.destroy();
+			__hotkeys = null;
 		}
 		
 		if (__scene_background != null)
@@ -159,6 +162,11 @@ class EventDescription extends FlxSubState
 			_text.destroy();
 			_text = null;
 		}
+		
+		_state.visible = false;
+		RegTriggers._run_flxstate_effects_for_calendar = true;
+		
+		Sys.sleep(0.2);
 		
 		close();		
 	}

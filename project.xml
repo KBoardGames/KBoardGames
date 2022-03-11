@@ -14,13 +14,13 @@
 	<!-- ____________________________ Window Settings ___________________________ -->
 
 	<!--These window settings apply to all targets-->
-	<window width="800" height="680" fps="60" background="#000000" hardware="true" vsync="true" borderless="false" />
+	<window width="940" height="513" fps="60" background="#000000" hardware="true" vsync="true" borderless="false" />
 	<!-- maybe add this to the above... antialiasing="4" --->
 	
 	<!-- android "$(CompilerPath)/haxelib" run lime build "$(OutputFile)" $(TargetBuild) -$(BuildConfig) -Dfdb
 	<window width="0" height="0" fps="60" background="#000000" />-->
 	
-	<!--<window maximized="true" />-->
+	<window maximized="true" />
 
 	<!--HTML5-specific-->
 	<window if="html5"  width="0" height="0" resizable="true" background="#004880" />
@@ -65,9 +65,13 @@
 	</assets>
 	
 	<!-- comment this for smaller build size and faster program loading.-->		
-	<!--<assets path="assets/music" embed="true" rename="music" unless="flash">
+	<assets path="assets/music" embed="true" rename="music" unless="flash">
 		<music path="moonlightSonata.ogg" id="intro"/>
-	</assets>-->
+	</assets>
+	
+	<assets path="assets/music" embed="true" rename="music" unless="flash">
+		<music path="logo.ogg" id="logo"/>
+	</assets>
 	
 	<assets path="assets/fonts" embed="true" include="*.ttf"/>
 	
@@ -83,17 +87,19 @@
 	<haxelib name="hscript" if="debug" />
 	
 	<!-- Client modules _____________________________ -->
-		
 	<!-- comment these two lines to disable client world flags. Commenting these lines will also disable leaderboards.-->	
 	<define name="flags" />
 	<assets path="modules/worldFlags/assets/images" embed="true" />
+	
 	<define name="leaderboards" />
 	
 	<define name="avatars" />
 	<assets path="vendor/multiavatar" embed="true"/>
 	
 	<define name="username_suggestions" />
+	
 	<define name="tournaments" />
+	
 	<define name="miscellaneous" />
 	
 	<define name="dailyQuests" />
@@ -104,6 +110,7 @@
 	
 	<define name="checkers" />
 	<assets path="modules/games/checkers/assets/images" embed="true" />	
+	
 	<define name="chess" />
 	<assets path="modules/games/chess/assets/images" embed="true" />
 	
@@ -115,16 +122,13 @@
 	
 	<define name="wheelEstate" />
 	<assets path="modules/games/wheelEstate/assets/images" embed="true" />
-	
 	<!-- End of client libraries ______________________ -->
+	
 	<!-- 
 	############   IMPORTANT: MUST READ   ################
 		neko build always has a console window and because of that, the program will do strange things to the server when the user closes the client console window and not the application window. therefore, for the final build you must build for windows not neko.
 	######################################################-->
 	
-	<!--keep this commented for final build-->
-	<!--<haxeflag name="--no-traces" if="release"/>--> 
-		
 	<!--In case you want to use the ui package-->
 	<haxelib name="flixel-ui" />
 

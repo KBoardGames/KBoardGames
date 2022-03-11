@@ -159,7 +159,9 @@ class CheckersCurrentUnitClicked extends FlxSprite
 	
 	override public function update (elapsed:Float)
 	{
-		if (Reg._gameOverForPlayer == false && Reg._gameId == 0)
+		if (Reg._gameOverForPlayer == false
+		&&	Reg._gameId == 0
+		&&	Reg._messageId == 0)
 		{
 			RegFunctions.is_player_attacker(false); // a value of false then the player hosts a game known as the defender. true, if being hosted. eg, array[Reg._playerMoving][value][yy][xx]. playerAttacker is the opposite of the defender. so if Reg._playerMoving = 0 then its the player hosting the game while Reg._playerNotMoving which has a value of 1 had accepted the game at the chatroom.	
 			// p is the unit number. at the loop below, p starts at the top-left corner of the gameboard, the xx/yy value of zero, and increments as each unit is looped and moving in the direction of east. when the end of that first row is loop, the next row will be looped and p will still continue to be increased in size.

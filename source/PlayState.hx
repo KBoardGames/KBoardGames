@@ -51,12 +51,10 @@ class PlayState extends FlxState
 	 */
 	private var __scene_background:SceneBackground;
 	
-	public var messageBox:MessageBox;
-	
 	/******************************
 	 * system operator class. handles key presses. can disconnect the server by pressing the ESC key, etc.
 	 */
-	public var __action_commands:ActionCommands;
+	public var __hotkeys:Hotkeys;
 	public static var __scene_lobby:SceneLobby;
 	public var __scene_create_room:SceneCreateRoom;
 	public var __scene_waiting_room:SceneWaitingRoom;
@@ -125,6 +123,11 @@ class PlayState extends FlxState
 	public static var _clientDisconnect:Bool = false;
 	public static var _clientDisconnectDo:Bool = true;
 	
+	/******************************
+	 * if true the user will be redirected to the game room for offline play.
+	 */
+	private var _game_offline_enter_game_room:Bool = false;
+	
 	private var _id:Int = 0;
 	
 	override public function create():Void
@@ -132,7 +135,6 @@ class PlayState extends FlxState
 		super.create();
 		
 		RegFunctions.fontsSharpen();
-		Reg._can_join_server = true;
 		
 		persistentDraw = true;
 		persistentUpdate = true;
@@ -192,6 +194,13 @@ class PlayState extends FlxState
 		#if chess
 			__chess_check_or_checkmate = new ChessCheckOrCheckmate(__ids_win_lose_or_draw);
 		#end
+		
+		_game_offline_enter_game_room = false;
+		
+		if (Reg._game_offline_vs_player == false && Reg._game_offline_vs_cpu == false)
+			Internet.isUsernameOnline();
+		else 
+			_game_offline_enter_game_room = true;
 	}
 	
 	public static function prepareToDisconnect():Void
@@ -213,7 +222,7 @@ class PlayState extends FlxState
 				RegTypedef._dataMisc._userLocation -= 1;
 				RegTypedef._dataMisc._room = 0;
 				
-				PlayState.send("Get Statistics Win Loss Draw", RegTypedef._dataPlayers); // ping.
+				PlayState.send("Get Statistics Win Loss Draw", RegTypedef._dataPlayers);
 				
 			}
 			
@@ -221,7 +230,7 @@ class PlayState extends FlxState
 			Reg._yesNoKeyPressValueAtMessage = 1;
 			Reg._buttonCodeValues = "g1000";
 		}		
-	
+		
 		Reg._disconnectNow = true;
 	}
 	
@@ -242,7 +251,7 @@ class PlayState extends FlxState
 		FlxG.switchState(new MenuState());
 	}
 	
-	static function setExitHandler(_exit:Void->Void):Void 
+	public static function setExitHandler(_exit:Void->Void):Void 
 	{
 		#if openfl_legacy
 		openfl.Lib.current.stage.onQuit = function() {
@@ -337,6 +346,51 @@ class PlayState extends FlxState
     }
 	*/
 	
+	/******************************
+	 * if player clicks the watch game button or enters into the waiting room then these typedefs need to be updated.
+	 */
+	public static function allTypedefRoomUpdate(_room:Int):Void
+	{
+		RegTypedef._dataGame._room = _room;
+		RegTypedef._dataGame0._room = _room;// this line is needed or else the server will not be able to send back the data or will send back to the wrong client. remember that the server broadcasts to a room using the room var. 
+		RegTypedef._dataGame1._room = _room;
+		RegTypedef._dataGame2._room = _room;
+		RegTypedef._dataGame3._room = _room;
+		RegTypedef._dataGame4._room = _room;
+		
+		RegTypedef._dataGameMessage._room = 	_room;
+		RegTypedef._dataQuestions._room = 		_room;
+		RegTypedef._dataTournaments._room = 	_room;
+		RegTypedef._dataOnlinePlayers._room = 	_room;
+		RegTypedef._dataPlayers._room = 		_room; 
+		RegTypedef._dataMovement._room = 		_room; 
+		RegTypedef._dataStatistics._room = 		_room; 
+
+	}
+	
+	/******************************
+	 * _dataMisc does not been this assignment a value because it already has the correct username from the "Is logging In" network event. This function is needed or else there will be a null error at server for the username when saving user actions to the server log file. _dataGame is not used here because its not needed for server log file. hence, in this board game its not a location where a player can go.
+	 */
+	public static function allTypedefUsernameUpdate(_username:String):Void
+	{
+		RegTypedef._dataGame0._username = _username;
+		
+		RegTypedef._dataGame1._username = _username;
+		RegTypedef._dataGame2._username = _username;
+		RegTypedef._dataGame3._username = _username;
+		RegTypedef._dataGame4._username = _username;
+		
+		RegTypedef._dataGameMessage._username = 	_username;
+		RegTypedef._dataDailyQuests._username = 	_username;
+		RegTypedef._dataQuestions._username = 		_username;
+		RegTypedef._dataTournaments._username = 	_username;
+		RegTypedef._dataOnlinePlayers._username = 	_username;
+		RegTypedef._dataPlayers._username = 		_username;
+		RegTypedef._dataMovement._username = 		_username; 
+		RegTypedef._dataStatistics._username = 		_username;
+		RegTypedef._dataHouse._username = 			_username;
+	}
+	
     public function disconnect() 
 	{
 		Reg._client_socket_is_connected = false;
@@ -344,13 +398,75 @@ class PlayState extends FlxState
         _websocket = null;
     }
 	
+	private function initiate_variables():Void
+	{
+		RegTypedef._dataGame0.id = RegTypedef._dataGame.id;
+		RegTypedef._dataGame1.id = RegTypedef._dataGame.id;
+		RegTypedef._dataGame2.id = RegTypedef._dataGame.id;
+		RegTypedef._dataGame3.id = RegTypedef._dataGame.id;
+		RegTypedef._dataGame4.id = RegTypedef._dataGame.id;
+		RegTypedef._dataMisc.id = RegTypedef._dataGame.id;
+		RegTypedef._dataPlayers.id = RegTypedef._dataGame.id;
+		RegTypedef._dataOnlinePlayers.id = RegTypedef._dataGame.id;
+		RegTypedef._dataDailyQuests.id = RegTypedef._dataGame.id;
+		RegTypedef._dataQuestions.id = RegTypedef._dataGame.id;
+		RegTypedef._dataAccount.id = RegTypedef._dataGame.id;		
+		RegTypedef._dataGameMessage.id = RegTypedef._dataGame.id;
+		RegTypedef._dataMovement.id = RegTypedef._dataGame.id;
+		RegTypedef._dataStatistics.id = RegTypedef._dataGame.id;
+		RegTypedef._dataHouse.id = RegTypedef._dataGame.id;
+		RegTypedef._dataLeaderboards.id = RegTypedef._dataGame.id;
+		
+		if (__ids_win_lose_or_draw != null)
+		{
+			remove(__ids_win_lose_or_draw);
+			__ids_win_lose_or_draw.destroy();
+		}
+				
+		__ids_win_lose_or_draw = new IDsWinLoseOrDraw();
+		add(__ids_win_lose_or_draw);
+		
+	}
+	
+	private function offline_game_room():Void
+	{
+		if (Reg._game_online_vs_cpu == false && Reg._game_offline_vs_cpu == true
+		||  Reg._game_online_vs_cpu == false && Reg._game_offline_vs_player == true)
+		{
+			_lobbyRoomChat = false;
+			Reg._loggedIn = true;
+			Reg._doStartGameOnce = true;
+			Reg._at_create_room = false;
+			Reg._at_waiting_room = false;
+			RegTypedef._dataMisc._room = 0;
+			RegTypedef._dataMisc._roomState[0] = 6; 
+			RegTypedef._dataMisc._gameRoom = true;
+			Reg._gameRoom = true;
+			
+			//TODO make auto start start for offline mode here. //Reg._gameOverForPlayer = false;
+			RegTypedef._dataMisc._roomGameIds[RegTypedef._dataMisc._room] = Reg._gameId;
+			
+			Reg._move_number_next = 0;
+		}
+		
+	}
+	
 	private function client():Void
 	{
+		if (_game_offline_enter_game_room == true)
+		{
+			_game_offline_enter_game_room = false;
+			
+			initiate_variables();
+			offline_game_room();
+		}
+		
 		// a value of 1 means that the user can enter to the front door.
 		// a value of 2 means that the user is next user to enter the front door.
 		// the order of the user is determined by the timestamp. a user's data is removed from the database when disconnecting or when entering the front door. the that time, the user with a value of 2 will be a value of 1 at the next check to the database. that check is made at Internet.front_door_queue.
 		if (Reg._game_offline_vs_player == false
-		&&	Reg._game_offline_vs_cpu == false)
+		&&	Reg._game_offline_vs_cpu == false
+		&&	Reg._display_queue_message == true)
 		{
 			if (_id == ID)
 			{
@@ -360,12 +476,12 @@ class PlayState extends FlxState
 			
 					if (_front_door_queue == 1)
 					{
-						Reg._gameMessage = "Welcome.";
+						Reg._messageBoxNoUserInput = "Welcome.";
 						_ticks_ip = 0;
 					}
 					
 					else if (_front_door_queue > 1)
-						Reg._gameMessage = "You are " + _front_door_queue + " in queue. Please wait...";
+						Reg._messageBoxNoUserInput = "You are " + _front_door_queue + " in queue. Please wait...";
 				} 
 				
 				_ticks_front_door_queue += 1;
@@ -384,56 +500,11 @@ class PlayState extends FlxState
 			// no simultaneous entry into the server.
 			Reg._can_join_server = false;
 			
-			RegTypedef._dataGame0.id = RegTypedef._dataGame.id;
-			RegTypedef._dataGame1.id = RegTypedef._dataGame.id;
-			RegTypedef._dataGame2.id = RegTypedef._dataGame.id;
-			RegTypedef._dataGame3.id = RegTypedef._dataGame.id;
-			RegTypedef._dataGame4.id = RegTypedef._dataGame.id;
-			RegTypedef._dataMisc.id = RegTypedef._dataGame.id;
-			RegTypedef._dataPlayers.id = RegTypedef._dataGame.id;
-			RegTypedef._dataOnlinePlayers.id = RegTypedef._dataGame.id;
-			RegTypedef._dataDailyQuests.id = RegTypedef._dataGame.id;
-			RegTypedef._dataQuestions.id = RegTypedef._dataGame.id;
-			RegTypedef._dataAccount.id = RegTypedef._dataGame.id;		
-			RegTypedef._dataGameMessage.id = RegTypedef._dataGame.id;
-			RegTypedef._dataMovement.id = RegTypedef._dataGame.id;
-			RegTypedef._dataStatistics.id = RegTypedef._dataGame.id;
-			RegTypedef._dataHouse.id = RegTypedef._dataGame.id;
-			RegTypedef._dataLeaderboards.id = RegTypedef._dataGame.id;
-			
-			if (__ids_win_lose_or_draw != null)
-			{
-				remove(__ids_win_lose_or_draw);
-				__ids_win_lose_or_draw.destroy();
-			}
-					
-			__ids_win_lose_or_draw = new IDsWinLoseOrDraw();
-			add(__ids_win_lose_or_draw);
-			
-			//############################# CODE BLOCK
-			// delete this block when game is finished. also, at join event, uncomment the block.
-			if (Reg._game_online_vs_cpu == false && Reg._game_offline_vs_cpu == true
-			||  Reg._game_online_vs_cpu == false && Reg._game_offline_vs_player == true)
-			{
-				_lobbyRoomChat = false;
-				Reg._loggedIn = true;
-				Reg._doStartGameOnce = true;
-				Reg._at_create_room = false;
-				Reg._at_waiting_room = false;
-				RegTypedef._dataMisc._room = 26;
-				RegTypedef._dataMisc._roomState[26] = 6; 
-				RegTypedef._dataMisc._gameRoom = true;
-				Reg._gameRoom = true;
-				
-				//TODO make auto start start for offline mode here. //Reg._gameOverForPlayer = false;
-				RegTypedef._dataMisc._roomGameIds[RegTypedef._dataMisc._room] = Reg._gameId;
-				
-				Reg._move_number_next = 0;
-			}
+			initiate_variables();
 			
 			if (Reg._game_online_vs_cpu == true || Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false)		
 			{
-				trace("connected");
+				trace("connected"); // don't remove.
        
 				try {
 					_websocket = new WebSocket("ws://" + Reg._ipAddress + ":" + Reg._port);
@@ -598,6 +669,14 @@ class PlayState extends FlxState
 							go_to_event(_data);	
 						}
 						
+						else if (RegFunctions.contains(_str, "tidi52") == true)
+						{
+							var unserializer = new Unserializer(_str);
+							var _data:DataServerMessage = unserializer.unserialize();
+							unserializer = null;
+							go_to_event(_data);	
+						}
+						
 					};
 					
 					_websocket.onerror = function(err) 
@@ -703,17 +782,14 @@ class PlayState extends FlxState
 				
 			}			
 			
-			if (Reg._clientReadyForPublicRelease == false)
+			if (__hotkeys != null)
 			{
-				if (__action_commands != null)
-				{
-					remove(__action_commands);
-					__action_commands.destroy();
-				}
-				
-				__action_commands = new ActionCommands(); 
-				add(__action_commands);
+				remove(__hotkeys);
+				__hotkeys.destroy();
 			}
+			
+			__hotkeys = new Hotkeys(); 
+			add(__hotkeys);
 		}
 		
 		// this is needed to show the SceneGameRoom.hx class in offline mode.
@@ -743,44 +819,39 @@ class PlayState extends FlxState
 	/******************************
 	 * player is entering the lobby.
 	 */
-	private function lobbyEnter():Void
+	/*private function lobbyEnter():Void
 	{
-		if (Reg._game_offline_vs_cpu == false  && Reg._game_offline_vs_player == false && _clientDisconnect == false)
-		{
-			if (Reg._goBackToLobby == true || Reg._loginSuccessfulWasRead == true && Reg._doOnce == true)
+		if (Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false && _clientDisconnect == false)
+		{trace("a");
+			Reg._doOnce2 = false; 
+			__scene_lobby.active = true;
+			
+			if (Reg._lobbyDisplay == true)
 			{
-				Reg._doOnce = false; 
-				Reg._goBackToLobby = false;
-				__scene_lobby.active = true;
-				
-				//ActionInput.enable();
-	
-				if (Reg._lobbyDisplay == true)
-				{
-					Reg._lobbyDisplay = false;
-					__scene_lobby.display();
-				}		
-				
-				__scene_lobby.visible = true;			
-				__scene_lobby.__scrollable_area.visible = true;
-				
-				if (GameChatter.__scrollable_area2 != null
-				&&	RegCustom._chat_when_at_lobby_enabled[Reg._tn] == true)
-				{
-					GameChatter.__scrollable_area2.visible = true;
-				}
-				
-				__scene_waiting_room.visible = false;
-				__scene_waiting_room.active = false;
-				__scene_create_room.visible = false;
+				Reg._lobbyDisplay = false;
+				__scene_lobby.display();
+			}		
+			
+			__scene_lobby.visible = true;			
+			__scene_lobby.__scrollable_area.visible = true;
+			
+			if (GameChatter.__scrollable_area2 != null
+			&&	RegCustom._chat_when_at_lobby_enabled[Reg._tn] == true)
+			{
+				GameChatter.__scrollable_area2.visible = true;
 			}
+			
+			__scene_waiting_room.visible = false;
+			__scene_waiting_room.active = false;
+			__scene_create_room.visible = false;
 		}
 	}
+	*/
 	
 	/******************************
-	 * everything inside this block is ran when a game is first started at every move.
+	 * // everything inside this code block is ran when a game is first started.
 	 */
-	private function enterGameRoom():Void
+	private function game_room_enter():Void
 	{
 		if (Reg._gameRoom == true)
 		{
@@ -798,6 +869,9 @@ class PlayState extends FlxState
 				{
 					SceneWaitingRoom.__game_chatter.visible = false;
 					SceneWaitingRoom.__game_chatter.active = false;
+					
+					__scene_waiting_room.__scrollable_area.visible = false;
+					__scene_waiting_room.__scrollable_area.active = false;
 					
 					__scene_waiting_room.visible = false;
 					__scene_waiting_room.active = false;
@@ -903,17 +977,18 @@ class PlayState extends FlxState
 			if (Reg._doStartGameOnce == true)
 			{						
 				Reg._doStartGameOnce = false;  // TODO does this var need to be anywhere?
-			
-			}
-			
 				
+				openSubState(new SceneTransition());
+			}
 		}
+		
 	}
 	/******************************
 	 * restart the game for either p1 vs computer or p1 vs p2,p3,p4.
 	 */
 	private function restartGame():Void
 	{
+		// offline.
 		if (Reg._createGameRoom == true 
 		&& Reg._game_offline_vs_cpu == true 
 		&& Reg._game_online_vs_cpu == false
@@ -927,25 +1002,25 @@ class PlayState extends FlxState
 			RegCustom.resetRegVars();
 			RegTriggers.resetTriggers();
 			
+			_lobbyRoomChat = false;
+			Reg._loggedIn = true;
+			Reg._doStartGameOnce = true;
+			Reg._at_create_room = false;
+			Reg._at_waiting_room = false; 
+			RegTypedef._dataMisc._gameRoom = true;
+			Reg._gameRoom = true;
+			Reg._gameOverForPlayer = false;
+			
 			if (RegTypedef._dataTournaments._move_piece == false)
 			{
 				Reg._playerMoving = 0;
 				Reg._playerNotMoving = 1;
 			}
 			
-			_lobbyRoomChat = false;
-			Reg._loggedIn = true;
-			Reg._doStartGameOnce = true;
-			Reg._at_create_room = false;
-			Reg._at_waiting_room = false;
-			RegTypedef._dataMisc._room = 5;
-			RegTypedef._dataMisc._roomState[3] = 6; 
-			RegTypedef._dataMisc._gameRoom = true;
-			Reg._gameRoom = true;
 			Reg._gameHost = true;
-			Reg._gameOverForPlayer = false;
 			
-			//getPlayersNamesAndAvatars();
+			RegTypedef._dataMisc._room = 5;
+			RegTypedef._dataMisc._roomState[3] = 6;
 			
 			Reg._playerCanMovePiece = true;
 			Reg._playerMoving = 0;
@@ -954,7 +1029,8 @@ class PlayState extends FlxState
 			Reg._move_number_next = 0;
 			Reg._gameJumpTo = 0; 
 		}
-	
+		
+		// online.
 		if (Reg._createGameRoom == true
 		&&  Reg._game_offline_vs_cpu == false
 		&&  Reg._game_offline_vs_player == false
@@ -962,11 +1038,19 @@ class PlayState extends FlxState
 		&&  Reg._game_online_vs_cpu == true)
 		{
 			RegTypedef.resetTypedefData();
-		
 			Reg.resetRegVars(); 
 			Reg2.resetRegVars();
 			RegCustom.resetRegVars();
 			RegTriggers.resetTriggers();
+			
+			_lobbyRoomChat = false;
+			Reg._loggedIn = true;
+			Reg._doStartGameOnce = true;
+			Reg._at_create_room = false;
+			Reg._at_waiting_room = false;
+			RegTypedef._dataMisc._gameRoom = true;
+			Reg._gameRoom = true;
+			InviteTable._ticks_invite_list = 0;
 			
 			if (RegTypedef._dataTournaments._move_piece == false)
 			{
@@ -986,26 +1070,22 @@ class PlayState extends FlxState
 			}
 			
 			if (Reg._game_online_vs_cpu == true) 
-				RegTypedef._dataPlayers._spectatorPlaying = true;	
-			Reg._at_create_room = true;
-			Reg._at_waiting_room = true;
-			_lobbyRoomChat = false;
-			Reg._goBackToLobby = false;
-			Reg._loggedIn = true;
-			Reg._doStartGameOnce = true;
-			Reg._gameRoom = true;
+				RegTypedef._dataPlayers._spectatorPlaying = true;
+			
 			Reg._hasUserConnectedToServer = true;
 			
 			if (RegTypedef._dataTournaments._move_piece == false)
 				Reg._move_number_next = 0;
-			//if (__scene_waiting_room.visible == false) Reg._loginSuccessfulWasRead = true;
+				
+			// waiting room.
+			if (GameChatter.__scrollable_area3 != null)
+			{
+				GameChatter.__scrollable_area3.visible = false;
+				GameChatter.__scrollable_area3.active = false;			
+			}
+			
 			Reg._doOnce = false;			
 			Reg._lobbyDisplay = false;
-			//Reg._gameOverForPlayer = false;
-			
-			
-	//RegTypedef._dataMisc._roomPlayerLimit[RegTypedef._dataMisc._room] = 3;	
-			
 		}
 	}
 	
@@ -1024,56 +1104,221 @@ class PlayState extends FlxState
 	
 	private function gameMessage():Void
 	{
-		if (Reg._gameMessage != ""
+		if (Reg._messageBoxNoUserInput != ""
 		&&	Reg._outputMessage == true)
-			openSubState( new GameMessage());
+			openSubState( new MessageBoxNoUserInput());
 	}
 	
 	/******************************
-	 * if player clicks the watch game button or enters into the waiting room then these typedefs need to be updated.
+	 * changing scenes.
+	 * lobby, creating room and waiting room are here.
 	 */
-	public static function allTypedefRoomUpdate(_room:Int):Void
+	private function scene_trigger():Void
 	{
-		RegTypedef._dataGame._room = _room;
-		RegTypedef._dataGame0._room = _room;// this line is needed or else the server will not be able to send back the data or will send back to the wrong client. remember that the server broadcasts to a room using the room var. 
-		RegTypedef._dataGame1._room = _room;
-		RegTypedef._dataGame2._room = _room;
-		RegTypedef._dataGame3._room = _room;
-		RegTypedef._dataGame4._room = _room;
+		if (RegTriggers._lobby == true
+		&& PlayState._clientDisconnect == false
+		&& Reg._game_offline_vs_cpu == false
+		|| RegTriggers._lobby == true
+		&& PlayState._clientDisconnect == false
+		&& Reg._game_offline_vs_player == false)
+		{
+			Reg._at_lobby = true;
+			// lobby table starts at id 0. set first column as default.
+			Reg._tc = 0;
+			RegTriggers._lobby = false;
+			RegTriggers._buttons_set_not_active = false;
+			
+			__scene_lobby.visible = false;
+			
+			if (Reg._lobbyDisplay == true)
+			{
+				Reg._lobbyDisplay = false;
+				__scene_lobby.display();
+			}		
+			
+			// title button at game room was clicked. if here then room data was updated. now go to the title scene.
+			if (RegTriggers._return_to_title == true)
+			{
+				RegTriggers._return_to_title = false;
+				Reg._disconnectNow = true;
+			}
+			
+			if (__scene_game_room != null)
+			{
+				if (__scene_game_room.__player_time_remaining_move != null)
+				{
+					__scene_game_room.__player_time_remaining_move.destroy();
+					__scene_game_room.__player_time_remaining_move = null;
+				}
+				
+				remove(__scene_game_room);
+			}
+			
+			PlayersLeftGameResetThoseVars.playerRepopulateTypedefPlayers();
+			Reg._playerOffset = 0;
+				
+			Reg._clearDoubleMessage = false;
+			Reg._game_online_vs_cpu = false;
+			Reg._at_create_room = false;
+			Reg._at_waiting_room = false;
+			
+			__scene_create_room.visible = false;
+			__scene_create_room.active = false;
+			
+			if (GameChatter._groupChatterScroller != null)
+				GameChatter._groupChatterScroller.x = 0;
+			
+			// this check is needed because user might be coming from creating room.
+			if (GameChatter.__scrollable_area3 != null)
+			{
+				SceneWaitingRoom.__game_chatter.visible = false;
+				GameChatter.__scrollable_area3.visible = false;
+			
+				SceneWaitingRoom.__game_chatter.active = false;
+				GameChatter.__scrollable_area3.active = false;
+			}
+			
+			// this is needed to stop two room buttons highlighting simultaneously at lobby.
+			__scene_waiting_room.__scrollable_area.scroll.y = 5000;
+			__scene_waiting_room.__scrollable_area.visible = false;
+			__scene_waiting_room.__scrollable_area.active = false;
+			
+			__scene_waiting_room.visible = false;					
+			__scene_waiting_room.active = false;
+			
+			__scene_lobby.__scrollable_area.active = true;			
+			__scene_lobby.__scrollable_area.visible = true;
+			
+			__scene_lobby.set_active_for_buttons();			
+			__scene_lobby.initialize();
+			
+			if (SceneLobby.__game_chatter != null)
+			{
+				SceneLobby.__game_chatter.active = true;
+				SceneLobby.__game_chatter.visible = true;
+			}
+			
+			if (GameChatter.__scrollable_area2 != null)
+			{
+				GameChatter.__scrollable_area2.active = true;
+				GameChatter.__scrollable_area2.visible = true;
+			}
+			
+			RegTriggers._recreate_chatter_input_chat = true;
+			
+			Reg._updateScrollbarBringUp = true; 
+			GameChatter._input_chat.active = true;
+			
+			__scene_lobby.active = true;
+			__scene_lobby.visible = true;
+			
+			openSubState(new SceneTransition());
+			
+		}
 		
-		RegTypedef._dataGameMessage._room = 	_room;
-		RegTypedef._dataQuestions._room = 		_room;
-		RegTypedef._dataTournaments._room = 	_room;
-		RegTypedef._dataOnlinePlayers._room = 	_room;
-		RegTypedef._dataPlayers._room = 		_room; 
-		RegTypedef._dataMovement._room = 		_room; 
-		RegTypedef._dataStatistics._room = 		_room; 
+		if (RegTriggers._createRoom == true)
+		{
+			Reg._at_create_room = true;
+			RegTriggers._createRoom = false;
+			Reg._clearDoubleMessage = false;
+			RegTriggers._buttons_set_not_active = false;
+			
+			if (GameChatter.__scrollable_area2 != null)
+			{
+				GameChatter.__scrollable_area2.visible = false;
+				__scene_lobby.__scrollable_area.visible = false;
+				
+				GameChatter.__scrollable_area2.active = false;
+				__scene_lobby.__scrollable_area.active = false;
+			}
+			
+			if (GameChatter.__scrollable_area3 != null)
+			{
+				GameChatter.__scrollable_area3.visible = false;
+				GameChatter.__scrollable_area3.active = false;
+			}
+									
+			__scene_lobby.__scrollable_area.visible = false;
+			__scene_lobby.__scrollable_area.active = false;
+			
+			__scene_lobby.visible = false;
+			__scene_lobby.active = false;			
+			
+			__scene_create_room.active = true;
+			__scene_create_room.visible = true;
+			
+			__scene_create_room.initialize();
+			
+			Reg._updateScrollbarBringUp = true; 
+			
+			openSubState(new SceneTransition());
+		
+		}
+		
+		
+		if (RegTriggers.__scene_waiting_room == true)
+		{
+			Reg._at_lobby = false;
+			// waiting room invite table starts at id 100.
+			Reg._tc = 100; // default to the first table column.
+			RegTriggers.__scene_waiting_room = false;
+			Reg._clearDoubleMessage = false;
+			RegTriggers._buttons_set_not_active = false;
+			Reg._at_waiting_room = true;
+			
+			__scene_create_room.visible = false;
+			__scene_create_room.active = false;			
+			
+			if (GameChatter.__scrollable_area2 != null)
+			{
+				GameChatter.__scrollable_area2.visible = false;
+				GameChatter.__scrollable_area2.active = false;
+			}
+			
+			// this is needed to stop two send buttons highlighting simultaneously at waiting room.
+			__scene_lobby.__scrollable_area.scroll.y = 5000;
+			__scene_lobby.__scrollable_area.visible = false;
+			__scene_lobby.__scrollable_area.active = false;
+			
+			__scene_lobby.visible = false;	
+			__scene_lobby.active = false;
+			
+			if (RegCustom._chat_when_at_lobby_enabled[Reg._tn] == true)
+			{
+				SceneLobby.__game_chatter.visible = false;
+				SceneLobby.__game_chatter.active = false;
+			}
+			
+			if (GameChatter._chatterOpenCloseButton != null)
+			{
+				GameChatter._chatterOpenCloseButton.visible = false;
+				GameChatter._chatterOpenCloseButton.active = false;
+			}
+			
+			__scene_waiting_room.active = true;			
+			__scene_waiting_room.visible = false;			
+			__scene_waiting_room.initialize();
+			__scene_waiting_room.visible = true;
+			
+			if (SceneWaitingRoom.__game_chatter != null)
+			{
+				SceneWaitingRoom.__game_chatter.active = true;
+				SceneWaitingRoom.__game_chatter.visible = true;
+			}
+			
+			if (GameChatter.__scrollable_area3 != null)
+			{
+				GameChatter.__scrollable_area3.active = true;
+				GameChatter.__scrollable_area3.visible = true;
+			}
+			
+			Reg._updateScrollbarBringUp = true; 
+			
+			openSubState(new SceneTransition());
+		
+		}
 
 	}
-	
-	/******************************
-	 * _dataMisc does not been this assignment a value because it already has the correct username from the "Is logging In" network event. This function is needed or else there will be a null error at server for the username when saving user actions to the server log file. _dataGame is not used here because its not needed for server log file. hence, in this board game its not a location where a player can go.
-	 */
-	public static function allTypedefUsernameUpdate(_username:String):Void
-	{
-		RegTypedef._dataGame0._username = _username;
-		
-		RegTypedef._dataGame1._username = _username;
-		RegTypedef._dataGame2._username = _username;
-		RegTypedef._dataGame3._username = _username;
-		RegTypedef._dataGame4._username = _username;
-		
-		RegTypedef._dataGameMessage._username = 	_username;
-		RegTypedef._dataDailyQuests._username = 	_username;
-		RegTypedef._dataQuestions._username = 		_username;
-		RegTypedef._dataTournaments._username = 	_username;
-		RegTypedef._dataOnlinePlayers._username = 	_username;
-		RegTypedef._dataPlayers._username = 		_username;
-		RegTypedef._dataMovement._username = 		_username; 
-		RegTypedef._dataStatistics._username = 		_username;
-		RegTypedef._dataHouse._username = 			_username;
-	}
-	
 	
 	override public function destroy()
 	{
@@ -1091,11 +1336,11 @@ class PlayState extends FlxState
 			__scene_background = null;
 		}
 		
-		if (__action_commands != null)
+		if (__hotkeys != null)
 		{	
-			remove(__action_commands);
-			__action_commands.destroy();
-			__action_commands = null;
+			remove(__hotkeys);
+			__hotkeys.destroy();
+			__hotkeys = null;
 		}
 		
 		if (__scene_lobby != null)
@@ -1176,13 +1421,6 @@ class PlayState extends FlxState
 			_websocket = null;
 		}
 		
-		if (messageBox != null)
-		{	
-			remove(messageBox);
-			messageBox.destroy();
-			messageBox = null;
-		}
-			
 		super.destroy();
 	}
 	
@@ -1191,54 +1429,43 @@ class PlayState extends FlxState
 	 */
 	override public function update(elapsed:Float):Void
 	{
-		// should message box be displayed?
-		if (Reg._messageId > 0 && Reg._messageId != 1000000
-		&&	Reg._messageId != Reg._message_id_temp
-		&&	Reg._messageFocusId[Reg._messageFocusId.length-1] == Reg._messageId)
-		{
-			_msg = new IdsMessageBox();
-			add(_msg);
-		}
-		
 		if (RegTriggers._keyboard_open == true)
 		{
 			RegTriggers._keyboard_open = false;
 			RegTriggers._keyboard_opened = true;
 
-			//#if mobile
-				if (__action_keyboard != null)
-				{
-					__action_keyboard.close();
-					remove(__action_keyboard);
-					__action_keyboard = null;
-				}
-				
-				if (__action_keyboard == null)
-				{
-					__action_keyboard = new ActionKeyboard();
-					add(__action_keyboard);
-				}
-				
-				__action_keyboard.drawButtons();
-			//#end
+			if (__action_keyboard != null)
+			{
+				__action_keyboard.close();
+				remove(__action_keyboard);
+				__action_keyboard = null;
+			}
+			
+			if (__action_keyboard == null)
+			{
+				__action_keyboard = new ActionKeyboard();
+				add(__action_keyboard);
+			}
+			
+			__action_keyboard.drawButtons();
 		}
 		
 		if (RegTriggers._keyboard_close == true)
 		{
 			RegTriggers._keyboard_close = false;
 
-			//#if mobile
-				if (__action_keyboard != null) 
-				{
-					__action_keyboard.close();
-					remove(__action_keyboard);
-					__action_keyboard = null;
-				}
-			//#end
+			if (__action_keyboard != null) 
+			{
+				__action_keyboard.close();
+				remove(__action_keyboard);
+				__action_keyboard = null;
+			}
+			
 		}
 		
 		// go to the client() function and connect to the server. If connected then define the events.
-		if ( Reg._hasUserConnectedToServer == false) client();
+		if ( Reg._hasUserConnectedToServer == false
+		&&	 Reg._alreadyOnlineUser == false) client();
 		
 		if ( Reg._hasUserConnectedToServer == true)
 		{
@@ -1257,21 +1484,19 @@ class PlayState extends FlxState
 						
 						__title_bar.visible = false;
 						
-						//#if mobile
-							if (__action_keyboard != null) 
-							{
-								__action_keyboard.close();
-								remove(__action_keyboard);
-								__action_keyboard = null;
-							}
-						//#end
+						if (__action_keyboard != null) 
+						{
+							__action_keyboard.close();
+							remove(__action_keyboard);
+							__action_keyboard = null;
+						}
 						
 					}
 					
 				}
 				
 				// everything inside this code block is ran when a game is first started.
-				enterGameRoom();
+				game_room_enter();
 				
 				// restart the game for either p1 vs computer or p1 vs p2.
 				if (Reg._playerLeftGame == false) restartGame();
@@ -1292,11 +1517,7 @@ class PlayState extends FlxState
 			{
 				Reg2._scrollable_area_is_scrolling = false;
 				
-				if (RegCustom._sound_enabled[Reg._tn] == true)
-					FlxG.sound.play("click", 1, false);
-				
 				Reg._isLoggingIn = false; 
-				Reg._buttonDown = true;
 				
 				// client at website is only for guest accounts.
 				#if html5
@@ -1313,189 +1534,9 @@ class PlayState extends FlxState
 			}
 		}
 		
-		// player is entering the lobby.
-		if (Reg._at_create_room == false
-		&&	Reg._at_waiting_room == false)
-			lobbyEnter();
-		
-		if (RegTriggers._lobby == true
-		&& PlayState._clientDisconnect == false
-		&& Reg._game_offline_vs_cpu == false
-		|| RegTriggers._lobby == true
-		&& PlayState._clientDisconnect == false
-		&& Reg._game_offline_vs_player == false)
-		{
-			Reg._at_lobby = true;
-			// lobby table starts at id 0. set first column as default.
-			Reg._tc = 0;
-			RegTriggers._lobby = false;
-			RegTriggers._buttons_set_not_active = false;
-			
-			if (__scene_game_room != null)
-			{
-				if (__scene_game_room._playerTimeRemainingMove != null)
-				{
-					__scene_game_room._playerTimeRemainingMove.destroy();
-					__scene_game_room._playerTimeRemainingMove = null;
-				}
-				
-				remove(__scene_game_room);
-			}
-			
-			PlayersLeftGameResetThoseVars.playerRepopulateTypedefPlayers();
-			Reg._playerOffset = 0;
-				
-			Reg._clearDoubleMessage = false;
-			Reg._game_online_vs_cpu = false;
-			Reg._at_create_room = false;
-			Reg._at_waiting_room = false;
-			
-			//room.group.visible = false;
-			__scene_create_room.visible = false;
-			//room.group.active = false; 
-			__scene_create_room.active = false;
-			
-			if (GameChatter._groupChatterScroller != null)
-				GameChatter._groupChatterScroller.x = 0;
-			
-			// this check is needed because user might be coming from creating room.
-			if (GameChatter.__scrollable_area3 != null)
-			{
-				SceneWaitingRoom.__game_chatter.visible = false;
-				GameChatter.__scrollable_area3.visible = false;
-			
-				SceneWaitingRoom.__game_chatter.active = false;
-				GameChatter.__scrollable_area3.active = false;
-			}
-			
-			__scene_waiting_room.visible = false;					
-			__scene_waiting_room.active = false;
-			
-			__scene_lobby.active = true;
-			__scene_lobby.visible = true;
-			
-			__scene_lobby.__scrollable_area.active = true;			
-			__scene_lobby.__scrollable_area.visible = true;
-			
-			__scene_lobby.set_active_for_buttons();			
-			__scene_lobby.initialize();
-			
-			if (SceneLobby.__game_chatter != null)
-			{
-				SceneLobby.__game_chatter.active = true;
-				SceneLobby.__game_chatter.visible = true;
-			}
-			
-			if (GameChatter.__scrollable_area2 != null)
-			{
-				GameChatter.__scrollable_area2.active = true;
-				GameChatter.__scrollable_area2.visible = true;
-			}
-			
-			RegTriggers._recreate_chatter_input_chat = true;
-			
-			Reg._updateScrollbarBringUp = true; 
-			GameChatter._input_chat.active = true;
-		}
-		
-		if (RegTriggers._createRoom == true)
-		{
-			Reg._at_create_room = true;
-			RegTriggers._createRoom = false;
-			Reg._clearDoubleMessage = false;
-			Reg2._lobby_button_alpha = 0.3;
-			RegTriggers._buttons_set_not_active = false;
-			
-			if (GameChatter.__scrollable_area2 != null)
-			{
-				GameChatter.__scrollable_area2.visible = false;
-				__scene_lobby.__scrollable_area.visible = false;
-				
-				GameChatter.__scrollable_area2.active = false;
-				__scene_lobby.__scrollable_area.active = false;
-			}
-			
-			if (GameChatter.__scrollable_area3 != null)
-			{
-				GameChatter.__scrollable_area3.visible = false;
-				GameChatter.__scrollable_area3.active = false;
-			}
-									
-			__scene_lobby.__scrollable_area.visible = false;
-			__scene_lobby.__scrollable_area.active = false;
-			
-			__scene_lobby.visible = false;
-			__scene_lobby.active = false;			
-			
-			__scene_create_room.active = true;
-			__scene_create_room.visible = true;
-			
-			__scene_create_room.initialize();
-			
-			Reg._updateScrollbarBringUp = true; 
-		}
-		
-		
-		if (RegTriggers.__scene_waiting_room == true)
-		{
-			Reg._at_lobby = false;
-			// waiting room invite table starts at id 100.
-			Reg._tc = 100; // default to the first table column.
-			RegTriggers.__scene_waiting_room = false;
-			Reg._clearDoubleMessage = false;
-			Reg2._lobby_button_alpha = 1;
-			RegTriggers._buttons_set_not_active = false;
-			Reg._at_waiting_room = true;
-			
-			__scene_create_room.visible = false;
-			__scene_create_room.active = false;			
-			
-			if (GameChatter.__scrollable_area2 != null)
-			{
-				GameChatter.__scrollable_area2.visible = false;
-				__scene_lobby.__scrollable_area.visible = false;
-							
-				GameChatter.__scrollable_area2.active = false;
-				__scene_lobby.__scrollable_area.active = false;
-			}
-			
-			__scene_lobby.__scrollable_area.visible = false;
-			__scene_lobby.__scrollable_area.active = false;
-			
-			__scene_lobby.visible = false;	
-			__scene_lobby.active = false;
-			
-			if (RegCustom._chat_when_at_lobby_enabled[Reg._tn] == true)
-			{
-				SceneLobby.__game_chatter.visible = false;
-				SceneLobby.__game_chatter.active = false;
-			}
-			
-			if (GameChatter._chatterOpenCloseButton != null)
-			{
-				GameChatter._chatterOpenCloseButton.visible = false;
-				GameChatter._chatterOpenCloseButton.active = false;
-			}
-			
-			__scene_waiting_room.active = true;			
-			__scene_waiting_room.visible = false;			
-			__scene_waiting_room.initialize();
-			__scene_waiting_room.visible = true;
-			
-			if (SceneWaitingRoom.__game_chatter != null)
-			{
-				SceneWaitingRoom.__game_chatter.active = true;
-				SceneWaitingRoom.__game_chatter.visible = true;
-			}
-			
-			if (GameChatter.__scrollable_area3 != null)
-			{
-				GameChatter.__scrollable_area3.active = true;
-				GameChatter.__scrollable_area3.visible = true;
-			}
-			
-			Reg._updateScrollbarBringUp = true; 
-		}
+		// changing scenes. 
+		// lobby, creating room and waiting room are here.
+		scene_trigger();
 		
 		// kicked or banned. display message.
 		if (RegTriggers._actionMessage == true)
@@ -1530,6 +1571,15 @@ class PlayState extends FlxState
 			// Reg._buttonCodeValues = ""; this var is cleared at ButtonGeneralNetworkYes class
 		}
 		
+		// should message box be displayed?
+		if (Reg._messageId > 0 && Reg._messageId != 1000000
+		&&	Reg._messageId != Reg._message_id_temp
+		&&	Reg._messageFocusId[Reg._messageFocusId.length-1] == Reg._messageId)
+		{
+			_msg = new IdsMessageBox();
+			add(_msg);
+		}
+		
 		if (Reg._outputMessage == true) gameMessage();
 		
 		super.update(elapsed);
@@ -1560,7 +1610,7 @@ class PlayState extends FlxState
 		// at server the username is set to "nobody" when user logs off. the array element cannot be removed because handle id value always increments and the handle id value is used to get and set the username list.
 		if (RegTypedef._dataAccount._username.toLowerCase() == "nobody")
 		{
-			Reg._username_restricted = true;
+			Reg._username_banned = true;
 			FlxG.switchState(new MenuState());
 		}
 		
@@ -1587,8 +1637,6 @@ class PlayState extends FlxState
 			
 		if (Reg._disconnectNow == true) 
 		{
-			Reg._disconnectNow = false;
-			
 			if (Reg._game_online_vs_cpu == true || Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false)
 			{
 				if (Reg._client_socket_is_connected == true) 

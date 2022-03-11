@@ -22,6 +22,8 @@ class SceneWaitingRoom extends FlxState
 	public static var __title_bar:TitleBar;
 	public static var __menu_bar:MenuBar; 
 	
+	private var __player_kick_or_ban_players:PlayerKickOrBanPlayers;
+	
 	/******************************
 	 * background gradient, texture and plain color for a scene.
 	 */
@@ -36,17 +38,10 @@ class SceneWaitingRoom extends FlxState
 	private var _ticksOnlineList:Float = 0;
 		
 	/******************************
-	 * the user that created the chat. displayed at the top of the user list.
+	 * player 1 is the user that created the room. player 2-4 is the user that joined the waiting room.
 	 */
-	public static var _textPlayer1Stats:FlxText;
-		
-	/******************************
-	 * the user that joined the chatroom.
-	 */
-	public static var _textPlayer2Stats:FlxText;
-	public static var _textPlayer3Stats:FlxText;
-	public static var _textPlayer4Stats:FlxText;
-
+	public static var _text_player_stats:Array<FlxText> = [];
+	
 	/******************************
 	 * compare this array with Reg.usernames. it false then usernames has changed. this var is used to get stats when false.
 	 */
@@ -85,8 +80,13 @@ class SceneWaitingRoom extends FlxState
 			_color = FlxColor.fromHSB(RegCustomColors.color_client_background().hue, RegCustom._client_background_saturation[Reg._tn], RegCustom._client_background_brightness[Reg._tn]);
 		}
 		
-		if (__scene_background != null) remove(__scene_background);	
-			__scene_background = new SceneBackground();
+		if (__scene_background != null)
+		{
+			remove(__scene_background);
+			__scene_background.destroy();
+		}
+		
+		__scene_background = new SceneBackground();
 		add(__scene_background);
 		
 		// creates the invite table and also sends the invite request to the server.
@@ -99,9 +99,13 @@ class SceneWaitingRoom extends FlxState
 		_invite_table = new InviteTable(this);
 		add(_invite_table);
 		
-		//#############################
-						
 		// background underneath the stats.
+		if (bodyBg != null)
+		{
+			remove(bodyBg);
+			bodyBg.destroy();
+		}
+		
 		bodyBg = new FlxSprite(0, FlxG.height / 1.65 + 85);
 		bodyBg.makeGraphic(FlxG.width - 370 - 20, FlxG.height);
 		if (RegCustom._chat_when_at_room_enabled[Reg._tn] == false)
@@ -117,41 +121,31 @@ class SceneWaitingRoom extends FlxState
 					
 		Reg._keyOrButtonDown = false;
 		Reg._gameHost = true;
-				
-		var _offset:Int = 20;		
-				
-		var playerKickOrBanPlayers = new PlayerKickOrBanPlayers();
-		add(playerKickOrBanPlayers);
+		
+		__player_kick_or_ban_players = new PlayerKickOrBanPlayers();
+		add(__player_kick_or_ban_players);
 		
 		// the user that created the chat. displayed at the bottom of the user list.
-		_textPlayer1Stats = new FlxText(60, 603, 0, "", 24);
-		_textPlayer1Stats.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
-		if (RegCustom._chat_when_at_room_enabled[Reg._tn] == false)
-			_textPlayer1Stats.x += 180; // half of 360 is the width of chatter. half is used to center it to scene.
-		_textPlayer1Stats.scrollFactor.set(0, 0);
-		add(_textPlayer1Stats);
+		for (i in 0... 4)
+		{
+			if (_text_player_stats[i] != null)
+			{
+				remove(_text_player_stats[i]);
+				_text_player_stats[i].destroy();
+			}
+			
+			if (i == 0) _text_player_stats[i] = new FlxText(60, 603, 0, "", 24);
+			if (i == 1) _text_player_stats[i] = new FlxText(280, 603, 0, "", 24);
+			if (i == 2) _text_player_stats[i] = new FlxText(500, 603, 0, "", 24);
+			if (i == 3) _text_player_stats[i] = new FlxText(720, 603, 0, "", 24);
+			
+			_text_player_stats[i].setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
+			if (RegCustom._chat_when_at_room_enabled[Reg._tn] == false)
+				_text_player_stats[i].x += 180; // half of 360 is the width of chatter. half is used to center it to scene.
+			_text_player_stats[i].scrollFactor.set(0, 0);
+			add(_text_player_stats[i]);
+		}
 		
-		// the user that joined the chatroom.
-		_textPlayer2Stats = new FlxText(280, 603, 0, "", 24);
-		_textPlayer2Stats.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
-		if (RegCustom._chat_when_at_room_enabled[Reg._tn] == false)
-			_textPlayer2Stats.x += 180; // half of 360 is the width of chatter. half is used to center it to scene.
-		_textPlayer2Stats.scrollFactor.set(0, 0);		
-		add(_textPlayer2Stats);
-		
-		_textPlayer3Stats = new FlxText(500, 603, 0, "", 24);
-		_textPlayer3Stats.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
-		if (RegCustom._chat_when_at_room_enabled[Reg._tn] == false)
-			_textPlayer3Stats.x += 180; // half of 360 is the width of chatter. half is used to center it to scene.
-		_textPlayer3Stats.scrollFactor.set(0, 0);		
-		add(_textPlayer3Stats);
-		
-		_textPlayer4Stats = new FlxText(720, 603, 0, "", 24);
-		_textPlayer4Stats.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
-		if (RegCustom._chat_when_at_room_enabled[Reg._tn] == false)
-			_textPlayer4Stats.x += 180; // half of 360 is the width of chatter. half is used to center it to scene.
-		_textPlayer4Stats.scrollFactor.set(0, 0);		
-		add(_textPlayer4Stats);
 	}
 	
 	public function initialize():Void
@@ -229,13 +223,23 @@ class SceneWaitingRoom extends FlxState
 		if (RegCustom._chat_when_at_room_enabled[Reg._tn] == true)
 		{
 			// make a scrollbar-enabled camera for it (a FlxScrollableArea)	
-			if (__scrollable_area != null) FlxG.cameras.remove(__scrollable_area);
+			if (__scrollable_area != null) 
+			{
+				FlxG.cameras.remove(__scrollable_area);
+				__scrollable_area.destroy();
+			}
+			
 			__scrollable_area = new FlxScrollableArea( new FlxRect(0, 0, 1400-370, FlxG.height - 50), new FlxRect(0, 0, 1400, 8800), ResizeMode.NONE, 0, 100, -1, FlxColor.LIME, null, 0);	
 		}
 		
 		else
 		{
-			if (__scrollable_area != null) FlxG.cameras.remove(__scrollable_area);
+			if (__scrollable_area != null)
+			{
+				FlxG.cameras.remove(__scrollable_area);
+				__scrollable_area.destroy();
+			}
+			
 			__scrollable_area = new FlxScrollableArea( new FlxRect(0, 0, 1400, FlxG.height - 50), new FlxRect(0, 0, 1400, 8800), ResizeMode.FIT_WIDTH, 0, 100, -1, FlxColor.LIME, null, 0);	
 		}
 	
@@ -297,7 +301,7 @@ class SceneWaitingRoom extends FlxState
 				{
 					if (RegCustom._sound_enabled[Reg._tn] == true
 					&&  Reg2._scrollable_area_is_scrolling == false)
-						FlxG.sound.play("pager", 1, true);
+						FlxG.sound.playMusic("pager", 1, true);
 				}
 			}
 		}
@@ -336,7 +340,7 @@ class SceneWaitingRoom extends FlxState
 			// this var will be used to determine when its a different users turn to move. this var is in reference to, _move_number_next.
 			RegTypedef._dataPlayers._moveNumberDynamic[0] = 0;
 			
-			_textPlayer1Stats.text = "Wins " + RegTypedef._dataPlayers._gamesAllTotalWins[0] + "\nLosses " + RegTypedef._dataPlayers._gamesAllTotalLosses[0] + "\nDraws " + RegTypedef._dataPlayers._gamesAllTotalDraws[0];
+			_text_player_stats[0].text = "Wins " + RegTypedef._dataPlayers._gamesAllTotalWins[0] + "\nLosses " + RegTypedef._dataPlayers._gamesAllTotalLosses[0] + "\nDraws " + RegTypedef._dataPlayers._gamesAllTotalDraws[0];
 			
 			Reg._totalPlayersInRoom = 0;
 			//Reg._buttonCodeValues = "";
@@ -347,58 +351,41 @@ class SceneWaitingRoom extends FlxState
 			var _tempUser:String = RegTypedef._dataMisc._username;
 			RegTypedef._dataMisc._username = RegTypedef._dataPlayers._usernamesDynamic[0];
 			
-			PlayState.send("Is Host", RegTypedef._dataMisc);
+			if (RegTypedef._dataPlayers._username == RegTypedef._dataPlayers._usernamesDynamic[0])
+				PlayState.send("Is Host", RegTypedef._dataMisc);
 			
 			RegTypedef._dataMisc._username = _tempUser;
 			
 		} else if (RegTypedef._dataPlayers._usernamesDynamic[0] == "" && Reg._buttonCodeValues != "p1000") // player does not exist so delete button.
-		_textPlayer1Stats.text = "";
+		_text_player_stats[0].text = "";
 		
-		if (RegTypedef._dataPlayers._usernamesDynamic[1] != "" && RegTypedef._dataPlayers._actionWho != RegTypedef._dataPlayers._usernamesDynamic[1])
+		// draw player 2-4 stats to scene.
+		for (i in 1... 4)
 		{
-			RegTypedef._dataPlayers._moveNumberDynamic[1] = 1;
+			if (RegTypedef._dataPlayers._usernamesDynamic[i] != "" && RegTypedef._dataPlayers._actionWho != RegTypedef._dataPlayers._usernamesDynamic[i])
+			{
+				RegTypedef._dataPlayers._moveNumberDynamic[i] = i;
+				
+				_text_player_stats[i].text = "Wins " + RegTypedef._dataPlayers._gamesAllTotalWins[i] + "\nLosses " + RegTypedef._dataPlayers._gamesAllTotalLosses[i] + "\nDraws " + RegTypedef._dataPlayers._gamesAllTotalDraws[i];
+				
+				Reg._totalPlayersInRoom = i;
+				Reg._currentRoomState = (i + 2);
+			} 
 			
-			_textPlayer2Stats.text = "Wins " + RegTypedef._dataPlayers._gamesAllTotalWins[1] + "\nLosses " + RegTypedef._dataPlayers._gamesAllTotalLosses[1] + "\nDraws " + RegTypedef._dataPlayers._gamesAllTotalDraws[1];
-			
-			Reg._totalPlayersInRoom = 1;
-			Reg._currentRoomState = 3;
-		} else if (RegTypedef._dataPlayers._usernamesDynamic[1] == "" && Reg._buttonCodeValues != "p1000") // player does not exist so delete button.
-		_textPlayer2Stats.text = "";
-
-		
-		if (RegTypedef._dataPlayers._usernamesDynamic[2] != "" && RegTypedef._dataPlayers._actionWho != RegTypedef._dataPlayers._usernamesDynamic[2])
-		{
-			RegTypedef._dataPlayers._moveNumberDynamic[2] = 2;
-		
-			_textPlayer3Stats.text = "Wins " + RegTypedef._dataPlayers._gamesAllTotalWins[2] + "\nLosses " + RegTypedef._dataPlayers._gamesAllTotalLosses[2] + "\nDraws " + RegTypedef._dataPlayers._gamesAllTotalDraws[2];
-			
-			Reg._totalPlayersInRoom = 2;
-			Reg._currentRoomState = 4;
-		} else if (RegTypedef._dataPlayers._usernamesDynamic[2] == "" && Reg._buttonCodeValues != "p1000") // player does not exist so delete button.
-		_textPlayer3Stats.text = "";
-			
-						
-		if (RegTypedef._dataPlayers._usernamesDynamic[3] != "" && RegTypedef._dataPlayers._actionWho != RegTypedef._dataPlayers._usernamesDynamic[3])
-		{
-			RegTypedef._dataPlayers._moveNumberDynamic[3] = 3;
-			
-			_textPlayer4Stats.text = "Wins " + RegTypedef._dataPlayers._gamesAllTotalWins[3] + "\nLosses " + RegTypedef._dataPlayers._gamesAllTotalLosses[3] + "\nDraws " + RegTypedef._dataPlayers._gamesAllTotalDraws[3];
-			
-			Reg._totalPlayersInRoom = 3;
-			Reg._currentRoomState = 5;
-		} else if (RegTypedef._dataPlayers._usernamesDynamic[3] == "" && Reg._buttonCodeValues != "p1000") // player does not exist so delete button.
-		_textPlayer4Stats.text = "";
-		
+			// player does not exist so delete button.
+			else if (RegTypedef._dataPlayers._usernamesDynamic[i] == "" && Reg._buttonCodeValues != "p1000") 			
+				_text_player_stats[i].text = "";
+		}
 
 		if (_count > 1) // if there are more than one player in room then make start game visible
 		{
 			if (Reg._currentRoomState > 2 && Std.string(RegTypedef._dataAccount._username) == Std.string(RegTypedef._dataPlayers._usernamesDynamic[0])
 			&& RegTypedef._dataMisc._roomPlayerLimit[RegTypedef._dataMisc._room] == _count) // actionNumber is 0 if nobody in room is kicked or banned, etc.
 			{	
-				if (Reg._currentRoomState == 3 && _textPlayer1Stats.text != ""
-				||  Reg._currentRoomState == 4 && _textPlayer2Stats.text != ""
-				||  Reg._currentRoomState == 5 && _textPlayer3Stats.text != ""
-				||  Reg._currentRoomState == 6 && _textPlayer4Stats.text != "")
+				if (Reg._currentRoomState == 3 && _text_player_stats[0].text != ""
+				||  Reg._currentRoomState == 4 && _text_player_stats[1].text != ""
+				||  Reg._currentRoomState == 5 && _text_player_stats[2].text != ""
+				||  Reg._currentRoomState == 6 && _text_player_stats[3].text != "")
 				{
 					__menu_bar._buttonGameRoom.active = true;
 					__menu_bar._buttonGameRoom.visible = true;
@@ -411,6 +398,7 @@ class SceneWaitingRoom extends FlxState
 					}
 				}
 			}
+			
 			else if (Reg._buttonCodeValues != "p1000") // player does not exist so delete button.
 			{
 				__menu_bar._buttonGameRoom.visible = false;
@@ -462,12 +450,12 @@ class SceneWaitingRoom extends FlxState
 			RegTypedef._dataPlayers._gamePlayersValues = [0, 0, 0, 0];
 						
 			// stop any sound playing.			
-			if (FlxG.sound.music != null && FlxG.sound.music.playing == true) FlxG.sound.music.stop();
+			//if (FlxG.sound.music != null && FlxG.sound.music.playing == true) FlxG.sound.music.stop();
 			
-			_textPlayer1Stats.text = "";
-			_textPlayer2Stats.text = "";	
-			_textPlayer3Stats.text = "";
-			_textPlayer4Stats.text = "";	
+			for (i in 0... 4)
+			{
+				_text_player_stats[i].text = "";
+			}
 			
 			Reg._createGameRoom = true;
 		}
@@ -488,7 +476,6 @@ class SceneWaitingRoom extends FlxState
 			
 			__scrollable_area.visible = false;
 			__scrollable_area.active = false;
-				
 			
 			PlayState.send("Lesser RoomState Value", RegTypedef._dataMisc);
 			
@@ -500,12 +487,10 @@ class SceneWaitingRoom extends FlxState
 			Reg._rememberChatterIsOpen = false;
 			Reg._lobbyDisplay = false;
 			
-			if (FlxG.sound.music != null && FlxG.sound.music.playing == true) FlxG.sound.music.stop();		
-			
-			_textPlayer1Stats.text = "";
-			_textPlayer2Stats.text = "";
-			_textPlayer3Stats.text = "";
-			_textPlayer4Stats.text = "";
+			for (i in 0... 4)
+			{
+				_text_player_stats[i].text = "";
+			}
 			
 			Reg._gameHost = true;
 			
@@ -518,7 +503,8 @@ class SceneWaitingRoom extends FlxState
 				RegTriggers._actionMessage = true;
 			}
 			
-			RegTriggers._lobby = true; 
+			RegTriggers._lobby = true;
+			
 		}
 		
 		// leave room cancelled. game has not been started yet. 
@@ -533,32 +519,28 @@ class SceneWaitingRoom extends FlxState
 		
 	override public function destroy()
 	{
-		if (_textPlayer1Stats != null) 
+		if (__player_kick_or_ban_players != null)
 		{
-			remove(_textPlayer1Stats);
-			_textPlayer1Stats.destroy();
-			_textPlayer1Stats = null;
+			remove(__player_kick_or_ban_players);
+			__player_kick_or_ban_players.destroy();
+			__player_kick_or_ban_players = null;
+		}
+			
+		if (__scene_background != null)
+		{
+			remove(__scene_background);
+			__scene_background.destroy();
+			__scene_background = null;
 		}
 		
-		if (_textPlayer2Stats != null) 
+		for (i in 0... 4)
 		{
-			remove(_textPlayer2Stats);
-			_textPlayer2Stats.destroy();
-			_textPlayer2Stats = null;
-		}
-		
-		if (_textPlayer3Stats != null) 
-		{
-			remove(_textPlayer3Stats);
-			_textPlayer3Stats.destroy();
-			_textPlayer3Stats = null;
-		}
-		
-		if (_textPlayer4Stats != null) 
-		{
-			remove(_textPlayer4Stats);
-			_textPlayer4Stats.destroy();
-			_textPlayer4Stats = null;
+			if (_text_player_stats[i] != null) 
+			{
+				remove(_text_player_stats[i]);
+				_text_player_stats[i].destroy();
+				_text_player_stats[i]= null;
+			}
 		}
 		
 		if (bodyBg != null) 
@@ -611,9 +593,6 @@ class SceneWaitingRoom extends FlxState
 		// send the offset of the scrollable area to the button class so that when scrolling the scrollable area, the buttons will not be fired at an incorrect scene location. for example, without this offset, when scrolling to the right about 100 pixels worth, the button could fire at 100 pixels to the right of the button's far right location.
 			ButtonGeneralNetworkYes._scrollarea_offset_x = __scrollable_area.scroll.x;
 			ButtonGeneralNetworkYes._scrollarea_offset_y = __scrollable_area.scroll.y;
-		if (FlxG.keys.justReleased.ANY
-		||	FlxG.mouse.justPressed == true)
-			FlxG.sound.destroy(true);
 		
 		// TODO make this code everywhere that's needed, such as at SceneGameRoom.hx.
 		if (Reg._buttonCodeValues != "") buttonCodeValues();

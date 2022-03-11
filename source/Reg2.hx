@@ -51,18 +51,18 @@ class Reg2 extends FlxGroup
 	public static var _dragBox_y:Int = 0;
 	public static var _title_x:Int = 0;
 	public static var _title_y:Int = 0;
-	public static var _button1_x:Int = 0;
-	public static var _button1_y:Int = 0;
+	public static var _button_x_x:Int = 0;
+	public static var _button_x_y:Int = 0;
 	public static var _textMessage_x:Int = 0;
 	public static var _textMessage_y:Int = 0;
 	public static var _textTimer_x:Int = 0;
 	public static var _textTimer_y:Int = 0;
-	public static var _buttonMessageOK_x:Int = 0;
-	public static var _buttonMessageOK_y:Int = 0;
-	public static var _button5_x:Int = 0;
-	public static var _button5_y:Int = 0;
-	public static var _button6_x:Int = 0;
-	public static var _button6_y:Int = 0;
+	public static var _button_ok_x:Int = 0;
+	public static var _button_ok_y:Int = 0;
+	public static var _button_yes_x:Int = 0;
+	public static var _button_yes_y:Int = 0;
+	public static var _button_no_x:Int = 0;
+	public static var _button_no_y:Int = 0;
 	//#############################
 	
 	public static var _updateNotation:Bool = false;
@@ -178,11 +178,6 @@ class Reg2 extends FlxGroup
 	public static var _scrollable_area_is_scrolling = false;
 	
 	/******************************
-	 * this is used at scrollable area. each time a button is clicked at the lobby, this value is plus 1. at the ButtonGeneralNetworkYes.hx class when alpha is set to 1 then this is minus 1. the scrollable area will not scroll unless this value is 0.3.
-	 */
-	public static var _lobby_button_alpha:Float = 0.3;
-	
-	/******************************
 	 * at lobby after a message box is closed, this var is used to set alpha to 1 to all buttons.
 	 */
 	public static var _message_box_just_closed:Bool = false;
@@ -241,7 +236,6 @@ class Reg2 extends FlxGroup
 		_message_box_just_closed = false;
 		_offline_cpu_host_name2 = "";
 		_offline_cpu_host_name3 = "";
-		_lobby_button_alpha = 1;
 		_messageFileExists = "";
 		_getGameInstrcutions = "";
 		_key_output = "";
@@ -257,18 +251,18 @@ class Reg2 extends FlxGroup
 		_dragBox_y = 17;
 		_title_x = 45;
 		_title_y = 15;
-		_button1_x = 585;
-		_button1_y = 12;
+		_button_x_x = 585;
+		_button_x_y = 12;
 		_textMessage_x = 45;
 		_textMessage_y = 75;
 		_textTimer_x = 535;
 		_textTimer_y = 19;
-		_buttonMessageOK_x = 240;
-		_buttonMessageOK_y = 220;
-		_button5_x = 170;
-		_button5_y = 220;
-		_button6_x = 335;
-		_button6_y = 220;
+		_button_ok_x = 240;
+		_button_ok_y = 220;
+		_button_yes_x = 170;
+		_button_yes_y = 220;
+		_button_no_x = 335;
+		_button_no_y = 220;
 				
 		_experiencePointsTable[0] = 0;
 		_experiencePointsTable[1] = 105;

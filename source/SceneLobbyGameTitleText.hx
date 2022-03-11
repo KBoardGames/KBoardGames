@@ -38,11 +38,13 @@ class SceneLobbyGameTitleText extends FlxText
 		if (Reg._at_lobby == false) return;
 		
 		// this code is needed so that it refreshes the lobby scrollable area data without new the text.
-		for (i in 0...27)
+		for (i in 0... SceneLobby._room_total)
 		{			
 			if (i == _id) 
 			{
-				if (RegTypedef._dataMisc._roomHostUsername[i] != "")
+				if (RegTypedef._dataMisc._roomHostUsername[i] != ""
+				&&	RegTypedef._dataMisc._roomState[i] != 2
+				&&	RegTypedef._dataMisc._roomPlayerCurrentTotal[i] > 0)
 				{
 					var _title = RegFunctions.gameName(RegTypedef._dataMisc._roomGameIds[i]);
 					text = _title;

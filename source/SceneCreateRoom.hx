@@ -76,6 +76,7 @@ class SceneCreateRoom extends FlxState
 	public function new() 
 	{
 		super();
+		
 		RegFunctions.fontsSharpen();		
 
 		if (Reg._total_games_in_release > 0)
@@ -639,11 +640,11 @@ class SceneCreateRoom extends FlxState
 					Reg2._gameId_sprite_highlight.setPosition(75 + ( i * 255), 120);
 				
 				if (ActionInput.overlaps(Reg2._gameId_sprite[i]) == true
-				&&  ActionInput.justPressed() == true)
+				&&  ActionInput.justReleased() == true)
 				{
 					if (RegCustom._sound_enabled[Reg._tn] == true
 					&&  Reg2._scrollable_area_is_scrolling == false)
-						FlxG.sound.play("click", 1, false);			
+						FlxG.sound.playMusic("click", 1, false);			
 				}
 				
 				if (ActionInput.overlaps(Reg2._gameId_sprite[i]) == true

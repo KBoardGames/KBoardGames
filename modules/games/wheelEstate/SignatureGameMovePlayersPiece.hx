@@ -270,7 +270,7 @@ class SignatureGameMovePlayersPiece extends FlxSprite {
 			Reg._moveNumberCurrentForNotation = Reg._move_number_next;
 			
 			Reg._move_number_next += 1;
-		
+			
 			// what player moves next. a value of 3 means its the third player. e.g, Reg._gameDiceCurrentIndex[2] stores the location of the third player's piece.
 			if (Reg._move_number_next >= Reg._roomPlayerLimit - Reg._playerOffset)
 			Reg._move_number_next = 0;

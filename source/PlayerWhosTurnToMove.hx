@@ -16,56 +16,69 @@ package;
  * @author kboardgames.com
  */
 class PlayerWhosTurnToMove extends FlxState
-{	 	
-	private var _rectangleBox:FlxSprite;
+{
+	/******************************
+	 * when its the player's turn to move, this _background will be displayed behind either the p1, p2, p3 or p4 text.
+	 */
+	private var _background:FlxSprite;
+	
+	/******************************
+	 * player's p1, p2, p3 or p4 text.
+	 */
+	private var _text:Array<FlxText> = [];
+	
+	/******************************
+	 * display move total for games that use this feature.
+	 */
 	private var _move_total:FlxText;
 	
 	public function new() 
 	{
 		super();
 		
-		// when its the player's turn to move, this _rectangleBox will be displayed behind that player's text.
-		_rectangleBox = new FlxSprite(FlxG.width - 360, Reg._unitYgameBoardLocation[0] + 50);
-		_rectangleBox.makeGraphic(51, 40, 0xFFFFFFFF);
-		_rectangleBox.scrollFactor.set(0, 0);
-		_rectangleBox.visible = false;
-		add(_rectangleBox);
+		// when its the player's turn to move, this _background will be displayed behind that player's text.
+		_background = new FlxSprite(FlxG.width - 360, Reg._unitYgameBoardLocation[0] + 50);
+		_background.makeGraphic(51, 40, 0xFFFFFFFF);
+		_background.scrollFactor.set(0, 0);
+		_background.visible = false;
+		add(_background);
 		
-		var _textPlayer1 = new FlxText(FlxG.width - 352, Reg._unitYgameBoardLocation[0] + 55, 0, "", 20);
-		_textPlayer1.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.CYAN);
-		_textPlayer1.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
-		_textPlayer1.text = "P1";		
-		_textPlayer1.scrollFactor.set(0, 0);
-		add(_textPlayer1);
+		// player's p1, p2, p3 or p4 text.
+		_text[0] = new FlxText(FlxG.width - 352, Reg._unitYgameBoardLocation[0] + 55, 0, "", 20);
+		_text[0].setFormat(Reg._fontDefault, Reg._font_size, FlxColor.CYAN);
+		_text[0].setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
+		_text[0].text = "P1";		
+		_text[0].scrollFactor.set(0, 0);
+		add(_text[0]);
 		
-		var _textPlayer2 = new FlxText(FlxG.width - 267, Reg._unitYgameBoardLocation[0] + 55, 0, "", 20);
-		_textPlayer2.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.CYAN);
-		_textPlayer2.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
-		_textPlayer2.text = "P2";		
-		_textPlayer2.scrollFactor.set(0, 0);
-		add(_textPlayer2);
+		_text[1] = new FlxText(FlxG.width - 267, Reg._unitYgameBoardLocation[0] + 55, 0, "", 20);
+		_text[1].setFormat(Reg._fontDefault, Reg._font_size, FlxColor.CYAN);
+		_text[1].setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
+		_text[1].text = "P2";		
+		_text[1].scrollFactor.set(0, 0);
+		add(_text[1]);
 				
 		if (Reg._roomPlayerLimit - Reg._playerOffset > 2)
 		{		
-			var _textPlayer3 = new FlxText(FlxG.width - 183, Reg._unitYgameBoardLocation[0] + 55, 0, "", 20);
-			_textPlayer3.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.CYAN);
-			_textPlayer3.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
-			_textPlayer3.text = "P3";		
-			_textPlayer3.scrollFactor.set(0, 0);
-			add(_textPlayer3);
+			_text[2] = new FlxText(FlxG.width - 183, Reg._unitYgameBoardLocation[0] + 55, 0, "", 20);
+			_text[2].setFormat(Reg._fontDefault, Reg._font_size, FlxColor.CYAN);
+			_text[2].setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
+			_text[2].text = "P3";		
+			_text[2].scrollFactor.set(0, 0);
+			add(_text[2]);
 		}
 		
 		if (Reg._roomPlayerLimit - Reg._playerOffset > 3)
 		{
-			var _textPlayer4 = new FlxText(FlxG.width - 98, Reg._unitYgameBoardLocation[0] + 55, 0, "", 20);
-			_textPlayer4.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.CYAN);
-			_textPlayer4.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
-			_textPlayer4.text = "P4";		
-			_textPlayer4.scrollFactor.set(0, 0);
-			add(_textPlayer4);
+			_text[3] = new FlxText(FlxG.width - 98, Reg._unitYgameBoardLocation[0] + 55, 0, "", 20);
+			_text[3].setFormat(Reg._fontDefault, Reg._font_size, FlxColor.CYAN);
+			_text[3].setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
+			_text[3].text = "P4";		
+			_text[3].scrollFactor.set(0, 0);
+			add(_text[3]);
 		}
 	
-		// display move total only for checkers, chess and Reversi. do this condition also for the function updateMove().
+		// display move total for games that use this feature. do this condition also for the function updateMove().
 		if (Reg._gameId < 3 && RegCustom._move_total_enabled[Reg._tn] == true)
 		{
 			_move_total = new FlxText(FlxG.width - 352, FlxG.height - 357, 0, "Total Move:" + RegTypedef._dataPlayers._moveTotal);
@@ -80,7 +93,7 @@ class PlayerWhosTurnToMove extends FlxState
 
 	public function updateMove():Void 
 	{
-		_rectangleBox.visible = true;
+		_background.visible = true;
 		
 		if (RegCustom._move_total_enabled[Reg._tn] == true)
 		{
@@ -93,7 +106,7 @@ class PlayerWhosTurnToMove extends FlxState
 		&& RegTypedef._dataGameMessage._userTo == RegTypedef._dataPlayers._usernamesDynamic[0] 
 		&& RegTriggers._tradeProposalOffer == true) 
 		{
-			if (_rectangleBox.x != FlxG.width - 360
+			if (_background.x != FlxG.width - 360
 			&& RegTypedef._dataPlayers._spectatorWatching == false)
 			{
 				RegTypedef._dataPlayers._spectatorWatchingGetMoveNumber = 0;
@@ -105,7 +118,7 @@ class PlayerWhosTurnToMove extends FlxState
 				}
 			}
 			
-			_rectangleBox.x = FlxG.width - 360;
+			_background.x = FlxG.width - 360;
 		}
 		
 		
@@ -114,7 +127,7 @@ class PlayerWhosTurnToMove extends FlxState
 		&& RegTypedef._dataGameMessage._userTo == RegTypedef._dataPlayers._usernamesDynamic[1] 
 		&& RegTriggers._tradeProposalOffer == true)
 		{
-			if (_rectangleBox.x != FlxG.width - 275
+			if (_background.x != FlxG.width - 275
 			&& RegTypedef._dataPlayers._spectatorWatching == false)
 			{
 				RegTypedef._dataPlayers._spectatorWatchingGetMoveNumber = 1;
@@ -125,7 +138,7 @@ class PlayerWhosTurnToMove extends FlxState
 				}
 			}
 			
-			_rectangleBox.x = FlxG.width - 275;
+			_background.x = FlxG.width - 275;
 		}
 		
 		if (Reg._move_number_next == 2 && RegTriggers._tradeProposalOffer == false 
@@ -133,7 +146,7 @@ class PlayerWhosTurnToMove extends FlxState
 		&& RegTypedef._dataGameMessage._userTo == RegTypedef._dataPlayers._usernamesDynamic[2] 
 		&& RegTriggers._tradeProposalOffer == true)
 		{
-			if (_rectangleBox.x != FlxG.width - 190
+			if (_background.x != FlxG.width - 190
 			&& RegTypedef._dataPlayers._spectatorWatching == false)
 			{
 				RegTypedef._dataPlayers._spectatorWatchingGetMoveNumber = 2;
@@ -144,7 +157,7 @@ class PlayerWhosTurnToMove extends FlxState
 				}
 			}
 				
-			_rectangleBox.x = FlxG.width - 190;
+			_background.x = FlxG.width - 190;
 		}
 		
 		if (Reg._move_number_next == 3 && RegTriggers._tradeProposalOffer == false 
@@ -152,7 +165,7 @@ class PlayerWhosTurnToMove extends FlxState
 		&& RegTypedef._dataGameMessage._userTo == RegTypedef._dataPlayers._usernamesDynamic[3] 
 		&& RegTriggers._tradeProposalOffer == true)
 		{
-			if (_rectangleBox.x != FlxG.width - 105
+			if (_background.x != FlxG.width - 105
 			&& RegTypedef._dataPlayers._spectatorWatching == false)
 			{
 				RegTypedef._dataPlayers._spectatorWatchingGetMoveNumber = 3;
@@ -163,14 +176,37 @@ class PlayerWhosTurnToMove extends FlxState
 				}
 			}
 			
-			_rectangleBox.x = FlxG.width - 105;
+			_background.x = FlxG.width - 105;
 		}
 		
 	}
 		
 	override public function destroy()
 	{
+		if (_background != null)
+		{
+			remove(_background);
+			_background.destroy();
+			_background = null;
+		}
 		
+		for (i in 0... 4)
+		{
+			if (_text[i] != null)
+			{
+				remove(_text[i]);
+				_text[i].destroy();
+				_text[i] = null;
+			}
+		}
+		
+		if (_move_total != null)
+		{
+			remove(_move_total);
+			_move_total.destroy();
+			_move_total = null;
+		}
+	
 		super.destroy();
 	}
 	

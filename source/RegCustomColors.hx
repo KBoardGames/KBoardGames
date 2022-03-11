@@ -17,7 +17,7 @@ package;
  */
 class RegCustomColors 
 {
-public static function color_future_capturing_units():FlxColor
+	public static function color_future_capturing_units():FlxColor
 	{
 		var _c = colors(RegCustom._chess_future_capturing_units_number[Reg._tn]);
 		return _c;
@@ -155,6 +155,12 @@ public static function color_future_capturing_units():FlxColor
 	public static function menu_bar_background_color():FlxColor
 	{
 		var _c = colors(RegCustom._menu_bar_background_number[Reg._tn]);
+		return _c;
+	}
+	
+	public static function title_icon_color():FlxColor
+	{
+		var _c = colors(RegCustom._title_icon_number[Reg._tn]);
 		return _c;
 	}
 	

@@ -75,7 +75,7 @@ class ConfigurationOutput extends FlxGroup
 			__scrollable_area = null;
 		}
 		
-		__scrollable_area = new FlxScrollableArea(new FlxRect( 0, 0, FlxG.width, FlxG.height - 50), CID3._group.getHitbox(), ResizeMode.NONE, 0, 100, -1, FlxColor.LIME, null, 1000, true);
+		__scrollable_area = new FlxScrollableArea(new FlxRect( 0, 0, FlxG.width, FlxG.height - 50), CID3._group.getHitbox(), ResizeMode.FIT_WIDTH, 0, 100, -1, FlxColor.LIME, null, 1000, true);
 			
 		FlxG.cameras.add( __scrollable_area );
 		__scrollable_area.antialiasing = true;
@@ -212,6 +212,7 @@ class ConfigurationOutput extends FlxGroup
 		// when using __scrollable_area we need to put the camera off screen so that the normal FlxStage buttons do not fire when the __scrollable_area y value is offset. So if the __scrollable_area is y offset by 300, the FlxState underneath will still fire the buttons that were added to the stage at the same FlxState y values.
 		CID1._group.y = 770;
 		__scrollable_area.content.y = 770;
+		
 		if (Reg.__scrollable_area_scroll_y > 0) 
 		{			
 			__scrollable_area.scroll.y = Reg.__scrollable_area_scroll_y;
@@ -253,6 +254,7 @@ class ConfigurationOutput extends FlxGroup
 		// when using __scrollable_area we need to put the camera off screen so that the normal FlxStage buttons do not fire when the __scrollable_area y value is offset. So if the __scrollable_area is y offset by 300, the FlxState underneath will still fire the buttons that were added to the stage at the same FlxState y values.
 		CID2._group.y = 770;
 		__scrollable_area.content.y = 770;
+		
 		if (Reg.__scrollable_area_scroll_y > 0) 
 		{			
 			__scrollable_area.scroll.y = Reg.__scrollable_area_scroll_y;
@@ -295,6 +297,7 @@ class ConfigurationOutput extends FlxGroup
 		// when using __scrollable_area we need to put the camera off screen so that the normal FlxStage buttons do not fire when the __scrollable_area y value is offset. So if the __scrollable_area is y offset by 300, the FlxState underneath will still fire the buttons that were added to the stage at the same FlxState y values.
 		CID3._group.y = 770;
 		__scrollable_area.content.y = 770;
+		
 		if (Reg.__scrollable_area_scroll_y > 0) 
 		{			
 			__scrollable_area.scroll.y = Reg.__scrollable_area_scroll_y;
@@ -460,10 +463,10 @@ class ConfigurationOutput extends FlxGroup
 			}
 			
 			// Cannot save theme. Password field and email address field must be empty for guest accounts.
-			else if (CID3._group_username_input[CID3._CRN].text.substr(0, 5).toLowerCase() == "guest"
-			&&	CID3._group_password_input[CID3._CRN].text.length != 0
-			||	CID3._group_username_input[CID3._CRN].text.substr(0, 5).toLowerCase() == "guest"
-			&&	CID3._group_email_address_input[CID3._CRN].text.length != 0)
+			else if (CID3._group_input_text_field[0][CID3._CRN].text.substr(0, 5).toLowerCase() == "guest"
+			&&	CID3._group_input_text_field[1][CID3._CRN].text.length != 0
+			||	CID3._group_input_text_field[0][CID3._CRN].text.substr(0, 5).toLowerCase() == "guest"
+			&&	CID3._group_input_text_field[2][CID3._CRN].text.length != 0)
 			{
 				Reg._messageId = 9013;
 				Reg._buttonCodeValues = "v1013";
@@ -471,10 +474,10 @@ class ConfigurationOutput extends FlxGroup
 				return;
 			}
 			
-			else if (CID3._group_password_input[CID3._CRN].text.length <= 3
-			&&		 CID3._group_username_input[CID3._CRN].text.substr(0, 5).toLowerCase() != "guest"
-			||		 CID3._group_username_input[CID3._CRN].text.length <= 3
-			&&		 CID3._group_username_input[CID3._CRN].text.substr(0, 5).toLowerCase() != "guest")
+			else if (CID3._group_input_text_field[1][CID3._CRN].text.length <= 3
+			&&		 CID3._group_input_text_field[0][CID3._CRN].text.substr(0, 5).toLowerCase() != "guest"
+			||		 CID3._group_input_text_field[0][CID3._CRN].text.length <= 3
+			&&		 CID3._group_input_text_field[0][CID3._CRN].text.substr(0, 5).toLowerCase() != "guest")
 			{
 				Reg._messageId = 9012;
 				Reg._buttonCodeValues = "v1012";
@@ -482,9 +485,9 @@ class ConfigurationOutput extends FlxGroup
 				return;
 			}
 			
-			else if (CID3._group_email_address_input[CID3._CRN].text != "" 
-			&&	_email_address_regex.match(CID3._group_email_address_input[CID3._CRN].text) == false 
-			&&	CID3._group_username_input[CID3._CRN].text.substr(0, 5).toLowerCase() != "guest")
+			else if (CID3._group_input_text_field[2][CID3._CRN].text != "" 
+			&&	_email_address_regex.match(CID3._group_input_text_field[2][CID3._CRN].text) == false 
+			&&	CID3._group_input_text_field[0][CID3._CRN].text.substr(0, 5).toLowerCase() != "guest")
 			{
 				Reg._messageId = 9014;
 				Reg._buttonCodeValues = "v1014";
@@ -493,7 +496,7 @@ class ConfigurationOutput extends FlxGroup
 			} 
 			
 			// RegCustom._profile_email_address_p1 is set at IdsMessageBox case 9001 
-			RegCustom._profile_password_p1[CID3._CRN] = CID3._group_password_input[CID3._CRN].text;
+			RegCustom._profile_password_p1[CID3._CRN] = CID3._group_input_text_field[1][CID3._CRN].text;
 			
 		}
 		else

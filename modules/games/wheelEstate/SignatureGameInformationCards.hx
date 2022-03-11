@@ -86,100 +86,100 @@ class SignatureGameInformationCards extends FlxState
 		_unitImage.animation.add("frameInnerUnits", [1], 30, true);
 		_unitImage.animation.play("frameInnerUnits");	
 		
-		//_unitImage.scrollFactor.set(0, 0);	
+		_unitImage.scrollFactor.set(0, 0);	
 		add(_unitImage);
 		
 		// this is the title of the information cards.
 		_textUnitTitle = new FlxText(44, 212 + _offsetY + 6, 0, "", 22);
 		_textUnitTitle.setFormat(Reg._fontDefault, 22, FlxColor.WHITE);
-		//_textUnitTitle.scrollFactor.set(0, 0);
+		_textUnitTitle.scrollFactor.set(0, 0);
 		add(_textUnitTitle);
 		
 		_textUnitBody = new FlxText(44, 268 + _offsetY + 6, 0, "", 22);
 		_textUnitBody.setFormat(Reg._fontDefault, 22, FlxColor.BLACK);
-		//_textUnitBody.scrollFactor.set(0, 0);
+		_textUnitBody.scrollFactor.set(0, 0);
 		_textUnitBody.fieldWidth = 285;
 		add(_textUnitBody);
 		
 		// table column 1. House
 		_tableColumnHeader1 = new FlxText(50, 269 + _offsetY2, 0, "", 20);
 		_tableColumnHeader1.setFormat(Reg._fontDefault, 20, FlxColor.WHITE);
-		//_tableColumnHeader1.scrollFactor.set(0, 0);
+		_tableColumnHeader1.scrollFactor.set(0, 0);
 		add(_tableColumnHeader1);
 		
 		// table column 2. value.
 		_tableColumnHeader2 = new FlxText(151, 269 + _offsetY2, 0, "", 20);
 		_tableColumnHeader2.setFormat(Reg._fontDefault, 20, FlxColor.WHITE);
-		//_tableColumnHeader2.scrollFactor.set(0, 0);
+		_tableColumnHeader2.scrollFactor.set(0, 0);
 		add(_tableColumnHeader2);
 		
 		// table column 3. rent.
 		_tableColumnHeader3 = new FlxText(255, 269 + _offsetY2, 0, "", 20);
 		_tableColumnHeader3.setFormat(Reg._fontDefault, 20, FlxColor.WHITE);
-		//_tableColumnHeader3.scrollFactor.set(0, 0);
+		_tableColumnHeader3.scrollFactor.set(0, 0);
 		add(_tableColumnHeader3);
 		
 		//############################# FIRST ROW. FIRST COLUMN ##########
 		_tableColumn1Row1 = new FlxText(50, 307 + _offsetY2, 0, "", 20);
 		_tableColumn1Row1.setFormat(Reg._fontDefault, 20, FlxColor.BLACK);
-		//_tableColumn1Row1.scrollFactor.set(0, 0);
+		_tableColumn1Row1.scrollFactor.set(0, 0);
 		add(_tableColumn1Row1);
 		
 		_tableColumn1Row2 = new FlxText(50, 344 + _offsetY2, 0, "", 20);
 		_tableColumn1Row2.setFormat(Reg._fontDefault, 20, FlxColor.BLACK);
-		//_tableColumn1Row2.scrollFactor.set(0, 0);
+		_tableColumn1Row2.scrollFactor.set(0, 0);
 		add(_tableColumn1Row2);
 		
 		_tableColumn1Row3 = new FlxText(50, 381 + _offsetY2, 0, "", 20);
 		_tableColumn1Row3.setFormat(Reg._fontDefault, 20, FlxColor.BLACK);
-		//_tableColumn1Row3.scrollFactor.set(0, 0);
+		_tableColumn1Row3.scrollFactor.set(0, 0);
 		add(_tableColumn1Row3);
 		
 		_tableColumn1Row4 = new FlxText(50, 418 + _offsetY2, 0, "", 20);
 		_tableColumn1Row4.setFormat(Reg._fontDefault, 20, FlxColor.BLACK);
-		//_tableColumn1Row4.scrollFactor.set(0, 0);
+		_tableColumn1Row4.scrollFactor.set(0, 0);
 		add(_tableColumn1Row4);		
 		
 		//############################# ROWS AT SECOND COLUMN ##########
 		_tableColumn2Row1 = new FlxText(151, 307 + _offsetY2, 0, "", 20);
 		_tableColumn2Row1.setFormat(Reg._fontDefault, 20, FlxColor.BLACK);
-		//_tableColumn2Row1.scrollFactor.set(0, 0);
+		_tableColumn2Row1.scrollFactor.set(0, 0);
 		add(_tableColumn2Row1);
 		
 		_tableColumn2Row2 = new FlxText(151, 344 + _offsetY2, 0, "", 20);
 		_tableColumn2Row2.setFormat(Reg._fontDefault, 20, FlxColor.BLACK);
-		//_tableColumn2Row2.scrollFactor.set(0, 0);
+		_tableColumn2Row2.scrollFactor.set(0, 0);
 		add(_tableColumn2Row2);
 		
 		_tableColumn2Row3 = new FlxText(151, 381 + _offsetY2, 0, "", 20);
 		_tableColumn2Row3.setFormat(Reg._fontDefault, 20, FlxColor.BLACK);
-		//_tableColumn2Row3.scrollFactor.set(0, 0);
+		_tableColumn2Row3.scrollFactor.set(0, 0);
 		add(_tableColumn2Row3);
 		
 		_tableColumn2Row4 = new FlxText(151, 418 + _offsetY2, 0, "", 20);
 		_tableColumn2Row4.setFormat(Reg._fontDefault, 20, FlxColor.BLACK);
-		//_tableColumn2Row4.scrollFactor.set(0, 0);
+		_tableColumn2Row4.scrollFactor.set(0, 0);
 		add(_tableColumn2Row4);		
 		
 		//############################# ROWS AT THIRD COLUMN ##########
 		_tableColumn3Row1 = new FlxText(255, 307 + _offsetY2, 0, "", 20);
 		_tableColumn3Row1.setFormat(Reg._fontDefault, 20, FlxColor.BLACK);
-		//_tableColumn3Row1.scrollFactor.set(0, 0);
+		_tableColumn3Row1.scrollFactor.set(0, 0);
 		add(_tableColumn3Row1);
 		
 		_tableColumn3Row2 = new FlxText(255, 344 + _offsetY2, 0, "", 20);
 		_tableColumn3Row2.setFormat(Reg._fontDefault, 20, FlxColor.BLACK);
-		//_tableColumn3Row2.scrollFactor.set(0, 0);
+		_tableColumn3Row2.scrollFactor.set(0, 0);
 		add(_tableColumn3Row2);
 		
 		_tableColumn3Row3 = new FlxText(255, 381 + _offsetY2, 0, "", 20);
 		_tableColumn3Row3.setFormat(Reg._fontDefault, 20, FlxColor.BLACK);
-		//_tableColumn3Row3.scrollFactor.set(0, 0);
+		_tableColumn3Row3.scrollFactor.set(0, 0);
 		add(_tableColumn3Row3);
 		
 		_tableColumn3Row4 = new FlxText(255, 418 + _offsetY2, 0, "", 20);
 		_tableColumn3Row4.setFormat(Reg._fontDefault, 20, FlxColor.BLACK);
-		//_tableColumn3Row4.scrollFactor.set(0, 0);
+		_tableColumn3Row4.scrollFactor.set(0, 0);
 		add(_tableColumn3Row4);
 		
 	}	

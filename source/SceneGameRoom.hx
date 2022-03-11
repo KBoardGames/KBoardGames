@@ -21,59 +21,59 @@ package;
  */
 class SceneGameRoom extends FlxState
 {
-	public var __action_commands:ActionCommands;
-	
 	/******************************
 	* the title of this state.
 	*/
 	private var _title:FlxText;
 	
-	public var buttonStartRestartGame:ButtonGeneralNetworkYes;
-	public var buttonReturnToTitle:ButtonGeneralNetworkYes;
+	private var _button_start_or_restart_game:ButtonGeneralNetworkYes;
+	private var _button_return_to_title:ButtonGeneralNetworkYes;
 	
 	/******************************
 	 * offline buttons.
 	 */
-	public var buttonStartRestartGame2:ButtonGeneralNetworkNo;
-	public var buttonReturnToTitle2:ButtonGeneralNetworkNo;
+	private var _button_start_or_restart_game2:ButtonGeneralNetworkNo;
+	private var _button_return_to_title2:ButtonGeneralNetworkNo;
 	
 	/******************************
 	 * offer a draw so that nobody wins that game.
 	 */
-	public var buttonDrawGame:ButtonGeneralNetworkYes;
+	private var _button_draw_game:ButtonGeneralNetworkYes;
 	
 	/******************************
 	 * button that returns user to the lobby.
 	 */
-	public var buttonReturnToLobby:ButtonGeneralNetworkYes;	
-	public var buttonQuitGame:ButtonGeneralNetworkYes;		
+	private var _button_return_to_lobby:ButtonGeneralNetworkYes;	
+	private var _button_quit_game:ButtonGeneralNetworkYes;		
 		
 	/******************************
 	 * pointer to GameChatter.
 	 */
 	public static var __game_chatter:GameChatter;
 	
+	public var __hotkeys:Hotkeys;
+	
 	/******************************
 	 * this class determines if a game has ended naturally, such as no move units to move to, or no more pieces for that player on board, etc.
 	 */
-	public var __ids_win_lose_or_draw:IDsWinLoseOrDraw;	
+	private var __ids_win_lose_or_draw:IDsWinLoseOrDraw;	
 	
 	public var __game_create:GameCreate;
 		
 	/******************************
 	* player's stats, displayed at bottom of playing area.
 	*/
-	public var _hud:HUD;
+	private var __hud:HUD;
 	
 	/******************************
 	* highlights which players turn it is to move.
 	*/
-	public var _playerWhosTurnToMove:PlayerWhosTurnToMove;
+	private var __player_whos_turn_to_move:PlayerWhosTurnToMove;
 	
 	/******************************
 	* player's idle time remaining and move time remaining while playing a game. 
 	*/
-	public var _playerTimeRemainingMove:PlayerTimeRemainingMove;
+	public var __player_time_remaining_move:PlayerTimeRemainingMove;
 	
 	/******************************
 	 * is it a check or checkmate? anything related to a checkmate such as setting capturing units for the king or determining if a pawn can free the king from check, etc.
@@ -82,8 +82,10 @@ class SceneGameRoom extends FlxState
 		private var __chess_check_or_checkmate:ChessCheckOrCheckmate;
 	#end
 	
-	public var _playersLeftGame:PlayersLeftGameResetThoseVars;
-	public var _finalizeWhenGameOver:GameFinalize;
+	private var __players_left_game:PlayersLeftGameResetThoseVars;
+	public var __finalize_when_game_over:GameFinalize;
+	
+	private var __IDs_history_buttons:Array<IDsHistoryButtons> = [];
 	
 	/******************************
 	* class that displays the game notations.
@@ -94,15 +96,21 @@ class SceneGameRoom extends FlxState
 	{
 		super();
 		
+		persistentDraw = true;
+		
 		Reg._at_game_room = true;
 		Reg._at_waiting_room = false;
 		
-		TitleBar._title_for_screenshot = "Game Room";
-		
+		if (Reg._game_offline_vs_player == true
+		||	Reg._game_offline_vs_cpu == true)
+		{
+			Reg._gameOverForPlayer = false;
+			Reg._gameOverForAllPlayers = false;
+		}
+			
 		// this is needed because if message box was centered to screen, it would overlap part of the right side scrollbar at lobby. if true then we are at the game room so center the message box since there is no scrollbar to the right of the scene.
 		Reg2._messageBox_x = 380;
 		
-		Reg2._lobby_button_alpha = 0.3;
 		RegTriggers._buttons_set_not_active = false;
 		
 		RegFunctions.fontsSharpen();
@@ -131,6 +139,12 @@ class SceneGameRoom extends FlxState
 		
 		if (Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false) Reg._roomPlayerLimit = RegTypedef._dataMisc._roomPlayerLimit[RegTypedef._dataMisc._room];
 		
+		if (__game_create != null)
+		{
+			remove(__game_create);
+			__game_create.destroy();
+		}
+		
 		#if chess
 			__game_create = new GameCreate(__ids_win_lose_or_draw, __chess_check_or_checkmate);
 			add(__game_create);
@@ -139,30 +153,58 @@ class SceneGameRoom extends FlxState
 			add(__game_create);
 		#end
 		
-		_finalizeWhenGameOver = new GameFinalize(this);
-		add(_finalizeWhenGameOver);
+		TitleBar._title_for_screenshot = "Game Room";
+		
+		if (__finalize_when_game_over != null)
+		{
+			remove(__finalize_when_game_over);
+			__finalize_when_game_over.destroy();
+		}
+		
+		__finalize_when_game_over = new GameFinalize(this);
+		add(__finalize_when_game_over);
 
 		__game_create.gameId_set_board_and_pieces();
 		
-		_playersLeftGame = new PlayersLeftGameResetThoseVars(this);
-		add(_playersLeftGame);
+		if (__players_left_game != null)
+		{
+			remove(__players_left_game);
+			__players_left_game.destroy();
+		}
+		
+		__players_left_game = new PlayersLeftGameResetThoseVars(this);
+		add(__players_left_game);
 		
 		addChatterAndGameTime();
+		
+		if (_title != null)
+		{
+			remove(_title);
+			_title.destroy();
+		}
 		
 		_title = new FlxText(0, 0, 0, "");
 		_title.setFormat(Reg._fontDefault, 50, RegCustomColors.title_bar_text_color());
 		_title.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 3);
 		_title.scrollFactor.set();
-		if (RegTypedef._dataMisc._room <= 9) 
-			_title.setPosition(FlxG.width - 275, 20);
-		else
-			_title.setPosition(FlxG.width - 290, 20);
-			
+		
 		if (Reg._game_offline_vs_player == true 
 		||	Reg._game_offline_vs_cpu == true)
 			_title.text = "Offline";
 		else
 			_title.text = "Room " + Std.string(RegTypedef._dataMisc._room ) + " ";
+		
+		if (_title.text == "Offline")
+			_title.setPosition(FlxG.width - 290, 20);
+		
+		else
+		{
+			if (RegTypedef._dataMisc._room <= 9) 
+				_title.setPosition(FlxG.width - 275, 20);
+			else
+				_title.setPosition(FlxG.width - 290, 20);
+		}
+			
 		_title.visible = true;
 		add(_title);	
 			
@@ -185,11 +227,14 @@ class SceneGameRoom extends FlxState
 		if (Reg._gameId <= 1)
 		{
 			if (__game_history_and_notations != null)
+			{
+				remove(__game_history_and_notations);
 				__game_history_and_notations.destroy();
+			}
 			
 			__game_history_and_notations = new GameHistoryAndNotations();
 			add(__game_history_and_notations);
-						
+			
 		}
 		
 		// disable chatter for the spectator watching feature but enable it when playing a game online.
@@ -200,7 +245,8 @@ class SceneGameRoom extends FlxState
 		{
 			//-------------------------------
 			if (__game_chatter != null) 
-			{			
+			{
+				remove(__game_chatter);
 				__game_chatter.destroy();
 			}
 			
@@ -234,17 +280,15 @@ class SceneGameRoom extends FlxState
 			}
 		}
 		
-		if (Reg._clientReadyForPublicRelease == false)
+		if (__hotkeys != null)
 		{
-			if (__action_commands != null)
-			{
-				remove(__action_commands);
-				__action_commands.destroy();
-			}
-			
-			__action_commands = new ActionCommands(); 
-			add(__action_commands);
+			remove(__hotkeys);
+			__hotkeys.destroy();
 		}
+		
+		__hotkeys = new Hotkeys(); 
+		add(__hotkeys);
+		
 	}
 	
 	public function gameIDRightSidePanel():Void
@@ -253,81 +297,129 @@ class SceneGameRoom extends FlxState
 		
 		if (Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false)
 		{
-			buttonStartRestartGame = new ButtonGeneralNetworkYes(FlxG.width - 373, FlxG.height - 237 - _y_offset , "Start Game", 160 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, messageStartRestartGame, RegCustom._button_color[Reg._tn], false, 1000);
+			if (_button_start_or_restart_game != null)
+			{
+				remove(_button_start_or_restart_game);
+				_button_start_or_restart_game.destroy();
+			}
+			
+			_button_start_or_restart_game = new ButtonGeneralNetworkYes(FlxG.width - 373, FlxG.height - 237 - _y_offset , "Start Game", 160 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, messageStartRestartGame, RegCustom._button_color[Reg._tn], false, 1000);
 			
 			if (Reg._gameHost == true
 			&&  RegTypedef._dataPlayers._spectatorWatching == false)
-				buttonStartRestartGame.label.text = "Start Game";
+				_button_start_or_restart_game.label.text = "Start Game";
 			else 
 			{
-				buttonStartRestartGame.visible = false;
-				buttonStartRestartGame.active = false;
+				_button_start_or_restart_game.visible = false;
+				_button_start_or_restart_game.active = false;
 			}
 			
-			buttonStartRestartGame.label.font = Reg._fontDefault;
-			add(buttonStartRestartGame);
+			_button_start_or_restart_game.label.font = Reg._fontDefault;
+			add(_button_start_or_restart_game);
 						
 		}
 		
 		else
 		{
+			if (_button_start_or_restart_game2 != null)
+			{
+				remove(_button_start_or_restart_game2);
+				_button_start_or_restart_game2.destroy();
+			}
+			
 			// offline
-			buttonStartRestartGame2 = new ButtonGeneralNetworkNo(FlxG.width - 373, FlxG.height - 137 - _y_offset, "Start Game", 175, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, messageStartRestartGame, RegCustom._button_color[Reg._tn], false, 1);
-			buttonStartRestartGame2.label.font = Reg._fontDefault;
-		add(buttonStartRestartGame2); 
+			_button_start_or_restart_game2 = new ButtonGeneralNetworkNo(FlxG.width - 373, FlxG.height - 137 - _y_offset, "Start Game", 175, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, messageStartRestartGame, RegCustom._button_color[Reg._tn], false, 1);
+			_button_start_or_restart_game2.label.font = Reg._fontDefault;
+		add(_button_start_or_restart_game2); 
 		
 		}
 				
 		
 		if (Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false)
 		{
-			buttonReturnToTitle = new ButtonGeneralNetworkYes(FlxG.width - 183, FlxG.height - 187 - _y_offset, "To Title", 160 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, messageReturnToTitle, RegCustom._button_color[Reg._tn], false, 1001);
-			buttonReturnToTitle.label.font = Reg._fontDefault;
-			add(buttonReturnToTitle);
+			if (_button_return_to_title != null)
+			{
+				remove(_button_return_to_title);
+				_button_return_to_title.destroy();
+			}
 			
-		}			
+			_button_return_to_title = new ButtonGeneralNetworkYes(FlxG.width - 183, FlxG.height - 187 - _y_offset, "To Title", 160 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, messageReturnToTitle, RegCustom._button_color[Reg._tn], false, 1001);
+			_button_return_to_title.label.font = Reg._fontDefault;
+			add(_button_return_to_title);
+			
+		}
 		
 		if (Reg._game_offline_vs_cpu == true || Reg._game_offline_vs_player == true)
 		{
+			if (_button_return_to_title2 != null)
+			{
+				remove(_button_return_to_title2);
+				_button_return_to_title2.destroy();
+			}
+			
 			// offline
-			buttonReturnToTitle2 = new ButtonGeneralNetworkNo(FlxG.width - 183, FlxG.height - 137 - _y_offset, "To Title", 160 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, messageReturnToTitle, RegCustom._button_color[Reg._tn], false, 1);
-			buttonReturnToTitle2.label.font = Reg._fontDefault;
-			add(buttonReturnToTitle2);
+			_button_return_to_title2 = new ButtonGeneralNetworkNo(FlxG.width - 183, FlxG.height - 137 - _y_offset, "To Title", 160 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, messageReturnToTitle, RegCustom._button_color[Reg._tn], false, 1);
+			_button_return_to_title2.label.font = Reg._fontDefault;
+			add(_button_return_to_title2);
 			
 		}
 		
 		if (Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false)
 		{
-			buttonDrawGame = new ButtonGeneralNetworkYes(FlxG.width - 373, FlxG.height -  187 - _y_offset, "Draw", 160 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, messageDrawOffer, RegCustom._button_color[Reg._tn], false, 1002);
-			buttonDrawGame.label.font = Reg._fontDefault;
-			buttonDrawGame.visible = false;
-			buttonDrawGame.active = false;
-			add(buttonDrawGame);
+			if (_button_draw_game != null)
+			{
+				remove(_button_draw_game);
+				_button_draw_game.destroy();
+			}
+			
+			_button_draw_game = new ButtonGeneralNetworkYes(FlxG.width - 373, FlxG.height -  187 - _y_offset, "Draw", 160 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, messageDrawOffer, RegCustom._button_color[Reg._tn], false, 1002);
+			_button_draw_game.label.font = Reg._fontDefault;
+			_button_draw_game.visible = false;
+			_button_draw_game.active = false;
+			add(_button_draw_game);
 		}
 		
 		// Reg._game_online_vs_cpu code is needed to show this button while playing an online game.
 		if (Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false)
 		{
-			buttonReturnToLobby = new ButtonGeneralNetworkYes(FlxG.width - 183, FlxG.height - 237 - _y_offset, "To Lobby", 160 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, messageReturnToLobby, RegCustom._button_color[Reg._tn], false, 1003);
-			buttonReturnToLobby.label.font = Reg._fontDefault;
-			add(buttonReturnToLobby);
+			if (_button_return_to_lobby != null)
+			{
+				remove(_button_return_to_lobby);
+				_button_return_to_lobby.destroy();
+			}
+			
+			_button_return_to_lobby = new ButtonGeneralNetworkYes(FlxG.width - 183, FlxG.height - 237 - _y_offset, "To Lobby", 160 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, messageReturnToLobby, RegCustom._button_color[Reg._tn], false, 1003);
+			_button_return_to_lobby.label.font = Reg._fontDefault;
+			add(_button_return_to_lobby);
 		}
 		
 		if (Reg._game_online_vs_cpu == true)
 		{
-			buttonReturnToLobby = new ButtonGeneralNetworkYes(FlxG.width - 183, FlxG.height - 187 - _y_offset, "To Lobby", 160 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, messageReturnToLobby, RegCustom._button_color[Reg._tn], false, 1004);
-			buttonReturnToLobby.label.font = Reg._fontDefault;
-			add(buttonReturnToLobby);
+			if (_button_return_to_lobby != null)
+			{
+				remove(_button_return_to_lobby);
+				_button_return_to_lobby.destroy();
+			}
+			
+			_button_return_to_lobby = new ButtonGeneralNetworkYes(FlxG.width - 183, FlxG.height - 187 - _y_offset, "To Lobby", 160 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, messageReturnToLobby, RegCustom._button_color[Reg._tn], false, 1004);
+			_button_return_to_lobby.label.font = Reg._fontDefault;
+			add(_button_return_to_lobby);
 		}
 		
 		// Reg._game_online_vs_cpu code is needed to show this button while playing an online game.
 		if (Reg._game_online_vs_cpu == true || Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false)
 		{
-			buttonQuitGame = new ButtonGeneralNetworkYes(FlxG.width - 373, FlxG.height - 137 - _y_offset, "Quit Game", 160 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, messageQuitGame, RegCustom._button_color[Reg._tn], false, 1005);
-			buttonQuitGame.label.font = Reg._fontDefault;
-			buttonQuitGame.visible = false;
-			buttonQuitGame.active = false;
-			add(buttonQuitGame);
+			if (_button_quit_game != null)
+			{
+				remove(_button_quit_game);
+				_button_quit_game.destroy();
+			}
+			
+			_button_quit_game = new ButtonGeneralNetworkYes(FlxG.width - 373, FlxG.height - 137 - _y_offset, "Quit Game", 160 + 15, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, messageQuitGame, RegCustom._button_color[Reg._tn], false, 1005);
+			_button_quit_game.label.font = Reg._fontDefault;
+			_button_quit_game.visible = false;
+			_button_quit_game.active = false;
+			add(_button_quit_game);
 		}
 
 	}
@@ -469,31 +561,31 @@ class SceneGameRoom extends FlxState
 	
 	public function buttonShowAll():Void
 	{				
-		if (buttonReturnToTitle != null)
+		if (_button_return_to_title != null)
 		{
-			buttonReturnToTitle.active = true;
-			buttonReturnToTitle.visible = true;
+			_button_return_to_title.active = true;
+			_button_return_to_title.visible = true;
 		}
 		
-		if (buttonReturnToLobby != null)
+		if (_button_return_to_lobby != null)
 		{
-			buttonReturnToLobby.active = true;
-			buttonReturnToLobby.visible = true;
+			_button_return_to_lobby.active = true;
+			_button_return_to_lobby.visible = true;
 		}
 	
 		
-		if (buttonStartRestartGame != null && Reg._game_offline_vs_cpu == true
-		||  buttonStartRestartGame != null && Reg._game_offline_vs_player == true)
+		if (_button_start_or_restart_game != null && Reg._game_offline_vs_cpu == true
+		||  _button_start_or_restart_game != null && Reg._game_offline_vs_player == true)
 		{
 			if (RegTypedef._dataPlayers._spectatorWatching == false
 			&& Reg._game_online_vs_cpu == false)
 			{
-				buttonStartRestartGame.active = true;	
-				buttonStartRestartGame.visible = true;
+				_button_start_or_restart_game.active = true;	
+				_button_start_or_restart_game.visible = true;
 			}
 		}	
 		
-		if (buttonDrawGame != null && Reg._game_offline_vs_cpu == false
+		if (_button_draw_game != null && Reg._game_offline_vs_cpu == false
 		&&  Reg._game_offline_vs_player == false)
 		{		
 			if (Reg._gameOverForPlayer == false
@@ -501,11 +593,11 @@ class SceneGameRoom extends FlxState
 			&&  Reg._gameOverForAllPlayers == false 
 			&&  RegTypedef._dataPlayers._spectatorWatching == false)
 			{
-				buttonDrawGame.active = true;
-				buttonDrawGame.visible = true;
+				_button_draw_game.active = true;
+				_button_draw_game.visible = true;
 				
-				buttonQuitGame.active = true;
-				buttonQuitGame.visible = true;
+				_button_quit_game.active = true;
+				_button_quit_game.visible = true;
 			}	
 		}
 			
@@ -519,46 +611,46 @@ class SceneGameRoom extends FlxState
 		if (Reg._game_offline_vs_player == true
 		||	Reg._game_offline_vs_cpu == true) return;
 		
-		if (buttonReturnToTitle != null)
+		if (_button_return_to_title != null)
 		{
-			buttonReturnToTitle.visible = false;
-			buttonReturnToTitle.active = false;
+			_button_return_to_title.visible = false;
+			_button_return_to_title.active = false;
 		}
 		
-		if (buttonReturnToTitle2 != null)
+		if (_button_return_to_title2 != null)
 		{
-			buttonReturnToTitle2.visible = false;
-			buttonReturnToTitle2.active = false;
+			_button_return_to_title2.visible = false;
+			_button_return_to_title2.active = false;
 		}
 				
-		if (buttonReturnToLobby != null)
+		if (_button_return_to_lobby != null)
 		{
-			buttonReturnToLobby.visible = false;
-			buttonReturnToLobby.active = false;
+			_button_return_to_lobby.visible = false;
+			_button_return_to_lobby.active = false;
 		}	
 		
-		if (buttonStartRestartGame != null)
+		if (_button_start_or_restart_game != null)
 		{
-			buttonStartRestartGame.visible = false;
-			buttonStartRestartGame.active = false;
+			_button_start_or_restart_game.visible = false;
+			_button_start_or_restart_game.active = false;
 		}
 		
-		if (buttonStartRestartGame2 != null)
+		if (_button_start_or_restart_game2 != null)
 		{
-			buttonStartRestartGame2.visible = false;
-			buttonStartRestartGame2.active = false;
+			_button_start_or_restart_game2.visible = false;
+			_button_start_or_restart_game2.active = false;
 		}
 			
-		if (buttonDrawGame != null)
+		if (_button_draw_game != null)
 		{
-			buttonDrawGame.visible = false;
-			buttonDrawGame.active = false;
+			_button_draw_game.visible = false;
+			_button_draw_game.active = false;
 		}
 				
-		if (buttonQuitGame != null)
+		if (_button_quit_game != null)
 		{
-			buttonQuitGame.visible = false;
-			buttonQuitGame.active = false;
+			_button_quit_game.visible = false;
+			_button_quit_game.active = false;
 		}	
 	}
 
@@ -570,7 +662,6 @@ class SceneGameRoom extends FlxState
 		if (Reg._gameRoom == true && GameChatter._title_background.x > 1200)
 		{
 			var _state:Bool = true;
-			
 			gameButtonActive(_state);
 		}
 		
@@ -587,8 +678,8 @@ class SceneGameRoom extends FlxState
 	 */
 	private function gameButtonActive(_state:Bool):Void
 	{
-		if (buttonReturnToTitle != null) buttonReturnToTitle.active = _state;
-		if (buttonReturnToLobby != null) buttonReturnToLobby.active = _state;
+		if (_button_return_to_title != null) _button_return_to_title.active = _state;
+		if (_button_return_to_lobby != null) _button_return_to_lobby.active = _state;
 	}
 	
 	/******************************
@@ -602,6 +693,7 @@ class SceneGameRoom extends FlxState
 		{
 			Reg._yesNoKeyPressValueAtMessage = 0;
 			Reg._playerWaitingAtGameRoom = false;			
+			Reg._display_queue_message = false;
 			
 			// clear chatter then hide this FlxState.
 			//if (Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false) GameChatter.clearText();
@@ -620,16 +712,16 @@ class SceneGameRoom extends FlxState
 				GameChatter._chatterOpenCloseButton.visible = false;
 				GameChatter._chatterOpenCloseButton.active = false;
 								
-				buttonStartRestartGame.visible = false;
-				buttonStartRestartGame.active = false;
-				buttonReturnToTitle.visible = false;
-				buttonReturnToTitle.active = false;
-				buttonReturnToLobby.visible = false;
-				buttonReturnToLobby.active = false;
-				buttonDrawGame.visible = false;
-				buttonDrawGame.active = false;
-				buttonQuitGame.visible = false;
-				buttonQuitGame.active = false;
+				_button_start_or_restart_game.visible = false;
+				_button_start_or_restart_game.active = false;
+				_button_return_to_title.visible = false;
+				_button_return_to_title.active = false;
+				_button_return_to_lobby.visible = false;
+				_button_return_to_lobby.active = false;
+				_button_draw_game.visible = false;
+				_button_draw_game.active = false;
+				_button_quit_game.visible = false;
+				_button_quit_game.active = false;
 			}
 			
 			RegTypedef._dataMisc._gameRoom = false;			
@@ -656,9 +748,6 @@ class SceneGameRoom extends FlxState
 			
 			else go_back_to_lobby();			
 			
-			// stop any sound playing.			
-			if (FlxG.sound.music != null && FlxG.sound.music.playing == true) FlxG.sound.music.stop();		
-			
 			// destroy game notation if exists.
 			if (__game_history_and_notations != null)
 				__game_history_and_notations.destroy();			
@@ -681,21 +770,29 @@ class SceneGameRoom extends FlxState
 			) 
 			{
 				FlxG.switchState(new MenuState());
+				return;
 			}
 			
-			
-			if (Reg._game_online_vs_cpu == true || RegTypedef._dataMisc._spectatorWatching == false && Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false && RegTypedef._dataPlayers._gamePlayersValues[Reg._move_number_next] == 1) 
+			// game in progress for player.
+			if (RegTypedef._dataMisc._spectatorWatching == false && Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false && RegTypedef._dataPlayers._gamePlayersValues[Reg._move_number_next] == 1) 
 			{
+				// if here then a game was in progress.
 				PlayState.send("Save Lose Stats", RegTypedef._dataPlayers);				
 				
-				// do NOT use "Player Left Game Room" here. you will get a player left game, a lose was saved to player stats message after a normal game has ended.
+				// do not use "Player Left Game Room" here.
+				// you will get a player left game, a lose was saved to player stats message after a normal game has ended.
 				PlayState.send("Player Left Game", RegTypedef._dataPlayers);				
 				
-				Reg._game_offline_vs_cpu = false;
-				Reg._game_online_vs_cpu = false;
-				
 				Reg._disconnectNow = true;	
-			}			
+			}
+			
+			// go to lobby and then to title.
+			else 
+			{
+				go_back_to_lobby();
+				RegTriggers._return_to_title = true;
+			}	
+			
 		}
 		
 		// return to title screen cancelled
@@ -1070,33 +1167,33 @@ class SceneGameRoom extends FlxState
 	// draw this class to screen.
 	public function gamePlayerWhosTurnToMove():Void
 	{
-		if (_playerWhosTurnToMove != null)
+		if (__player_whos_turn_to_move != null)
 		{
-			_playerWhosTurnToMove.visible = false;
-			_playerWhosTurnToMove.destroy();
-			_playerWhosTurnToMove = null;
+			__player_whos_turn_to_move.visible = false;
+			remove(__player_whos_turn_to_move);
+			__player_whos_turn_to_move.destroy();
 		}
 		
-		_playerWhosTurnToMove = new PlayerWhosTurnToMove();
-		_playerWhosTurnToMove.visible = true;
-		add(_playerWhosTurnToMove);
+		__player_whos_turn_to_move = new PlayerWhosTurnToMove();
+		__player_whos_turn_to_move.visible = true;
+		add(__player_whos_turn_to_move);
 	}
 	
 	public function gamePlayerTimeRemainingMove():Void
 	{	
-		if (_playerTimeRemainingMove != null)
+		if (__player_time_remaining_move != null)
 		{
-			_playerTimeRemainingMove.visible = false;
-			_playerTimeRemainingMove.destroy();
-			_playerTimeRemainingMove = null;
+			__player_time_remaining_move.visible = false;
+			remove(__player_time_remaining_move);
+			__player_time_remaining_move.destroy();
 		}
 
 		if (RegCustom._timer_enabled[Reg._tn] == true
 		||  RegTypedef._dataTournaments._move_piece == true) // always enabled for tournament play.
 		{
-			_playerTimeRemainingMove = new PlayerTimeRemainingMove(GameCreate._t, this);
-			_playerTimeRemainingMove.visible = true;
-			add(_playerTimeRemainingMove);
+			__player_time_remaining_move = new PlayerTimeRemainingMove(GameCreate._t, this);
+			__player_time_remaining_move.visible = true;
+			add(__player_time_remaining_move);
 		}
 		
 		
@@ -1111,23 +1208,34 @@ class SceneGameRoom extends FlxState
 	// draw this class to screen.
 	private function gameHistoryButtonsDisplayIt(i:Int):Void
 	{
-		var _iDsHistoryButtons = new IDsHistoryButtons(FlxG.width - 405 + (i * 75), FlxG.height - 453, i); 
-		add(_iDsHistoryButtons);
+		if (__IDs_history_buttons[i] != null)
+		{
+			remove(__IDs_history_buttons[i]);
+			__IDs_history_buttons[i].destroy();
+		}
+		
+		__IDs_history_buttons[i] = new IDsHistoryButtons(FlxG.width - 405 + (i * 75), FlxG.height - 453, i); 
+		add(__IDs_history_buttons[i]);
 	}
 	
 	// draw this class to screen.
 	private function gameAddHUD():Void
 	{
-		if (_hud != null) _hud.destroy();
-		_hud = new HUD();
-		add(_hud);
+		if (__hud != null)
+		{
+			remove(__hud);
+			__hud.destroy();
+		}
+		
+		__hud = new HUD();
+		add(__hud);
 	}
 	
 	
 	public static function go_back_to_lobby():Void
 	{
-		// go back tolooby
-		PlayState.send("Lesser RoomState Value", RegTypedef._dataMisc);		
+		// go back to lobby
+		PlayState.send("Lesser RoomState Value", RegTypedef._dataMisc);
 		
 		// display the lobby.
 		PlayersLeftGameResetThoseVars.playerRepopulateTypedefPlayers();
@@ -1143,7 +1251,7 @@ class SceneGameRoom extends FlxState
 		Reg._loggedIn = true; 
 		Reg._createGameRoom = false;
 		Reg._loginSuccessfulWasRead = false;
-		Reg._doOnce = true;			
+		Reg._doOnce2 = true;			
 		Reg._at_create_room = false;
 		Reg._at_waiting_room = false;
 		Reg._doStartGameOnce = false;
@@ -1151,12 +1259,12 @@ class SceneGameRoom extends FlxState
 		Reg._hasUserConnectedToServer = true;
 		Reg._lobbyDisplay = false;			
 		Reg._clearDoubleMessage = true;			
-		//Reg._goBackToLobby = true;
+		Reg._display_queue_message = false;
 		
-		SceneWaitingRoom._textPlayer1Stats.text = "";
-		SceneWaitingRoom._textPlayer2Stats.text = "";
-		SceneWaitingRoom._textPlayer3Stats.text = "";
-		SceneWaitingRoom._textPlayer4Stats.text = "";
+		for (i in 0... 4)
+		{
+			SceneWaitingRoom._text_player_stats[i].text = "";
+		}
 		
 		RegTriggers._lobby = true;
 	}
@@ -1172,9 +1280,141 @@ class SceneGameRoom extends FlxState
 	
 	override public function destroy()
 	{
-		remove(__game_create);
-		__game_create.destroy();
-						
+		if (_title != null)
+		{
+			remove(_title);
+			_title.destroy();
+			_title = null;
+		}
+		
+		if (_button_start_or_restart_game != null)
+		{
+			remove(_button_start_or_restart_game);
+			_button_start_or_restart_game.destroy();
+			_button_start_or_restart_game = null;
+		}
+			
+		if (_button_return_to_title != null)
+		{
+			remove(_button_return_to_title);
+			_button_return_to_title.destroy();
+			_button_return_to_title = null;
+		}
+		
+		if (_button_start_or_restart_game2 != null)
+		{
+			remove(_button_start_or_restart_game2);
+			_button_start_or_restart_game2.destroy();
+			_button_start_or_restart_game2 = null;
+		}
+		
+		if (_button_return_to_title2 != null)
+		{
+			remove(_button_return_to_title2);
+			_button_return_to_title2.destroy();
+			_button_return_to_title2 = null;
+		}
+		
+		if (_button_draw_game != null)
+		{
+			remove(_button_draw_game);
+			_button_draw_game.destroy();
+			_button_draw_game = null;
+		}
+		
+		if (_button_return_to_lobby != null)
+		{
+			remove(_button_return_to_lobby);
+			_button_return_to_lobby.destroy();
+			_button_return_to_lobby = null;
+		}
+		
+		if (_button_quit_game != null)
+		{
+			remove(_button_quit_game);
+			_button_quit_game.destroy();
+			_button_quit_game = null;
+		}
+		
+		if (__game_chatter != null)
+		{
+			remove(__game_chatter);
+			__game_chatter.destroy();
+			__game_chatter = null;
+		}
+		
+		if (__hotkeys != null)
+		{
+			remove(__hotkeys);
+			__hotkeys.destroy();
+			__hotkeys = null;
+		}
+		
+		__ids_win_lose_or_draw = null;
+		
+		if (__game_create != null)
+		{
+			remove(__game_create);
+			__game_create.destroy();
+			__game_create = null;
+		}
+		
+		if (__hud != null)
+		{
+			remove(__hud);
+			__hud.destroy();
+			__hud = null;
+		}
+		
+		if (__player_whos_turn_to_move != null)
+		{
+			remove(__player_whos_turn_to_move);
+			__player_whos_turn_to_move.destroy();
+			__player_whos_turn_to_move = null;
+		}
+		
+		if (__player_time_remaining_move != null)
+		{
+			remove(__player_time_remaining_move);
+			__player_time_remaining_move.destroy();
+			__player_time_remaining_move = null;
+		}		
+		
+		#if chess
+			__chess_check_or_checkmate = null;
+		#end
+		
+		if (__players_left_game != null)
+		{
+			remove(__players_left_game);
+			__players_left_game.destroy();
+			__players_left_game = null;
+		}
+		
+		if (__finalize_when_game_over != null)
+		{
+			remove(__finalize_when_game_over);
+			__finalize_when_game_over.destroy();
+			__finalize_when_game_over = null;
+		}
+		
+		for (i in 0... 4)
+		{
+			if (__IDs_history_buttons[i] != null)
+			{
+				remove(__IDs_history_buttons[i]);
+				__IDs_history_buttons[i].destroy();
+				__IDs_history_buttons[i] = null;
+			}	
+		}
+		
+		if (__game_history_and_notations != null)
+		{
+			remove(__game_history_and_notations);
+			__game_history_and_notations.destroy();
+			__game_history_and_notations = null;
+		}
+	
 		super.destroy();
 	}
 	
@@ -1210,8 +1450,8 @@ class SceneGameRoom extends FlxState
 			// disable these things so that playing cannot open a message box and mouse click it when computer is thinking about a move. the result will be a crash or some unexpected strange things, such as computer moving first.
 			if (Reg._gameOverForPlayer == false && Reg._playerMoving == 1 && Reg._game_offline_vs_cpu == true && Reg._game_offline_vs_player == false)
 			{
-				if (buttonReturnToTitle != null) buttonReturnToTitle.active = false;
-				if (buttonReturnToLobby != null) buttonReturnToLobby.active = false;
+				if (_button_return_to_title != null) _button_return_to_title.active = false;
+				if (_button_return_to_lobby != null) _button_return_to_lobby.active = false;
 			}
 		}
 			
@@ -1248,16 +1488,16 @@ class SceneGameRoom extends FlxState
 						&&  Reg._gameOverForPlayer == false
 						)
 						{
-							if (buttonStartRestartGame != null)
+							if (_button_start_or_restart_game != null)
 							{
-								buttonStartRestartGame.visible = false;
-								buttonStartRestartGame.active = false;
+								_button_start_or_restart_game.visible = false;
+								_button_start_or_restart_game.active = false;
 							}
 							
 							else
 							{
-								buttonStartRestartGame2.visible = false;
-								buttonStartRestartGame2.active = false;
+								_button_start_or_restart_game2.visible = false;
+								_button_start_or_restart_game2.active = false;
 							}
 						}
 						
@@ -1269,10 +1509,10 @@ class SceneGameRoom extends FlxState
 						{
 							if (RegTypedef._dataPlayers._spectatorWatching == false)
 							{
-								if (buttonStartRestartGame != null)
-									buttonStartRestartGame.active = true;	
+								if (_button_start_or_restart_game != null)
+									_button_start_or_restart_game.active = true;	
 								else
-									buttonStartRestartGame2.visible = true;
+									_button_start_or_restart_game2.visible = true;
 							}
 						}
 					}
@@ -1280,24 +1520,24 @@ class SceneGameRoom extends FlxState
 				
 				else
 				{
-					buttonStartRestartGame.visible = false;
-					buttonStartRestartGame.active = false;
+					_button_start_or_restart_game.visible = false;
+					_button_start_or_restart_game.active = false;
 				}
 				
-				if (buttonReturnToTitle != null)
+				if (_button_return_to_title != null)
 				{
-					buttonReturnToTitle.active = true;
-					buttonReturnToTitle.visible = true;
+					_button_return_to_title.active = true;
+					_button_return_to_title.visible = true;
 				}
 				
 				else
 				{
-					buttonReturnToTitle2.active = true;
-					buttonReturnToTitle2.visible = true;
+					_button_return_to_title2.active = true;
+					_button_return_to_title2.visible = true;
 				}
 				
-				buttonReturnToLobby.active = true;
-				buttonReturnToLobby.visible = true;
+				_button_return_to_lobby.active = true;
+				_button_return_to_lobby.visible = true;
 				
 				// playing against the player online.
 				if (Reg._game_online_vs_cpu == false
@@ -1305,45 +1545,45 @@ class SceneGameRoom extends FlxState
 				&&  Reg._gameOverForAllPlayers == false 
 				&&  RegTypedef._dataPlayers._spectatorWatching == false)
 				{
-					buttonDrawGame.active = true;
-					buttonDrawGame.visible = true;
+					_button_draw_game.active = true;
+					_button_draw_game.visible = true;
 					
-					buttonQuitGame.active = true;
-					buttonQuitGame.visible = true;
+					_button_quit_game.active = true;
+					_button_quit_game.visible = true;
 					
 				}
 				
 				else if (Reg._game_online_vs_cpu == false)
 				{					
-					if (buttonDrawGame != null)
+					if (_button_draw_game != null)
 					{
-						buttonDrawGame.visible = false;
-						buttonDrawGame.active = false;
+						_button_draw_game.visible = false;
+						_button_draw_game.active = false;
 					}
 					
-					if (buttonQuitGame != null)
+					if (_button_quit_game != null)
 					{
-						buttonQuitGame.visible = false;
-						buttonQuitGame.active = false;
+						_button_quit_game.visible = false;
+						_button_quit_game.active = false;
 					}
 				}
-				if (buttonQuitGame != null)
+				if (_button_quit_game != null)
 				
 				// show the quit game button if game against the computer online.
 				// spectators cannot watch this game.
-				if (buttonQuitGame != null
+				if (_button_quit_game != null
 				&&  Reg._game_online_vs_cpu == true
 				&&  RegTypedef._dataPlayers._spectatorWatching == false)
 				{
 					if (Reg._gameOverForPlayer == false)
 					{
-						buttonQuitGame.active = true;
-						buttonQuitGame.visible = true;
+						_button_quit_game.active = true;
+						_button_quit_game.visible = true;
 					}
 					else
 					{
-						buttonQuitGame.visible = false;
-						buttonQuitGame.active = false;
+						_button_quit_game.visible = false;
+						_button_quit_game.active = false;
 					}
 				}
 				
@@ -1360,8 +1600,8 @@ class SceneGameRoom extends FlxState
 				&&	RegTypedef._dataMisc._username
 				==	RegTypedef._dataPlayers._usernamesDynamic[0])
 				{
-					buttonStartRestartGame.active = true;
-					buttonStartRestartGame.visible = true;
+					_button_start_or_restart_game.active = true;
+					_button_start_or_restart_game.visible = true;
 				}
 			}
 			
@@ -1370,8 +1610,8 @@ class SceneGameRoom extends FlxState
 				_title.visible = false;
 				_title.active = false;
 				
-				buttonStartRestartGame.visible = false;
-				buttonStartRestartGame.active = false;
+				_button_start_or_restart_game.visible = false;
+				_button_start_or_restart_game.active = false;
 			}
 			
 		}
@@ -1391,10 +1631,10 @@ class SceneGameRoom extends FlxState
 				if (Reg._game_online_vs_cpu == true
 				&&	Reg._move_number_next == 1)
 				{
-					if (buttonStartRestartGame != null)
-						buttonStartRestartGame.alpha = 0.3;
+					if (_button_start_or_restart_game != null)
+						_button_start_or_restart_game.alpha = 0.3;
 					else
-						buttonStartRestartGame2.alpha = 0.3;
+						_button_start_or_restart_game2.alpha = 0.3;
 					
 					Reg._messageId = 1000000;			
 				}
@@ -1403,7 +1643,7 @@ class SceneGameRoom extends FlxState
 				if (Reg._game_offline_vs_cpu == true
 				&&	Reg._move_number_next == 1)
 				{
-					buttonStartRestartGame2.alpha = 0.3;
+					_button_start_or_restart_game2.alpha = 0.3;
 					Reg._messageId = 1000000;
 				}
 				
@@ -1411,7 +1651,7 @@ class SceneGameRoom extends FlxState
 				if (Reg._game_online_vs_cpu == true
 				&&	Reg._move_number_next == 1)
 				{
-					buttonReturnToTitle.alpha = 0.3;
+					_button_return_to_title.alpha = 0.3;
 					Reg._messageId = 1000000;
 				}
 				
@@ -1419,7 +1659,7 @@ class SceneGameRoom extends FlxState
 				if (Reg._game_offline_vs_cpu == true
 				&&	Reg._move_number_next == 1)
 				{
-					buttonReturnToTitle2.alpha = 0.3;
+					_button_return_to_title2.alpha = 0.3;
 					Reg._messageId = 1000000;
 				}
 				
@@ -1427,34 +1667,34 @@ class SceneGameRoom extends FlxState
 				if (Reg._game_online_vs_cpu == true
 				&&	Reg._move_number_next == 0)
 				{				
-					if (buttonStartRestartGame != null)
-						buttonStartRestartGame.alpha = 1;
+					if (_button_start_or_restart_game != null)
+						_button_start_or_restart_game.alpha = 1;
 					else
-						buttonStartRestartGame2.alpha = 1;
+						_button_start_or_restart_game2.alpha = 1;
 				}
 				
 				// show this button when human's turn to move.
 				if (Reg._game_offline_vs_cpu == true
 				&&	Reg._move_number_next == 0)
 				{
-					buttonStartRestartGame2.alpha = 1;
+					_button_start_or_restart_game2.alpha = 1;
 				}
 				
 				// show this button when human's turn to move.
 				if (Reg._game_online_vs_cpu == true
 				&&	Reg._move_number_next == 0)
 				{
-					if (buttonReturnToTitle != null)
-						buttonReturnToTitle.alpha = 1;
+					if (_button_return_to_title != null)
+						_button_return_to_title.alpha = 1;
 					else 
-						buttonReturnToTitle2.alpha = 1;
+						_button_return_to_title2.alpha = 1;
 				}
 				
 				// show this button when human's turn to move.
 				if (Reg._game_offline_vs_cpu == true
 				&&	Reg._move_number_next == 0)
 				{
-					buttonReturnToTitle2.alpha = 1;
+					_button_return_to_title2.alpha = 1;
 				}
 			}
 			
@@ -1492,18 +1732,17 @@ class SceneGameRoom extends FlxState
 				}
 			}
 			
-			var _count:Int = 0;
-			
+			var _count:Int = 0;			
 			
 			// if more then 1 player in room and the _restartingTheGame game is true then that means that player has left the game while there are two or more players still playing game. continue the game after repopulating the data.
 			if (_totalPlayers > 1)
 			{
-				var _restartingTheGame = _playersLeftGame.restartingTheGameForOthers();
+				var _restartingTheGame = __players_left_game.restartingTheGameForOthers();
 				
 				if (_restartingTheGame == true)
 				{
 					// if that player has a RegTypedef._dataPlayers._gamePlayersValues value of 1 or 3 then  this code is used so that playing the game for the other players the second time will not happen.	
-					_playersLeftGame.assignMoveNumberPlayerAndShowRotator(); 
+					__players_left_game.assignMoveNumberPlayerAndShowRotator(); 
 				}
 				
 			}
@@ -1738,33 +1977,33 @@ class SceneGameRoom extends FlxState
 			// these buttons should be used only when both players are in room and playing a game. since a player has left game, hide these buttons.
 			if (_count == 1) // only one player in room.
 			{
-				if (buttonStartRestartGame != null && Reg._game_online_vs_cpu == false)
+				if (_button_start_or_restart_game != null && Reg._game_online_vs_cpu == false)
 				{
-					buttonStartRestartGame.visible = false;
+					_button_start_or_restart_game.visible = false;
 				}
 				
-				if (buttonStartRestartGame2 != null && Reg._game_online_vs_cpu == false)
+				if (_button_start_or_restart_game2 != null && Reg._game_online_vs_cpu == false)
 				{
-					buttonStartRestartGame2.visible = false;
+					_button_start_or_restart_game2.visible = false;
 				}
 				
-				if (buttonDrawGame != null) buttonDrawGame.visible = false;
-				if (buttonQuitGame != null && Reg._game_online_vs_cpu == false)
-					buttonQuitGame.visible = false;
+				if (_button_draw_game != null) _button_draw_game.visible = false;
+				if (_button_quit_game != null && Reg._game_online_vs_cpu == false)
+					_button_quit_game.visible = false;
 				
-				if (buttonStartRestartGame != null && Reg._game_online_vs_cpu == false) 
+				if (_button_start_or_restart_game != null && Reg._game_online_vs_cpu == false) 
 				{
-					buttonStartRestartGame.active = false;
+					_button_start_or_restart_game.active = false;
 				}
 				
-				if (buttonStartRestartGame2 != null && Reg._game_online_vs_cpu == false) 
+				if (_button_start_or_restart_game2 != null && Reg._game_online_vs_cpu == false) 
 				{
-					buttonStartRestartGame2.active = false;
+					_button_start_or_restart_game2.active = false;
 				}
 				
-				if (buttonDrawGame != null) buttonDrawGame.active = false;
-				if (buttonQuitGame != null && Reg._game_online_vs_cpu == false)
-					buttonQuitGame.active = false;
+				if (_button_draw_game != null) _button_draw_game.active = false;
+				if (_button_quit_game != null && Reg._game_online_vs_cpu == false)
+					_button_quit_game.active = false;
 			}
 			
 			for (i in 0...4)
@@ -2023,22 +2262,22 @@ class SceneGameRoom extends FlxState
 		// these buttons should be used only when both players are in room and playing a game. since a player has left game, hide these buttons.
 		if (_count == 1) // only one player in room.
 		{
-			if (buttonStartRestartGame != null && Reg._game_online_vs_cpu == false)
+			if (_button_start_or_restart_game != null && Reg._game_online_vs_cpu == false)
 			{
-				buttonStartRestartGame.visible = false;
-				buttonStartRestartGame.active = false;
+				_button_start_or_restart_game.visible = false;
+				_button_start_or_restart_game.active = false;
 			}
 			
-			if (buttonStartRestartGame2 != null && Reg._game_online_vs_cpu == false)
+			if (_button_start_or_restart_game2 != null && Reg._game_online_vs_cpu == false)
 			{
-				buttonStartRestartGame2.visible = false;
-				buttonStartRestartGame2.active = false;
+				_button_start_or_restart_game2.visible = false;
+				_button_start_or_restart_game2.active = false;
 			}
 			
-			if (buttonDrawGame != null)
+			if (_button_draw_game != null)
 			{		
-				buttonDrawGame.visible = false;
-				buttonDrawGame.active = false;
+				_button_draw_game.visible = false;
+				_button_draw_game.active = false;
 			}
 			
 		}

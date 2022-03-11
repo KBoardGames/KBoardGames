@@ -16,39 +16,54 @@ package;
  * @author kboardgames.com
  */
 class PlayerTimeRemainingMove extends FlxState
-{	 	
-	public var _ticks:Float = 0;
-	
-	// this is the timer remaining text.
-	public var _textMoveTimer1:FlxText;
-	public var _textMoveTimer2:FlxText;
-	public var _textMoveTimer3:FlxText;
-	public var _textMoveTimer4:FlxText;
-	
-	// this stop the entering of the timer function the second time for that player. once that timer is timer.run, everything in that function does not need to be updated again because timer will enter that function once every second. 
-	public var _doOnce1:Bool = false;
-	public var _doOnce2:Bool = false;
-	public var _doOnce3:Bool = false;
-	public var _doOnce4:Bool = false;
-	
-	private var _doOnce:Bool = false; // when true a loop will not be entered.
-	
-	private var _offsetY:Int = 15; // use this var to change to vertical layout of this class elements.
-	
-	public static var _ticksStart:Int = 0; // this stops a double "player losses game" message when restarting a game when timer reaches zero.
-	
+{
+ 	
 	private var __scene_game_room:SceneGameRoom;
 	
-	// p1, p2, p3, p4. text.
+	/******************************
+	 * "p1", "p2", "p3", "p4". text.
+	 */
 	private var _textPlayer3:FlxText;
 	private var _textPlayer4:FlxText;
 	
-	// player 1 timer background.
-	private var _BGtimerForP1:FlxSprite;
-	private var _BGtimerForP2:FlxSprite;
-	private var _BGtimerForP3:FlxSprite;
-	private var _BGtimerForP4:FlxSprite;
+	/******************************
+	 * player timer background.
+	 */
+	private var _background_for_timer:Array<FlxSprite> = [];
 	
+	/******************************
+	 * this is the timer remaining text for each player.
+	 */
+	private var _text_player_move_timer:Array<FlxText> = [];
+	
+	/******************************
+	 * every once in a while, send move value for this player to the other clients. those other client will then have an updated value.
+	 */
+	public var _ticks:Float = 0;
+		
+	/******************************
+	 * this stop the entering of the timer function the second time for that player. once that timer is timer.run, everything in that function does not need to be updated again because timer will enter that function once every second.
+	 */
+	private var _do_once:Array<Bool> = [false, false, false, false];
+	
+	/******************************
+	 * when true a loop will not be entered.
+	 */
+	private var _doOnce:Bool = false;
+	
+	/******************************
+	 * use this var to change to vertical layout of this class elements.
+	 */
+	private var _offsetY:Int = 15;
+	
+	/******************************
+	 * this stops a double "player losses game" message when restarting a game when timer reaches zero.
+	 */
+	public static var _ticksStart:Int = 0;
+	
+	/******************************
+	 * this is the time remaining.
+	 */
 	private var _t:Int = 0;
 	
 	public function new(t:Int, scene_game_room:SceneGameRoom) 
@@ -62,13 +77,9 @@ class PlayerTimeRemainingMove extends FlxState
 		
 		__scene_game_room = scene_game_room;
 		
+		_do_once = [false, false, false, false];
 		_doOnce = false;
 		
-		_doOnce1 = false;
-		_doOnce2 = false;
-		_doOnce3 = false;
-		_doOnce4 = false;
-	
 		Reg._playerWaitingAtGameRoom = false;
 		
 		// move timer text.
@@ -78,40 +89,60 @@ class PlayerTimeRemainingMove extends FlxState
 		_textMoveTimer.text = "Move Timer";		
 		_textMoveTimer.scrollFactor.set(0, 0);
 		add(_textMoveTimer);
-		
-		
+				
 		// table. the rows have players idle time remaining and players game move time remaining. if any of those times reach 0, the player will lose the game.
-		_BGtimerForP1 = new FlxSprite(0, 0);
-		_BGtimerForP1.makeGraphic(112, 40, 0xFF440044);		
-		_BGtimerForP1.setPosition(FlxG.width - 307, 170 + (1 * 45) - _offsetY); 
-		_BGtimerForP1.scrollFactor.set(0, 0);
-		add(_BGtimerForP1);	
-
-		// table column divider.
-		var _BGtimerForP2 = new FlxSprite(0, 0);
-		_BGtimerForP2.makeGraphic(112, 40, 0xFF440044);		
-		_BGtimerForP2.setPosition(FlxG.width - 133, 170 + (1 * 45) - _offsetY); 
-		_BGtimerForP2.scrollFactor.set(0, 0);
-		add(_BGtimerForP2);
+		if (_background_for_timer[0] != null)
+		{
+			remove(_background_for_timer[0]);
+			_background_for_timer[0].destroy();
+		}
+		
+		_background_for_timer[0] = new FlxSprite(0, 0);
+		_background_for_timer[0].makeGraphic(112, 40, 0xFF440044);		
+		_background_for_timer[0].setPosition(FlxG.width - 307, 170 + (1 * 45) - _offsetY); 
+		_background_for_timer[0].scrollFactor.set(0, 0);
+		add(_background_for_timer[0]);	
+	
+		if (_background_for_timer[1] != null)
+		{
+			remove(_background_for_timer[1]);
+			_background_for_timer[1].destroy();
+		}
+		
+		_background_for_timer[1] = new FlxSprite(0, 0);
+		_background_for_timer[1].makeGraphic(112, 40, 0xFF440044);		
+		_background_for_timer[1].setPosition(FlxG.width - 133, 170 + (1 * 45) - _offsetY); 
+		_background_for_timer[1].scrollFactor.set(0, 0);
+		add(_background_for_timer[1]);
 	
 		if (Reg._roomPlayerLimit - Reg._playerOffset > 2)
 		{
-			// table column divider.
-			var _BGtimerForP3 = new FlxSprite(0, 0);
-			_BGtimerForP3.makeGraphic(112, 40, 0xFF440044);		
-			_BGtimerForP3.setPosition(FlxG.width - 307, 170 + (2 * 45) - _offsetY); 
-			_BGtimerForP3.scrollFactor.set(0, 0);
-			add(_BGtimerForP3);
+			if (_background_for_timer[2] != null)
+			{
+				remove(_background_for_timer[2]);
+				_background_for_timer[2].destroy();
+			}
+			
+			_background_for_timer[2] = new FlxSprite(0, 0);
+			_background_for_timer[2].makeGraphic(112, 40, 0xFF440044);
+			_background_for_timer[2].setPosition(FlxG.width - 307, 170 + (2 * 45) - _offsetY); 
+			_background_for_timer[2].scrollFactor.set(0, 0);
+			add(_background_for_timer[2]);
 		}
 		
 		if (Reg._roomPlayerLimit - Reg._playerOffset > 3)
 		{
-			// table column divider.
-			var _BGtimerForP4 = new FlxSprite(0, 0);
-			_BGtimerForP4.makeGraphic(112, 40, 0xFF440044);		
-			_BGtimerForP4.setPosition(FlxG.width - 133, 170 + (2 * 45) - _offsetY); 
-			_BGtimerForP4.scrollFactor.set(0, 0);
-			add(_BGtimerForP4);
+			if (_background_for_timer[3] != null)
+			{
+				remove(_background_for_timer[3]);
+				_background_for_timer[3].destroy();
+			}
+			
+			_background_for_timer[3] = new FlxSprite(0, 0);
+			_background_for_timer[3].makeGraphic(112, 40, 0xFF440044);	
+			_background_for_timer[3].setPosition(FlxG.width - 133, 170 + (2 * 45) - _offsetY); 
+			_background_for_timer[3].scrollFactor.set(0, 0);
+			add(_background_for_timer[3]);
 		}
 	
 		//#############################		
@@ -155,28 +186,28 @@ class PlayerTimeRemainingMove extends FlxState
 		
 		//############################# Move timer text for each player.
 		// move timer 1 text.
-		_textMoveTimer1 = new FlxText(FlxG.width - 296, 176 + (1 * 45) - _offsetY, 0, formatTime(_t), Reg._font_size);
-		_textMoveTimer1.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.WHITE);
-		_textMoveTimer1.scrollFactor.set(0, 0);
-		add(_textMoveTimer1);
+		_text_player_move_timer[0] = new FlxText(FlxG.width - 296, 176 + (1 * 45) - _offsetY, 0, formatTime(_t), Reg._font_size);
+		_text_player_move_timer[0].setFormat(Reg._fontDefault, Reg._font_size, FlxColor.WHITE);
+		_text_player_move_timer[0].scrollFactor.set(0, 0);
+		add(_text_player_move_timer[0]);
 		
 		Reg._textTimeRemainingToMove1 = formatTime(_t);
 		
 		// move timer 2 text.		
-		_textMoveTimer2 = new FlxText(FlxG.width - 125, 176 + (1 * 45) - _offsetY, 0, formatTime(_t), Reg._font_size);
-		_textMoveTimer2.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.WHITE);
-		_textMoveTimer2.scrollFactor.set(0, 0);
-		add(_textMoveTimer2);
+		_text_player_move_timer[1] = new FlxText(FlxG.width - 125, 176 + (1 * 45) - _offsetY, 0, formatTime(_t), Reg._font_size);
+		_text_player_move_timer[1].setFormat(Reg._fontDefault, Reg._font_size, FlxColor.WHITE);
+		_text_player_move_timer[1].scrollFactor.set(0, 0);
+		add(_text_player_move_timer[1]);
 		
 		Reg._textTimeRemainingToMove2 = formatTime(_t);
 		
 		if (Reg._roomPlayerLimit - Reg._playerOffset > 2)
 		{
 			// move timer 3 text.
-			_textMoveTimer3 = new FlxText(FlxG.width - 296, 176 + (2 * 45) - _offsetY, 0, formatTime(_t), Reg._font_size);
-			_textMoveTimer3.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.WHITE);
-			_textMoveTimer3.scrollFactor.set(0, 0);
-			add(_textMoveTimer3);
+			_text_player_move_timer[2] = new FlxText(FlxG.width - 296, 176 + (2 * 45) - _offsetY, 0, formatTime(_t), Reg._font_size);
+			_text_player_move_timer[2].setFormat(Reg._fontDefault, Reg._font_size, FlxColor.WHITE);
+			_text_player_move_timer[2].scrollFactor.set(0, 0);
+			add(_text_player_move_timer[2]);
 			
 			Reg._textTimeRemainingToMove3 = formatTime(_t);
 		}
@@ -184,10 +215,10 @@ class PlayerTimeRemainingMove extends FlxState
 		if (Reg._roomPlayerLimit - Reg._playerOffset > 3)
 		{
 			// move timer 4 text.
-			_textMoveTimer4 = new FlxText(FlxG.width - 125, 176 + (2 * 45) - _offsetY, 0, formatTime(_t), Reg._font_size);
-			_textMoveTimer4.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.WHITE);
-			_textMoveTimer4.scrollFactor.set(0, 0);
-			add(_textMoveTimer4);
+			_text_player_move_timer[3] = new FlxText(FlxG.width - 125, 176 + (2 * 45) - _offsetY, 0, formatTime(_t), Reg._font_size);
+			_text_player_move_timer[3].setFormat(Reg._fontDefault, Reg._font_size, FlxColor.WHITE);
+			_text_player_move_timer[3].scrollFactor.set(0, 0);
+			add(_text_player_move_timer[3]);
 			
 			Reg._textTimeRemainingToMove4 = formatTime(_t);
 		}
@@ -243,14 +274,14 @@ class PlayerTimeRemainingMove extends FlxState
 				
 				if (Reg._move_number_next == 0) 
 				{
-					_textMoveTimer1.text = "0";
+					_text_player_move_timer[0].text = "0";
 					Reg._textTimeRemainingToMove1 = "0";
 					updateStats(Reg._move_number_next);
 				}
 				
 				if (Reg._move_number_next == 1) 
 				{
-					_textMoveTimer2.text = "0";
+					_text_player_move_timer[1].text = "0";
 					Reg._textTimeRemainingToMove2 = "0";
 					updateStats(Reg._move_number_next);
 					
@@ -258,7 +289,7 @@ class PlayerTimeRemainingMove extends FlxState
 				
 				if (Reg._move_number_next == 2) 
 				{
-					_textMoveTimer3.text = "0";
+					_text_player_move_timer[2].text = "0";
 					Reg._textTimeRemainingToMove3 = "0";
 					updateStats(Reg._move_number_next);
 					
@@ -266,7 +297,7 @@ class PlayerTimeRemainingMove extends FlxState
 				
 				if (Reg._move_number_next == 3) 
 				{
-					_textMoveTimer4.text = "0";
+					_text_player_move_timer[3].text = "0";
 					Reg._textTimeRemainingToMove4 = "0";
 					updateStats(Reg._move_number_next);
 					
@@ -461,73 +492,36 @@ class PlayerTimeRemainingMove extends FlxState
 		
 		switch (Reg._gameId)
 		{
-			case 0: __scene_game_room._finalizeWhenGameOver.id0();
-			case 1: __scene_game_room._finalizeWhenGameOver.id1();
-			case 2: __scene_game_room._finalizeWhenGameOver.id2();
-			case 3: __scene_game_room._finalizeWhenGameOver.id3();
-			case 4: __scene_game_room._finalizeWhenGameOver.id4();
+			case 0: {};
+			case 1: {};
+			case 2: {};
+			case 3: {};
+			case 4: __scene_game_room.__finalize_when_game_over.id4();
 		}
 	}
 	
 	override public function destroy()
 	{
 		// timer background.
-		if (_BGtimerForP1 != null)
+		for (i in 0... _background_for_timer.length)
 		{
-			_BGtimerForP1.visible = false;
-			_BGtimerForP1.destroy();
-			_BGtimerForP1 = null;
+			if (_background_for_timer[i] != null)
+			{
+				_background_for_timer[i].visible = false;
+				_background_for_timer[i].destroy();
+				_background_for_timer[i] = null;
+			}
 		}
-		
-		if (_BGtimerForP2 != null)
-		{
-			_BGtimerForP2.visible = false;
-			_BGtimerForP2.destroy();
-			_BGtimerForP2 = null;
-		}
-		
-		if (_BGtimerForP3 != null) 
-		{
-			_BGtimerForP3.visible = false;
-			_BGtimerForP3.destroy();
-			_BGtimerForP3 = null;
-		}
-		
-		if (_BGtimerForP4 != null) 
-		{
-			_BGtimerForP4.visible = false;
-			_BGtimerForP4.destroy();
-			_BGtimerForP4 = null;
-		}
-		
 		
 		// timer text.
-		if (_textMoveTimer1 != null)
+		for (i in 0... _text_player_move_timer.length)
 		{
-			_textMoveTimer1.visible = false;
-			_textMoveTimer1.destroy();
-			_textMoveTimer1 = null;
-		}
-		
-		if (_textMoveTimer2 != null)
-		{
-			_textMoveTimer2.visible = false;
-			_textMoveTimer2.destroy();
-			_textMoveTimer2 = null;
-		}
-		
-		if (_textMoveTimer3 != null) 
-		{
-			_textMoveTimer3.visible = false;
-			_textMoveTimer3.destroy();
-			_textMoveTimer3 = null;
-		}
-		
-		if (_textMoveTimer4 != null) 
-		{
-			_textMoveTimer4.visible = false;
-			_textMoveTimer4.destroy();
-			_textMoveTimer4 = null;
+			if (_text_player_move_timer[i] != null)
+			{
+				_text_player_move_timer[i].visible = false;
+				_text_player_move_timer[i].destroy();
+				_text_player_move_timer[i] = null;
+			}
 		}
 		
 		if (Reg._playerAll != null)
@@ -536,6 +530,22 @@ class PlayerTimeRemainingMove extends FlxState
 			Reg._playerAll = null;
 		}
 		
+		__scene_game_room = null;
+	
+		if (_textPlayer3 != null)
+		{
+			remove(_textPlayer3);
+			_textPlayer3.destroy();
+			_textPlayer3 = null;
+		}
+		
+		if (_textPlayer4 != null)
+		{
+			remove(_textPlayer4);
+			_textPlayer4.destroy();
+			_textPlayer4 = null;
+		}	
+	
 		super.destroy();
 	}
 	
@@ -584,13 +594,13 @@ class PlayerTimeRemainingMove extends FlxState
 				if (Reg._roomPlayerLimit - Reg._playerOffset <= 2)
 				{
 					_textPlayer3.visible = false;
-					_textMoveTimer3.visible = false;
+					_text_player_move_timer[2].visible = false;
 				}
 				
 				else
 				{
 					_textPlayer3.visible = true;
-					_textMoveTimer3.visible = true;
+					_text_player_move_timer[2].visible = true;
 				}
 			}
 			
@@ -600,13 +610,13 @@ class PlayerTimeRemainingMove extends FlxState
 				if (Reg._roomPlayerLimit - Reg._playerOffset <= 3)
 				{
 					_textPlayer4.visible = false;
-					_textMoveTimer4.visible = false;
+					_text_player_move_timer[3].visible = false;
 				}
 				
 				else
 				{
 					_textPlayer4.visible = true;
-					_textMoveTimer4.visible = true;
+					_text_player_move_timer[3].visible = true;
 				}
 			}
 			
@@ -622,28 +632,28 @@ class PlayerTimeRemainingMove extends FlxState
 			
 			var _time:String = formatTime(_t);
 			
-			// game has just started because _textMoveTimer1 equals empty. therefore, display the maximum time for each player.
+			// game has just started because _text_player_move_timer[0] equals empty. therefore, display the maximum time for each player.
 			if (RegTypedef._dataTournaments._move_piece == false)
 			{
-				if (_textMoveTimer1 != null && _textMoveTimer1.text == "")
-					_textMoveTimer1.text = _time;
-				if (_textMoveTimer2 != null && _textMoveTimer2.text == "") 
-					_textMoveTimer2.text = _time;
+				if (_text_player_move_timer[0] != null && _text_player_move_timer[0].text == "")
+					_text_player_move_timer[0].text = _time;
+				if (_text_player_move_timer[1] != null && _text_player_move_timer[1].text == "") 
+					_text_player_move_timer[1].text = _time;
 			}
 			
 			else
 			{
 				// display how much time is remaining for tournament play.
-				if (_textMoveTimer1 != null && _textMoveTimer1.text == "")
-					_textMoveTimer1.text = Reg._textTimeRemainingToMove1;
-				if (_textMoveTimer2 != null && _textMoveTimer2.text == "") 
-					_textMoveTimer2.text = Reg._textTimeRemainingToMove2;
+				if (_text_player_move_timer[0] != null && _text_player_move_timer[0].text == "")
+					_text_player_move_timer[0].text = Reg._textTimeRemainingToMove1;
+				if (_text_player_move_timer[1] != null && _text_player_move_timer[1].text == "") 
+					_text_player_move_timer[1].text = Reg._textTimeRemainingToMove2;
 			}
 			
-			if (_textMoveTimer3 != null && _textMoveTimer3.text == "") 
-				_textMoveTimer3.text = _time;
-			if (_textMoveTimer4 != null && _textMoveTimer4.text == "") 
-				_textMoveTimer4.text = _time;
+			if (_text_player_move_timer[2] != null && _text_player_move_timer[2].text == "") 
+				_text_player_move_timer[2].text = _time;
+			if (_text_player_move_timer[3] != null && _text_player_move_timer[3].text == "") 
+				_text_player_move_timer[3].text = _time;
 			
 			// addresses the double button/key firing bug when timer reaches zero.
 			if (_ticksStart < Reg._framerate * 2) _ticksStart += 1;
@@ -655,9 +665,9 @@ class PlayerTimeRemainingMove extends FlxState
 			&&	Reg._spectator_start_timer == true
 			&&	Reg._move_number_next == 0)
 			{
-				if (_doOnce1 == false)
+				if (_do_once[0] == false)
 				{	
-					_doOnce1 = true;
+					_do_once[0] = true;
 					_ticks = 0;
 					
 					Reg._playerAll.run = function() 
@@ -676,9 +686,9 @@ class PlayerTimeRemainingMove extends FlxState
 					// end game and minus 1 from the player whos move var value reaches zero.
 					if (RegTypedef._dataPlayers._moveTimeRemaining[0] <= 0)
 					moveZeroReached();
-					else _textMoveTimer1.text = "0";
+					else _text_player_move_timer[0].text = "0";
 					
-					_doOnce2 = false; _doOnce3 = false; _doOnce4 = false;
+					_do_once = [false, false, false, false];
 				}
 			}
 			
@@ -689,9 +699,9 @@ class PlayerTimeRemainingMove extends FlxState
 			&&	Reg._spectator_start_timer == true
 			&&	Reg._move_number_next == 1)
 			{
-				if (_doOnce2 == false)
+				if (_do_once[1] == false)
 				{	
-					_doOnce2 = true;
+					_do_once[1] = true;
 					_ticks = 0;
 					
 					Reg._playerAll.run = function() 
@@ -711,9 +721,9 @@ class PlayerTimeRemainingMove extends FlxState
 					// end game and minus 1 from the player whos move var value reaches zero.
 					if (RegTypedef._dataPlayers._moveTimeRemaining[1] <= 0)
 					moveZeroReached();
-					else _textMoveTimer2.text = "0";
+					else _text_player_move_timer[1].text = "0";
 					
-					_doOnce1 = false; _doOnce3 = false; _doOnce4 = false;
+					_do_once = [false, false, false, false];
 				}
 			}
 			
@@ -723,9 +733,9 @@ class PlayerTimeRemainingMove extends FlxState
 			&&	Reg._spectator_start_timer == true
 			&&	Reg._move_number_next == 2)
 			{
-				if (_doOnce3 == false)
+				if (_do_once[2] == false)
 				{
-					_doOnce3 = true;
+					_do_once[2] = true;
 					_ticks = 0;
 					
 					Reg._playerAll.run = function() 
@@ -745,9 +755,9 @@ class PlayerTimeRemainingMove extends FlxState
 					// end game and minus 1 from the player whos move var value reaches zero.
 					if (RegTypedef._dataPlayers._moveTimeRemaining[2] <= 0)
 					moveZeroReached();
-					else _textMoveTimer3.text = "0";
+					else _text_player_move_timer[2].text = "0";
 					
-					_doOnce1 = false; _doOnce2 = false; _doOnce4 = false;
+					_do_once = [false, false, false, false];
 				}
 			}
 			
@@ -757,9 +767,9 @@ class PlayerTimeRemainingMove extends FlxState
 			&&	Reg._spectator_start_timer == true
 			&&	Reg._move_number_next == 3)
 			{
-				if (_doOnce4 == false)
+				if (_do_once[3] == false)
 				{
-					_doOnce4 = true;
+					_do_once[3] = true;
 					_ticks = 0;
 					
 					Reg._playerAll.run = function() 
@@ -779,16 +789,16 @@ class PlayerTimeRemainingMove extends FlxState
 					// end game and minus 1 from the player whos move var value reaches zero.
 					if (RegTypedef._dataPlayers._moveTimeRemaining[3] <= 0)
 					moveZeroReached();
-					else _textMoveTimer4.text = "0";
+					else _text_player_move_timer[3].text = "0";
 					
-					_doOnce1 = false; _doOnce2 = false; _doOnce3 = false;
+					_do_once = [false, false, false, false];
 				}
 			}
 						
 			if (Reg._gameOverForPlayer == true && _doOnce == false)
 			{
 				// set values to false so that the timer does not run again. restarting the game will set this value correctly.
-				_doOnce1 = false; _doOnce2 = false; _doOnce3 = false; _doOnce4 = false;
+				_do_once = [false, false, false, false];
 			
 				// clear the timer function so that nothing runs.
 				Reg._playerAll.run = function() 
@@ -807,12 +817,11 @@ class PlayerTimeRemainingMove extends FlxState
 			}
 			
 			
-			if (_textMoveTimer1 != null && Reg._move_number_next == 0) _textMoveTimer1.text = Reg._textTimeRemainingToMove1;
-			if (_textMoveTimer2 != null && Reg._move_number_next == 1) _textMoveTimer2.text = Reg._textTimeRemainingToMove2;
-			if (_textMoveTimer3 != null && Reg._move_number_next == 2) _textMoveTimer3.text = Reg._textTimeRemainingToMove3;
-			if (_textMoveTimer4 != null && Reg._move_number_next == 3) _textMoveTimer4.text = Reg._textTimeRemainingToMove4;
+			if (_text_player_move_timer[0] != null && Reg._move_number_next == 0) _text_player_move_timer[0].text = Reg._textTimeRemainingToMove1;
+			if (_text_player_move_timer[1] != null && Reg._move_number_next == 1) _text_player_move_timer[1].text = Reg._textTimeRemainingToMove2;
+			if (_text_player_move_timer[2] != null && Reg._move_number_next == 2) _text_player_move_timer[2].text = Reg._textTimeRemainingToMove3;
+			if (_text_player_move_timer[3] != null && Reg._move_number_next == 3) _text_player_move_timer[3].text = Reg._textTimeRemainingToMove4;
 			
-			// TODO this needs fixing. cannot have an event that is called at a random time with html5 because html5 needs a server around trip to work if this event is called when another event is called then html5 will abort the second event. 1 event can only be called within an event function.
 			// every once in a while, send move value for this player to the other clients. those other client will then have an updated value.
 			if (_ticks == 0 ) 
 			{

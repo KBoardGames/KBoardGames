@@ -109,14 +109,14 @@ class ChessPromote extends FlxSubState
 			_text.screenCenter(XY);
 			add(_text);
 			
-			Reg._gameMessage = _text.text;			
+			Reg._messageBoxNoUserInput = _text.text;			
 		}
 	}
 	
 	private function closeMessage(i:FlxTimer):Void
 	{
 		Reg._chessPawnPromotedMessage = false;
-		Reg._gameMessage = "";
+		Reg._messageBoxNoUserInput = "";
 		close();
 	}	
 	

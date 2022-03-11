@@ -696,7 +696,7 @@ class MenuBar extends FlxGroup
 	 * "X" button on this menu bar.
 	 */
 	private function disconnect(_from_menuState:Bool = false):Void
-	{
+	{		
 		Reg2._miscMenuIparameter = 0;
 		
 		if (GameChatter.__scrollable_area2 != null)	GameChatter.__scrollable_area2 = null;
@@ -825,43 +825,6 @@ class MenuBar extends FlxGroup
 				_scene_leaderboards_exit.visible = false;
 				_scene_leaderboards_exit.active = false;
 			}
-		#end
-	}
-	
-	/******************************
-	 * function that house uses.
-	 */
-	public function scene_house():Void
-	{
-		#if house
-			set_all_menu_bar_elements_not_active(); // reset buttons to false because just after closing a dialog box, that class will reset state of buttons back to active.
-					
-			// this stop the clicking of this button when not at this buttons scene.
-			if (RegTypedef._dataMisc._room > 0) return; 
-			
-			RegTypedef.resetHouseData(); // this is needed to avoid a crash.	
-			//Reg._at_lobby = true;
-			Reg._at_house = true;
-			
-			if (RegTriggers._houseFirstPartComplete == true)
-			{
-				__house.initialize2();
-				
-				RegTriggers._houseFirstPartComplete = false;
-			}
-
-			ButtonToggleHouse._id_selected = 1;
-			__house.active = true;			
-			__house.visible = true;
-			__house.optionsMakeActive();
-			__house.activeFurnitureGetElements();
-			__house._houseDataLoaded = true;
-
-			Reg2._lobby_button_alpha = 1;
-			//}
-			
-			PlayState.__scene_lobby.set_not_active_for_buttons();
-			__house.buttonToFurnitureGetMenu();
 		#end
 	}
 	
@@ -1080,6 +1043,45 @@ class MenuBar extends FlxGroup
 	}
 	
 	/******************************
+	 * function that house uses.
+	 */
+	public function scene_lobby_house():Void
+	{
+		#if house
+			set_all_menu_bar_elements_not_active(); // reset buttons to false because just after closing a dialog box, that class will reset state of buttons back to active.
+					
+			// this stop the clicking of this button when not at this buttons scene.
+			if (RegTypedef._dataMisc._room > 0) return; 
+			
+			RegTypedef.resetHouseData(); // this is needed to avoid a crash.	
+			//Reg._at_lobby = true;
+			Reg._at_house = true;
+			
+			if (RegTriggers._houseFirstPartComplete == true)
+			{
+				__house.initialize2();
+				
+				RegTriggers._houseFirstPartComplete = false;
+			}
+
+			ButtonToggleHouse._id_selected = 1;
+			__house.active = true;			
+			__house.visible = true;
+			__house.optionsMakeActive();
+			__house.activeFurnitureGetElements();
+			__house._houseDataLoaded = true;
+
+			//}
+			
+			PlayState.__scene_lobby.set_not_active_for_buttons();
+			__house.buttonToFurnitureGetMenu();
+			
+			var _state = FlxG.state;
+			_state.openSubState(new SceneTransition());
+		#end
+	}
+	
+	/******************************
 	 * lobby menu button
 	 */
 	private function scene_lobby_leaderboards():Void
@@ -1140,6 +1142,9 @@ class MenuBar extends FlxGroup
 			
 			__miscellaneous_menu = new MiscellaneousMenu();
 			add(__miscellaneous_menu);
+			
+			var _state = FlxG.state;
+			_state.openSubState(new SceneTransition());
 		#end
 	}
 	
@@ -1171,7 +1176,6 @@ class MenuBar extends FlxGroup
 			__daily_quests = new DailyQuests();
 			add(__daily_quests);
 			
-			//TODO instead of destroying a scene, the scene must be removed. hence, opposite of add();
 		#end
 	}
 	
@@ -1201,6 +1205,9 @@ class MenuBar extends FlxGroup
 			PlayState.send("Tournament Chess Standard 8 Get", RegTypedef._dataTournaments);
 			
 			PlayState.__scene_lobby.set_not_active_for_buttons();
+			
+			var _state = FlxG.state;
+			_state.openSubState(new SceneTransition());
 		#end
 	}
 
@@ -1283,7 +1290,7 @@ class MenuBar extends FlxGroup
 	}
 	
 	private function scene_waiting_room_return_to_lobby():Void
-	{			
+	{
 		Reg._buttonCodeValues = "r1004";
 		
 		if (RegCustom._to_lobby_from_waiting_room_confirmation[Reg._tn] == false)
@@ -1651,6 +1658,18 @@ class MenuBar extends FlxGroup
 	
 	override public function update(elapsed:Float):Void 
 	{
+		RegFunctions.sound(2);
+		
+		// show foreground scene effects when return to misc scene from misc output scene.
+		if (RegTriggers._makeMiscellaneousMenuClassActive == true
+		&&	__miscellaneous_menu.active == true)
+		{
+			RegTriggers._makeMiscellaneousMenuClassActive = false;
+			
+			var _state = FlxG.state;
+			_state.openSubState(new SceneTransition());
+		}
+		
 		if (_group_lobby_sprite_highlighted != null 
 		&&	Reg._at_lobby == true)
 		{			
@@ -1662,7 +1681,7 @@ class MenuBar extends FlxGroup
 				Reg._group_lobby_sprite[i].visible = true;
 					
 				// stop player hammering.
-				if (Reg._buttonDown == true) 
+				if (FlxG.mouse.y >= FlxG.height - 50 && Reg._buttonDown == true) 
 					Reg._group_lobby_sprite[i].alpha = 0.3;
 				else 
 					Reg._group_lobby_sprite[i].alpha = 1;
@@ -1686,13 +1705,12 @@ class MenuBar extends FlxGroup
 					{
 						PlayState.__scene_lobby._lobby_sprite_mouse_just_pressed = false;
 						
-						if (RegCustom._sound_enabled[Reg._tn] == true
-						&&  Reg2._scrollable_area_is_scrolling == false)
-							FlxG.sound.play("click", 1, false);	
+						if (RegCustom._sound_enabled[Reg._tn] == true)
+							FlxG.sound.playMusic("click", 1, false);
 						
 						switch(Reg._lobby_icon_number[i])
 						{
-							case 0: scene_house();				
+							case 0: scene_lobby_house();				
 							case 1: scene_lobby_daily_quests();
 							case 2: scene_lobby_leaderboards();
 							case 3: scene_lobby_tournaments();

@@ -78,9 +78,9 @@ class Usernames
 			{
 				if (CID3._CRN == ii)
 				{
-					if (CID3._group_username_input[ii].text.toLowerCase()
-					==	_arr[i].substr(0, CID3._group_username_input[ii].text.length).toLowerCase() 
-					&&	CID3._group_username_input[ii].text.toLowerCase() 
+					if (CID3._group_input_text_field[0][ii].text.toLowerCase()
+					==	_arr[i].substr(0, CID3._group_input_text_field[0][ii].text.length).toLowerCase() 
+					&&	CID3._group_input_text_field[0][ii].text.toLowerCase() 
 					!=	_arr[i].toLowerCase())
 					{
 						_count += 1;

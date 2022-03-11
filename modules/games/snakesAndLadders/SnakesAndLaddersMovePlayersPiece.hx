@@ -432,7 +432,7 @@ class SnakesAndLaddersMovePlayersPiece extends FlxSprite {
 									// did the other player roll a 6. pass the roll dice message to that player, so that the player will only move again when received this message. because sometime the player not rolling has not finished moving.
 									if (Reg._isThisPieceAtBackdoor == false)
 									{								
-										Reg._gameMessage = "Roll dice again.";
+										Reg._messageBoxNoUserInput = "Roll dice again.";
 										RegTypedef._dataGameMessage._gameMessage = "Other player rolls dice again.";
 										
 										// send message to server then server to other client.

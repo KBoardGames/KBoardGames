@@ -448,6 +448,9 @@ class TableColumnSort extends FlxSprite
 		_table_column.splice(0, _table_column.length);
 		_column.splice(0, _column.length);
 		
+		_scene_lobby = null;
+		_invite_table = null;
+			
 		super.destroy();
 	}	
 	

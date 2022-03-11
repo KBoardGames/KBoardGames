@@ -38,8 +38,6 @@ class SceneEffects extends FlxSprite
 	 */
 	private var _effects_num:Int = 0;
 	
-	private var _initialized:Bool = false;
-	
 	/******************************
 	 * use this ticks for anything.
 	 */
@@ -62,7 +60,6 @@ class SceneEffects extends FlxSprite
 			case 1: effects_rain();
 		}
 		
-		_initialized = true;
 	}
 
 	private function effects_snow():Void
@@ -70,10 +67,13 @@ class SceneEffects extends FlxSprite
 		var _scales:Array<Float> = [0.55, 0.52, 0.48, 0.44, 0.40, 0.37, 0.33, 0.29, 0.23];
 		var _scale = _scales[_level];
 		
-		var color = FlxColor.WHITE.getDarkened(.5 - (_level * .06));
 		loadGraphic("assets/images/snowFlake.png", true, 64, 64);
-		alpha = 0.7;
+		alpha = 0.7;	
 		
+		// cannot have white flakes on white background.		
+		if (RegCustomColors.color_client_background() == FlxColor.WHITE)
+			color = FlxColor.GRAY;
+			
 		var _ra = FlxG.random.int(0, 3);
 		
 		if (_ra == 0) animation.add("run", [0, 1, 2, 3, 4], 10, true, true);
@@ -89,15 +89,15 @@ class SceneEffects extends FlxSprite
 	
 	private function effects_rain():Void
 	{
-		var size = Std.int(FlxMath.bound(_level / 2, 1.5, 3));
-		var color = 0xFF0000AA;
-		makeGraphic(size, size * 4, color);
+		var _size = FlxG.random.int(32, 64);
+		loadGraphic("assets/images/rain.png", false, _size, _size);
+		
 		alpha = 1;
 	}
 	
 	override public function reset(x:Float, y:Float):Void
 	{
-		var _ra = FlxG.random.int(-50, 50);
+		var _ra = FlxG.random.int(-20, 20);
 		super.reset((x + _ra), (y + _ra));
 		
 		// snow.
@@ -106,36 +106,28 @@ class SceneEffects extends FlxSprite
 			alpha = 0.6;
 			animation.paused = false;
 			
-			if (_initialized)
-			{
-				x = FlxG.random.int(0, FlxG.width * 4 * _level);
-				y = FlxG.random.int(-5, -10);
-			}
-			else
-			{
-				x = FlxG.random.int(0, FlxG.width * 4 * _level);
-				y = FlxG.random.int(-10, FlxG.height);
-			}
+			x = FlxG.random.int(0, FlxG.width * 4 * _level);
+			y = FlxG.random.int(-5, -10);
 			
 			// do this every 3/4 of total ticks.
 			if (_ticks > 100)
 			{
 				// make the snow fall at normal speed,
 				scrollFactor.set(.7 + (_level * .1), 0);
-				velocity.y = FlxG.random.int(175, 325) + (_level * 15);
+				velocity.y = FlxG.random.int(140, 250) + (_level * 14);
 				
 				var _ra = FlxG.random.int(1, 9);
-				velocity.x = FlxG.random.int( -55, -75) + (_ra * 30);
+				velocity.x = FlxG.random.int( -55 + (-_ra * 5), 55 + (_ra * 5));
 			}
 			
 			else
 			{
 				// these flakes fall slower than normal but drift left-right more.
 				scrollFactor.set(.7 + (_level * .1), 0);
-				velocity.y = FlxG.random.int(111, 255) + (_level * 10);
+				velocity.y = FlxG.random.int(95, 215) + (_level * 10);
 				
 				var _ra = FlxG.random.int(1, 9);			
-				velocity.x = FlxG.random.int( -100, -200) + (_ra * 20);
+				velocity.x = FlxG.random.int( -100 + (-_ra * 8), 100 + (_ra * 8));
 			}
 		}
 		
@@ -144,19 +136,11 @@ class SceneEffects extends FlxSprite
 		{
 			alpha = 1;
 			
-			if (_initialized)
-			{
-				x = FlxG.random.int(0, FlxG.width * _level);
-				y = FlxG.random.int( -5, -10);
-			}
-			else
-			{
-				x = FlxG.random.int(0, FlxG.width * _level);
-				y = FlxG.random.int( -10, FlxG.height);
-			}
-			scrollFactor.set(.7 + (_level * .1), 0);
-			velocity.y = FlxG.random.int(340, 480) * ((_level+5) * .4);
-			velocity.x = FlxG.random.int( -50, -100) * ((_level+2) * .3);
+			x = FlxG.random.int(-500, FlxG.width * _level);
+			y = 150;
+			
+			velocity.y = FlxG.random.int(1300, 1600);
+			velocity.x = FlxG.random.int( -500, 1800);
 		}		
 	}
 
@@ -192,7 +176,7 @@ class SceneEffects extends FlxSprite
 		
 		else
 		{			
-			if (x < 50 || x > FlxG.width + 50 || y > FlxG.height || alpha <= 0)
+			if (x > FlxG.width + 50 || y > FlxG.height || alpha <= 0)
 			{
 				reset(_startX, _startY);
 			}

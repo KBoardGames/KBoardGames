@@ -31,6 +31,11 @@ class RegFunctions
 	public static var _theme_array_float:Array<Array<Float>> = [[0, 0]];
 	
 	/******************************
+	 * text displayed at scene about there is no modules installed.
+	 */
+	public static var _no_game_modules_installed:FlxText;
+	
+	/******************************
 	* framerate ticks.
 	* @param ticks	the current value of a tick.
 	* @param _inc	by how much a tick increments. 
@@ -65,6 +70,69 @@ class RegFunctions
 		return ticks;
 	}
 	
+	/******************************
+	 * Play a sound when mouse clicked on a button if a condition is true or if bypass variable is set to true.
+	 * the hotkeys class is used at every scene. therefore, this sound class is accessed from every scene. However, the TitleBar.hx and MenuBar.hx do not have the hotkeys class. since that would create more than one instance of that class per scene. A Hotkeys.hx, TitleBar.hx and MenuBar.hx each pass a different value of _num to the sound function. When a mouse is clicked at TitleBar, another click at that class cannot be made again until the tick is a set value. Each of the three classes that use the sound function have their own ticks that delay a button from clicking again until the tick is a value. A delay tick is ignored if the button is not a network button. A network button needs to be mouse click delayed to stop network hammering.
+	 * @param	_num			0:TitleBar.hx, 1:Hotkeys.hx, 2:MenuBar.hx
+	 * @param	_bypass			0:use delay ticks (network). 1:play sound at every mouse click (offline).
+	 */
+	public static function sound(_num:Int, _bypass:Bool = false):Void
+	{
+		// stop pager.
+		if (Reg._at_waiting_room == true)
+		{
+			if (FlxG.keys.justReleased.ANY
+			||	FlxG.mouse.justPressed == true)
+				FlxG.sound.destroy(true);
+		}
+		
+		if (_bypass == false)
+		{
+			if (Reg._ticks_button_100_percent_opacity[_num] > 0)
+				Reg._ticks_button_100_percent_opacity[_num] += 1;		
+			
+			if (Reg._ticks_button_100_percent_opacity[_num] == Reg._button_100_percent_opacity_value[_num] * 2)
+			{
+				Reg._ticks_button_100_percent_opacity[_num] = 0;
+				Reg._buttonDown = false;
+				Reg._button_clicked = false;
+			}
+			
+			if (FlxG.mouse.justReleased == true
+			&&	RegCustom._sound_enabled[Reg._tn] == true
+			&&  Reg2._scrollable_area_is_scrolling == false
+			&&	Reg._buttonCodeValues == ""
+			&&	Reg._buttonDown == true
+			&&	Reg._ticks_button_100_percent_opacity[_num] == 0)
+			{
+				Reg._ticks_button_100_percent_opacity[_num] = Reg._button_100_percent_opacity_value[_num];
+			}
+			
+			if (FlxG.mouse.justPressed == true
+			&&	RegCustom._sound_enabled[Reg._tn] == true
+			&&  Reg2._scrollable_area_is_scrolling == false
+			&&	Reg._buttonCodeValues == ""
+			&&	Reg._buttonDown == true
+			&&	Reg._ticks_button_100_percent_opacity[_num] == 0
+			&&	Reg._button_clicked == false)
+			{
+				Reg._button_clicked = true;
+				FlxG.sound.playMusic("click", 1, false);
+			}
+		}
+		
+		else
+		{
+			if (FlxG.mouse.justPressed == true
+			&&	RegCustom._sound_enabled[Reg._tn] == true
+			&&  Reg2._scrollable_area_is_scrolling == false
+			&&	Reg._buttonCodeValues == ""
+			&&	Reg._buttonDown == true)
+			{
+				FlxG.sound.playMusic("click", 1, false);
+			}
+		}
+	}
 	
 	// here we use the ip address to find the username of the user logged into the website. if found, the user will be sent to the lobby.
 	public static function front_door_queue(_ip:String):String
@@ -588,6 +656,10 @@ class RegFunctions
 			saveFile.writeString("_world_flags_number: " + RegCustom._world_flags_number[Reg._tn] + "\r\n");
 			
 			saveFile.writeString("_pager_enabled: " + RegCustom._pager_enabled[Reg._tn] + "\r\n");
+			
+			saveFile.writeString("_scene_transition_number: " + RegCustom._scene_transition_number[Reg._tn] + "\r\n");
+			
+			saveFile.writeString("_title_icon_number: " + RegCustom._title_icon_number[Reg._tn] + "\r\n");
 			
 			saveFile.close();
 		#end
@@ -1230,6 +1302,22 @@ class RegFunctions
 						}
 						catch (e:Dynamic){}
 						
+						try
+						{
+							RegCustom._scene_transition_number[Reg._tn] = 5;
+							
+							if (Std.parseInt(data.get("_scene_transition_number")) != null) RegCustom._scene_transition_number[Reg._tn] = Std.parseInt(data.get("_scene_transition_number"));
+						}
+						catch (e:Dynamic){}
+						
+						try
+						{
+							RegCustom._title_icon_number[Reg._tn] = 1;
+							
+							if (Std.parseInt(data.get("_title_icon_number")) != null) RegCustom._title_icon_number[Reg._tn] = Std.parseInt(data.get("_title_icon_number"));
+						}
+						catch (e:Dynamic){}
+						
 						
 					}
 					
@@ -1333,7 +1421,7 @@ class RegFunctions
 		RegCustom._menu_bar_background_brightness.push(0.5);
 		RegCustom._world_flags_number.push(0);
 		RegCustom._pager_enabled.push(true);
-		
+		RegCustom._scene_transition_number.push(5);
 	}
 	
 	/******************************
@@ -1417,7 +1505,7 @@ class RegFunctions
 			
 			if (_gameMenu.data._world_flags_number != null)
 				RegCustom._world_flags_number[Reg._tn] = _gameMenu.data._world_flags_number;
-				
+			
 			_gameMenu.close;			
 			
 			// this codde is needed twice. the second line is two lines down. this code is used to change the appearence of the scene.
@@ -1452,15 +1540,18 @@ class RegFunctions
 			||	RegCustom._profile_username_p1[CID3._CRN].toLowerCase() == "Guest") RegCustom._profile_username_p1[CID3._CRN] = "Guest1";
 			
 			if (RegCustom._profile_username_p2 == "") RegCustom._profile_username_p2 = "Guest2";
-		
+			
 			for (i in 0...5)
 			{
-				_gameMenu.data._profile_username_p1[i] = CID3._group_username_input[i].text;
+				_gameMenu.data._profile_username_p1[i] = CID3._group_input_text_field[0][i].text;
 				
-				_gameMenu.data._profile_password_p1[i] = CID3._group_password_input[i].text;	
+				_gameMenu.data._profile_password_p1[i] = CID3._group_input_text_field[1][i].text;	
 					
-				_gameMenu.data._profile_email_address_p1[i] = CID3._group_email_address_input[i].text;
+				_gameMenu.data._profile_email_address_p1[i] = CID3._group_input_text_field[2][i].text;
 			}
+			
+			// this is needed because both p1 and p2 share that same input text field.
+			_gameMenu.data._profile_username_p1[CID3._CRN] = RegCustom._profile_username_p1[CID3._CRN];
 			
 			_gameMenu.data._profile_username_p2 = RegCustom._profile_username_p2;
 			
@@ -1666,9 +1757,21 @@ class RegFunctions
 		
 		for (i in 0... Reg._total_games_in_release - Reg._total_games_excluded_from_list)
 		{
+			if (Reg2._gameId_sprite[i] != null)
+			{
+				_this.remove(Reg2._gameId_sprite[i]);
+				Reg2._gameId_sprite[i].destroy();
+			}
+			
 			Reg2._gameId_sprite[i] = new FlxSprite(75 + ( i * 255), 120, "assets/images/gameId" + Reg2._gameIds_that_can_be_selected[i] + ".png");
 			Reg2._gameId_sprite[i].scrollFactor.set(0, 0);
 			_this.add(Reg2._gameId_sprite[i]);
+		}
+		
+		if (Reg2._gameId_sprite_highlight != null)
+		{
+			_this.remove(Reg2._gameId_sprite_highlight);
+			Reg2._gameId_sprite_highlight.destroy();
 		}
 		
 		Reg2._gameId_sprite_highlight = new FlxSprite(75, 120);
@@ -1686,10 +1789,16 @@ class RegFunctions
 	
 	public static function no_game_modules_installed_notice(_this:FlxState):Void
 	{
-		var _text = new FlxText(15, 100, 0, "No game modules installed.");
-		_text.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_topic_title_text_color());
-		_text.scrollFactor.set(0, 0);
-		_this.add(_text);
+		if (_no_game_modules_installed != null)
+		{
+			_this.remove(_no_game_modules_installed);
+			_no_game_modules_installed.destroy();
+		}
+		
+		_no_game_modules_installed = new FlxText(15, 100, 0, "No game modules installed.");
+		_no_game_modules_installed.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_topic_title_text_color());
+		_no_game_modules_installed.scrollFactor.set(0, 0);
+		_this.add(_no_game_modules_installed);
 	}
 	
 }//

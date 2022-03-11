@@ -57,15 +57,17 @@ class CID3 extends FlxGroup
 	
 	public static var _text_username:FlxText;
 	public static var _username_input:FlxInputText;
-	public static var _group_username_input:Array<FlxInputText> = [];
-	
+		
 	public static var _text_password:FlxText;
 	public static var _password_input:FlxInputText;
-	public static var _group_password_input:Array<FlxInputText> = [];
 	
 	public static var _text_email_address:FlxText;
 	public static var _email_address_input:FlxInputText;
-	public static var _group_email_address_input:Array<FlxInputText> = [];
+	
+	/******************************
+	 * first array holds 0:username, 1:password, 2: email address and the second array holds the amount of those input fields.
+	 */
+	public static var _group_input_text_field:Array<Array<FlxInputText>> = [for (i in 0...3) new Array<FlxInputText>()];
 	
 	public static var _text_empty:ButtonGeneralNetworkNo;
 	public static var __configurations_output:ConfigurationOutput;
@@ -76,7 +78,7 @@ class CID3 extends FlxGroup
 	/******************************
 	 * needed to move the cursor of the inputText because a var can get the value of a caret but cannot for some reason set the value to the caret index.
 	 */
-	public static var _caretIndex:Int = 0;
+	public static var _caretIndex:Array<Int> = [0,0,0];
 	
 	/******************************
 	 * number of account rows. 5:player1: 1:player2

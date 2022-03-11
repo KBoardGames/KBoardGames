@@ -38,7 +38,7 @@ class SceneLobbyRoomPlayerLimitText extends FlxText
 		if (Reg._at_lobby == false) return;
 		
 		// this code is needed so that it refreshes the lobby scrollable area data without new the text.
-		for (i in 0...27)
+		for (i in 0... SceneLobby._room_total)
 		{
 			var _host:String = RegTypedef._dataMisc._roomHostUsername[i];
 			var _title = RegFunctions.gameName(RegTypedef._dataMisc._roomGameIds[i]);
@@ -47,7 +47,8 @@ class SceneLobbyRoomPlayerLimitText extends FlxText
 			if (i == _id)
 			{
 				if (_host != "" && _title != " "
-				&&	RegTypedef._dataMisc._roomPlayerCurrentTotal[i] > 0)
+				&&	RegTypedef._dataMisc._roomPlayerCurrentTotal[i] > 0
+				&&	RegTypedef._dataMisc._roomState[i] != 2)
 					text = _players;
 				
 				else text = " ";				

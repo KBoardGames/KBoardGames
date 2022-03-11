@@ -89,7 +89,7 @@ class IdsMessageBox extends FlxGroup
 				
 				case 2010: _msg = new MessageBox(2010, "Yes", "No", true, true, false, false, "Notice!", "You cannot enter room " + Std.string(SceneLobby._number) + " because some of its data is not yet available.");
 				
-				// display a server message from "Message All By Server" event.
+				// display a server message from "Disconnect All By Server" event.
 				case 2222: _msg = new MessageBox(2222, "Yes", "No", true, true, false, false, "Notice!", Reg._server_message);
 				
 				// waiting room. case, 4000-4999.
@@ -149,7 +149,7 @@ class IdsMessageBox extends FlxGroup
 					{
 						var _email_changed_message:String = "";
 						
-						if (CID3._group_email_address_input[CID3._CRN].text != RegCustom._profile_email_address_p1[CID3._CRN]
+						if (CID3._group_input_text_field[2][CID3._CRN].text != RegCustom._profile_email_address_p1[CID3._CRN]
 						||	RegTypedef._dataAccount._send_email_address_validation_code == true)
 						{
 							_email_changed_message = " Your email address has changed. A validation email will be sent to you but only after you go online.";	
@@ -162,7 +162,7 @@ class IdsMessageBox extends FlxGroup
 						
 						_msg = new MessageBox(9001, "Yes", "No", true, true, false, false, "", "Configurations saved." + _email_changed_message);						
 						
-						RegCustom._profile_email_address_p1[CID3._CRN] = CID3._group_email_address_input[CID3._CRN].text;
+						RegCustom._profile_email_address_p1[CID3._CRN] = CID3._group_input_text_field[2][CID3._CRN].text;
 					}
 				}
 				
@@ -216,7 +216,14 @@ class IdsMessageBox extends FlxGroup
 				#end
 				
 				// Action commands. sysop menu. 15000-15999.
-				case 15000: _msg = new MessageBox(15000, "Yes", "No", true, true, true, false, "Goodbye.", "Disconnect from server?");
+				case 15000: 
+				{
+					if (Reg._game_offline_vs_player == true
+					||	Reg._game_offline_vs_cpu == true)
+						_msg = new MessageBox(15000, "Yes", "No", true, true, true, false, "Goodbye.", "Exit Client?");
+					else
+						_msg = new MessageBox(15000, "Yes", "No", true, true, true, false, "Goodbye.", "Disconnect from server?");
+				}
 				
 				// for spectator watching. Did the player one lose or win or do something else? this is the message box message for player 1 that displays for all spectators that are watching that game.
 				case 16000: _msg = new MessageBox(16000, "Yes", "No", true, true, false, false, "Notice!", RegTypedef._dataGameMessage._gameMessage);

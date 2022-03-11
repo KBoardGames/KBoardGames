@@ -75,10 +75,6 @@ class ButtonGeneralNetworkYes extends FlxUIButton
 	private var _innerColor:FlxColor;
 	private var _text:String;
 	
-	/******************************
-	 * when alpha for button is not 1, it cannot be clicked. when a dialog box is closed or after a button is pressed, we need to wait these many ticks until it is clickable again.
-	 */
-	private var _tick_button:Int = Reg._framerate; // 1 second.
 	/**
 	 * @param	x				The x location of the button on the screen.
 	 * @param	y				The y location of the button on the screen.
@@ -93,6 +89,9 @@ class ButtonGeneralNetworkYes extends FlxUIButton
 	 */
 	public function new(x:Float = 0, y:Float = 0, ?text:String, button_width:Int = 80, button_height:Int = 40, textSize:Int = 20, textColor:FlxColor = 0xFFFFFFFF, textPadding:Int = 0, ?onClick:Void->Void, innerColor:FlxColor = 0xFF000066, use_down_click:Bool = false, id:Int = 0, refresh_online_list:Bool = false, id_refresh:Int = 0)
 	{
+		// do not use. this feature needs to remain hardcoded.
+		use_down_click = false;
+		
 		super(x, y-7, text, onClick, false, false, RegCustom._button_color[Reg._tn]);
 
 		_startX = x;
@@ -100,8 +99,6 @@ class ButtonGeneralNetworkYes extends FlxUIButton
 	
 		_text = text;
 		if (_text == "") visible = false;
-		
-		_tick_button = Reg._framerate;
 		
 		_refresh_online_list = refresh_online_list;
 		_id_refresh = id_refresh;
@@ -140,20 +137,36 @@ class ButtonGeneralNetworkYes extends FlxUIButton
 	override public function update(elapsed:Float):Void
 	{
 		if (_id == ID)
-		{		
-			if (ActionInput.overlaps(this, null)
-			&&  FlxG.mouse.justPressed == true
-			&&	alpha == 1) 
+		{
+			if (FlxG.mouse.pressed == false && justReleased == true && Reg._buttonDown == true)
 			{
 				// this button has been pressed. remove focus from the chatter input box.
 				if (GameChatter._input_chat != null) GameChatter._input_chat.hasFocus = false;
 				
 				if (RegCustom._sound_enabled[Reg._tn] == true
-				&&  Reg2._scrollable_area_is_scrolling == false)
-					FlxG.sound.play("click", 1, false);
-					
-				Reg2._lobby_button_alpha = 0.3;
-			}		
+				&&	Reg2._scrollable_area_is_scrolling == false
+				&&	Reg._tn == 0)
+				{
+					FlxG.sound.play("error", 1, false);
+				}	
+			}
+		}
+		
+		if (Reg._buttonCodeValues == "")
+		{
+			if (Reg._ticks_button_100_percent_opacity[0] == 0 
+			&&	Reg._ticks_button_100_percent_opacity[1] == 0
+			&&	Reg._ticks_button_100_percent_opacity[2] == 0
+			&&	Reg._messageId == 0)
+				alpha = 1;
+			else
+				alpha = 0.3;
+		}
+		
+		else if (Reg._buttonCodeValues != ""
+		&&	Reg._disconnectNow == false)
+		{
+			alpha = 0.3;
 		}
 		
 		// when pressing the refresh online user list button, this code is needed so that it populates the table without creating text and buttons.
@@ -177,75 +190,50 @@ class ButtonGeneralNetworkYes extends FlxUIButton
 					label.text = "Send";
 					y = _startY - 14;
 					visible = true;
+					if (alpha == 1) super.update(elapsed);
 				}
 			}			
 		
 		}	
 		
-		if (Reg._at_lobby == true
-		&&	Reg._buttonCodeValues != ""
+		if (Reg._buttonCodeValues != ""
 		&&	Reg2._message_box_just_closed == true)
 		{
 			Reg2._message_box_just_closed = false;
-			RegTypedef._dataMisc._room = 0;
-			if (RegTypedef._dataMisc._userLocation == 0)
-				Reg._buttonCodeValues = "";
-			alpha = 1;
-			Reg2._lobby_button_alpha = 1;
-		}
-		
-		else if (Reg._buttonCodeValues == "")
-		{
-			_tick_button -= 1;
-		}
-		
-		// show button clearly when tick expire.
-		if (_tick_button <= 0
-		&&	_id != 9999
-		// show button clearly when tick expire and after table at waiting room has been populated.
-		||	_tick_button <= 0
-		&&	_id == 9999 
-		// show button clearly when tick expire and when update list at waiting room has not been mouse clicked.
-		&&	InviteTable._ticks_invite_list
-		==	Reg._maximum_server_connections
-		||	_tick_button <= 0
-		&&	_id == 9999 
-		&&	InviteTable._ticks_invite_list == 0)
-		{
-			if (Reg._at_lobby == true
-			||	Reg._at_waiting_room == true)
-				Reg2._lobby_button_alpha = 1;
 			
-			alpha = 1;
-			_tick_button = Reg._framerate;
-			Reg._buttonDown = false;
+			if (Reg._at_lobby == true)
+				RegTypedef._dataMisc._room = 0;
+			
+			if (RegTypedef._dataMisc._userLocation == 0
+			&&	Reg._buttonCodeValues != "s9") // esc hotkey.
+				Reg._buttonCodeValues = "";
+			
+			Reg._ticks_button_100_percent_opacity[0] = 0; 
+			Reg._ticks_button_100_percent_opacity[1] = 0;
+			Reg._ticks_button_100_percent_opacity[2] = 0;
+			
+			if (Reg._messageId == 0) alpha = 1;
 		}
 		
-		if (label.text == "") visible = false;
-		
-		if (alpha == 1 && _id == ID) super.update(elapsed);
-		
-		if (ActionInput.overlaps(this, null)
-		&&	Reg._buttonCodeValues == ""
-		&&	Reg._disconnectNow == false
-		&&	FlxG.mouse.justPressed == true
-		||	Reg._buttonDown == true
-		&&	alpha == 1
-		)
+		if (Reg._ticks_button_100_percent_opacity[0] == 0
+		&&	Reg._ticks_button_100_percent_opacity[1] == 0
+		&&	Reg._ticks_button_100_percent_opacity[2] == 0
+		&&	alpha == 1 && _id == ID
+		||	Reg._at_input_keyboard == true && _id == 10000 && _id == ID)
 		{
-			alpha = 0.3;
-			_tick_button = Reg._framerate;
-			Reg._buttonDown = true;
+			super.update(elapsed);
 		}
-		
-		if (_id == 9999
-		&&	_id == ID
-		&&	InviteTable._ticks_invite_list
-		!=	Reg._maximum_server_connections
-		&&	InviteTable._ticks_invite_list > 0
-		)
-		{
-			alpha = 0.3;
-		}
-	}	
+	}
+	
+	override function onOverHandler():Void
+	{
+		Reg._buttonDown = true;
+		super.onOverHandler();
+	}
+	
+	override function onOutHandler():Void
+	{
+		Reg._buttonDown = false;
+		super.onOutHandler();
+	}
 }

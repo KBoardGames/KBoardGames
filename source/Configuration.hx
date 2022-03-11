@@ -17,13 +17,15 @@ package;
  */
 class Configuration extends FlxState
 {
-	public var __action_commands:ActionCommands;
+	public var __hotkeys:Hotkeys;
 	
 	public var _output:ConfigurationOutput;
 		
 	override public function create():Void
 	{
 		super.create();
+				
+		openSubState(new SceneTransition());
 		
 		persistentDraw = true;
 		persistentUpdate = true;
@@ -31,6 +33,8 @@ class Configuration extends FlxState
 		FlxG.mouse.visible = true;
 		
 		Reg._at_configuration_menu = true;
+		Reg._at_input_keyboard = false;
+		Reg2._scrollable_area_is_scrolling = false;
 		
 		#if !html5
 			//------------------------------
@@ -60,28 +64,25 @@ class Configuration extends FlxState
 		_output = new ConfigurationOutput();
 		add(_output);
 		
-		if (Reg._clientReadyForPublicRelease == false)
+		if (__hotkeys != null)
 		{
-			if (__action_commands != null)
-			{
-				remove(__action_commands);
-				__action_commands.destroy();
-				__action_commands = null;
-			}
-			
-			__action_commands = new ActionCommands();
-			add(__action_commands);
+			remove(__hotkeys);
+			__hotkeys.destroy();
+			__hotkeys = null;
 		}
+		
+		__hotkeys = new Hotkeys();
+		add(__hotkeys);
 	}
 	
 	override public function destroy():Void
 	{
 		
-		if (__action_commands != null)
+		if (__hotkeys != null)
 		{
-			remove(__action_commands);
-			__action_commands.destroy();
-			__action_commands = null;
+			remove(__hotkeys);
+			__hotkeys.destroy();
+			__hotkeys = null;
 		}
 	
 		if (_output != null)

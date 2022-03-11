@@ -81,7 +81,7 @@ class ConfigurationGames extends FlxGroup
 		
 		var _count:Int = 0;
 		
-		for (i in 0... Reg._total_games_in_release + 1)
+		for (i in 0... Reg._total_games_in_release)
 		{
 			if (CID1._question_gameIds_time_allowed[i] == 0)
 			{
@@ -238,7 +238,7 @@ class ConfigurationGames extends FlxGroup
 		
 		#if chess
 			// chess title.
-			CID1._chess = new FlxText(15, CID1._description_game_minutes.y + 85 + ((CID1._question_gameIds_time_allowed.length + 1) * 85), 0, "Chess.");
+			CID1._chess = new FlxText(15, CID1._description_game_minutes.y + 55 + ((CID1._question_gameIds_time_allowed.length + 1) * 85), 0, "Chess.");
 			CID1._chess.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_topic_title_text_color());
 			CID1._chess.screenCenter(X);
 			CID1._chess.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
@@ -256,7 +256,7 @@ class ConfigurationGames extends FlxGroup
 			CID1._group_button.push(CID1._button_chess_opening_moves_enabled);
 			CID1._group.add(CID1._group_button[(_count + 1)]);
 			
-			CID1._question_chess_show_last_piece_moved = new TextGeneral(15, CID1._button_chess_opening_moves_enabled.height + CID1._button_chess_opening_moves_enabled.y + CID1._offset_rows_y, 800, "Show last piece moved?");
+			CID1._question_chess_show_last_piece_moved = new TextGeneral(15, CID1._button_chess_opening_moves_enabled.height + CID1._button_chess_opening_moves_enabled.y + CID1._offset_rows_y + 3, 800, "Show last piece moved?");
 			CID1._question_chess_show_last_piece_moved.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
 			CID1._question_chess_show_last_piece_moved.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 			CID1._group.add(CID1._question_chess_show_last_piece_moved);
@@ -268,7 +268,7 @@ class ConfigurationGames extends FlxGroup
 			CID1._group_button.push(CID1._button_chess_show_last_piece_moved);
 			CID1._group.add(CID1._group_button[(_count + 2)]);
 			
-			CID1._question_chess_future_capturing_units_enabled = new TextGeneral(15, CID1._button_chess_show_last_piece_moved.height +  CID1._button_chess_show_last_piece_moved.y + CID1._offset_rows_y, 800, "The future capturing units feature show upcoming attacks to the king. A chess skill level of beginner is needed for this feature to work. Enabled the future capturing units feature?", 8, true, true);
+			CID1._question_chess_future_capturing_units_enabled = new TextGeneral(15, CID1._button_chess_show_last_piece_moved.height +  CID1._button_chess_show_last_piece_moved.y + CID1._offset_rows_y + 3, 800, "The future capturing units feature show upcoming attacks to the king. A chess skill level of beginner is needed for this feature to work. Enabled the future capturing units feature?", 8, true, true);
 			CID1._question_chess_future_capturing_units_enabled.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
 			CID1._question_chess_future_capturing_units_enabled.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 			CID1._group.add(CID1._question_chess_future_capturing_units_enabled);
@@ -305,7 +305,7 @@ class ConfigurationGames extends FlxGroup
 			
 			//##############################
 			
-			CID1._question_chess_path_to_king_enabled = new TextGeneral(15, CID1._question_chess_future_capturing_units_enabled.height + CID1._question_chess_future_capturing_units_enabled.y + (CID1._offset_rows_y * 4) + 5, 800, "the path to king are units in a straight line showing where an attack on the king is coming from. Enable the path to king feature?", 8, true, true);
+			CID1._question_chess_path_to_king_enabled = new TextGeneral(15, CID1._question_chess_future_capturing_units_enabled.height + CID1._question_chess_future_capturing_units_enabled.y + CID1._offset_rows_y - 3, 800, "the path to king are units in a straight line showing where an attack on the king is coming from. Enable the path to king feature?", 8, true, true);
 			CID1._question_chess_path_to_king_enabled.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
 			CID1._question_chess_path_to_king_enabled.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 			CID1._group.add(CID1._question_chess_path_to_king_enabled);
@@ -340,7 +340,7 @@ class ConfigurationGames extends FlxGroup
 			
 			//##############################
 			
-			CID1._question_chess_set_for_player1 = new TextGeneral(15, CID1._question_chess_path_to_king_enabled.height + CID1._question_chess_path_to_king_enabled.y + (CID1._offset_rows_y * 3) + 5, 600, "Player 1 chess piece set.");
+			CID1._question_chess_set_for_player1 = new TextGeneral(15, CID1._question_chess_path_to_king_enabled.height + CID1._question_chess_path_to_king_enabled.y + CID1._offset_rows_y - 3, 600, "Player 1 chess piece set.");
 			CID1._question_chess_set_for_player1.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
 			CID1._question_chess_set_for_player1.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 			CID1._group.add(CID1._question_chess_set_for_player1);
@@ -410,7 +410,7 @@ class ConfigurationGames extends FlxGroup
 			
 			//#############################
 			
-			CID1._question_chess_set_for_player2 = new TextGeneral(15, CID1._button_chess_set_for_player1_color_plus.height + CID1._button_chess_set_for_player1_color_plus.y + CID1._offset_rows_y, 0, "Player 2 chess piece set.");
+			CID1._question_chess_set_for_player2 = new TextGeneral(15, CID1._button_chess_set_for_player1_color_plus.height + CID1._button_chess_set_for_player1_color_plus.y + CID1._offset_rows_y + 3, 0, "Player 2 chess piece set.");
 			CID1._question_chess_set_for_player2.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
 			CID1._question_chess_set_for_player2.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 			CID1._group.add(CID1._question_chess_set_for_player2);
@@ -854,7 +854,7 @@ class ConfigurationGames extends FlxGroup
 			{
 				// if mouse is on the button plus any offset made by the box scroller and mouse is pressed...
 				if (FlxG.mouse.y + ButtonGeneralNetworkNo._scrollarea_offset_y >= CID1._group_button[i]._startY &&  FlxG.mouse.y + ButtonGeneralNetworkNo._scrollarea_offset_y <= CID1._group_button[i]._startY + CID1._group_button[i]._button_height 
-				&& FlxG.mouse.x + ButtonGeneralNetworkNo._scrollarea_offset_x >= CID1._group_button[i]._startX &&  FlxG.mouse.x + ButtonGeneralNetworkNo._scrollarea_offset_x <= CID1._group_button[i]._startX + CID1._group_button[i]._button_width && FlxG.mouse.justPressed == true )
+				&& FlxG.mouse.x + ButtonGeneralNetworkNo._scrollarea_offset_x >= CID1._group_button[i]._startX &&  FlxG.mouse.x + ButtonGeneralNetworkNo._scrollarea_offset_x <= CID1._group_button[i]._startX + CID1._group_button[i]._button_width && FlxG.mouse.justReleased == true )
 				{
 					if (Reg._tn > 0)
 					{
@@ -1349,9 +1349,7 @@ class ConfigurationGames extends FlxGroup
 	override public function update(elapsed:Float):Void
 	{
 		if (FlxG.keys.pressed.ANY
-		||	FlxG.mouse.justPressed == true
-		||	FlxG.mouse.justPressedMiddle == true
-		||	FlxG.mouse.justPressedRight == true
+		||	FlxG.mouse.justReleased == true
 		|| _do_once == true)
 		{
 			_do_once = false;

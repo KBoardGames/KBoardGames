@@ -231,7 +231,6 @@ class TextGeneral extends FlxText
 			
 			drawTextFieldTo(graphic.bitmap);
 			
-			Reg._can_join_server = true;
 			_ticks = 2;
 			
 			FlxG.mouse.visible = true;

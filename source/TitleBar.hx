@@ -63,10 +63,10 @@ class TitleBar extends FlxGroup
 		_background.scrollFactor.set(0,0);
 		add(_background);
 		
-		var _offset_y:Int = 0;
+		var _offset_y:Int = -5;
 		
 		#if html5
-			_offset_y = - 10;
+			_offset_y = - 15;
 		#end
 		
 		if (_title != null) 
@@ -139,5 +139,12 @@ class TitleBar extends FlxGroup
 		}
 		
 		super.destroy();
+	}
+	
+	
+	override public function update(elapsed:Float):Void 
+	{
+		RegFunctions.sound(0);
+		super.update(elapsed);
 	}
 }

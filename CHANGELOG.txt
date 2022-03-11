@@ -1,4 +1,70 @@
-Version 1.23.13 2021-2-13
+Version 2.0.19. 2022-3-11
+
+New Features.
+		
+	Wheel Estate (Signature game) now works in offline mode.
+	
+	Can now change title icon color at configuration scene.
+	
+	Optional 1 login session per device.
+
+Feature changed.
+
+	Redone two icons at title scene.
+	
+	Changed a gradient transparency value from 80% to 20%.
+	
+	Stopped the clicking of a unit when a dialog box was displayed.
+
+	Horizontal alignment of the "Offline" text changed in value at game room.
+
+	Mobile keyboard now works with all input fields.
+
+	ActionCommands.hx class renamed to Hotkeys.hx. Many hotkeys can now be used in software release mode.
+
+	The username of the person at creating room now is shown beside lobby button.
+
+Bugs fixed.
+
+	Accessing server from port services would hang the next client trying to connect to server.
+
+	Corrupted lobby data if user logged in when already logged in. Now cannot login when a login session from that username already exists.
+
+	Fixed this error at two different locations... An exception occurred in a neko Thread. This error occurred randomly in an online game. The second player could never move piece.
+
+	The client would crash after user entered to the configuration scene when at profile 1 a username field other than the first field was selected to be used as the default login username. 
+
+	Message boxes could not be closed when starting a game in online mode.
+
+	In windows build, at configuration scene game section, a duplicate game timer option would display. The mouse could not click options underneath it.
+
+	The ESC hotkeys "return to title" and "exit client" now both work in client public release mode.
+
+	Stopped two room buttons from highlighting simultaneously at lobby when returning to lobby from waiting room.
+
+	Stopped two invite send buttons from highlighting simultaneously at waiting room when returning to waiting room from lobby.
+
+	Two variables were pointing to both creating room and waiting room when user was at game room. Hidden buttons that where still active could be triggered.
+
+	In the Wheel Estate game the HUD did not update the player's cash value. 
+
+	Fixed an issue where some buttons would not output any sound when changing scenes.
+
+	At the miscellaneous statistics scene the scrollable area could not be mouse dragged.
+
+	The daily quests scene displayed a bug when coming from the miscellaneous statistics scene.
+
+	Changing the alpha of chatter's elements now work when ALT+SPACE are pressed.
+
+	Two mouse clicks on the "fullscreen toggle" button at title scene were needed to return to a window mode when client window was maximized. Now only one mouse click is needed.
+
+	At the game room the player could not return to title scene until game was started.
+
+	At title scene the snow effect stopped working after February 21.
+
+	At the configuration scene, the player 1 username was saved as player 2 username when saving the configurations at profile player 2 section.
+
+Version 1.23.13 2022-2-13
 
 New Features.
 
@@ -60,7 +126,7 @@ Bugs fixed.
 
 	Fixed two incorrect row padding at the configuration general section.
 
-Version 1.22.2 2021-1-9
+Version 1.22.2 2022-1-9
 
 New Features.
 

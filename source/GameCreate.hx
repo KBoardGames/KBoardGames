@@ -48,9 +48,24 @@ class GameCreate extends FlxState
 	public var __number_wheel:NumberWheel;
 	private var __number_wheel_button:NumberWheelButton;
 	
+	/******************************
+	 * this is the player 1 gameboard piece such as a chess horse.
+	 */
 	public var _playerPieces1:Dynamic;
+	
+	/******************************
+	 * this is the player 2 gameboard piece.
+	 */
 	public var _playerPieces2:Dynamic;
+	
+	/******************************
+	 * this is the player 3 gameboard piece.
+	 */
 	public var _playerPieces3:Dynamic;
+	
+	/******************************
+	 * this is the player 4 gameboard piece.
+	 */
 	public var _playerPieces4:Dynamic;
 	
 	private var _gameboardBorder:FlxSprite;
@@ -249,7 +264,7 @@ class GameCreate extends FlxState
 		{
 			Reg._spectator_watching_entering_game_room_message = true;
 			
-			Reg._gameMessage = "You are a watching spectator.";
+			Reg._messageBoxNoUserInput = "You are a watching spectator.";
 			Reg._outputMessage = true;
 			
 		}
@@ -500,7 +515,8 @@ class GameCreate extends FlxState
 			_spriteGroup.add(_playerPieces1);
 			
 			// need + 1 because Reg._totalPlayersInRoom starts with 0 for the first player.
-			if (Reg._totalPlayersInRoom + 1 >= 2)
+			if (Reg._totalPlayersInRoom + 1 >= 2
+			||	Reg._game_offline_vs_player == true)
 			{
 				_y = get_piece_location_from_value_y(1);
 				_x = get_piece_location_from_value_x(1);

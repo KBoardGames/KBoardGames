@@ -354,23 +354,23 @@ class GameHistoryAndNotations extends FlxGroup
 			{
 				if (Reg._promotePieceLetter != "") _textTemp = _textTemp + Reg._promotePieceLetter; // (Q) for queen at the end of a notation.
 				if (Reg._doneEnPassant == true) _textTemp = _textTemp + "(ep)"; // En passant.
-				if (Reg._gameMessage == "Check" && Reg._chessUnitsInCheckTotal[Reg._playerMoving] != 0) _textTemp = _textTemp + "+"; // refers to check.  
-				if (Reg._gameMessage == "Checkmate" 
-				||  Reg._gameMessage == "Black piece wins." && Reg._gameId == 1
-				||  Reg._gameMessage == "While piece wins." && Reg._gameId == 1)
+				if (Reg._messageBoxNoUserInput == "Check" && Reg._chessUnitsInCheckTotal[Reg._playerMoving] != 0) _textTemp = _textTemp + "+"; // refers to check.  
+				if (Reg._messageBoxNoUserInput == "Checkmate" 
+				||  Reg._messageBoxNoUserInput == "Black piece wins." && Reg._gameId == 1
+				||  Reg._messageBoxNoUserInput == "While piece wins." && Reg._gameId == 1)
 				_textTemp = _textTemp + "++"; // refers to checkmate.
 						
 				if (Reg._gameYYnew2 > -1 )
 				{
 					if (Reg._gameXXnew2 >= 5)
 					{
-						Reg._gameMessage = "Castling"; 
+						Reg._messageBoxNoUserInput = "Castling"; 
 						Reg._outputMessage = true;
 						_textTemp = _textTemp + "(0-0)"; // castling kingside.
 					}
 					else 
 					{
-						Reg._gameMessage = "Castling";
+						Reg._messageBoxNoUserInput = "Castling";
 						Reg._outputMessage = true;
 						_textTemp = _textTemp + "(0-0-0)"; // castle queenside. 
 					}
@@ -397,7 +397,7 @@ class GameHistoryAndNotations extends FlxGroup
 		notationReset();
 				
 		_textTemp = "";
-		Reg._gameMessage = "";
+		Reg._messageBoxNoUserInput = "";
 		RegTypedef._dataGameMessage._gameMessage = "";
 	}
 	

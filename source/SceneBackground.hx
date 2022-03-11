@@ -136,8 +136,8 @@ class SceneBackground extends FlxGroup
 			_background_gradient_color.color = RegCustomColors.gradient_color();
 			_background_gradient_color.scrollFactor.set(0, 0);
 			if (RegCustom._background_alpha_enabled[Reg._tn] == true)
-			// a value of 0.25 is 75% transparency.
-			_background_gradient_color.alpha = 0.20;
+			// a value of 0.80 is 20% transparency.
+			_background_gradient_color.alpha = 0.80;
 			add(_background_gradient_color);
 		}
 		
@@ -149,10 +149,10 @@ class SceneBackground extends FlxGroup
 					_background_texture_color.destroy();
 			}
 			
-			_background_texture_color = new FlxSprite(0, 0, "assets/images/scenes/textures/" + Std.string(RegCustom._texture_background_image_number[Reg._tn]) + ".jpg"); // 44 is half of hud height.
+			_background_texture_color = new FlxSprite(0, 0, "assets/images/scenes/textures/" + Std.string(RegCustom._texture_background_image_number[Reg._tn]) + ".jpg");
 			_background_texture_color.scrollFactor.set(0, 0);
 			if (RegCustom._background_alpha_enabled[Reg._tn] == true)
-				_background_texture_color.alpha = 0.20;
+				_background_texture_color.alpha = 0.20; // note that this value is opposite of gradient.
 			add(_background_texture_color);
 		}
 	}

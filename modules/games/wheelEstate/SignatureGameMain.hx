@@ -51,7 +51,7 @@ class SignatureGameMain extends FlxState
 	private var _dontBuyLandIfCashIsLessThan:Int = 0;
 	
 	/******************************
-	* a square box where the parameter of it covers the under units.
+	* a square box where the parameter of it covers the inner units.
 	*/
 	public static var background:FlxSprite;
 	
@@ -497,11 +497,6 @@ class SignatureGameMain extends FlxState
 	public function new():Void
 	{
 		super();			
-				
-		// TODO delete...
-		//RegTypedef._dataPlayers._cash[0] = 30;
-		//RegTypedef._dataPlayers._cash[1] = 30;
-		// end of delete.			
 		
 		persistentDraw = true;
 		persistentUpdate = true;
@@ -623,11 +618,11 @@ class SignatureGameMain extends FlxState
 			Reg._gameDiceCurrentIndex[Reg._move_number_next] = 27;
 		}
 		
-		// a square box where the parameter of it covers the under units.
+		// a square box where the parameter of it covers the inner units.
 		if (background != null) remove(background);
 		background = new FlxSprite(0, (Reg._unitYgameBoardLocation[0]) + 75);
 		background.makeGraphic(450, 450, Reg._game_piece_color2[Reg._move_number_current]);
-		//background.scrollFactor.set(0, 0);	
+		background.scrollFactor.set(0, 0);	
 		background.screenCenter(X);
 		add(background);	
 		
@@ -635,8 +630,9 @@ class SignatureGameMain extends FlxState
 		if (_unitBG != null) remove(_unitBG);
 		_unitBG = new FlxSprite(0, (Reg._unitYgameBoardLocation[0]) + 100);
 		_unitBG.makeGraphic(450, 113, 0xFF002200);
-		//_unitBG.scrollFactor.set(0, 0);	
+		_unitBG.scrollFactor.set(0, 0);	
 		_unitBG.screenCenter(X);
+		_unitBG.visible = true;
 		add(_unitBG);
 		
 		// ####################### UNIT IMAGE / TITLE #######################
@@ -654,6 +650,7 @@ class SignatureGameMain extends FlxState
 		
 		// this aligns the text to the right side of the _unitBG. 
 		_unitTitle.x = (_unitBG.x + (_unitBG.width / 4)) - (_unitTitle.fieldWidth / 2);
+		_unitTitle.scrollFactor.set(0, 0);
 		add(_unitTitle);
 				
 		// an image of the unit where the player is at. Displayed in front of all background. Positioned at the header background.
@@ -668,7 +665,7 @@ class SignatureGameMain extends FlxState
 		
 		// this aligns the image to the right side of the _unitBG. 
 		_unitImage.x = _unitTitle.x + (_unitTitle.fieldWidth / 2) - (_unitImage.width / 2);
-		//_unitImage.scrollFactor.set(0, 0);	
+		_unitImage.scrollFactor.set(0, 0);	
 		add(_unitImage);
 		
 		// #################### END OF UNIT IMAGE / TITLE ####################
@@ -691,6 +688,7 @@ class SignatureGameMain extends FlxState
 		// this aligns the text to the right side of the _unitBG. 
 		_unitTitleDebt.x = (_unitBG.x + (_unitBG.width / 1.3335)) - (_unitTitleDebt.fieldWidth / 2);
 		_unitTitleDebt.visible = false;
+		_unitTitleDebt.scrollFactor.set(0, 0);
 		add(_unitTitleDebt);
 		
 		
@@ -706,7 +704,7 @@ class SignatureGameMain extends FlxState
 		
 		// this aligns the image to the right side of the _unitBG. 
 		_unitImageDebt.x = _unitTitleDebt.x + (_unitTitleDebt.fieldWidth / 2) - (_unitImageDebt.width / 2);
-		//_unitImageDebt.scrollFactor.set(0, 0);
+		_unitImageDebt.scrollFactor.set(0, 0);
 		_unitImageDebt.visible = false;
 		add(_unitImageDebt);
 		
@@ -720,14 +718,14 @@ class SignatureGameMain extends FlxState
 		if (_textGeneralMessage != null) remove(_textGeneralMessage);
 		_textGeneralMessage = new FlxText(Reg._unitXgameBoardLocation[0] + 90, Reg._unitYgameBoardLocation[0] + 230, 0, "", 20);
 		_textGeneralMessage.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.WHITE);
-		//_textGeneralMessage.scrollFactor.set(0, 0);
+		_textGeneralMessage.scrollFactor.set(0, 0);
 		_textGeneralMessage.fieldWidth = 404;
 		add(_textGeneralMessage);
 		
 		if (_textGeneralMessage2 != null) remove(_textGeneralMessage2);
 		_textGeneralMessage2 = new FlxText(Reg._unitXgameBoardLocation[0] + 90, Reg._unitYgameBoardLocation[0] + 80, 0, "", Reg._font_size);
 		_textGeneralMessage2.setFormat(Reg._fontDefault, (Reg._font_size-3), FlxColor.WHITE);
-		//_textGeneralMessage2.scrollFactor.set(0, 0);
+		_textGeneralMessage2.scrollFactor.set(0, 0);
 		_textGeneralMessage2.fieldWidth = 416;
 		add(_textGeneralMessage2);
 				
@@ -738,6 +736,7 @@ class SignatureGameMain extends FlxState
 		_buttonSellHouse.label.font = Reg._fontDefault;
 		_buttonSellHouse.visible = false;
 		_buttonSellHouse.active = false;
+		_buttonSellHouse.scrollFactor.set(0, 0);
 		add(_buttonSellHouse);
 		
 		if (_buttonBuyMortgage != null) remove(_buttonBuyMortgage);
@@ -745,6 +744,7 @@ class SignatureGameMain extends FlxState
 		_buttonBuyMortgage.label.font = Reg._fontDefault;
 		_buttonBuyMortgage.visible = false;
 		_buttonBuyMortgage.active = false;
+		_buttonBuyMortgage.scrollFactor.set(0, 0);
 		add(_buttonBuyMortgage);
 		
 		if (_buttonBuyHouseTaxiCabOrCafeStores != null)
@@ -761,7 +761,8 @@ class SignatureGameMain extends FlxState
 			else if (_p == 5 || _p == 11 || _p == 17 || _p == 22) 
 			_buttonBuyHouseTaxiCabOrCafeStores.label.text = "Buy Cafe store";			
 			else _buttonBuyHouseTaxiCabOrCafeStores.label.text = "Buy House";
-			
+		
+		_buttonBuyHouseTaxiCabOrCafeStores.scrollFactor.set(0, 0);
 		add(_buttonBuyHouseTaxiCabOrCafeStores);
 		
 		if (_tradeWith != null) remove(_tradeWith);
@@ -769,6 +770,7 @@ class SignatureGameMain extends FlxState
 		_tradeWith.label.font = Reg._fontDefault;
 		_tradeWith.visible = false;
 		_tradeWith.active = false;
+		_tradeWith.scrollFactor.set(0, 0);
 		add(_tradeWith);		
 		
 		optionsTrade();
@@ -781,11 +783,13 @@ class SignatureGameMain extends FlxState
 		_buttonGoBack.screenCenter(X);
 		_buttonGoBack.visible = false;
 		_buttonGoBack.active = false;
+		_buttonGoBack.scrollFactor.set(0, 0);
 		add(_buttonGoBack);
 		
 		_buttonEndTurnOrPayNow = new ButtonUnique(0, FlxG.height - 257, "End turn", 190, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, buttonOK);
 		_buttonEndTurnOrPayNow.label.font = Reg._fontDefault;
-		_buttonEndTurnOrPayNow.screenCenter(X);		
+		_buttonEndTurnOrPayNow.screenCenter(X);
+		_buttonEndTurnOrPayNow.scrollFactor.set(0, 0);
 		add(_buttonEndTurnOrPayNow);
 		
 		// ########################################################
@@ -798,6 +802,7 @@ class SignatureGameMain extends FlxState
 		_buttonBuyHouseTaxiCabOrCafeStore1.active = false;
 		_buttonBuyHouseTaxiCabOrCafeStore1.screenCenter(X);
 		_buttonBuyHouseTaxiCabOrCafeStore1.label.text = setHouseTaxiCabCafeStoreTextFromP(_p, "One", "", 0);
+		_buttonBuyHouseTaxiCabOrCafeStore1.scrollFactor.set(0, 0);
 		add(_buttonBuyHouseTaxiCabOrCafeStore1);
 				
 		if (_buttonBuyHouseTaxiCabOrCafeStore2 != null) remove(_buttonBuyHouseTaxiCabOrCafeStore2);
@@ -807,6 +812,7 @@ class SignatureGameMain extends FlxState
 		_buttonBuyHouseTaxiCabOrCafeStore2.active = false;
 		_buttonBuyHouseTaxiCabOrCafeStore2.screenCenter(X);
 		_buttonBuyHouseTaxiCabOrCafeStore2.label.text = setHouseTaxiCabCafeStoreTextFromP(_p, "Two", "s", 1);
+		_buttonBuyHouseTaxiCabOrCafeStore2.scrollFactor.set(0, 0);
 		add(_buttonBuyHouseTaxiCabOrCafeStore2);
 				
 		if (_buttonBuyHouseTaxiCabOrCafeStore3 != null) remove(_buttonBuyHouseTaxiCabOrCafeStore3);
@@ -816,6 +822,7 @@ class SignatureGameMain extends FlxState
 		_buttonBuyHouseTaxiCabOrCafeStore3.active = false;
 		_buttonBuyHouseTaxiCabOrCafeStore3.screenCenter(X);
 		_buttonBuyHouseTaxiCabOrCafeStore3.label.text = setHouseTaxiCabCafeStoreTextFromP(_p, "Three", "s", 2);
+		_buttonBuyHouseTaxiCabOrCafeStore3.scrollFactor.set(0, 0);
 		add(_buttonBuyHouseTaxiCabOrCafeStore3);
 		
 		if (_buttonBuyHouseTaxiCabOrCafeStore4 != null) remove(_buttonBuyHouseTaxiCabOrCafeStore4);
@@ -825,6 +832,7 @@ class SignatureGameMain extends FlxState
 		_buttonBuyHouseTaxiCabOrCafeStore4.active = false;	
 		_buttonBuyHouseTaxiCabOrCafeStore4.screenCenter(X);
 		_buttonBuyHouseTaxiCabOrCafeStore4.label.text = setHouseTaxiCabCafeStoreTextFromP(_p, "Four", "s", 3);
+		_buttonBuyHouseTaxiCabOrCafeStore4.scrollFactor.set(0, 0);
 		add(_buttonBuyHouseTaxiCabOrCafeStore4);
 		
 		var _p = Reg._gameDiceMaximumIndex[Reg._move_number_next];
@@ -923,7 +931,7 @@ class SignatureGameMain extends FlxState
 		if (background2 != null) remove(background2);
 		background2 = new FlxSprite(0, (Reg._unitYgameBoardLocation[0]) + 75);
 		background2.makeGraphic(450, 450, Reg._game_piece_color2[Reg._move_number_current]);
-		//background2.scrollFactor.set(0, 0);	
+		background2.scrollFactor.set(0, 0);	
 		background2.screenCenter(X);
 		background2.visible = false;
 		add(background2); // THIS MUST BE THE SECOND LAST IN FUNCTION.
@@ -931,7 +939,7 @@ class SignatureGameMain extends FlxState
 		if (_textGeneralMessage3 != null) remove(_textGeneralMessage3);
 		_textGeneralMessage3 = new FlxText(Reg._unitXgameBoardLocation[0] + 90, Reg._unitYgameBoardLocation[0] + 100, 0, "", 20);
 		_textGeneralMessage3.setFormat(Reg._fontDefault, 20, FlxColor.WHITE);
-		//_textGeneralMessage3.scrollFactor.set(0, 0);
+		_textGeneralMessage3.scrollFactor.set(0, 0);
 		_textGeneralMessage3.fieldWidth = 416;
 		add(_textGeneralMessage3);
 	}
@@ -944,6 +952,7 @@ class SignatureGameMain extends FlxState
 		_buttonResetTradeProposal.label.font = Reg._fontDefault;
 		_buttonResetTradeProposal.visible = false;
 		_buttonResetTradeProposal.active = false;
+		_buttonResetTradeProposal.scrollFactor.set(0, 0);
 		add(_buttonResetTradeProposal);
 		
 		if (_buttonTradeProposal != null) remove(_buttonTradeProposal);
@@ -951,12 +960,13 @@ class SignatureGameMain extends FlxState
 		_buttonTradeProposal.label.font = Reg._fontDefault;
 		_buttonTradeProposal.visible = false;
 		_buttonTradeProposal.active = false;
+		_buttonTradeProposal.scrollFactor.set(0, 0);
 		add(_buttonTradeProposal);
 		
 		if (_tradingYourBG != null) remove(_tradingYourBG);
 		_tradingYourBG = new FlxSprite(0, (Reg._unitYgameBoardLocation[0] + 130) + 35);
 		_tradingYourBG.makeGraphic(450, 107, 0xFF002222);
-		//_tradingYourBG.scrollFactor.set(0, 0);
+		_tradingYourBG.scrollFactor.set(0, 0);
 		_tradingYourBG.visible = false;
 		_tradingYourBG.screenCenter(X);
 		add(_tradingYourBG);
@@ -968,25 +978,26 @@ class SignatureGameMain extends FlxState
 		_unitYoursButton.set_toggled(false);
 		_unitYoursButton.visible = false;
 		_unitYoursButton.active = false;
+		_unitYoursButton.scrollFactor.set(0, 0);
 		add(_unitYoursButton);
 		
 		if (_unitYoursImage != null) remove(_unitYoursImage);
 		_unitYoursImage = new FlxSprite(Reg._unitXgameBoardLocation[0] + 209, (Reg._unitYgameBoardLocation[0] + 151) + 35, "modules/games/wheelEstate/assets/images/empty.png");
-		//_unitYoursImage.scrollFactor.set(0, 0);	
+		_unitYoursImage.scrollFactor.set(0, 0);	
 		add(_unitYoursImage);
 		
 		if (_unitYoursText != null) remove(_unitYoursText);
 		_unitYoursText = new FlxText(Reg._unitXgameBoardLocation[0] + 105, (Reg._unitYgameBoardLocation[0] + 140) + 48, 0, "", Reg._font_size);
 		_unitYoursText.fieldWidth = 100;
 		_unitYoursText.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.WHITE);
-		//_unitYoursText.scrollFactor.set(0, 0);
+		_unitYoursText.scrollFactor.set(0, 0);
 		_unitYoursText.visible = false;
 		add(_unitYoursText);
 		
 		if (_cashSendText != null) remove(_cashSendText);
 		_cashSendText = new FlxText(Reg._unitXgameBoardLocation[0] + 320, (Reg._unitYgameBoardLocation[0] + 135) + 70, 0, "Send", Reg._font_size);
 		_cashSendText.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.WHITE);
-		//_cashSendText.scrollFactor.set(0, 0);
+		_cashSendText.scrollFactor.set(0, 0);
 		_cashSendText.visible = false;
 		add(_cashSendText);
 				
@@ -996,6 +1007,7 @@ class SignatureGameMain extends FlxState
 		_cashMinus500YoursButton.label.bold = true;
 		_cashMinus500YoursButton.visible = false;
 		_cashMinus500YoursButton.active = false;
+		_cashMinus500YoursButton.scrollFactor.set(0, 0);
 		add(_cashMinus500YoursButton);
 		
 		if (_cashPlus500YoursButton != null) remove(_cashPlus500YoursButton);
@@ -1004,12 +1016,13 @@ class SignatureGameMain extends FlxState
 		_cashPlus500YoursButton.label.bold = true;
 		_cashPlus500YoursButton.visible = false;
 		_cashPlus500YoursButton.active = false;
+		_cashPlus500YoursButton.scrollFactor.set(0, 0);
 		add(_cashPlus500YoursButton);
 		
 		if (_cashValueYoursText != null) remove(_cashValueYoursText);
 		_cashValueYoursText = new FlxText(Reg._unitXgameBoardLocation[0] + 406, (Reg._unitYgameBoardLocation[0] + 232), 0, "$0", 20);
 		_cashValueYoursText.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.WHITE);
-		//_cashValueYoursText.scrollFactor.set(0, 0);
+		_cashValueYoursText.scrollFactor.set(0, 0);
 		_cashValueYoursText.visible = false;
 		add(_cashValueYoursText);
 		
@@ -1018,7 +1031,7 @@ class SignatureGameMain extends FlxState
 		if (_tradingOtherBG != null) remove(_tradingOtherBG);
 		_tradingOtherBG = new FlxSprite(0, (Reg._unitYgameBoardLocation[0] + 253) + 35);
 		_tradingOtherBG.makeGraphic(450, 107, 0xFF002222);
-		//_tradingOtherBG.scrollFactor.set(0, 0);	
+		_tradingOtherBG.scrollFactor.set(0, 0);	
 		_tradingOtherBG.visible = false;
 		_tradingOtherBG.screenCenter(X);
 		add(_tradingOtherBG);
@@ -1030,25 +1043,26 @@ class SignatureGameMain extends FlxState
 		_unitOthersButton.set_toggled(false);
 		_unitOthersButton.visible = false;
 		_unitOthersButton.active = false;
+		_unitOthersButton.scrollFactor.set(0, 0);
 		add(_unitOthersButton);
 		
 		if (_unitOthersImage != null) remove(_unitOthersImage);
 		_unitOthersImage = new FlxSprite(Reg._unitXgameBoardLocation[0] + 209, (Reg._unitYgameBoardLocation[0] + 274) + 35, "modules/games/wheelEstate/assets/images/empty.png");
-		//_unitOthersImage.scrollFactor.set(0, 0);	
+		_unitOthersImage.scrollFactor.set(0, 0);	
 		add(_unitOthersImage);
 		
 		if (_unitOthersText != null) remove(_unitOthersText);
 		_unitOthersText = new FlxText(Reg._unitXgameBoardLocation[0] + 105, (Reg._unitYgameBoardLocation[0] + 263) + 48, 0, "", 20);
 		_unitOthersText.fieldWidth = 100;
 		_unitOthersText.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.WHITE);
-		//_unitOthersText.scrollFactor.set(0, 0);
+		_unitOthersText.scrollFactor.set(0, 0);
 		_unitOthersText.visible = false;
 		add(_unitOthersText);
 		
 		if (_cashGetText != null) remove(_cashGetText);
 		_cashGetText = new FlxText(Reg._unitXgameBoardLocation[0] + 320, (Reg._unitYgameBoardLocation[0] + 258) + 70, 0, "Get", Reg._font_size);
 		_cashGetText.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.WHITE);
-		//_cashGetText.scrollFactor.set(0, 0);
+		_cashGetText.scrollFactor.set(0, 0);
 		_cashGetText.visible = false;
 		add(_cashGetText);
 		
@@ -1058,6 +1072,7 @@ class SignatureGameMain extends FlxState
 		_cashMinus500OthersButton.label.bold = true;
 		_cashMinus500OthersButton.visible = false;
 		_cashMinus500OthersButton.active = false;
+		_cashMinus500OthersButton.scrollFactor.set(0, 0);
 		add(_cashMinus500OthersButton);
 		
 		if (_cashPlus500OthersButton != null) remove(_cashPlus500OthersButton);
@@ -1066,12 +1081,13 @@ class SignatureGameMain extends FlxState
 		_cashPlus500OthersButton.label.bold = true;
 		_cashPlus500OthersButton.visible = false;
 		_cashPlus500OthersButton.active = false;
+		_cashPlus500OthersButton.scrollFactor.set(0, 0);
 		add(_cashPlus500OthersButton);
 		
 		if (_cashValueOthersText != null) remove(_cashValueOthersText);
 		_cashValueOthersText = new FlxText(Reg._unitXgameBoardLocation[0] + 406, (Reg._unitYgameBoardLocation[0] + 355), 0, "$0", 20);
 		_cashValueOthersText.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.WHITE);
-		//_cashValueOthersText.scrollFactor.set(0, 0);
+		_cashValueOthersText.scrollFactor.set(0, 0);
 		_cashValueOthersText.visible = false;
 		add(_cashValueOthersText);
 		
@@ -1241,7 +1257,7 @@ class SignatureGameMain extends FlxState
 	{
 		// buying land.
 		if (Reg._yesNoKeyPressValueAtMessage == 1 
-		&& Reg._buttonCodeValues == "s1000" 
+		&&	Reg._buttonCodeValues == "s1000" 
 		)
 		{
 			Reg._buttonCodeValues = "";
@@ -1265,12 +1281,12 @@ class SignatureGameMain extends FlxState
 					{
 						if (Reg._game_offline_vs_cpu == true && Reg._move_number_current == Reg._move_number_next && Reg._move_number_current > 0)
 						{
-							Reg._gameMessage = "Computer bought " + _unitTitle.text + ".";
+							Reg._messageBoxNoUserInput = "Computer bought " + _unitTitle.text + ".";
 						}
 						
 						else
 						{
-							Reg._gameMessage = "You bought " + _unitTitle.text + ".";
+							Reg._messageBoxNoUserInput = "You bought " + _unitTitle.text + ".";
 						}
 						
 						Reg._outputMessage = true;
@@ -1283,16 +1299,12 @@ class SignatureGameMain extends FlxState
 					}
 				}
 				
-				// player bought land.
-				if (Reg._game_offline_vs_cpu == true)
-				{
-					Std.string(RegTypedef._dataPlayers._cash[Reg._move_number_next] -= _unitBuyingLandPrice[_priceOfLand]);
-					
-					_textBuyLand.visible = false;
-					_textBuyLand.active = false;
-					_buttonBuyLand.visible = false;
-					_buttonBuyLand.active = false;
-				}
+				Std.string(RegTypedef._dataPlayers._cash[Reg._move_number_next] -= _unitBuyingLandPrice[_priceOfLand]);
+				
+				_textBuyLand.visible = false;
+				_textBuyLand.active = false;
+				_buttonBuyLand.visible = false;
+				_buttonBuyLand.active = false;
 				
 				// land bought if this button is false. so true then finish the buying data.
 				if (_buttonBuyLand.visible == false)
@@ -1407,7 +1419,7 @@ class SignatureGameMain extends FlxState
 				
 				Std.string(RegTypedef._dataPlayers._cash[Reg._move_number_next] = RegTypedef._dataPlayers._cash[Reg._move_number_next] + _mortgageLandPrice[Reg._move_number_next][_p] - _mortgageProcessingFee); 
 				
-				Reg._gameMessage = _unitTitleTemp + " is now mortgaged.";
+				Reg._messageBoxNoUserInput = _unitTitleTemp + " is now mortgaged.";
 				Reg._outputMessage = true;
 			}	
 			
@@ -1497,7 +1509,7 @@ class SignatureGameMain extends FlxState
 			RegTypedef._dataGameMessage._questionAnsweredAs = true;
 			
 			// send general message that a trade request has been answered.
-			Reg._gameMessage = "Trade request accepted.";
+			Reg._messageBoxNoUserInput = "Trade request accepted.";
 			
 			if (Reg._game_offline_vs_cpu == true)
 			{
@@ -1563,7 +1575,7 @@ class SignatureGameMain extends FlxState
 			RegTypedef._dataGameMessage._questionAnsweredAs = false;
 			
 			// send general message that a trade proposal has been answered.
-			Reg._gameMessage = "Trade proposal rejected.";
+			Reg._messageBoxNoUserInput = "Trade proposal rejected.";
 			
 			if (Reg._game_offline_vs_cpu == true)
 			{
@@ -1633,7 +1645,7 @@ class SignatureGameMain extends FlxState
 			else RegTriggers._tradeProposalOffer = true;
 			
 			// send general message that a trade request has been sent.
-			Reg._gameMessage = "Trade request sent to " + RegTypedef._dataGameMessage._userTo;
+			Reg._messageBoxNoUserInput = "Trade request sent to " + RegTypedef._dataGameMessage._userTo;
 			
 			if (Reg._game_offline_vs_cpu == false)
 			{				
@@ -2359,7 +2371,7 @@ class SignatureGameMain extends FlxState
 			else if (_p == 5 || _p == 11 || _p == 17 || _p == 22)	_str = "a cafe store";	
 			else _str = "a house";
 			
-			Reg._gameMessage = "You bought " + _str + " for $" + Std.int(Math.fround(_buyPriceForHouseTaxiCafe[_num][Reg._gameDiceMaximumIndex[Reg._move_number_next]]));
+			Reg._messageBoxNoUserInput = "You bought " + _str + " for $" + Std.int(Math.fround(_buyPriceForHouseTaxiCafe[_num][Reg._gameDiceMaximumIndex[Reg._move_number_next]]));
 			Reg._outputMessage = true;
 			
 			showOptionButtons();
@@ -2571,6 +2583,7 @@ class SignatureGameMain extends FlxState
 		_textBuyLand.setFormat(Reg._fontDefault, 24, FlxColor.WHITE);
 		//_textBuyLand.scrollFactor.set();
 		_textBuyLand.fieldWidth = 404;
+		_textBuyLand.scrollFactor.set(0, 0);
 		add(_textBuyLand);
 		
 		_buttonBuyLand = new ButtonUnique(0, 0, "Buy", 190, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, buyLandConfirm);
@@ -2579,6 +2592,7 @@ class SignatureGameMain extends FlxState
 		_buttonBuyLand.y += 97;
 		_buttonBuyLand.active = true;
 		_buttonBuyLand.visible = true;
+		_buttonBuyLand.scrollFactor.set(0, 0);
 		add(_buttonBuyLand);
 		
 		if (Reg._game_offline_vs_cpu == true && Reg._move_number_current > 0)
@@ -2635,6 +2649,7 @@ class SignatureGameMain extends FlxState
 			_payRent.setFormat(Reg._fontDefault, 24, FlxColor.WHITE);
 			//_payRent.scrollFactor.set();
 			_payRent.fieldWidth = 404;
+			_payRent.scrollFactor.set(0, 0);
 			add(_payRent);
 		}
 		else
@@ -2655,6 +2670,7 @@ class SignatureGameMain extends FlxState
 			_payRent.setFormat(Reg._fontDefault, 24, FlxColor.WHITE);
 			//_payRent.scrollFactor.set();
 			_payRent.fieldWidth = 404;
+			_payRent.scrollFactor.set(0, 0);
 			add(_payRent);
 		}
 	}

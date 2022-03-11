@@ -1,0 +1,1 @@
+these files are for playing against the computer. the chess files currently are broken.

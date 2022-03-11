@@ -102,10 +102,10 @@ class IDsWinLoseOrDraw extends FlxState
 				// determine if user cannot move. if _found = false then player cannot move. send message to everyone, letting them know this.
 				if (_found == false)
 				{
-					Reg._gameMessage = RegTypedef._dataPlayers._usernamesDynamic[Reg._move_number_next];
+					Reg._messageBoxNoUserInput = RegTypedef._dataPlayers._usernamesDynamic[Reg._move_number_next];
 					
-					Reg._gameMessage += " cannot move.";
-					RegTypedef._dataGameMessage._gameMessage = Reg._gameMessage;
+					Reg._messageBoxNoUserInput += " cannot move.";
+					RegTypedef._dataGameMessage._gameMessage = Reg._messageBoxNoUserInput;
 					
 					if (Reg._game_offline_vs_cpu == false 
 					&&  Reg._game_offline_vs_player == false 
@@ -190,10 +190,10 @@ class IDsWinLoseOrDraw extends FlxState
 				}
 					
 				// if count = 0 then there is no moves for that player.
-				if (Reg._chessStalemate == true && Reg._gameMessage == "")
+				if (Reg._chessStalemate == true && Reg._messageBoxNoUserInput == "")
 				{
-					Reg._gameMessage = "Draw. Stalemate.";
-					RegTypedef._dataGameMessage._gameMessage = Reg._gameMessage;
+					Reg._messageBoxNoUserInput = "Draw. Stalemate.";
+					RegTypedef._dataGameMessage._gameMessage = Reg._messageBoxNoUserInput;
 					
 					// send message to server then server to other client.
 					if (Reg._game_online_vs_cpu == true || Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false) 
@@ -435,8 +435,8 @@ class IDsWinLoseOrDraw extends FlxState
 				   _blackPawnDraw == true && _blackQueenDraw == true && _blackRookDraw == true && _blackHorseDraw == true && _blackBishopHorseDraw == true && _blackBishopsDraw == true )
 				{
 					// if here then there is not enough pieces on board for a checkmate. display the game over message to both players.
-					Reg._gameMessage = "Draw. Insufficient material";
-					RegTypedef._dataGameMessage._gameMessage = Reg._gameMessage;
+					Reg._messageBoxNoUserInput = "Draw. Insufficient material";
+					RegTypedef._dataGameMessage._gameMessage = Reg._messageBoxNoUserInput;
 					
 					// send message to server then server to other client.
 					if (Reg._game_online_vs_cpu == true || Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false) 
@@ -514,8 +514,8 @@ class IDsWinLoseOrDraw extends FlxState
 			if (_found == false)
 			{				
 				// if _found is false then no piece exists on board for player. display the game over message to both players.
-				Reg._gameMessage = "Game Over.";
-				RegTypedef._dataGameMessage._gameMessage = Reg._gameMessage;
+				Reg._messageBoxNoUserInput = "Game Over.";
+				RegTypedef._dataGameMessage._gameMessage = Reg._messageBoxNoUserInput;
 				
 				// send message to server then server to other client.
 				if (Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false) 
@@ -608,12 +608,12 @@ class IDsWinLoseOrDraw extends FlxState
 					
 					if (_piecesWhite < _piecesBlack) 
 					{
-						Reg._gameMessage = "Black piece wins."; // if message does not display then search for "Black piece wins." at PlayState.hx and add it where the message box is called to display.
+						Reg._messageBoxNoUserInput = "Black piece wins."; // if message does not display then search for "Black piece wins." at PlayState.hx and add it where the message box is called to display.
 					}
 										
 					if (_piecesWhite > _piecesBlack) 
 					{
-						Reg._gameMessage = "White piece wins.";	
+						Reg._messageBoxNoUserInput = "White piece wins.";	
 					}
 					
 					Reg._outputMessage = true;
@@ -656,8 +656,8 @@ class IDsWinLoseOrDraw extends FlxState
 				}
 				
 				// display a game over message to all players.
-				Reg._gameMessage = "Game Over.";
-				RegTypedef._dataGameMessage._gameMessage = Reg._gameMessage;
+				Reg._messageBoxNoUserInput = "Game Over.";
+				RegTypedef._dataGameMessage._gameMessage = Reg._messageBoxNoUserInput;
 								
 				if (Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false) 
 				{
@@ -761,8 +761,8 @@ class IDsWinLoseOrDraw extends FlxState
 						if (Reg._gamePointValueForPiece[Reg._gameYYold][Reg._gameXXold] == 1)  _piecesWhite2 = 1;
 						
 						// if this value is 0 then this piece cannot move.
-						if (_piecesWhite == 0) Reg._gameMessage = "White piece cannot move.";
-						else Reg._gameMessage = "Black piece cannot move.";
+						if (_piecesWhite == 0) Reg._messageBoxNoUserInput = "White piece cannot move.";
+						else Reg._messageBoxNoUserInput = "Black piece cannot move.";
 										
 						RegTriggers._win = true;
 						RegTypedef._dataTournaments._game_over = 1;
@@ -793,11 +793,11 @@ class IDsWinLoseOrDraw extends FlxState
 						//===============================
 						
 						// player cannot move message.
-						Reg._gameMessage = RegTypedef._dataPlayers._username;
-						Reg._gameMessage += " cannot move.";
+						Reg._messageBoxNoUserInput = RegTypedef._dataPlayers._username;
+						Reg._messageBoxNoUserInput += " cannot move.";
 				
 						// prepare to send message to server so that the other player can see it.
-						RegTypedef._dataGameMessage._gameMessage = Reg._gameMessage;
+						RegTypedef._dataGameMessage._gameMessage = Reg._messageBoxNoUserInput;
 						
 						PlayState.send("Game Message Not Sender", RegTypedef._dataGameMessage);		
 						
@@ -843,11 +843,11 @@ class IDsWinLoseOrDraw extends FlxState
 				}
 			}	
 			
-			Reg._gameMessage = "Game over.";
+			Reg._messageBoxNoUserInput = "Game over.";
 			
 			if (Reg._game_offline_vs_player == false && Reg._isThisPieceAtBackdoor == false)
 			{				
-				RegTypedef._dataGameMessage._gameMessage = Reg._gameMessage;
+				RegTypedef._dataGameMessage._gameMessage = Reg._messageBoxNoUserInput;
 				PlayState.send("Game Message Not Sender", RegTypedef._dataGameMessage);						
 
 				RegTypedef._dataPlayers._gameMessage = "You win.";
@@ -924,12 +924,12 @@ class IDsWinLoseOrDraw extends FlxState
 			
 			if (_canMove == false) 
 			{
-				Reg._gameMessage = "Game over.";
+				Reg._messageBoxNoUserInput = "Game over.";
 			}
 			
 			if (_canMove == false && Reg._game_offline_vs_cpu == false && Reg._isThisPieceAtBackdoor == false)
 			{				
-				RegTypedef._dataGameMessage._gameMessage = Reg._gameMessage;
+				RegTypedef._dataGameMessage._gameMessage = Reg._messageBoxNoUserInput;
 				PlayState.send("Game Message Not Sender", RegTypedef._dataGameMessage);				
 
 				RegTypedef._dataPlayers._gameMessage = "You lose.";

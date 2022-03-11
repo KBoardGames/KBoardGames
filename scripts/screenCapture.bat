@@ -1,1 +1,0 @@
-nircmdc.exe savescreenshot *clipboard* 150 150 400 400 

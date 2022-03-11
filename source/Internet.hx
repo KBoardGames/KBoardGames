@@ -140,8 +140,6 @@ class Internet extends FlxGroup
 	
 	public static function isWebsiteAvailable(?callback:Bool->Void):Bool
 	{
-
-		var _data:String = "";
 		var result:Bool;
 		
 		// any data could be in this json file. If this file is found then user is connected to the internet. This method is 10 times faster than a php request.
@@ -241,7 +239,7 @@ class Internet extends FlxGroup
 
 			_http.onError = function (_error)
 			{
-				// TODO make a message box saying that maybe not connected to internet because this function needs to connect to the website.
+				trace('error: $_error');
 			}
 			
 			_http.request(false);
@@ -260,11 +258,83 @@ class Internet extends FlxGroup
 		_http.onData = function (data:String) 
 		{
 			RegTypedef._dataAccount._hostname = data;
+			if (Reg._same_device_login_more_than_once == false) isHostnameOnline();
 		}
 
 		_http.onError = function (error) 
 		{
-		  trace('error: $error');
+			trace('error: $error');
+		
+			Reg._ip_message = true;				
+			Reg._client_socket_is_connected = false;
+			PlayState._websocket.close();
+			
+			FlxG.switchState(new MenuState());
+			return;
+		}
+
+		_http.request();
+	}
+	
+	public static function isHostnameOnline():Void
+	{
+		var _hostname = RegTypedef._dataAccount._hostname;
+		_hostname = StringTools.replace(RegTypedef._dataAccount._hostname, " ", "%20");
+		
+		_http = new haxe.Http("http://" + Reg._websiteHomeUrl + "/server/isHostnameOnline.php?token=H77Wox53m7syw6Ng&hostname=" + _hostname);
+		
+		_http.onData = function (data:String) 
+		{
+			if (data == RegTypedef._dataAccount._hostname) 
+			{
+				Reg._alreadyOnlineHost = true;				
+				FlxG.switchState(new MenuState());
+				return;
+			}
+		}
+
+		_http.onError = function (error) 
+		{
+			trace('error: $error');
+			
+			Reg._alreadyOnlineHost = true;				
+			FlxG.switchState(new MenuState());
+			return;
+			
+		}
+
+		_http.request();
+	}
+	
+	public static function isUsernameOnline():Void
+	{
+		var _username = RegTypedef._dataAccount._username;
+		_username = StringTools.replace(RegTypedef._dataAccount._username, " ", "%20");
+		
+		_http = new haxe.Http("http://" + Reg._websiteHomeUrl + "/server/isUsernameOnline.php?token=H77Wox53m7syw6Ng&user=" + _username);
+		
+		_http.onData = function (data:String) 
+		{
+			if (data != "nobody") 
+			{
+				Reg._alreadyOnlineUser = true;				
+				FlxG.switchState(new MenuState());
+				return;
+			}
+			
+			else if (data == "nobody") 
+			{
+				Reg._can_join_server = true;	
+			}
+		}
+
+		_http.onError = function (error) 
+		{
+			trace('error: $error');
+			
+			Reg._alreadyOnlineUser = true;				
+			FlxG.switchState(new MenuState());
+			return;
 		}
 
 		_http.request();
@@ -276,18 +346,29 @@ class Internet extends FlxGroup
 		var _username = RegTypedef._dataAccount._username;
 		_username = StringTools.replace(RegTypedef._dataAccount._username, " ", "%20");
 		
-		_http = new haxe.Http("http://" + Reg._websiteHomeUrl + "/server/frontDoorQueue.php?token=J39BsrUDd94mWd4Jd341&q=" + _username);
+		_http = new haxe.Http("http://" + Reg._websiteHomeUrl + "/server/frontDoorqueue.php?token=J39BsrUDd94mWd4Jd341&q=" + _username);
 		
 		_http.onData = function (data:String) 
 		{
 			PlayState._front_door_queue = Std.parseInt(data);
 			
 			if (data == null) PlayState._front_door_queue = 0;
+					
+			if (data == ""
+			||	data.substr(0, 21) == "<!DOCTYPE HTML PUBLIC")
+			{
+				Reg._front_door_queue_data = true;
+				FlxG.switchState(new MenuState());
+				return;
+			}
 		}
 
 		_http.onError = function (error) 
 		{
 			trace('error: $error');
+			Reg._front_door_queue_data = true;
+			FlxG.switchState(new MenuState());
+			return;
 		}
 
 		_http.request();
@@ -304,10 +385,14 @@ class Internet extends FlxGroup
 		{
 			RegTypedef._dataAccount._ip = data;
 		}
-
+		
 		_http.onError = function (error) 
 		{
-		  trace('error: $error');
+			trace('error: $error');
+			
+			Reg._ip_message = true;
+			FlxG.switchState(new MenuState());
+			return;
 		}
 
 		_http.request();

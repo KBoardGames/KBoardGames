@@ -342,6 +342,34 @@ class MessageBoxTradeProposal extends FlxGroup
 	override public function destroy()
 	{
 		_timeDo.stop();
+
+		if (_title != null)
+		{
+			remove(_title);
+			_title.destroy();
+			_title = null;
+		}
+		
+		if (_textMessage != null)
+		{
+			remove(_textMessage);
+			_textMessage.destroy();
+			_textMessage = null;
+		}
+		
+		if (_messageBox != null)
+		{
+			remove(_messageBox);
+			_messageBox.destroy();
+			_messageBox = null;
+		}
+		
+		if (_textTimer != null)
+		{
+			remove(_textTimer);
+			_textTimer.destroy();
+			_textTimer = null;
+		}
 		
 		if (_buttonMessageOK != null)
 		{

@@ -17,6 +17,9 @@ package;
  */
 class ActionKeyboard extends FlxGroup
 {
+	private var _background_scene:FlxSprite;
+	private var _background_behind_keyboard:FlxSprite;
+	
 	/******************************
 	 * access keyboard members here such as the letter a or the spacebar.
 	 */	
@@ -78,42 +81,48 @@ class ActionKeyboard extends FlxGroup
 		
 		Reg._at_input_keyboard = true;
 		
-		var background = new FlxSprite(394, 40 + 69);
-		background.makeGraphic(606, 600 - 75 - 69, 0xff000099);
-		background.scrollFactor.set(0, 0);
-		background.screenCenter(X);
-		add(background);
+		_background_scene = new FlxSprite();
+		_background_scene.makeGraphic(FlxG.width, FlxG.height, 0x33222222);
+		_background_scene.scrollFactor.set(0, 0);
+		add(_background_scene);
 		
-		_button1 = new ButtonGeneralNetworkYes(Reg._unitXgameBoardLocation[4] + 2, Reg._unitXgameBoardLocation[2] + 4 - 140 + 7, "FWD", 72, 62, 32, 0xFFFFFFFF, 0, buttonClicked.bind(36), 0xFF440044, false);
+		_background_behind_keyboard = new FlxSprite(394, 109);
+		_background_behind_keyboard.makeGraphic(606, 456, 0xff000099);
+		_background_behind_keyboard.scrollFactor.set(0, 0);
+		_background_behind_keyboard.screenCenter(X);
+		_background_behind_keyboard.x -= 4;
+		add(_background_behind_keyboard);
+		
+		_button1 = new ButtonGeneralNetworkYes(Reg._unitXgameBoardLocation[4] + 2, Reg._unitXgameBoardLocation[2] + 4 - 140 + 7, "FWD", 72, 62, 32, RegCustomColors.button_text_colors(), 0, buttonClicked.bind(36), RegCustomColors.button_colors(), false, 10000);
 		_button1.label.font = Reg._fontDefault;
 		add(_button1);
 		_group_button.push(_button1);
 		
-		_button2 = new ButtonGeneralNetworkYes(Reg._unitXgameBoardLocation[5] + 2, Reg._unitXgameBoardLocation[2] + 4 - 140 + 7, "BWD", 72, 62, 32, 0xFFFFFFFF, 0, buttonClicked.bind(37), 0xFF440044, false);
+		_button2 = new ButtonGeneralNetworkYes(Reg._unitXgameBoardLocation[5] + 2, Reg._unitXgameBoardLocation[2] + 4 - 140 + 7, "BWD", 72, 62, 32, RegCustomColors.button_text_colors(), 0, buttonClicked.bind(37), RegCustomColors.button_colors(), false, 10000);
 		_button2.label.font = Reg._fontDefault;
 		add(_button2);
 		_group_button.push(_button2);
 		
 		// space button.
-		_button3 = new ButtonGeneralNetworkYes(Reg._unitXgameBoardLocation[0] + 2, Reg._unitXgameBoardLocation[3] + 4 - 140 + 7, "SPACE", 298, 62, 32, 0xFFFFFFFF, 0, buttonClicked.bind(38), 0xFF440044, false);
+		_button3 = new ButtonGeneralNetworkYes(Reg._unitXgameBoardLocation[0] + 2, Reg._unitXgameBoardLocation[3] + 4 - 140 + 7, "SPACE", 298, 62, 32, RegCustomColors.button_text_colors(), 0, buttonClicked.bind(38), RegCustomColors.button_colors(), false, 10000);
 		_button3.label.font = Reg._fontDefault;
 		add(_button3);
 		_group_button.push(_button3);
 		
 		// a A ! button.
-		_button4 = new ButtonGeneralNetworkYes(Reg._unitXgameBoardLocation[6] + 2, Reg._unitXgameBoardLocation[2] + 4 - 140 + 7, "aA!", 72, 62, 32, 0xFFFFFFFF, 0, buttonClicked.bind(39), 0xFF440044, false);
+		_button4 = new ButtonGeneralNetworkYes(Reg._unitXgameBoardLocation[6] + 2, Reg._unitXgameBoardLocation[2] + 4 - 140 + 7, "aA!", 72, 62, 32, RegCustomColors.button_text_colors(), 0, buttonClicked.bind(39), RegCustomColors.button_colors(), false, 10000);
 		_button4.label.font = Reg._fontDefault;
 		add(_button4);
 		_group_button.push(_button4);
 		
 		// delete button.
-		_button5 = new ButtonGeneralNetworkYes(Reg._unitXgameBoardLocation[7] + 2, Reg._unitXgameBoardLocation[2] + 4 - 140 + 7, "DEL", 72, 62, 32, 0xFFFFFFFF, 0, buttonClicked.bind(40), 0xFF440044, false);
+		_button5 = new ButtonGeneralNetworkYes(Reg._unitXgameBoardLocation[7] + 2, Reg._unitXgameBoardLocation[2] + 4 - 140 + 7, "DEL", 72, 62, 32, RegCustomColors.button_text_colors(), 0, buttonClicked.bind(40), RegCustomColors.button_colors(), false, 10000);
 		_button5.label.font = Reg._fontDefault;
 		add(_button5);
 		_group_button.push(_button5);
 		
 		// close button.
-		_button6 = new ButtonGeneralNetworkYes(Reg._unitXgameBoardLocation[4] + 2, Reg._unitXgameBoardLocation[3] + 4 - 140 + 7, "CLOSE", 298, 62, 32, 0xFFFFFFFF, 0, buttonClicked.bind(41), 0xFF333300, false);
+		_button6 = new ButtonGeneralNetworkYes(Reg._unitXgameBoardLocation[4] + 2, Reg._unitXgameBoardLocation[3] + 4 - 140 + 7, "CLOSE", 298, 62, 32, RegCustomColors.button_text_colors(), 0, buttonClicked.bind(41), RegCustomColors.button_colors(), false, 10000);
 		_button6.label.font = Reg._fontDefault;
 		add(_button6);
 		_group_button.push(_button6);
@@ -147,8 +156,10 @@ class ActionKeyboard extends FlxGroup
 				{
 					// keyboard togglable keys such as letters, numbers and special characters.
 					//use onDownClick false because setting it to true that will break the focus of the input fields such as the username field. if setting the onDownClick to true the cursor will then be set back to the beginning at every keyboard press, so don't set it back to true.
-					_button_rows = new ButtonGeneralNetworkYes(Reg._unitXgameBoardLocation[xx]+2, Reg._unitXgameBoardLocation[yy] + 4 - 290 + 7, _keys[(i + _toggle_keys)], 72, 62, 32, 0xFFFFFFFF, 0, buttonClicked.bind(i), RegCustom._button_color[Reg._tn], false);
+					_button_rows = new ButtonGeneralNetworkYes(Reg._unitXgameBoardLocation[xx]+2, Reg._unitXgameBoardLocation[yy] + 4 - 290 + 7, _keys[(i + _toggle_keys)], 72, 62, 22, 0xFFFFFFFF, 0, buttonClicked.bind(i), RegCustom._button_color[Reg._tn], false, 10000);
 					_button_rows.label.font = Reg._fontDefault;
+					_button_rows.label.size = 36;
+					_button_rows.label.offset.y = 9;
 					add(_button_rows);
 					// add this member to _group_sprite.
 					_group_button.push(_button_rows);
@@ -186,6 +197,18 @@ class ActionKeyboard extends FlxGroup
 	
 	override public function destroy():Void
 	{
+		if (_background_scene != null)
+		{
+			remove(_background_scene);
+			_background_scene.destroy();
+		}
+		
+		if (_background_behind_keyboard != null)
+		{
+			remove(_background_behind_keyboard);
+			_background_behind_keyboard.destroy();
+		}
+		
 		_group_button.splice(0, _group_button.length);
 		
 		if (_button_rows != null)

@@ -659,8 +659,24 @@ class ChessCheckOrCheckmate extends FlxSubState
 			Reg._chessOriginOfcheckmateYYnew = Reg._gameYYnew; 
 			Reg._chessOriginOfcheckmateXXnew = Reg._gameXXnew;
 	
-			Reg._checkmate = true;				
-			doCheckmate();	
+			Reg._checkmate_break_loop = true;
+			
+			#if chess
+				//ChessMoveCPUsPiece._foundPiece = true;
+			#end
+			
+			if (Reg._chessCheckmateBypass == false)
+			{
+				Reg._checkmate = true;				
+				doCheckmate();
+			}
+			
+			else 
+			{
+				#if chess
+					//ChessFindCheckmate.populatePiecesTemporary();
+				#end
+			}
 		}
 		
 		// if defending king is in check.
@@ -676,7 +692,7 @@ class ChessCheckOrCheckmate extends FlxSubState
 				PlayState.send("Game Message Not Sender", RegTypedef._dataGameMessage);
 			} 
 			
-			Reg._gameMessage = "Check";
+			Reg._messageBoxNoUserInput = "Check";
 			Reg._outputMessage = true;	
 			//Reg2._updateNotation = true;
 			
@@ -696,7 +712,7 @@ class ChessCheckOrCheckmate extends FlxSubState
 			PlayState.send("Game Message Not Sender", RegTypedef._dataGameMessage);			
 		} 
 		
-		Reg._gameMessage = "Checkmate";
+		Reg._messageBoxNoUserInput = "Checkmate";
 		Reg._outputMessage = true;				
 		RegTriggers._chessCheckmateEvent = true;			
 				

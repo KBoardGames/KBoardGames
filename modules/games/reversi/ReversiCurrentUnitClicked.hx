@@ -168,7 +168,8 @@ class ReversiCurrentUnitClicked extends FlxSprite
 	
 	override public function update (elapsed:Float)
 	{
-		if (Reg._gameOverForPlayer == false)
+		if (Reg._gameOverForPlayer == false
+		&&	Reg._messageId == 0)
 		{
 			RegFunctions.is_player_attacker(false); // a value of false then the player hosts a game known as the defender. true, if being hosted. eg, array[Reg._playerMoving][value][yy][xx]. playerAttacker is the opposite of the defender. so if Reg._playerMoving = 0 then its the player hosting the game while Reg._playerNotMoving which has a value of 1 had accepted the game at the chatroom.	
 			

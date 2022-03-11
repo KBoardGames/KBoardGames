@@ -38,13 +38,14 @@ class SceneLobbyRoomHostUsernameText extends FlxText
 		if (Reg._at_lobby == false) return;
 		
 		// this code is needed so that it refreshes the lobby scrollable area data without new the text.
-		for (i in 0...27)
+		for (i in 0... SceneLobby._room_total)
 		{
 			var _host:String = RegTypedef._dataMisc._roomHostUsername[i];
 			
 			if (i == _id) 
 			{
-				if (_host != "")
+				if (_host != ""
+				&&	RegTypedef._dataMisc._roomPlayerCurrentTotal[i] > 0)
 				{
 					text = _host;
 				}

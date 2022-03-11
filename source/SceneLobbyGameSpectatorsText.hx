@@ -38,7 +38,7 @@ class SceneLobbyGameSpectatorsText extends FlxText
 		if (Reg._at_lobby == false) return;
 		
 		// this code is needed so that it refreshes the lobby scrollable area data without new the text.
-		for (i in 0...27)
+		for (i in 0... SceneLobby._room_total)
 		{
 			var _host:String = RegTypedef._dataMisc._roomHostUsername[i];
 			var _allow = RegTypedef._dataMisc._allowSpectators[i];
@@ -48,12 +48,14 @@ class SceneLobbyGameSpectatorsText extends FlxText
 			
 			if (i == _id ) 
 			{
-				if (_host != "") // if hosting a game.
+				if (_host != ""
+				&&	RegTypedef._dataMisc._roomState[i] != 2) // if hosting a game.
 				{
 					if (_id < 2) // computer games.
 					{
 						text = "False";
 					}
+					
 					else text = _title;
 				}
 				

@@ -17,7 +17,15 @@ package;
  */
 class NumberWheel extends FlxSprite
 {
-	private var _ticks:Float = 0; // used to delay the display of this sprite.
+	/******************************
+	 * At NumberWheelButton is used to used to determine if the NumberWheel is animating. if it is animating that the NumberWheelButton can be clicked else that button is will displayed ad gray.
+	 */
+	public static var _animation_playing:Bool = true;
+	
+	/******************************
+	 * used to delay the display of this sprite.
+	 */
+	public var _ticks:Float = 0;
 	
 	public function new(x:Float, y:Float) 
 	{
@@ -25,7 +33,7 @@ class NumberWheel extends FlxSprite
 		
 		loadGraphic("assets/images/numberWheel.png", true, 198, 198);
 
-		animation.add("run", [0, 1, 2, 3, 4, 5], 17); // faster = higher value.
+		animation.add("run", [0, 1, 2, 3, 4, 5], Reg._number_wheel_speed); // faster = higher value.
 		animation.play("run");	
 		
 	}
@@ -88,7 +96,7 @@ class NumberWheel extends FlxSprite
 				&& Reg._isThisPieceAtBackdoor == false) 
 				{
 					_ticks = RegFunctions.incrementTicks(_ticks, 60 / Reg._framerate);
-					if (_ticks > 55) // at this value the animation will start.
+					if (_ticks > 120) // at this value the animation will start.
 					{
 						_ticks = 0;
 						
@@ -99,6 +107,7 @@ class NumberWheel extends FlxSprite
 							Reg._rolledA6 = false;
 							animation.play("run");
 						}
+						
 						new FlxTimer().start(0.2, showRotator, 1);
 					}
 				}
@@ -136,6 +145,12 @@ class NumberWheel extends FlxSprite
 			}
 		}
 		
+		if (animation.paused == true) _animation_playing = false;
+		else
+		{
+			_ticks = 0;
+			_animation_playing = true;
+		}
 		
 		super.update(elapsed);
 	}

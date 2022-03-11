@@ -25,7 +25,20 @@ class Main extends Sprite
 	{
 		super();
 		
-		addChild(new FlxGame(Reg._client_width, Reg._client_height, MenuState, zoom, Reg._framerate, Reg._framerate, true, false));
+		Reg.resetRegVarsOnce();
+		
+		#if neko
+			// FlxStateSubSpecialEffects.hx will display parts of the scene underneath it when first starting the client. This is normal when window is maximixed at project.xml and this statement is set to false.
+			Lib.application.window.maximized = false;
+			
+			addChild(new FlxGame(Reg._client_width, Reg._client_height, MenuState, zoom, Reg._framerate, Reg._framerate, true, false));	
+		
+		#else
+			Lib.application.window.maximized = true;
+			
+			addChild(new FlxGame(Reg._client_width, Reg._client_height, SceneLogo, zoom, Reg._framerate, Reg._framerate, false, false));
+		
+		#end		
 	}
 	
 }

@@ -120,6 +120,25 @@ class SnakesAndLaddersImagesCapturingUnits extends FlxSprite
 				
 			if (_found == false) visible = false;
 			
+			// is this is true then both peices are at the top left corner of the screen. if true then the game either has never started or has just started. if this is true then this code hides those pieces. 
+			if (Reg._gameXXoldA == Reg._gameXXnewA
+			&&	Reg._gameYYoldA == Reg._gameYYnewA
+			&& _yID == 0
+			&& _xID == 0
+			||	Reg._gameXXoldB == Reg._gameXXnewB
+			&&	Reg._gameYYoldB == Reg._gameYYnewB
+			&& _yID == 0
+			&& _xID == 0
+			||	Reg._gameYYoldA == _yID && _yID == 0
+			&&	Reg._gameXXoldA == _xID && _xID == 0
+			&&	ID == _id && ID == 1
+			||	Reg._gameYYoldB == _yID && _yID == 0
+			&&	Reg._gameXXoldB == _xID && _xID == 0
+			&&	ID == _id && ID == 2)
+			{
+				visible = false;
+			}
+			
 			super.update(elapsed);
 		}
 	}

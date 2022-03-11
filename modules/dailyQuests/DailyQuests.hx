@@ -154,8 +154,14 @@ class DailyQuests extends FlxGroup
 		_group.add(_button);
 		
 		// a negative x value moves the scrollable area in the opposite direction.
-		if (__scrollable_area != null) FlxG.cameras.remove(__scrollable_area);
-		__scrollable_area = new FlxScrollableArea(new FlxRect( 0, 0, FlxG.width, FlxG.height-50), new FlxRect( 0, 0, FlxG.width-40, _group.height), ResizeMode.NONE, 0, 100, -1, FlxColor.LIME, null, 100, true);
+		if (__scrollable_area != null)
+		{
+			FlxG.cameras.remove(__scrollable_area);
+			__scrollable_area.destroy();
+		}
+		
+		__scrollable_area = new FlxScrollableArea( new FlxRect(0, 0, 1400, FlxG.height - 50), new FlxRect(0, 0, 1400, 1950), ResizeMode.NONE, 0, 100, -1, FlxColor.LIME, null, 100, true);
+		
 		__scrollable_area.bgColor = 0xFF000066;
 		FlxG.cameras.add( __scrollable_area );
 		__scrollable_area.antialiasing = true;

@@ -59,9 +59,6 @@ class ConfigurationProfile extends FlxGroup
 		
 		CID3._group = cast add(new FlxSpriteGroup());
 		CID3._group.members.splice(0, CID3._group.members.length);
-		CID3._group_username_input.splice(0, CID3._group_username_input.length);
-		CID3._group_password_input.splice(0, CID3._group_password_input.length);
-		CID3._group_email_address_input.splice(0, CID3._group_email_address_input.length);
 		CID3._group_button.splice(0, CID3._group_button.length);
 		CID3._group_button_toggle.splice(0, CID3._group_button_toggle.length);
 		
@@ -182,6 +179,9 @@ class ConfigurationProfile extends FlxGroup
 		CID3._group.add(CID3._group_button[0]);
 	}	
 	
+	/******************************
+	 * draws the username input text field.
+	 */
 	private function username_input():Void
 	{
 		CID3._text_username = new FlxText(60, 0, 0, "Username", Reg._font_size);
@@ -205,15 +205,21 @@ class ConfigurationProfile extends FlxGroup
 			CID3._username_input.maxLength = 13;
 			
 			// add this member to _group_sprite.			
-			CID3._group_username_input.push(CID3._username_input);
-			CID3._group_username_input[i].setPosition(60, CID3._text_username.y + 50 + (45 * i));
-			add(CID3._group_username_input[i]);
 			
-			CID3._group_username_input[i].text = RegCustom._profile_username_p1[i];
+			CID3._group_input_text_field[0].push(CID3._username_input);
+			CID3._group_input_text_field[0][i].setPosition(60, CID3._text_username.y + 50 + (45 * i));
+			add(CID3._group_input_text_field[0][i]);
+			
+			CID3._group_input_text_field[0][i].text = RegCustom._profile_username_p1[i];
 			
 		}
+		
+		CID3._group_input_text_field[0][CID3._CRN].text = RegCustom._profile_username_p1[CID3._CRN];
 	}
 	
+	/******************************
+	 * draws the password input text field.
+	 */
 	private function password_input():Void
 	{
 		CID3._text_password = new FlxText(60 + 215, 0, 0, "Password", Reg._font_size);
@@ -242,15 +248,17 @@ class ConfigurationProfile extends FlxGroup
 			CID3._password_input.caretIndex = CID3._password_input.text.length;
 			
 			// add this member to _group_sprite.			
-			CID3._group_password_input.push(CID3._password_input);
-			CID3._group_password_input[i].setPosition(60 + 215, CID3._text_password.y + 50 + (45 * i));
-			add(CID3._group_password_input[i]);
+			CID3._group_input_text_field[1].push(CID3._password_input);
+			CID3._group_input_text_field[1][i].setPosition(60 + 215, CID3._text_password.y + 50 + (45 * i));
+			add(CID3._group_input_text_field[1][i]);
 			
-			CID3._group_password_input[i].text = RegCustom._profile_password_p1[i];
+			CID3._group_input_text_field[1][i].text = RegCustom._profile_password_p1[i];
 		}
 	}
 	
-	
+	/******************************
+	 * draws the email address input text field.
+	 */
 	private function email_address_input():Void
 	{
 		CID3._text_email_address = new FlxText(60 + (215 * 3), 0, 0, "Email Address", Reg._font_size);
@@ -273,11 +281,11 @@ class ConfigurationProfile extends FlxGroup
 			CID3._email_address_input.caretIndex = CID3._email_address_input.text.length;
 			
 			// add this member to _group_sprite.			
-			CID3._group_email_address_input.push(CID3._email_address_input);
-			CID3._group_email_address_input[i].setPosition(CID3._text_email_address.x, CID3._text_email_address.y + 50 + (45 * i));
-			add(CID3._group_email_address_input[i]);
+			CID3._group_input_text_field[2].push(CID3._email_address_input);
+			CID3._group_input_text_field[2][i].setPosition(CID3._text_email_address.x, CID3._text_email_address.y + 50 + (45 * i));
+			add(CID3._group_input_text_field[2][i]);
 			
-			CID3._group_email_address_input[i].text = RegCustom._profile_email_address_p1[i];
+			CID3._group_input_text_field[2][i].text = RegCustom._profile_email_address_p1[i];
 		}
 	}
 	
@@ -303,134 +311,123 @@ class ConfigurationProfile extends FlxGroup
 	private function button_toggle_number(_num:Int):Void
 	{
 		#if username_suggestions
-			switch (_num)
+			if (Usernames._button_username_suggestions[_num].label.text != null && Usernames._button_username_suggestions[_num].label.text != "")
 			{
-				case 0: CID3._group_username_input[CID3._CRN].text = Usernames._button_username_suggestions[0].label.text;
-				case 1: CID3._group_username_input[CID3._CRN].text = Usernames._button_username_suggestions[1].label.text;
-				case 2: CID3._group_username_input[CID3._CRN].text = Usernames._button_username_suggestions[2].label.text;
-				case 3: CID3._group_username_input[CID3._CRN].text = Usernames._button_username_suggestions[3].label.text;
-				case 4: CID3._group_username_input[CID3._CRN].text = Usernames._button_username_suggestions[4].label.text;
-				case 5: CID3._group_username_input[CID3._CRN].text = Usernames._button_username_suggestions[5].label.text;
-				case 6: CID3._group_username_input[CID3._CRN].text = Usernames._button_username_suggestions[6].label.text;
-				case 7: CID3._group_username_input[CID3._CRN].text = Usernames._button_username_suggestions[7].label.text;
-				case 8: CID3._group_username_input[CID3._CRN].text = Usernames._button_username_suggestions[8].label.text;
-				case 9: CID3._group_username_input[CID3._CRN].text = Usernames._button_username_suggestions[9].label.text;
-				case 10: CID3._group_username_input[CID3._CRN].text = Usernames._button_username_suggestions[10].label.text;
-				case 11: CID3._group_username_input[CID3._CRN].text = Usernames._button_username_suggestions[11].label.text;
-				case 12: CID3._group_username_input[CID3._CRN].text = Usernames._button_username_suggestions[12].label.text;
-				case 13: CID3._group_username_input[CID3._CRN].text = Usernames._button_username_suggestions[13].label.text;
-				case 14: CID3._group_username_input[CID3._CRN].text = Usernames._button_username_suggestions[14].label.text;
-				case 15: CID3._group_username_input[CID3._CRN].text = Usernames._button_username_suggestions[15].label.text;
-				case 16: CID3._group_username_input[CID3._CRN].text = Usernames._button_username_suggestions[16].label.text;
-				case 17: CID3._group_username_input[CID3._CRN].text = Usernames._button_username_suggestions[17].label.text;
+				CID3._group_input_text_field[0][CID3._CRN].text = Usernames._button_username_suggestions[_num].label.text;
+				
+				Usernames.repopulate_username_suggestions();
+				CID3._username_input.caretIndex = CID3._username_input.text.length;
 			}
-			
-			Usernames.repopulate_username_suggestions();
-			CID3._username_input.caretIndex = CID3._username_input.text.length;
 		#end
 	}
 	
 	private function keyboard_pressed():Void
 	{
-		// if input field was in focus and a keyboard key was pressed...
-		if (Reg2._input_field_number == 1
-		&& Reg2._key_output != "")
+		for (i in 0...3)
 		{
-			CID3._username_input.hasFocus = true; // set the field back to focus.
-			
-			if (Reg2._key_output == "FORWARDS")
+			if (CID3._group_input_text_field[i][CID3._CRN].fieldBorderColor == FlxColor.BLUE)
 			{
-				if (CID3._caretIndex > 0) 
+				// if input field was in focus and a keyboard key was pressed...
+				if (Reg2._key_output != "")
 				{
-					CID3._caretIndex -= 1;
-					CID3._username_input.caretIndex = CID3._caretIndex;
-				}
-				
-				else CID3._username_input.caretIndex = 0;
-			}
-			
-			else if (Reg2._key_output == "BACKWARDS")
-			{
-				if (CID3._caretIndex < CID3._username_input.text.length) 
-				{
-					CID3._caretIndex += 1;
-					CID3._username_input.caretIndex = CID3._caretIndex;
-				}
-				
-				else CID3._username_input.caretIndex = CID3._username_input.text.length;
-			}
-			
-			else if (Reg2._key_output == "DELETE")
-			{
-				CID3._username_input.caretIndex = Reg2._input_field_caret_location; // since the field is once again in focus, we need to update the caret.
-				
-				// get from start of text to cursor.
-				var _str_start = CID3._username_input.text.substr(0, CID3._username_input.caretIndex);
-				
-				// and the end.
-				var _str_end = CID3._username_input.text.substr(_str_start.length, CID3._username_input.text.length);
-				
-				// then delete one character at the cursor.
-				CID3._username_input.text = _str_start.substr(0, _str_start.length - 1) + _str_end;
-				
-				// this is needed because we are removing a character therefore the position of the caret should change.
-				if (CID3._username_input.caretIndex > 0) 
-				{
-					CID3._username_input.caretIndex -= 1;
-					CID3._caretIndex -= 1;
-				}
-			}
-			
-			else // add a letter.
-			{
-				#if username_suggestions
-					Usernames.repopulate_username_suggestions();
-				#end
-				
-				// if cursor is at the end of the line.
-				if (CID3._username_input.text.length-1 == CID3._username_input.caretIndex)
-				{
-					CID3._username_input.caretIndex = Reg2._input_field_caret_location; // since the field is once again in focus, we need to update the caret.
+					CID3._group_input_text_field[i][CID3._CRN].hasFocus = true; // set the field back to focus.
 					
-					if (Reg2._key_output == "SPACE") CID3._username_input.text += " ";
-					else CID3._username_input.text += Reg2._key_output;
-				}
-				
-				else
-				{
-					CID3._username_input.caretIndex = Reg2._input_field_caret_location; // since the field is once again in focus, we need to update the caret.
-					// get from start of text to cursor.
-					var _str_start = CID3._username_input.text.substr(0, CID3._username_input.caretIndex);
-					// and the end.
-					var _str_end = CID3._username_input.text.substr(CID3._username_input.caretIndex, CID3._username_input.text.length);
-					
-					// output the text of the input field from the value set with the keyboard.
-					if (Reg2._key_output == "SPACE")
+					if (Reg2._key_output == "FORWARDS")
 					{
-						CID3._username_input.caretIndex = Reg2._input_field_caret_location; // since the field is once again in focus, we need to update the caret.
+						if (CID3._caretIndex[0] > 0) 
+						{
+							CID3._caretIndex[0] -= 1;
+							CID3._group_input_text_field[i][CID3._CRN].caretIndex = CID3._caretIndex[0];
+						}
 						
-						CID3._username_input.text = _str_start + " " + _str_end;
-					
-						// this is needed because we are removing a character therefore the position of the caret should change.
-						CID3._username_input.caretIndex += 1;
+						else CID3._group_input_text_field[i][CID3._CRN].caretIndex = 0;
 					}
-									
-					else 
+					
+					else if (Reg2._key_output == "BACKWARDS")
 					{
-						CID3._username_input.caretIndex = Reg2._input_field_caret_location; // since the field is once again in focus, we need to update the caret.
+						if (CID3._caretIndex[0] < CID3._group_input_text_field[i][CID3._CRN].text.length) 
+						{
+							CID3._caretIndex[0] += 1;
+							CID3._group_input_text_field[i][CID3._CRN].caretIndex = CID3._caretIndex[0];
+						}
 						
-						// at one character at cursor.
-						CID3._username_input.text = _str_start + Reg2._key_output + _str_end;
+						else CID3._group_input_text_field[i][CID3._CRN].caretIndex = CID3._group_input_text_field[i][CID3._CRN].text.length;
+					}
+					
+					else if (Reg2._key_output == "DELETE")
+					{
+						CID3._group_input_text_field[i][CID3._CRN].caretIndex = Reg2._input_field_caret_location; // since the field is once again in focus, we need to update the caret.
+						
+						// get from start of text to cursor.
+						var _str_start = CID3._group_input_text_field[i][CID3._CRN].text.substr(0, CID3._group_input_text_field[i][CID3._CRN].caretIndex);
+						
+						// and the end.
+						var _str_end = CID3._group_input_text_field[i][CID3._CRN].text.substr(_str_start.length, CID3._group_input_text_field[i][CID3._CRN].text.length);
+						
+						// then delete one character at the cursor.
+						CID3._group_input_text_field[i][CID3._CRN].text = _str_start.substr(0, _str_start.length - 1) + _str_end;
+						
 						// this is needed because we are removing a character therefore the position of the caret should change.
-						CID3._username_input.caretIndex += 1;
-						CID3._caretIndex += 1;
-					}					
-				}				
-				
+						if (CID3._group_input_text_field[i][CID3._CRN].caretIndex > 0) 
+						{
+							CID3._group_input_text_field[i][CID3._CRN].caretIndex -= 1;
+							CID3._caretIndex[0] -= 1;
+						}
+					}
+					
+					else // add a letter.
+					{
+						#if username_suggestions
+							Usernames.repopulate_username_suggestions();
+						#end
+						
+						// if cursor is at the end of the line.
+						if (CID3._group_input_text_field[i][CID3._CRN].text.length-1 == CID3._group_input_text_field[i][CID3._CRN].caretIndex)
+						{
+							CID3._group_input_text_field[i][CID3._CRN].caretIndex = Reg2._input_field_caret_location; // since the field is once again in focus, we need to update the caret.
+							
+							if (Reg2._key_output == "SPACE") CID3._group_input_text_field[i][CID3._CRN].text += " ";
+							else CID3._group_input_text_field[i][CID3._CRN].text += Reg2._key_output;
+						}
+						
+						else
+						{
+							CID3._group_input_text_field[i][CID3._CRN].caretIndex = Reg2._input_field_caret_location; // since the field is once again in focus, we need to update the caret.
+							// get from start of text to cursor.
+							var _str_start = CID3._group_input_text_field[i][CID3._CRN].text.substr(0, CID3._group_input_text_field[i][CID3._CRN].caretIndex);
+							// and the end.
+							var _str_end = CID3._group_input_text_field[i][CID3._CRN].text.substr(CID3._group_input_text_field[i][CID3._CRN].caretIndex, CID3._group_input_text_field[i][CID3._CRN].text.length);
+							
+							// output the text of the input field from the value set with the keyboard.
+							if (Reg2._key_output == "SPACE")
+							{
+								CID3._group_input_text_field[i][CID3._CRN].caretIndex = Reg2._input_field_caret_location; // since the field is once again in focus, we need to update the caret.
+								
+								CID3._group_input_text_field[i][CID3._CRN].text = _str_start + " " + _str_end;
+							
+								// this is needed because we are removing a character therefore the position of the caret should change.
+								CID3._group_input_text_field[i][CID3._CRN].caretIndex += 1;
+							}
+							
+							else 
+							{
+								CID3._group_input_text_field[i][CID3._CRN].caretIndex = Reg2._input_field_caret_location; // since the field is once again in focus, we need to update the caret.
+								
+								// at one character at cursor.
+								CID3._group_input_text_field[i][CID3._CRN].text = _str_start + Reg2._key_output + _str_end;
+								// this is needed because we are removing a character therefore the position of the caret should change.
+								CID3._group_input_text_field[i][CID3._CRN].caretIndex += 1;
+								CID3._caretIndex[0] += 1;
+							}					
+						}				
+						
+					}
+					
+					Reg2._key_output = "";
+				}
 			}
-			
-			Reg2._key_output = "";
 		}
+		
 	}
 	
 	private function user_input():Void
@@ -440,66 +437,66 @@ class ConfigurationProfile extends FlxGroup
 			if (CID3._CRN == i
 			||	CID3._button_p2.has_toggle == true)
 			{
-				CID3._group_username_input[i].backgroundColor = FlxColor.WHITE;
-				if (CID3._group_username_input[i].fieldBorderColor == FlxColor.BLUE)
-					CID3._group_username_input[i].hasFocus = true;
-				else if (CID3._group_username_input[i].hasFocus == true)
+				CID3._group_input_text_field[0][i].backgroundColor = FlxColor.WHITE;
+				if (CID3._group_input_text_field[0][i].fieldBorderColor == FlxColor.BLUE)
+					CID3._group_input_text_field[0][i].hasFocus = true;
+				else if (CID3._group_input_text_field[0][i].hasFocus == true)
 				{
-					CID3._group_password_input[i].fieldBorderColor = FlxColor.BLACK;
-					CID3._group_email_address_input[i].fieldBorderColor = FlxColor.BLACK;
+					CID3._group_input_text_field[1][i].fieldBorderColor = FlxColor.BLACK;
+					CID3._group_input_text_field[2][i].fieldBorderColor = FlxColor.BLACK;
 				}
 				
-				CID3._sprite_user_account.y = CID3._group_username_input[i].y + 6;
+				CID3._sprite_user_account.y = CID3._group_input_text_field[0][i].y + 6;
 			}
 			
 			else 
 			{
-				CID3._group_username_input[i].hasFocus = false;
-				CID3._group_username_input[i].backgroundColor = FlxColor.GRAY;
-				CID3._group_username_input[i].fieldBorderColor = FlxColor.BLACK;
-				CID3._group_username_input[i].fieldBorderThickness = 1;	
+				CID3._group_input_text_field[0][i].hasFocus = false;
+				CID3._group_input_text_field[0][i].backgroundColor = FlxColor.GRAY;
+				CID3._group_input_text_field[0][i].fieldBorderColor = FlxColor.BLACK;
+				CID3._group_input_text_field[0][i].fieldBorderThickness = 1;	
 			}
 			
 			if (CID3._CRN == i
 			||	CID3._button_p2.has_toggle == true)
 			{
-				CID3._group_password_input[i].backgroundColor = FlxColor.WHITE;
-				if (CID3._group_password_input[i].fieldBorderColor == FlxColor.BLUE)
-					CID3._group_password_input[i].hasFocus = true;
-				else if (CID3._group_password_input[i].hasFocus == true)
+				CID3._group_input_text_field[1][i].backgroundColor = FlxColor.WHITE;
+				if (CID3._group_input_text_field[1][i].fieldBorderColor == FlxColor.BLUE)
+					CID3._group_input_text_field[1][i].hasFocus = true;
+				else if (CID3._group_input_text_field[1][i].hasFocus == true)
 				{
-					CID3._group_username_input[i].fieldBorderColor = FlxColor.BLACK;
-					CID3._group_email_address_input[i].fieldBorderColor = FlxColor.BLACK;
+					CID3._group_input_text_field[0][i].fieldBorderColor = FlxColor.BLACK;
+					CID3._group_input_text_field[2][i].fieldBorderColor = FlxColor.BLACK;
 				}
 			}
 			
 			else 
 			{
-				CID3._group_password_input[i].hasFocus = false;
-				CID3._group_password_input[i].backgroundColor = FlxColor.GRAY;
-				CID3._group_password_input[i].fieldBorderColor = FlxColor.BLACK;
-				CID3._group_password_input[i].fieldBorderThickness = 1;
+				CID3._group_input_text_field[1][i].hasFocus = false;
+				CID3._group_input_text_field[1][i].backgroundColor = FlxColor.GRAY;
+				CID3._group_input_text_field[1][i].fieldBorderColor = FlxColor.BLACK;
+				CID3._group_input_text_field[1][i].fieldBorderThickness = 1;
 			}
 			
 			if (CID3._CRN == i
 			||	CID3._button_p2.has_toggle == true)
 			{
-				CID3._group_email_address_input[i].backgroundColor = FlxColor.WHITE;
-				if (CID3._group_email_address_input[i].fieldBorderColor == FlxColor.BLUE)
-					CID3._group_email_address_input[i].hasFocus = true;
-				else if (CID3._group_email_address_input[i].hasFocus == true)
+				CID3._group_input_text_field[2][i].backgroundColor = FlxColor.WHITE;
+				if (CID3._group_input_text_field[2][i].fieldBorderColor == FlxColor.BLUE)
+					CID3._group_input_text_field[2][i].hasFocus = true;
+				else if (CID3._group_input_text_field[2][i].hasFocus == true)
 				{
-					CID3._group_password_input[i].fieldBorderColor = FlxColor.BLACK;
-					CID3._group_username_input[i].fieldBorderColor = FlxColor.BLACK;
+					CID3._group_input_text_field[1][i].fieldBorderColor = FlxColor.BLACK;
+					CID3._group_input_text_field[0][i].fieldBorderColor = FlxColor.BLACK;
 				}
 			}
 			
 			else 
 			{
-				CID3._group_email_address_input[i].hasFocus = false;
-				CID3._group_email_address_input[i].backgroundColor = FlxColor.GRAY;
-				CID3._group_email_address_input[i].fieldBorderColor = FlxColor.BLACK;
-				CID3._group_email_address_input[i].fieldBorderThickness = 1;	
+				CID3._group_input_text_field[2][i].hasFocus = false;
+				CID3._group_input_text_field[2][i].backgroundColor = FlxColor.GRAY;
+				CID3._group_input_text_field[2][i].fieldBorderColor = FlxColor.BLACK;
+				CID3._group_input_text_field[2][i].fieldBorderThickness = 1;	
 			}
 			
 			// if keyboard is open then set some stuff as not active.
@@ -507,14 +504,14 @@ class ConfigurationProfile extends FlxGroup
 			&&	CID3._group.active == true
 			||	RegTriggers._keyboard_opened == true
 			&&	Reg2._input_field_number == 1
-			&&	CID3._group_username_input[i].active == false)
+			&&	CID3._group_input_text_field[0][i].active == false)
 			{
 				CID3._group.active = false;
 				
 				// username field was clicked.
 				if (Reg2._input_field_number == 1)
 				{
-					CID3._group_username_input[i].active = true;
+					CID3._group_input_text_field[0][i].active = true;
 				}			
 			}
 			
@@ -562,12 +559,9 @@ class ConfigurationProfile extends FlxGroup
 							
 							Avatars._image_avatar_highlighted.visible = true;
 							
-							if (ActionInput.justPressed() == true)
+							if (ActionInput.justReleased() == true
+							&&	Reg._at_input_keyboard == false)
 							{
-								if (RegCustom._sound_enabled[Reg._tn] == true
-								&&  Reg2._scrollable_area_is_scrolling == false)
-									FlxG.sound.play("click", 1, false);
-								
 								if (CID3._button_p1.has_toggle == true)
 									RegCustom._profile_avatar_number1[Reg._tn] = Std.string(i) + ".png";
 								else 
@@ -603,12 +597,9 @@ class ConfigurationProfile extends FlxGroup
 							if (_ticks <= 5) WorldFlags._group_flag_highlight_sprite[i].color = FlxColor.WHITE;
 							if (_ticks >= 10)  WorldFlags._group_flag_highlight_sprite[i].color = FlxColor.PURPLE;
 							
-							if (ActionInput.justPressed() == true)
+							if (ActionInput.justReleased() == true
+							&&	Reg._at_input_keyboard == false)
 							{
-								if (RegCustom._sound_enabled[Reg._tn] == true
-								&&  Reg2._scrollable_area_is_scrolling == false)
-									FlxG.sound.play("click", 1, false);
-								
 								RegCustom._world_flags_number[Reg._tn] = i;
 									
 								WorldFlags._image_selected_world_flag.loadGraphic("modules/worldFlags/assets/images/" + WorldFlags._flags_abbv[RegCustom._world_flags_number[Reg._tn]].toLowerCase() + ".png");
@@ -633,25 +624,17 @@ class ConfigurationProfile extends FlxGroup
 		{
 			if (CID3._CRN == i)
 			{
-				if (CID3._group_username_input[i].hasFocus == true) 
+				for (ii in 0... 3)
 				{
-					if (CID3._group_username_input[i].text == "") CID3._group_username_input[i].caretIndex = 0;
-					
-					// these are needed so that the input field can be set back to focused after a keyboard button press.
-					Reg2._input_field_caret_location = CID3._group_username_input[i].caretIndex;
-					Reg2._input_field_number = 1;
-				}
-				
-				// password input field.
-				if (CID3._group_password_input[i].hasFocus == true) 
-				{
-					if (CID3._group_password_input[i].text == "") CID3._group_password_input[i].caretIndex = 0;
-				}
-				
-				// email address input field.
-				if (CID3._group_email_address_input[i].hasFocus == true) 
-				{
-					if (CID3._group_email_address_input[i].text == "") CID3._group_email_address_input[i].caretIndex = 0;
+					if (CID3._group_input_text_field[ii][i].hasFocus == true) 
+					{
+						if (CID3._group_input_text_field[ii][i].text == "")
+							CID3._group_input_text_field[ii][i].caretIndex = 0;
+						
+						// these are needed so that the input field can be set back to focused after a keyboard button press.
+						Reg2._input_field_caret_location = CID3._group_input_text_field[ii][i].caretIndex;
+						Reg2._input_field_number = 1;
+					}
 				}
 			}
 		}
@@ -663,36 +646,32 @@ class ConfigurationProfile extends FlxGroup
 			RegTriggers._keyboard_open = false;
 			RegTriggers._keyboard_opened = true;
 
-			#if mobile
-				if (__action_keyboard != null)
-				{
-					__action_keyboard.close();
-					remove(__action_keyboard);
-					__action_keyboard = null;
-				}
-				
-				if (__action_keyboard == null)
-				{
-					__action_keyboard = new ActionKeyboard();
-					add(__action_keyboard);
-				}
-				
-				__action_keyboard.drawButtons();
-			#end
+			if (__action_keyboard != null)
+			{
+				__action_keyboard.close();
+				remove(__action_keyboard);
+				__action_keyboard = null;
+			}
+			
+			if (__action_keyboard == null)
+			{
+				__action_keyboard = new ActionKeyboard();
+				add(__action_keyboard);
+			}
+			
+			__action_keyboard.drawButtons();
 		}
 		
 		if (RegTriggers._keyboard_close == true)
 		{
 			RegTriggers._keyboard_close = false;
 
-			#if mobile
-				if (__action_keyboard != null) 
-				{
-					__action_keyboard.close();
-					remove(__action_keyboard);
-					__action_keyboard = null;
-				}
-			#end
+			if (__action_keyboard != null) 
+			{
+				__action_keyboard.close();
+				remove(__action_keyboard);
+				__action_keyboard = null;
+			}
 		}
 		
 		//------------------------------
@@ -702,16 +681,16 @@ class ConfigurationProfile extends FlxGroup
 			{
 				if (CID3._button_p1.has_toggle == true
 				&&	RegCustom._profile_username_p1[CID3._CRN] 
-				!=	CID3._group_username_input[i].text) 
+				!=	CID3._group_input_text_field[0][i].text) 
 				{
-					RegCustom._profile_username_p1[CID3._CRN] = CID3._group_username_input[i].text;			
+					RegCustom._profile_username_p1[CID3._CRN] = CID3._group_input_text_field[0][i].text;			
 				}
 				
 				if (CID3._button_p2.has_toggle == true
 				&&	RegCustom._profile_username_p2 
-				!=	CID3._group_username_input[i].text) 
+				!=	CID3._group_input_text_field[0][i].text) 
 				{
-					RegCustom._profile_username_p2 = CID3._group_username_input[i].text;
+					RegCustom._profile_username_p2 = CID3._group_input_text_field[0][i].text;
 				}
 			}
 		}
@@ -722,7 +701,8 @@ class ConfigurationProfile extends FlxGroup
 			{
 				// if mouse is on the text plus any offset made by the box scroller and mouse is pressed...
 				if (FlxG.mouse.y + ButtonGeneralNetworkNo._scrollarea_offset_y >= CID3._group_button_toggle[i]._startY &&  FlxG.mouse.y + ButtonGeneralNetworkNo._scrollarea_offset_y <= CID3._group_button_toggle[i]._startY + CID3._group_button_toggle[i]._button_height 
-				&& FlxG.mouse.x + ButtonGeneralNetworkNo._scrollarea_offset_x >= CID3._group_button_toggle[i]._startX &&  FlxG.mouse.x + ButtonGeneralNetworkNo._scrollarea_offset_x <= CID3._group_button_toggle[i]._startX + CID3._group_button_toggle[i]._button_width && FlxG.mouse.justPressed == true )
+				&& FlxG.mouse.x + ButtonGeneralNetworkNo._scrollarea_offset_x >= CID3._group_button_toggle[i]._startX &&  FlxG.mouse.x + ButtonGeneralNetworkNo._scrollarea_offset_x <= CID3._group_button_toggle[i]._startX + CID3._group_button_toggle[i]._button_width && FlxG.mouse.justReleased == true
+				&&	Reg._at_input_keyboard == false)
 				{
 					button_toggle_number(i);
 					break;
@@ -734,7 +714,8 @@ class ConfigurationProfile extends FlxGroup
 			{
 				// if mouse is on the text plus any offset made by the box scroller and mouse is pressed...
 				if (FlxG.mouse.y + ButtonGeneralNetworkNo._scrollarea_offset_y >= CID3._group_button[i]._startY &&  FlxG.mouse.y + ButtonGeneralNetworkNo._scrollarea_offset_y <= CID3._group_button[i]._startY + CID3._group_button[i]._button_height 
-				&& FlxG.mouse.x + ButtonGeneralNetworkNo._scrollarea_offset_x >= CID3._group_button[i]._startX &&  FlxG.mouse.x + ButtonGeneralNetworkNo._scrollarea_offset_x <= CID3._group_button[i]._startX + CID3._group_button[i]._button_width && FlxG.mouse.justPressed == true )
+				&& FlxG.mouse.x + ButtonGeneralNetworkNo._scrollarea_offset_x >= CID3._group_button[i]._startX &&  FlxG.mouse.x + ButtonGeneralNetworkNo._scrollarea_offset_x <= CID3._group_button[i]._startX + CID3._group_button[i]._button_width && FlxG.mouse.justReleased == true 
+				&&	Reg._at_input_keyboard == false)
 				{
 					button_number(i);
 					break;
@@ -745,103 +726,84 @@ class ConfigurationProfile extends FlxGroup
 		
 		for (i in 0... CID3._user_account_row)
 		{
-			if (ActionInput.justPressed() == true
-			&&  FlxG.mouse.x > CID3._group_username_input[i].x
-			&&  FlxG.mouse.x < CID3._group_username_input[i].x + CID3._group_username_input[i].width
-			&&  FlxG.mouse.y + __configurations_output.__scrollable_area.scroll.y > CID3._group_username_input[i].y
-			&&  FlxG.mouse.y + __configurations_output.__scrollable_area.scroll.y < CID3._group_username_input[i].y + CID3._group_username_input[i].height
-			&&  FlxG.mouse.y < FlxG.height - 50)
+			if (FlxG.mouse.x > CID3._group_input_text_field[0][i].x
+			&&  FlxG.mouse.x < CID3._group_input_text_field[0][i].x + CID3._group_input_text_field[0][i].width
+			&&  FlxG.mouse.y + __configurations_output.__scrollable_area.scroll.y > CID3._group_input_text_field[0][i].y
+			&&  FlxG.mouse.y + __configurations_output.__scrollable_area.scroll.y < CID3._group_input_text_field[0][i].y + CID3._group_input_text_field[0][i].height
+			&&  FlxG.mouse.y < FlxG.height - 50
+			&&	ActionInput.justReleased() == true
+			&&	Reg._at_input_keyboard == false)
 			{
-				CID3._group_username_input[i].hasFocus = true;
-				CID3._group_username_input[i].fieldBorderColor = FlxColor.BLUE;	
-				CID3._group_username_input[i].fieldBorderThickness = 3;
+				CID3._group_input_text_field[0][i].hasFocus = true;
+				CID3._group_input_text_field[0][i].fieldBorderColor = FlxColor.BLUE;	
+				CID3._group_input_text_field[0][i].fieldBorderThickness = 3;
 				
-				CID3._group_password_input[i].hasFocus = false;
-				CID3._group_email_address_input[i].hasFocus = false;
+				CID3._group_input_text_field[1][i].hasFocus = false;
+				CID3._group_input_text_field[2][i].hasFocus = false;
 				
-				CID3._group_password_input[i].fieldBorderColor = FlxColor.BLACK;
-				CID3._group_email_address_input[i].fieldBorderColor = FlxColor.BLACK;
+				CID3._group_input_text_field[1][i].fieldBorderColor = FlxColor.BLACK;
+				CID3._group_input_text_field[2][i].fieldBorderColor = FlxColor.BLACK;
 				
-				CID3._group_password_input[i].fieldBorderThickness = 1;
-				CID3._group_email_address_input[i].fieldBorderThickness = 1;
-				
-				if (RegCustom._sound_enabled[Reg._tn] == true
-				&&  Reg2._scrollable_area_is_scrolling == false)
-					FlxG.sound.play("click", 1, false);
-				
-				#if mobile
-					RegTriggers._keyboard_open = true;
-				#end
+				CID3._group_input_text_field[1][i].fieldBorderThickness = 1;
+				CID3._group_input_text_field[2][i].fieldBorderThickness = 1;
+				RegTriggers._keyboard_open = true;
 				
 				CID3._CRN = i;
 			}
 			
-			if (ActionInput.justPressed() == true
-			&&  FlxG.mouse.x > CID3._group_password_input[i].x
-			&&  FlxG.mouse.x < CID3._group_password_input[i].x + CID3._group_password_input[i].width
-			&&  FlxG.mouse.y + __configurations_output.__scrollable_area.scroll.y > CID3._group_password_input[i].y
-			&&  FlxG.mouse.y + __configurations_output.__scrollable_area.scroll.y < CID3._group_password_input[i].y + CID3._group_password_input[i].height
-			&&  FlxG.mouse.y < FlxG.height - 50)
+			if (FlxG.mouse.x > CID3._group_input_text_field[1][i].x
+			&&  FlxG.mouse.x < CID3._group_input_text_field[1][i].x + CID3._group_input_text_field[1][i].width
+			&&  FlxG.mouse.y + __configurations_output.__scrollable_area.scroll.y > CID3._group_input_text_field[1][i].y
+			&&  FlxG.mouse.y + __configurations_output.__scrollable_area.scroll.y < CID3._group_input_text_field[1][i].y + CID3._group_input_text_field[1][i].height
+			&&  FlxG.mouse.y < FlxG.height - 50
+			&&	ActionInput.justReleased() == true
+			&&	Reg._at_input_keyboard == false)
 			{
-				CID3._group_password_input[i].hasFocus = true;
-				CID3._group_password_input[i].fieldBorderColor = FlxColor.BLUE;	
-				CID3._group_password_input[i].fieldBorderThickness = 3;
+				CID3._group_input_text_field[1][i].hasFocus = true;
+				CID3._group_input_text_field[1][i].fieldBorderColor = FlxColor.BLUE;	
+				CID3._group_input_text_field[1][i].fieldBorderThickness = 3;
 				
-				CID3._group_username_input[i].hasFocus = false;
-				CID3._group_email_address_input[i].hasFocus = false;
+				CID3._group_input_text_field[0][i].hasFocus = false;
+				CID3._group_input_text_field[2][i].hasFocus = false;
 				
-				CID3._group_username_input[i].fieldBorderColor = FlxColor.BLACK;
-				CID3._group_email_address_input[i].fieldBorderColor = FlxColor.BLACK;
+				CID3._group_input_text_field[0][i].fieldBorderColor = FlxColor.BLACK;
+				CID3._group_input_text_field[2][i].fieldBorderColor = FlxColor.BLACK;
 				
-				CID3._group_username_input[i].fieldBorderThickness = 1;
-				CID3._group_email_address_input[i].fieldBorderThickness = 1;
-				
-				if (RegCustom._sound_enabled[Reg._tn] == true
-				&&  Reg2._scrollable_area_is_scrolling == false
-				&&	CID3._password_input.active == true)
-					FlxG.sound.play("click", 1, false);
-								
-				#if mobile
-					RegTriggers._keyboard_open = true;
-				#end
+				CID3._group_input_text_field[0][i].fieldBorderThickness = 1;
+				CID3._group_input_text_field[2][i].fieldBorderThickness = 1;
+				RegTriggers._keyboard_open = true;
 				
 				CID3._CRN = i;
 			}
 			
-			if (ActionInput.justPressed() == true
-			&&  FlxG.mouse.x > CID3._group_email_address_input[i].x
-			&&  FlxG.mouse.x < CID3._group_email_address_input[i].x + CID3._group_email_address_input[i].width
-			&&  FlxG.mouse.y + __configurations_output.__scrollable_area.scroll.y > CID3._group_email_address_input[i].y
-			&&  FlxG.mouse.y + __configurations_output.__scrollable_area.scroll.y < CID3._group_email_address_input[i].y + CID3._group_email_address_input[i].height
-			&&  FlxG.mouse.y < FlxG.height - 50)
+			if (FlxG.mouse.x > CID3._group_input_text_field[2][i].x
+			&&  FlxG.mouse.x < CID3._group_input_text_field[2][i].x + CID3._group_input_text_field[2][i].width
+			&&  FlxG.mouse.y + __configurations_output.__scrollable_area.scroll.y > CID3._group_input_text_field[2][i].y
+			&&  FlxG.mouse.y + __configurations_output.__scrollable_area.scroll.y < CID3._group_input_text_field[2][i].y + CID3._group_input_text_field[2][i].height
+			&&  FlxG.mouse.y < FlxG.height - 50
+			&&	ActionInput.justReleased() == true
+			&&  Reg._at_input_keyboard == false)
 			{
-				CID3._group_email_address_input[i].hasFocus = true;
-				CID3._group_email_address_input[i].fieldBorderColor = FlxColor.BLUE;	
-				CID3._group_email_address_input[i].fieldBorderThickness = 3;
+				CID3._group_input_text_field[2][i].hasFocus = true;
+				CID3._group_input_text_field[2][i].fieldBorderColor = FlxColor.BLUE;	
+				CID3._group_input_text_field[2][i].fieldBorderThickness = 3;
 				
-				CID3._group_username_input[i].hasFocus = false;
-				CID3._group_password_input[i].hasFocus = false;
+				CID3._group_input_text_field[0][i].hasFocus = false;
+				CID3._group_input_text_field[1][i].hasFocus = false;
 				
-				CID3._group_username_input[i].fieldBorderColor = FlxColor.BLACK;
-				CID3._group_password_input[i].fieldBorderColor = FlxColor.BLACK;
+				CID3._group_input_text_field[0][i].fieldBorderColor = FlxColor.BLACK;
+				CID3._group_input_text_field[1][i].fieldBorderColor = FlxColor.BLACK;
 				
-				CID3._group_username_input[i].fieldBorderThickness = 1;
-				CID3._group_password_input[i].fieldBorderThickness = 1;
+				CID3._group_input_text_field[0][i].fieldBorderThickness = 1;
+				CID3._group_input_text_field[1][i].fieldBorderThickness = 1;
 				
-				if (RegCustom._sound_enabled[Reg._tn] == true
-				&&  Reg2._scrollable_area_is_scrolling == false
-				&&	CID3._email_address_input.active == true)
-					FlxG.sound.play("click", 1, false);
-								
-				#if mobile
-					RegTriggers._keyboard_open = true;
-				#end
+				RegTriggers._keyboard_open = true;
 				
 				CID3._CRN = i;
 			}
 			
 			// update get 18 more username suggestions everytime a key at username input object is pressed.
-			CID3._group_username_input[i].callback = function (text, action)
+			CID3._group_input_text_field[0][i].callback = function (text, action)
 			{
 				if (text != "") 
 				{
@@ -856,6 +818,11 @@ class ConfigurationProfile extends FlxGroup
 	
 	override public function destroy():Void
 	{
+		for (i in 0...3)
+		{
+			CID3._group_input_text_field[i].splice(0, CID3._group_input_text_field[i].length);
+		}
+		
 		if (CID3._button_p1 != null)
 		{
 			CID3._group.remove(CID3._button_p1);

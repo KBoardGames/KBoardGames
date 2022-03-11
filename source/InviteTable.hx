@@ -137,18 +137,28 @@ class InviteTable extends FlxState
 	 */
 	private var _t5:FlxText;
 	
+	/******************************
+	 * sometimes because of a haxe timing issue, some every odd bugs can be the result. in this case, sometimes the waiting room invite table will continue to flicker in visibility. the reason is unknown. perhaps the issue is because some elements at SceneWaitingRoom has not be drawn yet. this seems to be the fix.
+	 */
+	private var _draw_table:Bool = true;
+	
 	public function new (scene_waiting_room:SceneWaitingRoom)		
 	{
 		super();
 		
 		_ticks_invite_list = 0;
-		
+		 
 		RegFunctions.fontsSharpen();
 		
 		_populated_table_body = false;
 		__scene_waiting_room = scene_waiting_room;
 		
-
+		draw_table();
+		
+	}
+	
+	private function draw_table():Void
+	{
 		var _color_table_rows = FlxColor.fromHSB((__scene_waiting_room._color_ra+25), 0.8, (RegCustom._client_background_brightness[Reg._tn]-0.10));
 		
 		if (RegCustom._client_background_enabled[Reg._tn] == true)
@@ -224,7 +234,7 @@ class InviteTable extends FlxState
 			_group.add(_table_horizontal_bottom_cell_padding[i]);
 		}
 		
-		table_columns();
+		table_columns();	
 	}
 	
 	private function table_columns():Void
@@ -794,38 +804,47 @@ class InviteTable extends FlxState
 		var _count:Int = 0;
 	
 		// only the first player that entered the room can start a game.
-		for (i in 0...4)
+		for (i in 0... 4)
 		{
 			if (RegTypedef._dataPlayers._usernamesDynamic[i] != "") _count += 1;
 		}
-	
-		if (_count == 1 && SceneWaitingRoom._textPlayer1Stats.text != ""
-		||  _count == 2 && SceneWaitingRoom._textPlayer2Stats.text != ""
-		||  _count == 3 && SceneWaitingRoom._textPlayer3Stats.text != ""
-		||  _count == 4 && SceneWaitingRoom._textPlayer4Stats.text != "")
+		
+		for (i in 1... 5)
 		{
-			// fix a camera display bug where the return to lobby an invite buttons can also be clicked from the right side of the screen because of the chatter scrollable area scrolling part of the scene.
-			if (FlxG.mouse.x > FlxG.width / 2
-			&&  FlxG.mouse.y >= FlxG.height - 50
-			&&  SceneWaitingRoom.__menu_bar._button_return_to_lobby_from_waiting_room.visible == true
-			&&  SceneWaitingRoom.__menu_bar._button_refresh_list.visible == true) 
+			if (_count == i && SceneWaitingRoom._text_player_stats[(i-1)].text != "")
 			{
-				SceneWaitingRoom.__menu_bar._button_return_to_lobby_from_waiting_room.label.color = 0xFFFFFFFF;
-				SceneWaitingRoom.__menu_bar._button_refresh_list.label.color = 0xFFFFFFFF;
+				// fix a camera display bug where the return to lobby an invite buttons can also be clicked from the right side of the screen because of the chatter scrollable area scrolling part of the scene.
+				if (FlxG.mouse.x > FlxG.width / 2
+				&&  FlxG.mouse.y >= FlxG.height - 50
+				&&  SceneWaitingRoom.__menu_bar._button_return_to_lobby_from_waiting_room.visible == true
+				&&  SceneWaitingRoom.__menu_bar._button_refresh_list.visible == true) 
+				{
+					SceneWaitingRoom.__menu_bar._button_return_to_lobby_from_waiting_room.label.color = 0xFFFFFFFF;
+					SceneWaitingRoom.__menu_bar._button_refresh_list.label.color = 0xFFFFFFFF;
+					
+					SceneWaitingRoom.__menu_bar._button_return_to_lobby_from_waiting_room.active = false;
+					SceneWaitingRoom.__menu_bar._button_refresh_list.active = false;
+				}
 				
-				SceneWaitingRoom.__menu_bar._button_return_to_lobby_from_waiting_room.active = false;
-				SceneWaitingRoom.__menu_bar._button_refresh_list.active = false;
+				else
+				
+				{
+					SceneWaitingRoom.__menu_bar._button_return_to_lobby_from_waiting_room.active = true;
+					SceneWaitingRoom.__menu_bar._button_refresh_list.active = true;
+				}
+				
 			}
-			
-			else
-			
-			{
-				SceneWaitingRoom.__menu_bar._button_return_to_lobby_from_waiting_room.active = true;
-				SceneWaitingRoom.__menu_bar._button_refresh_list.active = true;
-			}
-			
 		}
 		
 		super.update(elapsed);
+		
+		// TODO this is here instead of at the constructor to address a bug where sometimes the invite table will continue to flicker in visibility. this seems to address that problem.
+		// if you have not seen this error happen in about 50 entries to the waiting room, and 50 times populating the invite table where someone is at the lobby, then this issue has been solved.
+		if (_draw_table == true)
+		{
+			_draw_table = false;
+			draw_table();
+		}
 	}
-}//
+	
+}

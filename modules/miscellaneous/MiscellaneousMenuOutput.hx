@@ -73,17 +73,26 @@ class MiscellaneousMenuOutput extends FlxState
 			statisticsAll();
 			eventsAll();
 		}
-				
-			
+		
 		// make a scrollbar-enabled camera for it (a FlxScrollableArea)	
-		if (__scrollable_area != null) FlxG.cameras.remove(__scrollable_area);
-		__scrollable_area = new FlxScrollableArea( new FlxRect( 0, 0, FlxG.width, FlxG.height-55), group.getHitbox(), ResizeMode.NONE, 0, 100, -1, FlxColor.LIME, null, 0, true);
+		if (__scrollable_area != null) 
+		{
+			FlxG.cameras.remove(__scrollable_area);
+			__scrollable_area.destroy();
+		}
+		
+		__scrollable_area = new FlxScrollableArea( new FlxRect( 0, 0, FlxG.width, FlxG.height-55), group.getHitbox(), ResizeMode.NONE, 0, 100, -1, FlxColor.LIME, null, 2223, true);
 		add(__scrollable_area);
+		
 		FlxG.cameras.add( __scrollable_area );
 		__scrollable_area.antialiasing = true;
 		__scrollable_area.pixelPerfectRender = true;
 		
-		if (__title_bar != null)	remove(__title_bar);
+		// without this block this scrollable area cannot be dragged.
+		Reg2._scrollable_area_is_scrolling = false;
+		Reg._messageId = 0;
+			
+		if (__title_bar != null) remove(__title_bar);
 		if (_int == 30) __title_bar = new TitleBar("Game Statistics");
 		else __title_bar = new TitleBar("Game Instructions");
 		add(__title_bar);
@@ -449,7 +458,14 @@ class MiscellaneousMenuOutput extends FlxState
 		
 		RegTriggers._makeMiscellaneousMenuClassActive = true;
 		
-		__scrollable_area.visible = false;
+		if (__scrollable_area != null)
+		{	
+			__scrollable_area.visible = false;
+			cameras.remove(__scrollable_area);
+			__scrollable_area.destroy();
+			__scrollable_area = null;
+		}
+		
 		Reg._at_misc = true;
 		
 		visible = false;
@@ -460,7 +476,8 @@ class MiscellaneousMenuOutput extends FlxState
 	override public function destroy()
 	{
 		if (__scrollable_area != null)
-		{			
+		{
+			__scrollable_area.visible = false;
 			cameras.remove(__scrollable_area);
 			__scrollable_area.destroy();
 			__scrollable_area = null;

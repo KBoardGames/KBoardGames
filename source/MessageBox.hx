@@ -11,10 +11,6 @@
 
 package;
 
-#if !MOBILE
-	import flixel.input.keyboard.FlxKey;
-#end
-
 /**
  * NOTE this message box is not the same as the others. if (Reg._buttonCodeValues == "l1020") is added at the end of this file.
  * @author kboardgames.com
@@ -44,7 +40,7 @@ class MessageBox extends FlxGroup
 	/******************************
 	 * "x" button. top right corner on this message box image.
 	 */
-	private var _button1:ButtonAlwaysActiveNetworkYes;
+	private var _button_x:ButtonAlwaysActiveNetworkYes;
 	
 	/******************************
 	 * the output message text. 
@@ -55,22 +51,33 @@ class MessageBox extends FlxGroup
 	public var _textTimer:FlxText; // keep message box open for 30 sec. this is the text to show how much time is remaining.
 		
 	/******************************
-	 * the output message OK button.
+	 * the OK button.
 	 */
-	private var _buttonMessageOK:ButtonAlwaysActiveNetworkYes;
+	private var _button_ok:ButtonAlwaysActiveNetworkYes;
 	
 	/******************************
-	 * ok button that is only used when the cancel button is displayed. this is needed because this button's width is smaller than the other button that has the ok text.
+	 * yes button that is only used when the no button is displayed. 
 	 */
-	private var _button5:ButtonAlwaysActiveNetworkYes;
+	private var _button_yes:ButtonAlwaysActiveNetworkYes;
 	
 	/******************************
-	 * cancel button.
+	 * no button.
 	 */
-	private var _button6:ButtonAlwaysActiveNetworkYes;
+	private var _button_no:ButtonAlwaysActiveNetworkYes;
 	
+	/******************************
+	 * time remaining before the message box closes.
+	 */
 	private var _timeRemaining:Int = 30;
+	
+	/******************************
+	 * create the timer if timer does not exist. also used to run the timer.
+	 */
 	private var _timeDo:Timer;
+	
+	/******************************
+	 * should the timer be used for this mesage box instance?
+	 */
 	private var _useTimer:Bool = false;	
 	
 	/******************************
@@ -98,8 +105,10 @@ class MessageBox extends FlxGroup
 	 */	
 	public var _setButtonActive:Bool = true;
 	
+	/******************************
+	 * instance id.
+	 */
 	private var _id:Int = 0;
-	private var _jumpToOldPositions:Bool = false;
 	
 	/******************************
 	 * constructor.
@@ -142,12 +151,13 @@ class MessageBox extends FlxGroup
 		_title.scrollFactor.set(0, 0);
 		add(_title);
 		
-		if (_button1 != null) _button1.destroy();
-		_button1 = new ButtonAlwaysActiveNetworkYes(Reg2._messageBox_x + Reg2._button1_x, Reg2._messageBox_y + Reg2._button1_y + 5, "X", 45, 35, 20, RegCustom._button_text_color[Reg._tn], 0, buttonX, 0xFFCC0000, false);
-		_button1.visible = false;
-		_button1.scrollFactor.set(0, 0);
-		_button1.label.font = Reg._fontDefault;
-		add(_button1);
+		if (_button_x != null) _button_x.destroy();
+		_button_x = new ButtonAlwaysActiveNetworkYes(Reg2._messageBox_x + Reg2._button_x_x, Reg2._messageBox_y + Reg2._button_x_y + 5, "X", 45, 35, 20, RegCustom._button_text_color[Reg._tn], 0, buttonX, 0xFFCC0000, false);
+		_button_x.visible = false;
+		_button_x.active = false;
+		_button_x.scrollFactor.set(0, 0);
+		_button_x.label.font = Reg._fontDefault;
+		add(_button_x);
 			
 		//#############################
 		// a popup message that has a general message. not a log in or register message.
@@ -171,29 +181,32 @@ class MessageBox extends FlxGroup
 		if (_timeDo == null)
 		_timeDo = new Timer(1000); // fire every second.
 		
-		if (_buttonMessageOK != null) _buttonMessageOK.destroy();
-		_buttonMessageOK = new ButtonAlwaysActiveNetworkYes(Reg2._messageBox_x + Reg2._buttonMessageOK_x, Reg2._messageBox_y + Reg2._buttonMessageOK_y + 5, "OK", 160 + 15, 35, 20, 0xffffffff, 0, messageWasRead, RegCustom._button_color[Reg._tn]);
-		_buttonMessageOK.label.font = Reg._fontDefault;
-		_buttonMessageOK.visible = false;
-		if (_setButtonActive == false) _buttonMessageOK.active = false;
-		_buttonMessageOK.scrollFactor.set(0, 0);
-		add(_buttonMessageOK);
+		if (_button_ok != null) _button_ok.destroy();
+		_button_ok = new ButtonAlwaysActiveNetworkYes(Reg2._messageBox_x + Reg2._button_ok_x, Reg2._messageBox_y + Reg2._button_ok_y + 5, "OK", 160 + 15, 35, 20, 0xffffffff, 0, messageWasRead, RegCustom._button_color[Reg._tn]);
+		_button_ok.label.font = Reg._fontDefault;
+		_button_ok.visible = false;
+		_button_ok.active = false;
+		if (_setButtonActive == false) _button_ok.active = false;
+		_button_ok.scrollFactor.set(0, 0);
+		add(_button_ok);
 		
-		if (_button5 != null) _button5.destroy();
-		_button5 = new ButtonAlwaysActiveNetworkYes(Reg2._messageBox_x + Reg2._button5_x, Reg2._messageBox_y + Reg2._button5_y + 5, _textForYesButton, 135 + 15, 35, 20, 0xffffffff, 0, messageWasRead, RegCustom._button_color[Reg._tn]);
-		_button5.label.font = Reg._fontDefault;
-		_button5.visible = false;
-		if (_setButtonActive == false) _button5.active = false;
-		_button5.scrollFactor.set(0, 0);
-		add(_button5);	
+		if (_button_yes != null) _button_yes.destroy();
+		_button_yes = new ButtonAlwaysActiveNetworkYes(Reg2._messageBox_x + Reg2._button_yes_x, Reg2._messageBox_y + Reg2._button_yes_y + 5, _textForYesButton, 135 + 15, 35, 20, 0xffffffff, 0, messageWasRead, RegCustom._button_color[Reg._tn]);
+		_button_yes.label.font = Reg._fontDefault;
+		_button_yes.visible = false;
+		_button_yes.active = false;
+		if (_setButtonActive == false) _button_yes.active = false;
+		_button_yes.scrollFactor.set(0, 0);
+		add(_button_yes);	
 		
-		if (_button6 != null) _button6.destroy();
-		_button6 = new ButtonAlwaysActiveNetworkYes(Reg2._messageBox_x + Reg2._button6_x, Reg2._messageBox_y + Reg2._button6_y + 5, _textForNoButton, 135 + 15, 35, 20, 0xffffffff, 0, cancelWasPressed, RegCustom._button_color[Reg._tn]);
-		_button6.label.font = Reg._fontDefault;
-		_button6.visible = false;
-		if (_setButtonActive == false) _button6.active = false;
-		_button6.scrollFactor.set(0, 0);
-		add(_button6);
+		if (_button_no != null) _button_no.destroy();
+		_button_no = new ButtonAlwaysActiveNetworkYes(Reg2._messageBox_x + Reg2._button_no_x, Reg2._messageBox_y + Reg2._button_no_y + 5, _textForNoButton, 135 + 15, 35, 20, 0xffffffff, 0, cancelWasPressed, RegCustom._button_color[Reg._tn]);
+		_button_no.label.font = Reg._fontDefault;
+		_button_no.visible = false;
+		_button_no.active = false;
+		if (_setButtonActive == false) _button_no.active = false;
+		_button_no.scrollFactor.set(0, 0);
+		add(_button_no);
 		
 		_timeRemaining = 30;		
 				
@@ -210,13 +223,17 @@ class MessageBox extends FlxGroup
 		
 		// account.
 		_title.visible = false;
-		_button1.visible = false;
+		_button_x.visible = false;
+		_button_x.active = false;
 		
 		// message.
 		_textMessage.visible = false;
-		_buttonMessageOK.visible = false;
-		_button5.visible = false;
-		_button6.visible = false;
+		_button_ok.visible = false;
+		_button_ok.active = false;
+		_button_yes.visible = false;
+		_button_yes.active = false;
+		_button_no.visible = false;
+		_button_no.active = false;
 		_textTimer.visible = false;
 	}
 	
@@ -243,17 +260,11 @@ class MessageBox extends FlxGroup
 	
 		
 	private function messageWasRead():Void
-	{
-		if (Reg._messageId == _id
-		&&	GameMessage._ticks_close == false)
+	{	
+		if (Reg._messageId == _id)
 		{
 			Reg._yesNoKeyPressValueAtMessage = 1; // ok key was pressed.
 			
-			// button does not fire when this code is in the button class.
-			if (RegCustom._sound_enabled[Reg._tn] == true
-			&&  Reg2._scrollable_area_is_scrolling == false)
-				FlxG.sound.play("click", 1, false);
-				
 			popupMessageHide();
 		}
 	}
@@ -316,34 +327,22 @@ class MessageBox extends FlxGroup
 
 	public function cancelWasPressed():Void
 	{	
-		if (Reg._messageId == _id
-		&&	GameMessage._ticks_close == false)
+		if (Reg._messageId == _id)
 		{
 			Reg._yesNoKeyPressValueAtMessage = 2; // cancel key was pressed.
 			//Reg._buttonCodeValues = "";
 			
-			// button does not fire when this code is in the button class.
-			if (RegCustom._sound_enabled[Reg._tn] == true
-			&&  Reg2._scrollable_area_is_scrolling == false)
-				FlxG.sound.play("click", 1, false);
-				
 			popupMessageHide();
 		}
 	}
 	
 	private function buttonX():Void
 	{	
-		if (Reg._messageId == _id
-		&&	GameMessage._ticks_close == false)
+		if (Reg._messageId == _id)
 		{
 			if (_useYesNoButtons == true) Reg._yesNoKeyPressValueAtMessage = 3;
 			else Reg._yesNoKeyPressValueAtMessage = 1;
 			
-			// button does not fire when this code is in the button class.
-			if (RegCustom._sound_enabled[Reg._tn] == true
-			&&  Reg2._scrollable_area_is_scrolling == false)
-				FlxG.sound.play("click", 1, false);
-				
 			popupMessageHide();
 		}	
 		
@@ -379,16 +378,10 @@ class MessageBox extends FlxGroup
 				for (i in 0...3333333){}
 			#end	
 			
-			/*
-			if (Reg._doUpdate == false && Reg._buttonCodeValues == "" && _displayMessage == false || Reg._loginSuccessfulWasRead == true && Reg._buttonCodeValues == "") 
-			{
-				//Reg._loginSuccessfulWasRead = true; 
-				return;		
-			}*/
-		
 			_messageBox.visible = true;
 			_title.visible = true;
-			_button1.visible = true;
+			_button_x.active = true;
+			_button_x.visible = true;
 			
 			// if true then show the message, such as, an error or a login message attempt.
 			if (_displayMessage == true)
@@ -397,15 +390,20 @@ class MessageBox extends FlxGroup
 				
 				if (_useYesNoButtons == true)
 				{
-					_button5.visible = true;
-					_button6.visible = true;
+					_button_yes.active = true;
+					_button_yes.visible = true;
+					_button_no.active = true;
+					_button_no.visible = true;
 				}	
 				
-				else _buttonMessageOK.visible = true;						
+				else 
+				{
+					_button_ok.active = true;
+					_button_ok.visible = true;						
+				}
 			}				
 		}  							 
 	}
-	
 	
 	public function popupMessageHide():Void
 	{			
@@ -444,6 +442,14 @@ class MessageBox extends FlxGroup
 			
 			RegTriggers._buttons_set_not_active = false;
 			
+			for (i in 0...3)
+			{
+				Reg._ticks_button_100_percent_opacity[i] = 0;
+			}
+			
+			Reg._buttonDown = false;
+			Reg._button_clicked = false;
+			
 			destroy();		
 		} 
 	}	
@@ -453,30 +459,53 @@ class MessageBox extends FlxGroup
 		_timeDo.stop();
 		_ticks = 0;
 		
-		if (_buttonMessageOK != null)
+		if (_title != null)
 		{
-			remove(_buttonMessageOK);
-			_buttonMessageOK.destroy();
+			remove(_title);
+			_title.destroy();
+			_title = null;
 		}
 		
-		if (_button1 != null)
+		if (_messageBox != null)
 		{
-			remove(_button1);
-			_button1.destroy();
+			remove(_messageBox);
+			_messageBox.destroy();
+			_messageBox = null;
 		}
 		
-		if (_button5 != null)
+		if (_textMessage != null)
 		{
-			remove(_button5);
-			_button5.destroy();
+			remove(_textMessage);
+			_textMessage.destroy();
+			_textMessage = null;
+		}
+	
+		if (_button_ok != null)
+		{
+			remove(_button_ok);
+			_button_ok.destroy();
+		}
+		
+		if (_button_x != null)
+		{
+			remove(_button_x);
+			_button_x.destroy();
+			_button_x = null;
+		}
+		
+		if (_button_yes != null)
+		{
+			remove(_button_yes);
+			_button_yes.destroy();
+			_button_yes = null;
 		}
 			
-		if (_button6 != null)
+		if (_button_no != null)
 		{
-			remove(_button6);
-			_button6.destroy();
+			remove(_button_no);
+			_button_no.destroy();
+			_button_no = null;
 		}
-		
 		
 		super.destroy();
 	}

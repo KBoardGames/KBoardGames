@@ -17,6 +17,8 @@ package;
  */
 class RegTriggers
 {
+	// at game room, return to title button was clicked. go to lobby then from lobby go to title. by doing this, room data will be updated correctly.
+	public static var _return_to_title:Bool = false;
 	
 	public static var _kickOrBan:Bool = false; // Trigger the kicked or banned message.
 	
@@ -231,17 +233,17 @@ class RegTriggers
 	public static var _buttons_set_not_active:Bool = false;
 	
 	/******************************
-	 * At ActionCommands.hx this is the request made to jump to the waiting room from title scene. however, we need to go to the creating room first or else features at the waiting room will be broken.
+	 * At Hotkeys.hx this is the request made to jump to the waiting room from title scene. however, we need to go to the creating room first or else features at the waiting room will be broken.
 	 */
 	public static var _jump_creating_room:Bool = false;
 	
 	/******************************
-	 * At ActionCommands.hx this is the request made to jump to the waiting room from title scene.
+	 * At Hotkeys.hx this is the request made to jump to the waiting room from title scene.
 	 */
 	public static var _jump_waiting_room:Bool = false;
 	
 	/******************************
-	 * At ActionCommands.hx this is the request made to jump to the game room from title scene.
+	 * At Hotkeys.hx this is the request made to jump to the game room from title scene.
 	 */
 	public static var _jump_game_room:Bool = false;
 	
@@ -249,6 +251,11 @@ class RegTriggers
 	 * should the chatter scroll right?
 	 */
 	public static var _scrollRight:Bool = false;
+	
+	/******************************
+	 * when returning to event scheduke from event description, a trigger is needed to display the flxstate foreground effects.
+	 */
+	public static var _run_flxstate_effects_for_calendar:Bool = false;
 	
 	public static function reset_triggers_once():Void
 	{
@@ -259,6 +266,7 @@ class RegTriggers
 	
 	public static function resetTriggers():Void
 	{
+		//_return_to_title = false;
 		_playerLeftGame = false;
 		_win = false;
 		_loss = false;
@@ -315,6 +323,7 @@ class RegTriggers
 		_ticks_buttons_menuBar = false;
 		_buttons_set_not_active = false;
 		_recreate_chatter_input_chat = false;
+		_run_flxstate_effects_for_calendar = false;
 	}	
 	
 }//

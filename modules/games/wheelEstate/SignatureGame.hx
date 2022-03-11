@@ -181,13 +181,6 @@ class SignatureGame extends FlxGroup
 			}
 		}
 		
-		// unit border.
-		var _unitBorder = new FlxSprite();
-		_unitBorder.loadGraphic("modules/games/wheelEstate/assets/imagesUnitsBorder.png", false);
-		_unitBorder.setPosition(Reg._unitXgameBoardLocation[0], Reg._unitYgameBoardLocation[0]+5);
-		add(_unitBorder);		
-		
-		
 		var p = -1; // gameboard pieces.
 		
 		for (y in 0...8)

@@ -207,6 +207,9 @@ class ConfigurationGeneralEvents extends CID2
 		RegCustom._gradient_background_image_number[Reg._tn] -= 1;
 		if (RegCustom._gradient_background_image_number[Reg._tn] <= 0) RegCustom._gradient_background_image_number[Reg._tn] = 13;
 		
+		// don't use black.
+		if (RegCustom._gradient_background_image_number[Reg._tn] == 12) RegCustom._gradient_background_image_number[Reg._tn] = 11;
+		
 		CID2._sprite_gradient_background_image.color = RegCustomColors.gradient_color();
 	}
 	
@@ -214,6 +217,9 @@ class ConfigurationGeneralEvents extends CID2
 	{
 		RegCustom._gradient_background_image_number[Reg._tn] += 1;
 		if (RegCustom._gradient_background_image_number[Reg._tn] >= 14) RegCustom._gradient_background_image_number[Reg._tn] = 1;
+		
+		// don't use black.
+		if (RegCustom._gradient_background_image_number[Reg._tn] == 12) RegCustom._gradient_background_image_number[Reg._tn] = 13;
 		
 		CID2._sprite_gradient_background_image.color = RegCustomColors.gradient_color();
 	}
@@ -945,4 +951,44 @@ class ConfigurationGeneralEvents extends CID2
 		CID2._button_pager_enabled.label.text = Std.string(RegCustom._pager_enabled[Reg._tn]);
 	}
 	
+	public function scene_transition_number_minus()
+	{
+		RegCustom._scene_transition_number[Reg._tn] -= 1;
+		if (RegCustom._scene_transition_number[Reg._tn] == -1) RegCustom._scene_transition_number[Reg._tn] = 5;
+		
+		CID2._text_scene_transition_number.text = Std.string(RegCustom._scene_transition_number[Reg._tn]);
+	}
+	
+	public function scene_transition_number_plus()
+	{
+		RegCustom._scene_transition_number[Reg._tn] += 1;
+		if (RegCustom._scene_transition_number[Reg._tn] >= 6) RegCustom._scene_transition_number[Reg._tn] = 0;
+		
+		CID2._text_scene_transition_number.text = Std.string(RegCustom._scene_transition_number[Reg._tn]);
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	public function title_icon_number_minus()
+	{
+		RegCustom._title_icon_number[Reg._tn] -= 1;
+		if (RegCustom._title_icon_number[Reg._tn] == 0) RegCustom._title_icon_number[Reg._tn] = 13;
+		
+		CID2._sprite_title_icon_color.color = RegCustomColors.title_icon_color();
+	}
+	
+	public function title_icon_number_plus()
+	{
+		RegCustom._title_icon_number[Reg._tn] += 1;
+		if (RegCustom._title_icon_number[Reg._tn] >= 14) RegCustom._title_icon_number[Reg._tn] = 1;
+		
+		CID2._sprite_title_icon_color.color = RegCustomColors.title_icon_color();
+	}
+
 }//

@@ -17,11 +17,22 @@ package;
  */
 class ScrollingText extends FlxSpriteGroup
 {
-	private var _scroller:FlxSprite;	// black coloured image. seen as a background.
-	private var _tf:FlxText;		// text that the image will stamp. this text will be scrolled.
-	private var _tfY:Int = 0;			// final offset value.
-	private var _offsetY:Float = 0;
+	/******************************
+	 * black coloured image. seen as a background.
+	 */
+	private var _scroller:FlxSprite;
 	
+	/******************************
+	 * text that the image will stamp. this text will be scrolled.
+	 */
+	private var _tf:FlxText;
+	
+	/******************************
+	 * final offset value.
+	 */
+	private var _tfY:Int = 0;
+	
+	private var _offsetY:Float = 0;
 	public var _ticks_delay:Float = 0;
 	
 	public function new(x:Float = 0, y:Float = 0, width:Float = 128, height:Float = 14, text:String = "", textSize:Int = 10, tileHeight:Int = 16, upperCase:Bool = true) 
@@ -62,6 +73,25 @@ class ScrollingText extends FlxSpriteGroup
 			FlxSpriteUtil.drawRect(_scroller, 0, 0, width - 1, height - 1, 0xFF946c3c, { thickness: 1, color: 0xFF946c3c }); // the second color is the border.
 			_scroller.stamp(_tf, Std.int(tf.x), _tfY + 6); // uses the text as an image.
 		}
+	}
+	
+	override public function destroy():Void
+	{
+		if (_scroller != null)
+		{
+			remove(_scroller);
+			_scroller.destroy();
+			_scroller = null;
+		}
+		
+		if (_tf != null)
+		{
+			remove(_tf);
+			_tf.destroy();
+			_tf = null;
+		}
+		
+		super.destroy();
 	}
 	
 	override public function update(elapsed:Float):Void 

@@ -23,10 +23,7 @@ class HUD extends FlxState
 	 * this is the image of the avatar for profile.
 	 */
 	#if avatars
-		public static var _image_profile_avatar_p1:FlxSprite;
-		public static var _image_profile_avatar_p2:FlxSprite;
-		public static var _image_profile_avatar_p3:FlxSprite;
-		public static var _image_profile_avatar_p4:FlxSprite;
+		private static var _image_profile_avatar:Array<FlxSprite> = [];
 	#end
 	
 	/******************************
@@ -39,26 +36,17 @@ class HUD extends FlxState
 	/******************************
 	 * the name of the player.
 	 */
-	public static var _row_username_p1:FlxText;
-	public static var _row_username_p2:FlxText;
-	public static var _row_username_p3:FlxText;
-	public static var _row_username_p4:FlxText;
+	public static var _column_username:Array<FlxText> = [];
 	
 	/******************************
 	 * player win total.
 	 */
-	public static var _row_total_wins_p1:FlxText;
-	public static var _row_total_wins_p2:FlxText;
-	public static var _row_total_wins_p3:FlxText;
-	public static var _row_total_wins_p4:FlxText;
+	public static var _column_total_wins:Array<FlxText> = [];
 	
 	/******************************
 	 * player total cash if playing signature game, or this can be the total turns remaining, or whatever.
 	 */
-	public static var _row_total_other_p1:FlxText;
-	public static var _row_total_other_p2:FlxText;
-	public static var _row_total_other_p3:FlxText;
-	public static var _row_total_other_p4:FlxText;
+	public static var _column_total_other:Array<FlxText> = [];
 	
 	/******************************
 	 * the background behind the row.
@@ -74,10 +62,7 @@ class HUD extends FlxState
 	private var _row_bg_header_win_total:FlxSprite;
 	private var _row_bg_header_other:FlxSprite;
 		
-	public static var textGameTurnsP1:FlxText;
-	public static var textGameTurnsP2:FlxText;
-	public static var textGameTurnsP3:FlxText;
-	public static var textGameTurnsP4:FlxText;
+	public static var _column_game_turns:Array<FlxText> = [];
 	
 	override public function new() 
 	{
@@ -151,26 +136,26 @@ class HUD extends FlxState
 		#if avatars
 			RegCustom._profile_avatar_number1[Reg._tn] = RegTypedef._dataPlayers._avatarNumber[0];
 			
-			_image_profile_avatar_p1 = new FlxSprite(150 + 6, 0);
+			_image_profile_avatar[0] = new FlxSprite(150 + 6, 0);
 			if (Reg._game_offline_vs_player == true || Reg._game_offline_vs_cpu == true || Reg._game_online_vs_cpu == true)
-				_image_profile_avatar_p1.loadGraphic("vendor/multiavatar/" + RegCustom._profile_avatar_number1[Reg._tn]);
+				_image_profile_avatar[0].loadGraphic("vendor/multiavatar/" + RegCustom._profile_avatar_number1[Reg._tn]);
 			
-			_image_profile_avatar_p1.loadGraphic("vendor/multiavatar/" + RegTypedef._dataPlayers._avatarNumber[0]);		
-			_image_profile_avatar_p1.y = FlxG.height - (Reg._offsetScreenY + _image_profile_avatar_p1.height - 10) / 2; // this centers avatar to the HUD background.
-			_image_profile_avatar_p1.scrollFactor.set();	
-			add(_image_profile_avatar_p1);	
+			_image_profile_avatar[0].loadGraphic("vendor/multiavatar/" + RegTypedef._dataPlayers._avatarNumber[0]);		
+			_image_profile_avatar[0].y = FlxG.height - (Reg._offsetScreenY + _image_profile_avatar[0].height - 10) / 2; // this centers avatar to the HUD background.
+			_image_profile_avatar[0].scrollFactor.set();	
+			add(_image_profile_avatar[0]);	
 			
-			_image_profile_avatar_p2 = new FlxSprite(450 + 12, 0);
+			_image_profile_avatar[1] = new FlxSprite(450 + 12, 0);
 			if (Reg._game_offline_vs_player == true)
 			{
-				_image_profile_avatar_p2.loadGraphic("vendor/multiavatar/" + RegCustom._profile_avatar_number2[Reg._tn]);
+				_image_profile_avatar[1].loadGraphic("vendor/multiavatar/" + RegCustom._profile_avatar_number2[Reg._tn]);
 			}
 				
 			else if (Reg._game_offline_vs_cpu == true
 			&& 		 Reg._game_online_vs_cpu == false)
 			{
 				var _num = getBOTvalue();
-				_image_profile_avatar_p2.loadGraphic("vendor/multiavatar/" + Reg2._offline_cpu_avatar_number[_num]);	
+				_image_profile_avatar[1].loadGraphic("vendor/multiavatar/" + Reg2._offline_cpu_avatar_number[_num]);	
 			}
 			
 			// display the correct profile images for the computer when player started a computer game.
@@ -182,7 +167,7 @@ class HUD extends FlxState
 					{
 						if (Reg2._offline_cpu_host_names[i] == RegTypedef._dataMisc._roomHostUsername[2])
 						{
-							_image_profile_avatar_p2.loadGraphic("vendor/multiavatar/" + Reg2._offline_cpu_avatar_number[i]);	
+							_image_profile_avatar[1].loadGraphic("vendor/multiavatar/" + Reg2._offline_cpu_avatar_number[i]);	
 						}
 					
 					}
@@ -195,152 +180,99 @@ class HUD extends FlxState
 					{
 						if (Reg2._offline_cpu_host_names[i] == RegTypedef._dataMisc._roomHostUsername[1])
 						{
-							_image_profile_avatar_p2.loadGraphic("vendor/multiavatar/" + Reg2._offline_cpu_avatar_number[i]);	
+							_image_profile_avatar[1].loadGraphic("vendor/multiavatar/" + Reg2._offline_cpu_avatar_number[i]);	
 						}
 					}
 						
 				}
 			}
 			
-			else _image_profile_avatar_p2.loadGraphic("vendor/multiavatar/" + RegTypedef._dataPlayers._avatarNumber[1]);	
-			_image_profile_avatar_p2.y = FlxG.height - (Reg._offsetScreenY + _image_profile_avatar_p2.height - 10) / 2;	
-			_image_profile_avatar_p2.scrollFactor.set();	
-			add(_image_profile_avatar_p2);
+			else _image_profile_avatar[1].loadGraphic("vendor/multiavatar/" + RegTypedef._dataPlayers._avatarNumber[1]);	
+			_image_profile_avatar[1].y = FlxG.height - (Reg._offsetScreenY + _image_profile_avatar[1].height - 10) / 2;	
+			_image_profile_avatar[1].scrollFactor.set();	
+			add(_image_profile_avatar[1]);
 			
-			_image_profile_avatar_p3 = new FlxSprite(750 + 18, 0);
+			_image_profile_avatar[2] = new FlxSprite(750 + 18, 0);
 			if (Reg._game_offline_vs_player == true)
-				_image_profile_avatar_p3.loadGraphic("vendor/multiavatar/" + RegCustom._profile_avatar_number3[Reg._tn]);
-			else _image_profile_avatar_p3.loadGraphic("vendor/multiavatar/" + RegTypedef._dataPlayers._avatarNumber[2]);			
-			_image_profile_avatar_p3.y = FlxG.height - (Reg._offsetScreenY + _image_profile_avatar_p3.height - 10) / 2;	
-			_image_profile_avatar_p3.scrollFactor.set();	
-			add(_image_profile_avatar_p3);
+				_image_profile_avatar[2].loadGraphic("vendor/multiavatar/" + RegCustom._profile_avatar_number3[Reg._tn]);
+			else _image_profile_avatar[2].loadGraphic("vendor/multiavatar/" + RegTypedef._dataPlayers._avatarNumber[2]);			
+			_image_profile_avatar[2].y = FlxG.height - (Reg._offsetScreenY + _image_profile_avatar[2].height - 10) / 2;	
+			_image_profile_avatar[2].scrollFactor.set();	
+			add(_image_profile_avatar[2]);
 			
-			_image_profile_avatar_p4 = new FlxSprite(1050 + 24, 0);
+			_image_profile_avatar[3] = new FlxSprite(1050 + 24, 0);
 			if (Reg._game_offline_vs_player == true)
-				_image_profile_avatar_p4.loadGraphic("vendor/multiavatar/" + RegCustom._profile_avatar_number4[Reg._tn]);
-			else _image_profile_avatar_p4.loadGraphic("vendor/multiavatar/" + RegTypedef._dataPlayers._avatarNumber[3]);			
-			_image_profile_avatar_p4.y = FlxG.height - (Reg._offsetScreenY + _image_profile_avatar_p4.height - 10) / 2;	
-			_image_profile_avatar_p4.scrollFactor.set();	
-			add(_image_profile_avatar_p4);
+				_image_profile_avatar[3].loadGraphic("vendor/multiavatar/" + RegCustom._profile_avatar_number4[Reg._tn]);
+			else _image_profile_avatar[3].loadGraphic("vendor/multiavatar/" + RegTypedef._dataPlayers._avatarNumber[3]);			
+			_image_profile_avatar[3].y = FlxG.height - (Reg._offsetScreenY + _image_profile_avatar[3].height - 10) / 2;	
+			_image_profile_avatar[3].scrollFactor.set();	
+			add(_image_profile_avatar[3]);
 		#end
 		//---------------------------
-		
-		_row_username_p1 = new FlxText(150 + 6 + 85, FlxG.height - 91, 0, "", 20);
-		_row_username_p1.scrollFactor.set();
-		_row_username_p1.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.LIME);
-		_row_username_p1.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
-		add(_row_username_p1);
-		
-		_row_username_p2 = new FlxText(450 + 12 + 85, FlxG.height - 91, 0, "", 20);
-		_row_username_p2.scrollFactor.set();
-		_row_username_p2.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.LIME);
-		_row_username_p2.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
-		add(_row_username_p2);
-		
-		_row_username_p3 = new FlxText(750 + 18 + 85, FlxG.height - 91, 0, "", 20);
-		_row_username_p3.scrollFactor.set();
-		_row_username_p3.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.LIME);
-		_row_username_p3.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
-		add(_row_username_p3);
-		
-		_row_username_p4 = new FlxText(1050 + 24 + 85, FlxG.height - 91, 0, "", 20);
-		_row_username_p4.scrollFactor.set();
-		_row_username_p4.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.LIME);
-		_row_username_p4.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
-		add(_row_username_p4);
+		for (i in 0... 4)
+		{
+			if (i == 0) _column_username[i] = new FlxText(150 + 6 + 85, FlxG.height - 91, 0, "", 20);
+			if (i == 1) _column_username[i] = new FlxText(450 + 12 + 85, FlxG.height - 91, 0, "", 20);
+			if (i == 2) _column_username[i] = new FlxText(750 + 18 + 85, FlxG.height - 91, 0, "", 20);
+			if (i == 3) _column_username[i] = new FlxText(1050 + 24 + 85, FlxG.height - 91, 0, "", 20);
+			_column_username[i].scrollFactor.set();
+			_column_username[i].setFormat(Reg._fontDefault, Reg._font_size, FlxColor.LIME);
+			_column_username[i].setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
+			add(_column_username[i]);
+		}
 		
 		//--------------------------
 		if (Reg._game_online_vs_cpu == false 
 		&&  Reg._game_offline_vs_player == false
 		&&  Reg._game_offline_vs_cpu == false)
 		{
-			_row_total_wins_p1 = new FlxText(150 + 6 + 85, FlxG.height - 61, 0, "", 20);
-			_row_total_wins_p1.scrollFactor.set();
-			_row_total_wins_p1.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.LIME);
-			_row_total_wins_p1.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
-			add(_row_total_wins_p1);
-					
-			_row_total_wins_p2 = new FlxText(450 + 12 + 85, FlxG.height - 61, 0, "", 20);
-			_row_total_wins_p2.scrollFactor.set();
-			_row_total_wins_p2.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.LIME);
-			_row_total_wins_p2.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
-			add(_row_total_wins_p2);
-			
-			_row_total_wins_p3 = new FlxText(750 + 18 + 85, FlxG.height - 61, 0, "", 20);
-			_row_total_wins_p3.scrollFactor.set();
-			_row_total_wins_p3.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.LIME);
-			_row_total_wins_p3.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
-			add(_row_total_wins_p3);
-			
-			_row_total_wins_p4 = new FlxText(1050 + 24 + 85, FlxG.height - 61, 0, "", 20);
-			_row_total_wins_p4.scrollFactor.set();
-			_row_total_wins_p4.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.LIME);
-			_row_total_wins_p4.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
-			add(_row_total_wins_p4);
+			for (i in 0... 4)
+			{
+				if (i == 0) _column_total_wins[0] = new FlxText(150 + 6 + 85, FlxG.height - 61, 0, "", 20);
+				if (i == 1) _column_total_wins[1] = new FlxText(450 + 12 + 85, FlxG.height - 61, 0, "", 20);
+				if (i == 2) _column_total_wins[2] = new FlxText(750 + 18 + 85, FlxG.height - 61, 0, "", 20);
+				if (i == 3) _column_total_wins[3] = new FlxText(1050 + 24 + 85, FlxG.height - 61, 0, "", 20);
+				_column_total_wins[0].scrollFactor.set();
+				_column_total_wins[0].setFormat(Reg._fontDefault, Reg._font_size, FlxColor.LIME);
+				_column_total_wins[0].setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
+				add(_column_total_wins[0]);
+			}
 		}
 		//--------------------------
-			
-		_row_total_other_p1 = new FlxText(150 + 6 + 85, FlxG.height - 31, 0, "", 20);
-		_row_total_other_p1.scrollFactor.set();
-		_row_total_other_p1.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.LIME);
-		_row_total_other_p1.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
-		add(_row_total_other_p1);
+		for (i in 0... 4)
+		{
+			if (i == 0) _column_total_other[0] = new FlxText(150 + 6 + 85, FlxG.height - 31, 0, "", 20);
+			if (i == 1) _column_total_other[1] = new FlxText(450 + 12 + 85, FlxG.height - 31, 0, "", 20);
+			if (i == 2) _column_total_other[2] = new FlxText(750 + 18 + 85, FlxG.height - 31, 0, "", 20);
+			if (i == 3) _column_total_other[3] = new FlxText(1050 + 24 + 85, FlxG.height - 31, 0, "", 20);
+			_column_total_other[i].scrollFactor.set();
+			_column_total_other[i].setFormat(Reg._fontDefault, Reg._font_size, FlxColor.LIME);
+			_column_total_other[i].setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
+			add(_column_total_other[i]);
+		}
 		
-		_row_total_other_p2 = new FlxText(450 + 12 + 85, FlxG.height - 31, 0, "", 20);
-		_row_total_other_p2.scrollFactor.set();
-		_row_total_other_p2.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.LIME);
-		_row_total_other_p2.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
-		add(_row_total_other_p2);
-		
-		_row_total_other_p3 = new FlxText(750 + 18 + 85, FlxG.height - 31, 0, "", 20);
-		_row_total_other_p3.scrollFactor.set();
-		_row_total_other_p3.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.LIME);
-		_row_total_other_p3.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
-		add(_row_total_other_p3);
-		
-		_row_total_other_p4 = new FlxText(1050 + 24 + 85, FlxG.height - 31, 0, "", 20);
-		_row_total_other_p4.scrollFactor.set();
-		_row_total_other_p4.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.LIME);
-		_row_total_other_p4.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
-		add(_row_total_other_p4);		
-		//--------------------------
-		
-		textGameTurnsP1 = new FlxText(-1000, -1000, 0, "50", 20);
-		textGameTurnsP1.scrollFactor.set();
-		textGameTurnsP1.font = Reg._fontDefault;
-		textGameTurnsP1.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 1);
-		add(textGameTurnsP1);
-		
-		textGameTurnsP2 = new FlxText(-1000, -1000, 0, "50", 20);
-		textGameTurnsP2.scrollFactor.set();
-		textGameTurnsP2.font = Reg._fontDefault;
-		textGameTurnsP2.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 1);
-		add(textGameTurnsP2);
-		
-		textGameTurnsP3 = new FlxText(-1000, -1000, 0, "50", 20);
-		textGameTurnsP3.scrollFactor.set();
-		textGameTurnsP3.font = Reg._fontDefault;
-		textGameTurnsP3.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 1);
-		add(textGameTurnsP3);
-		
-		textGameTurnsP4 = new FlxText(-1000, -1000, 0, "50", 20);
-		textGameTurnsP4.scrollFactor.set();
-		textGameTurnsP4.font = Reg._fontDefault;
-		textGameTurnsP4.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 1);
-		add(textGameTurnsP4);
-		
-			
+		for (i in 0... 4)
+		{
+			if (i == 0) _column_game_turns[0] = new FlxText(-1000, -1000, 0, "50", 20);
+			if (i == 1) _column_game_turns[1] = new FlxText(-1000, -1000, 0, "50", 20);
+			if (i == 2) _column_game_turns[2] = new FlxText(-1000, -1000, 0, "50", 20);
+			if (i == 3) _column_game_turns[3] = new FlxText(-1000, -1000, 0, "50", 20);
+			_column_game_turns[i].scrollFactor.set();
+			_column_game_turns[i].font = Reg._fontDefault;
+			_column_game_turns[i].setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 1);
+			add(_column_game_turns[i]);
+		}
 	}
 	
 	public static function stats():Void
 	{
-		_row_username_p1.text = RegTypedef._dataPlayers._usernamesDynamic[0];
+		_column_username[0].text = RegTypedef._dataPlayers._usernamesDynamic[0];
 		
-		if (_row_total_wins_p1 != null) _row_total_wins_p1.text = Std.string(RegTypedef._dataPlayers._gamesAllTotalWins[0]);		
+		if (_column_total_wins[0] != null) _column_total_wins[0].text = Std.string(RegTypedef._dataPlayers._gamesAllTotalWins[0]);		
 		
 		
-		if (Reg._gameId <= 1) _row_total_other_p1.text = Std.string(Reg._gameTurnsP1);
-		if (Reg._gameId == 4) _row_total_other_p1.text = Std.string(RegTypedef._dataPlayers._cash[0]);
+		if (Reg._gameId <= 1) _column_total_other[0].text = Std.string(Reg._gameTurnsP1);
+		if (Reg._gameId == 4) _column_total_other[0].text = Std.string(RegTypedef._dataPlayers._cash[0]);
 		
 		if (Reg._game_online_vs_cpu == true)
 		{			
@@ -350,7 +282,7 @@ class HUD extends FlxState
 				{
 					if (Reg2._offline_cpu_host_names[i] == RegTypedef._dataMisc._roomHostUsername[2])
 					{
-						_row_username_p2.text =	Reg2._offline_cpu_host_names[i];
+						_column_username[1].text =	Reg2._offline_cpu_host_names[i];
 					}
 				
 				}
@@ -363,30 +295,30 @@ class HUD extends FlxState
 				{
 					if (Reg2._offline_cpu_host_names[i] == RegTypedef._dataMisc._roomHostUsername[1])
 					{
-						_row_username_p2.text =	Reg2._offline_cpu_host_names[i];
+						_column_username[1].text =	Reg2._offline_cpu_host_names[i];
 					}
 				}
 			}
 		}
 		else 
-			_row_username_p2.text = RegTypedef._dataPlayers._usernamesDynamic[1];
+			_column_username[1].text = RegTypedef._dataPlayers._usernamesDynamic[1];
 		
-		if (_row_total_wins_p2 != null) _row_total_wins_p2.text = Std.string(RegTypedef._dataPlayers._gamesAllTotalWins[1]);
+		if (_column_total_wins[1] != null) _column_total_wins[1].text = Std.string(RegTypedef._dataPlayers._gamesAllTotalWins[1]);
 		
 		
-		if (Reg._gameId <= 1) _row_total_other_p2.text = Std.string(Reg._gameTurnsOther);
-		if (Reg._gameId == 4) _row_total_other_p2.text = Std.string(RegTypedef._dataPlayers._cash[1]);
+		if (Reg._gameId <= 1) _column_total_other[1].text = Std.string(Reg._gameTurnsOther);
+		if (Reg._gameId == 4) _column_total_other[1].text = Std.string(RegTypedef._dataPlayers._cash[1]);
 		
 		if (RegTypedef._dataMisc._roomPlayerLimit[RegTypedef._dataMisc._room] > 2)
 		{
-			_row_username_p3.text = RegTypedef._dataPlayers._usernamesDynamic[2];
+			_column_username[2].text = RegTypedef._dataPlayers._usernamesDynamic[2];
 			
-			if (_row_total_wins_p3 != null) _row_total_wins_p3.text = Std.string(RegTypedef._dataPlayers._gamesAllTotalWins[2]);
+			if (_column_total_wins[2] != null) _column_total_wins[2].text = Std.string(RegTypedef._dataPlayers._gamesAllTotalWins[2]);
 			
-			if (Reg._gameId == 4) _row_total_other_p3.text = Std.string(RegTypedef._dataPlayers._cash[2]);
+			if (Reg._gameId == 4) _column_total_other[2].text = Std.string(RegTypedef._dataPlayers._cash[2]);
 			
 			#if avatars
-				_image_profile_avatar_p3.visible = true;
+				_image_profile_avatar[2].visible = true;
 			#end
 			
 		} 
@@ -394,20 +326,20 @@ class HUD extends FlxState
 		else 
 		{
 			#if avatars
-				_image_profile_avatar_p3.visible = false;
+				_image_profile_avatar[2].visible = false;
 			#end
 		}
 		
 		if (RegTypedef._dataMisc._roomPlayerLimit[RegTypedef._dataMisc._room] > 3)
 		{
-			_row_username_p4.text = RegTypedef._dataPlayers._usernamesDynamic[3];
+			_column_username[3].text = RegTypedef._dataPlayers._usernamesDynamic[3];
 			
-			if (_row_total_wins_p4 != null) _row_total_wins_p4.text = Std.string(RegTypedef._dataPlayers._gamesAllTotalWins[3]);
+			if (_column_total_wins[3] != null) _column_total_wins[3].text = Std.string(RegTypedef._dataPlayers._gamesAllTotalWins[3]);
 						
-			if (Reg._gameId == 4) _row_total_other_p4.text = Std.string(RegTypedef._dataPlayers._cash[3]);
+			if (Reg._gameId == 4) _column_total_other[3].text = Std.string(RegTypedef._dataPlayers._cash[3]);
 			
 			#if avatars
-				_image_profile_avatar_p4.visible = true;
+				_image_profile_avatar[3].visible = true;
 			#end
 			
 		} 
@@ -415,7 +347,7 @@ class HUD extends FlxState
 		else
 		{
 			#if avatars
-				_image_profile_avatar_p4.visible = false;
+				_image_profile_avatar[3].visible = false;
 			#end
 		}
 	}
@@ -452,14 +384,14 @@ class HUD extends FlxState
 				// this code is needed so that the game turn text displayed underneath chatter for both players will update.
 				if (Reg._playerCanMovePiece == true) // the player moving...
 				{
-					if (HUD.textGameTurnsP1 != null)
-					HUD.textGameTurnsP1.text = Std.string(Reg._gameTurnsP1);
+					if (HUD._column_game_turns[0] != null)
+					HUD._column_game_turns[0].text = Std.string(Reg._gameTurnsP1);
 				}
 				// ... and also that piece at the other player's board.
 				else if (Reg._otherPlayer == false && Reg._gameDidFirstMove == false)
 				{
-					if (HUD.textGameTurnsP2 != null)
-					HUD.textGameTurnsP2.text = Std.string(Reg._gameTurnsOther);
+					if (HUD._column_game_turns[1] != null)
+					HUD._column_game_turns[1].text = Std.string(Reg._gameTurnsOther);
 				}
 			}
 			
@@ -480,13 +412,13 @@ class HUD extends FlxState
 				
 				if (Reg._playerCanMovePiece == true)
 				{
-					if (HUD.textGameTurnsP2 != null)
-					HUD.textGameTurnsP2.text = Std.string(Reg._gameTurnsOther);
+					if (HUD._column_game_turns[1] != null)
+					HUD._column_game_turns[1].text = Std.string(Reg._gameTurnsOther);
 				}
 				else if (Reg._otherPlayer == false && Reg._gameDidFirstMove == false)
 				{
-					if (HUD.textGameTurnsP1 != null)
-					HUD.textGameTurnsP1.text = Std.string(Reg._gameTurnsP1);
+					if (HUD._column_game_turns[0] != null)
+					HUD._column_game_turns[0].text = Std.string(Reg._gameTurnsP1);
 				}
 			}
 		}
@@ -501,8 +433,8 @@ class HUD extends FlxState
 				else Reg._gameTurnsP1 = 50;
 				
 				// update turn text.
-				if (HUD.textGameTurnsP1 != null)
-				HUD.textGameTurnsP1.text = Std.string(Reg._gameTurnsP1);		
+				if (HUD._column_game_turns[0] != null)
+				HUD._column_game_turns[0].text = Std.string(Reg._gameTurnsP1);		
 			}
 			
 			else if (Reg._playerMoving == 1)
@@ -511,8 +443,8 @@ class HUD extends FlxState
 				 || Reg._gamePointValueForPiece[yy][xx] == 0 && Reg._gameId == 1) Reg._gameTurnsOther -= 1;
 				else Reg._gameTurnsOther = 50;
 				
-				if (HUD.textGameTurnsP2 != null)
-				HUD.textGameTurnsP2.text = Std.string(Reg._gameTurnsOther);		
+				if (HUD._column_game_turns[1] != null)
+				HUD._column_game_turns[1].text = Std.string(Reg._gameTurnsOther);		
 			}
 		}
 		
@@ -548,32 +480,14 @@ class HUD extends FlxState
 		}
 		
 		#if avatars
-			if (_image_profile_avatar_p1 != null)
+			for (i in 0... 4)
 			{
-				remove(_image_profile_avatar_p1);
-				_image_profile_avatar_p1.destroy();
-				_image_profile_avatar_p1 = null;
-			}
-			
-			if (_image_profile_avatar_p2 != null)
-			{
-				remove(_image_profile_avatar_p2);
-				_image_profile_avatar_p2.destroy();
-				_image_profile_avatar_p2 = null;
-			}
-			
-			if (_image_profile_avatar_p3 != null)
-			{
-				remove(_image_profile_avatar_p3);
-				_image_profile_avatar_p3.destroy();
-				_image_profile_avatar_p3 = null;
-			}
-			
-			if (_image_profile_avatar_p4 != null)
-			{
-				remove(_image_profile_avatar_p4);
-				_image_profile_avatar_p4.destroy();
-				_image_profile_avatar_p4 = null;
+				if (_image_profile_avatar[i] != null)
+				{
+					remove(_image_profile_avatar[i]);
+					_image_profile_avatar[i].destroy();
+					_image_profile_avatar[i] = null;
+				}
 			}
 			
 		#end
@@ -598,89 +512,35 @@ class HUD extends FlxState
 			_row_other.destroy();
 			_row_other = null;
 		}
-		
-		if (_row_username_p1 != null)
+
+		for (i in 0... 4)
 		{
-			remove(_row_username_p1);
-			_row_username_p1.destroy();
-			_row_username_p1 = null;
+			if (_column_username[i] != null)
+			{
+				remove(_column_username[i]);
+				_column_username[i].destroy();
+				_column_username[i] = null;
+			}
+		}
+
+		for (i in 0... 4)
+		{
+			if (_column_total_wins[i] != null)
+			{
+				remove(_column_total_wins[i]);
+				_column_total_wins[i].destroy();
+				_column_total_wins[i] = null;
+			}
 		}
 		
-		if (_row_username_p2 != null)
+		for (i in 0... 4)
 		{
-			remove(_row_username_p2);
-			_row_username_p2.destroy();
-			_row_username_p2 = null;
-		}
-		
-		if (_row_username_p3 != null)
-		{
-			remove(_row_username_p3);
-			_row_username_p3.destroy();
-			_row_username_p3 = null;
-		}
-		
-		if (_row_username_p4 != null)
-		{
-			remove(_row_username_p4);
-			_row_username_p4.destroy();
-			_row_username_p4 = null;
-		}
-		
-		if (_row_total_wins_p1 != null)
-		{
-			remove(_row_total_wins_p1);
-			_row_total_wins_p1.destroy();
-			_row_total_wins_p1 = null;
-		}
-		
-		if (_row_total_wins_p2 != null)
-		{
-			remove(_row_total_wins_p2);
-			_row_total_wins_p2.destroy();
-			_row_total_wins_p2 = null;
-		}
-		
-		if (_row_total_wins_p3 != null)
-		{
-			remove(_row_total_wins_p3);
-			_row_total_wins_p3.destroy();
-			_row_total_wins_p3 = null;
-		}
-		
-		if (_row_total_wins_p4 != null)
-		{
-			remove(_row_total_wins_p4);
-			_row_total_wins_p4.destroy();
-			_row_total_wins_p4 = null;
-		}
-		
-		if (_row_total_other_p1 != null)
-		{
-			remove(_row_total_other_p1);
-			_row_total_other_p1.destroy();
-			_row_total_other_p1 = null;
-		}
-		
-		if (_row_total_other_p2 != null)
-		{
-			remove(_row_total_other_p2);
-			_row_total_other_p2.destroy();
-			_row_total_other_p2 = null;
-		}
-		
-		if (_row_total_other_p3 != null)
-		{
-			remove(_row_total_other_p3);
-			_row_total_other_p3.destroy();
-			_row_total_other_p3 = null;
-		}
-		
-		if (_row_total_other_p4 != null)
-		{
-			remove(_row_total_other_p4);
-			_row_total_other_p4.destroy();
-			_row_total_other_p4 = null;
+			if (_column_total_other[i] != null)
+			{
+				remove(_column_total_other[i]);
+				_column_total_other[i].destroy();
+				_column_total_other[i] = null;
+			}
 		}
 		
 		if (_row_bg_username != null)
@@ -725,32 +585,14 @@ class HUD extends FlxState
 			_row_bg_header_other = null;
 		}
 		
-		if (textGameTurnsP1 != null)
+		for (i in 0... 4)
 		{
-			remove(textGameTurnsP1);
-			textGameTurnsP1.destroy();
-			textGameTurnsP1 = null;
-		}
-		
-		if (textGameTurnsP2 != null)
-		{
-			remove(textGameTurnsP2);
-			textGameTurnsP2.destroy();
-			textGameTurnsP2 = null;
-		}
-		
-		if (textGameTurnsP3 != null)
-		{
-			remove(textGameTurnsP3);
-			textGameTurnsP3.destroy();
-			textGameTurnsP3 = null;
-		}
-		
-		if (textGameTurnsP4 != null)
-		{
-			remove(textGameTurnsP4);
-			textGameTurnsP4.destroy();
-			textGameTurnsP4 = null;
+			if (_column_game_turns[i] != null)
+			{
+				remove(_column_game_turns[i]);
+				_column_game_turns[i].destroy();
+				_column_game_turns[i] = null;
+			}
 		}
 		
 		super.destroy();
@@ -765,14 +607,14 @@ class HUD extends FlxState
 				// update the game turn for all players.
 				if (Reg._playerCanMovePiece == true) // the player moving...
 				{
-					if (textGameTurnsP1 != null)
-					textGameTurnsP1.text = Std.string(Reg._gameTurnsP1);
+					if (_column_game_turns[0] != null)
+					_column_game_turns[0].text = Std.string(Reg._gameTurnsP1);
 				}
 				// ... and also that piece at the other player's board.
 				else if (Reg._otherPlayer == false && Reg._gameDidFirstMove == false)
 				{
-					if (textGameTurnsP2 != null)
-					textGameTurnsP2.text = Std.string(Reg._gameTurnsOther);
+					if (_column_game_turns[1] != null)
+					_column_game_turns[1].text = Std.string(Reg._gameTurnsOther);
 				}
 			}
 			
@@ -797,7 +639,7 @@ class HUD extends FlxState
 					
 				}
 				
-				Reg._gameMessage = "Draw: Fifty-move rule.";				
+				Reg._messageBoxNoUserInput = "Draw: Fifty-move rule.";				
 				Reg._outputMessage = true;
 				
 			}

@@ -116,8 +116,19 @@ class NetworkEventsMain extends FlxState
 			PlayState._websocket = null;
 			PlayState.updateInfo();
 			
-			Reg._serverDisconnected = true;
-			FlxG.switchState(new MenuState()); 
+			// show server disconnected message only if not in public mode and if user has not logged in more than once.
+			if (Reg._same_device_login_more_than_once == false
+			&&	Reg._alreadyOnlineHost == false
+			&&	Reg._same_device_login_more_than_once == false
+			&&	Reg._alreadyOnlineUser == false)
+				Reg._serverDisconnected = true;
+			
+			// if "x" button was not clicked.
+			if (Reg._disconnectNow == false)
+				Reg._ping_time_expired = true;
+			
+			FlxG.switchState(new MenuState());
+			return;
 		};
 	}
 	
@@ -170,10 +181,6 @@ class NetworkEventsMain extends FlxState
 			// this function is called after this client connects to the server.
 			case "Join":
 				join(_data);
-			
-			// send everyone everywhere, a message that the server will disconnect.
-			case "Message All By Server":
-				messageAllByServer(_data);
 			
 			// the player is logging in.
 			case "Is Logging In":
@@ -393,6 +400,9 @@ class NetworkEventsMain extends FlxState
 			// makes all clients move the same piece at the same time.
 			case "Movement":
 				movement(_data);
+				
+			case "Disconnect All By Server":
+				disconnectAllByServer(_data);
 		}
 		
 		_data._event_name = "";
@@ -782,14 +792,13 @@ class NetworkEventsMain extends FlxState
 	{
 		if (_data.id != RegTypedef._dataAccount.id) return;
 		
-		if (_data._username_restricted != "")
+		if (_data._username_banned != "")
 		{
-			Reg._username_restricted = true;
+			Reg._username_banned = true;
 			FlxG.switchState(new MenuState());
 		}
 		
 		RegTypedef._dataAccount = _data;
-		RegTypedef._dataAccount._alreadyOnlineHost = _data._alreadyOnlineHost;
 		
 		PlayState._text_client_login_data.text = "Clients Data.\n\n";
 		PlayState._text_client_login_data.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
@@ -820,88 +829,49 @@ class NetworkEventsMain extends FlxState
 			_text_client_login_data4.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 			add(_text_client_login_data4);
 		}
-		// if _alreadyOnlineHost equals true that than means there is already a client opened at that device.
-		if ( RegTypedef._dataAccount._alreadyOnlineHost == true && Reg._loginMoreThanOnce == false)
-		{
-			Reg._alreadyOnlineHost = true;
-			Reg._displayOneDeviceErrorMessage = true; // prepare to show the error message.	At MenuState, if this var is true then a message about devices will be displayed.
-			
-			Reg._client_socket_is_connected = false;
-			PlayState._websocket.close();
-			FlxG.switchState(new MenuState());
-		}
 		
-		else 
-		{
-			Reg._isLoggingIn = true;
-			PlayState.allTypedefUsernameUpdate(RegTypedef._dataAccount._username);
-		}
+		Reg._isLoggingIn = true;
+		PlayState.allTypedefUsernameUpdate(RegTypedef._dataAccount._username);
+		
 	}	
 		
-	/******************************
-	* EVENT SERVER WILL SOON DISCONNECT. SEND MESSAGE To ALL CLIENT.
-	* DataQuestions
-	*/
-	public function messageAllByServer(_data:Dynamic):Void
-	{
-		Reg._messageId = 2222;
-		Reg._buttonCodeValues = "l2222";
-		SceneGameRoom.messageBoxMessageOrder();
-		
-		Reg._server_message = _data;
-	}
 	
 	/******************************
 	* EVENT IS LOGGED IN
 	*/
 	public function isLoggingIn(_data:Dynamic):Void
 	{
-		// if _alreadyOnlineHost equals true that than means there is already a user logged in with that name.
-		RegTypedef._dataAccount._alreadyOnlineUser = _data._alreadyOnlineUser;
-		
-		if ( RegTypedef._dataAccount._alreadyOnlineUser == true && Reg._loginMoreThanOnce == false)
+		if (_data._popupMessage == "Login failed.")
 		{
-			Reg._alreadyOnlineUser = true;
-			Reg._displayOneDeviceErrorMessage = true; // prepare to show the error message.	At MenuState, if this var is true then a message about devices will be displayed.
-			
+			Reg._login_failed = true;				
 			Reg._client_socket_is_connected = false;
 			PlayState._websocket.close();
+			
 			FlxG.switchState(new MenuState());
+			
 		}
 		
-		else if (Reg._alreadyOnlineUser == false)
+		else if (_data._popupMessage == "Login successful.") // if you change the value of this string then you need to change it also at server.
 		{
-			if (_data._popupMessage == "Login failed.")
-			{
-				Reg._login_failed = true;				
-				Reg._client_socket_is_connected = false;
-				PlayState._websocket.close();
-				
-				FlxG.switchState(new MenuState());
-				
-			}
+			Reg._username = RegTypedef._dataAccount._username = RegTypedef._dataMisc._username = RegTypedef._dataHouse._username = _data._username;
 			
-			else if (_data._popupMessage == "Login successful.") // if you change the value of this string then you need to change it also at server.
-			{
-				Reg._username = RegTypedef._dataAccount._username = RegTypedef._dataMisc._username = RegTypedef._dataHouse._username = _data._username;
-				
-				PlayState.allTypedefUsernameUpdate(_data._username);
-				
-				Reg._loggedIn = true; 
-				Reg._loginSuccessfulWasRead = true; 
-				Reg._doOnce = true;
-				
-				PlayState._text_client_login_data.visible = false;
-				_text_client_login_data2.visible = false;
-				_text_client_login_data3.visible = false;
-				_text_client_login_data4.visible = false;
-				PlayState._text_logging_in.visible = false;
-				
-				PlayState.allTypedefUsernameUpdate(Reg._username);
-				
-				PlayState.send("Get Statistics All", RegTypedef._dataStatistics);					
-			}
+			PlayState.allTypedefUsernameUpdate(_data._username);
+			
+			Reg._loggedIn = true; 
+			
+			PlayState._text_client_login_data.visible = false;
+			_text_client_login_data2.visible = false;
+			_text_client_login_data3.visible = false;
+			_text_client_login_data4.visible = false;
+			PlayState._text_logging_in.visible = false;
+			
+			PlayState.allTypedefUsernameUpdate(Reg._username);
+			
+			PlayState.send("Get Statistics All", RegTypedef._dataStatistics);
+			
+			RegTriggers._lobby = true;
 		}
+	
 	}
 		
 	/******************************
@@ -1070,31 +1040,31 @@ class NetworkEventsMain extends FlxState
 	{
 		if (_data._room == RegTypedef._dataGameMessage._room && _data.id != RegTypedef._dataGameMessage.id && Reg._gameOverForPlayer == false)
 		{
-			Reg._gameMessage = _data._gameMessage;		
+			Reg._messageBoxNoUserInput = _data._gameMessage;		
 
-			if (Reg._gameMessage == "Roll dice again.")
+			if (Reg._messageBoxNoUserInput == "Roll dice again.")
 			{
 				RegTriggers._snakesAndLaddersRollAgainMessage = true;		
 			}
 			
 			
-			else if (Reg._gameMessage == "Check" && Reg._chessCheckBypass == false) 
+			else if (Reg._messageBoxNoUserInput == "Check" && Reg._chessCheckBypass == false) 
 			{
 				GameHistoryAndNotations._message_for_scrollable_area.text = GameHistoryAndNotations._message_for_scrollable_area.text.substr(0, GameHistoryAndNotations._message_for_scrollable_area.text.length);
 				
 				GameHistoryAndNotations._message_for_scrollable_area.text = GameHistoryAndNotations._message_for_scrollable_area.text + "+";
 			}
 			
-			if (Reg._gameMessage == "Checkmate" && Reg._chessCheckBypass == false) 
+			if (Reg._messageBoxNoUserInput == "Checkmate" && Reg._chessCheckBypass == false) 
 			{
 				GameHistoryAndNotations._message_for_scrollable_area.text = GameHistoryAndNotations._message_for_scrollable_area.text.substr(0, GameHistoryAndNotations._message_for_scrollable_area.text.length);
 				
 				GameHistoryAndNotations._message_for_scrollable_area.text = GameHistoryAndNotations._message_for_scrollable_area.text + "++";
 			}
 							
-			if (Reg._gameMessage != "") 
+			if (Reg._messageBoxNoUserInput != "") 
 			{					
-				RegTypedef._dataGameMessage._gameMessage = Reg._gameMessage;
+				RegTypedef._dataGameMessage._gameMessage = Reg._messageBoxNoUserInput;
 			}			
 					
 			Reg._outputMessage = true;
@@ -1265,7 +1235,7 @@ class NetworkEventsMain extends FlxState
 					
 					
 					// stop any sound playing.			
-					if (FlxG.sound.music != null && FlxG.sound.music.playing == true) FlxG.sound.music.stop();
+					//if (FlxG.sound.music != null && FlxG.sound.music.playing == true) FlxG.sound.music.stop();
 					
 					Reg._playerCanMovePiece = false;	
 					//Reg._createGameRoom = true;
@@ -1417,9 +1387,10 @@ class NetworkEventsMain extends FlxState
 			}
 			
 			if (_count > -1)
-			{
+			{			
 				// now that the _username is found we remove that player from the other players arrays.
 				RegTypedef._dataPlayers._usernamesDynamic.splice(_count, 1);
+	
 				// we push the array because one element has just been removed. now we need to added it back so to always hold a total of four players data.
 				RegTypedef._dataPlayers._usernamesDynamic.push("");
 									
@@ -1515,7 +1486,6 @@ class NetworkEventsMain extends FlxState
 	public function getRoomData(_data:Dynamic):Void
 	{
 		RegTypedef._dataMisc._roomState = _data._roomState; 
-	
 		RegTypedef._dataMisc._roomGameIds = _data._roomGameIds;
 		
 		// never get a value of -1 or there will be a server error when saving stats.
@@ -1554,175 +1524,6 @@ class NetworkEventsMain extends FlxState
 		{
 			SceneLobby._do_once = true;
 			SceneLobby._lobby_data_received = true;
-			/*
-			RegTypedef._dataMisc._roomState[1] = 3;
-			RegTypedef._dataMisc._roomState[2] = 7;
-			RegTypedef._dataMisc._roomState[3] = 3;
-			RegTypedef._dataMisc._roomState[4] = 3;
-			RegTypedef._dataMisc._roomState[5] = 2;
-			RegTypedef._dataMisc._roomState[6] = 7;
-			RegTypedef._dataMisc._roomState[7] = 8;
-			RegTypedef._dataMisc._roomState[8] = 8;
-			RegTypedef._dataMisc._roomState[9] = 8;
-			RegTypedef._dataMisc._roomState[10] = 7;
-			RegTypedef._dataMisc._roomState[11] = 2;
-			RegTypedef._dataMisc._roomState[12] = 3;
-			RegTypedef._dataMisc._roomState[13] = 8;
-			RegTypedef._dataMisc._roomState[14] = 2;
-			RegTypedef._dataMisc._roomState[15] = 8;
-			RegTypedef._dataMisc._roomState[16] = 2;
-			RegTypedef._dataMisc._roomState[17] = 7;
-			RegTypedef._dataMisc._roomState[18] = 8;
-			RegTypedef._dataMisc._roomState[19] = 3;
-			RegTypedef._dataMisc._roomState[20] = 3;
-			RegTypedef._dataMisc._roomState[21] = 7;
-			RegTypedef._dataMisc._roomState[22] = 7;
-			RegTypedef._dataMisc._roomState[23] = 8;
-			
-			RegTypedef._dataMisc._roomHostUsername[1] = "Jeti";
-			RegTypedef._dataMisc._roomHostUsername[2] = "rastarx";
-			RegTypedef._dataMisc._roomHostUsername[3] = "Sabadilla";
-			RegTypedef._dataMisc._roomHostUsername[4] = "EstaXen";
-			RegTypedef._dataMisc._roomHostUsername[5] = "";
-			RegTypedef._dataMisc._roomHostUsername[6] = "qentroz";
-			RegTypedef._dataMisc._roomHostUsername[7] = "EloBender";
-			RegTypedef._dataMisc._roomHostUsername[8] = "GameGeek";
-			RegTypedef._dataMisc._roomHostUsername[9] = "Udela";
-			RegTypedef._dataMisc._roomHostUsername[10] = "dogbone";
-			RegTypedef._dataMisc._roomHostUsername[11] = "";
-			RegTypedef._dataMisc._roomHostUsername[12] = "InError";
-			RegTypedef._dataMisc._roomHostUsername[13] = "MingmeiCheng";
-			RegTypedef._dataMisc._roomHostUsername[14] = "";
-			RegTypedef._dataMisc._roomHostUsername[15] = "laceyAnt";
-			RegTypedef._dataMisc._roomHostUsername[16] = "";
-			RegTypedef._dataMisc._roomHostUsername[17] = "stillwater";
-			RegTypedef._dataMisc._roomHostUsername[18] = "ponyride";
-			RegTypedef._dataMisc._roomHostUsername[19] = "sam";
-			RegTypedef._dataMisc._roomHostUsername[20] = "drumspirit";
-			RegTypedef._dataMisc._roomHostUsername[21] = "blueberry";
-			RegTypedef._dataMisc._roomHostUsername[22] = "margaret";
-			RegTypedef._dataMisc._roomHostUsername[23] = "Noob";
-			
-			RegTypedef._dataMisc._roomGameIds[1] = 1;
-			RegTypedef._dataMisc._roomGameIds[2] = 3;
-			RegTypedef._dataMisc._roomGameIds[3] = 0;
-			RegTypedef._dataMisc._roomGameIds[4] = 4;
-			RegTypedef._dataMisc._roomGameIds[5] = 3;
-			RegTypedef._dataMisc._roomGameIds[6] = 2;
-			RegTypedef._dataMisc._roomGameIds[7] = 1;
-			RegTypedef._dataMisc._roomGameIds[8] = 2;
-			RegTypedef._dataMisc._roomGameIds[9] = 0;
-			RegTypedef._dataMisc._roomGameIds[10] = 4;
-			RegTypedef._dataMisc._roomGameIds[11] = 3;
-			RegTypedef._dataMisc._roomGameIds[12] = 4;
-			RegTypedef._dataMisc._roomGameIds[13] = 1;
-			RegTypedef._dataMisc._roomGameIds[14] = 4;
-			RegTypedef._dataMisc._roomGameIds[15] = 0;
-			RegTypedef._dataMisc._roomGameIds[16] = 1;
-			RegTypedef._dataMisc._roomGameIds[17] = 3;
-			RegTypedef._dataMisc._roomGameIds[18] = 2;
-			RegTypedef._dataMisc._roomGameIds[19] = 0;
-			RegTypedef._dataMisc._roomGameIds[20] = 4;
-			RegTypedef._dataMisc._roomGameIds[21] = 3;
-			RegTypedef._dataMisc._roomGameIds[22] = 1;
-			RegTypedef._dataMisc._roomGameIds[23] = 0;
-			
-			RegTypedef._dataMisc._roomPlayerLimit[1] = 2;
-			RegTypedef._dataMisc._roomPlayerLimit[2] = 2;
-			RegTypedef._dataMisc._roomPlayerLimit[3] = 2;
-			RegTypedef._dataMisc._roomPlayerLimit[4] = 4;
-			RegTypedef._dataMisc._roomPlayerLimit[5] = 2;
-			RegTypedef._dataMisc._roomPlayerLimit[6] = 2;
-			RegTypedef._dataMisc._roomPlayerLimit[7] = 2;
-			RegTypedef._dataMisc._roomPlayerLimit[8] = 2;
-			RegTypedef._dataMisc._roomPlayerLimit[9] = 2;
-			RegTypedef._dataMisc._roomPlayerLimit[10] = 3;
-			RegTypedef._dataMisc._roomPlayerLimit[11] = 2;
-			RegTypedef._dataMisc._roomPlayerLimit[12] = 2;
-			RegTypedef._dataMisc._roomPlayerLimit[13] = 2;
-			RegTypedef._dataMisc._roomPlayerLimit[14] = 3;
-			RegTypedef._dataMisc._roomPlayerLimit[15] = 2;
-			RegTypedef._dataMisc._roomPlayerLimit[16] = 2;
-			RegTypedef._dataMisc._roomPlayerLimit[17] = 2;
-			RegTypedef._dataMisc._roomPlayerLimit[18] = 2;
-			RegTypedef._dataMisc._roomPlayerLimit[19] = 2;
-			RegTypedef._dataMisc._roomPlayerLimit[20] = 4;
-			RegTypedef._dataMisc._roomPlayerLimit[21] = 2;
-			RegTypedef._dataMisc._roomPlayerLimit[22] = 2;
-			RegTypedef._dataMisc._roomPlayerLimit[23] = 2;
-			
-			RegTypedef._dataMisc._roomPlayerCurrentTotal[1] = 1;
-			RegTypedef._dataMisc._roomPlayerCurrentTotal[2] = 2;
-			RegTypedef._dataMisc._roomPlayerCurrentTotal[3] = 1;
-			RegTypedef._dataMisc._roomPlayerCurrentTotal[4] = 3;
-			RegTypedef._dataMisc._roomPlayerCurrentTotal[5] = 1;
-			RegTypedef._dataMisc._roomPlayerCurrentTotal[6] = 2;
-			RegTypedef._dataMisc._roomPlayerCurrentTotal[7] = 2;
-			RegTypedef._dataMisc._roomPlayerCurrentTotal[8] = 2;
-			RegTypedef._dataMisc._roomPlayerCurrentTotal[9] = 2;
-			RegTypedef._dataMisc._roomPlayerCurrentTotal[10] = 3;
-			RegTypedef._dataMisc._roomPlayerCurrentTotal[11] = 1;
-			RegTypedef._dataMisc._roomPlayerCurrentTotal[12] = 1;
-			RegTypedef._dataMisc._roomPlayerCurrentTotal[13] = 2;
-			RegTypedef._dataMisc._roomPlayerCurrentTotal[14] = 1;
-			RegTypedef._dataMisc._roomPlayerCurrentTotal[15] = 2;
-			RegTypedef._dataMisc._roomPlayerCurrentTotal[16] = 1;
-			RegTypedef._dataMisc._roomPlayerCurrentTotal[17] = 2;
-			RegTypedef._dataMisc._roomPlayerCurrentTotal[18] = 2;
-			RegTypedef._dataMisc._roomPlayerCurrentTotal[19] = 1;
-			RegTypedef._dataMisc._roomPlayerCurrentTotal[20] = 1;
-			RegTypedef._dataMisc._roomPlayerCurrentTotal[21] = 2;
-			RegTypedef._dataMisc._roomPlayerCurrentTotal[22] = 2;
-			RegTypedef._dataMisc._roomPlayerCurrentTotal[23] = 2;
-			
-			RegTypedef._dataMisc._rated_game[1] = 1;
-			RegTypedef._dataMisc._rated_game[2] = 1;
-			RegTypedef._dataMisc._rated_game[3] = 1;
-			RegTypedef._dataMisc._rated_game[4] = 0;
-			RegTypedef._dataMisc._rated_game[5] = 1;
-			RegTypedef._dataMisc._rated_game[6] = 0;
-			RegTypedef._dataMisc._rated_game[7] = 1;
-			RegTypedef._dataMisc._rated_game[8] = 1;
-			RegTypedef._dataMisc._rated_game[9] = 1;
-			RegTypedef._dataMisc._rated_game[10] = 0;
-			RegTypedef._dataMisc._rated_game[11] = 1;
-			RegTypedef._dataMisc._rated_game[12] = 1;
-			RegTypedef._dataMisc._rated_game[13] = 1;
-			RegTypedef._dataMisc._rated_game[14] = 0;
-			RegTypedef._dataMisc._rated_game[15] = 0;
-			RegTypedef._dataMisc._rated_game[16] = 1;
-			RegTypedef._dataMisc._rated_game[17] = 1;
-			RegTypedef._dataMisc._rated_game[18] = 1;
-			RegTypedef._dataMisc._rated_game[19] = 0;
-			RegTypedef._dataMisc._rated_game[20] = 1;
-			RegTypedef._dataMisc._rated_game[21] = 1;
-			RegTypedef._dataMisc._rated_game[22] = 1;
-			RegTypedef._dataMisc._rated_game[23] = 1;
-			
-			RegTypedef._dataMisc._allowSpectators[1] = 1;
-			RegTypedef._dataMisc._allowSpectators[2] = 0;
-			RegTypedef._dataMisc._allowSpectators[3] = 1;
-			RegTypedef._dataMisc._allowSpectators[4] = 1;
-			RegTypedef._dataMisc._allowSpectators[5] = 1;
-			RegTypedef._dataMisc._allowSpectators[6] = 0;
-			RegTypedef._dataMisc._allowSpectators[7] = 1;
-			RegTypedef._dataMisc._allowSpectators[8] = 1;
-			RegTypedef._dataMisc._allowSpectators[9] = 1;
-			RegTypedef._dataMisc._allowSpectators[10] = 0;
-			RegTypedef._dataMisc._allowSpectators[11] = 0;
-			RegTypedef._dataMisc._allowSpectators[12] = 0;
-			RegTypedef._dataMisc._allowSpectators[13] = 1;
-			RegTypedef._dataMisc._allowSpectators[14] = 1;
-			RegTypedef._dataMisc._allowSpectators[15] = 1;
-			RegTypedef._dataMisc._allowSpectators[16] = 0;
-			RegTypedef._dataMisc._allowSpectators[17] = 0;
-			RegTypedef._dataMisc._allowSpectators[18] = 1;
-			RegTypedef._dataMisc._allowSpectators[19] = 1;
-			RegTypedef._dataMisc._allowSpectators[20] = 0;
-			RegTypedef._dataMisc._allowSpectators[21] = 0;
-			RegTypedef._dataMisc._allowSpectators[22] = 0;
-			RegTypedef._dataMisc._allowSpectators[23] = 1;
-			*/
 		}
 			
 		#if !html5
@@ -1774,10 +1575,13 @@ class NetworkEventsMain extends FlxState
 	*/
 	public function roomLock1(_data:Dynamic):Void
 	{
-		RegTypedef._dataMisc._roomLockMessage = "";
-		RegTypedef._dataMisc._roomCheckForLock[_data._room] = 0;
-		
-		PlayState.send("Room Lock 2", _data);			
+		if (_data._username == RegTypedef._dataPlayers._username)
+		{
+			RegTypedef._dataMisc._roomLockMessage = "";
+			RegTypedef._dataMisc._roomCheckForLock[_data._room] = 0;
+			
+			PlayState.send("Room Lock 2", _data);
+		}
 	}
 		
 	/******************************
@@ -1835,7 +1639,7 @@ class NetworkEventsMain extends FlxState
 			{
 				if (_data._drawAnsweredAs == true && Reg._totalPlayersInRoom == _drawSayYes)
 				{
-					Reg._gameMessage = "Draw accepted.";
+					Reg._messageBoxNoUserInput = "Draw accepted.";
 					Reg._outputMessage = true;
 					Reg._playerCanMovePiece = false;
 					RegTriggers._messageDraw = "Game ended in a draw.";
@@ -1849,7 +1653,7 @@ class NetworkEventsMain extends FlxState
 					if (Reg._gameHost == true)
 					{
 						RegTypedef._dataQuestions._gameOver = true;
-						RegTypedef._dataQuestions._gameMessage = Reg._gameMessage;
+						RegTypedef._dataQuestions._gameMessage = Reg._messageBoxNoUserInput;
 						RegTypedef._dataQuestions._restartGameAnsweredAs = false;
 						RegTypedef._dataQuestions._drawAnsweredAs = true;
 						PlayState.send("Spectator Watching", RegTypedef._dataQuestions);
@@ -1859,13 +1663,13 @@ class NetworkEventsMain extends FlxState
 				
 				else
 				{
-					Reg._gameMessage = "Draw rejected.";
+					Reg._messageBoxNoUserInput = "Draw rejected.";
 					Reg._outputMessage = true;
 					
 					if (Reg._gameHost == true)
 					{
 						RegTypedef._dataQuestions._gameOver = false;
-						RegTypedef._dataQuestions._gameMessage = Reg._gameMessage;
+						RegTypedef._dataQuestions._gameMessage = Reg._messageBoxNoUserInput;
 						RegTypedef._dataQuestions._restartGameAnsweredAs = false;
 						RegTypedef._dataQuestions._drawAnsweredAs = false;
 						PlayState.send("Spectator Watching", RegTypedef._dataQuestions);
@@ -1931,8 +1735,8 @@ class NetworkEventsMain extends FlxState
 				if (_data._restartGameAnsweredAs == true && Reg._totalPlayersInRoom == _restartSayYes)
 				{			
 					if (Reg._gameOverForAllPlayers == true)			
-						Reg._gameMessage = "Game started.";
-					else Reg._gameMessage = "Game restarted.";
+						Reg._messageBoxNoUserInput = "Game started.";
+					else Reg._messageBoxNoUserInput = "Game restarted.";
 					
 					Reg2._do_once_game_start_request = true;
 					
@@ -1946,12 +1750,14 @@ class NetworkEventsMain extends FlxState
 					
 					Reg._gameOverForPlayer = false;
 					Reg._gameOverForAllPlayers = false;
+					RegTypedef._dataPlayers._gameIsFinished = false;
+					
 					SceneGameRoom.assignMoveNumberPlayer();	
 					
 					if (Reg._gameHost == true)
 					{
 						RegTypedef._dataQuestions._gameOver = false;
-						RegTypedef._dataQuestions._gameMessage = Reg._gameMessage;
+						RegTypedef._dataQuestions._gameMessage = Reg._messageBoxNoUserInput;
 						RegTypedef._dataQuestions._drawAnsweredAs = false;
 						RegTypedef._dataQuestions._restartGameAnsweredAs = true;
 						if (RegTypedef._dataPlayers._spectatorWatching == false
@@ -1971,9 +1777,10 @@ class NetworkEventsMain extends FlxState
 							RegTypedef._dataPlayers._moveNumberDynamic[i] = i;
 						}
 					}
-
-					RegTypedef._dataPlayers._triggerEvent = "sender";
-					PlayState.send("Get Statistics Win Loss Draw", RegTypedef._dataPlayers);
+					
+					if (RegTypedef._dataMisc._username
+					==	RegTypedef._dataPlayers._usernamesStatic[0])
+						PlayState.send("Get Statistics Win Loss Draw", RegTypedef._dataPlayers);
 					
 					RegTypedef._dataPlayers._triggerEvent = "";
 					
@@ -1991,15 +1798,18 @@ class NetworkEventsMain extends FlxState
 					{
 						RegTypedef._dataPlayers._gamePlayersValues = [1, 1, 1, 1];
 						Reg._playerIDs = -1;
-						RegTypedef._dataPlayers._triggerEvent = "sender";
-						PlayState.send("Game Players Values", RegTypedef._dataPlayers); 
+						if (RegTypedef._dataMisc._username
+					==	RegTypedef._dataPlayers._usernamesStatic[0])
+							PlayState.send("Game Players Values", RegTypedef._dataPlayers); 
 						
 						RegTypedef._dataPlayers._triggerEvent = "";
 						
 						
 						RegTypedef._dataPlayers._gameIsFinished = false;
-						RegTypedef._dataPlayers._triggerEvent = "sender";
-						PlayState.send("Game Is Finished", RegTypedef._dataPlayers);
+						
+						if (RegTypedef._dataMisc._username
+					==	RegTypedef._dataPlayers._usernamesStatic[0])
+							PlayState.send("Game Is Finished", RegTypedef._dataPlayers);
 						
 						RegTypedef._dataPlayers._triggerEvent = "";
 					}
@@ -2008,12 +1818,12 @@ class NetworkEventsMain extends FlxState
 				else
 				{
 					if (Reg._gameOverForAllPlayers == true)			
-						Reg._gameMessage = "Request to start game was rejected.";
-					else Reg._gameMessage = "Request to restart game was rejected.";
+						Reg._messageBoxNoUserInput = "Request to start game was rejected.";
+					else Reg._messageBoxNoUserInput = "Request to restart game was rejected.";
 					if (Reg._gameHost == true)
 					{
 						RegTypedef._dataQuestions._gameOver = true;
-						RegTypedef._dataQuestions._gameMessage = Reg._gameMessage;
+						RegTypedef._dataQuestions._gameMessage = Reg._messageBoxNoUserInput;
 						RegTypedef._dataQuestions._drawAnsweredAs = false;
 						RegTypedef._dataQuestions._restartGameAnsweredAs = false;
 						
@@ -2035,7 +1845,7 @@ class NetworkEventsMain extends FlxState
 		}
 	}
 	
-	/************************************************************************
+ 	/************************************************************************
 	 * currently this event is for the signature game. a player sends a trade unit to another player and this event is for that other player receiving the trade. a message box displays, with trade details, asking if the player would like that trade. 30 seconds countdown. when timer reaches zero, the message box closes.
 	 */
 	public function tradeProposalOffer(_data:Dynamic):Void
@@ -2112,18 +1922,17 @@ class NetworkEventsMain extends FlxState
 			Reg._totalPlayersInRoom = RegTypedef._dataMisc._roomPlayerLimit[RegTypedef._dataMisc._room] - 1;
 			
 			// stop any sound playing.			
-			if (FlxG.sound.music != null && FlxG.sound.music.playing == true) FlxG.sound.music.stop();
+			//if (FlxG.sound.music != null && FlxG.sound.music.playing == true) FlxG.sound.music.stop();
 		
 			//RegTypedef._dataGame._room = _data._room; // tested once. seems to be not needed.
 			
 			Reg._gameHost = false;
 			Reg._gameId = _data._gameId;
-							
-			SceneWaitingRoom._textPlayer1Stats.text = "";
-			SceneWaitingRoom._textPlayer2Stats.text = "";
-			SceneWaitingRoom._textPlayer3Stats.text = "";
-			SceneWaitingRoom._textPlayer4Stats.text = "";
 			
+			for (i in 0... 4)
+			{
+				SceneWaitingRoom._text_player_stats[i].text = "";
+			}
 			
 			RegTypedef._dataMisc._userLocation = 3;			
 			
@@ -2385,7 +2194,7 @@ class NetworkEventsMain extends FlxState
 			updateStats(_data);
 			RegTypedef._dataPlayers._spectatorPlaying = false;
 			
-			// user is disconnecting by pressing the esc key. the PlayState._clientDisconnectDo var was set to false before entering this event so a check here is not needed because this is the last event entered after the ActionCommands.hx esc key was pressed.
+			// user is disconnecting by pressing the esc key. the PlayState._clientDisconnectDo var was set to false before entering this event so a check here is not needed because this is the last event entered after the Hotkeys.hx esc key was pressed.
 			if (PlayState._clientDisconnect == true)
 				PlayState.disconnectByESC();
 		}
@@ -2619,7 +2428,7 @@ class NetworkEventsMain extends FlxState
 		if (RegTypedef._dataMisc._spectatorWatching == true)
 		{
 			// get any game message
-			Reg._gameMessage = _data._gameMessage;
+			Reg._messageBoxNoUserInput = _data._gameMessage;
 
 			// game over if draw was answered as true.
 			if (_data._drawAnsweredAs == true)
@@ -2822,7 +2631,10 @@ class NetworkEventsMain extends FlxState
 		if ( Reg._roomPlayerLimit - Reg._playerOffset <= 2 )
 		{
 			RegTypedef._dataPlayers._gameIsFinished = true;
-			PlayState.send("Game Is Finished", RegTypedef._dataPlayers);				
+			
+			if (RegTypedef._dataMisc._username
+			==	RegTypedef._dataPlayers._usernamesStatic[0])
+				PlayState.send("Game Is Finished", RegTypedef._dataPlayers);				
 			
 			RegFunctions.playerAllStop();
 		}	
@@ -2972,7 +2784,10 @@ trace("--------------------");
 		if ( Reg._roomPlayerLimit - Reg._playerOffset <= 2 )
 		{
 			RegTypedef._dataPlayers._gameIsFinished = true;
-			PlayState.send("Game Is Finished", RegTypedef._dataPlayers);				
+			
+			if (RegTypedef._dataMisc._username
+			==	RegTypedef._dataPlayers._usernamesStatic[0])
+				PlayState.send("Game Is Finished", RegTypedef._dataPlayers);				
 			
 			RegFunctions.playerAllStop();
 		}	
@@ -3482,6 +3297,22 @@ trace("--------------------");
 			Reg._isThisPieceAtBackdoor = true;
 			Reg._playerCanMovePiece = true;
 		}
+	}
+	
+	/******************************
+	* EVENT SERVER WILL SOON DISCONNECT. SEND MESSAGE TO ALL CLIENT.
+	*/
+	public function disconnectAllByServer(_data:Dynamic):Void
+	{
+		if (Std.string(_data._message_offline) != "")
+			Reg._server_message = Std.string(_data._message_offline);	
+		
+		else if (Std.string(_data._message_online) != "")
+			Reg._server_message = Std.string(_data._message_online);
+		
+		Reg._messageId = 2222;
+		Reg._buttonCodeValues = "l2222";
+		SceneGameRoom.messageBoxMessageOrder();
 	}
 	
 	override public function destroy():Void

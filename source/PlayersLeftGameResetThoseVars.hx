@@ -263,8 +263,8 @@ class PlayersLeftGameResetThoseVars extends FlxText
 	}
 			
 	/******************************
-	 * when playing a game and then leave that game room while still playing, the other two or three player will .push that player's arrays so that the game can still be played with the remaining players in that room.
-	 * j n the player who left game, the data was .pop() now those arrays need to be added again or else there will be errors later.
+	 * when playing a game and then leaving that game room while still playing, the other two or three player will .push that player's arrays so that the game can still be played with the remaining players in that room.
+	 * for the player who left game, the data was pop(). now those arrays need to be added again or else there will be errors later.
 	 */
 	public static function playerRepopulateTypedefPlayers():Void
 	{		

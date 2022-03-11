@@ -56,7 +56,10 @@ class ButtonAlwaysActiveNetworkYes extends FlxUIButton
 	 * @param	innerColor		The color behind the text.
 	 */
 	public function new(x:Float = 0, y:Float = 0, ?text:String, button_width:Int = 80, button_height:Int = 40, textSize:Int = 20, textColor:FlxColor = 0xFFFFFFFF, textPadding:Int = 0, ?onClick:Void->Void, innerColor:FlxColor = 0xFF000066, use_down_click:Bool = false, id:Int = 0)	
-	{	
+	{
+		// do not use. this feature needs to remain hardcoded.
+		use_down_click = false;
+		
 		super(x, y-5, text, onClick, false, false, RegCustom._button_color[Reg._tn]);
 		
 		_startX = x;
@@ -87,14 +90,35 @@ class ButtonAlwaysActiveNetworkYes extends FlxUIButton
 	// this function must not be removed. also stops double firing of button sound at ActionKeyboard.hx.
 	override public function update(elapsed:Float):Void 
 	{
-		if (ActionInput.overlaps(this, null)
-		&&  FlxG.mouse.justPressed == true)
+		if (ActionInput.overlaps(this, null))
 		{
-			// this button has been pressed. remove focus from the chatter input box.
-			if (GameChatter._input_chat != null) GameChatter._input_chat.hasFocus = false;
+			if (FlxG.mouse.justPressed == true)
+			{
+				// this button has been pressed. remove focus from the chatter input box.
+				if (GameChatter._input_chat != null) GameChatter._input_chat.hasFocus = false;
+				
+				if (RegCustom._sound_enabled[Reg._tn] == true
+				&&  Reg2._scrollable_area_is_scrolling == false)
+					FlxG.sound.playMusic("click", 1, false);
+				
+			}
 		}
 		
 		super.update(elapsed);
-
+		
 	}
+	
+	override function onOverHandler():Void
+	{
+		Reg._buttonDown = true;
+		super.onOverHandler();
+	}
+	
+	override function onOutHandler():Void
+	{
+		Reg._buttonDown = false;
+		super.onOutHandler();
+	}
+	
+	
 }

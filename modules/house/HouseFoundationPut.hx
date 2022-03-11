@@ -341,15 +341,12 @@ class HouseFoundationPut extends FlxGroup
 					&&  ActionInput.coordinateY() - HouseScrollMap._map_offset_y >= _item_location_y[y] + _offset_y 
 					&&  ActionInput.coordinateY() - HouseScrollMap._map_offset_y <= _item_location_y[y] + _offset_y + 100)
 					{
-						if (ActionInput.justPressed() == true)
+						if (ActionInput.justReleased() == true)
 						{
 							if (RegCustom._sound_enabled[Reg._tn] == true
 							&&  Reg2._scrollable_area_is_scrolling == false)
-								FlxG.sound.play("click", 1, false);
-						}
+								FlxG.sound.playMusic("click", 1, false);
 						
-						if (ActionInput.justReleased() == true)
-						{
 							_item_selected_x = x;
 							_item_selected_y = y;
 							

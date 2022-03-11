@@ -16,7 +16,12 @@ package;
  * @author kboardgames.com
  */
 class GameChatter extends FlxGroup
-{
+{	
+	/******************************
+	 * haxe has a timing issue where the update function is read at b class before a class. this var is used to address the issue by only reading the content of that update function after the tick has a value of 2. 
+	 */
+	public static var _ticks_update:Int = 0;
+	
 	/******************************
 	 * background of chatter.
 	 */
@@ -254,8 +259,9 @@ class GameChatter extends FlxGroup
 		_group.add(_group_text);
 		
 		_idSprite = 1;
-		_group.y = _chatter_offset_y;		
+		_group.y = _chatter_offset_y;
 		
+		_ticks_update = 0;		
 	}
 	
 	public function initialize():Void
@@ -302,9 +308,7 @@ class GameChatter extends FlxGroup
 	}
 		
 	private function chat_input_from_button():Void
-	{
-		//if (_id != ID) return;
-		
+	{	
 		if (_input_chat.text != "")
 		{		
 			RegTypedef._dataMisc._chat = _input_chat.text;
@@ -832,6 +836,10 @@ class GameChatter extends FlxGroup
 		
 	override public function update(elapsed:Float):Void 
 	{
+		_ticks_update += 1;
+		if (_ticks_update > 2) _ticks_update == 2;
+		
+		if (_ticks_update < 2) return;
 		if (_id != ID) return;
 		
 		// this fixes a bug where the chat input element is not seen when returning to the lobby from the waiting room. Its not really a bug. it is just that two scenes are sharing the same class, no id is used and no id is needed.
@@ -870,23 +878,20 @@ class GameChatter extends FlxGroup
 			if (_input_chat.text == "") _input_chat.caretIndex = 0;
 		}
 		
-		/*
-			// these are needed so that the input field can be set back to focused after a keyboard button press.
-			Reg2._input_field_caret_location = _input_chat.caretIndex;
-			Reg2._input_field_number = 1;
-		}*/
+		// these are needed so that the input field can be set back to focused after a keyboard button press.
+		Reg2._input_field_caret_location = _input_chat.caretIndex;
+		Reg2._input_field_number = 1;
 		
 		if (ActionInput.justPressed() == true
 		&&  ActionInput.overlaps(_input_chat) == true)
 		{
-			#if mobile
-				RegTriggers._keyboard_open = true;
-			#end
+			RegTriggers._keyboard_open = true;
 		}
 		
-		//if (Reg2._key_output != "")	keyboard_pressed(); 
+		if (Reg2._key_output != "") keyboard_pressed(); 
 		
 		super.update(elapsed);
+		
 	}
 	
 }//

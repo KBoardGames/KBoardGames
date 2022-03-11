@@ -586,7 +586,7 @@ class ChessMovePlayersPiece extends FlxSprite {
 							
 						}
 						
-						//if (Reg._gameMessage == "") GameHistoryAndNotations.notationPrint();
+						//if (Reg._messageBoxNoUserInput == "") GameHistoryAndNotations.notationPrint();
 					}
 					
 					else
@@ -606,7 +606,7 @@ class ChessMovePlayersPiece extends FlxSprite {
 						
 						Reg._messageId = 0; // this triggers an event to make the restart game and to title buttons active again.
 						
-						//if (Reg._gameMessage == "") GameHistoryAndNotations.notationPrint();
+						//if (Reg._messageBoxNoUserInput == "") GameHistoryAndNotations.notationPrint();
 					}
 								
 					Reg._gameDidFirstMove = false;		

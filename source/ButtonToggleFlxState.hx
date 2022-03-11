@@ -82,7 +82,10 @@ class ButtonToggleFlxState extends FlxUIButton
 	 * @param	_innerColor		The color behind the text?
 	 */
 	public function new(x:Float = 0, y:Float = 0, id:Int, ?text:String, button_width:Int = 80, button_height:Int = 40, textSize:Int = 20, textColor:FlxColor = 0xFFFFFFFF, textPadding:Int = 0, ?onClick:Void->Void, _innerColor:FlxColor = 0xFF000066, use_down_click:Bool = false)	
-	{	
+	{
+		// do not use. this feature needs to remain hardcoded.
+		use_down_click = false;
+		
 		super(x, y - 5, text, onClick, false, false, RegCustom._button_color[Reg._tn]);
 		
 		_startX = x;
@@ -125,20 +128,20 @@ class ButtonToggleFlxState extends FlxUIButton
 	// this function must not be removed. also stops double firing of button sound at ActionKeyboard.hx.
 	override public function update(elapsed:Float):Void 
 	{
-		if (ActionInput.overlaps(this, null)
-		&&  FlxG.mouse.justPressed == true)
+		if (ActionInput.overlaps(this, null))
 		{
-			// this button has been pressed. remove focus from the chatter input box.
-			if (GameChatter._input_chat != null) GameChatter._input_chat.hasFocus = false;
-			
-			if (RegCustom._sound_enabled[Reg._tn] == true
-			&&  Reg2._scrollable_area_is_scrolling == false)
-				FlxG.sound.play("click", 1, false);
+			if (FlxG.mouse.justReleased == true 
+			&&  justReleased == true
+			&&	alpha == 1)
+			{
+				// this button has been pressed. remove focus from the chatter input box.
+				if (GameChatter._input_chat != null) GameChatter._input_chat.hasFocus = false;
+			}
+				
 		}
 		
-		if (Reg._buttonCodeValues == "")
+		if (Reg._buttonCodeValues == "" && Reg._messageId == 0)
 		{
-			Reg2._lobby_button_alpha = 1;
 			alpha = 1;
 		}
 		
@@ -148,7 +151,32 @@ class ButtonToggleFlxState extends FlxUIButton
 			alpha = 0.3;
 		}
 		
+		if (Reg._at_configuration_menu == true
+		&&	Reg._at_input_keyboard == true
+		&&	_id != 10000
+		&&	_id == ID
+		&&	FlxG.mouse.y < FlxG.height - 50)
+			skipButtonUpdate = true;
+			
+		if (Reg._at_configuration_menu == true
+		&&	Reg._at_input_keyboard == false
+		&&	_id != 10000
+		&&	_id == ID
+		&&	FlxG.mouse.y < FlxG.height - 50)
+			skipButtonUpdate = false;
+			
 		if (alpha == 1 && _id == ID) super.update(elapsed);
-		
+	}
+	
+	override function onOverHandler():Void
+	{
+		Reg._buttonDown = true;
+		super.onOverHandler();
+	}
+	
+	override function onOutHandler():Void
+	{
+		Reg._buttonDown = false;
+		super.onOutHandler();
 	}
 }

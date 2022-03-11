@@ -35,9 +35,11 @@ class ConfigurationProfileEvents extends CID2
 	 */
 	public function buttonP1():Void
 	{
+		if (Reg._at_input_keyboard == true) return;
+		
 		if (RegCustom._sound_enabled[Reg._tn] == true
 		&&  Reg2._scrollable_area_is_scrolling == false)
-			FlxG.sound.play("click", 1, false);
+			FlxG.sound.playMusic("click", 1, false);
 		
 		CID3._user_account_row = 5;
 		CID3._sprite_user_account.visible = true;
@@ -48,9 +50,10 @@ class ConfigurationProfileEvents extends CID2
 		
 		for (i in 0... CID3._user_account_row)
 		{
-			CID3._group_username_input[i].active = true;
-			CID3._group_password_input[i].active = true;
-			CID3._group_email_address_input[i].active = true;
+			for (ii in 0... 3)
+			{
+				CID3._group_input_text_field[ii][i].active = true;
+			}
 		}
 		
 		CID3._text_username.visible = true;		
@@ -59,26 +62,20 @@ class ConfigurationProfileEvents extends CID2
 		
 		for (i in 0... CID3._user_account_row)
 		{
-			CID3._group_username_input[i].visible = true;
-			CID3._group_password_input[i].visible = true;
-			CID3._group_email_address_input[i].visible = true;
-			
-			// remove the red border from any input fields.
-			CID3._group_username_input[i].fieldBorderColor = FlxColor.BLACK;
-			CID3._group_password_input[i].fieldBorderColor = FlxColor.BLACK;
-			CID3._group_email_address_input[i].fieldBorderColor = FlxColor.BLACK;
-			
-			CID3._group_username_input[i].fieldBorderThickness = 1;
-			CID3._group_password_input[i].fieldBorderThickness = 1;
-			CID3._group_email_address_input[i].fieldBorderThickness = 1;
-			
-			CID3._group_username_input[i].hasFocus = false;
-			CID3._group_password_input[i].hasFocus = false;
-			CID3._group_email_address_input[i].hasFocus = false;
+			for (ii in 0... 3)
+			{
+				CID3._group_input_text_field[ii][i].visible = true;
+				
+				// remove the red border from any input fields.
+				CID3._group_input_text_field[ii][i].fieldBorderColor = FlxColor.BLACK;
+				CID3._group_input_text_field[ii][i].fieldBorderThickness = 1;
+				
+				CID3._group_input_text_field[ii][i].hasFocus = false;
+			}
 			
 			if (RegCustom._profile_username_p1[i] == "") RegCustom._profile_username_p1[i] = "Guest1";
 			
-			CID3._group_username_input[i].text = RegCustom._profile_username_p1[i];
+			CID3._group_input_text_field[0][i].text = RegCustom._profile_username_p1[i];
 			
 		}
 		
@@ -99,6 +96,9 @@ class ConfigurationProfileEvents extends CID2
 		#end
 		
 		CID3._username_input.caretIndex = CID3._username_input.text.length;
+		
+		CID3._group_input_text_field[0][CID3._CRN].text = RegCustom._profile_username_p1[CID3._CRN];
+		
 	}
 	
 	/*****************************
@@ -106,33 +106,31 @@ class ConfigurationProfileEvents extends CID2
 	 */
 	public function buttonP2():Void
 	{
-		if (RegCustom._sound_enabled[Reg._tn] == true
-		&&  Reg2._scrollable_area_is_scrolling == false)
-			FlxG.sound.play("click", 1, false);
-		
+		if (Reg._at_input_keyboard == true) return;
 		// remove the red border from any input fields.
-		CID3._group_username_input[0].fieldBorderColor = FlxColor.BLACK;
-		CID3._group_username_input[0].fieldBorderThickness = 1;
-		CID3._group_username_input[0].hasFocus = false;
+		CID3._group_input_text_field[0][0].fieldBorderColor = FlxColor.BLACK;
+		CID3._group_input_text_field[0][0].fieldBorderThickness = 1;
+		CID3._group_input_text_field[0][0].hasFocus = false;
 		
-		CID3._group_password_input[0].fieldBorderColor = FlxColor.BLACK;
-		CID3._group_email_address_input[0].fieldBorderColor = FlxColor.BLACK;
+		CID3._group_input_text_field[1][0].fieldBorderColor = FlxColor.BLACK;
+		CID3._group_input_text_field[2][0].fieldBorderColor = FlxColor.BLACK;
 		CID3._text_password.visible = false;
 		CID3._text_email_address.visible = false;
 		
-		CID3._group_password_input[0].visible = false;
-		CID3._group_email_address_input[0].visible = false;
+		CID3._group_input_text_field[1][0].visible = false;
+		CID3._group_input_text_field[2][0].visible = false;
 		
-		CID3._group_password_input[0].active = false;
-		CID3._group_email_address_input[0].active = false;		
+		CID3._group_input_text_field[1][0].active = false;
+		CID3._group_input_text_field[2][0].active = false;		
 		
 		CID3._sprite_user_account.visible = false;		
 		
 		for (i in 1... CID3._user_account_row)
 		{
-			CID3._group_username_input[i].visible = false;
-			CID3._group_password_input[i].visible = false;
-			CID3._group_email_address_input[i].visible = false;
+			for (ii in 0... 3)
+			{
+				CID3._group_input_text_field[ii][i].visible = false;
+			}
 		}
 		
 		CID3._text_password.active = false;
@@ -140,9 +138,10 @@ class ConfigurationProfileEvents extends CID2
 		
 		for (i in 1... CID3._user_account_row)
 		{
-			CID3._group_username_input[i].active = false;
-			CID3._group_password_input[i].active = false;
-			CID3._group_email_address_input[i].active = false;
+			for (ii in 0... 3)
+			{
+				CID3._group_input_text_field[ii][i].active = false;
+			}
 		}
 		
 		CID3._user_account_row = 1; // keep this here.
@@ -154,7 +153,7 @@ class ConfigurationProfileEvents extends CID2
 		if (RegCustom._profile_username_p2 == "") RegCustom._profile_username_p2 = "Guest2";
 		
 		if (CID3._button_p2.has_toggle == false)
-			CID3._group_username_input[0].text = RegCustom._profile_username_p2;
+			CID3._group_input_text_field[0][0].text = RegCustom._profile_username_p2;
 				
 		#if avatars
 			Avatars._image_profile_avatar.loadGraphic("vendor/multiavatar/" + RegCustom._profile_avatar_number2[Reg._tn]);
@@ -171,10 +170,15 @@ class ConfigurationProfileEvents extends CID2
 		#end
 		
 		CID3._username_input.caretIndex = CID3._username_input.text.length;
+		
+		CID3._group_input_text_field[0][0].text = RegCustom._profile_username_p2;
+		
 	}
 	
 	public function send_email_address_validation_code_enabled():Void
 	{
+		if (Reg._at_input_keyboard == true) return;
+		
 		#if username_suggestions
 			if (RegCustom._send_email_address_validation_code == false)
 			{
@@ -191,6 +195,8 @@ class ConfigurationProfileEvents extends CID2
 	
 	public function username_suggestions_enabled():Void
 	{
+		if (Reg._at_input_keyboard == true) return;
+		
 		#if username_suggestions
 			if (RegCustom._username_suggestions_enabled[Reg._tn] == false)
 			{

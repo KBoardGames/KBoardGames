@@ -1,0 +1,1 @@
+Move this folder titled KBoardGames to the desktop. C:\Users\computer name\Desktop\KBoardGames

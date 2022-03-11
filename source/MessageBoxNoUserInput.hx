@@ -12,10 +12,10 @@
 package;
 
 /**
- * general message. its a blue background that can be closed when time expires or from a mouse button click.
+ * general message. its a blue background that closes after time expires.
  * @author kboardgames.com
  */
-class GameMessage extends FlxSubState
+class MessageBoxNoUserInput extends FlxSubState
 {		
 	/******************************
 	 * when timer runs out then this var is true. only then can a mouse click close this message. do not change this because check and checkmate messages will not be seen.
@@ -47,7 +47,7 @@ class GameMessage extends FlxSubState
 		_message_box.x = Reg2._messageBox_x;
 		add(_message_box);	
 					
-		_text = new FlxText(Reg2._messageBox_x + Reg2._textMessage_x, Reg2._messageBox_y + Reg2._textMessage_y, 0, Reg._gameMessage);
+		_text = new FlxText(Reg2._messageBox_x + Reg2._textMessage_x, Reg2._messageBox_y + Reg2._textMessage_y, 0, Reg._messageBoxNoUserInput);
 		_text.setFormat(null, 25, FlxColor.WHITE, LEFT);
 		_text.font = Reg._fontDefault;
 		_text.fieldWidth = 500;

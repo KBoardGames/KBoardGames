@@ -10,9 +10,6 @@
 */
 
 package;
-import flixel.math.FlxPoint;
-import flixel.ui.FlxVirtualPad.FlxActionMode;
-import lime.ui.MouseCursor;
 
 #if house
 	import modules.house.*;
@@ -70,7 +67,7 @@ class SceneLobby extends FlxState
 	/******************************
 	* the total player limit permitted for that room.
 	*/
-	public static var __scene_lobby_game_against_text:Array<SceneLobbyGameAgainstText> = [];
+	public static var __scene_lobby_game_against_text:Array<SceneLobbyGameRatedText> = [];
 	
 	/******************************
 	* outputs true or false if spectators are allowed for that room.
@@ -217,7 +214,7 @@ class SceneLobby extends FlxState
 		
 		__scene_lobby_room_player_limit_text = [for (i in 0... _room_total) new SceneLobbyRoomPlayerLimitText(0, 0, 0, "", 0)];
 		
-		__scene_lobby_game_against_text = [for (i in 0... _room_total) new SceneLobbyGameAgainstText(0, 0, 0, "", 0)];
+		__scene_lobby_game_against_text = [for (i in 0... _room_total) new SceneLobbyGameRatedText(0, 0, 0, "", 0)];
 		
 		__scene_lobby_game_spectators_text = [for (i in 0... _room_total) new SceneLobbyGameSpectatorsText(0, 0, 0, "", 0)];
 		
@@ -239,7 +236,7 @@ class SceneLobby extends FlxState
 		_lobby_data_received_do_once = true;
 		_lobby_sprite_mouse_just_pressed = false;
 		
-		GameMessage._ticks_close = false;
+		MessageBoxNoUserInput._ticks_close = false;
 		PlayState._text_logging_in.text = "";
 		Reg._at_lobby = true;
 		Reg._table_column_sort_do_once = false;
@@ -501,9 +498,6 @@ class SceneLobby extends FlxState
 				__scene_lobby_room_host_username_text[i].font = Reg._fontDefault;
 				_group_scrollable_area.add(__scene_lobby_room_host_username_text[i]);
 		
-						
-				var _host = RegFunctions.gameName(RegTypedef._dataMisc._roomGameIds[i]);
-				
 				if (__scene_lobby_game_title_text[i] != null)
 				{
 					remove(__scene_lobby_game_title_text[i]);
@@ -552,10 +546,11 @@ class SceneLobby extends FlxState
 					__scene_lobby_game_against_text[i].destroy();
 				}
 				
-				__scene_lobby_game_against_text[i] = new SceneLobbyGameAgainstText(1045 - _offset_x - _offset2_x, 130 - _offset_y + i * 70, 0, "", Reg._font_size, i);
+				__scene_lobby_game_against_text[i] = new SceneLobbyGameRatedText(1045 - _offset_x - _offset2_x, 130 - _offset_y + i * 70, 0, "", Reg._font_size, i);
 				
 				__scene_lobby_game_against_text[i].text = _title;
 				__scene_lobby_game_against_text[i].font = Reg._fontDefault;
+				
 				_group_scrollable_area.add(__scene_lobby_game_against_text[i]);
 				
 				//----------------------- spectators.
@@ -569,6 +564,7 @@ class SceneLobby extends FlxState
 				__scene_lobby_game_spectators_text[i] = new SceneLobbyGameSpectatorsText(1260 - _offset_x - _offset2_x, 130 - _offset_y + i * 70, 0, "", Reg._font_size, i);
 				
 				__scene_lobby_game_spectators_text[i].font = Reg._fontDefault;
+				
 				_group_scrollable_area.add(__scene_lobby_game_spectators_text[i]);
 				
 			}
@@ -588,14 +584,14 @@ class SceneLobby extends FlxState
 	 */
 	public function goto_room(_num:Int):Void
 	{
-		Reg2._lobby_button_alpha = 0.3; // this is needed here.
-		Reg._buttonDown = true;
-		
 		// get the number of the button from the button text.
 		var _str = _group_button_for_room[_num].label.text;
 		var _val = _str.split(":");
 		
-		_number = Std.parseInt(_val[0]);
+		if (RegTriggers._jump_creating_room == false)
+			_number = Std.parseInt(_val[0]);
+		else
+			_number = 1;
 		
 		// these are used to send a request to "get room data". at that event the _lobby_data_received is set to true. at this class that var is read along with _lobby_data_received_do_once to execute either the creating room or the waiting room event. The vars also helps to refresh the lobby with current data.
 		_lobby_data_received = false; 
@@ -650,7 +646,7 @@ class SceneLobby extends FlxState
 		RegTypedef._dataMovement._gid = RegTypedef._dataMisc._gid[_number];
 		RegTypedef._dataMovement._spectatorWatching = 1;
 		
-		PlayState.send("Get Statistics Win Loss Draw", RegTypedef._dataPlayers);		
+		PlayState.send("Get Statistics Win Loss Draw", RegTypedef._dataPlayers);	
 		PlayState.send("Greater RoomState Value", RegTypedef._dataMisc); 
 	}
 	
@@ -762,7 +758,6 @@ class SceneLobby extends FlxState
 	 */
 	public function set_active_for_buttons():Void
 	{
-		Reg._at_lobby = true;
 		__title_bar._title.visible = true;
 		
 		#if house
@@ -860,13 +855,21 @@ class SceneLobby extends FlxState
 			_table_column_sort6.active = true;
 			_table_column_sort6.visible = true;
 		}
+		
+		if (Reg._at_lobby == false)
+		{
+			var _state = FlxG.state;
+			_state.openSubState(new SceneTransition());
+		}
+		
+		Reg._at_lobby = true;
+		
 	}
 	
 	private function button_refresh():Void
 	{
 		// player is at lobby, so a check for room lock is not needed to be sent to this event.
 		RegTypedef._dataMisc._roomCheckForLock[0] = 0;
-		Reg2._lobby_button_alpha = 0.3;
 		
 		PlayState.send("Get Room Data", RegTypedef._dataMisc);		
 	}
@@ -963,8 +966,6 @@ class SceneLobby extends FlxState
 		#if miscellaneous
 			if (RegTriggers._makeMiscellaneousMenuClassActive == true)
 			{			
-				RegTriggers._makeMiscellaneousMenuClassActive = false;
-				
 				set_not_active_for_buttons();
 				
 				if (__menu_bar.__miscellaneous_menu != null)
@@ -1238,123 +1239,116 @@ class SceneLobby extends FlxState
 	}
 	
 	override public function destroy()
-	{ 
-		if (_group_button_for_room != null)
+	{
+		if (_group_scrollable_area != null)
 		{
-			for (i in 0... _group_button_for_room.length)
+			if (_group_button_for_room != null)
 			{
-				_group_scrollable_area.remove(_group_button_for_room[i]);
-				_group_button_for_room[i].destroy();
-				_group_button_for_room[i] = null;
+				for (i in 0... _group_button_for_room.length)
+				{
+					_group_scrollable_area.remove(_group_button_for_room[i]);
+					_group_button_for_room[i].destroy();
+					_group_button_for_room[i] = null;
+				}
 			}
-		}
-		
-		if (__scene_lobby_room_host_username_text != null)
-		{
-			for (i in 0... __scene_lobby_room_host_username_text.length)
+			
+			if (__scene_lobby_room_host_username_text != null)
 			{
-				_group_scrollable_area.remove(__scene_lobby_room_host_username_text[i]);
-				__scene_lobby_room_host_username_text[i].destroy();
-				__scene_lobby_room_host_username_text[i] = null;
-			}	
-		}
-		
-		if (__scene_lobby_game_title_text != null)
-		{
-			for (i in 0... __scene_lobby_game_title_text.length)
-			{
-				_group_scrollable_area.remove(__scene_lobby_game_title_text[i]);
-				__scene_lobby_game_title_text[i].destroy();
-				__scene_lobby_game_title_text[i] = null;
+				for (i in 0... __scene_lobby_room_host_username_text.length)
+				{
+					_group_scrollable_area.remove(__scene_lobby_room_host_username_text[i]);
+					__scene_lobby_room_host_username_text[i].destroy();
+					__scene_lobby_room_host_username_text[i] = null;
+				}	
 			}
-		}
-		
-		if (__scene_lobby_room_player_limit_text != null)
-		{
-			for (i in 0... __scene_lobby_room_player_limit_text.length)
+			
+			if (__scene_lobby_game_title_text != null)
 			{
-				_group_scrollable_area.remove(__scene_lobby_room_player_limit_text[i]);
-				__scene_lobby_room_player_limit_text[i].destroy();
-				__scene_lobby_room_player_limit_text[i] = null;
+				for (i in 0... __scene_lobby_game_title_text.length)
+				{
+					_group_scrollable_area.remove(__scene_lobby_game_title_text[i]);
+					__scene_lobby_game_title_text[i].destroy();
+					__scene_lobby_game_title_text[i] = null;
+				}
 			}
-		}
-		
-		if (__scene_lobby_game_against_text != null)
-		{
-			for (i in 0... __scene_lobby_game_against_text.length)
+			
+			if (__scene_lobby_room_player_limit_text != null)
 			{
-				_group_scrollable_area.remove(__scene_lobby_game_against_text[i]);
-				__scene_lobby_game_against_text[i].destroy();
-				__scene_lobby_game_against_text[i] = null;
+				for (i in 0... __scene_lobby_room_player_limit_text.length)
+				{
+					_group_scrollable_area.remove(__scene_lobby_room_player_limit_text[i]);
+					__scene_lobby_room_player_limit_text[i].destroy();
+					__scene_lobby_room_player_limit_text[i] = null;
+				}
 			}
-		}
+			
+			if (__scene_lobby_game_against_text != null)
+			{
+				for (i in 0... __scene_lobby_game_against_text.length)
+				{
+					_group_scrollable_area.remove(__scene_lobby_game_against_text[i]);
+					__scene_lobby_game_against_text[i].destroy();
+					__scene_lobby_game_against_text[i] = null;
+				}
+			}
 
-		if (__scene_lobby_game_spectators_text != null)
-		{
-			for (i in 0... __scene_lobby_game_spectators_text.length)
+			if (__scene_lobby_game_spectators_text != null)
 			{
-				_group_scrollable_area.remove(__scene_lobby_game_spectators_text[i]);
-				__scene_lobby_game_spectators_text[i].destroy();
-				__scene_lobby_game_spectators_text[i] = null;
+				for (i in 0... __scene_lobby_game_spectators_text.length)
+				{
+					_group_scrollable_area.remove(__scene_lobby_game_spectators_text[i]);
+					__scene_lobby_game_spectators_text[i].destroy();
+					__scene_lobby_game_spectators_text[i] = null;
+				}
 			}
-		}
-		
-		if (__scene_background != null)
-		{
-			remove(__scene_background);
-			__scene_background.destroy();
-			__scene_background = null;
-		}
-		
-		if (_button_lobby_refresh != null)
-		{
-			remove(_button_lobby_refresh);
-			_button_lobby_refresh.destroy();
-			_button_lobby_refresh = null;
-		}
+			
+			if (_table_rows != null)
+			{
+				for (i in 0... _table_rows.length)
+				{
+					_group_scrollable_area.remove(_table_rows[i]);
+					_table_rows[i].destroy();
+					_table_rows[i] = null;
+				}
+			}
+			
+			if (_table_horizontal_cell_padding != null)
+			{
+				_group_scrollable_area.remove(_table_horizontal_cell_padding);
+				_table_horizontal_cell_padding.destroy();
+				_table_horizontal_cell_padding = null;
+			}
+			
+			if (_table_horizontal_bottom_cell_padding != null)
+			{
+				_group_scrollable_area.remove(_table_horizontal_bottom_cell_padding);
+				_table_horizontal_bottom_cell_padding.destroy();
+				_table_horizontal_bottom_cell_padding = null;
+			}
+			
+			if (_table_vertical_cell_padding != null)
+			{
+				for (i in 0... _table_vertical_cell_padding.length)
+				{
+					_group_scrollable_area.remove(_table_vertical_cell_padding[i]);
+					_table_vertical_cell_padding[i].destroy();
+					_table_vertical_cell_padding[i] = null;
+				}
+			}
+			
+			if (_table_column_text != null)
+			{
+				for (i in 0... _table_column_text.length)
+				{
+					_group_scrollable_area.remove(_table_column_text[i]);
+					_table_column_text[i].destroy();
+					_table_column_text[i] = null;
+				}
+			}
 
-		if (_table_rows != null)
-		{
-			for (i in 0... _table_rows.length)
-			{
-				_group_scrollable_area.remove(_table_rows[i]);
-				_table_rows[i].destroy();
-				_table_rows[i] = null;
-			}
-		}
-		
-		if (_table_horizontal_cell_padding != null)
-		{
-			_group_scrollable_area.remove(_table_horizontal_cell_padding);
-			_table_horizontal_cell_padding.destroy();
-			_table_horizontal_cell_padding = null;
-		}
-		
-		if (_table_horizontal_bottom_cell_padding != null)
-		{
-			_group_scrollable_area.remove(_table_horizontal_bottom_cell_padding);
-			_table_horizontal_bottom_cell_padding.destroy();
-			_table_horizontal_bottom_cell_padding = null;
-		}
-		
-		if (_table_vertical_cell_padding != null)
-		{
-			for (i in 0... _table_vertical_cell_padding.length)
-			{
-				_group_scrollable_area.remove(_table_vertical_cell_padding[i]);
-				_table_vertical_cell_padding[i].destroy();
-				_table_vertical_cell_padding[i] = null;
-			}
-		}
-		
-		if (_table_column_text != null)
-		{
-			for (i in 0... _table_column_text.length)
-			{
-				_group_scrollable_area.remove(_table_column_text[i]);
-				_table_column_text[i].destroy();
-				_table_column_text[i] = null;
-			}
+			remove(_group_scrollable_area);
+			_group_scrollable_area.destroy();
+			_group_scrollable_area = null;
 		}
 
 		if (__scrollable_area != null && RegTypedef._dataMisc._userLocation == 0)
@@ -1363,14 +1357,7 @@ class SceneLobby extends FlxState
 			__scrollable_area.destroy();
 			__scrollable_area = null;
 		}
-		
-		if (_group_scrollable_area != null)
-		{
-			remove(_group_scrollable_area);
-			_group_scrollable_area.destroy();
-			_group_scrollable_area = null;
-		}
-		
+				
 		#if miscellaneous
 			if (__miscellaneous_menu_output != null)
 			{
@@ -1391,6 +1378,20 @@ class SceneLobby extends FlxState
 			}
 		#end
 		
+		if (__scene_background != null)
+		{
+			remove(__scene_background);
+			__scene_background.destroy();
+			__scene_background = null;
+		}
+		
+		if (_button_lobby_refresh != null)
+		{
+			remove(_button_lobby_refresh);
+			_button_lobby_refresh.destroy();
+			_button_lobby_refresh = null;
+		}
+
 		if (__menu_bar != null)
 		{
 			__menu_bar.visible = false;
@@ -1475,16 +1476,11 @@ class SceneLobby extends FlxState
 			{
 				// if mouse is on the button plus any offset made by the box scroller and mouse is pressed...
 				if (FlxG.mouse.y + ButtonGeneralNetworkYes._scrollarea_offset_y >= _group_button_for_room[i]._startY &&  FlxG.mouse.y + ButtonGeneralNetworkYes._scrollarea_offset_y <= _group_button_for_room[i]._startY + _group_button_for_room[i]._button_height + 7 && FlxG.mouse.y < FlxG.height - 50
-				&& FlxG.mouse.x + ButtonGeneralNetworkYes._scrollarea_offset_x >= _group_button_for_room[i]._startX &&  FlxG.mouse.x + ButtonGeneralNetworkYes._scrollarea_offset_x <= _group_button_for_room[i]._startX + _group_button_for_room[i]._button_width && FlxG.mouse.justPressed == true )
+				&& FlxG.mouse.x + ButtonGeneralNetworkYes._scrollarea_offset_x >= _group_button_for_room[i]._startX &&  FlxG.mouse.x + ButtonGeneralNetworkYes._scrollarea_offset_x <= _group_button_for_room[i]._startX + _group_button_for_room[i]._button_width && FlxG.mouse.justReleased == true )
 				{
-					if (Reg2._lobby_button_alpha == 1)
+					if (Reg._ticks_button_100_percent_opacity[1] == 0
+					&&	Reg._buttonCodeValues == "")
 					{
-						Reg2._lobby_button_alpha = 0.3;
-						
-						if (RegCustom._sound_enabled[Reg._tn] == true
-						&&  Reg2._scrollable_area_is_scrolling == false)
-							FlxG.sound.play("click", 1, false);
-						
 						button_clicked(i);
 						break;
 					}

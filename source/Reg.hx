@@ -16,7 +16,7 @@ package;
 #end
 
 /**
- * game 0 to 4 vars plus any vars to get them working. a var cab be just for a game or used for all games.
+ * general variables that can be used anywhere in code. before you do a release, see resetRegVarsOnce() and set some config vars there.
  * @author kboardgames.com
  */
 
@@ -34,7 +34,7 @@ class Reg
 	public static var _maximum_server_connections:Int = 119;
 		
 	
-	/* far below this code, at the resetRegVarsOnce() function, change this var to true when you are ready to release this version of the client to the public. this var will hide bot username and stop keyboard keys from working at ActionCommands.hx. Also, will stop player from logging in with same username more than once simultaneously.
+	/* far below this code, at the resetRegVarsOnce() function, change this var to true when you are ready to release this version of the client to the public. this var will hide bot username and stop keyboard keys from working at Hotkeys.hx. Also, will stop player from logging in with same username more than once simultaneously.
 	 */
 	public static var _clientReadyForPublicRelease:Bool = false;
 	
@@ -42,7 +42,7 @@ class Reg
 	 * only change the version number here. this value must be changed every time this complete program with dll's are copied to the localhost/files/windows folder.
 	 * no need to copy this var then paste to the bottom of this class because this value does not change while client is running.
 	 */
-	public static var _version:String = "1.23.13";
+	public static var _version:String = "2.0.19";
 	
 	/******************************
 	 * total games available in this release.
@@ -50,6 +50,27 @@ class Reg
 	public static var _total_games_in_release:Int = 0; // this value is populated at resetRegVarsOnce();
 	
 	public static var _total_games_excluded_from_list:Int = 0;
+	
+	/******************************
+	 * the speed of the number wheel in game ticks. higher value equals faster number wheel animation.
+	 */
+	public static var _number_wheel_speed:Int = 25;
+	
+	/******************************
+	 * Alpha will be set to a value of 1, 100% opacity, when _tick_button at a button class reaches this value.
+	 * this is the amount of game ticks needed.
+	 */
+	public static var _button_100_percent_opacity_value:Array<Int> = [0,0,0];
+	
+	/******************************
+	 * stops sound from playing.
+	 */
+	public static var _ticks_button_100_percent_opacity:Array<Int> = [0, 0, 0];
+	
+	/******************************
+	 * value is true if network button are clicked. this is used to stop rapid fire of button.
+	 */
+	public static var _button_clicked:Bool = false;
 	
 	/******************************
 	 * website domain does not end in "/" nor has http://.
@@ -77,7 +98,7 @@ class Reg
 	/******************************
 	 * Warning, server will crash if there are about 56 open clients on windows. Therefore, set this var to false when game is finish. also change this var at near the bottom of this class.
 	 */
-	public static var _loginMoreThanOnce = false;
+	public static var _same_device_login_more_than_once = true;
 	
 	//############################# END CONFIG
 	
@@ -90,16 +111,6 @@ class Reg
 
 	public static var _ipAddressSession:String = ""; // used to temp hold the value of an IP address until the restart of the program.
 		
-	/******************************
-	* this var will not decrease in value. it is the maximum amount of time that the user has to move or to use an action key for the player before the timer triggers a player disconnect from server event.
-	*/
-	public static var _logoffTime:Int = 9999999; // 2200 is a good number. ALSO CHANGE THIS VALUE AT resetRegVars().
-	
-	/******************************
-	* this is the current amount of time left before the timer triggers a player disconnect. this var must be the same as the _logoffTine.
-	*/
-	public static var _logoffTimeCurrent:Int = 9999999; // ALSO CHANGE THIS VALUE AT resetRegVars().
-	
 	//############################# THE FOLLOWING VALUES CAN BE IGNORED...
 	
 	/******************************
@@ -163,12 +174,12 @@ class Reg
 	public static var _messageFocusId:Array<Int> = [0];
 	
 	/******************************
-	 * this var is passed to MenuState. if true then there is already a host with that same name connected. a message will display if found a duplicate. change _loginMoreThanOnce, not this var.
+	 * this var is passed to MenuState. if true then there is already a host with that same name connected. a message will display if found a duplicate. change _same_device_login_more_than_once, not this var.
 	 */
 	public static var _alreadyOnlineHost:Bool = false;
 	
 	/******************************
-	 * this var is passed to MenuState. if true then there is already a username with that same name connected. a message will display if found a duplicate. change _loginMoreThanOnce, not this var.
+	 * this var is passed to MenuState. if true then there is already a username with that same name connected. a message will display if found a duplicate.
 	 */
 	public static var _alreadyOnlineUser:Bool = false;
 	
@@ -183,6 +194,21 @@ class Reg
 	public static var _ip_message:Bool = false;
 	
 	/******************************
+	 * user will return to MenuState.hx and this message will be seen when client disconnects and no other disconnect message is triggered at MenuState.hx because in the block of code at the if/else statements, this is the last message checked. The reason this is the last is because server only triggers an onclose event at client. No other data is sent. Therefore, we do not know if a ping was the issue. If there is no other message to display then this must be the issue.
+	 */
+	public static var _ping_time_expired:Bool = false;
+	
+	/******************************
+	 * if true then go to MenuState.hx to display an error message saying that client could not get calendar event data from website.
+	 */
+	public static var _calendar_event_data:Bool = false;
+	
+	/******************************
+	 * if true then go to MenuState.hx to display an error message saying that client could not get front door queue data.
+	 */
+	public static var _front_door_queue_data:Bool = false;
+	
+	/******************************
 	 * The config.txt file at root of client has the server domain details. if this value is true then that server domain, found at MySQL users table at server_domain field, is a paid member. therefore if true, the player can connect to that server. else, only the main server can be connected to.
 	 */
 	public static var _isThisServerPaidMember:Bool = true;
@@ -191,6 +217,8 @@ class Reg
 	 * used to display to the other player that this player is no longer playing a game because this player had left the room. this var can be also used to remove game text, such as win, loss text from the room.
 	 */
 	public static var _playerLeftGameUsername:String = "";
+	
+	
 	
 	/******************************
 	 * this var is used at PlayersLeftGameResetThoseVars.resetPlayersData() to do anything needed, such as reset the player's land back to its default state.
@@ -235,15 +263,20 @@ class Reg
 	public static var _at_leaderboards:Bool = false;
 	
 	/******************************
-	 * used at PlayState to make a condition to be only read once. at lobby, the scrollbar needs to be hidden or else the message box will not display it "login successful" message. this var is needed to only hide the scrollbar once along with reg._doOnce so the if statement is not read the second time.
+	 * used at PlayState to make a condition to be only read once. at lobby, the scrollbar needs to be hidden or else the message box will not display it "Welcome" message. this var is needed to only hide the scrollbar once along with reg._doOnce so the if statement is not read the second time.
 	 */
 	public static var _loginSuccessfulWasRead:Bool = false;
 	
 	/******************************
-	* used at PlayState to make a condition to be only read once. at lobby, the scrollbar needs to be hidden or else the message box will not display it "login successful" message. this var is needed to only hide the scrollbar once with Reg._loginSuccessfulWasRead being true and that if statement is not read the second time because this var will be set to false. also this var is used from room to return the user to the lobby.
+	* used at PlayState to make a condition to be only read once. at lobby, the scrollbar needs to be hidden or else the message box will not display it "Welcome" message. this var is needed to only hide the scrollbar once with Reg._loginSuccessfulWasRead being true and that if statement is not read the second time because this var will be set to false.
 	* this var is also used at menuState to determine if a website file exists. (versionClient.txt); if _doOnce is true then there is an error message that needs to be displayed.
 	*/
 	public static var _doOnce:Bool = true;
+	
+	/******************************
+	 * this var is used from game room to return the user to the lobby.
+	 */
+	public static var _doOnce2:Bool = true;
 	
 	/******************************
 	 * this calls the Player's Move event once so that the game can be played at this time.
@@ -294,11 +327,6 @@ class Reg
 	 * this var holds the parent state. If a class is public at playState.hx then it can be accessed at playState.hx using the code "Reg.state." then select the public class from the popup box.
 	 */
 	public static var state:PlayState;
-	
-	/******************************
-	 * used to execute a block of code after an ok or cancel key has been pressed at the PopupMessage.hx.
-	 */
-	public static var _displayOneDeviceErrorMessage:Bool = false;
 	
 	/******************************
 	 * used to display the cancel key at the PopupMessage.hx.
@@ -891,7 +919,7 @@ class Reg
 	/******************************
 	 * chess, checkmate and castling messages.
 	 */
-	public static var _gameMessage:String = "";
+	public static var _messageBoxNoUserInput:String = "";
 	
 	
 	/******************************
@@ -1119,7 +1147,7 @@ class Reg
 	
 	public static var _createGameRoom:Bool = false;
 	
-	public static var _goBackToLobby:Bool = false; // true then the lobby will be active and visible.
+	public static var _display_queue_message:Bool = true; // true then the front door queue message will not be seen.
 	
 	public static var _clearDoubleMessage:Bool = false; // sometimes a double message is seen when changing state. when set to true then this fixes it.
 	public static var _drawOffer:Bool = false;
@@ -1295,6 +1323,16 @@ class Reg
 	public static var _move_number_next:Int = 0;
 	
 	/******************************
+	 * at ChessCheckOrCheckmate.isThisCheckOrCheckmate, this var is used to break out of ChessFindCheckmate.checkmateSearch() loop because checkmate is found.
+	 */
+	public static var _checkmate_break_loop :Bool = false;	
+	
+	/******************************
+	 * when its the computer turn to search for a checkmate in 2 moves or more, this stops a checkmate message from displaying if checkmate is found in a loop depth greater than 1.
+	 */
+	public static var _chessCheckmateBypass:Bool = false;
+	
+	/******************************
 	 * if spectator, timer will not start for any player until this is set to true. at PlayerTimeRemainingMove.hx class, this var is verified.
 	 */
 	public static var _spectator_start_timer:Bool = false;
@@ -1428,7 +1466,7 @@ class Reg
 	 * if this field is not empty then the username has matched one of the names from the bad list. the user cannot login with a bad word.
 	 * this is used to reject the user and then send that user back to MenuState.
 	 */
-	public static var _username_restricted:Bool = false;
+	public static var _username_banned:Bool = false;
 	
 	
 	/******************************
@@ -1576,7 +1614,7 @@ class Reg
 	 * without this var, when two players enter the join() function at the same time, no ip and hostname text displayed from TextGeneral.hx at the front door and no way to enter into the lobby from front door.
 	 * the reason is two or more instances cannot share the same typedef data.
 	 */
-	public static var _can_join_server:Bool = true; 
+	public static var _can_join_server:Bool = false; 
 	
 	// Invite table variables. they are used to output data to the scrollable area.
 	public static var _usernamesOnline:Array<String> = [];
@@ -1584,39 +1622,12 @@ class Reg
 	public static var _invite_points:Array<Float> = [];
 	public static var _invite_percentage:Array<Float> = [];
 	
-	/******************************
-	 * change the _public var to true if release is ready for the public.
-	 * resetRegVarsOnce() calls this function.
-	 * only change the "var _public = false;" line.
-	 */
-	public static function set_for_public():Void
-	{
-		var _public = false;
-		
-		if (_public == false)
-		{
-			// just change change these three var values below this line.
-			_clientReadyForPublicRelease = false;		
-			
-			// set true when testing a feature that needs 2 players or when not ready for the public.
-			_loginMoreThanOnce = true; 
-		}
-		
-		else
-		{
-			Lib.application.window.maximized = true;
-			_clientReadyForPublicRelease = true;		
-			_loginMoreThanOnce = false; 
-		}
-	}
-	
 	public static function system_reset():Void
 	{
 		_serverDisconnected = false;
 		_clientDisconnected = false;
 		_login_failed = false;
 		_game_online_vs_cpu = false;
-		_displayOneDeviceErrorMessage = false;
 		_move_number_next = 0;
 		_moveNumberCurrentForHistory = 0;
 		
@@ -1642,11 +1653,13 @@ class Reg
 		}
 		
 		// the following in this function are not needed to be uncommented.
-		//_gameMessage = "";
+		//_messageBoxNoUserInput = "";
 		//_outputMessage = false;
 		//_alreadyOnlineHost = false;
 		//_alreadyOnlineUser = false;
 		//_isThisServerPaidMember = false;
+		//_calendar_event_data = false;
+		//_front_door_queue_data = false;
 		
 		_ecoOpeningsNotationsOutput = "";
 		// notation works when commenting out these two lines.
@@ -1655,7 +1668,7 @@ class Reg
 		
 		//_unitXgameBoardLocation and _unitYgameBoardLocation; // not needed to be reset.
 		//_actionMessage = ""; // never reset this var.
-		//_cannotConnectToServer = false and _username_restricted = false; // don't use these. they are commented because when changing states all reg.hx vars are reset. we cannot reset this because this var is used to go from menuState to playState to try to connect and then back to menuState if the connect fails.
+		//_cannotConnectToServer = false and _username_banned = false; // don't use these. they are commented because when changing states all reg.hx vars are reset. we cannot reset this because this var is used to go from menuState to playState to try to connect and then back to menuState if the connect fails.
 	}
 	
 	/******************************
@@ -1664,15 +1677,24 @@ class Reg
 	public static function resetRegVarsOnce():Void
 	{
 		//############################# START CONFIG
+		#if neko
+			_clientReadyForPublicRelease = false;
 		
-		set_for_public();
+		#else
+			_clientReadyForPublicRelease = true; 
+		
+		#end
+		
+		for (i in 0...3)
+		{
+			_button_100_percent_opacity_value[i] = 50;
+		}
 		
 		_avatar_total = 300;
 		__scrollable_area_scroll_y = 0;
 		_websiteHomeUrl = "kboardgames.com";
 		_websiteNameTitle = "K Board Games";
 		_websiteNameTitleCompare = "K Board Games";
-		
 		
 		// use localhost if you want to work offline. // use your public IP (ipconfig at command prompt), if you want others from the internet to connect to server. must be online for the connection to server to work.
 		
@@ -1681,6 +1703,7 @@ class Reg
 		_useThirdPartyIpAddress = true; // set this true to enable paid server feature. paid members can host their own domain and that domain can be selected at MenuState as an option to connect to that server.
 		
 		//############################# END CONFIG
+		
 		_total_games_in_release = 0;
 		_total_games_excluded_from_list = 0;
 		
@@ -1702,7 +1725,7 @@ class Reg
 
 		#if wheelEstate
 			_total_games_in_release += 1;
-			_total_games_excluded_from_list += 1;
+			//_total_games_excluded_from_list += 1;
 		#end		
 		
 		_title_bar_background_enabled = RegCustomColors.title_bar_background_color();
@@ -1748,6 +1771,14 @@ class Reg
 			ChessECO.listToArray();
 		#end
 		
+		for (i in 0 ... 3)
+		{
+			_ticks_button_100_percent_opacity[i] = 0;
+		}
+		
+		_button_clicked = false;
+		_chessCheckmateBypass = false;
+		_checkmate_break_loop = false;
 		_tc = 0;
 		_text_general_id = 0;
 		_gameIsNowOver = false;
@@ -1871,7 +1902,7 @@ class Reg
 		
 		_playerLeftGameUsername = "";
 		_playerLeftGameMoveNumber = 0;
-		_goBackToLobby = false;
+		//_display_queue_message = true;
 		_gameUnitNumberMiddle = -1;
 		_jumpingWhatDirection = -1;
 		_checkersFoundPieceToJumpOver = false;
@@ -1888,11 +1919,7 @@ class Reg
 		_getRoomData = false;
 		
 		_displayActionMessage = false;
-		
-		// if client has not pressed a keyboard key nor clicked a mouse button/wheel then that client will be disconnected.
-		_logoffTime = 9999999;
-		_logoffTimeCurrent = 9999999;
-			
+
 		_snakesLaddersPlayerUnitNumber[0] = 0;
 		_snakesLaddersPlayerUnitNumber[0] = 0;
 		
@@ -2191,4 +2218,4 @@ class Reg
 		_gameJumpTo = 0; 
 		
 	}
-}//
+}//

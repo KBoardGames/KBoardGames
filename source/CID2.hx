@@ -104,6 +104,8 @@ class CID2 extends FlxGroup
 	public static var _text_client_background_saturation:FlxText;
 	public static var _text_table_body_background_brightness:FlxText;
 	public static var _text_table_body_background_saturation:FlxText;
+	public static var _text_scene_transition_number:FlxText;
+	
 	/******************************
 	 * minus button for shade images of odd units. clicking this button will change the image of all odd units on the gameboard, displaying a different shade of grayscale.
 	 */
@@ -193,6 +195,8 @@ class CID2 extends FlxGroup
 	public static var _sprite_menu_bar_background_color:FlxSprite;
 	public static var _text_menu_bar_background_brightness:FlxText;
 	
+	public static var _sprite_title_icon_color:FlxSprite;
+	
 	/******************************
 	 * this changes the gradient background image of the game room.
 	 */
@@ -269,9 +273,11 @@ class CID2 extends FlxGroup
 	public static var _question_menu_bar_background_number:TextGeneral;
 	public static var _question_menu_bar_background_brightness:TextGeneral;
 	public static var _question_sound_enabled:TextGeneral;
+	public static var _question_scene_transition_number:TextGeneral;	
 	
 	public static var _text_empty:ButtonGeneralNetworkNo;
 	public static var _question_pager_enabled:TextGeneral;
+	public static var _question_title_icon_number:TextGeneral;
 	
 	/******************************
 	 * button used to toggle on and off the display of the leaderboard.
@@ -353,6 +359,10 @@ class CID2 extends FlxGroup
 	public static var _button_menu_bar_background_brightness_minus:ButtonGeneralNetworkNo;
 	public static var _button_menu_bar_background_brightness_plus:ButtonGeneralNetworkNo;
 	public static var _button_pager_enabled:ButtonGeneralNetworkNo;
+	public static var _button_scene_transition_number_minus:ButtonGeneralNetworkNo;
+	public static var _button_scene_transition_number_plus:ButtonGeneralNetworkNo;
+	public static var _button_title_icon_number_minus:ButtonGeneralNetworkNo;
+	public static var _button_title_icon_number_plus:ButtonGeneralNetworkNo;
 	
 	/******************************
 	 * moves the button down,
