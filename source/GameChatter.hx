@@ -250,13 +250,27 @@ class GameChatter extends FlxGroup
 		_group_text.visible = false;
 		add(_group_text);
 		
-		_group_text.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
+		_group_text.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.chatter_text_color());
 		_group_text.fieldWidth = 325;
 		_group_text.visible = true;
 		
-		_group_text.setPosition(Reg._client_width, 100);
+		_group_text.setPosition(Reg._client_width + 10, 100);
 		_group_text.ID = _idSprite;
 		_group.add(_group_text);
+		
+		// dummy text for chatter
+		if (RegTypedef._dataMisc._dummy_data_in_use == true
+		&&	Reg._at_lobby == true)
+		{
+			_group_text.text = "Tabbie: why?
+			oriel: every chess player should master the English opening
+			oriel: c4
+			Tabbie: what is the first move in english opening?
+			oriel: Two famous chess openings that i like to use are Italian game and English opening.
+			Cadmar: chess has no best style. It depends on your preference.
+			Tabbie: What is the best opening in chess?
+			Chatter.\n\r";
+		}
 		
 		_idSprite = 1;
 		_group.y = _chatter_offset_y;

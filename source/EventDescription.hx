@@ -166,9 +166,7 @@ class EventDescription extends FlxSubState
 		_state.visible = false;
 		RegTriggers._run_flxstate_effects_for_calendar = true;
 		
-		Sys.sleep(0.2);
-		
-		close();		
+		haxe.Timer.delay(function (){ close(); }, 200);		
 	}
 
 }

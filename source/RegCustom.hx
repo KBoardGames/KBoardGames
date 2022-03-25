@@ -110,6 +110,16 @@ class RegCustom
 	public static var _title_bar_text_color_number:Array<Int> = [];
 	
 	/******************************
+	 * table of a scene. this is the text color at the table body.
+	 */
+	public static var _table_body_text_color_number:Array<Int> = [];
+	
+	/******************************
+	 * chatter tex color.
+	 */
+	public static var _chatter_text_color_number:Array<Int> = [];
+	
+	/******************************
 	 * display a gradient background image for most client scenes.
 	 */
 	public static var _gradient_background_enabled:Array<Bool> = [];
@@ -447,6 +457,31 @@ class RegCustom
 	 */
 	public static var _title_icon_number:Array<Int> = [];
 	
+	/******************************
+	 * the shadow displayed underneath the number wheel.
+	 */
+	public static var _number_wheel_shadow_image_number:Array<Int> = [];
+	
+	/******************************
+	 * the body of the number wheel excluding text.
+	 */
+	public static var _number_wheel_image_number:Array<Int> = [];
+	
+	/******************************
+	 * text 1-6 of the number wheel.
+	 */
+	public static var _number_wheel_numbers_image_number:Array<Int> = [];
+	
+	/******************************
+	 * this highlights in color the selected number on the number wheel then the number wheel button is mouse clicked.
+	 */
+	public static var _number_wheel_highlighter_image_number:Array<Int> = [];
+	
+	/******************************
+	 * the mouse clickable button on the number wheel.
+	 */
+	public static var _number_wheel_button_image_number:Array<Int> = [];
+	
 	
 	// these vars are reset at the start of each game.
 	public static function resetRegVars():Void
@@ -626,6 +661,12 @@ class RegCustom
 		_title_bar_text_color_number.splice(0, _title_bar_text_color_number.length);
 		_title_bar_text_color_number.push(11);
 		
+		_table_body_text_color_number.splice(0, _table_body_text_color_number.length);
+		_table_body_text_color_number.push(1);
+		
+		_chatter_text_color_number.splice(0, _chatter_text_color_number.length);
+		_chatter_text_color_number.push(1);
+		
 		_profile_avatar_number1.splice(0, _profile_avatar_number1.length);
 		_profile_avatar_number1.push("0.png");
 		
@@ -707,6 +748,21 @@ class RegCustom
 		
 		_title_icon_number.splice(0, _title_icon_number.length);
 		_title_icon_number.push(1);
+		
+		_number_wheel_shadow_image_number.splice(0, _number_wheel_shadow_image_number.length);
+		_number_wheel_shadow_image_number.push(12);
+		
+		_number_wheel_image_number.splice(0, _number_wheel_image_number.length);
+		_number_wheel_image_number.push(11);
+		
+		_number_wheel_numbers_image_number.splice(0, _number_wheel_numbers_image_number.length);
+		_number_wheel_numbers_image_number.push(1);
+		
+		_number_wheel_highlighter_image_number.splice(0, _number_wheel_highlighter_image_number.length);
+		_number_wheel_highlighter_image_number.push(8);
+		
+		_number_wheel_button_image_number.splice(0, _number_wheel_button_image_number.length);
+		_number_wheel_button_image_number.push(3);
 		
 		#if html5
 			return;

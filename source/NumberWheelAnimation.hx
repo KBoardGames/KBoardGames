@@ -15,7 +15,7 @@ package;
  * the dice wheel, highlights each number, in turn. from 1 to 6. the number highlighted, after a mouse click, is the number used to move a piece that many times from the piece's current location.
  * @author kboardgames.com
  */
-class NumberWheel extends FlxSprite
+class NumberWheelAnimation extends FlxSprite
 {
 	/******************************
 	 * At NumberWheelButton is used to used to determine if the NumberWheel is animating. if it is animating that the NumberWheelButton can be clicked else that button is will displayed ad gray.
@@ -29,9 +29,9 @@ class NumberWheel extends FlxSprite
 	
 	public function new(x:Float, y:Float) 
 	{
-		super(x, y-7);
+		super(x, y);
 		
-		loadGraphic("assets/images/numberWheel.png", true, 198, 198);
+		loadGraphic("assets/images/numberWheel-animation.png", true, 198, 198);
 
 		animation.add("run", [0, 1, 2, 3, 4, 5], Reg._number_wheel_speed); // faster = higher value.
 		animation.play("run");	

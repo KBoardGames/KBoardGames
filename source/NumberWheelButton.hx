@@ -22,9 +22,10 @@ class NumberWheelButton extends FlxSprite
 		super(x, y-7);
 		
 		// if changing this size, the click me x and y coordinates at GameCreate.hx also needs changing. for example, search for SnakesAndLaddersClickMe.
-		loadGraphic("assets/images/numberWheelButton.png", true, 138, 138);
-
-		animation.add("run", [0, 1, 0], 12, false); // faster = higher value.
+		loadGraphic("assets/images/numberWheel-button.png", true, 110, 110);
+		
+		// faster = higher value.
+		animation.add("run", [0, 1, 0], 12, false); 
 		visible = false;
 		
 	}
@@ -41,7 +42,7 @@ class NumberWheelButton extends FlxSprite
 					visible = true;
 					
 					if (FlxG.mouse.justPressed == true
-					&&	NumberWheel._animation_playing == true)
+					&&	NumberWheelAnimation._animation_playing == true)
 					{
 						// number is really 29.5. we cannot have half a pixel so 1 is added to the right side of the image.
 						if (FlxG.mouse.x >= x - 29
@@ -60,7 +61,7 @@ class NumberWheelButton extends FlxSprite
 		
 		super.update(elapsed);
 		
-		if (NumberWheel._animation_playing == true) alpha = 1;
+		if (NumberWheelAnimation._animation_playing == true) alpha = 1;
 		else alpha = 0.7;
 		
 	}

@@ -232,12 +232,13 @@ class HUD extends FlxState
 				if (i == 1) _column_total_wins[1] = new FlxText(450 + 12 + 85, FlxG.height - 61, 0, "", 20);
 				if (i == 2) _column_total_wins[2] = new FlxText(750 + 18 + 85, FlxG.height - 61, 0, "", 20);
 				if (i == 3) _column_total_wins[3] = new FlxText(1050 + 24 + 85, FlxG.height - 61, 0, "", 20);
-				_column_total_wins[0].scrollFactor.set();
-				_column_total_wins[0].setFormat(Reg._fontDefault, Reg._font_size, FlxColor.LIME);
-				_column_total_wins[0].setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
-				add(_column_total_wins[0]);
+				_column_total_wins[i].scrollFactor.set();
+				_column_total_wins[i].setFormat(Reg._fontDefault, Reg._font_size, FlxColor.LIME);
+				_column_total_wins[i].setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
+				add(_column_total_wins[i]);
 			}
 		}
+		
 		//--------------------------
 		for (i in 0... 4)
 		{

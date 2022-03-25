@@ -41,10 +41,12 @@ _notation_panel_40_percent_alpha_enabled: true
 _notation_panel_same_background_color_enabled: false
 _notation_panel_background_color_enabled: false
 _notation_panel_background_color_number: 1
-_notation_panel_text_color_number: 14
+_notation_panel_text_color_number: 13
 _client_topic_title_text_color_number: 1
 _client_text_color_number: 1
 _title_bar_text_color_number: 1
+_table_body_text_color_number: 1
+_chatter_text_color_number: 1
 _profile_avatar_number1: 0.png
 _profile_avatar_number2: 0.png
 _profile_avatar_number3: 0.png
@@ -70,3 +72,10 @@ _title_bar_background_brightness: 0.5
 _menu_bar_background_brightness: 0.5
 _world_flags_number: 0
 _pager_enabled: false
+_scene_transition_number: 5
+_title_icon_number: 1
+_number_wheel_shadow_image_number: 12
+_number_wheel_image_number: 11
+_number_wheel_numbers_image_number: 1
+_number_wheel_highlighter_image_number: 8
+_number_wheel_button_image_number: 3

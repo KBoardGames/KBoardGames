@@ -474,9 +474,9 @@ class ConfigurationOutput extends FlxGroup
 				return;
 			}
 			
-			else if (CID3._group_input_text_field[1][CID3._CRN].text.length <= 3
+			else if (CID3._group_input_text_field[1][CID3._CRN].text.length <= 2
 			&&		 CID3._group_input_text_field[0][CID3._CRN].text.substr(0, 5).toLowerCase() != "guest"
-			||		 CID3._group_input_text_field[0][CID3._CRN].text.length <= 3
+			||		 CID3._group_input_text_field[0][CID3._CRN].text.length <= 2
 			&&		 CID3._group_input_text_field[0][CID3._CRN].text.substr(0, 5).toLowerCase() != "guest")
 			{
 				Reg._messageId = 9012;

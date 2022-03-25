@@ -201,7 +201,7 @@ class Hotkeys extends FlxGroup
 				#if openfl_legacy
 					openfl.Lib.close();
 				#else
-					Sys.exit(0);
+					#if !html5 Sys.exit(0); #end
 				#end
 			}
 			

@@ -196,17 +196,17 @@ class ButtonGeneralNetworkYes extends FlxUIButton
 		
 		}	
 		
-		if (Reg._buttonCodeValues != ""
-		&&	Reg2._message_box_just_closed == true)
+		if (Reg2._message_box_just_closed == true)
 		{
 			Reg2._message_box_just_closed = false;
 			
-			if (Reg._at_lobby == true)
+			if (Reg._at_lobby == true) 
 				RegTypedef._dataMisc._room = 0;
 			
-			if (RegTypedef._dataMisc._userLocation == 0
-			&&	Reg._buttonCodeValues != "s9") // esc hotkey.
-				Reg._buttonCodeValues = "";
+			// this creates a bug at NewAccount where two mouse clicks are needed to return to lobby.
+			//if (RegTypedef._dataMisc._userLocation == 0
+			//&&	Reg._buttonCodeValues != "s9") // esc hotkey.
+			//	Reg._buttonCodeValues = "";
 			
 			Reg._ticks_button_100_percent_opacity[0] = 0; 
 			Reg._ticks_button_100_percent_opacity[1] = 0;

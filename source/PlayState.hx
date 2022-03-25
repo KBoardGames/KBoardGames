@@ -692,7 +692,7 @@ class PlayState extends FlxState
 					if (RegTypedef._dataAccount._username == "")
 						RegTypedef._dataAccount._username = RegCustom._profile_username_p1[CID3._CRN];
 					
-					Internet.getIP();
+					//Internet.getIP();
 				}
 				
 				catch (err:Dynamic) 
@@ -707,11 +707,10 @@ class PlayState extends FlxState
 			
 		if (_ticks_ip == 1
 		&&	_ticks_hostname == -1
-		&&	RegTypedef._dataAccount._ip != ""
 		&&	_id == ID)
 		{
-			if (Reg._game_online_vs_cpu == true || Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false)	{
-				Internet.getHostname();	
+			if (Reg._game_online_vs_cpu == true || Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false)
+			{
 				_ticks_hostname = 1;
 			}
 		
@@ -719,7 +718,6 @@ class PlayState extends FlxState
 		
 		// display the front door text for this user and set the lobby ticks so that if user has not pressed a key within time allowed, that user will be redirected to lobby. see FlxG.keys.justPressed.ANY == true code.
 		if (_ticks_hostname == 1
-		&&	RegTypedef._dataAccount._hostname != ""
 		&&	_id == ID)
 		{
 			_ticks_hostname = 2;
@@ -1178,8 +1176,9 @@ class PlayState extends FlxState
 				GameChatter.__scrollable_area3.active = false;
 			}
 			
-			// this is needed to stop two room buttons highlighting simultaneously at lobby.
+			// this is needed to stop two room buttons highlighting simultaneously at lobby. remember lobby and waiting room share the same camera.
 			__scene_waiting_room.__scrollable_area.scroll.y = 5000;
+			
 			__scene_waiting_room.__scrollable_area.visible = false;
 			__scene_waiting_room.__scrollable_area.active = false;
 			
@@ -1189,7 +1188,6 @@ class PlayState extends FlxState
 			__scene_lobby.__scrollable_area.active = true;			
 			__scene_lobby.__scrollable_area.visible = true;
 			
-			__scene_lobby.set_active_for_buttons();			
 			__scene_lobby.initialize();
 			
 			if (SceneLobby.__game_chatter != null)
@@ -1207,12 +1205,14 @@ class PlayState extends FlxState
 			RegTriggers._recreate_chatter_input_chat = true;
 			
 			Reg._updateScrollbarBringUp = true; 
-			GameChatter._input_chat.active = true;
+			
+			if (GameChatter == null)
+				GameChatter._input_chat.active = true;
+			
+			__scene_lobby.set_active_for_buttons();			
 			
 			__scene_lobby.active = true;
 			__scene_lobby.visible = true;
-			
-			openSubState(new SceneTransition());
 			
 		}
 		
@@ -1429,40 +1429,43 @@ class PlayState extends FlxState
 	 */
 	override public function update(elapsed:Float):Void
 	{
-		if (RegTriggers._keyboard_open == true)
-		{
-			RegTriggers._keyboard_open = false;
-			RegTriggers._keyboard_opened = true;
+		#if html5	
+			if (RegTriggers._keyboard_open == true)
+			{
+				RegTriggers._keyboard_open = false;
+				RegTriggers._keyboard_opened = true;
 
-			if (__action_keyboard != null)
-			{
-				__action_keyboard.close();
-				remove(__action_keyboard);
-				__action_keyboard = null;
+				if (__action_keyboard != null)
+				{
+					__action_keyboard.close();
+					remove(__action_keyboard);
+					__action_keyboard = null;
+				}
+				
+				if (__action_keyboard == null)
+				{
+					__action_keyboard = new ActionKeyboard();
+					add(__action_keyboard);
+				}
+				
+				__action_keyboard.drawButtons();
 			}
 			
-			if (__action_keyboard == null)
+			if (RegTriggers._keyboard_close == true)
 			{
-				__action_keyboard = new ActionKeyboard();
-				add(__action_keyboard);
-			}
-			
-			__action_keyboard.drawButtons();
-		}
-		
-		if (RegTriggers._keyboard_close == true)
-		{
-			RegTriggers._keyboard_close = false;
+				RegTriggers._keyboard_close = false;
 
-			if (__action_keyboard != null) 
-			{
-				__action_keyboard.close();
-				remove(__action_keyboard);
-				__action_keyboard = null;
+				if (__action_keyboard != null) 
+				{
+					__action_keyboard.close();
+					remove(__action_keyboard);
+					__action_keyboard = null;
+				}
+				
 			}
 			
-		}
-		
+		#end
+			
 		// go to the client() function and connect to the server. If connected then define the events.
 		if ( Reg._hasUserConnectedToServer == false
 		&&	 Reg._alreadyOnlineUser == false) client();
@@ -1568,7 +1571,7 @@ class PlayState extends FlxState
 		if (Reg._yesNoKeyPressValueAtMessage > 0 && Reg._buttonCodeValues == "lock1000")
 		{
 			Reg._yesNoKeyPressValueAtMessage = 0;
-			// Reg._buttonCodeValues = ""; this var is cleared at ButtonGeneralNetworkYes class
+			Reg._buttonCodeValues = "";
 		}
 		
 		// should message box be displayed?

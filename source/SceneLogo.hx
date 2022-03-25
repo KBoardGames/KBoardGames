@@ -25,9 +25,11 @@ class SceneLogo extends FlxState
 	{
 		FlxG.mouse.visible = false;
 		
+		//#if !html5
 		FlxG.sound.playMusic("logo", 1, false);
+		//#end
 		
-		_logo = new FlxSprite(0, 250, "assets/logo.png");
+		_logo = new FlxSprite(0, 250, "assets/logo/logo2.png");
 		_logo.screenCenter(X);
 		add(_logo);
 		

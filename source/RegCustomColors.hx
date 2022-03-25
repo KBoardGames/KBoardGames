@@ -119,6 +119,18 @@ class RegCustomColors
 		return _c;
 	}
 	
+	public static function table_body_text_color():FlxColor
+	{		
+		var _c = colors(RegCustom._table_body_text_color_number[Reg._tn]);
+		return _c;
+	}
+	
+	public static function chatter_text_color():FlxColor
+	{		
+		var _c = colors(RegCustom._chatter_text_color_number[Reg._tn]);
+		return _c;
+	}
+	
 	/******************************
 	 * button fill color is the color behind the button text.
 	 */
@@ -161,6 +173,36 @@ class RegCustomColors
 	public static function title_icon_color():FlxColor
 	{
 		var _c = colors(RegCustom._title_icon_number[Reg._tn]);
+		return _c;
+	}
+	
+	public static function number_wheel_shadow_color():FlxColor
+	{
+		var _c = colors(RegCustom._number_wheel_shadow_image_number[Reg._tn]);
+		return _c;
+	}
+	
+	public static function number_wheel_color():FlxColor
+	{
+		var _c = colors(RegCustom._number_wheel_image_number[Reg._tn]);
+		return _c;
+	}
+	
+	public static function number_wheel_numbers_color():FlxColor
+	{
+		var _c = colors(RegCustom._number_wheel_numbers_image_number[Reg._tn]);
+		return _c;
+	}
+	
+	public static function number_wheel_highlighter_color():FlxColor
+	{
+		var _c = colors(RegCustom._number_wheel_highlighter_image_number[Reg._tn]);
+		return _c;
+	}
+	
+	public static function number_wheel_button_color():FlxColor
+	{
+		var _c = colors(RegCustom._number_wheel_button_image_number[Reg._tn]);
 		return _c;
 	}
 	

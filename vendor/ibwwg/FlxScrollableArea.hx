@@ -104,12 +104,6 @@ class FlxScrollableArea extends FlxCamera
 		// stops a bug at configuration menu, where the scene background is always the same color as the header.
 		if (_id == 1000) bgColor = 0x00000000;
 		
-		// vertical bar at the left side of the scrollable area.
-		var _spr = new FlxSprite(-2, 0);
-		_spr.makeGraphic(6, FlxG.height, FlxColor.BLUE);
-		_spr.scrollFactor.set(0, 0);
-		_state.add(_spr);
-		
 		content = Content;
 		
 		if (_id == 1000)

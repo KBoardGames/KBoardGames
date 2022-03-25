@@ -17,7 +17,7 @@ package modules.games.wheelEstate;
  */
 class SignatureGameClickMe extends FlxSprite
 {
-	public var __number_wheel:NumberWheel;
+	public var __number_wheel_animation:NumberWheelAnimation;
 	
 	public static var _canMoveNow:Bool = false; // sometimes when clicking the number wheel, the move count will be out of sync with the number wheel index. the result will be the piece moves once but the image is highlighting 2. this var fixes that.
 
@@ -41,7 +41,7 @@ class SignatureGameClickMe extends FlxSprite
 	private var _playerPieces3:SignatureGameMovePlayersPiece;
 	private var _playerPieces4:SignatureGameMovePlayersPiece;
 	
-	public function new(x:Float, y:Float, number_wheel:NumberWheel, ids_win_lose_or_draw:IDsWinLoseOrDraw,
+	public function new(x:Float, y:Float, number_wheel_animation:NumberWheelAnimation, ids_win_lose_or_draw:IDsWinLoseOrDraw,
 	playerPieces1:SignatureGameMovePlayersPiece,
 	playerPieces2:SignatureGameMovePlayersPiece,
 	playerPieces3:SignatureGameMovePlayersPiece,
@@ -51,7 +51,7 @@ class SignatureGameClickMe extends FlxSprite
 		
 		__ids_win_lose_or_draw = ids_win_lose_or_draw;
 		
-		__number_wheel = number_wheel;
+		__number_wheel_animation = number_wheel_animation;
 		
 		_canMoveNow = false;
 		_ra = 0;
@@ -95,7 +95,7 @@ class SignatureGameClickMe extends FlxSprite
 				// if not in mortgage.
 				if (SignatureGameMain._isMortgage[Reg._move_number_next][i] != -1)
 				{
-					SignatureGameMain._isMortgage[Reg._move_number_next][i] = SignatureGameMain._isMortgage[Reg._move_number_next][i] + __number_wheel.animation.curAnim.curIndex + 1; // this code is for mortgage.					
+					SignatureGameMain._isMortgage[Reg._move_number_next][i] = SignatureGameMain._isMortgage[Reg._move_number_next][i] + __number_wheel_animation.animation.curAnim.curIndex + 1; // this code is for mortgage.					
 				}
 			}
 			
@@ -106,7 +106,7 @@ class SignatureGameClickMe extends FlxSprite
 			{
 				Reg._move_number_next = Reg._gameXXnew;
 				
-				Reg._gameDiceMaximumIndex[Reg._move_number_next] = Reg._gameDiceMaximumIndex[Reg._move_number_next] + __number_wheel.animation.curAnim.curIndex + 1;
+				Reg._gameDiceMaximumIndex[Reg._move_number_next] = Reg._gameDiceMaximumIndex[Reg._move_number_next] + __number_wheel_animation.animation.curAnim.curIndex + 1;
 	
 				// set backdoor value.
 				Reg._backdoorMoveValue = Reg._gameDiceMaximumIndex[Reg._move_number_next];
@@ -119,7 +119,7 @@ class SignatureGameClickMe extends FlxSprite
 			
 			else 
 			{
-				Reg._gameDiceMaximumIndex[Reg._move_number_next] = Reg._gameDiceMaximumIndex[Reg._move_number_next] + __number_wheel.animation.curAnim.curIndex + 1;				
+				Reg._gameDiceMaximumIndex[Reg._move_number_next] = Reg._gameDiceMaximumIndex[Reg._move_number_next] + __number_wheel_animation.animation.curAnim.curIndex + 1;				
 			}
 			
 		}
@@ -144,7 +144,7 @@ class SignatureGameClickMe extends FlxSprite
 			// when its the computer player's turn to move, this give a random delay at clicking the number wheel.
 			if (Reg._game_offline_vs_cpu == true 
 			&&  Reg._move_number_current > 0
-			&& __number_wheel.animation.paused == false)
+			&& __number_wheel_animation.animation.paused == false)
 			{
 				_ticks = RegFunctions.incrementTicks(_ticks, 60 / Reg._framerate);
 				if (_ticks >= _ra) _ticks = 0;
@@ -159,7 +159,7 @@ class SignatureGameClickMe extends FlxSprite
 			&& Reg._gameDidFirstMove == false 
 			&& Reg._playerCanMovePiece == true 
 			&& Reg._gameDidFirstMove == false 
-			&& __number_wheel.animation.paused == false
+			&& __number_wheel_animation.animation.paused == false
 			&& Reg._move_number_current == Reg._move_number_next			
 			|| Reg._game_offline_vs_cpu == true // player's turn to move.
 			&& Reg._move_number_current == 0 
@@ -169,7 +169,7 @@ class SignatureGameClickMe extends FlxSprite
 			&& ActionInput.justPressed() == true 
 			&& RegTypedef._dataMisc._spectatorWatching == false
 			&& Reg._gameDidFirstMove == false 
-			&& __number_wheel.animation.paused == false 
+			&& __number_wheel_animation.animation.paused == false 
 			&& Reg._move_number_current == Reg._move_number_next
 			
 			|| Reg._game_offline_vs_cpu == false // all players' turn.
@@ -179,7 +179,7 @@ class SignatureGameClickMe extends FlxSprite
 			&& ActionInput.justPressed() == true 
 			&& RegTypedef._dataMisc._spectatorWatching == false
 			&& Reg._gameDidFirstMove == false 
-			&& __number_wheel.animation.paused == false 
+			&& __number_wheel_animation.animation.paused == false 
 			&& Reg._move_number_current == Reg._move_number_next
 			&& Reg._at_input_keyboard == false
 			
@@ -190,7 +190,7 @@ class SignatureGameClickMe extends FlxSprite
 				Reg._number_wheel_get_value = true;
 				//Reg._number_wheel_ticks = 0;
 				Reg._triggerNextStuffToDo = 0;
-				__number_wheel.animation.pause();			
+				__number_wheel_animation.animation.pause();			
 								
 			}
 			
@@ -213,7 +213,7 @@ class SignatureGameClickMe extends FlxSprite
 					Reg._number_wheel_ticks += 1;
 			}
 			
-			if (Reg._playerCanMovePiece == true && __number_wheel.animation.paused == false && _canMoveNow == false) 
+			if (Reg._playerCanMovePiece == true && __number_wheel_animation.animation.paused == false && _canMoveNow == false) 
 			{			
 				visible = true;
 				Reg._gameDidFirstMove = false;

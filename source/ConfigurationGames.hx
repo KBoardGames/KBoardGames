@@ -293,10 +293,10 @@ class ConfigurationGames extends FlxGroup
 			CID1._group_button.push(CID1._button_chess_future_capturing_units_plus);
 			CID1._group.add(CID1._group_button[(_count + 5)]);
 			
-			CID1._sprite_chess_future_capturing_units_bg = new FlxSprite(CID1._button_chess_future_capturing_units_plus.x + CID1._button_chess_future_capturing_units_plus.width + 45, CID1._button_chess_future_capturing_units_plus.y - 10, "assets/images/blackBackground.jpg");
+			CID1._sprite_chess_future_capturing_units_bg = new FlxSprite(CID1._button_chess_future_capturing_units_plus.x + CID1._button_chess_future_capturing_units_plus.width + 15, CID1._button_chess_future_capturing_units_plus.y - 10, "assets/images/blackBackground.jpg");
 			CID1._group.add(CID1._sprite_chess_future_capturing_units_bg);
 			
-			CID1._sprite_chess_future_capturing_units = new FlxSprite(CID1._button_chess_future_capturing_units_plus.x + CID1._button_chess_future_capturing_units_plus.width + 45, CID1._button_chess_future_capturing_units_plus.y - 10);
+			CID1._sprite_chess_future_capturing_units = new FlxSprite(CID1._button_chess_future_capturing_units_plus.x + CID1._button_chess_future_capturing_units_plus.width + 15, CID1._button_chess_future_capturing_units_plus.y - 10);
 			CID1._sprite_chess_future_capturing_units.loadGraphic("assets/images/futureCapturingUnits.png", true, 75, 75);
 			CID1._sprite_chess_future_capturing_units.animation.add("path empty unit", [2], 1, false);
 			CID1._sprite_chess_future_capturing_units.animation.play("path empty unit");
@@ -330,12 +330,12 @@ class ConfigurationGames extends FlxGroup
 			CID1._group_button.push(CID1._button_chess_path_to_king_plus);
 			CID1._group.add(CID1._group_button[(_count + 8)]);
 					
-			CID1._sprite_chess_path_to_king = new FlxSprite(CID1._button_chess_path_to_king_plus.x + CID1._button_chess_path_to_king_plus.width + 45, CID1._button_chess_path_to_king_plus.y - 10);
+			CID1._sprite_chess_path_to_king = new FlxSprite(CID1._button_chess_path_to_king_plus.x + CID1._button_chess_path_to_king_plus.width + 15, CID1._button_chess_path_to_king_plus.y - 10);
 			CID1._sprite_chess_path_to_king.loadGraphic("assets/images/pathToKing.png", false, 75, 75);
 			CID1._sprite_chess_path_to_king.color = RegCustomColors.color_path_to_king();
 			CID1._group.add(CID1._sprite_chess_path_to_king);
 			
-			CID1._sprite_chess_path_to_king_bg = new FlxSprite(CID1._button_chess_path_to_king_plus.x + CID1._button_chess_path_to_king_plus.width + 45, CID1._button_chess_path_to_king_plus.y - 10, "assets/images/border1.png");
+			CID1._sprite_chess_path_to_king_bg = new FlxSprite(CID1._button_chess_path_to_king_plus.x + CID1._button_chess_path_to_king_plus.width + 15, CID1._button_chess_path_to_king_plus.y - 10, "assets/images/border1.png");
 			CID1._group.add(CID1._sprite_chess_path_to_king_bg);
 			
 			//##############################

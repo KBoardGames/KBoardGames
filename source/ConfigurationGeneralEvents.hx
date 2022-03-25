@@ -613,6 +613,42 @@ class ConfigurationGeneralEvents extends CID2
 		CID2._sprite_title_bar_text_color.color = RegCustomColors.title_bar_text_color();
 	}	
 	
+	// change the text color at the table.
+	public function table_body_text_color_minus()
+	{
+		RegCustom._table_body_text_color_number[Reg._tn] -= 1;
+		if (RegCustom._table_body_text_color_number[Reg._tn] == 0) RegCustom._table_body_text_color_number[Reg._tn] = 13;
+		
+		CID2._sprite_table_body_text_color.color = RegCustomColors.table_body_text_color();
+	}
+	
+	// change the text color at the title.
+	public function table_body_text_color_plus()
+	{
+		RegCustom._table_body_text_color_number[Reg._tn] += 1;
+		if (RegCustom._table_body_text_color_number[Reg._tn] >= 14) RegCustom._table_body_text_color_number[Reg._tn] = 1;
+		
+		CID2._sprite_table_body_text_color.color = RegCustomColors.table_body_text_color();
+	}	
+	
+	// change the text color at the chatter.
+	public function chatter_text_color_minus()
+	{
+		RegCustom._chatter_text_color_number[Reg._tn] -= 1;
+		if (RegCustom._chatter_text_color_number[Reg._tn] == 0) RegCustom._chatter_text_color_number[Reg._tn] = 13;
+		
+		CID2._sprite_chatter_text_color.color = RegCustomColors.chatter_text_color();
+	}
+	
+	// change the text color at the title.
+	public function chatter_text_color_plus()
+	{
+		RegCustom._chatter_text_color_number[Reg._tn] += 1;
+		if (RegCustom._chatter_text_color_number[Reg._tn] >= 14) RegCustom._chatter_text_color_number[Reg._tn] = 1;
+		
+		CID2._sprite_chatter_text_color.color = RegCustomColors.chatter_text_color();
+	}	
+	
 	public function capturing_units_enabled():Void
 	{
 		if (RegCustom._capturing_units[Reg._tn] == false)
@@ -967,14 +1003,6 @@ class ConfigurationGeneralEvents extends CID2
 		CID2._text_scene_transition_number.text = Std.string(RegCustom._scene_transition_number[Reg._tn]);
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
 	public function title_icon_number_minus()
 	{
 		RegCustom._title_icon_number[Reg._tn] -= 1;
@@ -991,4 +1019,83 @@ class ConfigurationGeneralEvents extends CID2
 		CID2._sprite_title_icon_color.color = RegCustomColors.title_icon_color();
 	}
 
+	public function number_wheel_shadow_minus()
+	{
+		RegCustom._number_wheel_shadow_image_number[Reg._tn] -= 1;
+		if (RegCustom._number_wheel_shadow_image_number[Reg._tn] == 0) RegCustom._number_wheel_shadow_image_number[Reg._tn] = 13;
+		
+		CID2._sprite_number_wheel_shadow_image_number_color.color = RegCustomColors.number_wheel_shadow_color();
+	}
+	
+	public function number_wheel_shadow_plus()
+	{
+		RegCustom._number_wheel_shadow_image_number[Reg._tn] += 1;
+		if (RegCustom._number_wheel_shadow_image_number[Reg._tn] >= 14) RegCustom._number_wheel_shadow_image_number[Reg._tn] = 1;
+		
+		CID2._sprite_number_wheel_shadow_image_number_color.color = RegCustomColors.number_wheel_shadow_color();
+	}
+	
+	public function number_wheel_minus()
+	{
+		RegCustom._number_wheel_image_number[Reg._tn] -= 1;
+		if (RegCustom._number_wheel_image_number[Reg._tn] == 0) RegCustom._number_wheel_image_number[Reg._tn] = 13;
+		
+		CID2._sprite_number_wheel_image_number_color.color = RegCustomColors.number_wheel_color();
+	}
+	
+	public function number_wheel_plus()
+	{
+		RegCustom._number_wheel_image_number[Reg._tn] += 1;
+		if (RegCustom._number_wheel_image_number[Reg._tn] >= 14) RegCustom._number_wheel_image_number[Reg._tn] = 1;
+		
+		CID2._sprite_number_wheel_image_number_color.color = RegCustomColors.number_wheel_color();
+	}
+	
+	public function number_wheel_numbers_minus()
+	{
+		RegCustom._number_wheel_numbers_image_number[Reg._tn] -= 1;
+		if (RegCustom._number_wheel_numbers_image_number[Reg._tn] == 0) RegCustom._number_wheel_numbers_image_number[Reg._tn] = 13;
+		
+		CID2._sprite_number_wheel_numbers_image_number_color.color = RegCustomColors.number_wheel_numbers_color();
+	}
+	
+	public function number_wheel_numbers_plus()
+	{
+		RegCustom._number_wheel_numbers_image_number[Reg._tn] += 1;
+		if (RegCustom._number_wheel_numbers_image_number[Reg._tn] >= 14) RegCustom._number_wheel_numbers_image_number[Reg._tn] = 1;
+		
+		CID2._sprite_number_wheel_numbers_image_number_color.color = RegCustomColors.number_wheel_numbers_color();
+	}
+	
+	public function number_wheel_highlighter_minus()
+	{
+		RegCustom._number_wheel_highlighter_image_number[Reg._tn] -= 1;
+		if (RegCustom._number_wheel_highlighter_image_number[Reg._tn] == 0) RegCustom._number_wheel_highlighter_image_number[Reg._tn] = 13;
+		
+		CID2._sprite_number_wheel_highlighter_image_number_color.color = RegCustomColors.number_wheel_highlighter_color();
+	}
+	
+	public function number_wheel_highlighter_plus()
+	{
+		RegCustom._number_wheel_highlighter_image_number[Reg._tn] += 1;
+		if (RegCustom._number_wheel_highlighter_image_number[Reg._tn] >= 14) RegCustom._number_wheel_highlighter_image_number[Reg._tn] = 1;
+		
+		CID2._sprite_number_wheel_highlighter_image_number_color.color = RegCustomColors.number_wheel_highlighter_color();
+	}
+	
+	public function number_wheel_button_minus()
+	{
+		RegCustom._number_wheel_button_image_number[Reg._tn] -= 1;
+		if (RegCustom._number_wheel_button_image_number[Reg._tn] == 0) RegCustom._number_wheel_button_image_number[Reg._tn] = 13;
+		
+		CID2._sprite_number_wheel_button_image_number_color.color = RegCustomColors.number_wheel_button_color();
+	}
+	
+	public function number_wheel_button_plus()
+	{
+		RegCustom._number_wheel_button_image_number[Reg._tn] += 1;
+		if (RegCustom._number_wheel_button_image_number[Reg._tn] >= 14) RegCustom._number_wheel_button_image_number[Reg._tn] = 1;
+		
+		CID2._sprite_number_wheel_button_image_number_color.color = RegCustomColors.number_wheel_button_color();
+	}
 }//

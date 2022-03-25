@@ -17,13 +17,13 @@ package modules.games.snakesAndLadders;
  */
 class SnakesAndLaddersClickMe extends FlxSprite
 {
-	public var __number_wheel:NumberWheel;
+	public var __number_wheel_animation:NumberWheelAnimation;
 	
-	public function new(x:Float, y:Float, number_wheel:NumberWheel) 
+	public function new(x:Float, y:Float, number_wheel_animation:NumberWheelAnimation) 
 	{
 		super(x, y);
 		
-		__number_wheel = number_wheel;
+		__number_wheel_animation = number_wheel_animation;
 		
 		loadGraphic("assets/images/clickMe.png", true, 198, 198);	
 	}
@@ -53,12 +53,12 @@ class SnakesAndLaddersClickMe extends FlxSprite
 		*/
 		
 		// move player's piece when this image is clicked
-		if (Reg._backdoorMoveValue != -1 || Reg._playerCanMovePiece == true && ActionInput.overlaps(this) && ActionInput.justPressed() == true && __number_wheel.animation.paused == false && RegTypedef._dataMisc._spectatorWatching == false && Reg._at_input_keyboard == false)
+		if (Reg._backdoorMoveValue != -1 || Reg._playerCanMovePiece == true && ActionInput.overlaps(this) && ActionInput.justPressed() == true && __number_wheel_animation.animation.paused == false && RegTypedef._dataMisc._spectatorWatching == false && Reg._at_input_keyboard == false)
 		{
 			Reg._number_wheel_get_value = true;
 			//Reg._number_wheel_ticks = 0;
 			
-			__number_wheel.animation.pause();
+			__number_wheel_animation.animation.pause();
 				
 		}
 		
@@ -120,7 +120,7 @@ class SnakesAndLaddersClickMe extends FlxSprite
 					if (Reg._isThisPieceAtBackdoor == false && Reg._rolledA6 == false)
 					{
 						Reg._gameDiceMinimumIndex[Reg._playerMoving] = Reg._gameDiceMaximumIndex[Reg._playerMoving];
-						Reg._gameDiceMaximumIndex[Reg._playerMoving] += __number_wheel.animation.curAnim.curIndex + 1;
+						Reg._gameDiceMaximumIndex[Reg._playerMoving] += __number_wheel_animation.animation.curAnim.curIndex + 1;
 						Reg._backdoorMoveValue = Reg._gameDiceMaximumIndex[Reg._playerMoving];
 					}
 				} 
@@ -129,7 +129,7 @@ class SnakesAndLaddersClickMe extends FlxSprite
 				//Reg._gameDiceMinimumIndex[Reg._playerMoving] = Reg._gameDiceCurrentIndex[Reg._playerMoving];
 				
 				// roll dice again.
-				if (__number_wheel.animation.curAnim.curIndex + 1 == 6 && Reg._gameDiceMaximumIndex[Reg._playerMoving] < 64) 
+				if (__number_wheel_animation.animation.curAnim.curIndex + 1 == 6 && Reg._gameDiceMaximumIndex[Reg._playerMoving] < 64) 
 				{
 					Reg._rolledA6 = true;
 					
@@ -202,7 +202,7 @@ class SnakesAndLaddersClickMe extends FlxSprite
 			}
 		}
 		
-		if (Reg._playerCanMovePiece == true && __number_wheel.animation.paused == false) 
+		if (Reg._playerCanMovePiece == true && __number_wheel_animation.animation.paused == false) 
 		{			
 			visible = true;
 		}

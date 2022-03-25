@@ -229,7 +229,10 @@ class SceneLobby extends FlxState
 			__scene_background = new SceneBackground();
 		add(__scene_background);		
 	}
-		
+	
+	/******************************
+	 * when this function is called, it is called twice. keep it that way because it fixes at least one bug.
+	 */
 	public function initialize():Void
 	{
 		_lobby_data_received = false;
@@ -238,13 +241,21 @@ class SceneLobby extends FlxState
 		
 		MessageBoxNoUserInput._ticks_close = false;
 		PlayState._text_logging_in.text = "";
-		Reg._at_lobby = true;
+		
 		Reg._table_column_sort_do_once = false;
 		
 		_populate_table_body = false;
 		
-		__menu_bar.initialize();
+		if (Reg._at_lobby == false)
+		{
+			__menu_bar.initialize();	
+		}
 		
+		
+		// when first logging in to server, sometimes doe to the timing issue bug, the lobby buttons will not show the correct text. therefore, a second refresh will be needed.		
+		PlayState.send("Get Room Data", RegTypedef._dataMisc);
+		
+		Reg._at_lobby = true;
 	}
 		
 	public function display():Void
@@ -275,10 +286,15 @@ class SceneLobby extends FlxState
 			_button_lobby_refresh.destroy();			
 		}
 		
-		// 360 is the chat width. 215 is this button with. 15 is the default space from the edge. 20 is the width of the scrollbar. 10 is the extra space needed to make it look nice,		
-		_button_lobby_refresh = new ButtonGeneralNetworkYes(FlxG.width + -360 + -215 + -15 - 20 - 10, 12 + Reg.__title_bar_offset_y, "Lobby Refresh", 215, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, button_refresh, RegCustom._button_color[Reg._tn], false);		
+		// 370 is the chat width. 215 is this button with. 15 is the default space from the edge. 20 is the width of the scrollbar.
+		_button_lobby_refresh = new ButtonGeneralNetworkYes(FlxG.width  -370 -215 - 20 - 15, 12 + Reg.__title_bar_offset_y, "Lobby Refresh", 215, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, button_refresh, RegCustom._button_color[Reg._tn], false);		
 		_button_lobby_refresh.label.font = Reg._fontDefault;
 		_button_lobby_refresh.scrollFactor.set(0, 0);
+		
+		// 215:button width. 20:scrollarea bar width. 15:button padding.
+		if (RegCustom._chat_when_at_lobby_enabled[Reg._tn] == false)
+			_button_lobby_refresh.x = FlxG.width - 215 - 20 - 15; 
+		
 		button_refresh();
 		add(_button_lobby_refresh);
 				
@@ -304,7 +320,7 @@ class SceneLobby extends FlxState
 				FlxG.cameras.remove(__scrollable_area);
 				__scrollable_area.destroy();
 			}
-			__scrollable_area = new FlxScrollableArea( new FlxRect(0, 0, 1400-370, FlxG.height - 50), new FlxRect(0, 0, 1400, 1950), ResizeMode.NONE, 0, 100, -1, FlxColor.LIME, null, 0, true);
+			__scrollable_area = new FlxScrollableArea( new FlxRect(0, 0, 1410-370, FlxG.height - 50), new FlxRect(0, 0, 1410, 1950), ResizeMode.NONE, 0, 100, -1, FlxColor.LIME, null, 0, true);
 			
 			FlxG.cameras.add( __scrollable_area );
 			__scrollable_area.antialiasing = true;
@@ -495,7 +511,7 @@ class SceneLobby extends FlxState
 				__scene_lobby_room_host_username_text[i] = new SceneLobbyRoomHostUsernameText(390 - _offset_x - _offset2_x, 130 - _offset_y + i * 70, 0, "", Reg._font_size, i);
 								
 				__scene_lobby_room_host_username_text[i].text = Std.string(_gameName);	
-				__scene_lobby_room_host_username_text[i].font = Reg._fontDefault;
+				__scene_lobby_room_host_username_text[i].setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.table_body_text_color());
 				_group_scrollable_area.add(__scene_lobby_room_host_username_text[i]);
 		
 				if (__scene_lobby_game_title_text[i] != null)
@@ -508,7 +524,7 @@ class SceneLobby extends FlxState
 				__scene_lobby_game_title_text[i].fieldWidth = 220;
 				__scene_lobby_game_title_text[i].wordWrap = false;
 				__scene_lobby_game_title_text[i].text = " ";
-				__scene_lobby_game_title_text[i].font = Reg._fontDefault;
+				__scene_lobby_game_title_text[i].setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.table_body_text_color());
 				_group_scrollable_area.add(__scene_lobby_game_title_text[i]);
 		
 		
@@ -525,7 +541,7 @@ class SceneLobby extends FlxState
 				__scene_lobby_room_player_limit_text[i] = new SceneLobbyRoomPlayerLimitText(875 - _offset_x - _offset2_x, 130 - _offset_y + i * 70, 0, "", Reg._font_size, i);
 					
 				__scene_lobby_room_player_limit_text[i].text = Std.string(_total);
-				__scene_lobby_room_player_limit_text[i].font = Reg._fontDefault;
+				__scene_lobby_room_player_limit_text[i].setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.table_body_text_color());
 				
 				if (RegTypedef._dataMisc._roomPlayerCurrentTotal[i] == 0) __scene_lobby_room_player_limit_text[i].text = "";
 				
@@ -549,7 +565,7 @@ class SceneLobby extends FlxState
 				__scene_lobby_game_against_text[i] = new SceneLobbyGameRatedText(1045 - _offset_x - _offset2_x, 130 - _offset_y + i * 70, 0, "", Reg._font_size, i);
 				
 				__scene_lobby_game_against_text[i].text = _title;
-				__scene_lobby_game_against_text[i].font = Reg._fontDefault;
+				__scene_lobby_game_against_text[i].setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.table_body_text_color());
 				
 				_group_scrollable_area.add(__scene_lobby_game_against_text[i]);
 				
@@ -563,7 +579,7 @@ class SceneLobby extends FlxState
 				
 				__scene_lobby_game_spectators_text[i] = new SceneLobbyGameSpectatorsText(1260 - _offset_x - _offset2_x, 130 - _offset_y + i * 70, 0, "", Reg._font_size, i);
 				
-				__scene_lobby_game_spectators_text[i].font = Reg._fontDefault;
+				__scene_lobby_game_spectators_text[i].setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.table_body_text_color());
 				
 				_group_scrollable_area.add(__scene_lobby_game_spectators_text[i]);
 				
@@ -863,15 +879,16 @@ class SceneLobby extends FlxState
 		}
 		
 		Reg._at_lobby = true;
-		
-	}
+		button_refresh();
+	}	
 	
+	// also the lobby gets refresh when mouse clicked.
 	private function button_refresh():Void
 	{
 		// player is at lobby, so a check for room lock is not needed to be sent to this event.
 		RegTypedef._dataMisc._roomCheckForLock[0] = 0;
 		
-		PlayState.send("Get Room Data", RegTypedef._dataMisc);		
+		PlayState.send("Get Room Data", RegTypedef._dataMisc);
 	}
 	
 	private function button_code_values():Void
@@ -882,8 +899,8 @@ class SceneLobby extends FlxState
 		{
 			_group_scrollable_area.active = true;
 			
-			//Reg._buttonCodeValues = ""; this var is cleared at ButtonGeneralNetworkYes class
 			Reg._yesNoKeyPressValueAtMessage = 0;
+			Reg._buttonCodeValues = "";
 			
 			goto_room((Reg._inviteRoomNumberToJoin - 1));
 		}
@@ -894,8 +911,8 @@ class SceneLobby extends FlxState
 		{			
 			_group_scrollable_area.active = true;
 			
-			//Reg._buttonCodeValues = ""; this var is cleared at ButtonGeneralNetworkYes class
 			Reg._yesNoKeyPressValueAtMessage = 0;
+			Reg._buttonCodeValues = "";
 		}
 		
 		// room full, or room creating message.
@@ -907,7 +924,7 @@ class SceneLobby extends FlxState
 			visible = true;				
 			
 			Reg._yesNoKeyPressValueAtMessage = 0;
-			//Reg._buttonCodeValues = ""; this var is cleared at ButtonGeneralNetworkYes class
+			Reg._buttonCodeValues = "";
 		}
 		
 		// room not ready. someone is in that room.
@@ -919,16 +936,15 @@ class SceneLobby extends FlxState
 			visible = true;				
 			
 			Reg._yesNoKeyPressValueAtMessage = 0;
-			//Reg._buttonCodeValues = ""; this var is cleared at ButtonGeneralNetworkYes class
+			Reg._buttonCodeValues = "";
 		}
 		
 		if (Reg._yesNoKeyPressValueAtMessage > 0 && Reg._buttonCodeValues == "l2222")
 		{
 			Reg._yesNoKeyPressValueAtMessage = 0;
-			//Reg._buttonCodeValues = ""; this var is cleared at ButtonGeneralNetworkYes class
-			Reg._server_message = "";
+			Reg._buttonCodeValues = "";
 			
-			
+			Reg._server_message = "";			
 		}
 	}
 	

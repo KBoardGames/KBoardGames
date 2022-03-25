@@ -641,38 +641,41 @@ class ConfigurationProfile extends FlxGroup
 		
 		if (Reg2._key_output != "") keyboard_pressed();
 		
-		if (RegTriggers._keyboard_open == true)
-		{
-			RegTriggers._keyboard_open = false;
-			RegTriggers._keyboard_opened = true;
-
-			if (__action_keyboard != null)
+		#if html5	
+			if (RegTriggers._keyboard_open == true)
 			{
-				__action_keyboard.close();
-				remove(__action_keyboard);
-				__action_keyboard = null;
+				RegTriggers._keyboard_open = false;
+				RegTriggers._keyboard_opened = true;
+
+				if (__action_keyboard != null)
+				{
+					__action_keyboard.close();
+					remove(__action_keyboard);
+					__action_keyboard = null;
+				}
+				
+				if (__action_keyboard == null)
+				{
+					__action_keyboard = new ActionKeyboard();
+					add(__action_keyboard);
+				}
+				
+				__action_keyboard.drawButtons();
 			}
 			
-			if (__action_keyboard == null)
+			if (RegTriggers._keyboard_close == true)
 			{
-				__action_keyboard = new ActionKeyboard();
-				add(__action_keyboard);
+				RegTriggers._keyboard_close = false;
+
+				if (__action_keyboard != null) 
+				{
+					__action_keyboard.close();
+					remove(__action_keyboard);
+					__action_keyboard = null;
+				}
 			}
 			
-			__action_keyboard.drawButtons();
-		}
-		
-		if (RegTriggers._keyboard_close == true)
-		{
-			RegTriggers._keyboard_close = false;
-
-			if (__action_keyboard != null) 
-			{
-				__action_keyboard.close();
-				remove(__action_keyboard);
-				__action_keyboard = null;
-			}
-		}
+		#end
 		
 		//------------------------------
 		for (i in 0... CID3._user_account_row)

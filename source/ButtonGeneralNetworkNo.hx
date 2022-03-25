@@ -131,7 +131,9 @@ class ButtonGeneralNetworkNo extends FlxUIButton
 				
 				if (RegCustom._sound_enabled[Reg._tn] == true
 				&&	Reg2._scrollable_area_is_scrolling == false
-				&&	Reg._tn == 0)
+				&&	Reg._tn == 0
+				&&	Reg._at_configuration_menu == true
+				&&	Reg._messageId == 0)
 				{
 					FlxG.sound.play("error", 1, false);
 				}	
@@ -174,5 +176,17 @@ class ButtonGeneralNetworkNo extends FlxUIButton
 	{
 		Reg._buttonDown = false;
 		super.onOutHandler();
+	}
+	
+	override function onDownHandler():Void
+	{
+		Reg._buttonDown = true;
+		super.onDownHandler();
+	}
+	
+	override function onUpHandler():Void
+	{
+		Reg._buttonDown = true;
+		super.onUpHandler();
 	}
 }//

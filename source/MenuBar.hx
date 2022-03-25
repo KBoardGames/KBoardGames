@@ -265,7 +265,7 @@ class MenuBar extends FlxGroup
 				RegHouse.resetHouseAtLobby();
 				
 				PlayState.send("House Load", RegTypedef._dataHouse);
-				 
+				
 			} else RegTriggers._returnToLobbyMakeButtonsActive = true;
 		#else
 			RegTriggers._returnToLobbyMakeButtonsActive = true;

@@ -158,8 +158,7 @@ class NewAccount extends FlxGroup
 		RegTriggers._returnToLobbyMakeButtonsActive = true;
 		
 		visible = false;
-		active = false;
-		
+		active = false;		
 	}
 		
 	override public function destroy()
@@ -221,6 +220,7 @@ class NewAccount extends FlxGroup
 		if (Reg._yesNoKeyPressValueAtMessage > 0 && Reg._buttonCodeValues == "e1000")
 		{
 			Reg._yesNoKeyPressValueAtMessage = 0;
+			Reg._buttonCodeValues = "";
 			
 			if (_button_b1.has_toggle == true)
 				RegTypedef._dataStatistics._chess_elo_rating = 800;
@@ -233,6 +233,14 @@ class NewAccount extends FlxGroup
 						
 			PlayState.send("Save New Account Configurations", RegTypedef._dataStatistics);
 			closeState();
+		}
+	
+		// this is needed to hide lobby scrollable area when at NewAccount.hx.
+		if (PlayState.__scene_lobby != null
+		&&	PlayState.__scene_lobby.__scrollable_area != null)
+		{
+			PlayState.__scene_lobby.__scrollable_area.visible = false;
+			PlayState.__scene_lobby.__scrollable_area.active = false;
 		}
 		
 		super.update(elapsed);

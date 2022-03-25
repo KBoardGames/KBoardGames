@@ -109,4 +109,16 @@ class ButtonToggleSignatureGame extends FlxUIButton
 		Reg._buttonDown = false;
 		super.onOutHandler();
 	}
+	
+	override function onDownHandler():Void
+	{
+		Reg._buttonDown = true;
+		super.onDownHandler();
+	}
+	
+	override function onUpHandler():Void
+	{
+		Reg._buttonDown = true;
+		super.onUpHandler();
+	}
 }// 

@@ -186,6 +186,8 @@ class CID2 extends FlxGroup
 	public static var _sprite_client_topic_title_text_color:FlxSprite;
 	public static var _sprite_client_text_color:FlxSprite;
 	public static var _sprite_title_bar_text_color:FlxSprite;
+	public static var _sprite_table_body_text_color:FlxSprite;
+	public static var _sprite_chatter_text_color:FlxSprite;
 	
 	/******************************
 	 * this shows the selected background color of the scene header title and footer menu if saved.
@@ -196,6 +198,11 @@ class CID2 extends FlxGroup
 	public static var _text_menu_bar_background_brightness:FlxText;
 	
 	public static var _sprite_title_icon_color:FlxSprite;
+	public static var _sprite_number_wheel_shadow_image_number_color:FlxSprite;
+	public static var _sprite_number_wheel_image_number_color:FlxSprite;
+	public static var _sprite_number_wheel_numbers_image_number_color:FlxSprite;
+	public static var _sprite_number_wheel_highlighter_image_number_color:FlxSprite;
+	public static var _sprite_number_wheel_button_image_number_color:FlxSprite;
 	
 	/******************************
 	 * this changes the gradient background image of the game room.
@@ -248,6 +255,8 @@ class CID2 extends FlxGroup
 	public static var _question_client_topic_title_text_color_number:TextGeneral;
 	public static var _question_client_text_color_number:TextGeneral;
 	public static var _question_title_bar_text_color_number:TextGeneral;
+	public static var _question_table_body_text_color_number:TextGeneral;
+	public static var _question_chatter_text_color_number:TextGeneral;
 	public static var _question_gradient_background_enabled:TextGeneral;
 	public static var _question_client_background_brightness:TextGeneral;
 	public static var _question_client_background_saturation:TextGeneral;
@@ -278,6 +287,12 @@ class CID2 extends FlxGroup
 	public static var _text_empty:ButtonGeneralNetworkNo;
 	public static var _question_pager_enabled:TextGeneral;
 	public static var _question_title_icon_number:TextGeneral;
+	
+	public static var _question_number_wheel_shadow_image_number:TextGeneral;
+	public static var _question_number_wheel_image_number:TextGeneral;
+	public static var _question_number_wheel_numbers_image_number:TextGeneral;
+	public static var _question_number_wheel_highlighter_image_number:TextGeneral;
+	public static var _question_number_wheel_button_image_number:TextGeneral;
 	
 	/******************************
 	 * button used to toggle on and off the display of the leaderboard.
@@ -326,6 +341,10 @@ class CID2 extends FlxGroup
 	public static var _button_client_text_color_number_plus:ButtonGeneralNetworkNo;
 	public static var _button_title_bar_text_color_number_minus:ButtonGeneralNetworkNo;
 	public static var _button_title_bar_text_color_number_plus:ButtonGeneralNetworkNo;
+	public static var _button_table_body_text_color_number_minus:ButtonGeneralNetworkNo;
+	public static var _button_table_body_text_color_number_plus:ButtonGeneralNetworkNo;
+	public static var _button_chatter_text_color_number_minus:ButtonGeneralNetworkNo;
+	public static var _button_chatter_text_color_number_plus:ButtonGeneralNetworkNo;
 	public static var _button_gameboard_even_units_show_enabled:ButtonGeneralNetworkNo;
 	public static var _button_gradient_texture_background_enabled:ButtonGeneralNetworkNo;
 	public static var _button_client_background_enabled:ButtonGeneralNetworkNo;	
@@ -363,6 +382,17 @@ class CID2 extends FlxGroup
 	public static var _button_scene_transition_number_plus:ButtonGeneralNetworkNo;
 	public static var _button_title_icon_number_minus:ButtonGeneralNetworkNo;
 	public static var _button_title_icon_number_plus:ButtonGeneralNetworkNo;
+	
+	public static var _button_number_wheel_shadow_image_number_minus:ButtonGeneralNetworkNo;
+	public static var _button_number_wheel_image_number_minus:ButtonGeneralNetworkNo;
+	public static var _button_number_wheel_numbers_image_number_minus:ButtonGeneralNetworkNo;
+	public static var _button_number_wheel_highlighter_image_number_minus:ButtonGeneralNetworkNo;
+	public static var _button_number_wheel_button_image_number_minus:ButtonGeneralNetworkNo; 
+	public static var _button_number_wheel_shadow_image_number_plus:ButtonGeneralNetworkNo;
+	public static var _button_number_wheel_image_number_plus:ButtonGeneralNetworkNo;
+	public static var _button_number_wheel_numbers_image_number_plus:ButtonGeneralNetworkNo;
+	public static var _button_number_wheel_highlighter_image_number_plus:ButtonGeneralNetworkNo;
+	public static var _button_number_wheel_button_image_number_plus:ButtonGeneralNetworkNo; 
 	
 	/******************************
 	 * moves the button down,

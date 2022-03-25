@@ -17,6 +17,11 @@ package;
  */
 class SceneTransition extends FlxSubState
 {
+	/******************************
+	 * when this value is 0 then the backgrounds will be set in motion. this give time for the stage underneath it to draw all elements. without this ticks, some scenes will be shown as redrawing or resizing its elements as these backgrounds are opening to display them.
+	 */	
+	private var _ticks_delay:Int = 5;
+	
 	private var _half_background_horizontal_left:FlxSprite;
 	private var _half_background_horizontal_right:FlxSprite;
 	private var _half_background_vertical_left:FlxSprite;
@@ -94,24 +99,7 @@ class SceneTransition extends FlxSubState
 			_half_background_vertical_right.angle = -45;
 			add(_half_background_vertical_right);
 		}	
-		
-		if (_direction == 1 || _direction == 3)
-		{
-			_half_background_horizontal_left.velocity.x = - _speed;
-			_half_background_horizontal_right.velocity.x = _speed;
-		}
-		
-		if (_direction == 2 || _direction == 3)
-		{
-			_half_background_vertical_left.velocity.y = - _speed;
-			_half_background_vertical_right.velocity.y = _speed;
-		}
-		
-		if (_direction == 4)
-		{
-			_half_background_vertical_left.velocity.x = - _speed;
-			_half_background_vertical_right.velocity.x = _speed;
-		}
+
 	}
 	
 	override public function destroy():Void
@@ -149,6 +137,29 @@ class SceneTransition extends FlxSubState
 	
 	override public function update(elapsed:Float):Void
 	{
+		_ticks_delay -= 1;
+		
+		if (_ticks_delay == 0)
+		{
+			if (_direction == 1 || _direction == 3)
+			{
+				_half_background_horizontal_left.velocity.x = - _speed;
+				_half_background_horizontal_right.velocity.x = _speed;
+			}
+			
+			if (_direction == 2 || _direction == 3)
+			{
+				_half_background_vertical_left.velocity.y = - _speed;
+				_half_background_vertical_right.velocity.y = _speed;
+			}
+			
+			if (_direction == 4)
+			{
+				_half_background_vertical_left.velocity.x = - _speed;
+				_half_background_vertical_right.velocity.x = _speed;
+			}
+		}
+		
 		if (_direction == 0) close();
 		
 		// horizontal or vertical.

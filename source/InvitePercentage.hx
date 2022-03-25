@@ -44,7 +44,10 @@ class InvitePercentage extends FlxText
 				// win percentage.
 				if (Reg._usernamesOnline[ID] != "")
 				{
-					text = Std.string(Reg._invite_percentage[ID]); // win percentage.				
+					if (Std.string(Reg._invite_percentage[ID]) == "-1")
+						text = "0";
+					else
+						text = Std.string(Reg._invite_percentage[ID]); // win percentage.				
 				} 
 				
 				else text = "";

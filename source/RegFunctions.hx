@@ -604,6 +604,10 @@ class RegFunctions
 			
 			saveFile.writeString("_title_bar_text_color_number: " + RegCustom._title_bar_text_color_number[Reg._tn] + "\r\n");
 			
+			saveFile.writeString("_table_body_text_color_number: " + RegCustom._table_body_text_color_number[Reg._tn] + "\r\n");
+			
+			saveFile.writeString("_chatter_text_color_number: " + RegCustom._chatter_text_color_number[Reg._tn] + "\r\n");
+			
 			saveFile.writeString("_profile_avatar_number1: " + RegCustom._profile_avatar_number1[Reg._tn] + "\r\n");
 			
 			saveFile.writeString("_profile_avatar_number2: " + RegCustom._profile_avatar_number2[Reg._tn] + "\r\n");
@@ -660,6 +664,17 @@ class RegFunctions
 			saveFile.writeString("_scene_transition_number: " + RegCustom._scene_transition_number[Reg._tn] + "\r\n");
 			
 			saveFile.writeString("_title_icon_number: " + RegCustom._title_icon_number[Reg._tn] + "\r\n");
+			
+			saveFile.writeString("_number_wheel_shadow_image_number: " + RegCustom._number_wheel_shadow_image_number[Reg._tn] + "\r\n");
+			
+			saveFile.writeString("_number_wheel_image_number: " + RegCustom._number_wheel_image_number[Reg._tn] + "\r\n");
+			
+			saveFile.writeString("_number_wheel_numbers_image_number: " + RegCustom._number_wheel_numbers_image_number[Reg._tn] + "\r\n");
+			
+			saveFile.writeString("_number_wheel_highlighter_image_number: " + RegCustom._number_wheel_highlighter_image_number[Reg._tn] + "\r\n");
+			
+			saveFile.writeString("_number_wheel_button_image_number: " + RegCustom._number_wheel_button_image_number[Reg._tn] + "\r\n");
+			
 			
 			saveFile.close();
 		#end
@@ -1085,6 +1100,22 @@ class RegFunctions
 						
 						try
 						{
+							RegCustom._table_body_text_color_number[Reg._tn] = 1;
+							
+							if (Std.parseInt(data.get("_table_body_text_color_number")) != null) RegCustom._table_body_text_color_number[Reg._tn] = Std.parseInt(data.get("_table_body_text_color_number"));
+						}
+						catch (e:Dynamic){}
+						
+						try
+						{
+							RegCustom._chatter_text_color_number[Reg._tn] = 1;
+							
+							if (Std.parseInt(data.get("_chatter_text_color_number")) != null) RegCustom._chatter_text_color_number[Reg._tn] = Std.parseInt(data.get("_chatter_text_color_number"));
+						}
+						catch (e:Dynamic){}
+						
+						try
+						{
 							RegCustom._profile_avatar_number1[Reg._tn] = "0.png";
 							
 							if (Std.string(data.get("_profile_avatar_number1")) != ""
@@ -1315,6 +1346,46 @@ class RegFunctions
 							RegCustom._title_icon_number[Reg._tn] = 1;
 							
 							if (Std.parseInt(data.get("_title_icon_number")) != null) RegCustom._title_icon_number[Reg._tn] = Std.parseInt(data.get("_title_icon_number"));
+						}
+						catch (e:Dynamic){}
+						
+						try
+						{
+							RegCustom._number_wheel_shadow_image_number[Reg._tn] = 12;
+							
+							if (Std.parseInt(data.get("_number_wheel_shadow_image_number")) != null) RegCustom._number_wheel_shadow_image_number[Reg._tn] = Std.parseInt(data.get("_number_wheel_shadow_image_number"));
+						}
+						catch (e:Dynamic){}
+						
+						try
+						{
+							RegCustom._number_wheel_image_number[Reg._tn] = 11;
+							
+							if (Std.parseInt(data.get("_number_wheel_image_number")) != null) RegCustom._number_wheel_image_number[Reg._tn] = Std.parseInt(data.get("_number_wheel_image_number"));
+						}
+						catch (e:Dynamic){}
+						
+						try
+						{
+							RegCustom._number_wheel_numbers_image_number[Reg._tn] = 1;
+							
+							if (Std.parseInt(data.get("_number_wheel_numbers_image_number")) != null) RegCustom._number_wheel_numbers_image_number[Reg._tn] = Std.parseInt(data.get("_number_wheel_numbers_image_number"));
+						}
+						catch (e:Dynamic){}
+						
+						try
+						{
+							RegCustom._number_wheel_highlighter_image_number[Reg._tn] = 8;
+							
+							if (Std.parseInt(data.get("_number_wheel_highlighter_image_number")) != null) RegCustom._number_wheel_highlighter_image_number[Reg._tn] = Std.parseInt(data.get("_number_wheel_highlighter_image_number"));
+						}
+						catch (e:Dynamic){}
+						
+						try
+						{
+							RegCustom._number_wheel_button_image_number[Reg._tn] = 3;
+							
+							if (Std.parseInt(data.get("_number_wheel_button_image_number")) != null) RegCustom._number_wheel_button_image_number[Reg._tn] = Std.parseInt(data.get("_number_wheel_button_image_number"));
 						}
 						catch (e:Dynamic){}
 						

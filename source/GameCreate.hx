@@ -45,7 +45,7 @@ class GameCreate extends FlxState
 	/******************************
 	* the dice wheel, highlights each number, in turn. from 1 to 6. the number highlighted, after a mouse click, is the number used to move a piece that many times from the piece's current location.
 	*/
-	public var __number_wheel:NumberWheel;
+	public var __number_wheel_animation:NumberWheelAnimation;
 	private var __number_wheel_button:NumberWheelButton;
 	
 	/******************************
@@ -639,23 +639,42 @@ class GameCreate extends FlxState
 	
 	public function gameId_dice(X:Float, Y:Float):Void
 	{
+		var __number_wheel_shadow = new FlxSprite(X-4, Y-3, "assets/images/numberWheel-shadow.png");
+		__number_wheel_shadow.scrollFactor.set(0, 0);
+		__number_wheel_shadow.color = RegCustomColors.number_wheel_shadow_color();
+		add(__number_wheel_shadow);
+		
 		if (__number_wheel_button != null)
 		{
 			remove(__number_wheel_button);
 			__number_wheel_button.destroy();
 		}
 		
-		__number_wheel_button = new NumberWheelButton(X + 28, Y + 30);
+		__number_wheel_button = new NumberWheelButton(X + 45, Y + 50);
+		__number_wheel_button.scrollFactor.set(0, 0);
+		__number_wheel_button.color = RegCustomColors.number_wheel_button_color();
 		add(__number_wheel_button);
 		
-		if (__number_wheel != null)
+		if (__number_wheel_animation != null)
 		{
-			remove(__number_wheel);
-			__number_wheel.destroy();
+			remove(__number_wheel_animation);
+			__number_wheel_animation.destroy();
 		}
 		
-		__number_wheel = new NumberWheel(X, Y);
+		var __number_wheel = new FlxSprite(X, Y, "assets/images/numberWheel.png");
+		__number_wheel.scrollFactor.set(0, 0);
+		__number_wheel.color = RegCustomColors.number_wheel_color();
 		add(__number_wheel);
+		
+		__number_wheel_animation = new NumberWheelAnimation(X+1, Y+1);
+		__number_wheel_animation.scrollFactor.set(0, 0);
+		__number_wheel_animation.color = RegCustomColors.number_wheel_highlighter_color();
+		add(__number_wheel_animation);
+		
+		var __number_wheel_numbers = new FlxSprite(X, Y, "assets/images/numberWheel-numbers.png");
+		__number_wheel_numbers.scrollFactor.set(0, 0);
+		__number_wheel_numbers.color = RegCustomColors.number_wheel_numbers_color();
+		add(__number_wheel_numbers);		
 		
 		#if snakesAndLadders
 			if (Reg._gameId == 3)
@@ -667,7 +686,7 @@ class GameCreate extends FlxState
 				}
 				
 				// if changing the number wheel button, this x and y coordinates also needs changing.
-				__snakes_and_ladders_clickMe = new SnakesAndLaddersClickMe(X - 1, Y - 6, __number_wheel);
+				__snakes_and_ladders_clickMe = new SnakesAndLaddersClickMe(X - 1, Y - 6, __number_wheel_animation);
 				add(__snakes_and_ladders_clickMe);	
 			}
 		#end
@@ -681,7 +700,7 @@ class GameCreate extends FlxState
 					__signature_game_clickMe.destroy();
 				}
 				
-				__signature_game_clickMe = new SignatureGameClickMe(X - 1, Y - 6, __number_wheel, __ids_win_lose_or_draw, _playerPieces1, _playerPieces2, _playerPieces3, _playerPieces4);
+				__signature_game_clickMe = new SignatureGameClickMe(X - 1, Y - 6, __number_wheel_animation, __ids_win_lose_or_draw, _playerPieces1, _playerPieces2, _playerPieces3, _playerPieces4);
 				add(__signature_game_clickMe);	
 			}
 		#end
@@ -709,11 +728,11 @@ class GameCreate extends FlxState
 	
 	override function destroy():Void
 	{
-		if (__number_wheel != null)
+		if (__number_wheel_animation != null)
 		{
-			remove(__number_wheel);
-			__number_wheel.destroy();
-			__number_wheel = null;
+			remove(__number_wheel_animation);
+			__number_wheel_animation.destroy();
+			__number_wheel_animation = null;
 		}
 		
 		if (__number_wheel_button != null)

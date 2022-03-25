@@ -55,7 +55,7 @@ class ConfigurationGeneral extends CID2
 		
 		// DO NOT FORGET TO UPDATE THE buttonNumber() FUNCTiON.
 		// THIS NEEDS TO BE POINTING TO THE LAST FEATURE IN THE LIST.
-		CID2._text_empty = new ButtonGeneralNetworkNo(0, CID2._question_title_icon_number.y + 250, "", 100, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, null, RegCustom._button_color[Reg._tn]);
+		CID2._text_empty = new ButtonGeneralNetworkNo(0, CID2._question_number_wheel_button_image_number.y + 250, "", 100, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, null, RegCustom._button_color[Reg._tn]);
 		CID2._text_empty.visible = false;
 		CID2._group.add(CID2._text_empty);
 		
@@ -238,6 +238,8 @@ class ConfigurationGeneral extends CID2
 		client_topic_title_text_color();
 		client_text_color();
 		title_bar_text_color();
+		table_body_text_color();
+		chatter_text_color();
 		gameboard_even_units_show();
 		background_alpha();
 		gradient_background();
@@ -273,6 +275,12 @@ class ConfigurationGeneral extends CID2
 		pager_enable();
 		scene_transition();
 		title_icon_color();
+		number_wheel_shadow_color();
+		number_wheel_color();
+		number_wheel_numbers_color();
+		number_wheel_highlighter_color();
+		number_wheel_button_color();
+		
 	}
 	
 	private function gameboard_coordinates():Void
@@ -380,7 +388,7 @@ class ConfigurationGeneral extends CID2
 		CID2._group_button.push(CID2._button_notation_panel_background_color_number_plus);
 		CID2._group.add(CID2._group_button[_num]);		
 		
-		CID2._sprite_notation_panel_background_color = new FlxSprite(CID2._button_notation_panel_background_color_number_plus.x + CID2._button_notation_panel_background_color_number_plus.width + 45, CID2._button_notation_panel_background_color_number_plus.y - 12);
+		CID2._sprite_notation_panel_background_color = new FlxSprite(CID2._button_notation_panel_background_color_number_plus.x + CID2._button_notation_panel_background_color_number_plus.width + 15, CID2._button_notation_panel_background_color_number_plus.y - 12);
 		CID2._sprite_notation_panel_background_color.loadGraphic("assets/images/capturingUnits.png", false, 75, 75);
 		CID2._sprite_notation_panel_background_color.color = RegCustomColors.notation_panel_background_color();
 		CID2._group.add(CID2._sprite_notation_panel_background_color);		
@@ -412,7 +420,7 @@ class ConfigurationGeneral extends CID2
 		CID2._group_button.push(CID2._button_notation_panel_text_color_number_plus);
 		CID2._group.add(CID2._group_button[_num]);
 		
-		CID2._sprite_notation_panel_text_color = new FlxSprite(CID2._button_notation_panel_text_color_number_plus.x + CID2._button_notation_panel_text_color_number_plus.width + 45, CID2._button_notation_panel_text_color_number_plus.y - 12);
+		CID2._sprite_notation_panel_text_color = new FlxSprite(CID2._button_notation_panel_text_color_number_plus.x + CID2._button_notation_panel_text_color_number_plus.width + 15, CID2._button_notation_panel_text_color_number_plus.y - 12);
 		CID2._sprite_notation_panel_text_color.loadGraphic("assets/images/capturingUnits.png", false, 75, 75);
 		CID2._sprite_notation_panel_text_color.color = RegCustomColors.notation_panel_text_color();
 		CID2._group.add(CID2._sprite_notation_panel_text_color);
@@ -442,7 +450,7 @@ class ConfigurationGeneral extends CID2
 		CID2._group_button.push(CID2._button_client_topic_title_text_color_number_plus);
 		CID2._group.add(CID2._group_button[_num]);
 		
-		CID2._sprite_client_topic_title_text_color = new FlxSprite(CID2._button_client_topic_title_text_color_number_plus.x + CID2._button_client_topic_title_text_color_number_plus.width + 45, CID2._button_client_topic_title_text_color_number_plus.y - 12);
+		CID2._sprite_client_topic_title_text_color = new FlxSprite(CID2._button_client_topic_title_text_color_number_plus.x + CID2._button_client_topic_title_text_color_number_plus.width + 15, CID2._button_client_topic_title_text_color_number_plus.y - 12);
 		CID2._sprite_client_topic_title_text_color.loadGraphic("assets/images/capturingUnits.png", false, 75, 75);
 		CID2._sprite_client_topic_title_text_color.color = RegCustomColors.client_topic_title_text_color();
 		CID2._group.add(CID2._sprite_client_topic_title_text_color);
@@ -472,7 +480,7 @@ class ConfigurationGeneral extends CID2
 		CID2._group_button.push(CID2._button_client_text_color_number_plus);
 		CID2._group.add(CID2._group_button[_num]);
 		
-		CID2._sprite_client_text_color = new FlxSprite(CID2._button_client_text_color_number_plus.x + CID2._button_client_text_color_number_plus.width + 45, CID2._button_client_text_color_number_plus.y - 12);
+		CID2._sprite_client_text_color = new FlxSprite(CID2._button_client_text_color_number_plus.x + CID2._button_client_text_color_number_plus.width + 15, CID2._button_client_text_color_number_plus.y - 12);
 		CID2._sprite_client_text_color.loadGraphic("assets/images/capturingUnits.png", false, 75, 75);
 		CID2._sprite_client_text_color.color = RegCustomColors.client_text_color();
 		CID2._group.add(CID2._sprite_client_text_color);
@@ -502,10 +510,70 @@ class ConfigurationGeneral extends CID2
 		CID2._group_button.push(CID2._button_title_bar_text_color_number_plus);
 		CID2._group.add(CID2._group_button[_num]);
 		
-		CID2._sprite_title_bar_text_color = new FlxSprite(CID2._button_title_bar_text_color_number_plus.x + CID2._button_title_bar_text_color_number_plus.width + 45, CID2._button_title_bar_text_color_number_plus.y - 12);
+		CID2._sprite_title_bar_text_color = new FlxSprite(CID2._button_title_bar_text_color_number_plus.x + CID2._button_title_bar_text_color_number_plus.width + 15, CID2._button_title_bar_text_color_number_plus.y - 12);
 		CID2._sprite_title_bar_text_color.loadGraphic("assets/images/capturingUnits.png", false, 75, 75);
 		CID2._sprite_title_bar_text_color.color = RegCustomColors.title_bar_text_color();
 		CID2._group.add(CID2._sprite_title_bar_text_color);
+		
+	}
+	
+	private function table_body_text_color():Void
+	{
+		_num += 1;
+		
+		 CID2._question_table_body_text_color_number = new TextGeneral(15, CID2._button_title_bar_text_color_number_minus.height + CID2._button_title_bar_text_color_number_minus.y + CID2._offset_rows_y, 800, "table body text color?");
+		CID2._question_table_body_text_color_number.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
+		CID2._question_table_body_text_color_number.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
+		CID2._group.add(CID2._question_table_body_text_color_number);
+		
+		CID2._button_table_body_text_color_number_minus = new ButtonGeneralNetworkNo(850, CID2._question_table_body_text_color_number.y + CID2._offset_button_y, "-", 35, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, null, RegCustom._button_color[Reg._tn]);
+		CID2._button_table_body_text_color_number_minus.label.font = Reg._fontDefault;
+	
+		CID2._group_button.push(CID2._button_table_body_text_color_number_minus);
+		CID2._group.add(CID2._group_button[_num]);		
+		
+		_num += 1;
+		
+		CID2._button_table_body_text_color_number_plus = new ButtonGeneralNetworkNo(CID2._button_table_body_text_color_number_minus.x + CID2._button_table_body_text_color_number_minus.label.fieldWidth + 15, CID2._button_table_body_text_color_number_minus.y + 7, "+", 35, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, null, RegCustom._button_color[Reg._tn]);
+		CID2._button_table_body_text_color_number_plus.label.font = Reg._fontDefault;
+		
+		CID2._group_button.push(CID2._button_table_body_text_color_number_plus);
+		CID2._group.add(CID2._group_button[_num]);
+		
+		CID2._sprite_table_body_text_color = new FlxSprite(CID2._button_table_body_text_color_number_plus.x + CID2._button_table_body_text_color_number_plus.width + 15, CID2._button_table_body_text_color_number_plus.y - 12);
+		CID2._sprite_table_body_text_color.loadGraphic("assets/images/capturingUnits.png", false, 75, 75);
+		CID2._sprite_table_body_text_color.color = RegCustomColors.table_body_text_color();
+		CID2._group.add(CID2._sprite_table_body_text_color);
+		
+	}
+	
+	private function chatter_text_color():Void
+	{
+		_num += 1;
+		
+		 CID2._question_chatter_text_color_number = new TextGeneral(15, CID2._button_table_body_text_color_number_minus.height + CID2._button_table_body_text_color_number_minus.y + CID2._offset_rows_y, 800, "Chatter text color?");
+		CID2._question_chatter_text_color_number.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
+		CID2._question_chatter_text_color_number.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
+		CID2._group.add(CID2._question_chatter_text_color_number);
+		
+		CID2._button_chatter_text_color_number_minus = new ButtonGeneralNetworkNo(850, CID2._question_chatter_text_color_number.y + CID2._offset_button_y, "-", 35, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, null, RegCustom._button_color[Reg._tn]);
+		CID2._button_chatter_text_color_number_minus.label.font = Reg._fontDefault;
+	
+		CID2._group_button.push(CID2._button_chatter_text_color_number_minus);
+		CID2._group.add(CID2._group_button[_num]);		
+		
+		_num += 1;
+		
+		CID2._button_chatter_text_color_number_plus = new ButtonGeneralNetworkNo(CID2._button_chatter_text_color_number_minus.x + CID2._button_chatter_text_color_number_minus.label.fieldWidth + 15, CID2._button_chatter_text_color_number_minus.y + 7, "+", 35, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, null, RegCustom._button_color[Reg._tn]);
+		CID2._button_chatter_text_color_number_plus.label.font = Reg._fontDefault;
+		
+		CID2._group_button.push(CID2._button_chatter_text_color_number_plus);
+		CID2._group.add(CID2._group_button[_num]);
+		
+		CID2._sprite_chatter_text_color = new FlxSprite(CID2._button_chatter_text_color_number_plus.x + CID2._button_chatter_text_color_number_plus.width + 15, CID2._button_chatter_text_color_number_plus.y - 12);
+		CID2._sprite_chatter_text_color.loadGraphic("assets/images/capturingUnits.png", false, 75, 75);
+		CID2._sprite_chatter_text_color.color = RegCustomColors.chatter_text_color();
+		CID2._group.add(CID2._sprite_chatter_text_color);
 		
 	}
 	
@@ -513,7 +581,7 @@ class ConfigurationGeneral extends CID2
 	{
 		_num += 1;
 		
-		var _question_gameboard_even_units_show_enabled = new TextGeneral(15, CID2._button_title_bar_text_color_number_minus.height + CID2._button_title_bar_text_color_number_minus.y + CID2._offset_rows_y, 800, "Show even gameboard units?");
+		var _question_gameboard_even_units_show_enabled = new TextGeneral(15, CID2._button_chatter_text_color_number_minus.height + CID2._button_chatter_text_color_number_minus.y + CID2._offset_rows_y, 800, "Show even gameboard units?");
 		_question_gameboard_even_units_show_enabled.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
 		_question_gameboard_even_units_show_enabled.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		CID2._group.add(_question_gameboard_even_units_show_enabled);
@@ -651,6 +719,8 @@ class ConfigurationGeneral extends CID2
 		
 		CID2._group_button.push(CID2._button_client_background_plus);
 		CID2._group.add(CID2._group_button[_num]);
+		
+		// for the image is client_background_brightness() function.
 	}
 	
 	private function client_background_brightness():Void
@@ -1074,12 +1144,12 @@ class ConfigurationGeneral extends CID2
 		CID2._group_button.push(CID2._button_capturing_units_change_color_plus);
 		CID2._group.add(CID2._group_button[_num]);
 		
-		CID2._sprite_capturing_units = new FlxSprite(CID2._button_capturing_units_change_color_plus.x + CID2._button_capturing_units_change_color_plus.width + 45, CID2._button_capturing_units_change_color_plus.y - 13);
+		CID2._sprite_capturing_units = new FlxSprite(CID2._button_capturing_units_change_color_plus.x + CID2._button_capturing_units_change_color_plus.width + 15, CID2._button_capturing_units_change_color_plus.y - 13);
 		CID2._sprite_capturing_units.loadGraphic("assets/images/capturingUnits.png", false, 75, 75);
 		CID2._sprite_capturing_units.color = RegCustomColors.color_capturing_units();
 		CID2._group.add(CID2._sprite_capturing_units);
 		
-		CID2._sprite_chess_path_to_king_bg = new FlxSprite(CID2._button_capturing_units_change_color_plus.x + CID2._button_capturing_units_change_color_plus.width + 45, CID2._button_capturing_units_change_color_plus.y - 13, "assets/images/border1.png");
+		CID2._sprite_chess_path_to_king_bg = new FlxSprite(CID2._button_capturing_units_change_color_plus.x + CID2._button_capturing_units_change_color_plus.width + 15, CID2._button_capturing_units_change_color_plus.y - 13, "assets/images/border1.png");
 		CID2._group.add(CID2._sprite_chess_path_to_king_bg);
 	}
 	
@@ -1183,7 +1253,7 @@ class ConfigurationGeneral extends CID2
 		CID2._group_button.push(CID2._button_title_bar_background_number_plus);
 		CID2._group.add(CID2._group_button[_num]);
 		
-		CID2._sprite_title_bar_background_color = new FlxSprite(CID2._button_title_bar_background_number_plus.x + CID2._button_title_bar_background_number_plus.width + 45, CID2._button_title_bar_background_number_plus.y - 7);
+		CID2._sprite_title_bar_background_color = new FlxSprite(CID2._button_title_bar_background_number_plus.x + CID2._button_title_bar_background_number_plus.width + 15, CID2._button_title_bar_background_number_plus.y - 7);
 		CID2._sprite_title_bar_background_color.loadGraphic("assets/images/capturingUnits.png", false, 75, 75);
 		CID2._sprite_title_bar_background_color.color = RegCustomColors.title_bar_background_color();
 		CID2._group.add(CID2._sprite_title_bar_background_color);
@@ -1212,7 +1282,7 @@ class ConfigurationGeneral extends CID2
 		CID2._group_button.push(CID2._button_title_bar_background_brightness_plus);
 		CID2._group.add(CID2._group_button[_num]);
 		
-		CID2._text_title_bar_background_brightness = new FlxText(CID2._button_title_bar_background_brightness_plus.x + CID2._button_title_bar_background_brightness_plus.width + 45, CID2._button_title_bar_background_brightness_plus.y - 12, 0, Std.string(RegCustom._title_bar_background_brightness[Reg._tn]), Reg._font_size);
+		CID2._text_title_bar_background_brightness = new FlxText(CID2._button_title_bar_background_brightness_plus.x + CID2._button_title_bar_background_brightness_plus.width + 15, CID2._button_title_bar_background_brightness_plus.y - 12, 0, Std.string(RegCustom._title_bar_background_brightness[Reg._tn]), Reg._font_size);
 		CID2._text_title_bar_background_brightness.scrollFactor.set(0, 0);
 		CID2._text_title_bar_background_brightness.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
 		CID2._text_title_bar_background_brightness.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
@@ -1223,7 +1293,7 @@ class ConfigurationGeneral extends CID2
 	{
 		_num += 1;
 		
-		CID2._question_menu_bar_background_number = new TextGeneral(15, CID2._button_title_bar_background_brightness_minus.height + CID2._button_title_bar_background_brightness_minus.y + CID2._offset_rows_y, 800, "Background color of scene footer menu?");
+		CID2._question_menu_bar_background_number = new TextGeneral(15, CID2._button_title_bar_background_brightness_minus.height + CID2._button_title_bar_background_brightness_minus.y + CID2._offset_rows_y + 3, 800, "Background color of scene footer menu?");
 		CID2._question_menu_bar_background_number.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
 		CID2._question_menu_bar_background_number.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
 		CID2._group.add(CID2._question_menu_bar_background_number);
@@ -1242,7 +1312,7 @@ class ConfigurationGeneral extends CID2
 		CID2._group_button.push(CID2._button_menu_bar_background_number_plus);
 		CID2._group.add(CID2._group_button[_num]);
 		
-		CID2._sprite_menu_bar_background_color = new FlxSprite(CID2._button_menu_bar_background_number_plus.x + CID2._button_menu_bar_background_number_plus.width + 45, CID2._button_menu_bar_background_number_plus.y - 7);
+		CID2._sprite_menu_bar_background_color = new FlxSprite(CID2._button_menu_bar_background_number_plus.x + CID2._button_menu_bar_background_number_plus.width + 15, CID2._button_menu_bar_background_number_plus.y - 7);
 		CID2._sprite_menu_bar_background_color.loadGraphic("assets/images/capturingUnits.png", false, 75, 75);
 		CID2._sprite_menu_bar_background_color.color = RegCustomColors.menu_bar_background_color();
 		CID2._group.add(CID2._sprite_menu_bar_background_color);
@@ -1271,7 +1341,7 @@ class ConfigurationGeneral extends CID2
 		CID2._group_button.push(CID2._button_menu_bar_background_brightness_plus);
 		CID2._group.add(CID2._group_button[_num]);
 		
-		CID2._text_menu_bar_background_brightness = new FlxText(CID2._button_menu_bar_background_brightness_plus.x + CID2._button_menu_bar_background_brightness_plus.width + 45, CID2._button_menu_bar_background_brightness_plus.y - 12, 0, Std.string(RegCustom._menu_bar_background_brightness[Reg._tn]), Reg._font_size);
+		CID2._text_menu_bar_background_brightness = new FlxText(CID2._button_menu_bar_background_brightness_plus.x + CID2._button_menu_bar_background_brightness_plus.width + 15, CID2._button_menu_bar_background_brightness_plus.y - 12, 0, Std.string(RegCustom._menu_bar_background_brightness[Reg._tn]), Reg._font_size);
 		CID2._text_menu_bar_background_brightness.scrollFactor.set(0, 0);
 		CID2._text_menu_bar_background_brightness.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
 		CID2._text_menu_bar_background_brightness.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
@@ -1318,7 +1388,7 @@ class ConfigurationGeneral extends CID2
 		CID2._group_button.push(CID2._button_scene_transition_number_plus);
 		CID2._group.add(CID2._group_button[_num]);
 		
-		CID2._text_scene_transition_number = new FlxText(CID2._button_scene_transition_number_plus.x + CID2._button_scene_transition_number_plus.width + 45, CID2._button_scene_transition_number_plus.y - 12, 0, Std.string(RegCustom._scene_transition_number[Reg._tn]), Reg._font_size);
+		CID2._text_scene_transition_number = new FlxText(CID2._button_scene_transition_number_plus.x + CID2._button_scene_transition_number_plus.width + 15, CID2._button_scene_transition_number_plus.y - 12, 0, Std.string(RegCustom._scene_transition_number[Reg._tn]), Reg._font_size);
 		CID2._text_scene_transition_number.scrollFactor.set(0, 0);
 		CID2._text_scene_transition_number.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
 		CID2._text_scene_transition_number.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
@@ -1348,10 +1418,155 @@ class ConfigurationGeneral extends CID2
 		CID2._group_button.push(CID2._button_title_icon_number_plus);
 		CID2._group.add(CID2._group_button[_num]);
 		
-		CID2._sprite_title_icon_color = new FlxSprite(CID2._button_title_icon_number_plus.x + CID2._button_title_icon_number_plus.width + 45, CID2._button_title_icon_number_plus.y - 7);
+		CID2._sprite_title_icon_color = new FlxSprite(CID2._button_title_icon_number_plus.x + CID2._button_title_icon_number_plus.width + 15, CID2._button_title_icon_number_plus.y - 7);
 		CID2._sprite_title_icon_color.loadGraphic("assets/images/capturingUnits.png", false, 75, 75);
 		CID2._sprite_title_icon_color.color = RegCustomColors.title_icon_color();
 		CID2._group.add(CID2._sprite_title_icon_color);
+	}
+	
+	private function number_wheel_shadow_color():Void
+	{
+		_num += 1;
+		
+		CID2._question_number_wheel_shadow_image_number = new TextGeneral(15, CID2._button_title_icon_number_minus.height + CID2._button_title_icon_number_minus.y + CID2._offset_rows_y + 10, 800, "Number wheel shadow color?");
+		CID2._question_number_wheel_shadow_image_number.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
+		CID2._question_number_wheel_shadow_image_number.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
+		CID2._group.add(CID2._question_number_wheel_shadow_image_number);
+		
+		CID2._button_number_wheel_shadow_image_number_minus = new ButtonGeneralNetworkNo(850, CID2._question_number_wheel_shadow_image_number.y + 7, "-", 35, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, null, RegCustom._button_color[Reg._tn]);
+		CID2._button_number_wheel_shadow_image_number_minus.label.font = Reg._fontDefault;
+	
+		CID2._group_button.push(CID2._button_number_wheel_shadow_image_number_minus);
+		CID2._group.add(CID2._group_button[_num]);		
+		
+		_num += 1;
+		
+		CID2._button_number_wheel_shadow_image_number_plus = new ButtonGeneralNetworkNo(CID2._button_number_wheel_shadow_image_number_minus.x + CID2._button_number_wheel_shadow_image_number_minus.label.fieldWidth + 15, CID2._button_number_wheel_shadow_image_number_minus.y + 7, "+", 35, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, null, RegCustom._button_color[Reg._tn]);
+		CID2._button_number_wheel_shadow_image_number_plus.label.font = Reg._fontDefault;
+		
+		CID2._group_button.push(CID2._button_number_wheel_shadow_image_number_plus);
+		CID2._group.add(CID2._group_button[_num]);
+		
+		CID2._sprite_number_wheel_shadow_image_number_color = new FlxSprite(CID2._button_number_wheel_shadow_image_number_plus.x + CID2._button_number_wheel_shadow_image_number_plus.width + 15, CID2._button_number_wheel_shadow_image_number_plus.y - 7);
+		CID2._sprite_number_wheel_shadow_image_number_color.loadGraphic("assets/images/capturingUnits.png", false, 75, 75);
+		CID2._sprite_number_wheel_shadow_image_number_color.color = RegCustomColors.number_wheel_shadow_color();
+		CID2._group.add(CID2._sprite_number_wheel_shadow_image_number_color);
+	}
+	
+	private function number_wheel_color():Void
+	{
+		_num += 1;
+		
+		CID2._question_number_wheel_image_number = new TextGeneral(15, CID2._button_number_wheel_shadow_image_number_minus.height + CID2._button_number_wheel_shadow_image_number_minus.y + CID2._offset_rows_y + 10, 800, "Number wheel color?");
+		CID2._question_number_wheel_image_number.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
+		CID2._question_number_wheel_image_number.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
+		CID2._group.add(CID2._question_number_wheel_image_number);
+		
+		CID2._button_number_wheel_image_number_minus = new ButtonGeneralNetworkNo(850, CID2._question_number_wheel_image_number.y + 7, "-", 35, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, null, RegCustom._button_color[Reg._tn]);
+		CID2._button_number_wheel_image_number_minus.label.font = Reg._fontDefault;
+	
+		CID2._group_button.push(CID2._button_number_wheel_image_number_minus);
+		CID2._group.add(CID2._group_button[_num]);		
+		
+		_num += 1;
+		
+		CID2._button_number_wheel_image_number_plus = new ButtonGeneralNetworkNo(CID2._button_number_wheel_image_number_minus.x + CID2._button_number_wheel_image_number_minus.label.fieldWidth + 15, CID2._button_number_wheel_image_number_minus.y + 7, "+", 35, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, null, RegCustom._button_color[Reg._tn]);
+		CID2._button_number_wheel_image_number_plus.label.font = Reg._fontDefault;
+		
+		CID2._group_button.push(CID2._button_number_wheel_image_number_plus);
+		CID2._group.add(CID2._group_button[_num]);
+		
+		CID2._sprite_number_wheel_image_number_color = new FlxSprite(CID2._button_number_wheel_image_number_plus.x + CID2._button_number_wheel_image_number_plus.width + 15, CID2._button_number_wheel_image_number_plus.y - 7);
+		CID2._sprite_number_wheel_image_number_color.loadGraphic("assets/images/capturingUnits.png", false, 75, 75);
+		CID2._sprite_number_wheel_image_number_color.color = RegCustomColors.number_wheel_color();
+		CID2._group.add(CID2._sprite_number_wheel_image_number_color);
+	}
+	
+	private function number_wheel_numbers_color():Void
+	{
+		_num += 1;
+		
+		CID2._question_number_wheel_numbers_image_number = new TextGeneral(15, CID2._button_number_wheel_image_number_minus.height + CID2._button_number_wheel_image_number_minus.y + CID2._offset_rows_y + 10, 800, "Color of the numbers on the number wheel?");
+		CID2._question_number_wheel_numbers_image_number.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
+		CID2._question_number_wheel_numbers_image_number.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
+		CID2._group.add(CID2._question_number_wheel_numbers_image_number);
+		
+		CID2._button_number_wheel_numbers_image_number_minus = new ButtonGeneralNetworkNo(850, CID2._question_number_wheel_numbers_image_number.y + 7, "-", 35, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, null, RegCustom._button_color[Reg._tn]);
+		CID2._button_number_wheel_numbers_image_number_minus.label.font = Reg._fontDefault;
+	
+		CID2._group_button.push(CID2._button_number_wheel_numbers_image_number_minus);
+		CID2._group.add(CID2._group_button[_num]);		
+		
+		_num += 1;
+		
+		CID2._button_number_wheel_numbers_image_number_plus = new ButtonGeneralNetworkNo(CID2._button_number_wheel_numbers_image_number_minus.x + CID2._button_number_wheel_numbers_image_number_minus.label.fieldWidth + 15, CID2._button_number_wheel_numbers_image_number_minus.y + 7, "+", 35, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, null, RegCustom._button_color[Reg._tn]);
+		CID2._button_number_wheel_numbers_image_number_plus.label.font = Reg._fontDefault;
+		
+		CID2._group_button.push(CID2._button_number_wheel_numbers_image_number_plus);
+		CID2._group.add(CID2._group_button[_num]);
+		
+		CID2._sprite_number_wheel_numbers_image_number_color = new FlxSprite(CID2._button_number_wheel_numbers_image_number_plus.x + CID2._button_number_wheel_numbers_image_number_plus.width + 15, CID2._button_number_wheel_numbers_image_number_plus.y - 7);
+		CID2._sprite_number_wheel_numbers_image_number_color.loadGraphic("assets/images/capturingUnits.png", false, 75, 75);
+		CID2._sprite_number_wheel_numbers_image_number_color.color = RegCustomColors.number_wheel_numbers_color();
+		CID2._group.add(CID2._sprite_number_wheel_numbers_image_number_color);
+	}
+	
+	private function number_wheel_highlighter_color():Void
+	{
+		_num += 1;
+		
+		CID2._question_number_wheel_highlighter_image_number = new TextGeneral(15, CID2._button_number_wheel_numbers_image_number_minus.height + CID2._button_number_wheel_numbers_image_number_minus.y + CID2._offset_rows_y + 10, 800, "Number wheel highlighter color?");
+		CID2._question_number_wheel_highlighter_image_number.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
+		CID2._question_number_wheel_highlighter_image_number.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
+		CID2._group.add(CID2._question_number_wheel_highlighter_image_number);
+		
+		CID2._button_number_wheel_highlighter_image_number_minus = new ButtonGeneralNetworkNo(850, CID2._question_number_wheel_highlighter_image_number.y + 7, "-", 35, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, null, RegCustom._button_color[Reg._tn]);
+		CID2._button_number_wheel_highlighter_image_number_minus.label.font = Reg._fontDefault;
+	
+		CID2._group_button.push(CID2._button_number_wheel_highlighter_image_number_minus);
+		CID2._group.add(CID2._group_button[_num]);		
+		
+		_num += 1;
+		
+		CID2._button_number_wheel_highlighter_image_number_plus = new ButtonGeneralNetworkNo(CID2._button_number_wheel_highlighter_image_number_minus.x + CID2._button_number_wheel_highlighter_image_number_minus.label.fieldWidth + 15, CID2._button_number_wheel_highlighter_image_number_minus.y + 7, "+", 35, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, null, RegCustom._button_color[Reg._tn]);
+		CID2._button_number_wheel_highlighter_image_number_plus.label.font = Reg._fontDefault;
+		
+		CID2._group_button.push(CID2._button_number_wheel_highlighter_image_number_plus);
+		CID2._group.add(CID2._group_button[_num]);
+		
+		CID2._sprite_number_wheel_highlighter_image_number_color = new FlxSprite(CID2._button_number_wheel_highlighter_image_number_plus.x + CID2._button_number_wheel_highlighter_image_number_plus.width + 15, CID2._button_number_wheel_highlighter_image_number_plus.y - 7);
+		CID2._sprite_number_wheel_highlighter_image_number_color.loadGraphic("assets/images/capturingUnits.png", false, 75, 75);
+		CID2._sprite_number_wheel_highlighter_image_number_color.color = RegCustomColors.number_wheel_highlighter_color();
+		CID2._group.add(CID2._sprite_number_wheel_highlighter_image_number_color);
+	}
+	
+	private function number_wheel_button_color():Void
+	{
+		_num += 1;
+		
+		CID2._question_number_wheel_button_image_number = new TextGeneral(15, CID2._button_number_wheel_highlighter_image_number_minus.height + CID2._button_number_wheel_highlighter_image_number_minus.y + CID2._offset_rows_y + 10, 800, "Number wheel button color?");
+		CID2._question_number_wheel_button_image_number.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
+		CID2._question_number_wheel_button_image_number.setBorderStyle(FlxTextBorderStyle.SHADOW, FlxColor.BLACK, 2);
+		CID2._group.add(CID2._question_number_wheel_button_image_number);
+		
+		CID2._button_number_wheel_button_image_number_minus = new ButtonGeneralNetworkNo(850, CID2._question_number_wheel_button_image_number.y + 7, "-", 35, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, null, RegCustom._button_color[Reg._tn]);
+		CID2._button_number_wheel_button_image_number_minus.label.font = Reg._fontDefault;
+	
+		CID2._group_button.push(CID2._button_number_wheel_button_image_number_minus);
+		CID2._group.add(CID2._group_button[_num]);		
+		
+		_num += 1;
+		
+		CID2._button_number_wheel_button_image_number_plus = new ButtonGeneralNetworkNo(CID2._button_number_wheel_button_image_number_minus.x + CID2._button_number_wheel_button_image_number_minus.label.fieldWidth + 15, CID2._button_number_wheel_button_image_number_minus.y + 7, "+", 35, 35, Reg._font_size, RegCustom._button_text_color[Reg._tn], 0, null, RegCustom._button_color[Reg._tn]);
+		CID2._button_number_wheel_button_image_number_plus.label.font = Reg._fontDefault;
+		
+		CID2._group_button.push(CID2._button_number_wheel_button_image_number_plus);
+		CID2._group.add(CID2._group_button[_num]);
+		
+		CID2._sprite_number_wheel_button_image_number_color = new FlxSprite(CID2._button_number_wheel_button_image_number_plus.x + CID2._button_number_wheel_button_image_number_plus.width + 15, CID2._button_number_wheel_button_image_number_plus.y - 7);
+		CID2._sprite_number_wheel_button_image_number_color.loadGraphic("assets/images/capturingUnits.png", false, 75, 75);
+		CID2._sprite_number_wheel_button_image_number_color.color = RegCustomColors.number_wheel_button_color();
+		CID2._group.add(CID2._sprite_number_wheel_button_image_number_color);
 	}
 	
 	
@@ -1423,62 +1638,77 @@ class ConfigurationGeneral extends CID2
 			case 23: __e.client_text_color_plus();
 			case 24: __e.title_bar_text_color_minus();
 			case 25: __e.title_bar_text_color_plus();
-			case 26: __e.gameboard_even_units_show_enabled();
-			case 27: __e.client_background_alpha();
-			case 28: __e.client_gradient_background_enabled();
-			case 29: __e.client_gradient_background_number_minus();
-			case 30: __e.client_gradient_background_number_plus();
-			case 31: __e.client_texture_background_enabled();
-			case 32: __e.client_texture_background_number_minus();
-			case 33: __e.client_texture_background_number_plus();
-			case 34: __e.client_background_enabled();
-			case 35: __e.client_background_number_minus();
-			case 36: __e.client_background_number_plus();
-			case 37: __e.client_background_brightness_minus();
-			case 38: __e.client_background_brightness_plus();		
-			case 39: __e.client_background_saturation_minus();
-			case 40: __e.client_background_saturation_plus();
-			case 41: __e.table_body_background_minus();
-			case 42: __e.table_body_background_plus();
-			case 43: __e.table_body_background_brightness_minus();
-			case 44: __e.table_body_background_brightness_plus();
-			case 45: __e.table_body_background_saturation_minus();
-			case 46: __e.table_body_background_saturation_plus();
-			case 47: __e.leaderboards_enabled();
-			case 48: __e.house_feature_enabled();
-			case 49: __e.go_back_to_title_after_save();
-			case 50: __e.automatic_game_request();
-			case 51: __e.start_game_offline_confirmation();
-			case 52: __e.accept_automatic_game_request();
-			case 53: __e.to_lobby_waiting_room_confirmation();
-			case 54: __e.to_lobby_game_room_confirmation();
-			case 55: __e.to_game_room_confirmation();
-			case 56: __e.to_title_confirmation();
-			case 57: __e.chat_turn_off_lobby();
-			case 58: __e.chat_turn_off_room();
-			case 59: __e.move_timer_enabled();
-			case 60: __e.move_total_enabled();			
-			case 61: __e.capturing_units_enabled();
-			case 62: __e.capturing_units_minus();
-			case 63: __e.capturing_units_plus();
-			case 64: __e.button_background_color();
-			case 65: __e.button_border_color();
-			case 66: __e.button_text_color();
-			case 67: __e.music_enabled();
-			case 68: __e.sound_enabled();
-			case 69: __e.title_bar_background_number_minus();
-			case 70: __e.title_bar_background_number_plus();
-			case 71: __e.title_bar_background_brightness_minus();
-			case 72: __e.title_bar_background_brightness_plus();
-			case 73: __e.menu_bar_background_number_minus();
-			case 74: __e.menu_bar_background_number_plus();
-			case 75: __e.menu_bar_background_brightness_minus();
-			case 76: __e.menu_bar_background_brightness_plus();
-			case 77: __e.pager_enabled();
-			case 78: __e.scene_transition_number_minus();
-			case 79: __e.scene_transition_number_plus();
-			case 80: __e.title_icon_number_minus();
-			case 81: __e.title_icon_number_plus();
+			case 26: __e.table_body_text_color_minus();
+			case 27: __e.table_body_text_color_plus();
+			case 28: __e.chatter_text_color_minus();
+			case 29: __e.chatter_text_color_plus();
+			case 30: __e.gameboard_even_units_show_enabled();
+			case 31: __e.client_background_alpha();
+			case 32: __e.client_gradient_background_enabled();
+			case 33: __e.client_gradient_background_number_minus();
+			case 34: __e.client_gradient_background_number_plus();
+			case 35: __e.client_texture_background_enabled();
+			case 36: __e.client_texture_background_number_minus();
+			case 37: __e.client_texture_background_number_plus();
+			case 38: __e.client_background_enabled();
+			case 39: __e.client_background_number_minus();
+			case 40: __e.client_background_number_plus();
+			case 41: __e.client_background_brightness_minus();
+			case 42: __e.client_background_brightness_plus();		
+			case 43: __e.client_background_saturation_minus();
+			case 44: __e.client_background_saturation_plus();
+			case 45: __e.table_body_background_minus();
+			case 46: __e.table_body_background_plus();
+			case 47: __e.table_body_background_brightness_minus();
+			case 48: __e.table_body_background_brightness_plus();
+			case 49: __e.table_body_background_saturation_minus();
+			case 50: __e.table_body_background_saturation_plus();
+			case 51: __e.leaderboards_enabled();
+			case 52: __e.house_feature_enabled();
+			case 53: __e.go_back_to_title_after_save();
+			case 54: __e.automatic_game_request();
+			case 55: __e.start_game_offline_confirmation();
+			case 56: __e.accept_automatic_game_request();
+			case 57: __e.to_lobby_waiting_room_confirmation();
+			case 58: __e.to_lobby_game_room_confirmation();
+			case 59: __e.to_game_room_confirmation();
+			case 60: __e.to_title_confirmation();
+			case 61: __e.chat_turn_off_lobby();
+			case 62: __e.chat_turn_off_room();
+			case 63: __e.move_timer_enabled();
+			case 64: __e.move_total_enabled();			
+			case 65: __e.capturing_units_enabled();
+			case 66: __e.capturing_units_minus();
+			case 67: __e.capturing_units_plus();
+			case 68: __e.button_background_color();
+			case 69: __e.button_border_color();
+			case 70: __e.button_text_color();
+			case 71: __e.music_enabled();
+			case 72: __e.sound_enabled();
+			case 73: __e.title_bar_background_number_minus();
+			case 74: __e.title_bar_background_number_plus();
+			case 75: __e.title_bar_background_brightness_minus();
+			case 76: __e.title_bar_background_brightness_plus();
+			case 77: __e.menu_bar_background_number_minus();
+			case 78: __e.menu_bar_background_number_plus();
+			case 79: __e.menu_bar_background_brightness_minus();
+			case 80: __e.menu_bar_background_brightness_plus();
+			case 81: __e.pager_enabled();
+			case 82: __e.scene_transition_number_minus();
+			case 83: __e.scene_transition_number_plus();
+			case 84: __e.title_icon_number_minus();
+			case 85: __e.title_icon_number_plus();
+			case 86: __e.number_wheel_shadow_minus();
+			case 87: __e.number_wheel_shadow_plus();
+			case 88: __e.number_wheel_minus();
+			case 89: __e.number_wheel_plus();
+			case 90: __e.number_wheel_numbers_minus();
+			case 91: __e.number_wheel_numbers_plus();
+			case 92: __e.number_wheel_highlighter_minus();
+			case 93: __e.number_wheel_highlighter_plus();
+			case 94: __e.number_wheel_button_minus();
+			case 95: __e.number_wheel_button_plus();
+		
 		}
 	}
 		
@@ -2640,4 +2870,4 @@ class ConfigurationGeneral extends CID2
 		super.update(elapsed);		
 	}
 	
-}//
+}//

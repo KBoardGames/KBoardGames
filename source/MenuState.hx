@@ -11,6 +11,7 @@
 
 // If the game crashes without an error then copy the music files to the bin folder.
 package;
+import sys.net.Address;
 
 #if chess
 	import modules.games.chess.*;
@@ -70,10 +71,18 @@ class MenuState extends FlxState
 	private var _bgEventColumn2Number:FlxSprite;
 	private var _bgEventColumn3Number:FlxSprite;
 	
+	private var _bgEventColumn1Numberb:FlxSprite;
+	private var _bgEventColumn2Numberb:FlxSprite;
+	private var _bgEventColumn3Numberb:FlxSprite;
+	
 	// three events are displayed one after another on a event schedule current square.
 	private var _textEventColumn1Number:FlxText;
 	private var _textEventColumn2Number:FlxText;
 	private var _textEventColumn3Number:FlxText;
+	
+	private var _textEventColumn1Numberb:FlxText;
+	private var _textEventColumn2Numberb:FlxText;
+	private var _textEventColumn3Numberb:FlxText;
 	
 	/******************************
 	 * day starts at 1.
@@ -256,7 +265,7 @@ class MenuState extends FlxState
 		RegTriggers.reset_triggers_once();
 		RegTriggers.resetTriggers(); 		
 		RegFunctions.fontsSharpen();
-		
+
 		Reg.resetRegVarsOnce();
 		
 		getIPaddressFromServerOrMain();
@@ -820,7 +829,11 @@ class MenuState extends FlxState
 		
 		Reg._alreadyOnlineHost = false;
 		Reg._alreadyOnlineUser = false;
-		RegTypedef.resetTypedefDataOnce(); RegTypedef.resetTypedefData();		
+		RegTypedef.resetTypedefDataOnce(); RegTypedef.resetTypedefData();
+		
+		Internet.getIP();
+		Internet.getHostname();
+		
 		RegTypedef.resetHouseData();
 		Reg.system_reset(); 
 		Reg2.system_reset();
@@ -1182,32 +1195,32 @@ class MenuState extends FlxState
 					{
 						if (_eventNoMoreThanThree == 0)
 						{
-							if (_bgEventColumn1Number != null)
+							if (_bgEventColumn1Numberb != null)
 							{
-								remove(_bgEventColumn1Number);
-								_bgEventColumn1Number.destroy();
+								remove(_bgEventColumn1Numberb);
+								_bgEventColumn1Numberb.destroy();
 							}
 							
-							_bgEventColumn1Number = new FlxSprite(379 + _offset_upcoming_x, 410 + 60 + _offset_upcoming_y + _offset_icons_and__event_scheduler_y);
-							_bgEventColumn1Number.makeGraphic(166, 25);
-							_bgEventColumn1Number.scrollFactor.set(0, 0);	
-							_bgEventColumn1Number.color = EventSchedule.setBgRowColor(Reg2._eventBackgroundColour[i]);
-							add(_bgEventColumn1Number);
+							_bgEventColumn1Numberb = new FlxSprite(379 + _offset_upcoming_x, 410 + 60 + _offset_upcoming_y + _offset_icons_and__event_scheduler_y);
+							_bgEventColumn1Numberb.makeGraphic(166, 25);
+							_bgEventColumn1Numberb.scrollFactor.set(0, 0);	
+							_bgEventColumn1Numberb.color = EventSchedule.setBgRowColor(Reg2._eventBackgroundColour[i]);
+							add(_bgEventColumn1Numberb);
 							
-							if (_textEventColumn1Number != null)
+							if (_textEventColumn1Numberb != null)
 							{
-								remove(_textEventColumn1Number);
-								_textEventColumn1Number.destroy();
+								remove(_textEventColumn1Numberb);
+								_textEventColumn1Numberb.destroy();
 							}
 							
-							_textEventColumn1Number = new FlxText(383 + _offset_upcoming_x, 407 + 60 + _offset_upcoming_y + _offset_icons_and__event_scheduler_y, 0, "");
-							_textEventColumn1Number.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.WHITE);
-							_textEventColumn1Number.scrollFactor.set();
+							_textEventColumn1Numberb = new FlxText(383 + _offset_upcoming_x, 407 + 60 + _offset_upcoming_y + _offset_icons_and__event_scheduler_y, 0, "");
+							_textEventColumn1Numberb.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.WHITE);
+							_textEventColumn1Numberb.scrollFactor.set();
 							
-							_textEventColumn1Number.text = Reg2._eventName[i];
-							_textEventColumn1Number.fieldWidth = 152;
-							_textEventColumn1Number.wordWrap = false;
-							add(_textEventColumn1Number);
+							_textEventColumn1Numberb.text = Reg2._eventName[i];
+							_textEventColumn1Numberb.fieldWidth = 152;
+							_textEventColumn1Numberb.wordWrap = false;
+							add(_textEventColumn1Numberb);
 							
 							_eventNoMoreThanThree += 1;
 							_upcomingDay = ii;
@@ -1215,62 +1228,62 @@ class MenuState extends FlxState
 						
 						else if (_eventNoMoreThanThree == 1)
 						{
-							if (_bgEventColumn2Number != null)
+							if (_bgEventColumn2Numberb != null)
 							{
-								remove(_bgEventColumn2Number);
-								_bgEventColumn2Number.destroy();
+								remove(_bgEventColumn2Numberb);
+								_bgEventColumn2Numberb.destroy();
 							}
 							
-							_bgEventColumn2Number = new FlxSprite(379 + _offset_upcoming_x, 435 + 60 + _offset_upcoming_y + _offset_icons_and__event_scheduler_y);
-							_bgEventColumn2Number.makeGraphic(166, 25);
-							_bgEventColumn2Number.scrollFactor.set(0, 0);	
-							_bgEventColumn2Number.color = EventSchedule.setBgRowColor(Reg2._eventBackgroundColour[i]);
-							add(_bgEventColumn2Number);
+							_bgEventColumn2Numberb = new FlxSprite(379 + _offset_upcoming_x, 435 + 60 + _offset_upcoming_y + _offset_icons_and__event_scheduler_y);
+							_bgEventColumn2Numberb.makeGraphic(166, 25);
+							_bgEventColumn2Numberb.scrollFactor.set(0, 0);	
+							_bgEventColumn2Numberb.color = EventSchedule.setBgRowColor(Reg2._eventBackgroundColour[i]);
+							add(_bgEventColumn2Numberb);
 							
-							if (_textEventColumn2Number != null)
+							if (_textEventColumn2Numberb != null)
 							{
-								remove(_textEventColumn2Number);
-								_textEventColumn2Number.destroy();
+								remove(_textEventColumn2Numberb);
+								_textEventColumn2Numberb.destroy();
 							}
 							
-							_textEventColumn2Number = new FlxText(383 + _offset_upcoming_x, 432 + 60 + _offset_upcoming_y + _offset_icons_and__event_scheduler_y, 0, "");
-							_textEventColumn2Number.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.WHITE);
-							_textEventColumn2Number.scrollFactor.set();
-							_textEventColumn2Number.text = Reg2._eventName[i];
-							_textEventColumn2Number.fieldWidth = 152;
-							_textEventColumn2Number.wordWrap = false;
-							add(_textEventColumn2Number);
+							_textEventColumn2Numberb = new FlxText(383 + _offset_upcoming_x, 432 + 60 + _offset_upcoming_y + _offset_icons_and__event_scheduler_y, 0, "");
+							_textEventColumn2Numberb.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.WHITE);
+							_textEventColumn2Numberb.scrollFactor.set();
+							_textEventColumn2Numberb.text = Reg2._eventName[i];
+							_textEventColumn2Numberb.fieldWidth = 152;
+							_textEventColumn2Numberb.wordWrap = false;
+							add(_textEventColumn2Numberb);
 							
 							_eventNoMoreThanThree += 1;
 						}
 						
 						else if (_eventNoMoreThanThree == 2)
 						{
-							if (_bgEventColumn3Number != null)
+							if (_bgEventColumn3Numberb != null)
 							{
-								remove(_bgEventColumn3Number);
-								_bgEventColumn3Number.destroy();
+								remove(_bgEventColumn3Numberb);
+								_bgEventColumn3Numberb.destroy();
 							}
 							
-							_bgEventColumn3Number = new FlxSprite(379 + _offset_upcoming_x, 460 + 60 + _offset_upcoming_y + _offset_icons_and__event_scheduler_y);
-							_bgEventColumn3Number.makeGraphic(166, 25);
-							_bgEventColumn3Number.scrollFactor.set(0, 0);	
-							_bgEventColumn3Number.color = EventSchedule.setBgRowColor(Reg2._eventBackgroundColour[i]);
-							add(_bgEventColumn3Number);
+							_bgEventColumn3Numberb = new FlxSprite(379 + _offset_upcoming_x, 460 + 60 + _offset_upcoming_y + _offset_icons_and__event_scheduler_y);
+							_bgEventColumn3Numberb.makeGraphic(166, 25);
+							_bgEventColumn3Numberb.scrollFactor.set(0, 0);	
+							_bgEventColumn3Numberb.color = EventSchedule.setBgRowColor(Reg2._eventBackgroundColour[i]);
+							add(_bgEventColumn3Numberb);
 							
-							if (_textEventColumn3Number != null)
+							if (_textEventColumn3Numberb != null)
 							{
-								remove(_textEventColumn3Number);
-								_textEventColumn3Number.destroy();
+								remove(_textEventColumn3Numberb);
+								_textEventColumn3Numberb.destroy();
 							}
 							
-							_textEventColumn3Number = new FlxText(383 + _offset_upcoming_x, 457 + 60 + _offset_upcoming_y + _offset_icons_and__event_scheduler_y, 0, "");
-							_textEventColumn3Number.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.WHITE);
-							_textEventColumn3Number.scrollFactor.set();			
-							_textEventColumn3Number.text = Reg2._eventName[i];
-							_textEventColumn3Number.fieldWidth = 152;
-							_textEventColumn3Number.wordWrap = false;
-							add(_textEventColumn3Number);
+							_textEventColumn3Numberb = new FlxText(383 + _offset_upcoming_x, 457 + 60 + _offset_upcoming_y + _offset_icons_and__event_scheduler_y, 0, "");
+							_textEventColumn3Numberb.setFormat(Reg._fontDefault, Reg._font_size, FlxColor.WHITE);
+							_textEventColumn3Numberb.scrollFactor.set();			
+							_textEventColumn3Numberb.text = Reg2._eventName[i];
+							_textEventColumn3Numberb.fieldWidth = 152;
+							_textEventColumn3Numberb.wordWrap = false;
+							add(_textEventColumn3Numberb);
 							_eventNoMoreThanThree += 1;
 						}
 						
@@ -1902,6 +1915,48 @@ class MenuState extends FlxState
 			_textEventSchedule = null;
 		}
 		
+		if (_bgEventColumn1Number != null)
+		{		
+			remove(_bgEventColumn1Number);
+			_bgEventColumn1Number.destroy();
+			_bgEventColumn1Number = null;
+		}
+		
+		if (_textEventColumn1Number != null)
+		{		
+			remove(_textEventColumn1Number);
+			_textEventColumn1Number.destroy();
+			_textEventColumn1Number = null;
+		}
+		
+		if (_bgEventColumn2Number != null)
+		{		
+			remove(_bgEventColumn2Number);
+			_bgEventColumn2Number.destroy();
+			_bgEventColumn2Number = null;
+		}
+		
+		if (_textEventColumn2Number != null)
+		{		
+			remove(_textEventColumn2Number);
+			_textEventColumn2Number.destroy();
+			_textEventColumn2Number = null;
+		}
+		
+		if (_bgEventColumn3Number != null)
+		{		
+			remove(_bgEventColumn3Number);
+			_bgEventColumn3Number.destroy();
+			_bgEventColumn3Number = null;
+		}
+		
+		if (_textEventColumn3Number != null)
+		{		
+			remove(_textEventColumn3Number);
+			_textEventColumn3Number.destroy();
+			_textEventColumn3Number = null;
+		}
+		
 		super.destroy();
 	}
 	
@@ -2005,6 +2060,7 @@ class MenuState extends FlxState
 				_ticks_internet = 1;
 				draw_event_scheduler();
 				
+				// this needs to be here for ALT+SPACE to work correctly.
 				if (__hotkeys != null)
 				{
 					remove(__hotkeys);
@@ -2018,8 +2074,7 @@ class MenuState extends FlxState
 			if (Reg._buttonCodeValues != "") buttonCodeValues();
 		
 			// every time a user connects to the server, the server create a file with the name of the users host name. If the host name matches the name of the file, in the host directory at server, then that means there is already a client opened at that device. Therefore do the following.
-			if (Reg._clientDisconnected == true 
-			||  Reg._cannotConnectToServer == true
+			if (Reg._cannotConnectToServer == true
 			||	Reg._alreadyOnlineUser == true
 			||	Reg._alreadyOnlineHost == true
 			||  Reg._serverDisconnected == true 
@@ -2030,21 +2085,17 @@ class MenuState extends FlxState
 			||  Reg._login_failed == true
 			||	Reg._username_banned == true
 			||	Reg._calendar_event_data == true
-			||	Reg._front_door_queue_data == true
-			||	Reg._ping_time_expired == true)
+			||	Reg._front_door_queue_data == true)
 			{
 
-				if (Reg._clientDisconnected == true)
-					_str = "Client disconnected from server because of player inactivity.";
-				
-				else if (Reg._cannotConnectToServer == true) 	
+				if (Reg._cannotConnectToServer == true) 	
 					_str = "Cannot connect to server. Check the website to see if the server is online. Are you in airplane mode?"; //"This server will shutdown after 30 minutes expires because of server and/or client maintenance. Check the website for more information.";// 
 
 				else if (RegTriggers._kickOrBan == true)	
 					_str = Reg._kickOrBanMessage;
 
 				else if (Reg._serverDisconnected == true)	
-					_str = "Server either disconnected or dropped client.";
+					_str = "Server either disconnected, dropped client or server forced client to disconnect because of player inactivity.";
 
 				else if (Reg._alreadyOnlineUser == true)	
 					_str = "You cannot log in twice using the same username.";
@@ -2079,18 +2130,12 @@ class MenuState extends FlxState
 					_str = "Could not get front door queue data.";
 				}
 				
-				else if (Reg._ping_time_expired == true)
-				{
-					_str = "Server disconnected this client due to a lack of user activity.";
-				}
-				
 				Reg._messageId = 10;
 				Reg._buttonCodeValues = "m1000";
 				SceneGameRoom.messageBoxMessageOrder();
 				
 				buttonsIconsNotActive();
 				
-				Reg._clientDisconnected = false;
 				Reg._cannotConnectToServer = false;
 				Reg._serverDisconnected = false;
 				Reg._alreadyOnlineHost = false;
@@ -2105,7 +2150,6 @@ class MenuState extends FlxState
 				RegTypedef._dataAccount._username_banned = "";
 				Reg._calendar_event_data = false;
 				Reg._front_door_queue_data = false;
-				Reg._ping_time_expired = false;
 			}
 
 			// this block of code is needed so that the connect button will try to connect again.

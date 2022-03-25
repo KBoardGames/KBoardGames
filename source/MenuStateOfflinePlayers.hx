@@ -112,6 +112,11 @@ class MenuStateOfflinePlayers extends MenuState
 				{
 					if (ActionInput.justReleased() == true)
 					{
+						if (RegCustom._sound_enabled[Reg._tn] == true)
+						{
+							FlxG.sound.playMusic("click", 1, false);
+						}
+						
 						switch(Reg2._gameIds_that_can_be_selected[i])
 						{
 							case 0: play_game_offline(0);

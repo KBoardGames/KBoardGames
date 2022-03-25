@@ -229,7 +229,7 @@ class SceneWaitingRoom extends FlxState
 				__scrollable_area.destroy();
 			}
 			
-			__scrollable_area = new FlxScrollableArea( new FlxRect(0, 0, 1400-370, FlxG.height - 50), new FlxRect(0, 0, 1400, 8800), ResizeMode.NONE, 0, 100, -1, FlxColor.LIME, null, 0);	
+			__scrollable_area = new FlxScrollableArea( new FlxRect(0, 0, 1410-370, FlxG.height - 50), new FlxRect(0, 0, 1410, 8800), ResizeMode.NONE, 0, 100, -1, FlxColor.LIME, null, 0);	
 		}
 		
 		else

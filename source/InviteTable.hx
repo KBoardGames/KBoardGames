@@ -202,7 +202,6 @@ class InviteTable extends FlxState
 				_table_rows[i].destroy();
 			}
 			
-			// soild table rows
 			_table_rows[i] = new FlxSprite(0, 0);
 			_table_rows[i].makeGraphic(FlxG.width - 60, 55, RegCustomColors.color_table_body_background());		
 			_table_rows[i].setPosition(20, 120 - _offset_y + (i * 70)); 
@@ -418,7 +417,7 @@ class InviteTable extends FlxState
 			// _data._usernamesDynamic[i] is a string, we need to say it here again or else the program will crash.
 			if ( Std.string(_column1[i]) != "")
 			_onlineUserListUsernames[i].text = Std.string(_column1[i]);
-			_onlineUserListUsernames[i].font = Reg._fontDefault;
+			_onlineUserListUsernames[i].setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.table_body_text_color());
 			if (_do_once == true) _group.add(_onlineUserListUsernames[i]);
 			
 			// invite button, each for an online user not in room.
@@ -433,7 +432,7 @@ class InviteTable extends FlxState
 			//chess Elo
 			if ( Std.string(_column3[i]) != "0")
 			_chess_elo[i].text = Std.string(_column3[i]);
-			_chess_elo[i].font = Reg._fontDefault;
+			_chess_elo[i].setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.table_body_text_color());
 			if (_do_once == true) _group.add(_chess_elo[i]);
 			
 			//.....................
@@ -443,7 +442,7 @@ class InviteTable extends FlxState
 			
 			if (Std.string(_column1[i]) == "") _textPoints[i].text = "";
 			else _textPoints[i].text = Std.string(_points);
-			_textPoints[i].font = Reg._fontDefault;
+			_textPoints[i].setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.table_body_text_color());
 			if (_do_once == true) _group.add(_textPoints[i]);
 			
 			//.....................
@@ -454,7 +453,7 @@ class InviteTable extends FlxState
 		
 			if (Std.string(_column1[i]) == "") _textPercentage[i].text = "";
 			else _textPercentage[i].text = Std.string(_column5[i]);
-			_textPercentage[i].font = Reg._fontDefault;
+			_textPercentage[i].setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.table_body_text_color());
 			if (_do_once == true) _group.add(_textPercentage[i]);
 			
 		}	

@@ -116,16 +116,7 @@ class NetworkEventsMain extends FlxState
 			PlayState._websocket = null;
 			PlayState.updateInfo();
 			
-			// show server disconnected message only if not in public mode and if user has not logged in more than once.
-			if (Reg._same_device_login_more_than_once == false
-			&&	Reg._alreadyOnlineHost == false
-			&&	Reg._same_device_login_more_than_once == false
-			&&	Reg._alreadyOnlineUser == false)
-				Reg._serverDisconnected = true;
-			
-			// if "x" button was not clicked.
-			if (Reg._disconnectNow == false)
-				Reg._ping_time_expired = true;
+			Reg._serverDisconnected = true;
 			
 			FlxG.switchState(new MenuState());
 			return;
@@ -870,6 +861,17 @@ class NetworkEventsMain extends FlxState
 			PlayState.send("Get Statistics All", RegTypedef._dataStatistics);
 			
 			RegTriggers._lobby = true;
+			
+			// this hides the front door so that a blue empty background is not seen. instead, a new scene will be about to open.
+			openSubState(new SceneTransition());
+		}
+		
+		else
+		{
+			Reg._kickOrBanMessage = "The server is currently online but in maintenance mode. Only the administrator can login.";	
+			
+			RegTriggers._kickOrBan = true;
+			FlxG.switchState(new MenuState());
 		}
 	
 	}
@@ -1485,6 +1487,8 @@ class NetworkEventsMain extends FlxState
 	*/
 	public function getRoomData(_data:Dynamic):Void
 	{
+		RegTypedef._dataMisc._dummy_data_in_use = _data._dummy_data_in_use;
+		
 		RegTypedef._dataMisc._roomState = _data._roomState; 
 		RegTypedef._dataMisc._roomGameIds = _data._roomGameIds;
 		
@@ -1531,7 +1535,7 @@ class NetworkEventsMain extends FlxState
 			{
 				Reg._doOnce_email_address_validate = false;
 				
-				PlayState.send("Email Address Validate", RegTypedef._dataAccount);					
+				PlayState.send("Email Address Validate", RegTypedef._dataAccount);
 			}
 		#end
 	}
@@ -3301,6 +3305,7 @@ trace("--------------------");
 	
 	/******************************
 	* EVENT SERVER WILL SOON DISCONNECT. SEND MESSAGE TO ALL CLIENT.
+	* _dataServerMessage
 	*/
 	public function disconnectAllByServer(_data:Dynamic):Void
 	{
@@ -3354,4 +3359,4 @@ trace("--------------------");
 		
 		super.destroy();
 	}
-}//
+}//

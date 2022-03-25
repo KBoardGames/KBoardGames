@@ -96,7 +96,7 @@ class Reg
 	public static var _useThirdPartyIpAddress:Bool = false;
 			
 	/******************************
-	 * Warning, server will crash if there are about 56 open clients on windows. Therefore, set this var to false when game is finish. also change this var at near the bottom of this class.
+	 * Warning, server will crash if there are about 56 open clients on windows. Therefore, set this var to false when game is finish.
 	 */
 	public static var _same_device_login_more_than_once = true;
 	
@@ -194,11 +194,6 @@ class Reg
 	public static var _ip_message:Bool = false;
 	
 	/******************************
-	 * user will return to MenuState.hx and this message will be seen when client disconnects and no other disconnect message is triggered at MenuState.hx because in the block of code at the if/else statements, this is the last message checked. The reason this is the last is because server only triggers an onclose event at client. No other data is sent. Therefore, we do not know if a ping was the issue. If there is no other message to display then this must be the issue.
-	 */
-	public static var _ping_time_expired:Bool = false;
-	
-	/******************************
 	 * if true then go to MenuState.hx to display an error message saying that client could not get calendar event data from website.
 	 */
 	public static var _calendar_event_data:Bool = false;
@@ -288,11 +283,6 @@ class Reg
 	 */
 	public static var _serverDisconnected:Bool = false;
    
-	/******************************
-	 * display a message if true that client disconnected.
-	 */
-	public static var _clientDisconnected:Bool = false;
-	
 	/******************************
 	* Use this as a hack to stop double firing of a key press or button click.
 	*/
@@ -1625,7 +1615,6 @@ class Reg
 	public static function system_reset():Void
 	{
 		_serverDisconnected = false;
-		_clientDisconnected = false;
 		_login_failed = false;
 		_game_online_vs_cpu = false;
 		_move_number_next = 0;
@@ -1679,10 +1668,10 @@ class Reg
 		//############################# START CONFIG
 		#if neko
 			_clientReadyForPublicRelease = false;
-		
+			_same_device_login_more_than_once = true;		
 		#else
 			_clientReadyForPublicRelease = true; 
-		
+			_same_device_login_more_than_once = false;	
 		#end
 		
 		for (i in 0...3)

@@ -249,7 +249,7 @@ class SceneCreateRoom extends FlxState
 			}
 			
 			_textGame = new FlxText(83 - _offsetX, 135 + (1 * 70) + _offset_y, 0, "Checkers", Reg._font_size);
-			_textGame.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
+			_textGame.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.table_body_text_color());
 			add(_textGame);
 			
 			if (_textMaximumPlayersForGame != null)
@@ -260,7 +260,7 @@ class SceneCreateRoom extends FlxState
 			
 			_textMaximumPlayersForGame = new FlxText(420 - _offsetX - _offsetX2, 135 + (1 * 70) + _offset_y, 35, "", Reg._font_size);
 			_textMaximumPlayersForGame.text = "2";
-			_textMaximumPlayersForGame.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
+			_textMaximumPlayersForGame.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.table_body_text_color());
 			add(_textMaximumPlayersForGame);
 			
 			if (_buttonAllowSpectatorsGame != null)
@@ -283,7 +283,7 @@ class SceneCreateRoom extends FlxState
 			_textAllowSpectatorsGame = new FlxText(828 - _offsetX - _offsetX2, 135 + (1 * 70) + _offset_y, 35, "", Reg._font_size);
 			_textAllowSpectatorsGame.text = "No";
 			_textAllowSpectatorsGame.fieldWidth = 300;
-			_textAllowSpectatorsGame.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
+			_textAllowSpectatorsGame.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.table_body_text_color());
 			_textAllowSpectatorsGame.visible = false;
 			add(_textAllowSpectatorsGame);
 			
@@ -295,7 +295,7 @@ class SceneCreateRoom extends FlxState
 			
 			_text_allow_minutes = new FlxText(1040 - _offsetX - _offsetX2, 135 + (1 * 70) + _offset_y, 35, "", Reg._font_size);
 			_text_allow_minutes.fieldWidth = 300;
-			_text_allow_minutes.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.client_text_color());
+			_text_allow_minutes.setFormat(Reg._fontDefault, Reg._font_size, RegCustomColors.table_body_text_color());
 			add(_text_allow_minutes);
 			
 			//-----------------------------

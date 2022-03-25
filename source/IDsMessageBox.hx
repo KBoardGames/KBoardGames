@@ -168,13 +168,11 @@ class IdsMessageBox extends FlxGroup
 				
 				case 9010: _msg = new MessageBox(9010, "Yes", "No", true, true, false, false, "", "Theme saved.");
 				
-				case 9012: _msg = new MessageBox(9012, "Yes", "No", true, true, false, false, "", 'Cannot save theme. Username and/or password must be greater than 3 characters because you are not using a guest account.');
+				case 9012: _msg = new MessageBox(9012, "Yes", "No", true, true, false, false, "", 'Cannot save theme. Username and/or password must be greater than 2 characters because you are not using a guest account.');
 				
 				case 9013: _msg = new MessageBox(9013, "Yes", "No", true, true, false, false, "", 'Cannot save theme. Password field and email address field must be empty for guest accounts.');
 				
 				case 9014: _msg = new MessageBox(9014, "Yes", "No", true, true, false, false, "", 'Cannot save theme. Email address is not valid.');
-				case 9015: _msg = new MessageBox(9015, "Yes", "No", true, true, false, false, "", 'Cannot save theme. Username must be greater than 3 characters.');
-				
 				// menu credits 10000-10999
 				case 10001: _msg = new MessageBox(10001, "Yes", "No", true, true, true, false, "Website Credits.", "Display the full credits page at " + Reg._websiteNameTitle + " website?");
 				

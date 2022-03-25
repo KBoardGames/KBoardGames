@@ -1,3 +1,53 @@
+Version 2.1.9. 2022-3-25
+
+New Features.
+
+	When server is in maintenance mode the user will not be able to login. Instead, the user will receive a maintenance message at the title scene.
+
+	Dummy chat text at chatter when in dummy data mode.
+
+Feature changed.
+
+	Removed the blue vertical line at left side of stage. It was created at the scrollable area.
+
+	Sound now works for SceneLogo.hx in HTML5 build.
+	
+	Removed the only numeric entry in the username suggestion list since a username character can only be a letter.
+
+	Stopped button delay ticks for keyboard.
+
+	Stopped the display of keyboard in cpp and neko builds. 
+
+	Now only the admin can login to server when client receives dummy data from server.
+
+	Dummy data now works at lobby, waiting room and at game room.
+
+	Repositioned the "Lobby Refresh" button when chatter feature is turned off.
+	
+	Character limit for username and password changed from 4 to 3.
+
+	Sometimes user would stay in an endless loop at the front door because IP address data or hostname data could not be grabbed. Continue the login process regardless of possible empty IP address or empty real hostname.
+
+Bugs fixed.
+
+	timer was still enabled when rated game was set to false.
+
+	Some scenes were shown as redrawing or resizing its elements as the SceneTransition.hx backgrounds were opening to display them.
+
+	Fixed a display bug at "new account" scene.
+
+	Client going offline maintenance message and cancel going offline maintenance message both had text of "null" because of a null variable message.
+
+	Total game wins text at HUD only shown for player 1.
+
+	the win percentage row of the invite table at the waiting room scene displayed a value of -1 when user had no points to display. 
+
+	Timing bug. Sometimes when first logging in to server, lobby buttons will not show the correct text. Therefore, a second refresh is needed.
+
+	When the chat feature is turned off for lobby, GameChatter needed a null check.
+
+	Fixed display discrepancies at the configuration scene. 
+
 Version 2.0.19. 2022-3-11
 
 New Features.

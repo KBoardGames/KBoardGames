@@ -1205,6 +1205,12 @@ typedef DataMisc =
 	 * currently used from banning players.
 	 */
 	var _clientCommandIPs: String;
+	
+	/******************************
+	 * value is true if the dummy data is in use. when the admin enters the waiting room or game room, the admin's name will be displayed instead with one name from the dummy list of names. stats will not be saved and a dummy name will be displayed for player two.
+	 * the idea is to take a screenshot of a scene so that people viewing your website can get motivated to participate in the games. do not move a piece at the game room. You cannot play a game using dummy data because player two really does not exist. only at the hud can you see the dummy data of player two.
+	 */
+	var _dummy_data_in_use: Bool;
 }
 
 // all players inside a room. their data, such as cash, wins, losses.
@@ -1317,6 +1323,12 @@ typedef DataPlayers =
 	 * any game played. total game draws.
 	 */
 	var _gamesAllTotalDraws:Array<Int>;
+	
+	/******************************
+	 * value is true if the dummy data is in use. when the admin enters the waiting room or game room, the admin's name will be displayed instead with one name from the dummy list of names. stats will not be saved and a dummy name will be displayed for player two.
+	 * the idea is to take a screenshot of a scene so that people viewing your website can get motivated to participate in the games. do not move a piece at the game room. You cannot play a game using dummy data because player two really does not exist. only at the hud can you see the dummy data of player two.
+	 */
+	var _dummy_data_in_use: Bool;
 	
 	/******************************
 	 * the game being played.
@@ -2857,6 +2869,12 @@ class RegTypedef
 		
 		_clientCommandUsers: "",
 		_clientCommandIPs: "",
+		
+		/******************************
+		 * value is true if the dummy data is in use. when the admin enters the waiting room or game room, the admin's name will be displayed instead with one name from the dummy list of names. stats will not be saved and a dummy name will be displayed for player two.
+		 * the idea is to take a screenshot of a scene so that people viewing your website can get motivated to participate in the games. do not move a piece at the game room. You cannot play a game using dummy data because player two really does not exist. only at the hud can you see the dummy data of player two.
+		 */
+		_dummy_data_in_use: false,
 	};
 	
 	/******************************
@@ -2952,6 +2970,8 @@ class RegTypedef
 		 * any game played. total game draws for player.
 		 */
 		_gamesAllTotalDraws: [0, 0, 0, 0],
+		
+		_dummy_data_in_use: false,
 		
 		/******************************
 		 * the game being played.

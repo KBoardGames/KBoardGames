@@ -190,21 +190,15 @@ class SceneGameRoom extends FlxState
 		
 		if (Reg._game_offline_vs_player == true 
 		||	Reg._game_offline_vs_cpu == true)
-			_title.text = "Offline";
+			_title.text = "Room " + Std.string(FlxG.random.int(1, 99));
 		else
 			_title.text = "Room " + Std.string(RegTypedef._dataMisc._room ) + " ";
 		
-		if (_title.text == "Offline")
-			_title.setPosition(FlxG.width - 290, 20);
-		
+		if (RegTypedef._dataMisc._room <= 9) 
+			_title.setPosition(FlxG.width - 297, 20);
 		else
-		{
-			if (RegTypedef._dataMisc._room <= 9) 
-				_title.setPosition(FlxG.width - 275, 20);
-			else
-				_title.setPosition(FlxG.width - 290, 20);
-		}
-			
+			_title.setPosition(FlxG.width - 312, 20);
+		
 		_title.visible = true;
 		add(_title);	
 			
@@ -1187,15 +1181,16 @@ class SceneGameRoom extends FlxState
 			remove(__player_time_remaining_move);
 			__player_time_remaining_move.destroy();
 		}
-
+		
+		// game is rated when this is a value of 1.
 		if (RegCustom._timer_enabled[Reg._tn] == true
+		&&	RegTypedef._dataMisc._rated_game[RegTypedef._dataMisc._room] == 1
 		||  RegTypedef._dataTournaments._move_piece == true) // always enabled for tournament play.
 		{
 			__player_time_remaining_move = new PlayerTimeRemainingMove(GameCreate._t, this);
 			__player_time_remaining_move.visible = true;
 			add(__player_time_remaining_move);
 		}
-		
 		
 		// this is needed.
 		if (Reg._game_offline_vs_cpu == false && Reg._game_offline_vs_player == false)
