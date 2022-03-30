@@ -11,7 +11,6 @@
 
 // If the game crashes without an error then copy the music files to the bin folder.
 package;
-import sys.net.Address;
 
 #if chess
 	import modules.games.chess.*;
@@ -2242,7 +2241,7 @@ class MenuState extends FlxState
 			Reg._buttonCodeValues = "";
 			Reg._yesNoKeyPressValueAtMessage = 0;
 
-			FlxG.openURL("http://kboardgames.com/index.php?p=30","_blank"); 
+			FlxG.openURL("http://kboardgames.com/about-client-instructions","_blank"); 
 			
 			buttonsIconsActive();
 		}
@@ -2261,7 +2260,7 @@ class MenuState extends FlxState
 			Reg._buttonCodeValues = "";
 			Reg._yesNoKeyPressValueAtMessage = 0;
 
-			FlxG.openURL("http://kboardgames.com/index.php?p=31","_blank"); 
+			FlxG.openURL("http://kboardgames.com/about-credits","_blank"); 
 			
 			buttonsIconsActive();
 		}
