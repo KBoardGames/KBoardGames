@@ -2241,7 +2241,7 @@ class MenuState extends FlxState
 			Reg._buttonCodeValues = "";
 			Reg._yesNoKeyPressValueAtMessage = 0;
 
-			FlxG.openURL("http://kboardgames.com/about-client-instructions","_blank"); 
+			FlxG.openURL("https://kboardgames.com/about-client-instructions","_blank"); 
 			
 			buttonsIconsActive();
 		}
@@ -2260,7 +2260,7 @@ class MenuState extends FlxState
 			Reg._buttonCodeValues = "";
 			Reg._yesNoKeyPressValueAtMessage = 0;
 
-			FlxG.openURL("http://kboardgames.com/about-credits","_blank"); 
+			FlxG.openURL("https://kboardgames.com/about-credits","_blank"); 
 			
 			buttonsIconsActive();
 		}

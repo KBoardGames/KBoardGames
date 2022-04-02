@@ -73,7 +73,7 @@ class Reg
 	public static var _button_clicked:Bool = false;
 	
 	/******************************
-	 * website domain does not end in "/" nor has http://.
+	 * website domain does not end in "/" nor has https://.
 	 */
 	public static var _websiteHomeUrl:String = "kboardgames.com";
 	

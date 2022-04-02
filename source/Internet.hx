@@ -22,7 +22,7 @@ class Internet extends FlxGroup
 	
 	public static function webVersionFileExist():Void
 	{
-		_http = new haxe.Http("http://" + Reg._websiteHomeUrl + "/" + "files/versionClient.txt");
+		_http = new haxe.Http("https://" + Reg._websiteHomeUrl + "/" + "files/versionClient.txt");
 		
 		var _str:String = "Failed to get client's version number from a file at " + Reg._websiteNameTitle + " website. ";
 		Reg._doOnce = false;
@@ -59,7 +59,7 @@ class Internet extends FlxGroup
 	
 	public static function serverFileExist():Bool
 	{
-		_http = new haxe.Http("http://" + Reg._websiteHomeUrl + "/server/" + "server");
+		_http = new haxe.Http("https://" + Reg._websiteHomeUrl + "/server/" + "server");
 		
 		var _str:String = "Server is offline. Try again later.";
 		var _bool:Bool = false;
@@ -143,7 +143,7 @@ class Internet extends FlxGroup
 		var result:Bool;
 		
 		// any data could be in this json file. If this file is found then user is connected to the internet. This method is 10 times faster than a php request.
-		_http = new haxe.Http("http://" + Reg._websiteHomeUrl + "/server/online.json");
+		_http = new haxe.Http("https://" + Reg._websiteHomeUrl + "/server/online.json");
 
 		_http.onData = function (data:String)
 		  result = true;
@@ -162,7 +162,7 @@ class Internet extends FlxGroup
 	{
 		try
 		{
-			_http = new haxe.Http("http://" + Reg._websiteHomeUrl + "/server/" + "getAllEvents.php");
+			_http = new haxe.Http("https://" + Reg._websiteHomeUrl + "/server/" + "getAllEvents.php");
 		
 			// in getAllEvents.php the getAllEvents parameter will have the value of _str.
 			_http.setParameter("getAllEventNames", "names");
@@ -253,7 +253,7 @@ class Internet extends FlxGroup
 	
 	public static function getHostname():Void
 	{
-		_http = new haxe.Http("http://" + Reg._websiteHomeUrl + "/server/getHostname.php?id=" + RegTypedef._dataAccount._ip);
+		_http = new haxe.Http("https://" + Reg._websiteHomeUrl + "/server/getHostname.php?id=" + RegTypedef._dataAccount._ip);
 		
 		_http.onData = function (data:String) 
 		{
@@ -281,7 +281,7 @@ class Internet extends FlxGroup
 		var _hostname = RegTypedef._dataAccount._hostname;
 		_hostname = StringTools.replace(RegTypedef._dataAccount._hostname, " ", "%20");
 		
-		_http = new haxe.Http("http://" + Reg._websiteHomeUrl + "/server/isHostnameOnline.php?token=H77Wox53m7syw6Ng&hostname=" + _hostname);
+		_http = new haxe.Http("https://" + Reg._websiteHomeUrl + "/server/isHostnameOnline.php?token=H77Wox53m7syw6Ng&hostname=" + _hostname);
 		
 		_http.onData = function (data:String) 
 		{
@@ -311,7 +311,7 @@ class Internet extends FlxGroup
 		var _username = RegTypedef._dataAccount._username;
 		_username = StringTools.replace(RegTypedef._dataAccount._username, " ", "%20");
 		
-		_http = new haxe.Http("http://" + Reg._websiteHomeUrl + "/server/isUsernameOnline.php?token=H77Wox53m7syw6Ng&user=" + _username);
+		_http = new haxe.Http("https://" + Reg._websiteHomeUrl + "/server/isUsernameOnline.php?token=H77Wox53m7syw6Ng&user=" + _username);
 		
 		_http.onData = function (data:String) 
 		{
@@ -346,7 +346,7 @@ class Internet extends FlxGroup
 		var _username = RegTypedef._dataAccount._username;
 		_username = StringTools.replace(RegTypedef._dataAccount._username, " ", "%20");
 		
-		_http = new haxe.Http("http://" + Reg._websiteHomeUrl + "/server/frontDoorqueue.php?token=J39BsrUDd94mWd4Jd341&q=" + _username);
+		_http = new haxe.Http("https://" + Reg._websiteHomeUrl + "/server/frontDoorqueue.php?token=J39BsrUDd94mWd4Jd341&q=" + _username);
 		
 		_http.onData = function (data:String) 
 		{
